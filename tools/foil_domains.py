@@ -14,7 +14,7 @@ DOMAIN_KEYWORDS: dict[str, tuple[str, ...]] = {
         "theorem proving", "formal verification", "lean", "coq", "isabelle", "dafny", "smt", "proof assistant", "model checking"
     ),
     "optimization_operations_research": (
-        "optimization", "operations research", "linear programming", "integer programming", "constraint programming", "scheduling optimization"
+        "optimization", "optimize", "operations research", "linear program", "linear programming", "integer program", "integer programming", "constraint program", "constraint programming", "scheduling model", "scheduling optimization"
     ),
     "databases_data_engineering": (
         "database", "postgres", "sql", "data engineering", "etl", "data warehouse", "query planner", "schema design"
