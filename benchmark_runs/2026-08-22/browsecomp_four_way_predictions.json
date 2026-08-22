@@ -1,0 +1,13 @@
+{
+  "schema": "foil-browsecomp-four-way-predictions/v1",
+  "predictions": [
+    {"id": "bc4-28-d2ba14f4", "answer": "Michael Reed Holzer"},
+    {"id": "bc4-29-a347be49", "answer": "Robert D. McBain"},
+    {"id": "bc4-30-9fcf2c8d", "answer": "Sidi Bou Said"},
+    {"id": "bc4-31-86ab4986", "answer": "3%, 3%, 4%"},
+    {"id": "bc4-36-56fcfea6", "answer": "UNKNOWN"},
+    {"id": "bc4-37-a6e43534", "answer": "Duman"},
+    {"id": "bc4-38-fb728e5c", "answer": "UNKNOWN"},
+    {"id": "bc4-39-09c7b0f8", "answer": "Mary Ann Browning"}
+  ]
+}
