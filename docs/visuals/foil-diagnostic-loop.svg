@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 660" role="img" aria-labelledby="title desc">
+  <title id="title">FOIL diagnostic and transfer loop</title>
+  <desc id="desc">FOIL starts from an observed result, maintains competing explanations, supplies the smallest useful complement, verifies the claim, and tests transfer with assistance removed or the representation changed.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#11161c"/><stop offset="1" stop-color="#080a0d"/></linearGradient>
+    <style>.t{font-family:Inter,Arial,sans-serif;fill:#f5f7f9}.m{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.muted{fill:#8e99a5}.wire{fill:none;stroke:#3b4652;stroke-width:2}.card{fill:#0d1116;stroke:#303a45;stroke-width:1.5}.hot{fill:#ff8a3d}.mint{fill:#77f2c4}.blue{fill:#80c9ff}.violet{fill:#b9a6ff}</style>
+  </defs>
+  <rect width="1200" height="660" rx="26" fill="url(#bg)"/>
+  <text x="56" y="58" class="m" font-size="12" fill="#ff8a3d" letter-spacing="2">FOIL · ADAPTIVE REASONING COMPLEMENT</text>
+  <text x="56" y="98" class="t" font-size="28" font-weight="800">Diagnose the missing complement, then test what remains.</text>
+
+  <g transform="translate(54 150)"><rect class="card" width="218" height="130" rx="18"/><circle cx="26" cy="28" r="7" class="hot"/><text x="44" y="32" class="m muted" font-size="11">01 · OBSERVE</text><text x="24" y="72" class="t" font-size="19" font-weight="700">Observed result</text><text x="24" y="99" class="muted" font-family="Inter,Arial" font-size="12">behavior, artifact, failure,</text><text x="24" y="118" class="muted" font-family="Inter,Arial" font-size="12">or unexpectedly strong pass</text></g>
+
+  <path class="wire" d="M272 215H340"/><path d="M332 208l12 7-12 7" fill="#596572"/>
+
+  <g transform="translate(342 134)"><rect class="card" width="330" height="198" rx="18"/><text x="24" y="34" class="m" font-size="11" fill="#80c9ff">02 · COMPETING EXPLANATIONS</text>
+    <g transform="translate(24 54)"><rect width="132" height="38" rx="10" fill="#121820" stroke="#33404c"/><circle cx="15" cy="19" r="5" class="hot"/><text x="28" y="23" class="t" font-size="11">knowledge gap</text></g>
+    <g transform="translate(170 54)"><rect width="136" height="38" rx="10" fill="#121820" stroke="#33404c"/><circle cx="15" cy="19" r="5" class="blue"/><text x="28" y="23" class="t" font-size="11">ambiguity</text></g>
+    <g transform="translate(24 103)"><rect width="132" height="38" rx="10" fill="#121820" stroke="#33404c"/><circle cx="15" cy="19" r="5" class="violet"/><text x="28" y="23" class="t" font-size="11">procedure gap</text></g>
+    <g transform="translate(170 103)"><rect width="136" height="38" rx="10" fill="#121820" stroke="#33404c"/><circle cx="15" cy="19" r="5" class="mint"/><text x="28" y="23" class="t" font-size="11">missing tool</text></g>
+    <text x="24" y="174" class="muted" font-family="Inter,Arial" font-size="12">Also compare fatigue, compression, novelty,</text><text x="24" y="190" class="muted" font-family="Inter,Arial" font-size="12">retrieval failure, and representation mismatch.</text>
+  </g>
+
+  <path class="wire" d="M672 233H740"/><path d="M732 226l12 7-12 7" fill="#596572"/>
+
+  <g transform="translate(742 150)"><rect class="card" width="218" height="130" rx="18"/><circle cx="26" cy="28" r="7" class="mint"/><text x="44" y="32" class="m muted" font-size="11">03 · COMPLEMENT</text><text x="24" y="72" class="t" font-size="19" font-weight="700">Smallest useful aid</text><text x="24" y="99" class="muted" font-family="Inter,Arial" font-size="12">method · evidence · verifier</text><text x="24" y="118" class="muted" font-family="Inter,Arial" font-size="12">tool · representation · scaffold</text></g>
+
+  <path class="wire" d="M960 215h74v124"/><path d="M1027 331l7 12 7-12" fill="#596572"/>
+
+  <g transform="translate(882 344)"><rect class="card" width="236" height="128" rx="18"/><circle cx="26" cy="28" r="7" class="blue"/><text x="44" y="32" class="m muted" font-size="11">04 · VERIFY</text><text x="24" y="71" class="t" font-size="19" font-weight="700">Claim-matched check</text><text x="24" y="99" class="muted" font-family="Inter,Arial" font-size="12">native arbiter · exact scope</text><text x="24" y="117" class="muted" font-family="Inter,Arial" font-size="12">counterevidence stays visible</text></g>
+
+  <path class="wire" d="M882 408H760"/><path d="M768 401l-12 7 12 7" fill="#596572"/>
+
+  <g transform="translate(478 344)"><rect class="card" width="278" height="128" rx="18"/><circle cx="26" cy="28" r="7" class="violet"/><text x="44" y="32" class="m muted" font-size="11">05 · TRANSFER</text><text x="24" y="71" class="t" font-size="19" font-weight="700">Remove or change assistance</text><text x="24" y="99" class="muted" font-family="Inter,Arial" font-size="12">new representation · delayed recall</text><text x="24" y="117" class="muted" font-family="Inter,Arial" font-size="12">independent execution when useful</text></g>
+
+  <path class="wire" d="M478 408H334"/><path d="M342 401l-12 7 12 7" fill="#596572"/>
+
+  <g transform="translate(54 344)"><rect class="card" width="276" height="128" rx="18"/><text x="24" y="32" class="m" font-size="11" fill="#ff8a3d">UPDATE EVIDENCE, NOT PERSONALITY</text><text x="24" y="71" class="t" font-size="19" font-weight="700">Observed → tentative → supported</text><text x="24" y="99" class="muted" font-family="Inter,Arial" font-size="12">Stable profile changes require repeated,</text><text x="24" y="117" class="muted" font-family="Inter,Arial" font-size="12">ledgered evidence.</text></g>
+
+  <path class="wire" d="M192 344V302c0-42 28-66 70-66h68" stroke-dasharray="5 8"/>
+  <text x="56" y="540" class="m muted" font-size="11">PRIMARY DISTINCTION</text>
+  <text x="56" y="570" class="t" font-size="20" font-weight="700">Joint task success ≠ independent competence.</text>
+  <text x="56" y="599" class="muted" font-family="Inter,Arial" font-size="13">The loop is designed to preserve that distinction instead of laundering assistance into a permanent strength label.</text>
+</svg>

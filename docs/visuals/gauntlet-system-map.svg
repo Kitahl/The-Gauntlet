@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">The Gauntlet research system map</title>
+  <desc id="desc">A central Research Orchestrator routes claims to formal reasoning, research discovery, method synthesis, engineering verification, evaluation, process assurance, evidence review, decision preflight, and FOIL adaptive assistance.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#10141a"/><stop offset="1" stop-color="#080a0d"/></linearGradient>
+    <linearGradient id="core" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff5ec"/><stop offset="1" stop-color="#d9dfe5"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <style>
+      .label{font-family:Inter,Arial,sans-serif;fill:#f5f7f9}.muted{fill:#8e99a5}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.node{fill:#0f1318;stroke:#35404a;stroke-width:1.5}.wire{stroke:#4c5662;stroke-width:1.5;fill:none}.hot{fill:#ff8a3d}.mint{fill:#77f2c4}.blue{fill:#80c9ff}.violet{fill:#b9a6ff}
+    </style>
+  </defs>
+  <rect width="1200" height="720" rx="26" fill="url(#bg)"/>
+  <g opacity=".22" stroke="#252b34"><path d="M0 120h1200M0 240h1200M0 360h1200M0 480h1200M0 600h1200"/><path d="M120 0v720M240 0v720M360 0v720M480 0v720M600 0v720M720 0v720M840 0v720M960 0v720M1080 0v720"/></g>
+  <circle cx="600" cy="360" r="174" fill="none" stroke="#2e3741" stroke-width="2"/>
+  <circle cx="600" cy="360" r="244" fill="none" stroke="#20262e" stroke-width="1" stroke-dasharray="6 10"/>
+  <g class="wire">
+    <path d="M600 255L600 165"/><path d="M500 300L360 212"/><path d="M480 360L300 360"/><path d="M500 420L360 508"/><path d="M600 465L600 555"/><path d="M700 420L840 508"/><path d="M720 360L900 360"/><path d="M700 300L840 212"/>
+  </g>
+  <g filter="url(#glow)"><circle cx="600" cy="360" r="106" fill="url(#core)"/><circle cx="600" cy="360" r="116" fill="none" stroke="#ff8a3d" stroke-opacity=".28"/></g>
+  <text x="600" y="333" text-anchor="middle" class="mono" font-size="15" fill="#5f6670">CONTROL</text>
+  <text x="600" y="366" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="25" font-weight="800" fill="#090b0e">Research</text>
+  <text x="600" y="394" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="25" font-weight="800" fill="#090b0e">Orchestrator</text>
+  <text x="600" y="420" text-anchor="middle" class="mono" font-size="11" fill="#59616b">FRAME · ROUTE · RELEASE</text>
+
+  <g transform="translate(476 75)"><rect class="node" width="248" height="92" rx="16"/><circle cx="22" cy="24" r="6" class="hot"/><text x="38" y="29" class="mono muted" font-size="11">FORMAL</text><text x="20" y="56" class="label" font-size="17" font-weight="700">Formal Reasoning</text><text x="20" y="77" class="muted" font-family="Inter,Arial" font-size="11">proof · logic · probability</text></g>
+  <g transform="translate(160 150)"><rect class="node" width="240" height="92" rx="16"/><circle cx="22" cy="24" r="6" class="blue"/><text x="38" y="29" class="mono muted" font-size="11">DISCOVERY</text><text x="20" y="56" class="label" font-size="17" font-weight="700">Research Discovery</text><text x="20" y="77" class="muted" font-family="Inter,Arial" font-size="11">prior art · literature · reuse</text></g>
+  <g transform="translate(80 314)"><rect class="node" width="240" height="92" rx="16"/><circle cx="22" cy="24" r="6" class="violet"/><text x="38" y="29" class="mono muted" font-size="11">SYNTHESIS</text><text x="20" y="56" class="label" font-size="17" font-weight="700">Method Synthesis</text><text x="20" y="77" class="muted" font-family="Inter,Arial" font-size="11">new mechanism under constraint</text></g>
+  <g transform="translate(160 478)"><rect class="node" width="240" height="92" rx="16"/><circle cx="22" cy="24" r="6" class="mint"/><text x="38" y="29" class="mono muted" font-size="11">ENGINEERING</text><text x="20" y="56" class="label" font-size="17" font-weight="700">Engineering Verification</text><text x="20" y="77" class="muted" font-family="Inter,Arial" font-size="11">build · run · inspect</text></g>
+  <g transform="translate(476 553)"><rect class="node" width="248" height="92" rx="16"/><circle cx="22" cy="24" r="6" class="hot"/><text x="38" y="29" class="mono muted" font-size="11">EVALUATION</text><text x="20" y="56" class="label" font-size="17" font-weight="700">Evaluation &amp; Benchmarking</text><text x="20" y="77" class="muted" font-family="Inter,Arial" font-size="11">baseline · ablation · stop</text></g>
+  <g transform="translate(800 478)"><rect class="node" width="240" height="92" rx="16"/><circle cx="22" cy="24" r="6" class="blue"/><text x="38" y="29" class="mono muted" font-size="11">ASSURANCE</text><text x="20" y="56" class="label" font-size="17" font-weight="700">Process Assurance</text><text x="20" y="77" class="muted" font-family="Inter,Arial" font-size="11">frame · stale state · false green</text></g>
+  <g transform="translate(880 314)"><rect class="node" width="240" height="92" rx="16"/><circle cx="22" cy="24" r="6" class="violet"/><text x="38" y="29" class="mono muted" font-size="11">REVIEW</text><text x="20" y="56" class="label" font-size="17" font-weight="700">Evidence Review Panel</text><text x="20" y="77" class="muted" font-family="Inter,Arial" font-size="11">independent perspectives</text></g>
+  <g transform="translate(800 150)"><rect class="node" width="240" height="92" rx="16"/><circle cx="22" cy="24" r="6" class="mint"/><text x="38" y="29" class="mono muted" font-size="11">ADAPTIVE</text><text x="20" y="56" class="label" font-size="17" font-weight="700">FOIL</text><text x="20" y="77" class="muted" font-family="Inter,Arial" font-size="11">diagnose · complement · transfer</text></g>
+  <g transform="translate(500 492)"><rect x="0" y="0" width="200" height="40" rx="20" fill="#151a20" stroke="#3c4651"/><text x="100" y="25" text-anchor="middle" class="mono" font-size="10" fill="#a6b0ba">PREFLIGHT · GROUND BEFORE ACTION</text></g>
+</svg>

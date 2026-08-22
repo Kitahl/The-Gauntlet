@@ -13,6 +13,11 @@
     "license_disclosure": true,
     "pages_contract": true,
     "discovery_contract": true,
+    "visual_assets_present": true,
+    "visual_assets_referenced": true,
+    "visual_alt_text": true,
+    "visual_dimensions_declared": true,
+    "showcase_revision_separate_from_software_version": true,
     "source_artifacts_present": true,
     "skill_directories_are_spec_only": true,
     "research_metadata_present": true,
@@ -38,6 +43,7 @@
     "render_core_visible": true,
     "primary_nav_visible_all_viewports": true,
     "target_size_minimum": true,
+    "mechanism_visuals_rendered": true,
     "keyboard_path": true,
     "payload_budget": true,
     "payload_budget_negative_control": true,
@@ -45,6 +51,7 @@
     "hierarchy_mutant_detected": true,
     "target_size_mutant_detected": true,
     "remote_asset_mutant_detected": true,
+    "visual_reference_mutant_detected": true,
     "pages_link_mutant_detected": true,
     "trust_surface_mutant_detected": true
   },
@@ -56,7 +63,8 @@
       "h1_visible": true,
       "main_visible": true,
       "primary_nav_visible": true,
-      "target_sizes_ok": true
+      "target_sizes_ok": true,
+      "visuals_visible": true
     },
     "mobile": {
       "horizontal_overflow": false,
@@ -65,9 +73,11 @@
       "h1_visible": true,
       "main_visible": true,
       "primary_nav_visible": true,
-      "target_sizes_ok": true
+      "target_sizes_ok": true,
+      "visuals_visible": true
     }
   },
-  "total": 46,
-  "passed": 46
+  "payload_bytes": 66164,
+  "total": 53,
+  "passed": 53
 }
