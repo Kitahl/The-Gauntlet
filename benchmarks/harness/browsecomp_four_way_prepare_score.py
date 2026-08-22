@@ -22,6 +22,17 @@ TARGET = 20
 CONDITIONS = ("BASE", "FOIL", "FOIL_PROFILE", "FOIL_MM")
 PROFILE_FREEZE_COMMIT = "013a728bfd6f57a8592fc3fc6e098ea52da357d5"
 
+# A public search result surfaced a published BrowseComp trace/answer for bc4-01
+# after the blinded question artifact was generated. That item is excluded. The
+# same ordinal block is removed across all four conditions without consulting
+# hidden gold, preserving equal n=4 per condition.
+POST_EXPOSURE_EXCLUDED_IDS = {
+    "bc4-00-475d4888",
+    "bc4-01-08197e10",
+    "bc4-02-a8ed2df4",
+    "bc4-03-27616be2",
+}
+
 
 def fetch(url: str) -> bytes:
     request = urllib.request.Request(url, headers={"User-Agent": "The-Gauntlet-benchmark/1.1"})
@@ -51,8 +62,6 @@ def row_fingerprint(row: dict[str, str]) -> str:
 def prepare() -> tuple[list[dict], dict[str, str]]:
     rows = list(csv.DictReader(io.StringIO(fetch(URL).decode("utf-8-sig"))))
 
-    # Exclude all 20 rows used by the earlier BrowseComp sampling frame, not only
-    # the rows that survived its later contamination exclusions.
     old_rows = random.Random(OLD_SEED).sample(rows, 20)
     old_fingerprints = {row_fingerprint(row) for row in old_rows}
     fresh_pool = [row for row in rows if row_fingerprint(row) not in old_fingerprints]
@@ -69,6 +78,8 @@ def prepare() -> tuple[list[dict], dict[str, str]]:
         condition = CONDITIONS[index % len(CONDITIONS)]
         problem = decrypt(row["problem"], row["canary"])
         answer = decrypt(row["answer"], row["canary"])
+        if qid in POST_EXPOSURE_EXCLUDED_IDS:
+            continue
         questions.append(
             {
                 "id": qid,
@@ -76,20 +87,23 @@ def prepare() -> tuple[list[dict], dict[str, str]]:
                 "condition": condition,
                 "question": problem,
                 "instruction": "Use web browsing. Return one succinct exact answer.",
-                "budget": {
-                    "max_search_queries": 12,
-                    "max_source_followups": 12,
-                },
+                "budget": {"max_search_queries": 12, "max_source_followups": 12},
             }
         )
         gold[qid] = answer
 
     payload = {
-        "schema": "foil-browsecomp-four-way-questions/v1",
+        "schema": "foil-browsecomp-four-way-questions/v2",
         "selection_seed": SEED,
         "source": URL,
-        "sample_n": TARGET,
+        "initial_sample_n": TARGET,
+        "final_sample_n": len(questions),
         "prior_sample_excluded_n": 20,
+        "post_exposure_excluded_ids": sorted(POST_EXPOSURE_EXCLUDED_IDS),
+        "post_exposure_exclusion_reason": (
+            "bc4-01 was contaminated when a public search result exposed a published BrowseComp trace/answer; "
+            "the corresponding first ordinal from every condition was removed without consulting hidden gold."
+        ),
         "profile_freeze_commit": PROFILE_FREEZE_COMMIT,
         "profile_path": "benchmarks/profiles/BROWSECOMP_BENCHMARK_PROFILE.json",
         "protocol_path": "benchmarks/BROWSECOMP_FOUR_WAY_PROTOCOL.md",
@@ -125,18 +139,13 @@ def score(questions: list[dict], gold: dict[str, str]) -> None:
         exact = normalize(prediction) == normalize(reference)
         summary[condition][0] += int(exact)
         summary[condition][1] += 1
-        items.append(
-            {
-                "id": qid,
-                "condition": condition,
-                "exact_normalized_match": bool(exact),
-            }
-        )
+        items.append({"id": qid, "condition": condition, "exact_normalized_match": bool(exact)})
 
     result = {
         "schema": "foil-browsecomp-four-way-results/v1",
         "selection_seed": SEED,
         "profile_freeze_commit": PROFILE_FREEZE_COMMIT,
+        "post_exposure_excluded_ids": sorted(POST_EXPOSURE_EXCLUDED_IDS),
         "summary": [
             {
                 "condition": condition,
@@ -165,7 +174,7 @@ def main() -> int:
     counts = defaultdict(int)
     for question in questions:
         counts[question["condition"]] += 1
-    print(f"prepared {len(questions)} fresh BrowseComp questions: {dict(counts)}")
+    print(f"prepared {len(questions)} final BrowseComp questions: {dict(counts)}")
     return 0
 
 
