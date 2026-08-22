@@ -26,8 +26,10 @@ jobs:
         run: python benchmarks/harness/hle_arc_prepare_score.py
       - name: Prepare blinded GPQA-Diamond questions; score committed predictions
         run: python benchmarks/harness/gpqa_prepare_score.py
-      - name: Prepare blinded BrowseComp questions; score committed predictions when present
+      - name: Prepare blinded legacy BrowseComp questions; score committed predictions when present
         run: python benchmarks/harness/browsecomp_prepare_score.py
+      - name: Prepare blinded four-way BrowseComp questions; score committed predictions when present
+        run: python benchmarks/harness/browsecomp_four_way_prepare_score.py
 
       - name: Upload blinded HLE and ARC questions
         uses: actions/upload-artifact@v4
@@ -41,11 +43,17 @@ jobs:
           name: foil-gpqa-questions
           path: benchmark_runs/2026-08-22/gpqa_questions.json
           if-no-files-found: error
-      - name: Upload blinded BrowseComp questions
+      - name: Upload blinded legacy BrowseComp questions
         uses: actions/upload-artifact@v4
         with:
           name: foil-browsecomp-questions
           path: benchmark_runs/2026-08-22/browsecomp_questions.json
+          if-no-files-found: error
+      - name: Upload blinded four-way BrowseComp questions
+        uses: actions/upload-artifact@v4
+        with:
+          name: foil-browsecomp-four-way-questions
+          path: benchmark_runs/2026-08-22/browsecomp_four_way_questions.json
           if-no-files-found: error
 
       - name: Upload HLE and ARC score receipt
@@ -62,10 +70,17 @@ jobs:
           name: foil-gpqa-results
           path: benchmark_runs/2026-08-22/gpqa_results.json
           if-no-files-found: error
-      - name: Upload BrowseComp public score receipt
+      - name: Upload legacy BrowseComp public score receipt
         if: ${{ hashFiles('benchmark_runs/2026-08-22/browsecomp_results.json') != '' }}
         uses: actions/upload-artifact@v4
         with:
           name: foil-browsecomp-results
           path: benchmark_runs/2026-08-22/browsecomp_results.json
+          if-no-files-found: error
+      - name: Upload four-way BrowseComp public score receipt
+        if: ${{ hashFiles('benchmark_runs/2026-08-22/browsecomp_four_way_results.json') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: foil-browsecomp-four-way-results
+          path: benchmark_runs/2026-08-22/browsecomp_four_way_results.json
           if-no-files-found: error

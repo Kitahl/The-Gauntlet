@@ -146,7 +146,7 @@
       <div class="evidence-summary">
         <article><span class="tag measured">RECORDED</span><h3>FOIL structural validation</h3><strong>94 / 94</strong><p>Source, structure, and regression checks recorded as passed.</p></article>
         <article><span class="tag cited">PASS-SPEC</span><h3>Behavioral-contract coverage</h3><strong>18 / 18</strong><p>Specification coverage only; not execution evidence.</p></article>
-        <article><span class="tag derived">EXPLORATORY</span><h3>Model benchmark pilots</h3><strong>Mixed</strong><p>Positive and null results are reported together under scoped validity limits.</p></article>
+        <article><span class="tag derived">EXPLORATORY</span><h3>Model benchmark pilots</h3><strong>Mixed</strong><p>Positive, null, and mixed/negative results are reported together under scoped validity limits.</p></article>
         <article><span class="tag unknown">OPEN</span><h3>Prospective efficacy</h3><strong>Not established</strong><p>Matched-budget, independent-transfer evidence remains on the research roadmap.</p></article>
       </div>
 
@@ -166,20 +166,21 @@
     <section id="benchmarks" class="section section-tint">
       <div class="shell">
         <div class="section-head">
-          <div><p class="eyebrow">EXPLORATORY BENCHMARK PILOTS</p><h2>Positive results and null results are published together.</h2></div>
-          <p>These are small deterministic disjoint-subset pilots using GPT-5.6 Sol, not official leaderboard submissions or isolated same-item causal A/B tests. The assisted condition uses a frozen Frontier-Exam FOIL + Mastermind pre-commit protocol.</p>
+          <div><p class="eyebrow">EXPLORATORY BENCHMARK PILOTS</p><h2>Positive, null, and mixed results are published together.</h2></div>
+          <p>These are small deterministic disjoint-subset pilots using GPT-5.6 Sol, not official leaderboard submissions or isolated same-item causal A/B tests. Earlier closed-book pilots use a frozen Frontier-Exam FOIL + Mastermind condition; the BrowseComp pilot separately ablates generic FOIL, a frozen benchmark-blind profile, and a Mastermind final audit.</p>
         </div>
         <div class="benchmark-grid">
           <article><div class="metric">+16.7 <small>pp</small></div><p class="card-label">HLE PUBLIC TEXT SUBSET</p><h3>BASE 1/6 → assisted 2/6</h3><p>Blinded CI-scored pilot; 16.7% to 33.3%.</p></article>
           <article><div class="metric">+16.7 <small>pp</small></div><p class="card-label">ARC-AGI-1</p><h3>BASE 4/6 → assisted 5/6</h3><p>Blinded CI-scored pilot; 66.7% to 83.3%.</p></article>
           <article><div class="metric neutral">0.0 <small>pp</small></div><p class="card-label">GPQA-DIAMOND</p><h3>BASE 9/12 → assisted 9/12</h3><p>The larger follow-up produced a null result.</p></article>
+          <article><div class="metric neutral">1/2 · 2/2 · 1/2 · 0/2</div><p class="card-label">BROWSECOMP FOUR-WAY</p><h3>BASE · FOIL · PROFILE · MASTERMIND</h3><p>Two disjoint items per condition. Exact-normalized scoring, not the official BrowseComp LLM judge; no significance claim.</p></article>
         </div>
         <div class="method-strip">
-          <div><b>Validity boundary</b><span>Disjoint subsets, small n, exact-normalized scoring where documented; no general-efficacy claim.</span></div>
-          <div><b>Receipts</b><span>Frozen seeds, exclusions, harnesses, conditions, and machine-readable results are public.</span></div>
+          <div><b>Validity boundary</b><span>Disjoint subsets, small n, documented contamination/execution exclusions, and exact-normalized scoring where specified; pilot benchmark results do not establish general efficacy.</span></div>
+          <div><b>Receipts</b><span>Frozen seeds, exclusions, harnesses, conditions, predictions, and machine-readable results are public.</span></div>
           <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/BENCHMARKS.md">Read full benchmark report ↗</a>
         </div>
-        <p class="fine-print">Legacy SimpleBench and custom freshness-routing pilots remain in the detailed report with weaker evidence labels. Saturated math/error-localization pilots were discarded rather than used as non-discriminating evidence. Pilot benchmark deltas do not establish general efficacy.</p>
+        <p class="fine-print">BrowseComp observed BASE 1/2, FOIL 2/2, FOIL_PROFILE 1/2, and FOIL_MM 0/2; with n=2 per condition and different questions, these component differences are not statistically interpretable. Legacy SimpleBench and custom freshness-routing pilots remain in the detailed report with weaker evidence labels. Saturated math/error-localization pilots were discarded rather than used as non-discriminating evidence.</p>
       </div>
     </section>
 
