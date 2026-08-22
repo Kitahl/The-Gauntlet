@@ -22,8 +22,8 @@ jobs:
           python-version: '3.12'
       - name: Prepare blinded HLE and ARC questions; score predictions when present
         run: python benchmarks/harness/prepare_and_score_v4.py
-      - name: Prepare contamination-safe blinded BrowseComp questions; score predictions when present
-        run: python benchmarks/harness/browsecomp_prepare_score_v2.py
+      - name: Prepare final contamination-safe blinded BrowseComp questions; score predictions when present
+        run: python benchmarks/harness/browsecomp_prepare_score_v3.py
       - name: Upload blinded HLE and ARC questions
         uses: actions/upload-artifact@v4
         with:
