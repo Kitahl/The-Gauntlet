@@ -129,6 +129,75 @@ FOIL itself records performance evidence only after a diagnostic observation and
 - relevance does not change competence classification;
 - skill specification explicitly forbids one-miss permanent weakness updates.
 
+## Loop 6 — cold-path entrypoint and profile semantics
+
+### Failure
+
+The first integrated path revealed two classes of defect that unit-level component checks can miss: command/entrypoint behavior and over-broad profile promotion. Blank self-estimate fields could be mistaken for declared relevance, while setup-inferred domains needed an explicit persistence path into the saved profile.
+
+### General mechanism
+
+- only an actually supplied self-rating can become self-estimate evidence;
+- setup text and explicit custom domains are persisted as **relevance metadata only**;
+- cold-start/profile creation is exercised through the same public entrypoints used by hooks.
+
+### Regression
+
+- blank self-estimates do not declare competence or relevance;
+- setup-derived custom domains persist without being scored;
+- profile bootstrap remains blank/provisional.
+
+## Loop 7 — validator drift after architecture change
+
+### Failure
+
+The old showcase validator treated any reference to runtime helper paths as a defect because the previous public release was specification-only. After adding real portable helpers, that gate became anti-diagnostic: it rejected the intended architecture.
+
+### General mechanism
+
+Validation now distinguishes:
+
+- **required public runtime paths** — must exist and may be referenced;
+- **machine-specific/private paths** — must not appear;
+- **optional integrations** — may be absent and return `UNAVAILABLE`.
+
+Decision Preflight is checked by its current orchestrator-owned contract instead of a stale historical phrase.
+
+## Loop 8 — privacy validator self-leak
+
+### Failure
+
+A production validator itself listed the private names it was intended to ban. The privacy check therefore introduced the exact private lineage it was supposed to prevent.
+
+### General mechanism
+
+Separate sensitive sentinels from production validation:
+
+- private-name/path sentinels live only in `tests/test_private_leaks.py`;
+- production validators use generic portability checks such as machine-specific absolute-path patterns;
+- the leak test excludes its own sentinel source while scanning the candidate.
+
+### Regression
+
+The exact CI candidate passed the private-lineage scan after this separation.
+
+## Loop 9 — state-isolation validator specificity
+
+### Failure
+
+Runtime state was correctly configured as `.egrt/state` and the repository correctly ignored the broader `.egrt/` directory, but the showcase validator required the literal `.egrt/state/` line in `.gitignore` and produced a false negative.
+
+### General mechanism
+
+Validate the relationship semantically:
+
+1. read `.gauntlet.json` and obtain the configured `state_dir`;
+2. require it to lie under `.egrt/` and not `.git/`;
+3. require `.gitignore` to ignore `.egrt/`;
+4. require the public Process Assurance contract to state that runtime state is outside Git metadata.
+
+This tests the actual invariant rather than one spelling of the configuration.
+
 ## Release boundary
 
 This candidate is intended to establish:
@@ -138,7 +207,8 @@ This candidate is intended to establish:
 - saved profile mechanics;
 - questionnaire mechanics;
 - conservative classification/update rules;
-- automatic domain-relevance adaptation.
+- automatic domain-relevance adaptation;
+- release validators that track the actual runtime architecture rather than historical implementation details.
 
 It does **not** establish:
 
