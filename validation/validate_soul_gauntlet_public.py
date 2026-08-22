@@ -1,55 +1,74 @@
 #!/usr/bin/env python3
-"""Mechanical public-package checks for Soul + Infinity Gauntlet.
+"""Validate public Research Orchestrator and Process Assurance invariants.
 
-This validator is deliberately source-level. It checks release invariants that
-can be established without pretending to have executed an LLM behavior study.
+These are source/package checks. They do not claim behavioral efficacy of an
+executing language model or the complete research workflow.
 """
 from __future__ import annotations
 
-from pathlib import Path
 import re
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-def fail(msg: str) -> None:
-    print(f"FAIL: {msg}")
+
+def fail(message: str) -> None:
+    print(f"FAIL: {message}")
     raise SystemExit(1)
 
-def need(path: str) -> str:
-    p = ROOT / path
-    if not p.is_file():
+
+def read_required(path: str) -> str:
+    file_path = ROOT / path
+    if not file_path.is_file():
         fail(f"missing required file: {path}")
-    return p.read_text(encoding="utf-8")
+    return file_path.read_text(encoding="utf-8")
 
-soul = need("skills/soul/SKILL.md")
-gauntlet = need("skills/infinity-gauntlet/SKILL.md")
-readme = need("README.md")
-docs = need("docs/index.html")
 
-# Soul must exist as an invocable public control plane.
-for token in ("name: soul", "SOUL GEM", "/soul", "Portable runtime", "Infinity Gauntlet"):
-    if token not in soul:
-        fail(f"Soul missing invariant token: {token}")
+orchestrator = read_required("skills/soul/SKILL.md")
+assurance = read_required("skills/infinity-gauntlet/SKILL.md")
+readme = read_required("README.md")
+showcase = read_required("docs/index.html")
 
-# The portable Gauntlet has exactly the canonical ten ops and may not require
-# historical private paths as runtime dependencies.
-ops = ["frame","audit","costume","derive","self","redirect","refresh","boundary","explain","oob"]
-for op in ops:
-    if f"`{op}`" not in gauntlet:
-        fail(f"Gauntlet missing operation: {op}")
+# Technical identifiers remain stable for backwards compatibility.
+for token in ("name: soul", "/soul", "Portable runtime", "Infinity Gauntlet"):
+    if token not in orchestrator:
+        fail(f"Research Orchestrator missing compatibility invariant: {token}")
 
-table_rows = re.findall(r"^\|\s*\d+\s*\|\s*`(frame|audit|costume|derive|self|redirect|refresh|boundary|explain|oob)`\s*\|", gauntlet, re.M)
-if table_rows != ops:
-    fail(f"canonical operation table mismatch: {table_rows}")
+operations = [
+    "frame",
+    "audit",
+    "costume",
+    "derive",
+    "self",
+    "redirect",
+    "refresh",
+    "boundary",
+    "explain",
+    "oob",
+]
+for operation in operations:
+    if f"`{operation}`" not in assurance:
+        fail(f"Process Assurance missing operation: {operation}")
 
-for required in ("PUBLIC RUNTIME CONTRACT", "Feature-detect", "UNAVAILABLE", "A verification must not define its own scope"):
-    if required not in gauntlet:
-        fail(f"Gauntlet missing portability/safety invariant: {required}")
+pattern = (
+    r"^\|\s*\d+\s*\|\s*`(frame|audit|costume|derive|self|redirect|refresh|"
+    r"boundary|explain|oob)`\s*\|"
+)
+table_rows = re.findall(pattern, assurance, re.MULTILINE)
+if table_rows != operations:
+    fail(f"canonical Process Assurance operation table mismatch: {table_rows}")
 
-# Dead required-path regression: these historical private integrations may be
-# discussed only as non-required/optional behavior. The portable skill should
-# not contain them at all.
-dead = (
+for required in (
+    "PUBLIC RUNTIME CONTRACT",
+    "Feature-detect",
+    "UNAVAILABLE",
+    "A verification must not define its own scope",
+):
+    if required not in assurance:
+        fail(f"Process Assurance missing portability/safety invariant: {required}")
+
+# Historical private integrations must not become public runtime dependencies.
+dead_private_paths = (
     "tools/gauntlet_monitor.py",
     "tools/gauntlet_boundary.py",
     "tools/fsa_bots.py",
@@ -58,21 +77,29 @@ dead = (
     ".claude/settings.json",
     "repo CLAUDE.md",
 )
-for token in dead:
-    if token in gauntlet:
-        fail(f"dead private runtime dependency leaked into portable skill: {token}")
+for token in dead_private_paths:
+    if token in assurance:
+        fail(f"private runtime dependency leaked into public assurance spec: {token}")
 
-# Public documentation must expose Soul and keep module count synchronized.
-if "**SOUL / orchestrator**" not in readme:
-    fail("README does not expose Soul")
-if "<strong>10</strong><span>skill modules in this repository</span>" not in docs:
+# Portfolio terminology and technical aliases must remain synchronized.
+for token in (
+    "Evidence-Governed Research Toolkit",
+    "Research Orchestrator",
+    "Process Assurance Framework",
+    "FOIL — Adaptive Reasoning Complement",
+):
+    if token not in readme:
+        fail(f"README missing professional public terminology: {token}")
+
+if "<strong>10</strong>" not in showcase:
     fail("showcase module count is not 10")
-if "/soul" not in docs:
-    fail("showcase does not expose /soul")
-if "skills/soul/SKILL.md" not in docs:
-    fail("showcase does not link Soul skill")
+for token in ("Research Orchestrator", "Process Assurance Framework", "/soul"):
+    if token not in showcase:
+        fail(f"showcase missing public architecture token: {token}")
+if "skills/soul/SKILL.md" not in showcase:
+    fail("showcase does not link the Research Orchestrator specification")
 
-print("PASS: Soul + Infinity Gauntlet public package invariants")
-print("PASS: 10 canonical Gauntlet operations")
+print("PASS: Research Orchestrator public package invariants")
+print("PASS: 10 canonical Process Assurance operations")
 print("PASS: no required private runtime paths")
-print("PASS: README/showcase Soul exposure synchronized")
+print("PASS: professional naming and compatibility aliases synchronized")
