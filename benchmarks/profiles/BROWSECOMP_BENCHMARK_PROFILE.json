@@ -1,0 +1,37 @@
+{
+  "schema": "foil-benchmark-profile/v1",
+  "created_before_browsecomp_item_exposure": true,
+  "target": "GPT-5.6 Sol benchmark behavior under FOIL",
+  "source_evidence": [
+    {"evaluation": "HLE public text-only pilot", "base": "1/6", "interpretation": "low confidence for obscure expert exact-answer recall without additional verification"},
+    {"evaluation": "ARC-AGI-1 pilot", "base": "4/6", "interpretation": "moderate strength in structured transformation and constraint reasoning"},
+    {"evaluation": "GPQA-Diamond pilot", "base": "9/12", "interpretation": "relatively strong closed-book technical multiple-choice reasoning"},
+    {"evaluation": "SimpleBench public pilot", "base": "3/5", "interpretation": "some susceptibility to distracting surface narratives and state-tracking traps"},
+    {"evaluation": "current-evidence retrieval holdout", "base": "0/5", "interpretation": "model-memory answers are unreliable for freshness-sensitive exact facts; explicit evidence routing is valuable"}
+  ],
+  "provisional_profile": {
+    "promising_strengths": [
+      "structured constraint reasoning",
+      "technical multiple-choice reasoning when required knowledge is internally available"
+    ],
+    "possible_gaps": [
+      "exact identification of obscure entities or facts from memory",
+      "freshness-sensitive factual recall",
+      "premature commitment to a plausible narrative before checking all constraints"
+    ],
+    "browsecomp_policy": [
+      "allocate less effort to unsupported internal recall and more effort to identity resolution",
+      "decompose every clue into independently searchable constraints",
+      "use at least two independent evidence paths before committing when identity is obscure",
+      "prefer primary or near-primary sources for decisive constraints",
+      "search for disconfirming candidates, not only supporting matches",
+      "preserve exact names, dates, numeric ranges, exclusions, and relation direction",
+      "use remaining budget for final entity-level cross-check rather than additional prose"
+    ]
+  },
+  "limits": [
+    "This is a benchmark-blind provisional profile, not a validated psychometric profile.",
+    "It contains no BrowseComp questions, answers, topic names, or benchmark-specific hidden information.",
+    "It is frozen before the four-way BrowseComp question artifact is generated."
+  ]
+}
