@@ -1,0 +1,1 @@
+Runtime release gates are executed by `.github/workflows/validate.yml`: Ruff, unit/regression tests, Research Orchestrator/Process Assurance package validation, showcase validation, Python compilation, and research metadata checks. CodeQL runs separately.
