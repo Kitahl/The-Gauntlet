@@ -53,7 +53,10 @@ class FoilLayer2Tests(unittest.TestCase):
         self.assertEqual(len(session["open_probes"]), 3)
         self.assertEqual(len(session["self_estimate_facets"]), 12)
         self.assertTrue(
-            all(row["choice"] is None for row in session["response_schema"]["objective"].values())
+            all(
+                row["choice"] is None
+                for row in session["response_schema"]["objective"].values()
+            )
         )
         self.assertIsNone(forbidden_key(session["objective_items"]))
 
@@ -74,7 +77,10 @@ class FoilLayer2Tests(unittest.TestCase):
             responses["objective"][item["id"]]["choice"] = fl2.answer(item)
         report = fl2.score(session, responses)
         self.assertTrue(
-            all(row["classification"] == "INSUFFICIENT_EVIDENCE" for row in report["facet_evidence"].values())
+            all(
+                row["classification"] == "INSUFFICIENT_EVIDENCE"
+                for row in report["facet_evidence"].values()
+            )
         )
 
     def test_standard_perfect_independent_is_only_promising(self) -> None:
@@ -85,7 +91,10 @@ class FoilLayer2Tests(unittest.TestCase):
             responses["objective"][item["id"]]["confidence"] = 100
         report = fl2.score(session, responses)
         self.assertTrue(
-            all(row["classification"] == "PROMISING_STRENGTH" for row in report["facet_evidence"].values())
+            all(
+                row["classification"] == "PROMISING_STRENGTH"
+                for row in report["facet_evidence"].values()
+            )
         )
         self.assertEqual(report["calibration"]["brier"], 0.0)
         self.assertIn("cannot certify OWNED", report["ownership_ceiling"])
@@ -98,14 +107,19 @@ class FoilLayer2Tests(unittest.TestCase):
             responses["objective"][item["id"]]["assistance"] = "full"
         report = fl2.score(session, responses)
         self.assertTrue(
-            all(row["classification"] == "INSUFFICIENT_EVIDENCE" for row in report["facet_evidence"].values())
+            all(
+                row["classification"] == "INSUFFICIENT_EVIDENCE"
+                for row in report["facet_evidence"].values()
+            )
         )
 
     def test_apply_to_profile_records_verified_microprobes_without_open_text(self) -> None:
         profile = fp.load()
         session = fl2.build(profile, seed=5)
         responses = session["response_schema"]
-        responses["open"]["design-open"]["response"] = "PRIVATE OPEN RESPONSE SHOULD NOT BE STORED"
+        responses["open"]["design-open"]["response"] = (
+            "PRIVATE OPEN RESPONSE SHOULD NOT BE STORED"
+        )
         for item in session["objective_items"]:
             responses["objective"][item["id"]]["choice"] = fl2.answer(item)
         report = fl2.score(session, responses)
@@ -117,7 +131,10 @@ class FoilLayer2Tests(unittest.TestCase):
         deep = saved["deep_calibration"]
         self.assertEqual(len(deep["probe_history"]), 24)
         for facet in session["self_estimate_facets"]:
-            self.assertEqual(deep["facet_evidence"][facet]["classification"], "PROMISING_STRENGTH")
+            self.assertEqual(
+                deep["facet_evidence"][facet]["classification"],
+                "PROMISING_STRENGTH",
+            )
 
     def test_layer2_screen_alone_cannot_satisfy_deep_profile_gate(self) -> None:
         profile = fp.load()
@@ -135,16 +152,18 @@ class FoilLayer2Tests(unittest.TestCase):
 
     def test_prompt_facet_relevance_does_not_change_competence(self) -> None:
         profile = fp.load()
-        facets = fl2.infer_facets("Please formalize this proof claim and red team the evidence before we run tests")
+        facets = fl2.infer_facets(
+            "Please formalize this proof claim and red team the evidence before we run tests"
+        )
         self.assertIn("formalization_precision", facets)
         self.assertIn("error_detection", facets)
         self.assertIn("evidence_discipline", facets)
         self.assertIn("implementation_execution", facets)
         fl2.mark_facet_relevance(profile, facets)
         deep = profile["deep_calibration"]
-        self.assertNotIn("facet_evidence", deep) if False else None
         for facet in facets:
             self.assertNotIn(facet, deep.get("facet_evidence", {}))
+            self.assertGreaterEqual(deep["facet_relevance"][facet]["mentions"], 1)
 
 
 if __name__ == "__main__":
