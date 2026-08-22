@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - benchmark/hle-mastermind-foil
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
