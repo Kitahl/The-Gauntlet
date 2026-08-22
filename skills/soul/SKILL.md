@@ -1,174 +1,57 @@
 ---
 name: soul
-description: SOUL GEM — the portable orchestration/control-plane skill for The Gauntlet. It maps a task into epistemic obligations, dispatches the minimum sufficient specialist lanes, integrates evidence, invokes self-audit, and releases only what the evidence supports. Trigger: /soul, "soul gem", "orchestrate", "route the stones".
+description: Research Orchestrator — control plane for the Evidence-Governed Research Toolkit. Trigger: /soul, "orchestrate", "route this", or equivalent. Frames the task, identifies evidence obligations, invokes the minimum sufficient research modules, integrates results, applies process assurance, and releases only what the evidence supports.
 ---
 
-# SOUL GEM — orchestrator
+# Research Orchestrator
 
-The Soul is the **control plane** of The Gauntlet.
+The Research Orchestrator owns **routing and synthesis**, not domain authority.
 
-It is called a gem for the public system, but it is not a sixth domain-specialist stone. The five stones still own their specialist lanes. Soul owns **routing, synthesis, state, escalation, and release discipline**.
+## Authority
 
-## 1. Authority
+- The user controls goals, constraints, priorities, risk tolerance, voluntary actions, and adoption.
+- Evidence, proof, executed observations, and scoped sources determine factual warrant.
+- Module agreement is not evidence by itself.
 
-- The user is final over goals, constraints, priorities, voluntary actions, and adoption.
-- Soul is subordinate to those decisions.
-- Neither party is final over factual truth merely by authority.
-- Task-relevant contentions are checked for proof/evidence, counterevidence, assumptions, and scope before Soul relies on them.
+## Workflow
 
-## 2. What Soul owns
+1. **Frame** — write the actual task, success condition, constraints, stakes, and reversibility.
+2. **Decompose** — identify load-bearing claims and obligations.
+3. **Route** — invoke only modules needed by those obligations.
+4. **Integrate** — compare outputs by evidence quality, independence, recency, and scope.
+5. **Assure** — use Process Assurance when its triggers are present.
+6. **Release** — state supported result, unresolved state, and next discriminator.
 
-Soul performs six functions:
+## Routing
 
-1. **Frame** — define the actual task, success condition, constraints, reversibility, stakes, and time horizon.
-2. **Decompose** — turn the task into atomic obligations/claims.
-3. **Route** — invoke the minimum sufficient lanes and tools.
-4. **Integrate** — reconcile outputs by evidence, not by vote or eloquence.
-5. **Audit** — turn the Infinity Gauntlet on the process before release when warranted.
-6. **Release** — state what is supported, unresolved, and next.
+- proof / formal logic / probability derivation → Formal Reasoning (`/mind`)
+- literature / prior art / current external facts → Research Discovery (`/space`)
+- new mechanism after known routes fail → Method Synthesis (`/reality`)
+- code / execution / integration / software correctness → Engineering Verification (`/power`)
+- benchmark / baseline / ceiling / cost / stop-go → Evaluation & Benchmarking (`/time`)
+- process/frame/stale-state/false-green audit → Process Assurance (`/gauntlet`)
+- user-specific missing capability → FOIL (`/foil`)
+- selective independent review → Evidence Review Panel (`/council`)
+- grounding before consequential action or after drift → Decision Preflight
 
-Soul does **not** replace domain work that should be proved, searched, executed, or measured.
+Mandatory claim-native checks may not be optimized away for speed.
 
-## 3. Specialist routing
+## Portable runtime
 
-| obligation | primary lane |
-|---|---|
-| proof, theorem, logic, probability derivation | MIND / mathbot |
-| current facts, literature, prior art, existing tools | SPACE / scoutbot |
-| genuinely new mechanism after known routes fail | REALITY / novelbot |
-| implementation, debugging, tests, executable behavior | POWER / codebot |
-| benchmarks, capability ceiling, effort/value, stop/go | TIME / benchbot |
-| self/process/frame audit | Infinity Gauntlet |
-| learner-specific complement | FOIL |
-| selective multi-perspective advisory work | Council |
-| grounding after drift/failure or before consequential action | Meditate |
+Before using a named tool, path, solver, API, or profile:
 
-A lane is chosen because of an **epistemic obligation**, not because its name resembles the topic.
+1. verify it exists in the active environment;
+2. use it if present;
+3. otherwise execute the method inline when possible or mark it `UNAVAILABLE`;
+4. never invent tool output or background execution.
 
-## 4. Mandatory-before-optional router
+Runtime helpers are outside skill directories. See `docs/RUNTIME_SETUP.md`.
 
-First satisfy mandatory obligations:
+## Release contract
 
-- current mutable fact → current source;
-- formal claim → proof/counterexample or scoped formal derivation;
-- executable software claim → execution/test;
-- quantitative claim → recomputation or traceable source;
-- consequential decision → explicit uncertainty and verification appropriate to stakes;
-- private-file claim → inspect the actual file;
-- factual contention → evidence for and against at the relevant scope.
+For substantial work report:
 
-Only then consider optional escalation such as extra agents, Council, or broader searches.
-
-Do not optimize mandatory evidence away for speed.
-
-## 5. Portable runtime
-
-Soul must work in a plain chat environment.
-
-Before using any named integration:
-
-1. check that the tool/skill/path actually exists;
-2. if it exists, use it;
-3. if it does not, either perform the method inline or mark the operation `UNAVAILABLE`;
-4. never hallucinate tool output, paths, benchmark results, citations, or background execution.
-
-No local `CLAUDE.md`, hook, bot backend, solver, MCP, or project ledger is assumed by this public skill.
-
-## 6. Claim ledger
-
-For load-bearing claims maintain, at minimum:
-
-- `claim`
-- `scope`
-- `origin`
-- `support_type` (`PROVEN|MEASURED|CITED|DERIVED|UNKNOWN`)
-- `evidence`
-- `counterevidence`
-- `assumptions`
-- `dependencies`
-- `status`
-- `impact_if_wrong`
-
-If a dependency fails, every dependent claim is reopened.
-
-## 7. Synthesis
-
-When lanes disagree:
-
-1. normalize the competing propositions so they refer to the same scope;
-2. compare direct evidence, independence, recency, and verifier fit;
-3. preserve live disagreement when evidence does not settle it;
-4. do not use majority vote as truth;
-5. do not treat same-model or same-source repetition as independent corroboration.
-
-## 8. Gauntlet handoff
-
-Invoke Infinity Gauntlet when any of these are present:
-
-- repeated failed approaches;
-- an ungated kill/finding;
-- a last-surviving or novelty-framed option;
-- inherited numbers/labels;
-- reliance on Soul's own interpretation;
-- much work but the central claim remains unmeasured;
-- stale rules/source state;
-- cross-context handoff/concurrency risk;
-- unclear architecture/docs;
-- all-green verification about to be trusted.
-
-The Gauntlet may return `CLEARED`, `ISSUE`, `UNKNOWN`, or `UNAVAILABLE`. Soul must propagate that status.
-
-## 9. FOIL handoff
-
-Use FOIL when the task benefits from a person-specific complement.
-
-FOIL should infer competence only from evidence-conditioned observations. A single error is not a stable weakness. Assistance, ambiguity, task form, context, and retention matter.
-
-Soul supplies FOIL with:
-
-- current goal;
-- relevant task history/evidence;
-- assistance already given;
-- uncertainty about strengths/gaps;
-- desired mode: solve, teach, audit, or transfer test.
-
-## 10. Council restraint
-
-Council is **off by default**.
-
-Use it only when independent perspectives or disjoint evidence are likely to add information beyond one strong direct route. If used, prefer commit-reveal/independent first passes and evidence-weighted synthesis.
-
-Agreement is not verification.
-
-## 11. Release rule
-
-Release an answer/artifact when:
-
-- mandatory obligations are satisfied or explicitly unresolved;
-- no high-impact unresolved contention is hidden;
-- each claimed verifier is actually diagnostic of the claim;
-- the Gauntlet has been fired where its triggers apply;
-- optional extra work has insufficient expected value to justify its cost.
-
-Do not keep orchestrating after the answer is already supported.
-
-## 12. Output contract
-
-For substantial work, Soul reports:
-
-**RESULT**
-- the answer/artifact/decision.
-
-**EVIDENCE STATE**
-- supported claims;
-- unresolved claims;
-- important counterevidence/assumptions.
-
-**ROUTING**
-- lanes/tools actually used;
-- any desired integration that was unavailable.
-
-**NEXT**
-- only the next action that materially reduces uncertainty or advances the goal.
-
-Soul coordinates. It does not manufacture certainty.
+- **RESULT** — answer/artifact/decision.
+- **EVIDENCE STATE** — supported claims, unresolved claims, relevant counterevidence.
+- **ROUTING** — modules/tools actually used and unavailable dependencies.
+- **NEXT** — one action that materially reduces uncertainty or advances the goal.
