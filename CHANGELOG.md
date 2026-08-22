@@ -6,11 +6,26 @@ The project follows semantic versioning for public releases.
 
 ## [Unreleased]
 
+### Added
+- Reproducible blinded benchmark harnesses for HLE/ARC-AGI-1, GPQA-Diamond, and BrowseComp under `benchmarks/harness/`.
+- Benchmark-only `Frontier-Exam FOIL` protocol combining the existing FOIL verification behavior with a final Mastermind causal-defect pass without changing the permanent FOIL architecture.
+- Permanent machine-readable benchmark receipt at `benchmarks/results/2026-08-22-blinded-pilot.json`.
+- Public benchmark methodology and evidence-boundary report in `docs/BENCHMARKS.md`.
+- Scoped benchmark evidence on the repository README and public Pages showcase, including the GPQA-Diamond null result.
+
+### Changed
+- Benchmark workflows publish blinded questions and public score receipts only; decrypted BrowseComp reference answers are not uploaded as public artifacts.
+- Superseded experimental benchmark harness revisions were consolidated into three canonical runners.
+
+### Evidence boundary
+The current HLE, ARC-AGI-1, and GPQA results are exploratory deterministic disjoint-subset pilots using GPT-5.6 Sol, not official benchmark submissions or isolated same-item randomized A/B evidence. The GPQA-Diamond pilot produced no accuracy gain and is retained as a null result. Legacy SimpleBench and freshness-routing results have weaker/manual evidence labels.
+
 ### Planned
 - Prospective behavioral evaluation of FOIL against direct-assistance and static-scaffolding baselines.
 - Layer 1 vs Layer 1 + Layer 2A vs full Layer 2B personalization ablation.
 - Empirical calibration of profile-maturity thresholds and item difficulty.
-- Reproducible benchmark harnesses and independent reproduction reports.
+- Isolated same-item randomized benchmark A/B runs with confidence intervals and mechanism ablations.
+- Independent reproduction reports.
 - Archival DOI integration after the first evidence-bearing stable release.
 
 ## [0.4.0] - 2026-08-21
@@ -78,11 +93,10 @@ This release establishes portable runtime/profile mechanics and conservative col
 ### Added
 - Research Orchestrator control plane.
 - Formal Reasoning, Research Discovery, Method Synthesis, Engineering Verification, and Evaluation & Benchmarking modules.
-- Process Assurance Framework with ten portable audit operations.
-- Decision Preflight Protocol and Evidence Review Panel.
-- FOIL adaptive complementary-reasoning specification and research basis.
-- GitHub Pages technical showcase and provenance mapping.
-- Structural/specification validation artifacts and release-boundary audit.
+- Process Assurance Framework and Decision Preflight Protocol.
+- Evidence Review Panel and FOIL adaptive complement.
+- Public FOIL research integration validation records.
+- Professional research-software README, architecture, evaluator quickstart, research/reproducibility/roadmap documents, MIT license, citation metadata, governance, CodeQL, CI, Dependabot, issue forms, and pull-request evidence gates.
 
 ### Evidence boundary
-This release establishes a public research-software specification and mechanical validation package. It does not establish that the full system improves human reasoning or research outcomes in deployment.
+This release establishes the public software/specification baseline. It does not establish behavioral efficacy.
