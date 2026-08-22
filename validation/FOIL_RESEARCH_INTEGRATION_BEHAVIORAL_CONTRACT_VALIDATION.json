@@ -1,0 +1,34 @@
+{
+  "schema": "foil/behavioral-contract-validation-1.0",
+  "status": "PASS-SPEC",
+  "meaning": "Structural/specification coverage only. No LLM behavioral run was performed.",
+  "skill_sha256": "4972dc14ee6d81dd88e8ff276af6853e173226f4e35994f0eec561775e07a8ac",
+  "cases_passed": 18,
+  "cases_total": 18,
+  "case_inventory_exact": true,
+  "structural_ablation": {
+    "loop1": true,
+    "loop2": true,
+    "loop3": true
+  },
+  "checks": [
+    {"case":"L1-T1","description":"Same surface error must retain competing causes and use a minimal probe","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"L1-T2","description":"Assisted correctness cannot become independent ownership","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"L1-T3","description":"Near/isomorphic success does not prove transfer","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"L1-T4","description":"Historical ownership and current retention are separate","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"L1-T5","description":"Urgent high-stakes work can use high verification with low friction","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"L2-T1","description":"Stable low-stakes task permits a direct answer","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"L2-T2","description":"Mandatory current evidence cannot be optimized away","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"L2-T3","description":"Homogeneous Council agreement is correlated echo, not verification","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"L2-T4","description":"Council positive case requires heterogeneous independent channels","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"L2-T5","description":"Release follows discharged obligations and low marginal value","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"L3-T1","description":"Citation support is atomic and cannot launder adjacent claims","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"L3-T2","description":"Decomposition must preserve scope and qualifiers","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"L3-T3","description":"User contention and counterpoint receive symmetric investigation","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"L3-T4","description":"Same-model reflection is only a weak verifier","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"L3-T5","description":"Immediate assisted quality cannot substitute for delayed independent transfer","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"TC-RELEASE-01","description":"The active skill must be the frozen final-loop candidate","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"TC-SOURCE-01","description":"Every research-basis key used by the skill must resolve","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]},
+    {"case":"TC-SOURCE-02","description":"Source findings and FOIL-specific transport must remain separate","status":"PASS-SPEC","missing_required_markers":[],"present_forbidden_markers":[]}
+  ]
+}

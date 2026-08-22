@@ -1,0 +1,16 @@
+{
+  "status": "STALE_SUPERSEDED",
+  "scope": "historical pre-SOUL browser receipt",
+  "reason": "The previous 30/30 receipt was generated before SOUL became a tenth module and before the public Infinity Gauntlet portability repair. It must not be represented as validation of the current release candidate.",
+  "historical_result": {
+    "status": "PASS",
+    "total": 30,
+    "passed": 30,
+    "applied_to": "pre-SOUL showcase"
+  },
+  "current_validators": [
+    "validation/validate_soul_gauntlet_public.py",
+    "validation/validate_showcase.py"
+  ],
+  "current_browser_result": "NOT_MEASURED_IN_THIS_RECEIPT"
+}
