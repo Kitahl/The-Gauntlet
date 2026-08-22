@@ -1,12 +1,12 @@
 {
   "schema": "egrt/visual-provenance-1",
-  "showcase_revision": 13,
+  "showcase_revision": 14,
   "research_software_version": "0.4.0",
   "visuals": [
     {
       "id": "gauntlet-system-map",
       "file": "docs/visuals/gauntlet-system-map.svg",
-      "purpose": "Explain the public control plane and bounded research-module responsibilities.",
+      "purpose": "Explain the public control plane and bounded research-module responsibilities in the R14 editorial visual system.",
       "sources": [
         "docs/ARCHITECTURE.md",
         "skills/soul/SKILL.md",
@@ -25,7 +25,7 @@
     {
       "id": "foil-diagnostic-loop",
       "file": "docs/visuals/foil-diagnostic-loop.svg",
-      "purpose": "Expose FOIL's competing-explanation, complement, verification, transfer, and evidence-update logic.",
+      "purpose": "Expose FOIL's competing-explanation, complement, verification, transfer, and evidence-update logic in the R14 editorial visual system.",
       "sources": [
         "skills/foil/SKILL.md",
         "research/FOIL_RESEARCH_BASIS.md",
@@ -36,7 +36,7 @@
     {
       "id": "benchmark-evidence",
       "file": "docs/visuals/benchmark-evidence.svg",
-      "purpose": "Render the already-published HLE, ARC-AGI-1, and GPQA-Diamond pilot results with the null result visible.",
+      "purpose": "Render the already-published HLE, ARC-AGI-1, GPQA-Diamond, and small BrowseComp pilot observations while keeping null and mixed results visible.",
       "sources": [
         "docs/BENCHMARKS.md",
         "benchmarks/results/2026-08-22-blinded-pilot.json"
