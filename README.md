@@ -5,7 +5,7 @@
 [![Research software validation](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml)
 [![CodeQL](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.3.0-informational.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.4.0-informational.svg)](CHANGELOG.md)
 
 > **Research status:** public research-software toolkit with executable runtime checks and evidence-bearing structural/source validation. The repository does **not** yet claim that the complete system improves human reasoning, scientific discovery, or general AI capability in prospective deployment.
 
@@ -65,13 +65,13 @@ Professional display names are used for the research portfolio. Existing technic
 | **Process Assurance Framework** | `infinity-gauntlet`, `/gauntlet` | Frame/process audit, stale-state checks, inherited-number checks, false-green defense |
 | **Decision Preflight Protocol** | `meditate` | Grounding before consequential decisions and after failures |
 | **Evidence Review Panel** | `council-of-elders`, `/council` | Selective independent evidence/method review with matched control |
-| **FOIL — Adaptive Reasoning Complement** | `foil`, `/foil` | User/task-specific missing-method support, deep calibration, and independent-transfer tracking |
+| **FOIL — Adaptive Reasoning Complement** | `foil`, `/foil` | User/task-specific missing-method support, multi-stage calibration, and independent-transfer tracking |
 
 Every `skills/<id>/` directory contains **`SKILL.md` only**. Hooks, executable helpers, state policy, and profiles deliberately live elsewhere.
 
 ## Executable runtime
 
-Version 0.2.0 introduced the portable runtime around the specifications. Version 0.3.0 adds the second FOIL calibration layer.
+Version 0.2.0 introduced the portable runtime. Version 0.3.0 added adaptive real-work deep calibration. Version 0.4.0 adds a reproducible structured calibration layer for previously unknown users.
 
 - `.claude/settings.json` — shareable Claude Code hooks using `${CLAUDE_PROJECT_DIR}`;
 - `.gauntlet.json` — configurable governing files, audit budgets, optional evidence-ledger policy;
@@ -80,18 +80,19 @@ Version 0.2.0 introduced the portable runtime around the specifications. Version
 - `tools/gauntlet_hook.py` — Pre/Post tool integration;
 - `tools/verify_ledger.py` — optional generic evidence-ledger commit gate;
 - `tools/openrouter_bot.py`, `tools/fsa_bots.py`, `tools/snap.py` — optional model-backed independent review;
-- `tools/foil_profile.py` / `tools/foil_hook.py` — persistent profiles and prompt-time relevance adaptation;
-- `tools/foil_assessment.py` — Layer 1 blank cold-start questionnaire;
-- `tools/foil_calibration.py` — Layer 2 transfer/adversarial/real-work deep calibration;
+- `tools/foil_profile.py` / `tools/foil_hook.py` — persistent profiles and prompt-time domain/facet relevance adaptation;
+- `tools/foil_assessment.py` — Layer 1 blank cold-start domain questionnaire;
+- `tools/foil_layer2.py` — Layer 2A structured cross-cutting stranger calibration;
+- `tools/foil_calibration.py` — Layer 2B transfer/adversarial/real-work deep calibration;
 - `tools/foil_domains.py` — expanded non-diagnostic domain-relevance recognition.
 
 Runtime state is written under gitignored `.egrt/state/`, not `.git/`. Model credentials are environment-only. No private workstation path or project-specific keystore is required.
 
-## FOIL profiles and two-layer calibration
+## FOIL profiles and multi-stage calibration
 
 FOIL contains no built-in profile for any individual. A first hooked session creates a **blank local `default` profile** when needed; named profiles support multiple users on one installation.
 
-Profiles are stored outside the repository by default and record evidence metadata rather than raw prompts. Topic mentions can make a domain relevant to routing without changing competence classification.
+Profiles are stored outside the repository by default and record evidence metadata rather than raw prompts. Topic or facet mentions can change routing relevance without changing competence classification.
 
 ### Layer 1 — broad cold start
 
@@ -102,9 +103,21 @@ The onboarding screen includes:
 - open design/UX, creativity, and explanation tasks;
 - dynamic setup/usage domains, including arbitrary custom domains.
 
-### Layer 2 — deep calibration
+### Layer 2A — structured cross-cutting calibration
 
-The second stage builds a profile-specific plan containing:
+The stranger-facing second screen adds:
+
+- 24 objective micro-scenarios in standard mode;
+- two observations across 12 cross-cutting reasoning facets;
+- a 12-item short screening mode that cannot classify a facet from one response;
+- confidence calibration and self-estimates kept separate from observed performance;
+- open design, mechanism-diversity/creativity, and explanation tasks that remain rubric-reviewed.
+
+The objective facets include formalization precision, decomposition/systems reasoning, error detection, evidence discipline, causal/quantitative reasoning, implementation/execution, planning/prioritization, metacognitive calibration, transfer/adaptation, verifier/tool selection, and uncertainty management.
+
+### Layer 2B — adaptive real-work calibration
+
+The saved profile then drives a profile-specific plan containing:
 
 - changed-representation discriminators for uncertain/gap hypotheses;
 - harder transfer probes for apparent strengths;
@@ -114,11 +127,11 @@ The second stage builds a profile-specific plan containing:
 - explanation/teach-back;
 - verifier/tool-selection probes;
 - confidence-before-feedback;
-- cross-domain facet evidence such as formalization, decomposition, evidence discipline, error detection, planning, transfer, and uncertainty management.
+- domain-specific follow-up.
 
-Open-ended Layer 2 outcomes only count as verified when an appropriate rubric, artifact, proof, execution, or independent reviewer supports the result.
+Open-ended outcomes only count as verified when an appropriate rubric, artifact, proof, execution, or independent reviewer supports the result. A perfect Layer 2A screen alone cannot satisfy the deep-profile real-work coverage gates.
 
-The personalizer is an **experimental onboarding/calibration system**, not an IQ, personality, clinical, diagnostic, or employment test. See [`research/FOIL_PERSONALIZATION_BASIS.md`](research/FOIL_PERSONALIZATION_BASIS.md).
+The personalizer is an **experimental onboarding/calibration system**, not an IQ, personality, clinical, diagnostic, aptitude, or employment test. See [`research/FOIL_PERSONALIZATION_BASIS.md`](research/FOIL_PERSONALIZATION_BASIS.md).
 
 ## What is currently supported by evidence
 
@@ -127,7 +140,9 @@ The personalizer is an **experimental onboarding/calibration system**, not an IQ
 | Process Assurance hooks/tools are portable, config-driven, and state-isolated | release-gated source/runtime checks | `validation/RUNTIME_FOIL_MASTERMIND_AUDIT.md`, `tests/` |
 | Public skill directories contain `SKILL.md` only and private-lineage regressions are tested | release-gated checks | `tests/test_skill_layout.py`, `tests/test_private_leaks.py` |
 | FOIL Layer 1 saved-profile/questionnaire mechanics enforce conservative initial classifications | release-gated tests | `tests/test_runtime_tools.py`, `tests/test_foil_assessment.py` |
-| FOIL Layer 2 mechanics enforce transfer breadth, independent verification, duplicate protection, and multi-domain maturity gates | release-gated tests | `tests/test_foil_calibration.py` |
+| FOIL Layer 2A has blank-session, answer-isolation, assistance, confidence, and no-false-deep regressions | release-gated tests | `tests/test_foil_layer2.py` |
+| FOIL Layer 2B mechanics enforce transfer breadth, independent verification, duplicate protection, and multi-domain maturity gates | release-gated tests | `tests/test_foil_calibration.py` |
+| FOIL structured-calibration falsification history is preserved | audit record | `validation/FOIL_LAYER2_MASTERMIND_AUDIT.md` |
 | FOIL research-integration structure/source/regression checks passed the recorded validator | **94/94 PASS** | `validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json` |
 | FOIL frozen behavioral-contract cases are represented in the specification | **18/18 PASS-SPEC** | `validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json` |
 | Public claims have a machine-readable provenance map | implemented | `docs/content-provenance.json` |
@@ -165,13 +180,22 @@ python -m compileall -q validation tools tests
 
 For interpretation and evidence boundaries, read [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md).
 
-### 3. Optional FOIL calibration
+### 3. Optional FOIL stranger calibration
 
 ```bash
 python tools/foil_assessment.py start --out foil_assessment.json --responses foil_responses.json
 ```
 
-Complete the blank Layer 1 response file and apply it to a saved profile. Then generate Layer 2:
+Complete and apply Layer 1 to a saved profile, then run the structured Layer 2A screen:
+
+```bash
+python tools/foil_layer2.py start --profile default --mode standard \
+  --out foil_layer2.json --responses foil_layer2_responses.json
+python tools/foil_layer2.py score foil_layer2.json foil_layer2_responses.json \
+  --profile default --out foil_layer2_report.json
+```
+
+Then generate the profile-specific Layer 2B real-work/transfer plan:
 
 ```bash
 python tools/foil_calibration.py start --profile default --out foil_deep_calibration.json
@@ -191,7 +215,7 @@ The repository separates:
 5. **Evaluation** — strong baselines, matched budgets, ablations, uncertainty, and negative results.
 6. **Human learning** — assisted performance kept distinct from later independent ownership and transfer.
 
-Planned behavioral comparisons include strong direct AI, static rules, adaptive FOIL, Layer 1-only vs Layer 1 + Layer 2, module ablations, native verification vs same-model critique, and Evidence Review Panel vs matched-evidence direct control. See [`RESEARCH.md`](RESEARCH.md).
+Planned behavioral comparisons include strong direct AI, static rules, adaptive FOIL, Layer 1-only vs Layer 1 + Layer 2A vs full Layer 2B, module ablations, native verification vs same-model critique, and Evidence Review Panel vs matched-evidence direct control. See [`RESEARCH.md`](RESEARCH.md).
 
 ## Repository structure
 
@@ -227,6 +251,7 @@ Planned behavioral comparisons include strong direct AI, static rules, adaptive 
 - Behavioral efficacy is not inferred from specification correctness.
 - User-profile relevance is not competence evidence; one miss never creates a permanent weakness.
 - A deep profile requires evidence breadth; repeated success in one narrow task family is insufficient.
+- A structured questionnaire may accelerate cold start but does not replace real-work and transfer evidence.
 
 ## Citation
 
