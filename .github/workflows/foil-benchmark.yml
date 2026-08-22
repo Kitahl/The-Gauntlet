@@ -20,18 +20,35 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Prepare blinded questions and score predictions when present
+      - name: Prepare blinded HLE and ARC questions; score predictions when present
         run: python benchmarks/harness/prepare_and_score_v4.py
-      - name: Upload blinded questions
+      - name: Prepare blinded BrowseComp questions; score predictions when present
+        run: python benchmarks/harness/browsecomp_prepare_score.py
+      - name: Upload blinded HLE and ARC questions
         uses: actions/upload-artifact@v4
         with:
           name: foil-benchmark-questions
           path: benchmark_runs/2026-08-22/benchmark_questions.json
           if-no-files-found: error
-      - name: Upload scored results
+      - name: Upload blinded BrowseComp questions
+        uses: actions/upload-artifact@v4
+        with:
+          name: foil-browsecomp-questions
+          path: benchmark_runs/2026-08-22/browsecomp_questions.json
+          if-no-files-found: error
+      - name: Upload HLE and ARC results
         if: ${{ hashFiles('benchmark_runs/2026-08-22/benchmark_results.json') != '' }}
         uses: actions/upload-artifact@v4
         with:
           name: foil-benchmark-results
           path: benchmark_runs/2026-08-22/benchmark_results.json
+          if-no-files-found: error
+      - name: Upload BrowseComp scoring and private adjudication material
+        if: ${{ hashFiles('benchmark_runs/2026-08-22/browsecomp_results.json') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: foil-browsecomp-results
+          path: |
+            benchmark_runs/2026-08-22/browsecomp_results.json
+            benchmark_runs/2026-08-22/browsecomp_review_private.json
           if-no-files-found: error
