@@ -25,6 +25,8 @@ CONTAMINATION_REPLACEMENT_SEED = 20260828
 CONTAMINATION_REPLACEMENT_TARGET = 4
 SECOND_CONTAMINATION_REPLACEMENT_SEED = 20260829
 SECOND_CONTAMINATION_REPLACEMENT_TARGET = 4
+EXECUTION_INTEGRITY_REPLACEMENT_SEED = 20260830
+EXECUTION_INTEGRITY_REPLACEMENT_TARGET = 4
 CONDITIONS = ("BASE", "FOIL", "FOIL_PROFILE", "FOIL_MM")
 PROFILE_FREEZE_COMMIT = "013a728bfd6f57a8592fc3fc6e098ea52da357d5"
 
@@ -47,6 +49,14 @@ POST_EXPOSURE_EXCLUDED_IDS = {
 EXECUTION_BUDGET_EXCLUDED_IDS = {
     "bc4-08-00218e89", "bc4-09-66fe5438", "bc4-10-8de4e78a", "bc4-11-0de64524",
     "bc4-12-1b3f837e", "bc4-13-51ac9523", "bc4-14-f0048c50", "bc4-15-84601b6f",
+}
+
+# A pre-commit audit found that research attributed to bc4-34 had been executed
+# against the wrong prompt. No prediction was committed and no hidden gold was
+# consulted. Treating bc4-34 as fresh would silently grant that condition a new
+# search budget, so the complete bc4-32..35 block is retired and replaced.
+EXECUTION_INTEGRITY_EXCLUDED_IDS = {
+    "bc4-32-7e8964be", "bc4-33-8f29b330", "bc4-34-b73854b0", "bc4-35-87e09fcb",
 }
 
 
@@ -85,6 +95,7 @@ def prepare() -> tuple[list[dict], dict[str, str]]:
         + REPLACEMENT_TARGET
         + CONTAMINATION_REPLACEMENT_TARGET
         + SECOND_CONTAMINATION_REPLACEMENT_TARGET
+        + EXECUTION_INTEGRITY_REPLACEMENT_TARGET
     )
     if len(fresh_pool) < needed:
         raise RuntimeError(f"need at least {needed} fresh BrowseComp rows, found {len(fresh_pool)}")
@@ -114,6 +125,18 @@ def prepare() -> tuple[list[dict], dict[str, str]]:
     second_contamination_replacement_selected = random.Random(
         SECOND_CONTAMINATION_REPLACEMENT_SEED
     ).sample(second_contamination_replacement_pool, SECOND_CONTAMINATION_REPLACEMENT_TARGET)
+    second_contamination_replacement_fingerprints = {
+        row_fingerprint(row) for row in second_contamination_replacement_selected
+    }
+
+    execution_integrity_replacement_pool = [
+        row
+        for row in second_contamination_replacement_pool
+        if row_fingerprint(row) not in second_contamination_replacement_fingerprints
+    ]
+    execution_integrity_replacement_selected = random.Random(
+        EXECUTION_INTEGRITY_REPLACEMENT_SEED
+    ).sample(execution_integrity_replacement_pool, EXECUTION_INTEGRITY_REPLACEMENT_TARGET)
 
     indexed_rows = list(enumerate(initial_selected))
     indexed_rows += [(INITIAL_TARGET + offset, row) for offset, row in enumerate(replacement_selected)]
@@ -128,10 +151,25 @@ def prepare() -> tuple[list[dict], dict[str, str]]:
         )
         for offset, row in enumerate(second_contamination_replacement_selected)
     ]
+    indexed_rows += [
+        (
+            INITIAL_TARGET
+            + REPLACEMENT_TARGET
+            + CONTAMINATION_REPLACEMENT_TARGET
+            + SECOND_CONTAMINATION_REPLACEMENT_TARGET
+            + offset,
+            row,
+        )
+        for offset, row in enumerate(execution_integrity_replacement_selected)
+    ]
 
     questions: list[dict] = []
     gold: dict[str, str] = {}
-    all_excluded_ids = POST_EXPOSURE_EXCLUDED_IDS | EXECUTION_BUDGET_EXCLUDED_IDS
+    all_excluded_ids = (
+        POST_EXPOSURE_EXCLUDED_IDS
+        | EXECUTION_BUDGET_EXCLUDED_IDS
+        | EXECUTION_INTEGRITY_EXCLUDED_IDS
+    )
     for index, row in indexed_rows:
         fingerprint = row_fingerprint(row)
         qid = f"bc4-{index:02d}-{fingerprint[:8]}"
@@ -157,16 +195,18 @@ def prepare() -> tuple[list[dict], dict[str, str]]:
         raise RuntimeError(f"replacement balance failure: n={len(questions)}, counts={dict(counts)}")
 
     payload = {
-        "schema": "foil-browsecomp-four-way-questions/v7",
+        "schema": "foil-browsecomp-four-way-questions/v8",
         "selection_seed": SEED,
         "replacement_seed": REPLACEMENT_SEED,
         "contamination_replacement_seed": CONTAMINATION_REPLACEMENT_SEED,
         "second_contamination_replacement_seed": SECOND_CONTAMINATION_REPLACEMENT_SEED,
+        "execution_integrity_replacement_seed": EXECUTION_INTEGRITY_REPLACEMENT_SEED,
         "source": URL,
         "initial_sample_n": INITIAL_TARGET,
         "replacement_sample_n": REPLACEMENT_TARGET,
         "contamination_replacement_sample_n": CONTAMINATION_REPLACEMENT_TARGET,
         "second_contamination_replacement_sample_n": SECOND_CONTAMINATION_REPLACEMENT_TARGET,
+        "execution_integrity_replacement_sample_n": EXECUTION_INTEGRITY_REPLACEMENT_TARGET,
         "final_sample_n": len(questions),
         "prior_sample_excluded_n": 20,
         "post_exposure_excluded_ids": sorted(POST_EXPOSURE_EXCLUDED_IDS),
@@ -179,6 +219,12 @@ def prepare() -> tuple[list[dict], dict[str, str]]:
             "The frozen <=12-search-query ceiling was exceeded on bc4-09 and bc4-12 during pre-commit research. "
             "No benchmark gold or published BrowseComp answer/trace was consulted. Both complete four-condition ordinal blocks "
             "bc4-08..11 and bc4-12..15 were retired before scoring."
+        ),
+        "execution_integrity_excluded_ids": sorted(EXECUTION_INTEGRITY_EXCLUDED_IDS),
+        "execution_integrity_exclusion_reason": (
+            "A pre-commit audit found that research attributed to bc4-34 had been executed against the wrong prompt. "
+            "No prediction or hidden benchmark gold was consulted. To avoid silently granting a new search budget to one condition, "
+            "the complete four-condition block bc4-32..35 was retired before scoring and replaced with a fresh balanced block."
         ),
         "profile_freeze_commit": PROFILE_FREEZE_COMMIT,
         "profile_path": "benchmarks/profiles/BROWSECOMP_BENCHMARK_PROFILE.json",
@@ -217,14 +263,16 @@ def score(questions: list[dict], gold: dict[str, str]) -> None:
         items.append({"id": qid, "condition": condition, "exact_normalized_match": bool(exact)})
 
     result = {
-        "schema": "foil-browsecomp-four-way-results/v4",
+        "schema": "foil-browsecomp-four-way-results/v5",
         "selection_seed": SEED,
         "replacement_seed": REPLACEMENT_SEED,
         "contamination_replacement_seed": CONTAMINATION_REPLACEMENT_SEED,
         "second_contamination_replacement_seed": SECOND_CONTAMINATION_REPLACEMENT_SEED,
+        "execution_integrity_replacement_seed": EXECUTION_INTEGRITY_REPLACEMENT_SEED,
         "profile_freeze_commit": PROFILE_FREEZE_COMMIT,
         "post_exposure_excluded_ids": sorted(POST_EXPOSURE_EXCLUDED_IDS),
         "execution_budget_excluded_ids": sorted(EXECUTION_BUDGET_EXCLUDED_IDS),
+        "execution_integrity_excluded_ids": sorted(EXECUTION_INTEGRITY_EXCLUDED_IDS),
         "summary": [
             {
                 "condition": condition,
@@ -238,9 +286,9 @@ def score(questions: list[dict], gold: dict[str, str]) -> None:
         "validity_boundary": (
             "Official BrowseComp questions; exploratory four-condition disjoint-subset in-session ablation. "
             "Scored replacement items were run under the same frozen web-search ceiling. Exact-normalized scoring is not the official "
-            "BrowseComp LLM judge. Original balanced blocks were retired pre-gold after an operator search-budget overrun, and any block "
-            "whose item exposed a published BrowseComp trace/answer was retired in full. A stronger causal test requires isolated "
-            "same-item randomized executions."
+            "BrowseComp LLM judge. Original balanced blocks were retired pre-gold after an operator search-budget overrun, any block "
+            "whose item exposed a published BrowseComp trace/answer was retired in full, and one block was retired after a pre-commit "
+            "wrong-prompt execution was discovered. A stronger causal test requires isolated same-item randomized executions."
         ),
     }
     (OUT / "browsecomp_four_way_results.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
