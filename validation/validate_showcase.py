@@ -23,18 +23,31 @@ class PageParser(HTMLParser):
         self.ids: list[str] = []
         self.hrefs: list[str] = []
         self.headings: list[str] = []
+        self.links: list[dict[str, str]] = []
+        self.scripts: list[dict[str, str]] = []
+        self.meta: list[dict[str, str]] = []
         self.main_count = 0
         self.nav_count = 0
         self.lang: str | None = None
 
-    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
-        data = dict(attrs)
+    def handle_starttag(
+        self,
+        tag: str,
+        attrs: list[tuple[str, str | None]],
+    ) -> None:
+        data = {key: value or "" for key, value in attrs}
         if tag == "html":
             self.lang = data.get("lang")
         if data.get("id"):
-            self.ids.append(str(data["id"]))
+            self.ids.append(data["id"])
         if tag == "a" and data.get("href"):
-            self.hrefs.append(str(data["href"]))
+            self.hrefs.append(data["href"])
+        if tag == "link":
+            self.links.append(data)
+        if tag == "script":
+            self.scripts.append(data)
+        if tag == "meta":
+            self.meta.append(data)
         if tag in ("h1", "h2", "h3"):
             self.headings.append(tag)
         if tag == "main":
@@ -43,8 +56,35 @@ class PageParser(HTMLParser):
             self.nav_count += 1
 
 
-parser = PageParser()
-parser.feed(html)
+def parse_page(document: str) -> PageParser:
+    parsed = PageParser()
+    parsed.feed(document)
+    return parsed
+
+
+def remote_runtime_assets_absent(parsed: PageParser) -> bool:
+    for script in parsed.scripts:
+        src = script.get("src", "")
+        if src.startswith(("http://", "https://")):
+            return False
+    for link in parsed.links:
+        rel = set(link.get("rel", "").lower().split())
+        href = link.get("href", "")
+        if "stylesheet" in rel and href.startswith(("http://", "https://")):
+            return False
+    return True
+
+
+def executable_javascript_absent(parsed: PageParser) -> bool:
+    for script in parsed.scripts:
+        if script.get("src"):
+            return False
+        if script.get("type", "").lower() != "application/ld+json":
+            return False
+    return True
+
+
+parser = parse_page(html)
 checks["semantic_landmarks"] = (
     parser.lang == "en"
     and parser.main_count == 1
@@ -61,10 +101,8 @@ checks["skill_links_canonical"] = all(
     for href in parser.hrefs
     if "/skills/" in href
 )
-checks["no_remote_runtime_assets"] = not bool(
-    re.search(r'<(?:script|link)[^>]+(?:src|href)=["\']https?://', html, re.I)
-)
-checks["no_javascript_required"] = "<script" not in html.lower()
+checks["no_remote_runtime_assets"] = remote_runtime_assets_absent(parser)
+checks["no_javascript_required"] = executable_javascript_absent(parser)
 checks["focus_visible"] = ":focus-visible" in css
 checks["reduced_motion"] = "prefers-reduced-motion" in css
 checks["license_disclosure"] = (
@@ -75,6 +113,34 @@ checks["pages_contract"] = (
     and (ROOT / "docs/.nojekyll").exists()
     and "main" in (ROOT / "PAGES_SETUP.md").read_text(encoding="utf-8")
     and "/docs" in (ROOT / "PAGES_SETUP.md").read_text(encoding="utf-8")
+)
+
+canonical_url = "https://kitahl.github.io/The-Gauntlet/"
+canonical_link = any(
+    "canonical" in link.get("rel", "").lower().split()
+    and link.get("href") == canonical_url
+    for link in parser.links
+)
+og_url = any(
+    meta.get("property") == "og:url" and meta.get("content") == canonical_url
+    for meta in parser.meta
+)
+description_present = any(
+    meta.get("name") == "description" and len(meta.get("content", "")) >= 80
+    for meta in parser.meta
+)
+robots_path = ROOT / "docs/robots.txt"
+sitemap_path = ROOT / "docs/sitemap.xml"
+robots_text = robots_path.read_text(encoding="utf-8") if robots_path.exists() else ""
+sitemap_text = sitemap_path.read_text(encoding="utf-8") if sitemap_path.exists() else ""
+checks["discovery_contract"] = (
+    canonical_link
+    and og_url
+    and description_present
+    and robots_path.exists()
+    and sitemap_path.exists()
+    and "Sitemap: https://kitahl.github.io/The-Gauntlet/sitemap.xml" in robots_text
+    and f"<loc>{canonical_url}</loc>" in sitemap_text
 )
 
 skill_dirs = [
@@ -90,7 +156,8 @@ skill_dirs = [
     "foil",
 ]
 checks["source_artifacts_present"] = all(
-    (ROOT / "skills" / directory / "SKILL.md").exists() for directory in skill_dirs
+    (ROOT / "skills" / directory / "SKILL.md").exists()
+    for directory in skill_dirs
 )
 checks["skill_directories_are_spec_only"] = all(
     {path.name for path in (ROOT / "skills" / directory).iterdir()} == {"SKILL.md"}
@@ -105,6 +172,9 @@ checks["research_metadata_present"] = all(
         "CITATION.cff",
         "LICENSE",
         "CHANGELOG.md",
+        "SECURITY.md",
+        "GOVERNANCE.md",
+        "CONTRIBUTING.md",
     )
 )
 checks["foil_validation_present"] = (
@@ -114,7 +184,9 @@ checks["orchestrator_assurance_validation_present"] = (
     ROOT / "validation/validate_soul_gauntlet_public.py"
 ).exists()
 
-provenance = json.loads((ROOT / "docs/content-provenance.json").read_text(encoding="utf-8"))
+provenance = json.loads(
+    (ROOT / "docs/content-provenance.json").read_text(encoding="utf-8")
+)
 checks["provenance_sources_exist"] = all(
     (ROOT / source).exists()
     for claim in provenance["claims"]
@@ -127,6 +199,7 @@ checks["module_count_matches"] = (
 checks["professional_naming"] = all(
     token in html
     for token in (
+        "The Gauntlet",
         "Evidence-Governed Research Toolkit",
         "Research Orchestrator",
         "Formal Reasoning",
@@ -151,6 +224,37 @@ checks["evidence_trail_exposed"] = all(
         "REPRODUCIBILITY.md",
     )
 )
+checks["enterprise_trust_surface"] = all(
+    token in html
+    for token in (
+        "SECURITY.md",
+        "GOVERNANCE.md",
+        "CONTRIBUTING.md",
+        "CITATION.cff",
+        "CHANGELOG.md",
+        "ROADMAP.md",
+    )
+)
+checks["reproducibility_surface"] = all(
+    token in html
+    for token in (
+        "python validation/validate_soul_gauntlet_public.py",
+        "python validation/validate_showcase.py",
+        "python -m compileall -q validation",
+        "REPRODUCIBILITY.md",
+    )
+)
+
+citation_text = (ROOT / "CITATION.cff").read_text(encoding="utf-8")
+checks["release_identity_consistent"] = all(
+    token in citation_text
+    for token in (
+        'title: "Evidence-Governed Research Toolkit"',
+        "version: 0.4.0",
+        "license: MIT",
+    )
+) and all(token in html for token in ("v0.4.0", "MIT"))
+
 checks["activation_surface"] = all(
     command in html
     for command in (
@@ -189,8 +293,6 @@ checks["decision_preflight_trace"] = (
     and "STILL → GROUND → ORIENT → WEIGH → RELEASE" in preflight
 )
 
-# Model-output benchmark deltas may be reported when their scope is explicit.
-# They must not be presented as proof of human-learning or general efficacy.
 lower_html = html.lower()
 checks["no_behavioral_efficacy_overclaim"] = (
     "behavioral efficacy remains a research question" in lower_html
@@ -214,7 +316,10 @@ checks["assurance_portable_contract"] = (
     and "UNAVAILABLE" in assurance
     and "no machine-specific path is assumed" in assurance
     and all((ROOT / path).exists() for path in required_runtime_paths)
-    and all(path in assurance or path == "docs/RUNTIME_SETUP.md" for path in required_runtime_paths)
+    and all(
+        path in assurance or path == "docs/RUNTIME_SETUP.md"
+        for path in required_runtime_paths
+    )
 )
 checks["assurance_no_machine_specific_runtime"] = not (
     re.search(r"[A-Za-z]:\\Users\\[^\\]+\\", assurance)
@@ -227,7 +332,8 @@ checks["runtime_state_is_not_git_metadata"] = (
     state_dir.startswith(".egrt/")
     and not state_dir.startswith(".git/")
     and ".egrt/" in gitignore
-    and "state lives under the configured project runtime directory, not `.git/`" in assurance
+    and "state lives under the configured project runtime directory, not `.git/`"
+    in assurance
 )
 
 
@@ -244,7 +350,10 @@ def luminance(hex_value: str) -> float:
 
 
 def contrast_ratio(first: str, second: str) -> float:
-    lighter, darker = sorted((luminance(first), luminance(second)), reverse=True)
+    lighter, darker = sorted(
+        (luminance(first), luminance(second)),
+        reverse=True,
+    )
     return (lighter + 0.05) / (darker + 0.05)
 
 
@@ -263,6 +372,18 @@ def browser_launch_kwargs() -> dict[str, object]:
     if Path("/usr/bin/chromium").exists():
         kwargs["executable_path"] = "/usr/bin/chromium"
     return kwargs
+
+
+def target_sizes_ok(page: object) -> bool:
+    sizes = page.locator(".site-nav a, .button").evaluate_all(
+        """
+        els => els.map(el => {
+          const r = el.getBoundingClientRect();
+          return [r.width, r.height];
+        })
+        """
+    )
+    return bool(sizes) and all(width >= 24 and height >= 24 for width, height in sizes)
 
 
 render: dict[str, dict[str, object]] = {}
@@ -287,12 +408,15 @@ with sync_playwright() as playwright:
         )
         render[name] = {
             "horizontal_overflow": page.evaluate(
-                "document.documentElement.scrollWidth > document.documentElement.clientWidth"
+                "document.documentElement.scrollWidth > "
+                "document.documentElement.clientWidth"
             ),
             "keyboard_first_focus": focused,
             "console_errors": errors,
             "h1_visible": page.locator("h1").is_visible(),
             "main_visible": page.locator("main").is_visible(),
+            "primary_nav_visible": page.locator(".site-nav").is_visible(),
+            "target_sizes_ok": target_sizes_ok(page),
         }
         page.screenshot(
             path=str(ROOT / "validation" / f"showcase-{name}.png"),
@@ -310,6 +434,12 @@ checks["render_core_visible"] = all(
     bool(result["h1_visible"]) and bool(result["main_visible"])
     for result in render.values()
 )
+checks["primary_nav_visible_all_viewports"] = all(
+    bool(result["primary_nav_visible"]) for result in render.values()
+)
+checks["target_size_minimum"] = all(
+    bool(result["target_sizes_ok"]) for result in render.values()
+)
 checks["keyboard_path"] = all(
     result.get("keyboard_first_focus") == "#main" for result in render.values()
 )
@@ -318,7 +448,6 @@ payload_bytes = HTML.stat().st_size + CSS.stat().st_size
 checks["payload_budget"] = payload_bytes < 100_000
 checks["payload_budget_negative_control"] = payload_bytes + 100_001 >= 100_000
 
-# Representative mutants demonstrate that important gates can fail.
 mutant_html = source.replace(
     '<main id="main">',
     '<main id="main" style="display:none">',
@@ -331,15 +460,43 @@ with sync_playwright() as playwright:
     page.add_style_tag(content=mutant_css)
     hidden_detected = not page.locator("main").is_visible()
     hierarchy_detected = float(
-        page.locator("h1").evaluate("(e) => parseFloat(getComputedStyle(e).fontSize)")
+        page.locator("h1").evaluate(
+            "(e) => parseFloat(getComputedStyle(e).fontSize)"
+        )
     ) < 24
+
+    target_page = browser.new_page(viewport={"width": 390, "height": 844})
+    target_page.set_content(source, wait_until="load")
+    target_page.add_style_tag(
+        content=css + "\n.button,.site-nav a{min-height:10px!important;height:10px!important;}"
+    )
+    target_mutant_detected = not target_sizes_ok(target_page)
     browser.close()
 
+remote_asset_mutant = html.replace(
+    "</head>",
+    '<link rel="stylesheet" href="https://example.com/remote.css" /></head>',
+)
 checks["render_mutant_detected"] = hidden_detected
 checks["hierarchy_mutant_detected"] = hierarchy_detected
+checks["target_size_mutant_detected"] = target_mutant_detected
+checks["remote_asset_mutant_detected"] = not remote_runtime_assets_absent(
+    parse_page(remote_asset_mutant)
+)
 checks["pages_link_mutant_detected"] = not all(
     href.startswith("https://github.com/Kitahl/The-Gauntlet/")
     for href in ("../skills/foil/SKILL.md",)
+)
+checks["trust_surface_mutant_detected"] = not all(
+    token in html.replace("SECURITY.md", "SECURITY_REMOVED")
+    for token in (
+        "SECURITY.md",
+        "GOVERNANCE.md",
+        "CONTRIBUTING.md",
+        "CITATION.cff",
+        "CHANGELOG.md",
+        "ROADMAP.md",
+    )
 )
 
 status = "PASS" if all(checks.values()) else "FAIL"
