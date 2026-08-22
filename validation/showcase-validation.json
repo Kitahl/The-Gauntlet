@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "checks": {
+    "semantic_landmarks": true,
+    "unique_ids": true,
+    "skip_link": true,
+    "local_nav_targets": true,
+    "skill_links_canonical": true,
+    "no_remote_runtime_assets": true,
+    "no_javascript_required": true,
+    "focus_visible": true,
+    "reduced_motion": true,
+    "license_disclosure": true,
+    "pages_contract": true,
+    "source_artifacts_present": true,
+    "foil_validation_present": true,
+    "provenance_sources_exist": true,
+    "module_count_matches": true,
+    "evidence_trail_exposed": true,
+    "activation_surface": true,
+    "activation_triggers_trace_to_source": true,
+    "meditate_dispatch_trace": true,
+    "no_behavioral_efficacy_overclaim": true,
+    "principal_contrast": true,
+    "responsive_no_overflow": true,
+    "render_no_console_errors": true,
+    "render_core_visible": true,
+    "keyboard_path": true,
+    "payload_budget": true,
+    "payload_budget_negative_control": true,
+    "render_mutant_detected": true,
+    "hierarchy_mutant_detected": true,
+    "pages_link_mutant_detected": true
+  },
+  "render": {
+    "desktop": {
+      "horizontal_overflow": false,
+      "keyboard_first_focus": "#main",
+      "console_errors": [],
+      "h1_visible": true,
+      "main_visible": true
+    },
+    "mobile": {
+      "horizontal_overflow": false,
+      "keyboard_first_focus": "#main",
+      "console_errors": [],
+      "h1_visible": true,
+      "main_visible": true
+    }
+  },
+  "total": 30,
+  "passed": 30
+}
