@@ -10,6 +10,7 @@ import json
 import sys
 
 from foil_calibration import deep_context
+from foil_domains import infer_domains as infer_extended_domains
 from foil_profile import (
     bootstrap_active,
     compact_context,
@@ -41,7 +42,7 @@ def prompt() -> int:
     data = _input()
     text = str(data.get("prompt") or "")
     profile = bootstrap_active()
-    domains = infer_domains(text)
+    domains = list(dict.fromkeys([*infer_domains(text), *infer_extended_domains(text)]))
     if domains:
         mark_relevance(profile, domains, source="prompt")
         save(profile)
