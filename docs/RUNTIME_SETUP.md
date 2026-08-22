@@ -44,7 +44,7 @@ Expected minimal ledger shape:
 - `PreToolUse(Edit|Write|NotebookEdit)` surfaces stale governing state before mutation.
 - `PostToolUse(Bash)` snapshots after successful commits.
 - `Stop` runs the Process Assurance `frame`/`costume` turn-boundary evaluator and respects `stop_hook_active` to avoid continuation loops.
-- `UserPromptSubmit` updates only task-domain relevance metadata and injects the active FOIL context. It does **not** store raw prompts.
+- `UserPromptSubmit` updates compact task-domain and cross-cutting-facet relevance metadata and injects the active FOIL context. It does **not** store raw prompts.
 
 ## Optional OpenRouter judgment / multi-agent tools
 
@@ -88,24 +88,11 @@ python tools/foil_profile.py set alice \
   --preference independent_first=5
 ```
 
-## Questionnaire / onboarding
+## Layer 1 — broad onboarding
 
-The onboarding screen covers 20 generated objective items across:
+The first screen contains 20 generated objective items across quantitative reasoning, formal reasoning, probability/statistics, causal inference, software engineering, systems/reliability, research/evidence literacy, scientific method, security/privacy, and planning/decision-making.
 
-- quantitative reasoning;
-- formal reasoning;
-- probability/statistics;
-- causal inference;
-- software engineering;
-- systems/reliability;
-- research/evidence literacy;
-- scientific method;
-- security/privacy;
-- planning/decision-making.
-
-It also includes open design/UX, creativity, and explanation tasks, plus context, work-style preferences, self-estimates, and confidence calibration.
-
-Setup text automatically adds relevant optional domains such as data/ML, physics, chemistry/materials, biology/life sciences, law/policy, economics/finance, hardware/embedded, product management, human factors, and operations/logistics. Arbitrary custom domains can also be added with repeated `--domain` flags.
+It also includes context, work-style preferences, self-estimates, confidence calibration, and open design/UX, creativity, and explanation tasks.
 
 ```bash
 python tools/foil_assessment.py start \
@@ -121,11 +108,65 @@ python tools/foil_assessment.py score foil_assessment.json foil_responses.json \
   --profile alice --out foil_assessment_report.json
 ```
 
-The result is a **provisional routing prior**, not a personality/IQ/clinical/employment diagnosis. A single miss cannot create a stable weakness; a clean initial screen cannot certify ownership.
+The result is a **provisional routing prior**, not a personality/IQ/clinical/employment diagnosis.
+
+## Layer 2A — structured cross-cutting screen
+
+After Layer 1, run:
+
+```bash
+python tools/foil_layer2.py start \
+  --profile alice --mode standard \
+  --out foil_layer2.json --responses foil_layer2_responses.json
+```
+
+Standard mode contains 24 objective scenarios across 12 cross-cutting facets plus open design, creative-search, and explanation tasks. It samples formalization, systems decomposition, error detection, evidence discipline, causal and quantitative reasoning, execution, prioritization, confidence calibration, transfer, tool selection, and uncertainty management.
+
+Score and apply it:
+
+```bash
+python tools/foil_layer2.py score \
+  foil_layer2.json foil_layer2_responses.json \
+  --profile alice --out foil_layer2_report.json
+```
+
+The open responses remain `NEEDS_RUBRIC_REVIEW` and are not copied into the saved profile automatically.
+
+## Layer 2B — adaptive real-work / transfer calibration
+
+Generate the next profile-specific plan:
+
+```bash
+python tools/foil_calibration.py start --profile alice --out foil_deep_calibration.json
+```
+
+Record only checked outcomes:
+
+```bash
+python tools/foil_calibration.py record \
+  --profile alice \
+  --probe-id formal_reasoning:harder_transfer:1 \
+  --domain formal_reasoning \
+  --facet transfer_adaptation \
+  --kind harder_transfer \
+  --outcome pass \
+  --assistance none \
+  --verified \
+  --confidence 85 \
+  --representation "changed notation"
+```
+
+Inspect profile maturity:
+
+```bash
+python tools/foil_calibration.py status --profile alice
+```
+
+The structured screen improves cold-start depth, but real-work/transfer evidence remains required for a genuinely informative profile.
 
 ## Usage-time adaptation
 
-Prompt-time hooks mark domains as relevant without treating relevance as competence. Performance evidence is recorded only after a real diagnostic observation:
+Prompt-time hooks mark both domains and cross-cutting facets as relevant without treating relevance as competence. Performance evidence is recorded only after a real diagnostic observation:
 
 ```bash
 python tools/foil_profile.py observe alice \
@@ -133,4 +174,6 @@ python tools/foil_profile.py observe alice \
   --confidence 90 --source usage --representation "DAG identification"
 ```
 
-If a task requires a domain not already present, `observe` accepts any domain name and creates it as a candidate. Two independent consistent observations may support `PROMISING_STRENGTH` or `POSSIBLE_GAP`; mixed evidence stays `UNCERTAIN`. Newer task-diagnostic evidence overrides stale onboarding evidence.
+If a task requires a domain not already present, `observe` accepts any domain name and creates it as a candidate. The expanded relevance registry covers more than forty common research/professional families, and arbitrary custom domains remain supported.
+
+Two independent consistent observations may support `PROMISING_STRENGTH` or `POSSIBLE_GAP`; mixed evidence stays `UNCERTAIN`. Newer task-diagnostic evidence overrides stale onboarding evidence.
