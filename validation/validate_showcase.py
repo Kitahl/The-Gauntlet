@@ -63,11 +63,19 @@ def ratio(a,b):
     l1,l2=sorted((lum(a),lum(b)), reverse=True); return (l1+.05)/(l2+.05)
 checks['principal_contrast']=ratio('#f5f7f9','#07080a')>=7 and ratio('#9aa4af','#07080a')>=4.5 and ratio('#ff8a3d','#07080a')>=4.5
 
+# Use system Chromium when available (local review environments), otherwise the
+# Playwright-managed browser installed by CI.
+def launch_kwargs():
+    kw={'headless':True,'args':['--no-sandbox','--disable-dev-shm-usage']}
+    if Path('/usr/bin/chromium').exists():
+        kw['executable_path']='/usr/bin/chromium'
+    return kw
+
 # Browser render using set_content due sandbox URL policy; CSS is the production stylesheet.
 render={}
 source=html.replace('<link rel="stylesheet" href="styles.css" />','')
 with sync_playwright() as pw:
-    b=pw.chromium.launch(headless=True, executable_path='/usr/bin/chromium', args=['--no-sandbox','--disable-dev-shm-usage'])
+    b=pw.chromium.launch(**launch_kwargs())
     for name,w,h in [('desktop',1440,900),('mobile',390,844)]:
         page=b.new_page(viewport={'width':w,'height':h})
         errors=[]; page.on('console', lambda m, errors=errors: errors.append(m.text) if m.type=='error' else None); page.on('pageerror', lambda e, errors=errors: errors.append(str(e)))
@@ -95,7 +103,7 @@ checks['payload_budget_negative_control']=(payload_bytes+100_001) >= 100_000
 mutant_html=source.replace('<main id="main">','<main id="main" style="display:none">')
 mutant_css=css+'\nh1{font-size:12px!important}\n'
 with sync_playwright() as pw:
-    b=pw.chromium.launch(headless=True, executable_path='/usr/bin/chromium', args=['--no-sandbox','--disable-dev-shm-usage'])
+    b=pw.chromium.launch(**launch_kwargs())
     page=b.new_page(viewport={'width':1440,'height':900})
     page.set_content(mutant_html, wait_until='load'); page.add_style_tag(content=mutant_css)
     hidden_detected=not page.locator('main').is_visible()
