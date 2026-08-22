@@ -18,6 +18,8 @@
     "visual_alt_text": true,
     "visual_dimensions_declared": true,
     "showcase_revision_separate_from_software_version": true,
+    "showcase_revision_file_consistent": true,
+    "editorial_representation_contract": true,
     "source_artifacts_present": true,
     "skill_directories_are_spec_only": true,
     "research_metadata_present": true,
@@ -77,7 +79,7 @@
       "visuals_visible": true
     }
   },
-  "payload_bytes": 66164,
-  "total": 53,
-  "passed": 53
+  "payload_bytes": 56956,
+  "total": 55,
+  "passed": 55
 }
