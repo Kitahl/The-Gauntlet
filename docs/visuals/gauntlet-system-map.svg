@@ -1,34 +1,64 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
-  <title id="title">The Gauntlet research system map</title>
-  <desc id="desc">A central Research Orchestrator routes claims to formal reasoning, research discovery, method synthesis, engineering verification, evaluation, process assurance, evidence review, decision preflight, and FOIL adaptive assistance.</desc>
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#10141a"/><stop offset="1" stop-color="#080a0d"/></linearGradient>
-    <linearGradient id="core" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff5ec"/><stop offset="1" stop-color="#d9dfe5"/></linearGradient>
-    <filter id="glow"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <style>
-      .label{font-family:Inter,Arial,sans-serif;fill:#f5f7f9}.muted{fill:#8e99a5}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.node{fill:#0f1318;stroke:#35404a;stroke-width:1.5}.wire{stroke:#4c5662;stroke-width:1.5;fill:none}.hot{fill:#ff8a3d}.mint{fill:#77f2c4}.blue{fill:#80c9ff}.violet{fill:#b9a6ff}
-    </style>
-  </defs>
-  <rect width="1200" height="720" rx="26" fill="url(#bg)"/>
-  <g opacity=".22" stroke="#252b34"><path d="M0 120h1200M0 240h1200M0 360h1200M0 480h1200M0 600h1200"/><path d="M120 0v720M240 0v720M360 0v720M480 0v720M600 0v720M720 0v720M840 0v720M960 0v720M1080 0v720"/></g>
-  <circle cx="600" cy="360" r="174" fill="none" stroke="#2e3741" stroke-width="2"/>
-  <circle cx="600" cy="360" r="244" fill="none" stroke="#20262e" stroke-width="1" stroke-dasharray="6 10"/>
-  <g class="wire">
-    <path d="M600 255L600 165"/><path d="M500 300L360 212"/><path d="M480 360L300 360"/><path d="M500 420L360 508"/><path d="M600 465L600 555"/><path d="M700 420L840 508"/><path d="M720 360L900 360"/><path d="M700 300L840 212"/>
-  </g>
-  <g filter="url(#glow)"><circle cx="600" cy="360" r="106" fill="url(#core)"/><circle cx="600" cy="360" r="116" fill="none" stroke="#ff8a3d" stroke-opacity=".28"/></g>
-  <text x="600" y="333" text-anchor="middle" class="mono" font-size="15" fill="#5f6670">CONTROL</text>
-  <text x="600" y="366" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="25" font-weight="800" fill="#090b0e">Research</text>
-  <text x="600" y="394" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="25" font-weight="800" fill="#090b0e">Orchestrator</text>
-  <text x="600" y="420" text-anchor="middle" class="mono" font-size="11" fill="#59616b">FRAME · ROUTE · RELEASE</text>
+  <title id="title">The Gauntlet research control plane</title>
+  <desc id="desc">Editorial system map showing the Research Orchestrator routing work through formal reasoning, research discovery, method synthesis, engineering verification, evaluation and benchmarking, process assurance, evidence review, decision preflight, and FOIL.</desc>
+  <rect width="1200" height="720" fill="#f2f0e9"/>
+  <style>
+    .sans{font-family:Arial,Helvetica,sans-serif}.serif{font-family:Georgia,'Times New Roman',serif}.mono{font-family:Consolas,Menlo,monospace}.ink{fill:#111}.muted{fill:#625f59}.red{fill:#b83224}.line{stroke:#bdb8ad;stroke-width:1}.heavy{stroke:#111;stroke-width:1.4}.redline{stroke:#b83224;stroke-width:2}.small{font-size:11px;letter-spacing:1.8px}.micro{font-size:9px;letter-spacing:1.2px}.label{font-size:15px;font-weight:700}.body{font-size:12px}.num{font-size:10px}.title{font-size:58px}.lane{font-size:24px}
+  </style>
 
-  <g transform="translate(476 75)"><rect class="node" width="248" height="92" rx="16"/><circle cx="22" cy="24" r="6" class="hot"/><text x="38" y="29" class="mono muted" font-size="11">FORMAL</text><text x="20" y="56" class="label" font-size="17" font-weight="700">Formal Reasoning</text><text x="20" y="77" class="muted" font-family="Inter,Arial" font-size="11">proof · logic · probability</text></g>
-  <g transform="translate(160 150)"><rect class="node" width="240" height="92" rx="16"/><circle cx="22" cy="24" r="6" class="blue"/><text x="38" y="29" class="mono muted" font-size="11">DISCOVERY</text><text x="20" y="56" class="label" font-size="17" font-weight="700">Research Discovery</text><text x="20" y="77" class="muted" font-family="Inter,Arial" font-size="11">prior art · literature · reuse</text></g>
-  <g transform="translate(80 314)"><rect class="node" width="240" height="92" rx="16"/><circle cx="22" cy="24" r="6" class="violet"/><text x="38" y="29" class="mono muted" font-size="11">SYNTHESIS</text><text x="20" y="56" class="label" font-size="17" font-weight="700">Method Synthesis</text><text x="20" y="77" class="muted" font-family="Inter,Arial" font-size="11">new mechanism under constraint</text></g>
-  <g transform="translate(160 478)"><rect class="node" width="240" height="92" rx="16"/><circle cx="22" cy="24" r="6" class="mint"/><text x="38" y="29" class="mono muted" font-size="11">ENGINEERING</text><text x="20" y="56" class="label" font-size="17" font-weight="700">Engineering Verification</text><text x="20" y="77" class="muted" font-family="Inter,Arial" font-size="11">build · run · inspect</text></g>
-  <g transform="translate(476 553)"><rect class="node" width="248" height="92" rx="16"/><circle cx="22" cy="24" r="6" class="hot"/><text x="38" y="29" class="mono muted" font-size="11">EVALUATION</text><text x="20" y="56" class="label" font-size="17" font-weight="700">Evaluation &amp; Benchmarking</text><text x="20" y="77" class="muted" font-family="Inter,Arial" font-size="11">baseline · ablation · stop</text></g>
-  <g transform="translate(800 478)"><rect class="node" width="240" height="92" rx="16"/><circle cx="22" cy="24" r="6" class="blue"/><text x="38" y="29" class="mono muted" font-size="11">ASSURANCE</text><text x="20" y="56" class="label" font-size="17" font-weight="700">Process Assurance</text><text x="20" y="77" class="muted" font-family="Inter,Arial" font-size="11">frame · stale state · false green</text></g>
-  <g transform="translate(880 314)"><rect class="node" width="240" height="92" rx="16"/><circle cx="22" cy="24" r="6" class="violet"/><text x="38" y="29" class="mono muted" font-size="11">REVIEW</text><text x="20" y="56" class="label" font-size="17" font-weight="700">Evidence Review Panel</text><text x="20" y="77" class="muted" font-family="Inter,Arial" font-size="11">independent perspectives</text></g>
-  <g transform="translate(800 150)"><rect class="node" width="240" height="92" rx="16"/><circle cx="22" cy="24" r="6" class="mint"/><text x="38" y="29" class="mono muted" font-size="11">ADAPTIVE</text><text x="20" y="56" class="label" font-size="17" font-weight="700">FOIL</text><text x="20" y="77" class="muted" font-family="Inter,Arial" font-size="11">diagnose · complement · transfer</text></g>
-  <g transform="translate(500 492)"><rect x="0" y="0" width="200" height="40" rx="20" fill="#151a20" stroke="#3c4651"/><text x="100" y="25" text-anchor="middle" class="mono" font-size="10" fill="#a6b0ba">PREFLIGHT · GROUND BEFORE ACTION</text></g>
+  <text x="56" y="48" class="mono red small">PLATE 01 / RESEARCH CONTROL SYSTEM</text>
+  <text x="1144" y="48" text-anchor="end" class="mono muted micro">SPECIFICATION-DERIVED / NOT AN EXECUTION TRACE</text>
+  <line x1="56" y1="70" x2="1144" y2="70" class="heavy"/>
+
+  <text x="56" y="116" class="mono muted micro">CONTROL PLANE</text>
+  <text x="56" y="178" class="serif ink title">Research</text>
+  <text x="56" y="232" class="serif ink title">Orchestrator</text>
+  <text x="58" y="276" class="sans muted body">Frame · decompose · route · integrate · audit · release</text>
+
+  <line x1="56" y1="318" x2="428" y2="318" class="heavy"/>
+  <text x="56" y="346" class="mono red micro">CONTROL FLOW</text>
+  <g class="sans ink body">
+    <text x="56" y="382"><tspan class="mono red num">01</tspan><tspan dx="18" font-weight="700">FRAME</tspan><tspan dx="12" class="muted">claim · scope · decision</tspan></text>
+    <text x="56" y="418"><tspan class="mono red num">02</tspan><tspan dx="18" font-weight="700">ROUTE</tspan><tspan dx="12" class="muted">proof · search · build · test</tspan></text>
+    <text x="56" y="454"><tspan class="mono red num">03</tspan><tspan dx="18" font-weight="700">EXECUTE</tspan><tspan dx="12" class="muted">native method</tspan></text>
+    <text x="56" y="490"><tspan class="mono red num">04</tspan><tspan dx="18" font-weight="700">VERIFY</tspan><tspan dx="12" class="muted">claim-matched check</tspan></text>
+    <text x="56" y="526"><tspan class="mono red num">05</tspan><tspan dx="18" font-weight="700">RELEASE</tspan><tspan dx="12" class="muted">supported · unresolved · blocked</tspan></text>
+  </g>
+
+  <line x1="470" y1="102" x2="470" y2="610" class="heavy"/>
+  <line x1="470" y1="126" x2="512" y2="126" class="redline"/>
+  <text x="512" y="116" class="mono muted micro">BOUNDED EVIDENCE LANES</text>
+
+  <g>
+    <line x1="512" y1="142" x2="1144" y2="142" class="line"/>
+    <text x="512" y="176" class="mono red num">01</text><text x="552" y="178" class="serif ink lane">Formal Reasoning</text><text x="860" y="177" class="sans muted body">proof · probability · countermodels</text>
+    <line x1="512" y1="204" x2="1144" y2="204" class="line"/>
+
+    <text x="512" y="238" class="mono red num">02</text><text x="552" y="240" class="serif ink lane">Research Discovery</text><text x="860" y="239" class="sans muted body">prior art · literature · reuse</text>
+    <line x1="512" y1="266" x2="1144" y2="266" class="line"/>
+
+    <text x="512" y="300" class="mono red num">03</text><text x="552" y="302" class="serif ink lane">Method Synthesis</text><text x="860" y="301" class="sans muted body">new mechanism after named constraint</text>
+    <line x1="512" y1="328" x2="1144" y2="328" class="line"/>
+
+    <text x="512" y="362" class="mono red num">04</text><text x="552" y="364" class="serif ink lane">Engineering Verification</text><text x="860" y="363" class="sans muted body">implementation · integration · execution</text>
+    <line x1="512" y1="390" x2="1144" y2="390" class="line"/>
+
+    <text x="512" y="424" class="mono red num">05</text><text x="552" y="426" class="serif ink lane">Evaluation &amp; Benchmarking</text><text x="860" y="425" class="sans muted body">baselines · ablations · cost · stop</text>
+    <line x1="512" y1="452" x2="1144" y2="452" class="line"/>
+
+    <text x="512" y="486" class="mono red num">06</text><text x="552" y="488" class="serif ink lane">Process Assurance Framework</text><text x="860" y="487" class="sans muted body">frame · stale state · false-green audit</text>
+    <line x1="512" y1="514" x2="1144" y2="514" class="line"/>
+  </g>
+
+  <text x="512" y="554" class="mono muted micro">CROSS-CUTTING REVIEW / ADAPTATION</text>
+  <line x1="512" y1="568" x2="1144" y2="568" class="heavy"/>
+  <g class="sans">
+    <text x="512" y="604" class="red micro mono">07</text><text x="548" y="604" class="ink label">Evidence Review Panel</text>
+    <text x="754" y="604" class="red micro mono">08</text><text x="790" y="604" class="ink label">Decision Preflight</text>
+    <text x="984" y="604" class="red micro mono">09</text><text x="1020" y="604" class="ink label">FOIL</text>
+  </g>
+
+  <line x1="56" y1="646" x2="1144" y2="646" class="heavy"/>
+  <text x="56" y="680" class="serif ink" font-size="21">Evidence governs factual warrant.</text>
+  <text x="1144" y="680" text-anchor="end" class="mono muted micro">AGREEMENT AMONG AGENTS ≠ VERIFICATION</text>
 </svg>
