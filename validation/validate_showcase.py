@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import json
 import re
 from html.parser import HTMLParser
@@ -10,10 +11,18 @@ from playwright.sync_api import sync_playwright
 ROOT = Path(__file__).resolve().parents[1]
 HTML = ROOT / "docs/index.html"
 CSS = ROOT / "docs/styles.css"
+VISUAL_CSS = ROOT / "docs/visuals.css"
 README = ROOT / "README.md"
+VISUAL_PATHS = (
+    "docs/visuals/gauntlet-system-map.svg",
+    "docs/visuals/foil-diagnostic-loop.svg",
+    "docs/visuals/benchmark-evidence.svg",
+)
 
 html = HTML.read_text(encoding="utf-8")
 css = CSS.read_text(encoding="utf-8")
+visual_css = VISUAL_CSS.read_text(encoding="utf-8")
+combined_css = css + "\n" + visual_css
 checks: dict[str, bool] = {}
 
 
@@ -26,6 +35,7 @@ class PageParser(HTMLParser):
         self.links: list[dict[str, str]] = []
         self.scripts: list[dict[str, str]] = []
         self.meta: list[dict[str, str]] = []
+        self.images: list[dict[str, str]] = []
         self.main_count = 0
         self.nav_count = 0
         self.lang: str | None = None
@@ -48,6 +58,8 @@ class PageParser(HTMLParser):
             self.scripts.append(data)
         if tag == "meta":
             self.meta.append(data)
+        if tag == "img":
+            self.images.append(data)
         if tag in ("h1", "h2", "h3"):
             self.headings.append(tag)
         if tag == "main":
@@ -71,6 +83,10 @@ def remote_runtime_assets_absent(parsed: PageParser) -> bool:
         rel = set(link.get("rel", "").lower().split())
         href = link.get("href", "")
         if "stylesheet" in rel and href.startswith(("http://", "https://")):
+            return False
+    for image in parsed.images:
+        src = image.get("src", "")
+        if src.startswith(("http://", "https://")):
             return False
     return True
 
@@ -103,8 +119,8 @@ checks["skill_links_canonical"] = all(
 )
 checks["no_remote_runtime_assets"] = remote_runtime_assets_absent(parser)
 checks["no_javascript_required"] = executable_javascript_absent(parser)
-checks["focus_visible"] = ":focus-visible" in css
-checks["reduced_motion"] = "prefers-reduced-motion" in css
+checks["focus_visible"] = ":focus-visible" in combined_css
+checks["reduced_motion"] = "prefers-reduced-motion" in combined_css
 checks["license_disclosure"] = (
     "mit" in html.lower() and "license" in README.read_text(encoding="utf-8").lower()
 )
@@ -141,6 +157,30 @@ checks["discovery_contract"] = (
     and sitemap_path.exists()
     and "Sitemap: https://kitahl.github.io/The-Gauntlet/sitemap.xml" in robots_text
     and f"<loc>{canonical_url}</loc>" in sitemap_text
+)
+
+visual_files = [ROOT / path for path in VISUAL_PATHS]
+expected_visual_srcs = {path.removeprefix("docs/") for path in VISUAL_PATHS}
+actual_visual_srcs = {image.get("src", "") for image in parser.images}
+checks["visual_assets_present"] = VISUAL_CSS.exists() and all(
+    path.exists() and path.stat().st_size > 500 for path in visual_files
+)
+checks["visual_assets_referenced"] = expected_visual_srcs <= actual_visual_srcs
+checks["visual_alt_text"] = all(
+    image.get("alt", "").strip() and len(image.get("alt", "").strip()) >= 40
+    for image in parser.images
+    if image.get("src", "") in expected_visual_srcs
+)
+checks["visual_dimensions_declared"] = all(
+    image.get("width", "").isdigit() and image.get("height", "").isdigit()
+    for image in parser.images
+    if image.get("src", "") in expected_visual_srcs
+)
+checks["showcase_revision_separate_from_software_version"] = (
+    "SHOWCASE R13" in html
+    and "Research software" in html
+    and "0.4.0" in html
+    and "Showcase revision" in html
 )
 
 skill_dirs = [
@@ -386,8 +426,40 @@ def target_sizes_ok(page: object) -> bool:
     return bool(sizes) and all(width >= 24 and height >= 24 for width, height in sizes)
 
 
+def visual_sizes_ok(page: object) -> bool:
+    sizes = page.locator(".visual-card img").evaluate_all(
+        """
+        els => els.map(el => {
+          const r = el.getBoundingClientRect();
+          return [r.width, r.height, el.naturalWidth, el.naturalHeight];
+        })
+        """
+    )
+    return len(sizes) == len(VISUAL_PATHS) and all(
+        width >= 300
+        and height >= 150
+        and natural_width > 0
+        and natural_height > 0
+        for width, height, natural_width, natural_height in sizes
+    )
+
+
+def browser_source() -> str:
+    source = html.replace('<link rel="stylesheet" href="styles.css" />', "")
+    source = source.replace('<link rel="stylesheet" href="visuals.css" />', "")
+    for relative_path in VISUAL_PATHS:
+        path = ROOT / relative_path
+        encoded = base64.b64encode(path.read_bytes()).decode("ascii")
+        src = relative_path.removeprefix("docs/")
+        source = source.replace(
+            f'src="{src}"',
+            f'src="data:image/svg+xml;base64,{encoded}"',
+        )
+    return source
+
+
 render: dict[str, dict[str, object]] = {}
-source = html.replace('<link rel="stylesheet" href="styles.css" />', "")
+source = browser_source()
 with sync_playwright() as playwright:
     browser = playwright.chromium.launch(**browser_launch_kwargs())
     for name, width, height in (("desktop", 1440, 900), ("mobile", 390, 844)):
@@ -401,7 +473,7 @@ with sync_playwright() as playwright:
         )
         page.on("pageerror", lambda error, errors=errors: errors.append(str(error)))
         page.set_content(source, wait_until="load")
-        page.add_style_tag(content=css)
+        page.add_style_tag(content=combined_css)
         page.keyboard.press("Tab")
         focused = page.evaluate(
             'document.activeElement && document.activeElement.getAttribute("href")'
@@ -417,6 +489,7 @@ with sync_playwright() as playwright:
             "main_visible": page.locator("main").is_visible(),
             "primary_nav_visible": page.locator(".site-nav").is_visible(),
             "target_sizes_ok": target_sizes_ok(page),
+            "visuals_visible": visual_sizes_ok(page),
         }
         page.screenshot(
             path=str(ROOT / "validation" / f"showcase-{name}.png"),
@@ -440,11 +513,15 @@ checks["primary_nav_visible_all_viewports"] = all(
 checks["target_size_minimum"] = all(
     bool(result["target_sizes_ok"]) for result in render.values()
 )
+checks["mechanism_visuals_rendered"] = all(
+    bool(result["visuals_visible"]) for result in render.values()
+)
 checks["keyboard_path"] = all(
     result.get("keyboard_first_focus") == "#main" for result in render.values()
 )
 
-payload_bytes = HTML.stat().st_size + CSS.stat().st_size
+payload_bytes = HTML.stat().st_size + CSS.stat().st_size + VISUAL_CSS.stat().st_size
+payload_bytes += sum(path.stat().st_size for path in visual_files)
 checks["payload_budget"] = payload_bytes < 100_000
 checks["payload_budget_negative_control"] = payload_bytes + 100_001 >= 100_000
 
@@ -452,7 +529,7 @@ mutant_html = source.replace(
     '<main id="main">',
     '<main id="main" style="display:none">',
 )
-mutant_css = css + "\nh1{font-size:12px!important}\n"
+mutant_css = combined_css + "\nh1{font-size:12px!important}\n"
 with sync_playwright() as playwright:
     browser = playwright.chromium.launch(**browser_launch_kwargs())
     page = browser.new_page(viewport={"width": 1440, "height": 900})
@@ -468,7 +545,8 @@ with sync_playwright() as playwright:
     target_page = browser.new_page(viewport={"width": 390, "height": 844})
     target_page.set_content(source, wait_until="load")
     target_page.add_style_tag(
-        content=css + "\n.button,.site-nav a{min-height:10px!important;height:10px!important;}"
+        content=combined_css
+        + "\n.button,.site-nav a{min-height:10px!important;height:10px!important;}"
     )
     target_mutant_detected = not target_sizes_ok(target_page)
     browser.close()
@@ -477,11 +555,20 @@ remote_asset_mutant = html.replace(
     "</head>",
     '<link rel="stylesheet" href="https://example.com/remote.css" /></head>',
 )
+visual_reference_mutant = html.replace(
+    'src="visuals/gauntlet-system-map.svg"',
+    'src="visuals/missing-system-map.svg"',
+)
+visual_mutant_parser = parse_page(visual_reference_mutant)
+visual_mutant_srcs = {image.get("src", "") for image in visual_mutant_parser.images}
 checks["render_mutant_detected"] = hidden_detected
 checks["hierarchy_mutant_detected"] = hierarchy_detected
 checks["target_size_mutant_detected"] = target_mutant_detected
 checks["remote_asset_mutant_detected"] = not remote_runtime_assets_absent(
     parse_page(remote_asset_mutant)
+)
+checks["visual_reference_mutant_detected"] = not (
+    expected_visual_srcs <= visual_mutant_srcs
 )
 checks["pages_link_mutant_detected"] = not all(
     href.startswith("https://github.com/Kitahl/The-Gauntlet/")
@@ -504,6 +591,7 @@ output = {
     "status": status,
     "checks": checks,
     "render": render,
+    "payload_bytes": payload_bytes,
     "total": len(checks),
     "passed": sum(checks.values()),
 }
