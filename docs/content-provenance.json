@@ -82,9 +82,29 @@
     },
     {
       "id": "research-question-open",
-      "page_section": "Evidence",
+      "page_section": "Research Dossier",
       "claim": "Prospective behavioral efficacy of the complete workflow remains an open research question with planned matched-baseline and ablation studies.",
       "sources": ["RESEARCH.md", "ROADMAP.md"]
+    },
+    {
+      "id": "research-dossier-output-index",
+      "page_section": "Research Dossier",
+      "claim": "The homepage indexes the current research question, implemented architecture, FOIL basis, mechanical/specification receipts, exploratory benchmark pilots, prospective behavioral evaluation, and external reproduction as distinct research objects with explicit states.",
+      "sources": [
+        "RESEARCH.md",
+        "ROADMAP.md",
+        "docs/ARCHITECTURE.md",
+        "research/FOIL_RESEARCH_BASIS.md",
+        "validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json",
+        "validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json",
+        "docs/BENCHMARKS.md"
+      ]
+    },
+    {
+      "id": "research-site-benchmark",
+      "page_section": "Research Dossier",
+      "claim": "The research-site benchmark compares public research institutes, research indexes, open-science catalogs, and mature research-software repositories to identify transferable information-architecture mechanisms without treating the set as an objective global ranking.",
+      "sources": ["docs/RESEARCH_WEBSITE_BENCHMARK_2026-08-22.md"]
     },
     {
       "id": "citation-license",
