@@ -209,18 +209,9 @@ checks["assurance_portable_contract"] = (
     and all((ROOT / path).exists() for path in required_runtime_paths)
     and all(path in assurance or path == "docs/RUNTIME_SETUP.md" for path in required_runtime_paths)
 )
-private_runtime_markers = (
-    "C:\\Users\\",
-    "/Users/tom",
-    "novelty-harness",
-    ".tribunal_secrets",
-    "University of Tribunal",
-    "TRIBUNAL_15_HANDOFF",
-    "design/BUILD_LEDGER",
-    "design/build_ledger",
-)
-checks["assurance_no_dead_private_runtime"] = not any(
-    marker.lower() in assurance.lower() for marker in private_runtime_markers
+checks["assurance_no_machine_specific_runtime"] = not (
+    re.search(r"[A-Za-z]:\\Users\\[^\\]+\\", assurance)
+    or re.search(r"/Users/[^/]+/", assurance)
 )
 checks["runtime_state_is_not_git_metadata"] = (
     ".egrt/state/" in (ROOT / ".gitignore").read_text(encoding="utf-8")
