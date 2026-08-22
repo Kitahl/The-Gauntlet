@@ -1,22 +1,59 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
-  <title id="title">Exploratory benchmark evidence visual</title>
-  <desc id="desc">Three paired horizontal bar comparisons: HLE base 16.7 percent and assisted 33.3 percent; ARC-AGI-1 base 66.7 percent and assisted 83.3 percent; GPQA-Diamond base and assisted both 75 percent. The figure emphasizes that the GPQA follow-up was a null result and that all pilots are exploratory.</desc>
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#101419"/><stop offset="1" stop-color="#080a0d"/></linearGradient>
-    <style>.t{font-family:Inter,Arial,sans-serif;fill:#f5f7f9}.m{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.muted{fill:#8e99a5}.grid{stroke:#28313a;stroke-width:1}.base{fill:#59636f}.assist{fill:#77f2c4}.null{fill:#aeb7c0}.card{fill:#0d1116;stroke:#303a45}</style>
-  </defs>
-  <rect width="1200" height="620" rx="26" fill="url(#bg)"/>
-  <text x="54" y="56" class="m" font-size="12" fill="#ff8a3d" letter-spacing="2">EXPLORATORY MODEL BENCHMARKS</text>
-  <text x="54" y="96" class="t" font-size="28" font-weight="800">Positive and null results stay on the same surface.</text>
-  <text x="54" y="125" class="muted" font-family="Inter,Arial" font-size="12">Small deterministic disjoint-subset pilots. Not official leaderboard submissions or general-efficacy evidence.</text>
+  <title id="title">Exploratory benchmark evidence plate</title>
+  <desc id="desc">Editorial data plate comparing base and assisted results for HLE, ARC-AGI-1, GPQA-Diamond, and the small four-way BrowseComp pilot, with the GPQA null result and BrowseComp mixed result shown explicitly.</desc>
+  <rect width="1200" height="620" fill="#f2f0e9"/>
+  <style>
+    .sans{font-family:Arial,Helvetica,sans-serif}.serif{font-family:Georgia,'Times New Roman',serif}.mono{font-family:Consolas,Menlo,monospace}.ink{fill:#111}.muted{fill:#625f59}.red{fill:#b83224}.line{stroke:#bdb8ad;stroke-width:1}.heavy{stroke:#111;stroke-width:1.4}.small{font-size:10px;letter-spacing:1.4px}.micro{font-size:9px;letter-spacing:1px}.body{font-size:12px}.value{font-size:27px}.dataset{font-size:20px}
+  </style>
 
-  <g transform="translate(310 165)"><path class="grid" d="M0 0v330M170 0v330M340 0v330M510 0v330M680 0v330"/><text x="0" y="-14" class="m muted" font-size="10">0%</text><text x="160" y="-14" class="m muted" font-size="10">25%</text><text x="330" y="-14" class="m muted" font-size="10">50%</text><text x="500" y="-14" class="m muted" font-size="10">75%</text><text x="668" y="-14" class="m muted" font-size="10">100%</text></g>
+  <text x="54" y="46" class="mono red small">PLATE 03 / EXPLORATORY PILOTS</text>
+  <text x="1146" y="46" text-anchor="end" class="mono muted micro">DESCRIPTIVE RECEIPTS / NO GENERAL-EFFICACY CLAIM</text>
+  <line x1="54" y1="68" x2="1146" y2="68" class="heavy"/>
 
-  <g transform="translate(54 178)"><text x="0" y="24" class="t" font-size="18" font-weight="700">HLE public text</text><text x="0" y="47" class="m muted" font-size="10">n=6 PER CONDITION</text><text x="0" y="86" class="m muted" font-size="10">BASE</text><rect x="256" y="70" width="114" height="22" rx="6" class="base"/><text x="380" y="86" class="m muted" font-size="11">16.7%</text><text x="0" y="122" class="m" font-size="10" fill="#77f2c4">ASSISTED</text><rect x="256" y="106" width="227" height="22" rx="6" class="assist"/><text x="493" y="122" class="m" font-size="11" fill="#77f2c4">33.3% · +16.7 pp</text></g>
+  <text x="54" y="118" class="serif ink" font-size="44">Positive. Null. Mixed.</text>
+  <text x="1146" y="118" text-anchor="end" class="sans muted body">Published together.</text>
 
-  <g transform="translate(54 322)"><text x="0" y="24" class="t" font-size="18" font-weight="700">ARC-AGI-1</text><text x="0" y="47" class="m muted" font-size="10">n=6 PER CONDITION</text><text x="0" y="86" class="m muted" font-size="10">BASE</text><rect x="256" y="70" width="454" height="22" rx="6" class="base"/><text x="720" y="86" class="m muted" font-size="11">66.7%</text><text x="0" y="122" class="m" font-size="10" fill="#77f2c4">ASSISTED</text><rect x="256" y="106" width="567" height="22" rx="6" class="assist"/><text x="833" y="122" class="m" font-size="11" fill="#77f2c4">83.3% · +16.7 pp</text></g>
+  <line x1="54" y1="146" x2="1146" y2="146" class="line"/>
+  <text x="54" y="174" class="mono muted micro">DATASET</text>
+  <text x="350" y="174" class="mono muted micro">BASE</text>
+  <text x="580" y="174" class="mono muted micro">ASSISTED</text>
+  <text x="1100" y="174" text-anchor="end" class="mono muted micro">OBSERVED DELTA</text>
 
-  <g transform="translate(54 466)"><text x="0" y="24" class="t" font-size="18" font-weight="700">GPQA-Diamond</text><text x="0" y="47" class="m muted" font-size="10">n=12 PER CONDITION</text><text x="0" y="86" class="m muted" font-size="10">BASE</text><rect x="256" y="70" width="510" height="22" rx="6" class="base"/><text x="776" y="86" class="m muted" font-size="11">75.0%</text><text x="0" y="122" class="m" font-size="10" fill="#c9d0d7">ASSISTED</text><rect x="256" y="106" width="510" height="22" rx="6" class="null"/><text x="776" y="122" class="m" font-size="11" fill="#c9d0d7">75.0% · NULL</text></g>
+  <g>
+    <line x1="54" y1="194" x2="1146" y2="194" class="line"/>
+    <text x="54" y="235" class="serif ink dataset">HLE / public text</text>
+    <rect x="350" y="211" width="104" height="28" fill="#111"/>
+    <rect x="580" y="211" width="208" height="28" fill="#b83224"/>
+    <text x="466" y="233" class="mono ink body">16.7%</text>
+    <text x="800" y="233" class="mono red body">33.3%</text>
+    <text x="1100" y="235" text-anchor="end" class="serif red value">+16.7 pp</text>
 
-  <g transform="translate(936 170)"><rect class="card" width="212" height="298" rx="18"/><text x="20" y="34" class="m" font-size="10" fill="#ff8a3d">READ THIS FIGURE AS</text><text x="20" y="72" class="t" font-size="16" font-weight="700">Scoped evidence</text><text x="20" y="98" class="muted" font-family="Inter,Arial" font-size="11">not a product score</text><path d="M20 120h172" class="grid"/><text x="20" y="151" class="t" font-size="15" font-weight="700">Null preserved</text><text x="20" y="177" class="muted" font-family="Inter,Arial" font-size="11">GPQA does not move</text><path d="M20 199h172" class="grid"/><text x="20" y="230" class="t" font-size="15" font-weight="700">No significance claim</text><text x="20" y="256" class="muted" font-family="Inter,Arial" font-size="11">sample sizes are small</text><text x="20" y="276" class="muted" font-family="Inter,Arial" font-size="11">and exploratory</text></g>
+    <line x1="54" y1="262" x2="1146" y2="262" class="line"/>
+    <text x="54" y="303" class="serif ink dataset">ARC-AGI-1</text>
+    <rect x="350" y="279" width="416" height="28" fill="#111"/>
+    <rect x="580" y="279" width="520" height="28" fill="#b83224" opacity=".9"/>
+    <text x="778" y="301" class="mono ink body">66.7%</text>
+    <text x="1112" y="301" class="mono red body">83.3%</text>
+    <text x="1100" y="303" text-anchor="end" class="serif red value" transform="translate(0,36)">+16.7 pp</text>
+
+    <line x1="54" y1="354" x2="1146" y2="354" class="line"/>
+    <text x="54" y="395" class="serif ink dataset">GPQA-Diamond</text>
+    <rect x="350" y="371" width="468" height="28" fill="#111"/>
+    <rect x="580" y="371" width="468" height="28" fill="none" stroke="#b83224" stroke-width="3"/>
+    <text x="830" y="393" class="mono ink body">75.0%</text>
+    <text x="1060" y="393" class="mono red body">75.0%</text>
+    <text x="1100" y="395" text-anchor="end" class="serif ink value" transform="translate(0,36)">0.0 pp</text>
+  </g>
+
+  <line x1="54" y1="446" x2="1146" y2="446" class="heavy"/>
+  <text x="54" y="478" class="mono red micro">BROWSECOMP / FOUR-WAY / N=2 PER CONDITION</text>
+  <text x="54" y="523" class="serif ink dataset">BASE</text><text x="174" y="523" class="serif ink value">1/2</text>
+  <text x="310" y="523" class="serif ink dataset">FOIL</text><text x="420" y="523" class="serif red value">2/2</text>
+  <text x="558" y="523" class="serif ink dataset">PROFILE</text><text x="690" y="523" class="serif ink value">1/2</text>
+  <text x="822" y="523" class="serif ink dataset">MASTERMIND</text><text x="1030" y="523" class="serif ink value">0/2</text>
+  <text x="1146" y="555" text-anchor="end" class="mono muted micro">DIFFERENT QUESTIONS / NOT STATISTICALLY INTERPRETABLE</text>
+
+  <line x1="54" y1="574" x2="1146" y2="574" class="heavy"/>
+  <text x="54" y="602" class="mono muted micro">DISJOINT SUBSETS · SMALL N · SCOPED VALIDITY LIMITS</text>
+  <text x="1146" y="602" text-anchor="end" class="mono red micro">NULL RESULT RETAINED</text>
 </svg>

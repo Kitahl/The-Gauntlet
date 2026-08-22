@@ -36,5 +36,9 @@ Karimoku Research; Neko Health; Bisou Gallery; Living House; The Beautiful Truth
 - **D negative control:** PASS by explicit exclusion of decorative AI/startup tropes.
 - **E cross-domain transfer:** PASS; recurring mechanisms appear across galleries, architecture, editorial, cultural, health, and studio reference sites.
 - **F existing-mechanism compression:** PASS; CSS/SVG/HTML only, no new framework or JavaScript.
-- **G ablation:** The redesigned page remains intelligible with the diagrams absent because captions, evidence tables, and source links remain; the diagrams add explanatory compression rather than carrying unsupported claims.
-- **H regression:** PENDING exact-head CI at authoring time.
+- **G ablation:** PASS at the representation level. The redesigned page remains intelligible with the diagrams absent because captions, evidence ledgers, direct source links, and document indexes remain; the diagrams add explanatory compression rather than carrying unsupported claims.
+- **H regression:** PASS on validated design head `a9f0429656d0db34ac77339032e93b5e6202171c`: 55/55 showcase checks, 37/37 runtime/layout tests, Research Orchestrator + Process Assurance validation, and CodeQL. The final receipt-containing PR head must repeat the normal Research software validation and CodeQL gates before promotion.
+
+## First-failure correction
+
+The first R14 CI candidate passed 54/55 showcase checks and failed only mobile horizontal overflow. The defect was corrected by reducing the oversized single-word mobile hero composition. The validator was not weakened and overflow was not hidden with clipping. The corrected design head passed 55/55 checks with no horizontal overflow on either desktop or mobile.
