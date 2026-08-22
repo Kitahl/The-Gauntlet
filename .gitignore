@@ -1,0 +1,8 @@
+.mastermind/runtime/
+.mastermind/runs/
+__pycache__/
+*.pyc
+.DS_Store
+
+validation/showcase-*.png
+.mastermind/
