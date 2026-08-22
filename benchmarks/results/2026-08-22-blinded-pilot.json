@@ -1,0 +1,71 @@
+{
+  "schema": "egrt.foil-benchmark-receipt.v1",
+  "date": "2026-08-22",
+  "model": "GPT-5.6 Sol",
+  "protocol": "benchmarks/FRONTIER_EXAM_FOIL.md",
+  "design": {
+    "BASE": "same underlying model; direct answer without FOIL/Mastermind benchmark protocol",
+    "FOIL_MM": "same underlying model; frozen Frontier-Exam FOIL plus Mastermind final causal-defect pass",
+    "assignment": "deterministic disjoint subsets within one conversation to avoid same-item answer contamination",
+    "primary_metric": "exact benchmark accuracy",
+    "causal_limit": "Disjoint subsets are weaker than isolated same-item randomized A/B executions; no significance or leaderboard-equivalence claim is made."
+  },
+  "ci_scored_runs": [
+    {
+      "benchmark": "HLE public text-only subset",
+      "selection_seed": 20260822,
+      "workflow_run_id": 32581272865,
+      "scoring_head_sha": "164d319933e68dec10e8154533005b81dc28c558",
+      "BASE": {"correct": 1, "n": 6, "accuracy": 0.1666666667},
+      "FOIL_MM": {"correct": 2, "n": 6, "accuracy": 0.3333333333},
+      "delta_percentage_points": 16.66666666,
+      "status": "exploratory_blinded_pilot"
+    },
+    {
+      "benchmark": "ARC-AGI-1 evaluation",
+      "selection_seed": 20260822,
+      "workflow_run_id": 32581272865,
+      "scoring_head_sha": "164d319933e68dec10e8154533005b81dc28c558",
+      "BASE": {"correct": 4, "n": 6, "accuracy": 0.6666666667},
+      "FOIL_MM": {"correct": 5, "n": 6, "accuracy": 0.8333333333},
+      "delta_percentage_points": 16.66666666,
+      "status": "exploratory_blinded_pilot"
+    },
+    {
+      "benchmark": "GPQA-Diamond",
+      "selection_seed": 20260825,
+      "workflow_run_id": 32581636527,
+      "scoring_head_sha": "2f3e20c486ba79b3badc1bdfeb6fa9b25b87a13f",
+      "BASE": {"correct": 9, "n": 12, "accuracy": 0.75},
+      "FOIL_MM": {"correct": 9, "n": 12, "accuracy": 0.75},
+      "delta_percentage_points": 0.0,
+      "status": "exploratory_blinded_pilot",
+      "interpretation": "Null pilot result; the benchmark-only FOIL/Mastermind protocol did not improve accuracy on this sample."
+    }
+  ],
+  "legacy_manual_pilots": [
+    {
+      "benchmark": "SimpleBench public subset",
+      "BASE": {"correct": 3, "n": 5, "accuracy": 0.6},
+      "FOIL": {"correct": 5, "n": 5, "accuracy": 1.0},
+      "delta_percentage_points": 40.0,
+      "status": "legacy_manual_disjoint_subset_pilot",
+      "warning": "Not reproduced by the current CI harness; retain as exploratory historical evidence only."
+    },
+    {
+      "benchmark": "Current-evidence retrieval holdout",
+      "BASE": {"correct": 0, "n": 5, "accuracy": 0.0},
+      "FOIL": {"correct": 5, "n": 5, "accuracy": 1.0},
+      "delta_percentage_points": 100.0,
+      "status": "custom_mechanism_holdout_not_standard_benchmark",
+      "warning": "Measures freshness/evidence routing on a custom holdout; not a standardized benchmark."
+    }
+  ],
+  "discarded_pilots": [
+    {
+      "family": "math/error-localization stress tests",
+      "reason": "BASE saturated at or near 100%; discarded as non-discriminating rather than reported as evidence of FOIL gain."
+    }
+  ],
+  "publication_boundary": "These results are exploratory research-software pilots, not official HLE, ARC-AGI, GPQA, or SimpleBench submissions and not evidence that FOIL generally improves GPT-5.6 Sol."
+}
