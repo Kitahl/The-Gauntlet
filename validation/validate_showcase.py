@@ -474,6 +474,10 @@ with sync_playwright() as playwright:
         page.on("pageerror", lambda error, errors=errors: errors.append(str(error)))
         page.set_content(source, wait_until="load")
         page.add_style_tag(content=combined_css)
+        page.locator(".visual-card img").evaluate_all(
+            "els => els.forEach(el => { el.loading = 'eager'; })"
+        )
+        page.wait_for_timeout(250)
         page.keyboard.press("Tab")
         focused = page.evaluate(
             'document.activeElement && document.activeElement.getAttribute("href")'
