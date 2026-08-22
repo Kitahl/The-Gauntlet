@@ -69,7 +69,7 @@ Cold-start coverage includes:
 - teaching/explanation;
 - planning/decision-making.
 
-The extended runtime can also recognize common work families such as medicine/healthcare, psychology/behavior, education, social sciences, humanities/history, philosophy/ethics, business, marketing/sales, finance/accounting, mechanical/civil/environmental engineering, robotics/control, earth/geospatial, architecture, visual media, music/audio, language/translation, journalism, public administration, project/program management, entrepreneurship, manufacturing/fabrication, agriculture/food, energy/power, and geopolitics/international work.
+The extended runtime recognizes many additional professional/research families, including pure mathematics, theorem proving/formal methods, optimization/operations research, databases/data engineering, cloud/devops/platform, computer vision/graphics, NLP/language technology, AI safety/evaluation, healthcare, bioinformatics, neuroscience, psychology, education, social sciences, humanities/history, philosophy/ethics, business, marketing/sales, finance/accounting/econometrics, engineering disciplines, robotics/control, geospatial/earth science, architecture, visual media, games, music/audio, translation/linguistics, technical writing, journalism, law/policy, public administration, organizational/project/product management, entrepreneurship, manufacturing, agriculture/food, energy/power, human factors, operations/logistics, and geopolitics.
 
 This list is **not closed**.
 
@@ -86,25 +86,35 @@ During setup or use:
 
 When runtime tools are available, record performance with `tools/foil_profile.py observe` using domain, outcome, assistance, confidence when available, source, and representation. Do not store raw prompt text unless the user explicitly chooses to.
 
-## 5. Two-layer personalization model
+## 5. Three-stage personalization path
 
-FOIL uses two different calibration layers.
+FOIL separates cold-start coverage from cross-cutting calibration and real-work evidence.
 
 ### Layer 1 — broad cold start
 
 `tools/foil_assessment.py`
 
-Purpose: cheaply establish first-pass hypotheses about goals, relevant domains, work-style preferences, confidence calibration, and broad reasoning/research/engineering performance.
+Purpose: establish first-pass hypotheses about goals, relevant domains, work-style preferences, confidence calibration, and broad reasoning/research/engineering performance.
 
 Layer 1 is deliberately conservative. It can produce only provisional states such as `PROMISING_STRENGTH`, `POSSIBLE_GAP`, `UNCERTAIN`, and `INSUFFICIENT_EVIDENCE`.
 
-### Layer 2 — deep calibration
+### Layer 2A — structured cross-cutting calibration
+
+`tools/foil_layer2.py`
+
+Purpose: give a stranger a reproducible second-stage screen of **how they reason across domains**, not just what topics they know.
+
+Standard mode uses 24 mechanically scored micro-scenarios across 12 facets, plus open design, creative-search, and explanation tasks. Short mode uses one item per facet and is screening-only.
+
+Layer 2A records objective outcomes as provisional deep-calibration evidence. Open responses remain `NEEDS_RUBRIC_REVIEW` until a real rubric, artifact check, or independent reviewer supports them.
+
+### Layer 2B — adaptive deep calibration
 
 `tools/foil_calibration.py`
 
-Purpose: move a stranger from a shallow screen toward an evidence-rich personalized FOIL by sampling **how they work**, not merely what topics they know.
+Purpose: move from a broad questionnaire profile toward an evidence-rich personalized FOIL using the person's actual domains and work.
 
-Layer 2 uses:
+Layer 2B uses:
 
 - changed-representation discriminators;
 - harder transfer probes for apparent strengths;
@@ -116,7 +126,7 @@ Layer 2 uses:
 - verifier/tool-selection probes;
 - cross-domain reasoning facets.
 
-Layer 2 must not automatically score an open task as verified merely because an LLM likes the answer. A result becomes load-bearing only when the reviewer, artifact, proof, execution, rubric, or other claim-native evidence actually supports the outcome.
+Layer 2B must not automatically score an open task as verified merely because an LLM likes the answer. A result becomes load-bearing only when the reviewer, artifact, proof, execution, rubric, or other claim-native evidence actually supports the outcome.
 
 ## 6. Cross-domain working facets
 
@@ -139,6 +149,8 @@ A deep profile may track task-relevant evidence about:
 - uncertainty management.
 
 These are **evidence hypotheses**, not personality traits. They are useful because two people with similar domain knowledge may need different complements.
+
+Prompt-time facet inference may mark one or more of these as **currently relevant** to routing. Relevance never updates competence by itself.
 
 ## 7. Learner-state evidence
 
@@ -206,7 +218,7 @@ The second layer may report engineering maturity states such as:
 
 `DEEP_PROFILE_READY` means the saved profile has broad enough **evidence coverage** for stronger personalization across domains/facets, including multiple independent verified probes, changed representations/transfer, real-work samples, adversarial/error-detection evidence, confidence-bearing results, and open production.
 
-It does **not** mean the person has been psychometrically measured, that all strengths/gaps are known, or that the profile is as informative as months of naturalistic use. Newer real-work evidence continues to update it.
+It does **not** mean the person has been psychometrically measured, that all strengths/gaps are known, or that a newly screened profile is as informative as months of naturalistic use. Newer real-work evidence continues to update it.
 
 ## 11. Minimal diagnostic probes
 
@@ -228,13 +240,14 @@ Recommended sequence:
 
 1. create/activate a blank saved profile;
 2. run Layer 1 with `tools/foil_assessment.py`;
-3. apply the result as a provisional profile prior;
-4. run `tools/foil_calibration.py start` to produce the second-stage plan;
-5. record only evidence-backed outcomes from the selected probes;
-6. continue normal usage-time adaptation;
-7. stop active calibration when additional probes no longer materially change routing or when `DEEP_PROFILE_READY` has been reached and the remaining gaps are low-value for the person's goals.
+3. apply the result as a provisional domain/profile prior;
+4. run Layer 2A with `tools/foil_layer2.py` for concrete cross-cutting scenarios;
+5. run Layer 2B with `tools/foil_calibration.py start` for profile-dependent real-work/transfer probes;
+6. record only evidence-backed outcomes from selected probes;
+7. continue normal usage-time adaptation;
+8. stop active calibration when additional probes no longer materially change routing or remaining gaps are low-value for the person's goals.
 
-The system should not force every stranger through every possible domain.
+The system should not force every stranger through every possible domain. The target is equivalent **profile structure and evidence discipline**, not identical questions or identical labels.
 
 ## 13. Claim/evidence law
 
