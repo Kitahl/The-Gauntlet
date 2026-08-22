@@ -1,0 +1,29 @@
+name: Validate public package
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install browser validation dependency
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Validate Soul and Infinity Gauntlet
+        run: python validation/validate_soul_gauntlet_public.py
+      - name: Validate static showcase
+        run: python validation/validate_showcase.py
+      - name: Check Python syntax
+        run: python -m compileall -q validation
