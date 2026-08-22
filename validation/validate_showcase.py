@@ -188,8 +188,15 @@ checks["decision_preflight_trace"] = (
     and "Orchestrator-invoked" in preflight
     and "STILL → GROUND → ORIENT → WEIGH → RELEASE" in preflight
 )
+
+# Model-output benchmark deltas may be reported when their scope is explicit.
+# They must not be presented as proof of human-learning or general efficacy.
+lower_html = html.lower()
 checks["no_behavioral_efficacy_overclaim"] = (
-    "does not establish that FOIL improves human learning" in html
+    "behavioral efficacy remains a research question" in lower_html
+    and "not official leaderboard submissions" in lower_html
+    and "null result" in lower_html
+    and "do not establish general efficacy" in lower_html
 )
 
 assurance = (ROOT / "skills/infinity-gauntlet/SKILL.md").read_text(encoding="utf-8")
