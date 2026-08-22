@@ -67,7 +67,9 @@ checks["no_remote_runtime_assets"] = not bool(
 checks["no_javascript_required"] = "<script" not in html.lower()
 checks["focus_visible"] = ":focus-visible" in css
 checks["reduced_motion"] = "prefers-reduced-motion" in css
-checks["license_disclosure"] = "mit" in html.lower() and "license" in README.read_text(encoding="utf-8").lower()
+checks["license_disclosure"] = (
+    "mit" in html.lower() and "license" in README.read_text(encoding="utf-8").lower()
+)
 checks["pages_contract"] = (
     (ROOT / "PAGES_SETUP.md").exists()
     and (ROOT / "docs/.nojekyll").exists()
@@ -89,6 +91,10 @@ skill_dirs = [
 ]
 checks["source_artifacts_present"] = all(
     (ROOT / "skills" / directory / "SKILL.md").exists() for directory in skill_dirs
+)
+checks["skill_directories_are_spec_only"] = all(
+    {path.name for path in (ROOT / "skills" / directory).iterdir()} == {"SKILL.md"}
+    for directory in skill_dirs
 )
 checks["research_metadata_present"] = all(
     (ROOT / path).exists()
@@ -175,28 +181,46 @@ checks["activation_triggers_trace_to_source"] = all(
     command in (ROOT / relative_path).read_text(encoding="utf-8")
     for command, relative_path in trigger_sources.items()
 )
-checks["decision_preflight_trace"] = "invoked by the Soul" in (
-    ROOT / "skills/meditate/SKILL.md"
-).read_text(encoding="utf-8")
+
+preflight = (ROOT / "skills/meditate/SKILL.md").read_text(encoding="utf-8")
+checks["decision_preflight_trace"] = (
+    "Decision Preflight Protocol" in preflight
+    and "Orchestrator-invoked" in preflight
+    and "STILL → GROUND → ORIENT → WEIGH → RELEASE" in preflight
+)
 checks["no_behavioral_efficacy_overclaim"] = (
     "does not establish that FOIL improves human learning" in html
 )
 
 assurance = (ROOT / "skills/infinity-gauntlet/SKILL.md").read_text(encoding="utf-8")
-checks["assurance_portable_contract"] = (
-    "PUBLIC RUNTIME CONTRACT" in assurance and "UNAVAILABLE" in assurance
+required_runtime_paths = (
+    ".claude/settings.json",
+    ".gauntlet.json",
+    "tools/gauntlet_boundary.py",
+    "tools/gauntlet_monitor.py",
+    "tools/gauntlet_hook.py",
+    "tools/verify_ledger.py",
+    "docs/RUNTIME_SETUP.md",
 )
-checks["assurance_no_dead_private_runtime"] = not any(
-    token in assurance
-    for token in (
-        "tools/gauntlet_monitor.py",
-        "tools/gauntlet_boundary.py",
-        "tools/fsa_bots.py",
-        "tools/scout.py",
-        "tools/verify_ledger.py",
-        ".claude/settings.json",
-        "repo CLAUDE.md",
-    )
+checks["assurance_portable_contract"] = (
+    "## Runtime contract" in assurance
+    and "UNAVAILABLE" in assurance
+    and "no machine-specific path is assumed" in assurance
+    and all((ROOT / path).exists() for path in required_runtime_paths)
+    and all(path in assurance or path == "docs/RUNTIME_SETUP.md" for path in required_runtime_paths)
+)
+checks["assurance_no_machine_specific_runtime"] = not (
+    re.search(r"[A-Za-z]:\\Users\\[^\\]+\\", assurance)
+    or re.search(r"/Users/[^/]+/", assurance)
+)
+runtime_config = json.loads((ROOT / ".gauntlet.json").read_text(encoding="utf-8"))
+state_dir = str(runtime_config.get("state_dir", "")).strip().rstrip("/")
+gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
+checks["runtime_state_is_not_git_metadata"] = (
+    state_dir.startswith(".egrt/")
+    and not state_dir.startswith(".git/")
+    and ".egrt/" in gitignore
+    and "state lives under the configured project runtime directory, not `.git/`" in assurance
 )
 
 
@@ -263,7 +287,10 @@ with sync_playwright() as playwright:
             "h1_visible": page.locator("h1").is_visible(),
             "main_visible": page.locator("main").is_visible(),
         }
-        page.screenshot(path=str(ROOT / "validation" / f"showcase-{name}.png"), full_page=True)
+        page.screenshot(
+            path=str(ROOT / "validation" / f"showcase-{name}.png"),
+            full_page=True,
+        )
     browser.close()
 
 checks["responsive_no_overflow"] = all(
@@ -285,7 +312,10 @@ checks["payload_budget"] = payload_bytes < 100_000
 checks["payload_budget_negative_control"] = payload_bytes + 100_001 >= 100_000
 
 # Representative mutants demonstrate that important gates can fail.
-mutant_html = source.replace('<main id="main">', '<main id="main" style="display:none">')
+mutant_html = source.replace(
+    '<main id="main">',
+    '<main id="main" style="display:none">',
+)
 mutant_css = css + "\nh1{font-size:12px!important}\n"
 with sync_playwright() as playwright:
     browser = playwright.chromium.launch(**browser_launch_kwargs())

@@ -1,8 +1,21 @@
 .mastermind/runtime/
 .mastermind/runs/
+.mastermind/
 __pycache__/
 *.pyc
 .DS_Store
 
+# Generated showcase screenshots
 validation/showcase-*.png
-.mastermind/
+
+# Local Process Assurance runtime state
+.egrt/
+
+# Local FOIL onboarding/profile artifacts (profiles themselves live outside repo)
+foil_assessment*.json
+foil_responses*.json
+foil_assessment_report*.json
+foil_profile*.json
+
+# Claude Code local-only overrides
+.claude/settings.local.json
