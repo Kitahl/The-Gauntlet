@@ -17,7 +17,7 @@
   <header class="topbar">
     <a class="brand" href="#top" aria-label="Evidence-Governed Research Toolkit home"><span class="brand-mark">E</span><span>Evidence-Governed Research Toolkit</span></a>
     <nav aria-label="Primary">
-      <a href="#system">Architecture</a><a href="#foil">FOIL</a><a href="#evidence">Evidence</a><a href="#skills">Modules</a>
+      <a href="#system">Architecture</a><a href="#foil">FOIL</a><a href="#evidence">Evidence</a><a href="#benchmarks">Benchmarks</a><a href="#skills">Modules</a>
       <a class="repo-link" href="https://github.com/Kitahl/The-Gauntlet">GitHub ↗</a>
     </nav>
   </header>
@@ -31,7 +31,7 @@
       <div class="hero-actions"><a class="button primary" href="#system">Inspect architecture</a><a class="button ghost" href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/EVALUATOR_QUICKSTART.md">5-minute evaluator path</a></div>
       <div class="status-row" role="list">
         <div role="listitem"><strong>10</strong><span>research modules in this repository</span></div>
-        <div role="listitem"><strong>0.1.0</strong><span>public research-software baseline</span></div>
+        <div role="listitem"><strong>0.4.0</strong><span>current public research-software version</span></div>
         <div role="listitem"><strong>OPEN</strong><span>behavioral efficacy remains a research question</span></div>
       </div>
     </section>
@@ -74,6 +74,17 @@
       </div>
     </section>
 
+    <section id="benchmarks" class="shell section">
+      <div class="section-head narrow"><p class="eyebrow">EXPLORATORY BENCHMARK PILOTS</p><h2>Positive results and null results are published together.</h2><p>These are small, deterministic disjoint-subset pilots using GPT-5.6 Sol, not official leaderboard submissions or isolated same-item causal A/B tests. The assisted condition uses a frozen Frontier-Exam FOIL + Mastermind pre-commit protocol.</p></div>
+      <div class="evidence-grid">
+        <article><span class="tag measured">+16.7 pp</span><h3>HLE public text subset</h3><p>BASE 1/6 (16.7%) → assisted 2/6 (33.3%). Blinded CI-scored pilot.</p></article>
+        <article><span class="tag measured">+16.7 pp</span><h3>ARC-AGI-1</h3><p>BASE 4/6 (66.7%) → assisted 5/6 (83.3%). Blinded CI-scored pilot.</p></article>
+        <article><span class="tag unknown">0.0 pp</span><h3>GPQA-Diamond</h3><p>BASE 9/12 (75%) → assisted 9/12 (75%). The larger follow-up produced a null result.</p></article>
+        <article><span class="tag cited">METHOD</span><h3>Reproducible receipts</h3><p>Frozen seeds, exclusions, harnesses, conditions, and machine-readable results are public. <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/BENCHMARKS.md">Read the benchmark report ↗</a></p></article>
+      </div>
+      <p class="activate-note">Legacy SimpleBench and custom freshness-routing pilots are retained in the detailed report with weaker evidence labels. Saturated math/error-localization pilots were discarded rather than used as non-discriminating evidence.</p>
+    </section>
+
     <section id="activate" class="shell section activate" aria-labelledby="activate-title">
       <div class="section-head narrow"><p class="eyebrow">TECHNICAL ALIASES</p><h2 id="activate-title">Professional research names, backwards-compatible commands.</h2><p>The public portfolio uses professional display names. Existing technical IDs remain available so the research package does not break existing workflows.</p></div>
       <div class="command-grid" role="list" aria-label="Research module activation commands">
@@ -114,19 +125,20 @@
     </section>
 
     <section class="shell section evidence-trail" aria-labelledby="trail-title">
-      <div class="section-head narrow"><p class="eyebrow">REVIEWER PATH</p><h2 id="trail-title">Inspect the research package directly.</h2><p>The repository exposes architecture, research questions, primary evidence boundaries, reproducibility instructions, citation metadata, and validation artifacts.</p></div>
+      <div class="section-head narrow"><p class="eyebrow">REVIEWER PATH</p><h2 id="trail-title">Inspect the research package directly.</h2><p>The repository exposes architecture, research questions, primary evidence boundaries, reproducibility instructions, citation metadata, benchmark receipts, and validation artifacts.</p></div>
       <div class="trail-links">
         <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/ARCHITECTURE.md"><b>Architecture</b><span>Control plane, evidence flow, professional naming, compatibility aliases.</span></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/BENCHMARKS.md"><b>Benchmark pilots</b><span>HLE, ARC-AGI, GPQA, legacy pilots, negative results, sources, and validity boundaries.</span></a>
         <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/RESEARCH.md"><b>Research statement</b><span>Question, method, baselines, ablations, planned endpoints.</span></a>
         <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/REPRODUCIBILITY.md"><b>Reproducibility</b><span>Exact validation path and evidence interpretation.</span></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/research/FOIL_RESEARCH_BASIS.md"><b>FOIL research basis</b><span>FOIL_RESEARCH_BASIS.md — sources, transport limits, provisional hypotheses.</span></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/research/FOIL_RESEARCH_BASIS.md"><b>FOIL research basis</b><span>Sources, transport limits, provisional hypotheses.</span></a>
         <a href="https://github.com/Kitahl/The-Gauntlet/tree/main/validation"><b>/validation</b><span>Mechanical/specification evidence; not behavioral efficacy.</span></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/foil/SKILL.md"><b>FOIL specification</b><span>skills/foil/SKILL.md — learner-state, claims, routing, transfer.</span></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/soul/SKILL.md"><b>Orchestrator specification</b><span>skills/soul/SKILL.md — portable evidence-governed control plane.</span></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/foil/SKILL.md"><b>FOIL specification</b><span>Learner-state, claims, routing, transfer.</span></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/soul/SKILL.md"><b>Orchestrator specification</b><span>Portable evidence-governed control plane.</span></a>
       </div>
     </section>
 
-    <section class="cta shell"><p class="eyebrow">RESEARCH SOFTWARE v0.1.0</p><h2>Inspect, reproduce, challenge, and cite the exact version.</h2><p>The repository includes a public license, machine-readable citation metadata, research statement, reproducibility protocol, roadmap, contribution governance, and source-level validation. Validation of the specification does not establish that FOIL improves human learning in deployment.</p><a class="button primary" href="https://github.com/Kitahl/The-Gauntlet">Open research repository ↗</a></section>
+    <section class="cta shell"><p class="eyebrow">RESEARCH SOFTWARE v0.4.0</p><h2>Inspect, reproduce, challenge, and cite the exact version.</h2><p>The repository includes a public license, machine-readable citation metadata, research statement, reproducibility protocol, benchmark receipts, roadmap, contribution governance, and source-level validation. Pilot benchmark deltas are reported with their null result and do not establish general efficacy.</p><a class="button primary" href="https://github.com/Kitahl/The-Gauntlet">Open research repository ↗</a></section>
   </main>
   <footer class="shell"><span>Evidence-Governed Research Toolkit</span><span>Research software · MIT licensed · claims scoped to evidence.</span></footer>
 </body>
