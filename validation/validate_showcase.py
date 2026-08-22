@@ -213,8 +213,13 @@ checks["assurance_no_machine_specific_runtime"] = not (
     re.search(r"[A-Za-z]:\\Users\\[^\\]+\\", assurance)
     or re.search(r"/Users/[^/]+/", assurance)
 )
+runtime_config = json.loads((ROOT / ".gauntlet.json").read_text(encoding="utf-8"))
+state_dir = str(runtime_config.get("state_dir", "")).strip().rstrip("/")
+gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
 checks["runtime_state_is_not_git_metadata"] = (
-    ".egrt/state/" in (ROOT / ".gitignore").read_text(encoding="utf-8")
+    state_dir.startswith(".egrt/")
+    and not state_dir.startswith(".git/")
+    and ".egrt/" in gitignore
     and "state lives under the configured project runtime directory, not `.git/`" in assurance
 )
 
