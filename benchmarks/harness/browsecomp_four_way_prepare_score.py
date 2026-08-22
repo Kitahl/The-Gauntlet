@@ -22,13 +22,14 @@ TARGET = 20
 CONDITIONS = ("BASE", "FOIL", "FOIL_PROFILE", "FOIL_MM")
 PROFILE_FREEZE_COMMIT = "013a728bfd6f57a8592fc3fc6e098ea52da357d5"
 
-# Public search results exposed published BrowseComp traces/answers for bc4-01
-# and bc4-04 after blinded item generation. To preserve equal condition sizes,
-# the complete ordinal block containing each contaminated item is excluded
-# without consulting hidden gold. Final n=3 per condition.
+# Public search results exposed published BrowseComp traces/answers for bc4-01,
+# bc4-04, and bc4-16 after blinded item generation. To preserve equal condition
+# sizes, each contaminated item's complete four-condition ordinal block is
+# excluded without consulting hidden gold. Final n=2 per condition.
 POST_EXPOSURE_EXCLUDED_IDS = {
     "bc4-00-475d4888", "bc4-01-08197e10", "bc4-02-a8ed2df4", "bc4-03-27616be2",
     "bc4-04-852241e2", "bc4-05-0c3aa825", "bc4-06-03619bed", "bc4-07-9f2ba19f",
+    "bc4-16-963255ff", "bc4-17-15efdcb3", "bc4-18-5577c78b", "bc4-19-37b46515",
 }
 
 
@@ -87,7 +88,7 @@ def prepare() -> tuple[list[dict], dict[str, str]]:
         gold[qid] = answer
 
     payload = {
-        "schema": "foil-browsecomp-four-way-questions/v3",
+        "schema": "foil-browsecomp-four-way-questions/v4",
         "selection_seed": SEED,
         "source": URL,
         "initial_sample_n": TARGET,
@@ -95,7 +96,7 @@ def prepare() -> tuple[list[dict], dict[str, str]]:
         "prior_sample_excluded_n": 20,
         "post_exposure_excluded_ids": sorted(POST_EXPOSURE_EXCLUDED_IDS),
         "post_exposure_exclusion_reason": (
-            "bc4-01 and bc4-04 were contaminated when public search results exposed published BrowseComp traces/answers; "
+            "bc4-01, bc4-04, and bc4-16 were contaminated when public search results exposed published BrowseComp traces/answers; "
             "their complete four-condition ordinal blocks were removed without consulting hidden gold."
         ),
         "profile_freeze_commit": PROFILE_FREEZE_COMMIT,
