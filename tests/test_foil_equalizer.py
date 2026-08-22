@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 import os
+import sys
 import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
-from unittest.mock import patch
-
-import sys
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
@@ -57,8 +56,28 @@ class FoilEqualizerTests(unittest.TestCase):
 
     def test_assisted_or_unverified_results_do_not_count(self) -> None:
         profile = fp.load()
-        fe.record(profile, probe_id="a", family="reasoning_representation", facet="verbal_reasoning", domain="cross_domain", kind="qualifier_preservation", outcome="pass", assistance="full", verified=True)
-        fe.record(profile, probe_id="b", family="reasoning_representation", facet="spatial_structural_reasoning", domain="cross_domain", kind="structure_transform", outcome="pass", assistance="none", verified=False)
+        fe.record(
+            profile,
+            probe_id="a",
+            family="reasoning_representation",
+            facet="verbal_reasoning",
+            domain="cross_domain",
+            kind="qualifier_preservation",
+            outcome="pass",
+            assistance="full",
+            verified=True,
+        )
+        fe.record(
+            profile,
+            probe_id="b",
+            family="reasoning_representation",
+            facet="spatial_structural_reasoning",
+            domain="cross_domain",
+            kind="structure_transform",
+            outcome="pass",
+            assistance="none",
+            verified=False,
+        )
         self.assertEqual(fe.coverage(profile)["family_distinct_facets"]["reasoning_representation"], 0)
 
     def test_arbitrary_relevant_domain_gets_profile_dependent_probe(self) -> None:
@@ -103,7 +122,13 @@ class FoilEqualizerTests(unittest.TestCase):
 
     def test_high_stakes_urgent_task_has_max_verification_min_friction(self) -> None:
         profile = fp.load()
-        policy = fe.recommend_policy(profile, "Check the current official version and fix the repository build", stakes="high", goal="learning", urgency="urgent")
+        policy = fe.recommend_policy(
+            profile,
+            "Check the current official version and fix the repository build",
+            stakes="high",
+            goal="learning",
+            urgency="urgent",
+        )
         self.assertEqual(policy["verification_intensity"], "maximum")
         self.assertEqual(policy["pedagogical_friction"], "minimal")
         self.assertEqual(policy["support_mode"], "direct_verified")
@@ -136,7 +161,19 @@ class FoilEqualizerTests(unittest.TestCase):
                     kind = "real_work"
                 if counter in {6, 7}:
                     kind = "adversarial_claim"
-                fe.record(profile, probe_id=f"x{counter}", family=family, facet=facets[i], domain="formal_reasoning", kind=kind, outcome="pass", assistance="none", verified=True, confidence=80, representation=f"r{counter}")
+                fe.record(
+                    profile,
+                    probe_id=f"x{counter}",
+                    family=family,
+                    facet=facets[i],
+                    domain="formal_reasoning",
+                    kind=kind,
+                    outcome="pass",
+                    assistance="none",
+                    verified=True,
+                    confidence=80,
+                    representation=f"r{counter}",
+                )
         state = fe.coverage(profile)
         self.assertNotEqual(state["status"], "HIGH_FIDELITY_PROFILE")
         self.assertIn("delayed_unassisted_retrieval", state["missing_extra"])
@@ -146,8 +183,22 @@ class FoilEqualizerTests(unittest.TestCase):
         plan = fe.build_plan(profile, max_probes=30)
         delayed = next(probe for probe in plan["probes"] if probe["kind"] == "delayed_unassisted_retrieval")
         state = profile["universal_refinement"]
-        state["issued"][delayed["probe_id"]]["not_before"] = (datetime.now(timezone.utc) - timedelta(seconds=1)).isoformat()
-        fe.record(profile, probe_id=delayed["probe_id"], family=delayed["family"], facet=delayed["facet"], domain=delayed["domain"], kind=delayed["kind"], outcome="pass", assistance="none", verified=True, confidence=75, representation="delayed-novel-case")
+        state["issued"][delayed["probe_id"]]["not_before"] = (
+            datetime.now(timezone.utc) - timedelta(seconds=1)
+        ).isoformat()
+        fe.record(
+            profile,
+            probe_id=delayed["probe_id"],
+            family=delayed["family"],
+            facet=delayed["facet"],
+            domain=delayed["domain"],
+            kind=delayed["kind"],
+            outcome="pass",
+            assistance="none",
+            verified=True,
+            confidence=75,
+            representation="delayed-novel-case",
+        )
         self.assertEqual(fe.coverage(profile)["coverage"]["delayed_unassisted_retrieval"]["value"], 1)
 
 
