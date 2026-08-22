@@ -1,0 +1,47 @@
+{
+  "schema": "egrt/visual-provenance-1",
+  "showcase_revision": 13,
+  "research_software_version": "0.4.0",
+  "visuals": [
+    {
+      "id": "gauntlet-system-map",
+      "file": "docs/visuals/gauntlet-system-map.svg",
+      "purpose": "Explain the public control plane and bounded research-module responsibilities.",
+      "sources": [
+        "docs/ARCHITECTURE.md",
+        "skills/soul/SKILL.md",
+        "skills/mathbot/SKILL.md",
+        "skills/scoutbot/SKILL.md",
+        "skills/novelbot/SKILL.md",
+        "skills/codebot/SKILL.md",
+        "skills/benchbot/SKILL.md",
+        "skills/infinity-gauntlet/SKILL.md",
+        "skills/council-of-elders/SKILL.md",
+        "skills/meditate/SKILL.md",
+        "skills/foil/SKILL.md"
+      ],
+      "boundary": "Conceptual architecture rendering; it is not behavioral evidence or an execution trace."
+    },
+    {
+      "id": "foil-diagnostic-loop",
+      "file": "docs/visuals/foil-diagnostic-loop.svg",
+      "purpose": "Expose FOIL's competing-explanation, complement, verification, transfer, and evidence-update logic.",
+      "sources": [
+        "skills/foil/SKILL.md",
+        "research/FOIL_RESEARCH_BASIS.md",
+        "validation/FOIL_RESEARCH_INTEGRATION_3_LOOP_REPORT.md"
+      ],
+      "boundary": "Specification-derived mechanism visual; it does not establish learning benefit or psychometric validity."
+    },
+    {
+      "id": "benchmark-evidence",
+      "file": "docs/visuals/benchmark-evidence.svg",
+      "purpose": "Render the already-published HLE, ARC-AGI-1, and GPQA-Diamond pilot results with the null result visible.",
+      "sources": [
+        "docs/BENCHMARKS.md",
+        "benchmarks/results/2026-08-22-blinded-pilot.json"
+      ],
+      "boundary": "Descriptive rendering of scoped exploratory pilots; no significance, causal, leaderboard, or general-efficacy claim is added."
+    }
+  ]
+}
