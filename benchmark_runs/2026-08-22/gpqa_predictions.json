@@ -1,0 +1,31 @@
+{
+  "schema": "foil-gpqa-predictions/v1",
+  "selection_seed": 20260825,
+  "protocol": "BASE vs frozen Frontier-Exam FOIL + Mastermind; 12 disjoint items per condition; closed-book",
+  "predictions": [
+    {"id": "gpqa-diamond-058", "answer": "D"},
+    {"id": "gpqa-diamond-107", "answer": "B"},
+    {"id": "gpqa-diamond-012", "answer": "D"},
+    {"id": "gpqa-diamond-130", "answer": "B"},
+    {"id": "gpqa-diamond-064", "answer": "B"},
+    {"id": "gpqa-diamond-150", "answer": "D"},
+    {"id": "gpqa-diamond-103", "answer": "A"},
+    {"id": "gpqa-diamond-162", "answer": "A"},
+    {"id": "gpqa-diamond-059", "answer": "D"},
+    {"id": "gpqa-diamond-187", "answer": "D"},
+    {"id": "gpqa-diamond-066", "answer": "A"},
+    {"id": "gpqa-diamond-018", "answer": "B"},
+    {"id": "gpqa-diamond-136", "answer": "D"},
+    {"id": "gpqa-diamond-011", "answer": "B"},
+    {"id": "gpqa-diamond-043", "answer": "D"},
+    {"id": "gpqa-diamond-060", "answer": "A"},
+    {"id": "gpqa-diamond-144", "answer": "C"},
+    {"id": "gpqa-diamond-048", "answer": "D"},
+    {"id": "gpqa-diamond-029", "answer": "A"},
+    {"id": "gpqa-diamond-077", "answer": "A"},
+    {"id": "gpqa-diamond-083", "answer": "D"},
+    {"id": "gpqa-diamond-106", "answer": "B"},
+    {"id": "gpqa-diamond-146", "answer": "B"},
+    {"id": "gpqa-diamond-172", "answer": "A"}
+  ]
+}
