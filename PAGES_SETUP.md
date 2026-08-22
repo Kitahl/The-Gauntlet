@@ -1,16 +1,25 @@
-# GitHub Pages setup
+# GitHub Pages deployment
 
-The showcase is a dependency-free static site in `docs/` and is ready for GitHub Pages branch publishing.
+The Evidence-Governed Research Toolkit showcase is a dependency-free static site in `docs/`.
 
-One repository setting must be enabled by an administrator because the connected GitHub tool used to build this release does not expose the Pages settings API:
+## Repository setting
 
 1. Open **Settings → Pages** in `Kitahl/The-Gauntlet`.
 2. Under **Build and deployment**, choose **Deploy from a branch**.
 3. Select branch **main** and folder **/docs**.
 4. Save.
 
-Once enabled, the expected project-site URL is:
+Expected project-site URL:
 
 `https://kitahl.github.io/The-Gauntlet/`
 
-The site intentionally uses no build step, remote fonts, analytics, trackers, or required JavaScript. Skill links use canonical GitHub URLs so they remain valid when only `docs/` is published.
+## Deployment properties
+
+- no build step;
+- no required JavaScript;
+- no remote fonts, analytics, or trackers;
+- canonical GitHub links for repository artifacts;
+- deterministic browser validation in CI;
+- public content is research/portfolio material and follows the repository evidence boundary.
+
+If the repository slug is renamed later, update the Pages URL, `CITATION.cff`, badges, canonical links, and deployment documentation in the same change.
