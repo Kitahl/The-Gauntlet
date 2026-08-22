@@ -1,8 +1,8 @@
 """Claude Code hook adapter for automatic FOIL profile bootstrap/relevance.
 
 The prompt hook stores only inferred domain/facet relevance metadata. It does
-not store raw prompt text. Deep-calibration and universal-refinement state are
-injected as compact routing context when available.
+not store raw prompt text. Deep-calibration state is injected as compact routing
+context when available.
 """
 from __future__ import annotations
 
@@ -11,7 +11,6 @@ import sys
 
 from foil_calibration import deep_context
 from foil_domains import infer_domains as infer_extended_domains
-from foil_equalizer import context as equalizer_context
 from foil_layer2 import infer_facets, mark_facet_relevance
 from foil_profile import (
     bootstrap_active,
@@ -29,10 +28,9 @@ def _input() -> dict:
         return {}
 
 
-def _print_context(profile: dict, task: str | None = None) -> None:
+def _print_context(profile: dict) -> None:
     print(compact_context(profile))
     print(deep_context(profile))
-    print(equalizer_context(profile, task))
 
 
 def session() -> int:
@@ -58,7 +56,7 @@ def prompt() -> int:
         save(profile)
     current_domains = ", ".join(domains) if domains else "unclassified"
     current_facets = ", ".join(facets) if facets else "unclassified"
-    _print_context(profile, text)
+    _print_context(profile)
     print(
         f"<FOIL_CURRENT_TASK domains={current_domains!r} facets={current_facets!r}>"
         "Domain/facet relevance is routing metadata, not competence evidence."
