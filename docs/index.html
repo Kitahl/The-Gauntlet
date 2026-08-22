@@ -3,21 +3,21 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="The Gauntlet: an evidence-first research skill system with orchestration, specialist reasoning lanes, process auditing, and FOIL personalized gap-filling." />
+  <meta name="description" content="Evidence-Governed Research Toolkit: modular research software for AI-assisted reasoning, verification, evaluation, and reproducibility." />
   <meta name="theme-color" content="#07080a" />
-  <meta property="og:title" content="The Gauntlet — Evidence-first research skills" />
-  <meta property="og:description" content="A modular research skill system for orchestration, proof, scouting, novelty, software verification, benchmarking, process audit, and personalized gap-filling." />
+  <meta property="og:title" content="Evidence-Governed Research Toolkit" />
+  <meta property="og:description" content="Research software for evidence-governed reasoning, prior-art discovery, engineering verification, evaluation, process assurance, and adaptive complementary assistance." />
   <meta property="og:type" content="website" />
-  <title>The Gauntlet — Evidence-first research skills</title>
+  <title>Evidence-Governed Research Toolkit</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
   <div class="noise" aria-hidden="true"></div>
   <header class="topbar">
-    <a class="brand" href="#top" aria-label="The Gauntlet home"><span class="brand-mark">G</span><span>The Gauntlet</span></a>
+    <a class="brand" href="#top" aria-label="Evidence-Governed Research Toolkit home"><span class="brand-mark">E</span><span>Evidence-Governed Research Toolkit</span></a>
     <nav aria-label="Primary">
-      <a href="#system">System</a><a href="#foil">FOIL</a><a href="#evidence">Evidence</a><a href="#skills">Skills</a>
+      <a href="#system">Architecture</a><a href="#foil">FOIL</a><a href="#evidence">Evidence</a><a href="#skills">Modules</a>
       <a class="repo-link" href="https://github.com/Kitahl/The-Gauntlet">GitHub ↗</a>
     </nav>
   </header>
@@ -25,107 +25,109 @@
   <main id="main">
     <div id="top" aria-hidden="true"></div>
     <section class="hero shell">
-      <p class="eyebrow">RESEARCH OPERATING SYSTEM · PUBLIC SHOWCASE</p>
-      <h1>Don’t trust the answer.<br><span>Instrument the reasoning.</span></h1>
-      <p class="lede">The Gauntlet is a modular skill system for research work: orchestrate the task, scout what exists, formalize what must be true, build and execute, benchmark the gap, search for novelty only when needed, and audit the frame that produced the conclusion.</p>
-      <div class="hero-actions"><a class="button primary" href="#system">Explore the system</a><a class="button ghost" href="https://github.com/Kitahl/The-Gauntlet/tree/main/skills">Read the skills</a></div>
+      <p class="eyebrow">RESEARCH SOFTWARE · AI-ASSISTED REASONING · REPRODUCIBILITY</p>
+      <h1>Evidence before confidence.<br><span>Verification before claims.</span></h1>
+      <p class="lede">A modular research-software toolkit that routes AI-assisted work according to what must be proved, searched, executed, measured, independently checked, or left unresolved.</p>
+      <div class="hero-actions"><a class="button primary" href="#system">Inspect architecture</a><a class="button ghost" href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/EVALUATOR_QUICKSTART.md">5-minute evaluator path</a></div>
       <div class="status-row" role="list">
-        <div role="listitem"><strong>10</strong><span>skill modules in this repository</span></div>
-        <div role="listitem"><strong>USER</strong><span>controls goals and voluntary decisions</span></div>
-        <div role="listitem"><strong>EVIDENCE</strong><span>controls factual warrant</span></div>
+        <div role="listitem"><strong>10</strong><span>research modules in this repository</span></div>
+        <div role="listitem"><strong>0.1.0</strong><span>public research-software baseline</span></div>
+        <div role="listitem"><strong>OPEN</strong><span>behavioral efficacy remains a research question</span></div>
       </div>
     </section>
 
     <section id="system" class="shell section">
-      <div class="section-head"><p class="eyebrow">THE CONTROL SURFACE</p><h2>A control plane plus specialized lanes, not one giant prompt.</h2><p>SOUL frames and routes the work. Each specialist lane has a bounded mandate. Routing is based on the epistemic obligation—proof, prior art, execution, benchmarking, novelty, or process audit—not just the topic label.</p></div>
-      <div class="orbit" aria-label="The Gauntlet architecture">
-        <div class="core"><span>SOUL</span><strong>Orchestrate</strong><small>route · synthesize · decide</small></div>
-        <article class="node n1"><b>MIND</b><span>math · logic · proof</span></article>
-        <article class="node n2"><b>SPACE</b><span>prior art · reuse</span></article>
-        <article class="node n3"><b>REALITY</b><span>novel mechanisms</span></article>
-        <article class="node n4"><b>POWER</b><span>code · execute · verify</span></article>
-        <article class="node n5"><b>TIME</b><span>benchmarks · ceilings</span></article>
+      <div class="section-head"><p class="eyebrow">ARCHITECTURE</p><h2>A control plane plus specialist research modules.</h2><p>The Research Orchestrator decomposes a task by epistemic obligation. Specialist modules return bounded findings; evidence and verifier fit govern synthesis rather than votes, confidence, or agent count.</p></div>
+      <div class="orbit" aria-label="Evidence-Governed Research Toolkit architecture">
+        <div class="core"><span>CONTROL</span><strong>Research Orchestrator</strong><small>frame · route · integrate · release</small></div>
+        <article class="node n1"><b>FORMAL</b><span>proof · logic · probability</span></article>
+        <article class="node n2"><b>DISCOVERY</b><span>prior art · literature · reuse</span></article>
+        <article class="node n3"><b>SYNTHESIS</b><span>constrained new methods</span></article>
+        <article class="node n4"><b>ENGINEERING</b><span>build · execute · verify</span></article>
+        <article class="node n5"><b>EVALUATION</b><span>baselines · ceilings · cost</span></article>
       </div>
     </section>
 
     <section id="foil" class="foil-band">
       <div class="shell foil-grid">
-        <div><p class="eyebrow">THE PERSONALIZED COMPLEMENT</p><h2>FOIL mirrors the method you are using—then supplies what is missing.</h2><p>FOIL is not a fixed personality type. It treats observed errors as noisy evidence, maintains competing explanations, supplies missing proof or engineering methods, and separates immediate task success from what the user can later do independently.</p><div class="quote">USER controls decisions.<br><strong>Evidence controls factual warrant.</strong></div></div>
+        <div><p class="eyebrow">ADAPTIVE COMPLEMENT</p><h2>FOIL supplies the missing method without turning one error into a personality label.</h2><p>FOIL — Adaptive Reasoning Complement — maintains competing explanations for observed performance, conditions evidence on assistance and context, and separates immediate joint task success from later independent competence.</p><div class="quote">Human authority governs voluntary decisions.<br><strong>Evidence governs factual warrant.</strong></div></div>
         <div class="foil-console" aria-label="FOIL workflow example">
           <div class="console-head"><span></span><span></span><span></span><em>/foil both</em></div>
           <ol>
-            <li><i>01</i><div><b>Observe</b><span>What is the task actually asking?</span></div></li>
-            <li><i>02</i><div><b>Model</b><span>Gap, ambiguity, slip, retrieval failure?</span></div></li>
-            <li><i>03</i><div><b>Route</b><span>Use the minimum sufficient tools.</span></div></li>
-            <li><i>04</i><div><b>Verify</b><span>Match the verifier to the claim.</span></div></li>
-            <li><i>05</i><div><b>Transfer</b><span>Can the user do it after assistance is removed?</span></div></li>
+            <li><i>01</i><div><b>Observe</b><span>What behavior actually occurred?</span></div></li>
+            <li><i>02</i><div><b>Model</b><span>Gap, ambiguity, retrieval failure, representation, or slip?</span></div></li>
+            <li><i>03</i><div><b>Route</b><span>Use the minimum evidence-producing method.</span></div></li>
+            <li><i>04</i><div><b>Verify</b><span>Match the verifier to the exact claim.</span></div></li>
+            <li><i>05</i><div><b>Transfer</b><span>What remains when assistance is removed?</span></div></li>
           </ol>
         </div>
       </div>
     </section>
 
     <section id="evidence" class="shell section">
-      <div class="section-head narrow"><p class="eyebrow">EPISTEMIC CONTRACT</p><h2>Claims carry obligations.</h2><p>The system is designed to distinguish source provenance from certainty and to keep unsupported claims visibly unresolved.</p></div>
+      <div class="section-head narrow"><p class="eyebrow">CURRENT EVIDENCE</p><h2>Claims are separated by what the repository can actually support.</h2><p>Specification/source checks are public and reproducible. Behavioral efficacy is intentionally left open until prospective matched-baseline evidence exists.</p></div>
       <div class="evidence-grid">
-        <article><span class="tag measured">MEASURED</span><h3>Observed or computed</h3><p>Record the method, artifact, run, and scope.</p></article>
-        <article><span class="tag cited">CITED</span><h3>Source-entailing</h3><p>The inspected source must support the exact proposition, not a nearby one.</p></article>
-        <article><span class="tag derived">DERIVED</span><h3>Premise-linked</h3><p>Explicit inference from ledgered premises and assumptions.</p></article>
-        <article><span class="tag unknown">UNKNOWN</span><h3>Still unresolved</h3><p>Missing proof or evidence stays visible instead of being laundered into prose.</p></article>
+        <article><span class="tag measured">94 / 94</span><h3>FOIL structural validation</h3><p>Recorded source/structure/regression checks passed.</p></article>
+        <article><span class="tag cited">18 / 18</span><h3>Behavioral-contract coverage</h3><p>PASS-SPEC: specification coverage, not behavioral proof.</p></article>
+        <article><span class="tag derived">PORTABLE</span><h3>Public assurance package</h3><p>Control and process-assurance specs fail closed when private integrations are unavailable.</p></article>
+        <article><span class="tag unknown">OPEN</span><h3>Prospective efficacy</h3><p>Independent-transfer and matched-budget studies remain on the research roadmap.</p></article>
       </div>
     </section>
 
     <section id="activate" class="shell section activate" aria-labelledby="activate-title">
-      <div class="section-head narrow"><p class="eyebrow">ACTIVATE</p><h2 id="activate-title">Start with the obligation. Invoke only what you need.</h2><p>Each command below comes from the corresponding skill trigger metadata. SOUL can orchestrate the system; FOIL can personalize the complement when the missing obligation depends on the user.</p></div>
-      <div class="command-grid" role="list" aria-label="Skill activation commands">
-        <div role="listitem"><code>/soul</code><span>orchestrate · integrate · release</span></div>
-        <div role="listitem"><code>/foil</code><span>personalized complement</span></div>
-        <div role="listitem"><code>/mind</code><span>proof · logic · formal reasoning</span></div>
-        <div role="listitem"><code>/space</code><span>prior art · existing tools</span></div>
-        <div role="listitem"><code>/reality</code><span>novel mechanism search</span></div>
-        <div role="listitem"><code>/power</code><span>software · execution · verification</span></div>
-        <div role="listitem"><code>/time</code><span>benchmarks · ceiling · stop/go</span></div>
-        <div role="listitem"><code>/gauntlet</code><span>frame and process audit</span></div>
-        <div role="listitem"><code>/council</code><span>selective evidence-grounded forum</span></div>
+      <div class="section-head narrow"><p class="eyebrow">TECHNICAL ALIASES</p><h2 id="activate-title">Professional research names, backwards-compatible commands.</h2><p>The public portfolio uses professional display names. Existing technical IDs remain available so the research package does not break existing workflows.</p></div>
+      <div class="command-grid" role="list" aria-label="Research module activation commands">
+        <div role="listitem"><code>/soul</code><span>Research Orchestrator</span></div>
+        <div role="listitem"><code>/foil</code><span>Adaptive Reasoning Complement</span></div>
+        <div role="listitem"><code>/mind</code><span>Formal Reasoning</span></div>
+        <div role="listitem"><code>/space</code><span>Research Discovery</span></div>
+        <div role="listitem"><code>/reality</code><span>Method Synthesis</span></div>
+        <div role="listitem"><code>/power</code><span>Engineering Verification</span></div>
+        <div role="listitem"><code>/time</code><span>Evaluation &amp; Benchmarking</span></div>
+        <div role="listitem"><code>/gauntlet</code><span>Process Assurance Framework</span></div>
+        <div role="listitem"><code>/council</code><span>Evidence Review Panel</span></div>
       </div>
-      <p class="activate-note"><strong>Meditate</strong> is a grounding form invoked by the orchestrator at defined decision/failure junctures rather than a general user-facing command.</p>
+      <p class="activate-note"><strong>Decision Preflight Protocol</strong> is an orchestrator-invoked grounding procedure rather than a general user-facing command.</p>
     </section>
 
     <section id="skills" class="shell section">
-      <div class="section-head"><p class="eyebrow">MODULES</p><h2>Pick the lane that matches the obligation.</h2></div>
+      <div class="section-head"><p class="eyebrow">RESEARCH MODULES</p><h2>Each module owns a distinct evidence obligation.</h2></div>
       <div class="skill-grid">
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/soul/SKILL.md"><b>CONTROL</b><h3>SOUL Gem</h3><p>Frame, decompose, route, integrate, self-audit, and release.</p></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/mathbot/SKILL.md"><b>MIND</b><h3>Mathbot</h3><p>Proof, logic, probability, optimization, countermodels.</p></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/scoutbot/SKILL.md"><b>SPACE</b><h3>Scoutbot</h3><p>Existing tools, papers, code, and cross-domain anchors.</p></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/novelbot/SKILL.md"><b>REALITY</b><h3>Novelbot</h3><p>Novel mechanisms only after defaults fail a named constraint.</p></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/codebot/SKILL.md"><b>POWER</b><h3>Codebot</h3><p>Architecture, code, tests, benchmarks, executable verification.</p></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/benchbot/SKILL.md"><b>TIME</b><h3>Benchbot</h3><p>Capability frontiers, ceilings, effort/reward, stop decisions.</p></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/infinity-gauntlet/SKILL.md"><b>FRAME</b><h3>Infinity Gauntlet</h3><p>Attack the process and frame behind a candidate, not only the candidate.</p></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/meditate/SKILL.md"><b>GROUND</b><h3>Meditate</h3><p>Artifact-grounded preflight and dispatch discipline.</p></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/council-of-elders/SKILL.md"><b>FORUM</b><h3>Council</h3><p>Selective evidence-grounded perspectives after commitment.</p></a>
-        <a class="featured" href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/foil/SKILL.md"><b>MIRROR</b><h3>FOIL</h3><p>Personalized complement: solve, verify, teach, and test independent transfer.</p></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/soul/SKILL.md"><b>CONTROL</b><h3>Research Orchestrator</h3><p>Frame, decompose, route, integrate, audit, and release.</p></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/mathbot/SKILL.md"><b>FORMAL</b><h3>Formal Reasoning</h3><p>Proof, logic, probability/statistics, optimization, countermodels.</p></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/scoutbot/SKILL.md"><b>DISCOVERY</b><h3>Research Discovery</h3><p>Existing tools, literature, code, and cross-domain anchors.</p></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/novelbot/SKILL.md"><b>SYNTHESIS</b><h3>Method Synthesis</h3><p>New mechanisms only after existing methods fail a named constraint.</p></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/codebot/SKILL.md"><b>ENGINEERING</b><h3>Engineering Verification</h3><p>Architecture, implementation, integration, execution, and software verification.</p></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/benchbot/SKILL.md"><b>EVALUATION</b><h3>Evaluation &amp; Benchmarking</h3><p>Baselines, capability measurement, ceilings, cost, and stop decisions.</p></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/infinity-gauntlet/SKILL.md"><b>ASSURANCE</b><h3>Process Assurance Framework</h3><p>Audit frames, process, inherited assumptions, stale state, and false-green verification.</p></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/meditate/SKILL.md"><b>PREFLIGHT</b><h3>Decision Preflight Protocol</h3><p>Artifact-grounded orientation before consequential action or after failure.</p></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/council-of-elders/SKILL.md"><b>REVIEW</b><h3>Evidence Review Panel</h3><p>Selective independent perspectives with evidence packs and control comparison.</p></a>
+        <a class="featured" href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/foil/SKILL.md"><b>ADAPTIVE</b><h3>FOIL</h3><p>Adaptive complement: supply missing methods, verify, teach, and test independent transfer.</p></a>
       </div>
     </section>
 
     <section class="shell section principles">
-      <div><span>01</span><h3>Search before novelty</h3><p>“Nothing exists” is a claim, not a default assumption.</p></div>
-      <div><span>02</span><h3>Execute when executable</h3><p>Tests and measurements outrank plausible software prose.</p></div>
-      <div><span>03</span><h3>Audit the frame</h3><p>A reviewer can only attack the candidate it was handed. The Gauntlet also attacks what was handed to it.</p></div>
-      <div><span>04</span><h3>Measure what remains</h3><p>FOIL’s learning objective is future independent competence, not dependency on assistance.</p></div>
+      <div><span>01</span><h3>Search before novelty</h3><p>Absence and novelty are scoped research claims.</p></div>
+      <div><span>02</span><h3>Execute when executable</h3><p>Observed software behavior outranks plausible software prose.</p></div>
+      <div><span>03</span><h3>Audit the frame</h3><p>Verification must cover the claim's externally defined scope, not merely its own checklist.</p></div>
+      <div><span>04</span><h3>Measure what remains</h3><p>Behavioral efficacy must be demonstrated prospectively, not inferred from specification quality.</p></div>
     </section>
 
     <section class="shell section evidence-trail" aria-labelledby="trail-title">
-      <div class="section-head narrow"><p class="eyebrow">EVIDENCE TRAIL</p><h2 id="trail-title">Inspect the basis, not just the pitch.</h2><p>Architecture descriptions are traceable to the skill specifications. FOIL's learning and learner-model mechanisms are documented separately from mechanical specification validation.</p></div>
+      <div class="section-head narrow"><p class="eyebrow">REVIEWER PATH</p><h2 id="trail-title">Inspect the research package directly.</h2><p>The repository exposes architecture, research questions, primary evidence boundaries, reproducibility instructions, citation metadata, and validation artifacts.</p></div>
       <div class="trail-links">
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/soul/SKILL.md"><b>SOUL skill</b><span>Portable routing, evidence integration, self-audit, and release discipline.</span></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/foil/SKILL.md"><b>FOIL skill</b><span>Authority, claim handling, learner-state model, routing, verification.</span></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/research/FOIL_RESEARCH_BASIS.md"><b>Research basis</b><span>Sources, transport limits, and provisional design hypotheses.</span></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/tree/main/validation"><b>Validation artifacts</b><span>Mechanical/specification checks; not a claim of behavioral efficacy.</span></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/infinity-gauntlet/SKILL.md"><b>Gauntlet audit</b><span>Portable frame, process, stale-state, and false-green auditing.</span></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/ARCHITECTURE.md"><b>Architecture</b><span>Control plane, evidence flow, professional naming, compatibility aliases.</span></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/RESEARCH.md"><b>Research statement</b><span>Question, method, baselines, ablations, planned endpoints.</span></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/REPRODUCIBILITY.md"><b>Reproducibility</b><span>Exact validation path and evidence interpretation.</span></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/research/FOIL_RESEARCH_BASIS.md"><b>FOIL research basis</b><span>FOIL_RESEARCH_BASIS.md — sources, transport limits, provisional hypotheses.</span></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/tree/main/validation"><b>/validation</b><span>Mechanical/specification evidence; not behavioral efficacy.</span></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/foil/SKILL.md"><b>FOIL specification</b><span>skills/foil/SKILL.md — learner-state, claims, routing, transfer.</span></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/soul/SKILL.md"><b>Orchestrator specification</b><span>skills/soul/SKILL.md — portable evidence-governed control plane.</span></a>
       </div>
     </section>
 
-    <section class="cta shell"><p class="eyebrow">SOURCE AVAILABLE NOW</p><h2>Inspect the system instead of taking the showcase on trust.</h2><p>The repository includes the skill specifications, FOIL research basis, and mechanical validation artifacts. Validation of the specification does not establish that FOIL improves human learning in deployment. <strong>License status:</strong> no repository-wide license has been declared yet.</p><a class="button primary" href="https://github.com/Kitahl/The-Gauntlet">Open repository ↗</a></section>
+    <section class="cta shell"><p class="eyebrow">RESEARCH SOFTWARE v0.1.0</p><h2>Inspect, reproduce, challenge, and cite the exact version.</h2><p>The repository includes a public license, machine-readable citation metadata, research statement, reproducibility protocol, roadmap, contribution governance, and source-level validation. Validation of the specification does not establish that FOIL improves human learning in deployment.</p><a class="button primary" href="https://github.com/Kitahl/The-Gauntlet">Open research repository ↗</a></section>
   </main>
-  <footer class="shell"><span>The Gauntlet</span><span>Research / engineering toolkit · claims remain scoped to their evidence.</span></footer>
+  <footer class="shell"><span>Evidence-Governed Research Toolkit</span><span>Research software · MIT licensed · claims scoped to evidence.</span></footer>
 </body>
 </html>
