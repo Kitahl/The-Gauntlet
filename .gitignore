@@ -15,6 +15,8 @@ validation/showcase-*.png
 foil_assessment*.json
 foil_responses*.json
 foil_assessment_report*.json
+foil_layer2*.json
+foil_deep_calibration*.json
 foil_profile*.json
 
 # Claude Code local-only overrides
