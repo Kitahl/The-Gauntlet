@@ -1,0 +1,70 @@
+"""Shared configuration/runtime paths for the public Process Assurance tools."""
+from __future__ import annotations
+
+import json
+import os
+from pathlib import Path
+from typing import Any
+
+CONFIG_NAME = ".gauntlet.json"
+DEFAULT_CONFIG: dict[str, Any] = {
+    "state_dir": ".egrt/state",
+    "governing_files": [
+        "README.md", "RESEARCH.md", "REPRODUCIBILITY.md", "ROADMAP.md",
+        "skills/soul/SKILL.md", "skills/infinity-gauntlet/SKILL.md",
+        "skills/foil/SKILL.md",
+    ],
+    "boundary": {
+        "enabled": True,
+        "near_duplicate_threshold": 0.72,
+        "frame_budget": 3,
+        "costume_budget": 2,
+        "judge_model": None,
+    },
+    "ledger": {"enabled": False, "path": None},
+}
+
+
+def project_root(start: str | os.PathLike[str] | None = None) -> Path:
+    env = os.environ.get("CLAUDE_PROJECT_DIR") or os.environ.get("EGR_PROJECT_DIR")
+    if env:
+        return Path(env).expanduser().resolve()
+    p = Path(start or Path.cwd()).resolve()
+    for candidate in (p, *p.parents):
+        if (candidate / CONFIG_NAME).exists() or (candidate / ".git").exists():
+            return candidate
+    return p
+
+
+def _merge(base: dict[str, Any], extra: dict[str, Any]) -> dict[str, Any]:
+    out = dict(base)
+    for key, value in extra.items():
+        if isinstance(value, dict) and isinstance(out.get(key), dict):
+            out[key] = _merge(out[key], value)
+        else:
+            out[key] = value
+    return out
+
+
+def load_config(root: Path | None = None) -> dict[str, Any]:
+    root = root or project_root()
+    path = root / CONFIG_NAME
+    if not path.exists():
+        return json.loads(json.dumps(DEFAULT_CONFIG))
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"invalid {CONFIG_NAME}: {exc}") from exc
+    if not isinstance(raw, dict):
+        raise RuntimeError(f"invalid {CONFIG_NAME}: top level must be an object")
+    return _merge(DEFAULT_CONFIG, raw)
+
+
+def state_dir(root: Path | None = None, config: dict[str, Any] | None = None) -> Path:
+    root = root or project_root()
+    config = config or load_config(root)
+    p = Path(str(config.get("state_dir") or ".egrt/state"))
+    if not p.is_absolute():
+        p = root / p
+    p.mkdir(parents=True, exist_ok=True)
+    return p
