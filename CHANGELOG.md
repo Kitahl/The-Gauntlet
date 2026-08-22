@@ -8,33 +8,10 @@ The project follows semantic versioning for public releases.
 
 ### Planned
 - Prospective behavioral evaluation of FOIL against direct-assistance and static-scaffolding baselines.
-- Layer 1 vs Layer 1 + Layer 2A vs Layer 2A + Layer 2B vs full Layer 2C personalization ablation.
-- Empirical calibration of profile-maturity thresholds, item difficulty, and policy decisions.
+- Layer 1 vs Layer 1 + Layer 2A vs full Layer 2B personalization ablation.
+- Empirical calibration of profile-maturity thresholds and item difficulty.
 - Reproducible benchmark harnesses and independent reproduction reports.
 - Archival DOI integration after the first evidence-bearing stable release.
-
-## [0.5.0] - 2026-08-21
-
-### Added
-- Layer 2C universal evidence equalizer (`tools/foil_equalizer.py`) for balancing stranger-profile evidence across transferable capability families rather than over-sampling one narrow ability.
-- Additional evidence facets covering verbal qualifier preservation, structural/spatial transformation, data interpretation, experimental design, benchmark/construct validity, interface integration, strategy synthesis, learning diagnosis, delayed retention, and decision calibration.
-- Evidence-family coverage gates requiring distinct independently verified facets across reasoning/representation, epistemic/scientific judgment, systems/execution, creation/communication, strategy/integration, and learning/metacognition.
-- Relevant-domain, representation-diversity, transfer, real-work, adversarial/error-detection, confidence, and delayed-retrieval coverage gates.
-- A hard time-separated unassisted retrieval requirement before `HIGH_FIDELITY_PROFILE` can be reached.
-- Issued-probe contract validation so recorded results cannot silently change family/facet/domain/kind after issuance.
-- Neutral self-estimate/performance follow-up probes that do not tell the person which direction FOIL expects.
-- Current-task policy compiler separating system verification intensity from pedagogical friction.
-- Automatic prompt-hook injection of Layer 2C coverage and current-task policy context.
-- `docs/FOIL_UNIVERSAL_REFINEMENT.md` and `research/FOIL_UNIVERSAL_REFINEMENT_BASIS.md`.
-- Regression tests for evidence-family balancing, assistance/verification non-credit, arbitrary domains, delayed retrieval, issued-probe integrity, high-stakes direct verification, and current-fact routing.
-
-### Changed
-- FOIL's stranger path is now explicit: Layer 1 broad domain screen → Layer 2A structured cross-cutting screen → Layer 2B adaptive real-work/transfer calibration → Layer 2C universal evidence equalization/policy compilation → continued naturalistic updating.
-- `tools/foil_hook.py` compiles profile evidence into task-specific assistance/verification behavior during normal use.
-- Highest-fidelity personalization can no longer be achieved from a single immediate questionnaire session.
-
-### Evidence boundary
-This release improves stranger-profile **evidence coverage and runtime adaptation**. It does not establish psychometric validity, equalize people onto one intelligence/personality scale, or prove that onboarding becomes equivalent to months of naturalistic observation. The decisive behavioral endpoint remains delayed independent transfer relative to equally capable AI assistance without the personalization mechanisms.
 
 ## [0.4.0] - 2026-08-21
 
@@ -48,7 +25,7 @@ This release improves stranger-profile **evidence coverage and runtime adaptatio
 - `validation/FOIL_LAYER2_MASTERMIND_AUDIT.md` preserving the structured-calibration falsification loops and CI-discovered vocabulary failure.
 
 ### Changed
-- FOIL's stranger path became explicit: Layer 1 broad domain screen → Layer 2A structured cross-cutting screen → Layer 2B adaptive real-work/transfer calibration → normal usage-time updating.
+- FOIL's stranger path is now explicit: Layer 1 broad domain screen → Layer 2A structured cross-cutting screen → Layer 2B adaptive real-work/transfer calibration → normal usage-time updating.
 - Layer 2A objective responses can seed cross-cutting facet hypotheses, while open responses are not copied into profiles automatically.
 - Prompt-time routing may recognize relevant reasoning facets such as formalization, error detection, evidence discipline, design, execution, or prioritization while keeping relevance separate from competence.
 
