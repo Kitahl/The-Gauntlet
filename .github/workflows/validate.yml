@@ -22,20 +22,24 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: requirements-dev.txt
-      - name: Install pinned development dependencies
+          cache-dependency-path: |
+            requirements-dev.txt
+            requirements-runtime.txt
+      - name: Install pinned dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r requirements-dev.txt
+          python -m pip install -r requirements-dev.txt -r requirements-runtime.txt
           python -m playwright install --with-deps chromium
-      - name: Lint validation code
-        run: ruff check validation
+      - name: Lint public Python
+        run: ruff check validation tools tests
+      - name: Run runtime and layout tests
+        run: python -m unittest discover -s tests -v
       - name: Validate Research Orchestrator and Process Assurance
         run: python validation/validate_soul_gauntlet_public.py
       - name: Validate public showcase
         run: python validation/validate_showcase.py
       - name: Check Python syntax
-        run: python -m compileall -q validation
+        run: python -m compileall -q validation tools tests
       - name: Check repository research metadata
         run: |
           test -f LICENSE
@@ -44,3 +48,7 @@ jobs:
           test -f REPRODUCIBILITY.md
           test -f CHANGELOG.md
           test -f SECURITY.md
+          test -f docs/RUNTIME_SETUP.md
+          test -f research/FOIL_PERSONALIZATION_BASIS.md
+          test -f .claude/settings.json
+          test -f .gauntlet.json
