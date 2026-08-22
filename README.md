@@ -31,13 +31,13 @@ The toolkit routes work according to the **epistemic obligation**: what must be 
 
 The repository reports positive **and null** results. The newer blinded pilots compare GPT-5.6 Sol `BASE` with the same underlying model using a frozen **Frontier-Exam FOIL + Mastermind** pre-commit procedure (`FOIL_MM`). Because both conditions were executed in one conversation, items are deterministic **disjoint subsets**; these are exploratory estimates, not official submissions or isolated same-item causal A/B tests.
 
-| Evaluation | BASE | FOIL / FOIL+Mastermind | Delta | Status |
+| Evaluation | BASE | Assisted condition | Delta | Status |
 |---|---:|---:|---:|---|
-| **HLE public text-only subset** | 1/6 · **16.7%** | 2/6 · **33.3%** | **+16.7 pp** | blinded CI-scored pilot |
-| **ARC-AGI-1 evaluation** | 4/6 · **66.7%** | 5/6 · **83.3%** | **+16.7 pp** | blinded CI-scored pilot |
-| **GPQA-Diamond** | 9/12 · **75.0%** | 9/12 · **75.0%** | **0.0 pp** | blinded CI-scored pilot · **null result** |
-| SimpleBench public subset | 3/5 · 60% | 5/5 · 100% | +40 pp | legacy manual pilot |
-| Current-evidence retrieval holdout | 0/5 · 0% | 5/5 · 100% | +100 pp | custom mechanism holdout; not a standard benchmark |
+| **HLE public text-only subset** | 1/6 · **16.7%** | FOIL_MM 2/6 · **33.3%** | **+16.7 pp** | blinded CI-scored pilot |
+| **ARC-AGI-1 evaluation** | 4/6 · **66.7%** | FOIL_MM 5/6 · **83.3%** | **+16.7 pp** | blinded CI-scored pilot |
+| **GPQA-Diamond** | 9/12 · **75.0%** | FOIL_MM 9/12 · **75.0%** | **0.0 pp** | blinded CI-scored pilot · **null result** |
+| SimpleBench public subset | 3/5 · 60% | FOIL 5/5 · 100% | +40 pp | legacy manual pilot |
+| Current-evidence retrieval holdout | 0/5 · 0% | FOIL 5/5 · 100% | +100 pp | custom mechanism holdout; not a standard benchmark |
 
 **Do not combine these rows into a single headline accuracy.** Samples are small and the evaluations measure different constructs. The GPQA null result is retained because negative results are part of the research record. Several math/error-localization pilots were also discarded when BASE saturated at or near 100%, rather than being used as non-discriminating evidence.
 
