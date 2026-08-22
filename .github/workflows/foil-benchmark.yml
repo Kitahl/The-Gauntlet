@@ -1,0 +1,34 @@
+name: FOIL benchmark pilot
+
+on:
+  push:
+    branches:
+      - benchmark/hle-mastermind-foil
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prepare-score:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare blinded questions and score predictions when present
+        run: python benchmarks/harness/prepare_and_score.py
+      - name: Upload blinded questions
+        uses: actions/upload-artifact@v4
+        with:
+          name: foil-benchmark-questions
+          path: benchmark_runs/2026-08-22/benchmark_questions.json
+          if-no-files-found: error
+      - name: Upload scored results
+        if: ${{ hashFiles('benchmark_runs/2026-08-22/benchmark_results.json') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: foil-benchmark-results
+          path: benchmark_runs/2026-08-22/benchmark_results.json
+          if-no-files-found: error
