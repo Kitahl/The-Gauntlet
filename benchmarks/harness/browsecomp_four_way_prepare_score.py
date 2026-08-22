@@ -23,6 +23,8 @@ REPLACEMENT_SEED = 20260827
 REPLACEMENT_TARGET = 8
 CONTAMINATION_REPLACEMENT_SEED = 20260828
 CONTAMINATION_REPLACEMENT_TARGET = 4
+SECOND_CONTAMINATION_REPLACEMENT_SEED = 20260829
+SECOND_CONTAMINATION_REPLACEMENT_TARGET = 4
 CONDITIONS = ("BASE", "FOIL", "FOIL_PROFILE", "FOIL_MM")
 PROFILE_FREEZE_COMMIT = "013a728bfd6f57a8592fc3fc6e098ea52da357d5"
 
@@ -34,14 +36,14 @@ POST_EXPOSURE_EXCLUDED_IDS = {
     "bc4-04-852241e2", "bc4-05-0c3aa825", "bc4-06-03619bed", "bc4-07-9f2ba19f",
     "bc4-16-963255ff", "bc4-17-15efdcb3", "bc4-18-5577c78b", "bc4-19-37b46515",
     "bc4-20-3e558e7b", "bc4-21-2381769c", "bc4-22-386231f8", "bc4-23-1aaddc9b",
+    "bc4-24-9aa8e190", "bc4-25-8afc7681", "bc4-26-2d5931c0", "bc4-27-64feb6aa",
 }
 
 # During pre-commit execution of the two remaining original four-condition
 # blocks, the operator exceeded the frozen <=12-search-query ceiling on bc4-09
 # and bc4-12. No benchmark gold or published BrowseComp answer/trace was
 # consulted. Rather than score unequal-budget executions or delete only the
-# affected conditions, retire both complete exposed blocks before gold access
-# and replace them with fresh balanced blocks sampled independently.
+# affected conditions, retire both complete exposed blocks before gold access.
 EXECUTION_BUDGET_EXCLUDED_IDS = {
     "bc4-08-00218e89", "bc4-09-66fe5438", "bc4-10-8de4e78a", "bc4-11-0de64524",
     "bc4-12-1b3f837e", "bc4-13-51ac9523", "bc4-14-f0048c50", "bc4-15-84601b6f",
@@ -78,7 +80,12 @@ def prepare() -> tuple[list[dict], dict[str, str]]:
     old_rows = random.Random(OLD_SEED).sample(rows, 20)
     old_fingerprints = {row_fingerprint(row) for row in old_rows}
     fresh_pool = [row for row in rows if row_fingerprint(row) not in old_fingerprints]
-    needed = INITIAL_TARGET + REPLACEMENT_TARGET + CONTAMINATION_REPLACEMENT_TARGET
+    needed = (
+        INITIAL_TARGET
+        + REPLACEMENT_TARGET
+        + CONTAMINATION_REPLACEMENT_TARGET
+        + SECOND_CONTAMINATION_REPLACEMENT_TARGET
+    )
     if len(fresh_pool) < needed:
         raise RuntimeError(f"need at least {needed} fresh BrowseComp rows, found {len(fresh_pool)}")
 
@@ -95,12 +102,31 @@ def prepare() -> tuple[list[dict], dict[str, str]]:
     contamination_replacement_selected = random.Random(CONTAMINATION_REPLACEMENT_SEED).sample(
         contamination_replacement_pool, CONTAMINATION_REPLACEMENT_TARGET
     )
+    contamination_replacement_fingerprints = {
+        row_fingerprint(row) for row in contamination_replacement_selected
+    }
+
+    second_contamination_replacement_pool = [
+        row
+        for row in contamination_replacement_pool
+        if row_fingerprint(row) not in contamination_replacement_fingerprints
+    ]
+    second_contamination_replacement_selected = random.Random(
+        SECOND_CONTAMINATION_REPLACEMENT_SEED
+    ).sample(second_contamination_replacement_pool, SECOND_CONTAMINATION_REPLACEMENT_TARGET)
 
     indexed_rows = list(enumerate(initial_selected))
     indexed_rows += [(INITIAL_TARGET + offset, row) for offset, row in enumerate(replacement_selected)]
     indexed_rows += [
         (INITIAL_TARGET + REPLACEMENT_TARGET + offset, row)
         for offset, row in enumerate(contamination_replacement_selected)
+    ]
+    indexed_rows += [
+        (
+            INITIAL_TARGET + REPLACEMENT_TARGET + CONTAMINATION_REPLACEMENT_TARGET + offset,
+            row,
+        )
+        for offset, row in enumerate(second_contamination_replacement_selected)
     ]
 
     questions: list[dict] = []
@@ -131,19 +157,21 @@ def prepare() -> tuple[list[dict], dict[str, str]]:
         raise RuntimeError(f"replacement balance failure: n={len(questions)}, counts={dict(counts)}")
 
     payload = {
-        "schema": "foil-browsecomp-four-way-questions/v6",
+        "schema": "foil-browsecomp-four-way-questions/v7",
         "selection_seed": SEED,
         "replacement_seed": REPLACEMENT_SEED,
         "contamination_replacement_seed": CONTAMINATION_REPLACEMENT_SEED,
+        "second_contamination_replacement_seed": SECOND_CONTAMINATION_REPLACEMENT_SEED,
         "source": URL,
         "initial_sample_n": INITIAL_TARGET,
         "replacement_sample_n": REPLACEMENT_TARGET,
         "contamination_replacement_sample_n": CONTAMINATION_REPLACEMENT_TARGET,
+        "second_contamination_replacement_sample_n": SECOND_CONTAMINATION_REPLACEMENT_TARGET,
         "final_sample_n": len(questions),
         "prior_sample_excluded_n": 20,
         "post_exposure_excluded_ids": sorted(POST_EXPOSURE_EXCLUDED_IDS),
         "post_exposure_exclusion_reason": (
-            "Published BrowseComp traces/answers were exposed for bc4-01, bc4-04, bc4-16, and later bc4-21 during blinded research. "
+            "Published BrowseComp traces/answers were exposed for bc4-01, bc4-04, bc4-16, bc4-21, and later bc4-25 during blinded research. "
             "Each contaminated item's complete four-condition ordinal block was retired without consulting hidden gold."
         ),
         "execution_budget_excluded_ids": sorted(EXECUTION_BUDGET_EXCLUDED_IDS),
@@ -189,16 +217,21 @@ def score(questions: list[dict], gold: dict[str, str]) -> None:
         items.append({"id": qid, "condition": condition, "exact_normalized_match": bool(exact)})
 
     result = {
-        "schema": "foil-browsecomp-four-way-results/v3",
+        "schema": "foil-browsecomp-four-way-results/v4",
         "selection_seed": SEED,
         "replacement_seed": REPLACEMENT_SEED,
         "contamination_replacement_seed": CONTAMINATION_REPLACEMENT_SEED,
+        "second_contamination_replacement_seed": SECOND_CONTAMINATION_REPLACEMENT_SEED,
         "profile_freeze_commit": PROFILE_FREEZE_COMMIT,
         "post_exposure_excluded_ids": sorted(POST_EXPOSURE_EXCLUDED_IDS),
         "execution_budget_excluded_ids": sorted(EXECUTION_BUDGET_EXCLUDED_IDS),
         "summary": [
-            {"condition": condition, "correct_exact": summary[condition][0], "n": summary[condition][1],
-             "accuracy_exact": summary[condition][0] / summary[condition][1]}
+            {
+                "condition": condition,
+                "correct_exact": summary[condition][0],
+                "n": summary[condition][1],
+                "accuracy_exact": summary[condition][0] / summary[condition][1],
+            }
             for condition in CONDITIONS
         ],
         "items": items,
