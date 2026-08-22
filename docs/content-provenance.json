@@ -91,6 +91,18 @@
       "page_section": "Release",
       "claim": "The repository provides machine-readable citation metadata and an MIT open-source license.",
       "sources": ["CITATION.cff", "LICENSE"]
+    },
+    {
+      "id": "homepage-trust-center",
+      "page_section": "Research Software Trust Center",
+      "claim": "The public homepage exposes direct paths to security, governance, contribution, citation, changelog, and roadmap artifacts.",
+      "sources": ["SECURITY.md", "GOVERNANCE.md", "CONTRIBUTING.md", "CITATION.cff", "CHANGELOG.md", "ROADMAP.md"]
+    },
+    {
+      "id": "homepage-reproducibility-path",
+      "page_section": "Reproducibility",
+      "claim": "The public homepage exposes the documented mechanical validation commands and separates their interpretation from behavioral-efficacy claims.",
+      "sources": ["REPRODUCIBILITY.md", "validation/validate_soul_gauntlet_public.py", "validation/validate_showcase.py"]
     }
   ]
 }
