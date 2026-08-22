@@ -1,0 +1,116 @@
+{
+  "schema": "foil-browsecomp-four-way-results/v5",
+  "selection_seed": 20260826,
+  "replacement_seed": 20260827,
+  "contamination_replacement_seed": 20260828,
+  "second_contamination_replacement_seed": 20260829,
+  "execution_integrity_replacement_seed": 20260830,
+  "profile_freeze_commit": "013a728bfd6f57a8592fc3fc6e098ea52da357d5",
+  "post_exposure_excluded_ids": [
+    "bc4-00-475d4888",
+    "bc4-01-08197e10",
+    "bc4-02-a8ed2df4",
+    "bc4-03-27616be2",
+    "bc4-04-852241e2",
+    "bc4-05-0c3aa825",
+    "bc4-06-03619bed",
+    "bc4-07-9f2ba19f",
+    "bc4-16-963255ff",
+    "bc4-17-15efdcb3",
+    "bc4-18-5577c78b",
+    "bc4-19-37b46515",
+    "bc4-20-3e558e7b",
+    "bc4-21-2381769c",
+    "bc4-22-386231f8",
+    "bc4-23-1aaddc9b",
+    "bc4-24-9aa8e190",
+    "bc4-25-8afc7681",
+    "bc4-26-2d5931c0",
+    "bc4-27-64feb6aa"
+  ],
+  "execution_budget_excluded_ids": [
+    "bc4-08-00218e89",
+    "bc4-09-66fe5438",
+    "bc4-10-8de4e78a",
+    "bc4-11-0de64524",
+    "bc4-12-1b3f837e",
+    "bc4-13-51ac9523",
+    "bc4-14-f0048c50",
+    "bc4-15-84601b6f"
+  ],
+  "execution_integrity_excluded_ids": [
+    "bc4-32-7e8964be",
+    "bc4-33-8f29b330",
+    "bc4-34-b73854b0",
+    "bc4-35-87e09fcb"
+  ],
+  "summary": [
+    {
+      "condition": "BASE",
+      "correct_exact": 1,
+      "n": 2,
+      "accuracy_exact": 0.5
+    },
+    {
+      "condition": "FOIL",
+      "correct_exact": 2,
+      "n": 2,
+      "accuracy_exact": 1.0
+    },
+    {
+      "condition": "FOIL_PROFILE",
+      "correct_exact": 1,
+      "n": 2,
+      "accuracy_exact": 0.5
+    },
+    {
+      "condition": "FOIL_MM",
+      "correct_exact": 0,
+      "n": 2,
+      "accuracy_exact": 0.0
+    }
+  ],
+  "items": [
+    {
+      "id": "bc4-28-d2ba14f4",
+      "condition": "BASE",
+      "exact_normalized_match": true
+    },
+    {
+      "id": "bc4-29-a347be49",
+      "condition": "FOIL",
+      "exact_normalized_match": true
+    },
+    {
+      "id": "bc4-30-9fcf2c8d",
+      "condition": "FOIL_PROFILE",
+      "exact_normalized_match": true
+    },
+    {
+      "id": "bc4-31-86ab4986",
+      "condition": "FOIL_MM",
+      "exact_normalized_match": false
+    },
+    {
+      "id": "bc4-36-56fcfea6",
+      "condition": "BASE",
+      "exact_normalized_match": false
+    },
+    {
+      "id": "bc4-37-a6e43534",
+      "condition": "FOIL",
+      "exact_normalized_match": true
+    },
+    {
+      "id": "bc4-38-fb728e5c",
+      "condition": "FOIL_PROFILE",
+      "exact_normalized_match": false
+    },
+    {
+      "id": "bc4-39-09c7b0f8",
+      "condition": "FOIL_MM",
+      "exact_normalized_match": false
+    }
+  ],
+  "validity_boundary": "Official BrowseComp questions; exploratory four-condition disjoint-subset in-session ablation. Scored replacement items were run under the same frozen web-search ceiling. Exact-normalized scoring is not the official BrowseComp LLM judge. Original balanced blocks were retired pre-gold after an operator search-budget overrun, any block whose item exposed a published BrowseComp trace/answer was retired in full, and one block was retired after a pre-commit wrong-prompt execution was discovered. A stronger causal test requires isolated same-item randomized executions."
+}
