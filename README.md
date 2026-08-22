@@ -7,10 +7,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-0.4.0-informational.svg)](CHANGELOG.md)
 
-> **Research status:** public research-software toolkit with executable runtime checks and evidence-bearing structural/source validation. The repository does **not** yet claim that the complete system improves human reasoning, scientific discovery, or general AI capability in prospective deployment.
+> **Research status:** public research-software toolkit with executable runtime checks, evidence-bearing structural/source validation, and exploratory benchmark pilots. The repository does **not** claim that the complete system improves human reasoning, scientific discovery, or general AI capability in prospective deployment.
 
 **Demo:** https://kitahl.github.io/The-Gauntlet/  
 **5-minute evaluator path:** [`docs/EVALUATOR_QUICKSTART.md`](docs/EVALUATOR_QUICKSTART.md)  
+**Benchmark pilots:** [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) · **machine-readable receipt:** [`benchmarks/results/2026-08-22-blinded-pilot.json`](benchmarks/results/2026-08-22-blinded-pilot.json)  
 **Runtime setup:** [`docs/RUNTIME_SETUP.md`](docs/RUNTIME_SETUP.md) · **FOIL onboarding:** [`docs/FOIL_ONBOARDING.md`](docs/FOIL_ONBOARDING.md) · **Deep calibration:** [`docs/FOIL_DEEP_CALIBRATION.md`](docs/FOIL_DEEP_CALIBRATION.md)  
 **Research statement:** [`RESEARCH.md`](RESEARCH.md) · **Reproducibility:** [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) · **Roadmap:** [`ROADMAP.md`](ROADMAP.md)
 
@@ -25,6 +26,22 @@ The core research question is:
 > **Can a modular, evidence-governed reasoning workflow improve traceability, verification discipline, and independent usefulness in AI-assisted research without confusing confidence, consensus, or passing software checks with scientific validity?**
 
 The toolkit routes work according to the **epistemic obligation**: what must be proved, searched, executed, measured, independently checked, or left unresolved.
+
+## Exploratory benchmark pilots
+
+The repository reports positive **and null** results. The newer blinded pilots compare GPT-5.6 Sol `BASE` with the same underlying model using a frozen **Frontier-Exam FOIL + Mastermind** pre-commit procedure (`FOIL_MM`). Because both conditions were executed in one conversation, items are deterministic **disjoint subsets**; these are exploratory estimates, not official submissions or isolated same-item causal A/B tests.
+
+| Evaluation | BASE | Assisted condition | Delta | Status |
+|---|---:|---:|---:|---|
+| **HLE public text-only subset** | 1/6 · **16.7%** | FOIL_MM 2/6 · **33.3%** | **+16.7 pp** | blinded CI-scored pilot |
+| **ARC-AGI-1 evaluation** | 4/6 · **66.7%** | FOIL_MM 5/6 · **83.3%** | **+16.7 pp** | blinded CI-scored pilot |
+| **GPQA-Diamond** | 9/12 · **75.0%** | FOIL_MM 9/12 · **75.0%** | **0.0 pp** | blinded CI-scored pilot · **null result** |
+| SimpleBench public subset | 3/5 · 60% | FOIL 5/5 · 100% | +40 pp | legacy manual pilot |
+| Current-evidence retrieval holdout | 0/5 · 0% | FOIL 5/5 · 100% | +100 pp | custom mechanism holdout; not a standard benchmark |
+
+**Do not combine these rows into a single headline accuracy.** Samples are small and the evaluations measure different constructs. The GPQA null result is retained because negative results are part of the research record. Several math/error-localization pilots were also discarded when BASE saturated at or near 100%, rather than being used as non-discriminating evidence.
+
+Methodology, exclusions, sources, reproduction commands, and validity boundaries: **[`docs/BENCHMARKS.md`](docs/BENCHMARKS.md)**.
 
 ## Architecture
 
@@ -67,7 +84,7 @@ Professional display names are used for the research portfolio. Existing technic
 | **Evidence Review Panel** | `council-of-elders`, `/council` | Selective independent evidence/method review with matched control |
 | **FOIL — Adaptive Reasoning Complement** | `foil`, `/foil` | User/task-specific missing-method support, multi-stage calibration, and independent-transfer tracking |
 
-Every `skills/<id>/` directory contains **`SKILL.md` only**. Hooks, executable helpers, state policy, and profiles deliberately live elsewhere.
+Every `skills/<id>/` directory contains **`SKILL.md` only**. Hooks, executable helpers, state policy, profiles, and benchmark harnesses deliberately live elsewhere.
 
 ## Executable runtime
 
@@ -145,10 +162,11 @@ The personalizer is an **experimental onboarding/calibration system**, not an IQ
 | FOIL structured-calibration falsification history is preserved | audit record | `validation/FOIL_LAYER2_MASTERMIND_AUDIT.md` |
 | FOIL research-integration structure/source/regression checks passed the recorded validator | **94/94 PASS** | `validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json` |
 | FOIL frozen behavioral-contract cases are represented in the specification | **18/18 PASS-SPEC** | `validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json` |
+| HLE/ARC/GPQA pilot score receipts exist under blinded question-generation/scoring harnesses | exploratory benchmark evidence | `docs/BENCHMARKS.md`, `benchmarks/results/2026-08-22-blinded-pilot.json` |
 | Public claims have a machine-readable provenance map | implemented | `docs/content-provenance.json` |
 | FOIL improves independent human reasoning in deployment | **not established** | planned in `ROADMAP.md` |
 
-`PASS-SPEC` means the specification contains the required decision behavior; it is not a behavioral execution result.
+`PASS-SPEC` means the specification contains the required decision behavior; it is not a behavioral execution result. Benchmark pilots measure model-output accuracy under particular benchmark protocols; they are not evidence of human learning efficacy.
 
 ## Quick evaluation
 
@@ -171,11 +189,11 @@ python -m playwright install chromium
 ### 2. Run the reproducible public checks
 
 ```bash
-ruff check validation tools tests
+ruff check validation tools tests benchmarks/harness
 python -m unittest discover -s tests -v
 python validation/validate_soul_gauntlet_public.py
 python validation/validate_showcase.py
-python -m compileall -q validation tools tests
+python -m compileall -q validation tools tests benchmarks/harness
 ```
 
 For interpretation and evidence boundaries, read [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md).
@@ -223,13 +241,14 @@ Planned behavioral comparisons include strong direct AI, static rules, adaptive 
 .
 ├── skills/                  # specification-only modules: SKILL.md per directory
 ├── tools/                   # portable runtime helpers
+├── benchmarks/              # blinded benchmark protocols, harnesses, permanent receipts
 ├── .claude/settings.json    # project hook wiring
 ├── .gauntlet.json           # Process Assurance runtime policy
 ├── research/                # research basis and source records
 ├── validation/              # deterministic/specification evidence
 ├── tests/                   # runtime, privacy, layout, questionnaire/calibration regressions
-├── docs/                    # architecture, runtime/onboarding docs, public showcase
-├── .github/                 # CI, CodeQL, Dependabot, issue/PR forms
+├── docs/                    # architecture, benchmark, runtime/onboarding docs, public showcase
+├── .github/                 # CI, CodeQL, benchmark workflow, Dependabot, issue/PR forms
 ├── RESEARCH.md              # question, method, baselines, ablations
 ├── REPRODUCIBILITY.md       # exact reproduction/evidence protocol
 ├── ROADMAP.md               # evidence-first research roadmap
@@ -249,6 +268,7 @@ Planned behavioral comparisons include strong direct AI, static rules, adaptive 
 - Novelty and absence claims are scoped to searched evidence.
 - Negative results and failed mechanisms are retained when they change the credible search space.
 - Behavioral efficacy is not inferred from specification correctness.
+- Benchmark improvements are not generalized beyond their exact protocol and sample.
 - User-profile relevance is not competence evidence; one miss never creates a permanent weakness.
 - A deep profile requires evidence breadth; repeated success in one narrow task family is insufficient.
 - A structured questionnaire may accelerate cold start but does not replace real-work and transfer evidence.
