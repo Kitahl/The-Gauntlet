@@ -6,9 +6,22 @@ The project follows semantic versioning for public releases.
 
 ## [Unreleased]
 
+### Added
+- Structured stranger-facing Layer 2A screen (`tools/foil_layer2.py`) with 24 objective scenarios across 12 cross-cutting reasoning facets.
+- Short Layer 2A screening mode with one item per facet and no premature facet classification.
+- Open Layer 2A design, mechanism-diversity/creativity, and explanation tasks that remain rubric-reviewed rather than auto-scored.
+- Prompt-time cross-cutting facet relevance alongside domain relevance, without competence updates from topic mentions.
+- Expanded relevance registry spanning more than forty professional/research domain families, including formal methods, data engineering, cloud/platform, AI safety/evaluation, bioinformatics, neuroscience, additional engineering disciplines, technical writing, product/organizational work, and more.
+- Evidence-Centered Design, PISA creative-thinking, Consensual Assessment Technique, and metacognitive-transfer rationale in the personalization research basis.
+
+### Changed
+- FOIL's stranger path is now explicit: Layer 1 broad domain screen → Layer 2A structured cross-cutting screen → Layer 2B adaptive real-work/transfer calibration → normal usage-time updating.
+- Layer 2A objective responses can seed cross-cutting facet hypotheses, while open responses are not copied into profiles automatically.
+- Prompt-time routing may recognize relevant reasoning facets such as formalization, error detection, evidence discipline, design, execution, or prioritization while keeping relevance separate from competence.
+
 ### Planned
 - Prospective behavioral evaluation of FOIL against direct-assistance and static-scaffolding baselines.
-- Layer 1 vs Layer 1 + Layer 2 personalization ablation.
+- Layer 1 vs Layer 1 + Layer 2A vs full Layer 2B personalization ablation.
 - Empirical calibration of profile-maturity thresholds and item difficulty.
 - Reproducible benchmark harnesses and independent reproduction reports.
 - Archival DOI integration after the first evidence-bearing stable release.
