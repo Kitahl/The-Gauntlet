@@ -1,0 +1,103 @@
+{
+  "schema": "the-gauntlet/showcase-provenance-1",
+  "claims": [
+    {
+      "id": "architecture-specialized-lanes",
+      "page_section": "System",
+      "claim": "The system uses bounded specialist lanes rather than one undifferentiated prompt.",
+      "sources": [
+        "skills/infinity-gauntlet/SKILL.md",
+        "skills/mathbot/SKILL.md",
+        "skills/scoutbot/SKILL.md",
+        "skills/novelbot/SKILL.md",
+        "skills/codebot/SKILL.md",
+        "skills/benchbot/SKILL.md"
+      ]
+    },
+    {
+      "id": "foil-complement",
+      "page_section": "FOIL",
+      "claim": "FOIL mirrors the user's current method and supplies a load-bearing complementary capability.",
+      "sources": [
+        "skills/foil/SKILL.md"
+      ]
+    },
+    {
+      "id": "authority-split",
+      "page_section": "FOIL",
+      "claim": "The user controls goals/actions/adoption while evidence and proof determine factual status.",
+      "sources": [
+        "skills/foil/SKILL.md",
+        "research/FOIL_RESEARCH_BASIS.md"
+      ]
+    },
+    {
+      "id": "competing-gap-hypotheses",
+      "page_section": "FOIL",
+      "claim": "FOIL maintains competing explanations for observed errors instead of treating one error as a stable weakness.",
+      "sources": [
+        "skills/foil/SKILL.md",
+        "research/FOIL_RESEARCH_BASIS.md"
+      ]
+    },
+    {
+      "id": "independent-transfer-target",
+      "page_section": "FOIL",
+      "claim": "FOIL separates immediate assisted task success from later independent competence.",
+      "sources": [
+        "skills/foil/SKILL.md",
+        "research/FOIL_RESEARCH_BASIS.md"
+      ]
+    },
+    {
+      "id": "claim-obligations",
+      "page_section": "Evidence",
+      "claim": "FOIL distinguishes measured, cited, derived, and unresolved claims and keeps unsupported factual/technical claims exposed.",
+      "sources": [
+        "skills/foil/SKILL.md"
+      ]
+    },
+    {
+      "id": "module-count",
+      "page_section": "Hero",
+      "claim": "This repository contains nine skill modules.",
+      "sources": [
+        "skills/mathbot/SKILL.md",
+        "skills/scoutbot/SKILL.md",
+        "skills/novelbot/SKILL.md",
+        "skills/codebot/SKILL.md",
+        "skills/benchbot/SKILL.md",
+        "skills/infinity-gauntlet/SKILL.md",
+        "skills/meditate/SKILL.md",
+        "skills/council-of-elders/SKILL.md",
+        "skills/foil/SKILL.md"
+      ]
+    },
+    {
+      "id": "validation-boundary",
+      "page_section": "Evidence trail",
+      "claim": "Mechanical/specification validation does not establish behavioral efficacy.",
+      "sources": [
+        "validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json",
+        "validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json",
+        "research/FOIL_RESEARCH_BASIS.md"
+      ]
+    },
+    {
+      "id": "activation-commands",
+      "page_section": "Activate",
+      "claim": "The user-facing slash commands shown on the page are declared triggers in the corresponding skill metadata; Meditate is orchestrator-invoked.",
+      "sources": [
+        "skills/foil/SKILL.md",
+        "skills/mathbot/SKILL.md",
+        "skills/scoutbot/SKILL.md",
+        "skills/novelbot/SKILL.md",
+        "skills/codebot/SKILL.md",
+        "skills/benchbot/SKILL.md",
+        "skills/infinity-gauntlet/SKILL.md",
+        "skills/council-of-elders/SKILL.md",
+        "skills/meditate/SKILL.md"
+      ]
+    }
+  ]
+}
