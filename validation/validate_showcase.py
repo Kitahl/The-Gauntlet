@@ -30,21 +30,29 @@ checks['focus_visible']=':focus-visible' in css
 checks['reduced_motion']='prefers-reduced-motion' in css
 checks['license_disclosure']='license' in html.lower() and 'license' in README.read_text().lower()
 checks['pages_contract']=(ROOT/'PAGES_SETUP.md').exists() and (ROOT/'docs/.nojekyll').exists() and 'main' in (ROOT/'PAGES_SETUP.md').read_text() and '/docs' in (ROOT/'PAGES_SETUP.md').read_text()
-checks['source_artifacts_present']=all((ROOT/'skills'/d/'SKILL.md').exists() for d in ['mathbot','scoutbot','novelbot','codebot','benchbot','infinity-gauntlet','meditate','council-of-elders','foil'])
+skill_dirs=['soul','mathbot','scoutbot','novelbot','codebot','benchbot','infinity-gauntlet','meditate','council-of-elders','foil']
+checks['source_artifacts_present']=all((ROOT/'skills'/d/'SKILL.md').exists() for d in skill_dirs)
 checks['foil_validation_present']=(ROOT/'validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json').exists()
+checks['soul_gauntlet_validation_present']=(ROOT/'validation/validate_soul_gauntlet_public.py').exists()
 prov=json.loads((ROOT/'docs/content-provenance.json').read_text())
 checks['provenance_sources_exist']=all((ROOT/src).exists() for c in prov['claims'] for src in c['sources'])
-checks['module_count_matches']=len(list((ROOT/'skills').glob('*/SKILL.md')))==9 and '<strong>9</strong>' in html
-checks['evidence_trail_exposed']=all(x in html for x in ['FOIL_RESEARCH_BASIS.md','/validation','skills/foil/SKILL.md'])
-checks['activation_surface']=all(cmd in html for cmd in ['/foil','/mind','/space','/reality','/power','/time','/gauntlet','/council']) and 'Meditate' in html
+checks['module_count_matches']=len(list((ROOT/'skills').glob('*/SKILL.md')))==10 and '<strong>10</strong>' in html
+checks['evidence_trail_exposed']=all(x in html for x in ['FOIL_RESEARCH_BASIS.md','/validation','skills/foil/SKILL.md','skills/soul/SKILL.md'])
+checks['activation_surface']=all(cmd in html for cmd in ['/soul','/foil','/mind','/space','/reality','/power','/time','/gauntlet','/council']) and 'Meditate' in html
 trigger_sources={
-    '/foil':'skills/foil/SKILL.md','/mind':'skills/mathbot/SKILL.md','/space':'skills/scoutbot/SKILL.md',
+    '/soul':'skills/soul/SKILL.md','/foil':'skills/foil/SKILL.md','/mind':'skills/mathbot/SKILL.md','/space':'skills/scoutbot/SKILL.md',
     '/reality':'skills/novelbot/SKILL.md','/power':'skills/codebot/SKILL.md','/time':'skills/benchbot/SKILL.md',
     '/gauntlet':'skills/infinity-gauntlet/SKILL.md','/council':'skills/council-of-elders/SKILL.md'
 }
 checks['activation_triggers_trace_to_source']=all(cmd in (ROOT/rel).read_text() for cmd,rel in trigger_sources.items())
 checks['meditate_dispatch_trace']='invoked by the Soul' in (ROOT/'skills/meditate/SKILL.md').read_text()
 checks['no_behavioral_efficacy_overclaim']='does not establish that FOIL improves human learning' in html
+gauntlet=(ROOT/'skills/infinity-gauntlet/SKILL.md').read_text()
+checks['gauntlet_portable_contract']='PUBLIC RUNTIME CONTRACT' in gauntlet and 'UNAVAILABLE' in gauntlet
+checks['gauntlet_no_dead_private_runtime']=not any(x in gauntlet for x in [
+    'tools/gauntlet_monitor.py','tools/gauntlet_boundary.py','tools/fsa_bots.py','tools/scout.py',
+    'tools/verify_ledger.py','.claude/settings.json','repo CLAUDE.md'
+])
 
 # Basic contrast for principal text tokens against declared dark surfaces.
 def lum(hexv):
@@ -64,7 +72,6 @@ with sync_playwright() as pw:
         page=b.new_page(viewport={'width':w,'height':h})
         errors=[]; page.on('console', lambda m, errors=errors: errors.append(m.text) if m.type=='error' else None); page.on('pageerror', lambda e, errors=errors: errors.append(str(e)))
         page.set_content(source, wait_until='load'); page.add_style_tag(content=css)
-        # Exercise a real keyboard path from document start.
         page.keyboard.press('Tab')
         focused=page.evaluate('document.activeElement && document.activeElement.getAttribute("href")')
         render[name]={
@@ -83,6 +90,7 @@ checks['keyboard_path']=all(v.get('keyboard_first_focus')=='#main' for v in rend
 payload_bytes=HTML.stat().st_size+CSS.stat().st_size
 checks['payload_budget']=payload_bytes < 100_000
 checks['payload_budget_negative_control']=(payload_bytes+100_001) >= 100_000
+
 # Gate mutants: prove the validation suite detects representative regressions.
 mutant_html=source.replace('<main id="main">','<main id="main" style="display:none">')
 mutant_css=css+'\nh1{font-size:12px!important}\n'
@@ -95,7 +103,6 @@ with sync_playwright() as pw:
     b.close()
 checks['render_mutant_detected']=hidden_detected
 checks['hierarchy_mutant_detected']=hierarchy_detected
-# Link mutant: relative sibling links would be absent from a docs-only Pages publish.
 checks['pages_link_mutant_detected']=not all(h.startswith('https://github.com/Kitahl/The-Gauntlet/') for h in ['../skills/foil/SKILL.md'])
 
 status='PASS' if all(checks.values()) else 'FAIL'
