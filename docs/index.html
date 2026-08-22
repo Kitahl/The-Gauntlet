@@ -27,6 +27,7 @@
       <span>Evidence-Governed Research Toolkit</span>
     </a>
     <nav class="site-nav" aria-label="Primary">
+      <a href="#research">Research</a>
       <a href="#system">System</a>
       <a href="#foil">FOIL</a>
       <a href="#evidence">Evidence</a>
@@ -54,7 +55,7 @@
         <div class="hero-copy">
           <p>The Gauntlet routes AI-assisted work by the obligation that must be satisfied: prove it, find prior art, execute it, measure it, independently verify it, or leave it unresolved.</p>
           <div class="hero-actions">
-            <a class="button primary" href="#system">Enter the system</a>
+            <a class="button primary" href="#research">Open the research dossier</a>
             <a class="button quiet" href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/EVALUATOR_QUICKSTART.md">5-minute evaluator path ↗</a>
           </div>
         </div>
@@ -69,6 +70,37 @@
       </div>
 
       <p class="hero-boundary">Specification/source checks are reproducible. Behavioral efficacy remains a research question.</p>
+    </section>
+
+    <section id="research" class="chapter shell" aria-labelledby="research-title">
+      <div class="chapter-marker"><span>00</span><b>RESEARCH DOSSIER</b></div>
+      <div class="chapter-intro wide-copy">
+        <h2 id="research-title">The question, the artifacts, and the next evidence—without repository archaeology.</h2>
+        <p>The current research question is whether an evidence-governed modular reasoning workflow can improve traceability, verification discipline, and independent usefulness of AI-assisted research without confusing agreement, confidence, or passing software checks with scientific validity. The repository implements the architecture and mechanical/specification checks; a positive answer to the full behavioral question has not been established.</p>
+      </div>
+
+      <div class="document-index three" aria-label="Evaluator research paths">
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/RESEARCH.md"><span>01 / QUESTION</span><b>Research statement</b><small>Question, method, endpoints, baselines, integrity boundary ↗</small></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/RESEARCH_WEBSITE_BENCHMARK_2026-08-22.md"><span>02 / BENCHMARK</span><b>Research-site benchmark</b><small>Ten research websites/repos, FOIL diagnosis, Mastermind transfer gates ↗</small></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/ROADMAP.md"><span>03 / NEXT</span><b>Research roadmap</b><small>Release engineering, behavioral harness, FOIL study, ablations, external reproduction ↗</small></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/REPRODUCIBILITY.md"><span>04 / REPRODUCE</span><b>Reproducibility</b><small>Mechanical checks and interpretation boundary ↗</small></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/CITATION.cff"><span>05 / CITE</span><b>Citation metadata</b><small>Machine-readable software citation record ↗</small></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet"><span>06 / SOURCE</span><b>Source repository</b><small>Code, issues, validation, benchmark receipts, change history ↗</small></a>
+      </div>
+
+      <div class="archive-table" role="region" aria-label="Research output index" tabindex="0">
+        <div class="archive-head"><span>RESEARCH OBJECT</span><span>TYPE</span><span>CURRENT STATE</span><span>CANONICAL SOURCE</span></div>
+        <div><b>Evidence-governed modular workflow question</b><span>Research question</span><span>OPEN</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/RESEARCH.md">RESEARCH.md ↗</a></div>
+        <div><b>Research Orchestrator + bounded module architecture</b><span>Specification / software</span><span>Implemented</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/ARCHITECTURE.md">ARCHITECTURE.md ↗</a></div>
+        <div><b>FOIL adaptive complementary-assistance mechanism</b><span>Research basis / specification</span><span>Documented; efficacy open</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/research/FOIL_RESEARCH_BASIS.md">FOIL_RESEARCH_BASIS.md ↗</a></div>
+        <div><b>FOIL structural and source invariants</b><span>Mechanical evidence</span><span>94 / 94 recorded pass</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json">Validation receipt ↗</a></div>
+        <div><b>Required FOIL decision behavior represented in specification</b><span>Specification evidence</span><span>18 / 18 PASS-SPEC</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json">Contract receipt ↗</a></div>
+        <div><b>Selected model-task benchmark pilots</b><span>Exploratory empirical</span><span>Mixed; small-n</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/BENCHMARKS.md">BENCHMARKS.md ↗</a></div>
+        <div><b>Complete-system matched-budget behavioral evaluation</b><span>Prospective study</span><span>NOT ESTABLISHED</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/ROADMAP.md">ROADMAP R2–R4 ↗</a></div>
+        <div><b>Independent external reproduction</b><span>Prospective validation</span><span>NOT YET COMPLETED</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/ROADMAP.md">ROADMAP R5 ↗</a></div>
+      </div>
+
+      <div class="validity-strip"><b>Next evidence program</b><p>R2–R4 remain the main scientific bottleneck: matched-budget behavioral testing across materially different task families, a prospective FOIL adaptation study with delayed assistance-free transfer, and mechanism-level routing/review ablations. Release tags, archival DOI, and independent reproduction remain separate open obligations.</p><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/ROADMAP.md">Inspect the roadmap ↗</a></div>
     </section>
 
     <section id="system" class="chapter shell" aria-labelledby="system-title">
@@ -266,7 +298,7 @@ python -m compileall -q validation</code></pre>
       <p>RESEARCH SOFTWARE v0.4.0 · SHOWCASE R14</p>
       <h2>Inspect the source.<br>Reproduce the checks.<br><em>Challenge the claims.</em></h2>
       <div>
-        <p>The repository includes an MIT license, machine-readable citation metadata, research statement, reproducibility protocol, benchmark receipts, roadmap, contribution governance, security policy, and source-level validation.</p>
+        <p>The repository includes an MIT license, machine-readable citation metadata, research statement, reproducibility protocol, benchmark receipts, roadmap, contribution governance, security policy, source-level validation, and a public benchmark of research-site information architecture.</p>
         <a class="button primary" href="https://github.com/Kitahl/The-Gauntlet">Open research repository ↗</a>
       </div>
     </section>
