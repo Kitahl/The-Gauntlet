@@ -5,13 +5,13 @@
 [![Research software validation](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml)
 [![CodeQL](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.2.0-informational.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.3.0-informational.svg)](CHANGELOG.md)
 
 > **Research status:** public research-software toolkit with executable runtime checks and evidence-bearing structural/source validation. The repository does **not** yet claim that the complete system improves human reasoning, scientific discovery, or general AI capability in prospective deployment.
 
 **Demo:** https://kitahl.github.io/The-Gauntlet/  
 **5-minute evaluator path:** [`docs/EVALUATOR_QUICKSTART.md`](docs/EVALUATOR_QUICKSTART.md)  
-**Runtime setup:** [`docs/RUNTIME_SETUP.md`](docs/RUNTIME_SETUP.md) · **FOIL onboarding:** [`docs/FOIL_ONBOARDING.md`](docs/FOIL_ONBOARDING.md)  
+**Runtime setup:** [`docs/RUNTIME_SETUP.md`](docs/RUNTIME_SETUP.md) · **FOIL onboarding:** [`docs/FOIL_ONBOARDING.md`](docs/FOIL_ONBOARDING.md) · **Deep calibration:** [`docs/FOIL_DEEP_CALIBRATION.md`](docs/FOIL_DEEP_CALIBRATION.md)  
 **Research statement:** [`RESEARCH.md`](RESEARCH.md) · **Reproducibility:** [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) · **Roadmap:** [`ROADMAP.md`](ROADMAP.md)
 
 ---
@@ -65,13 +65,13 @@ Professional display names are used for the research portfolio. Existing technic
 | **Process Assurance Framework** | `infinity-gauntlet`, `/gauntlet` | Frame/process audit, stale-state checks, inherited-number checks, false-green defense |
 | **Decision Preflight Protocol** | `meditate` | Grounding before consequential decisions and after failures |
 | **Evidence Review Panel** | `council-of-elders`, `/council` | Selective independent evidence/method review with matched control |
-| **FOIL — Adaptive Reasoning Complement** | `foil`, `/foil` | User/task-specific missing-method support and independent-transfer tracking |
+| **FOIL — Adaptive Reasoning Complement** | `foil`, `/foil` | User/task-specific missing-method support, deep calibration, and independent-transfer tracking |
 
 Every `skills/<id>/` directory contains **`SKILL.md` only**. Hooks, executable helpers, state policy, and profiles deliberately live elsewhere.
 
 ## Executable runtime
 
-Version 0.2.0 adds a portable runtime around the specifications:
+Version 0.2.0 introduced the portable runtime around the specifications. Version 0.3.0 adds the second FOIL calibration layer.
 
 - `.claude/settings.json` — shareable Claude Code hooks using `${CLAUDE_PROJECT_DIR}`;
 - `.gauntlet.json` — configurable governing files, audit budgets, optional evidence-ledger policy;
@@ -81,24 +81,44 @@ Version 0.2.0 adds a portable runtime around the specifications:
 - `tools/verify_ledger.py` — optional generic evidence-ledger commit gate;
 - `tools/openrouter_bot.py`, `tools/fsa_bots.py`, `tools/snap.py` — optional model-backed independent review;
 - `tools/foil_profile.py` / `tools/foil_hook.py` — persistent profiles and prompt-time relevance adaptation;
-- `tools/foil_assessment.py` — blank adaptive onboarding questionnaire.
+- `tools/foil_assessment.py` — Layer 1 blank cold-start questionnaire;
+- `tools/foil_calibration.py` — Layer 2 transfer/adversarial/real-work deep calibration;
+- `tools/foil_domains.py` — expanded non-diagnostic domain-relevance recognition.
 
 Runtime state is written under gitignored `.egrt/state/`, not `.git/`. Model credentials are environment-only. No private workstation path or project-specific keystore is required.
 
-## FOIL profiles and onboarding
+## FOIL profiles and two-layer calibration
 
-FOIL no longer contains a built-in profile for any individual. A first hooked session creates a **blank local `default` profile** when needed; named profiles support multiple users on one installation.
+FOIL contains no built-in profile for any individual. A first hooked session creates a **blank local `default` profile** when needed; named profiles support multiple users on one installation.
 
-Profiles are stored outside the repository by default and record evidence metadata rather than raw prompts. Topic mentions can make a domain relevant to routing without changing its competence classification.
+Profiles are stored outside the repository by default and record evidence metadata rather than raw prompts. Topic mentions can make a domain relevant to routing without changing competence classification.
 
-The onboarding screen currently includes:
+### Layer 1 — broad cold start
+
+The onboarding screen includes:
 
 - 20 generated objective probes across quantitative reasoning, formal reasoning, probability/statistics, causal inference, software engineering, systems/reliability, research/evidence literacy, scientific method, security/privacy, and planning/decision-making;
 - context/goals, work-style preferences, self-estimates, and confidence calibration;
 - open design/UX, creativity, and explanation tasks;
 - dynamic setup/usage domains, including arbitrary custom domains.
 
-The questionnaire is an **experimental onboarding instrument**, not an IQ, personality, clinical, diagnostic, or employment test. See [`research/FOIL_PERSONALIZATION_BASIS.md`](research/FOIL_PERSONALIZATION_BASIS.md).
+### Layer 2 — deep calibration
+
+The second stage builds a profile-specific plan containing:
+
+- changed-representation discriminators for uncertain/gap hypotheses;
+- harder transfer probes for apparent strengths;
+- adversarial/error-detection checks;
+- real-work/artifact samples;
+- design and creative production;
+- explanation/teach-back;
+- verifier/tool-selection probes;
+- confidence-before-feedback;
+- cross-domain facet evidence such as formalization, decomposition, evidence discipline, error detection, planning, transfer, and uncertainty management.
+
+Open-ended Layer 2 outcomes only count as verified when an appropriate rubric, artifact, proof, execution, or independent reviewer supports the result.
+
+The personalizer is an **experimental onboarding/calibration system**, not an IQ, personality, clinical, diagnostic, or employment test. See [`research/FOIL_PERSONALIZATION_BASIS.md`](research/FOIL_PERSONALIZATION_BASIS.md).
 
 ## What is currently supported by evidence
 
@@ -106,7 +126,8 @@ The questionnaire is an **experimental onboarding instrument**, not an IQ, perso
 |---|---|---|
 | Process Assurance hooks/tools are portable, config-driven, and state-isolated | release-gated source/runtime checks | `validation/RUNTIME_FOIL_MASTERMIND_AUDIT.md`, `tests/` |
 | Public skill directories contain `SKILL.md` only and private-lineage regressions are tested | release-gated checks | `tests/test_skill_layout.py`, `tests/test_private_leaks.py` |
-| FOIL saved-profile/questionnaire mechanics enforce conservative initial classifications | release-gated tests | `tests/test_runtime_tools.py`, `tests/test_foil_assessment.py` |
+| FOIL Layer 1 saved-profile/questionnaire mechanics enforce conservative initial classifications | release-gated tests | `tests/test_runtime_tools.py`, `tests/test_foil_assessment.py` |
+| FOIL Layer 2 mechanics enforce transfer breadth, independent verification, duplicate protection, and multi-domain maturity gates | release-gated tests | `tests/test_foil_calibration.py` |
 | FOIL research-integration structure/source/regression checks passed the recorded validator | **94/94 PASS** | `validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json` |
 | FOIL frozen behavioral-contract cases are represented in the specification | **18/18 PASS-SPEC** | `validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json` |
 | Public claims have a machine-readable provenance map | implemented | `docs/content-provenance.json` |
@@ -144,13 +165,20 @@ python -m compileall -q validation tools tests
 
 For interpretation and evidence boundaries, read [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md).
 
-### 3. Optional FOIL onboarding
+### 3. Optional FOIL calibration
 
 ```bash
 python tools/foil_assessment.py start --out foil_assessment.json --responses foil_responses.json
 ```
 
-Complete the blank response file, then apply it to the automatically created `default` profile or a named profile. Full instructions: [`docs/FOIL_ONBOARDING.md`](docs/FOIL_ONBOARDING.md).
+Complete the blank Layer 1 response file and apply it to a saved profile. Then generate Layer 2:
+
+```bash
+python tools/foil_calibration.py start --profile default --out foil_deep_calibration.json
+python tools/foil_calibration.py status --profile default
+```
+
+Full instructions: [`docs/FOIL_ONBOARDING.md`](docs/FOIL_ONBOARDING.md) and [`docs/FOIL_DEEP_CALIBRATION.md`](docs/FOIL_DEEP_CALIBRATION.md).
 
 ## Research methodology
 
@@ -163,7 +191,7 @@ The repository separates:
 5. **Evaluation** — strong baselines, matched budgets, ablations, uncertainty, and negative results.
 6. **Human learning** — assisted performance kept distinct from later independent ownership and transfer.
 
-Planned behavioral comparisons include strong direct AI, static rules, adaptive FOIL, module ablations, native verification vs same-model critique, and Evidence Review Panel vs matched-evidence direct control. See [`RESEARCH.md`](RESEARCH.md).
+Planned behavioral comparisons include strong direct AI, static rules, adaptive FOIL, Layer 1-only vs Layer 1 + Layer 2, module ablations, native verification vs same-model critique, and Evidence Review Panel vs matched-evidence direct control. See [`RESEARCH.md`](RESEARCH.md).
 
 ## Repository structure
 
@@ -175,7 +203,7 @@ Planned behavioral comparisons include strong direct AI, static rules, adaptive 
 ├── .gauntlet.json           # Process Assurance runtime policy
 ├── research/                # research basis and source records
 ├── validation/              # deterministic/specification evidence
-├── tests/                   # runtime, privacy, layout, questionnaire regressions
+├── tests/                   # runtime, privacy, layout, questionnaire/calibration regressions
 ├── docs/                    # architecture, runtime/onboarding docs, public showcase
 ├── .github/                 # CI, CodeQL, Dependabot, issue/PR forms
 ├── RESEARCH.md              # question, method, baselines, ablations
@@ -198,6 +226,7 @@ Planned behavioral comparisons include strong direct AI, static rules, adaptive 
 - Negative results and failed mechanisms are retained when they change the credible search space.
 - Behavioral efficacy is not inferred from specification correctness.
 - User-profile relevance is not competence evidence; one miss never creates a permanent weakness.
+- A deep profile requires evidence breadth; repeated success in one narrow task family is insufficient.
 
 ## Citation
 
