@@ -13,6 +13,7 @@ HTML = ROOT / "docs/index.html"
 CSS = ROOT / "docs/styles.css"
 VISUAL_CSS = ROOT / "docs/visuals.css"
 README = ROOT / "README.md"
+VISUAL_VERSION = ROOT / "docs/visuals/VERSION"
 VISUAL_PATHS = (
     "docs/visuals/gauntlet-system-map.svg",
     "docs/visuals/foil-diagnostic-loop.svg",
@@ -177,10 +178,35 @@ checks["visual_dimensions_declared"] = all(
     if image.get("src", "") in expected_visual_srcs
 )
 checks["showcase_revision_separate_from_software_version"] = (
-    "SHOWCASE R13" in html
+    "SHOWCASE R14" in html
     and "Research software" in html
     and "0.4.0" in html
     and "Showcase revision" in html
+)
+visual_version_text = VISUAL_VERSION.read_text(encoding="utf-8") if VISUAL_VERSION.exists() else ""
+checks["showcase_revision_file_consistent"] = (
+    "showcase-revision=14" in visual_version_text
+    and "research-software-version=0.4.0" in visual_version_text
+)
+checks["editorial_representation_contract"] = all(
+    token in html
+    for token in (
+        "hero-editorial",
+        "chapter-marker",
+        "evidence-ledger",
+        "module-index",
+        "document-index",
+        "PLATE 01",
+        "PLATE 02",
+        "PLATE 03",
+    )
+) and all(
+    forbidden not in combined_css.lower()
+    for forbidden in (
+        "linear-gradient(",
+        "radial-gradient(",
+        "box-shadow:",
+    )
 )
 
 skill_dirs = [
@@ -398,9 +424,9 @@ def contrast_ratio(first: str, second: str) -> float:
 
 
 checks["principal_contrast"] = (
-    contrast_ratio("#f5f7f9", "#07080a") >= 7
-    and contrast_ratio("#9aa4af", "#07080a") >= 4.5
-    and contrast_ratio("#ff8a3d", "#07080a") >= 4.5
+    contrast_ratio("#111111", "#f2f0e9") >= 7
+    and contrast_ratio("#5c5a55", "#f2f0e9") >= 4.5
+    and contrast_ratio("#b83224", "#f2f0e9") >= 4.5
 )
 
 
