@@ -13,14 +13,7 @@ from fractions import Fraction
 from pathlib import Path
 from typing import Any, Callable
 
-from foil_profile import (
-    ensure_domain,
-    infer_domains,
-    load as load_profile,
-    normalize_domain,
-    observe,
-    save as save_profile,
-)
+import foil_profile
 
 SCHEMA = "egrt.foil-assessment.v1"
 SCREEN_DOMAINS = [
@@ -330,7 +323,7 @@ def _custom_domains(text: str | None) -> list[str]:
     if not text:
         return []
     raw = text.replace(";", ",").replace("\n", ",").split(",")
-    parts = [normalize_domain(part) for part in raw if part.strip()]
+    parts = [foil_profile.normalize_domain(part) for part in raw if part.strip()]
     return list(dict.fromkeys(parts))
 
 
@@ -341,11 +334,15 @@ def build(
 ) -> dict[str, Any]:
     actual_seed = seed if seed is not None else random.SystemRandom().randrange(1, 2**31)
     rng = random.Random(actual_seed)
+    setup_relevant_domains = []
+    for domain in [*foil_profile.infer_domains(setup_text), *(extra_domains or [])]:
+        normalized = foil_profile.normalize_domain(domain)
+        if normalized not in setup_relevant_domains:
+            setup_relevant_domains.append(normalized)
     selected = list(SCREEN_DOMAINS)
-    for domain in [*infer_domains(setup_text), *(extra_domains or [])]:
-        normalized = normalize_domain(domain)
-        if normalized not in selected:
-            selected.append(normalized)
+    for domain in setup_relevant_domains:
+        if domain not in selected:
+            selected.append(domain)
 
     objective: list[dict[str, Any]] = []
     for domain in SCREEN_DOMAINS:
@@ -365,6 +362,7 @@ def build(
         "schema": SCHEMA,
         "seed": actual_seed,
         "setup_text": setup_text,
+        "setup_relevant_domains": setup_relevant_domains,
         "selected_domains": selected,
         "limits": [
             "Experimental onboarding; not an IQ, clinical, diagnostic, or employment test.",
@@ -473,6 +471,7 @@ def score(session: dict[str, Any], responses: dict[str, Any]) -> dict[str, Any]:
         "schema": SCHEMA,
         "seed": session["seed"],
         "profile_status": "PROVISIONAL",
+        "setup_relevant_domains": session.get("setup_relevant_domains", []),
         "domain_evidence": domain_evidence,
         "calibration": {"brier": brier, "n": len(brier_terms), "lower_is_better": True},
         "style": responses.get("style", {}),
@@ -487,9 +486,13 @@ def score(session: dict[str, Any], responses: dict[str, Any]) -> dict[str, Any]:
 
 
 def apply_to_profile(name: str, report: dict[str, Any]) -> None:
-    profile = load_profile(name)
-    for domain in report.get("self_estimates", {}):
-        ensure_domain(profile, domain, declared=True)
+    profile = foil_profile.load(name)
+
+    for domain in report.get("setup_relevant_domains", []):
+        foil_profile.ensure_domain(profile, domain, declared=True)
+    for domain, value in report.get("self_estimates", {}).items():
+        if value is not None:
+            foil_profile.ensure_domain(profile, domain, declared=True)
 
     context = report.get("context", {})
     goal = context.get("goal")
@@ -497,17 +500,17 @@ def apply_to_profile(name: str, report: dict[str, Any]) -> None:
         profile["goals"] = list(dict.fromkeys([*profile.get("goals", []), str(goal)]))
     relevant_text = " ".join(str(value) for value in context.values() if value)
     relevant_domains = [
-        *infer_domains(relevant_text),
+        *foil_profile.infer_domains(relevant_text),
         *_custom_domains(context.get("other_domains")),
     ]
     for domain in relevant_domains:
-        ensure_domain(profile, domain, declared=True)
+        foil_profile.ensure_domain(profile, domain, declared=True)
 
     for domain, row in report.get("domain_evidence", {}).items():
         count = int(row.get("independent_n", 0))
         correct = int(row.get("independent_correct", 0))
         for index in range(count):
-            observe(
+            foil_profile.observe(
                 profile,
                 domain,
                 "correct" if index < correct else "incorrect",
@@ -519,7 +522,7 @@ def apply_to_profile(name: str, report: dict[str, Any]) -> None:
     for key, value in report.get("style", {}).items():
         if value is not None:
             profile.setdefault("preferences", {})[key] = value
-    save_profile(profile)
+    foil_profile.save(profile)
 
 
 def _write(path: str, obj: Any) -> None:
