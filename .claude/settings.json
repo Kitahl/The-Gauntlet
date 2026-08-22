@@ -1,19 +1,18 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "hooks": {
     "SessionStart": [
       {
         "hooks": [
           {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/gauntlet_monitor.py", "snapshot"], "timeout": 10},
           {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/gauntlet_boundary.py", "reset"], "timeout": 10},
-          {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/foil_profile.py", "context", "--hook"], "timeout": 10}
+          {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/foil_hook.py", "session"], "timeout": 10}
         ]
       }
     ],
     "UserPromptSubmit": [
       {
         "hooks": [
-          {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/foil_profile.py", "context", "--hook"], "timeout": 10}
+          {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/foil_hook.py", "prompt"], "timeout": 10}
         ]
       }
     ],
