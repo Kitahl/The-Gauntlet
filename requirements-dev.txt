@@ -1,0 +1,5 @@
+# Reproducible validation/tooling environment (verified current 2026-08-21)
+playwright==1.62.0
+ruff==0.16.2
+bandit==1.9.4
+pip-audit==2.10.1
