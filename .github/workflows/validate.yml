@@ -1,12 +1,17 @@
-name: Validate public package
+name: Research software validation
 
 on:
-  pull_request:
   push:
-    branches: [main, showcase/foil-gauntlet, public/foil-personalizer]
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 permissions:
   contents: read
+
+concurrency:
+  group: validation-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   validate:
@@ -16,14 +21,26 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install browser validation dependency
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - name: Install pinned development dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install playwright
+          python -m pip install -r requirements-dev.txt
           python -m playwright install --with-deps chromium
-      - name: Validate Soul and Infinity Gauntlet
+      - name: Lint validation code
+        run: ruff check validation
+      - name: Validate Research Orchestrator and Process Assurance
         run: python validation/validate_soul_gauntlet_public.py
-      - name: Validate static showcase
+      - name: Validate public showcase
         run: python validation/validate_showcase.py
       - name: Check Python syntax
         run: python -m compileall -q validation
+      - name: Check repository research metadata
+        run: |
+          test -f LICENSE
+          test -f CITATION.cff
+          test -f RESEARCH.md
+          test -f REPRODUCIBILITY.md
+          test -f CHANGELOG.md
+          test -f SECURITY.md

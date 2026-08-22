@@ -1,0 +1,45 @@
+name: Research question / mechanism proposal
+description: Propose an experiment, research mechanism, benchmark, or evidence-bearing change.
+title: "[Research]: "
+labels: ["research"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Research question
+      description: State the smallest falsifiable question.
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why it matters
+      description: What current limitation, failure mode, or open claim does this address?
+    validations:
+      required: true
+  - type: textarea
+    id: method
+    attributes:
+      label: Proposed method
+      description: Mechanism, data, intervention, or implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: baselines
+    attributes:
+      label: Baselines / ablations
+      description: What must this be compared against, including a with-vs-without ablation where appropriate?
+    validations:
+      required: true
+  - type: textarea
+    id: endpoint
+    attributes:
+      label: Endpoint and decision rule
+      description: What observation would support, refute, or leave the question unresolved?
+    validations:
+      required: true
+  - type: textarea
+    id: priorart
+    attributes:
+      label: Prior art / nearest existing method
+      description: Known related work, searched scope, and nearest boring alternative.

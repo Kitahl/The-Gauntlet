@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this research software, please cite the repository and the specific release used."
+title: "Evidence-Governed Research Toolkit"
+type: software
+authors:
+  - family-names: "Kitahl"
+repository-code: "https://github.com/Kitahl/The-Gauntlet"
+url: "https://kitahl.github.io/The-Gauntlet/"
+license: MIT
+version: 0.1.0
+date-released: 2026-08-21
+keywords:
+  - research software
+  - AI-assisted research
+  - reasoning
+  - verification
+  - reproducibility
+  - evaluation
+  - evidence provenance
+abstract: >-
+  A modular research-software toolkit for evidence-governed AI-assisted reasoning,
+  prior-art discovery, formal reasoning, engineering verification, evaluation,
+  process assurance, and adaptive complementary assistance.
