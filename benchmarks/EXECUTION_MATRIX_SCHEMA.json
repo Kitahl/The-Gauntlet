@@ -1,0 +1,32 @@
+{
+  "schema": "foil-paired-execution-matrix-schema/v1",
+  "status": "prospective_unscored",
+  "required_execution_fields": [
+    "benchmark",
+    "item_id",
+    "condition",
+    "isolation_session_id",
+    "answer",
+    "confidence",
+    "tool_counts",
+    "phase_allocation",
+    "viable_candidate_before_verification",
+    "sibling_outputs_visible"
+  ],
+  "conditions": ["BASE", "FOIL", "FOIL_GENERAL_PROFILE", "FOIL_MM"],
+  "browsecomp_additional_condition": "FOIL_BROWSECOMP_PROFILE",
+  "failure_codes": [
+    "DISCOVERY_FAILURE",
+    "WRONG_CANDIDATE",
+    "REASONING_ERROR",
+    "STATE_TRACKING_ERROR",
+    "VERIFICATION_FAILURE",
+    "BUDGET_EXHAUSTED",
+    "OVERCAUTIOUS_ABSTENTION",
+    "EXACT_OUTPUT_ERROR",
+    "TOOL_EXECUTION_ERROR",
+    "CONTAMINATED",
+    "OTHER"
+  ],
+  "publication_boundary": "This schema defines required execution receipts only. It is not a benchmark result."
+}
