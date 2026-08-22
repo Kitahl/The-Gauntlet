@@ -2,9 +2,11 @@
 
 This page reports **exploratory research-software evaluations**, not official leaderboard submissions.
 
-The evaluated assistance condition uses the same underlying model as the baseline. For the newer blinded runs, `FOIL_MM` means the frozen [Frontier-Exam FOIL](../benchmarks/FRONTIER_EXAM_FOIL.md) protocol plus a final Mastermind causal-defect pass. It is a benchmark configuration, **not a new permanent FOIL architecture layer**.
+The evaluated conditions use the same underlying model. Closed-book HLE, ARC-AGI-1, and GPQA-Diamond use a frozen Frontier-Exam FOIL + Mastermind configuration. The newer BrowseComp experiment separately ablates generic FOIL, a benchmark-blind saved profile, and a Mastermind final audit. These are benchmark configurations, **not permanent FOIL architecture layers**.
 
 ## Current results
+
+### Earlier blinded and legacy pilots
 
 | Evaluation | BASE | Assisted | Delta | Evidence status |
 |---|---:|---:|---:|---|
@@ -14,39 +16,67 @@ The evaluated assistance condition uses the same underlying model as the baselin
 | SimpleBench public subset | 3/5 · 60% | 5/5 · 100% | +40 pp | legacy manual disjoint-subset pilot |
 | Current-evidence retrieval holdout | 0/5 · 0% | 5/5 · 100% | +100 pp | custom mechanism holdout; not a standard benchmark |
 
-**Do not average these rows into one headline accuracy.** They measure different constructs, use different protocols, and have small sample sizes.
+### BrowseComp four-way ablation
 
-The permanent machine-readable receipt is [`benchmarks/results/2026-08-22-blinded-pilot.json`](../benchmarks/results/2026-08-22-blinded-pilot.json).
+| Condition | Correct / n | Exact-normalized accuracy |
+|---|---:|---:|
+| **BASE** | 1/2 | **50%** |
+| **FOIL** | 2/2 | **100%** |
+| **FOIL_PROFILE** | 1/2 | **50%** |
+| **FOIL_MM** | 0/2 | **0%** |
 
-## What the newer blinded runs test
+This is an **exploratory directional ablation with only two scored items per condition**. It does not establish that generic FOIL is superior, that the saved profile has no value, or that Mastermind is harmful. The conditions used deterministic disjoint subsets rather than same-item randomized executions, and the observed differences may be dominated by item difficulty and sampling noise.
 
-### BASE
+The BrowseComp scorer uses **normalized exact string match**, not the official BrowseComp LLM-judge scoring method. The permanent result receipt is [`benchmark_runs/2026-08-22/browsecomp_four_way_results.json`](../benchmark_runs/2026-08-22/browsecomp_four_way_results.json).
 
-`BASE` is GPT-5.6 Sol answering directly without the benchmark-specific FOIL/Mastermind procedure.
+**Do not average these rows or conditions into one headline accuracy.** The evaluations measure different constructs, use different protocols, and have small sample sizes.
 
-### Frontier-Exam FOIL + Mastermind (`FOIL_MM`)
+The earlier blinded receipt is [`benchmarks/results/2026-08-22-blinded-pilot.json`](../benchmarks/results/2026-08-22-blinded-pilot.json).
 
-The assisted condition freezes seven behaviors before evaluation:
+## What the blinded runs test
 
-1. classify the domain and answer form;
-2. preserve the exact claim, including quantifiers, exclusions, signs, units, and required format;
-3. generate the strongest plausible challenger, counterexample, or alternative answer;
-4. use a claim-native closed-book check when allowed, such as exact arithmetic or consistency checking;
-5. verify answer-choice mapping, dimensions, indexing, representation, and output format;
-6. calibrate confidence only after the verification pass;
-7. run a Mastermind final pass: identify the earliest causal defect that could make the candidate answer wrong, apply the smallest supported correction, then reread the original question.
+### Closed-book HLE / ARC / GPQA
 
-For closed-book HLE, ARC and GPQA evaluations, external web retrieval is not part of the assisted condition.
+`BASE` is GPT-5.6 Sol answering directly. The assisted condition uses the frozen [Frontier-Exam FOIL](../benchmarks/FRONTIER_EXAM_FOIL.md) protocol plus a final Mastermind causal-defect pass. External web retrieval is not part of those assisted conditions.
 
-## Blinding and contamination controls
+### BrowseComp four-way conditions
 
-The newer harnesses generate question artifacts without benchmark gold. Predictions are committed before the scoring run reads the hidden answer fields.
+All four BrowseComp conditions use the same GPT-5.6 Sol model and the same web-tool ceiling per item: at most 12 web search queries and at most 12 source follow-up operations.
 
-Because both conditions were executed in one conversation, the run uses **deterministic disjoint subsets** instead of giving BASE and FOIL the same item. This reduces direct answer leakage, but it does **not** provide the causal strength of isolated same-item randomized A/B executions.
+- **BASE** — direct browsing, no FOIL protocol, saved profile, or Mastermind.
+- **FOIL** — generic evidence-routing procedure: preserve clues, decompose constraints, identify candidates, seek decisive evidence, test a plausible challenger when feasible, then reread the required answer format.
+- **FOIL_PROFILE** — the complete generic FOIL procedure plus the benchmark-blind saved profile frozen before BrowseComp item exposure at commit `013a728bfd6f57a8592fc3fc6e098ea52da357d5`.
+- **FOIL_MM** — the complete generic FOIL procedure plus a Mastermind final audit, with **no saved profile**.
 
-HLE additionally excludes an item whose answer had surfaced earlier in the session and a deterministic opposite-condition balancing item. BrowseComp preparation excludes items for which public benchmark traces/answers surfaced during research, plus balancing items. These exclusions are frozen without consulting the harness's hidden gold for the retained items.
+The profile and Mastermind additions are intentionally separated rather than combined, so the experiment does not confound them.
+
+## Blinding, exclusions, and execution controls
+
+The harnesses generate question artifacts without benchmark gold. Predictions are committed before the scoring run reads hidden answer fields.
+
+Because conditions were executed in one conversation, the runs use **deterministic disjoint subsets** instead of giving conditions the same item. This reduces direct answer carryover but does **not** provide the causal strength of isolated same-item randomized A/B executions.
+
+HLE excludes an item whose answer had surfaced earlier in the session and a deterministic opposite-condition balancing item.
+
+The BrowseComp four-way run had additional pre-commit exclusions, all preserved in the machine-readable receipt:
+
+- public results exposed published BrowseComp answer/trace material for sampled items; each contaminated item's **complete four-condition block** was retired without consulting hidden gold;
+- the frozen `<=12` search-query ceiling was exceeded on two original items; both complete affected four-condition blocks were retired rather than scoring unequal-budget executions;
+- a later audit found that one item had been researched against the wrong prompt; its complete four-condition block was retired rather than silently granting a second search budget;
+- deterministic replacement seeds `20260827`, `20260828`, `20260829`, and `20260830` generated fresh blocks from previously unsampled rows;
+- the harness asserts a final balanced sample of exactly **8 questions: 2 per condition**.
+
+These are validity caveats, not model results. They occurred before prediction commitment and are recorded explicitly rather than hidden.
 
 ## Benchmark-specific interpretation
+
+### BrowseComp four-way: 1/2, 2/2, 1/2, 0/2
+
+The only defensible claim is the observed pilot result: BASE 1/2, FOIL 2/2, FOIL_PROFILE 1/2, and FOIL_MM 0/2 under the frozen conditions and exact-normalized scorer.
+
+The result is useful primarily because it rejects an easy narrative that every added layer automatically improves performance. On these eight disjoint items, generic FOIL happened to score highest, the profile condition tied BASE, and the Mastermind condition scored lowest. With `n=2` per condition and different questions assigned to each condition, there is no basis for statistical significance or a general component-effect estimate.
+
+A follow-up should use isolated same-item randomized executions, larger samples, preregistered exclusions, and the official BrowseComp judge if comparability to published BrowseComp results is desired.
 
 ### HLE: 16.7% → 33.3%
 
@@ -58,7 +88,7 @@ The ARC pilot also shows a positive numerical delta. Again, six items per condit
 
 ### GPQA-Diamond: 75% → 75%
 
-The 24-item GPQA-Diamond follow-up is the largest blinded run in this release and produced a **null result**: 9/12 in both conditions. This is retained prominently because the research question is whether the mechanism helps, not whether every benchmark can be made to show an improvement.
+The 24-item GPQA-Diamond follow-up is the largest earlier blinded run and produced a **null result**: 9/12 in both conditions. This is retained prominently because the research question is whether the mechanism helps, not whether every benchmark can be made to show an improvement.
 
 The null result suggests that the current Frontier-Exam procedure may add little on some expert multiple-choice problems when the underlying model already performs strongly, or that the sample is too small to detect a difference. The current evidence does not distinguish those explanations.
 
@@ -72,7 +102,7 @@ The 0/5 versus 5/5 result tested a narrow mechanism: whether FOIL recognizes tha
 
 ## Negative and discarded results
 
-Several math/error-localization stress pilots were discarded because the BASE condition scored at or near 100%. Reporting them as evidence for FOIL would be non-discriminating. Saturated evaluations are recorded as discarded rather than used to inflate the result set.
+The GPQA null and the mixed/negative BrowseComp component outcomes are retained. Several math/error-localization stress pilots were discarded because the BASE condition scored at or near 100%. Reporting saturated evaluations as improvement evidence would be non-discriminating.
 
 ## Reproduction
 
@@ -82,6 +112,7 @@ The public harnesses are:
 python benchmarks/harness/hle_arc_prepare_score.py
 python benchmarks/harness/gpqa_prepare_score.py
 python benchmarks/harness/browsecomp_prepare_score.py
+python benchmarks/harness/browsecomp_four_way_prepare_score.py
 ```
 
 They use pinned or explicitly identified public benchmark sources and deterministic seeds. The first run prepares blinded question artifacts. If the corresponding prediction file exists, the same harness generates a score receipt.
@@ -95,11 +126,12 @@ Current benchmark sources:
 
 ## What would constitute stronger evidence
 
-The next meaningful step is not a larger marketing table. It is an **isolated same-item A/B evaluation** in which independent GPT-5.6 Sol executions receive the same frozen items and equal model/tool budgets, with condition assignment hidden from scoring. That design should include more items, confidence intervals, predeclared exclusions, and mechanism ablations such as:
+The next meaningful step is not a larger marketing table. It is an **isolated same-item A/B or multi-condition evaluation** in which independent GPT-5.6 Sol executions receive the same frozen items and equal model/tool budgets, with condition assignment hidden from scoring. That design should include more items, confidence intervals, preregistered exclusions, and mechanism ablations such as:
 
 - BASE;
 - BASE + verification/freshness gate only;
 - full FOIL;
+- FOIL + frozen benchmark-blind profile;
 - FOIL + Mastermind final pass.
 
-Until then, the public claim is limited to the exact pilot results above.
+For BrowseComp specifically, a stronger public comparison should also use the official LLM-judge scoring method. Until then, the public claim is limited to the exact pilot results above.
