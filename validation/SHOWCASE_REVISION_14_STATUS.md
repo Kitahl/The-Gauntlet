@@ -4,7 +4,15 @@ Research software version: `0.4.0`
 
 Showcase revision: `14`
 
-Release state: **VALIDATED CANDIDATE — FINAL EXACT-HEAD RERUN REQUIRED**
+Release state: **RELEASED**
+
+Release pull request: `#17 — Redesign public showcase as editorial research publication (R14)`
+
+Validated design head: `a9f0429656d0db34ac77339032e93b5e6202171c`
+
+Final receipt-containing PR head: `4a184f8b5c2fd0e0d1b2611a88a74558a1c3f51c`
+
+Merged release commit: `afe3ce30b91215754ab9397d39c16c80b2968f8f`
 
 Design mechanism:
 
@@ -15,7 +23,7 @@ Design mechanism:
 - three mechanism-native SVG plates redrawn in the same restrained visual language;
 - no remote fonts, stock art, AI-generated hero imagery, WebGL, gradient-orb decoration, glassmorphism, or copied reference-site assets.
 
-Validated design head `a9f0429656d0db34ac77339032e93b5e6202171c` produced:
+Release evidence:
 
 - showcase validation: **55/55 PASS**;
 - desktop horizontal overflow: **false**;
@@ -26,6 +34,6 @@ Validated design head `a9f0429656d0db34ac77339032e93b5e6202171c` produced:
 - Research Orchestrator + Process Assurance validation: **PASS**;
 - CodeQL: **PASS**.
 
-The exact validation receipt and audit records are being committed after that run. Promotion therefore requires the normal Research software validation and CodeQL workflows to pass again on the final pull-request head containing those records.
+The exact validation receipt and Mastermind audit were committed before promotion. The final PR head containing those records then passed the normal Research software validation and CodeQL workflows before PR #17 was promoted and merged.
 
-No runtime, benchmark result, protocol, or scientific-evidence version is changed by this showcase revision.
+No runtime, benchmark result, protocol, or scientific-evidence version was changed by this showcase revision.
