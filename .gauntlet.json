@@ -1,0 +1,23 @@
+{
+  "state_dir": ".egrt/state",
+  "governing_files": [
+    "README.md",
+    "RESEARCH.md",
+    "REPRODUCIBILITY.md",
+    "ROADMAP.md",
+    "skills/soul/SKILL.md",
+    "skills/infinity-gauntlet/SKILL.md",
+    "skills/foil/SKILL.md"
+  ],
+  "boundary": {
+    "enabled": true,
+    "near_duplicate_threshold": 0.72,
+    "frame_budget": 3,
+    "costume_budget": 2,
+    "judge_model": null
+  },
+  "ledger": {
+    "enabled": false,
+    "path": null
+  }
+}
