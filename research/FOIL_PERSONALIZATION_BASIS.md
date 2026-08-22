@@ -47,6 +47,16 @@ Knowledge tracing treats competence as latent and changing over repeated interac
 
 **Boundary:** FOIL does not implement a trained KT model. Its ordinal classifications are explicit engineering heuristics until calibrated against real longitudinal data.
 
+## Evidence-Centered Design and complex performance
+
+Evidence-Centered Design (ECD) treats an assessment as an explicit inferential chain from claims about capability, to observable evidence, to tasks that can elicit that evidence. ETS work on complex problem-solving performance emphasizes extracting multiple features from integrated tasks rather than reducing the whole performance to one undifferentiated score.
+
+- Bennett, Jenkins, Persky & Weiss, *Assessing Complex Problem-Solving Performances* (ETS): https://www.ets.org/research/policy_research_reports/publications/report/2003/imdu.html
+
+**Design implication:** Layer 2 separates cross-cutting facets such as formalization, evidence discipline, error detection, tool selection, and transfer. Each task is mapped to the facet it is intended to inform.
+
+**Boundary:** FOIL does not claim to implement a complete ECD validity argument. Its facet-to-task mappings remain engineering hypotheses until validated.
+
 ## Multidimensional deep calibration
 
 Multidimensional adaptive assessment treats cognition/capability as a set of partially separable dimensions and selects items to improve uncertainty in those dimensions rather than relying on one total score.
@@ -57,6 +67,27 @@ Multidimensional adaptive assessment treats cognition/capability as a set of par
 **Design implication:** FOIL's second layer tracks both domain evidence and cross-domain working facets such as formalization, error detection, evidence discipline, transfer, design reasoning, and verifier selection.
 
 **Boundary:** FOIL's facet counts are not MIRT parameters and the current readiness gates are not psychometric cut scores.
+
+## Structured creative thinking is multidimensional
+
+The OECD PISA 2022 creative-thinking framework separates several processes—generating diverse ideas, generating creative ideas, and evaluating/improving ideas—and samples them across written, visual, social-problem-solving, and scientific-problem-solving contexts.
+
+- OECD, *PISA 2022 Creative Thinking Framework*: https://www.oecd.org/en/publications/pisa-2022-assessment-and-analytical-framework_dfe0bf9c-en/full-report/component-5.html
+
+**Design implication:** FOIL's Layer 2 open creative task requires both mechanism-distinct generation and evaluation/improvement rather than treating idea count alone as creativity.
+
+**Boundary:** FOIL does not use PISA items or PISA scoring and inherits none of its population norms.
+
+## Open creative products require appropriate judgment
+
+The Consensual Assessment Technique (CAT) literature evaluates actual creative products using independent judgments from people familiar with the relevant domain rather than forcing every creative response into a fixed answer key.
+
+- Dollinger & Shafran (2005), *Note on Consensual Assessment Technique in Creativity Research*: https://pubmed.ncbi.nlm.nih.gov/16060417/
+- CAT reliability evidence for creative products: https://www.sciencedirect.com/science/article/pii/S1871187107000223
+
+**Design implication:** design, creative-search, and explanation outputs remain `NEEDS_RUBRIC_REVIEW` until a suitable reviewer/rubric or claim-native check supports them.
+
+**Boundary:** an LLM liking an answer is not automatically independent expert judgment.
 
 ## Transfer is a separate target
 
@@ -86,6 +117,16 @@ Adaptive feedback systems can influence self-regulated learning behavior over ti
 
 **Boundary:** this does not establish that FOIL's adaptive feedback policy improves learning.
 
+## Metacognitive calibration can transfer separately from task performance
+
+Research on adaptive metacognitive training has shown improvements in confidence-accuracy calibration that transferred to untrained stimuli/tasks even when first-order task performance did not improve.
+
+- *Domain-General Enhancements of Metacognitive Ability Through Adaptive Training*: https://pmc.ncbi.nlm.nih.gov/articles/PMC6390881/
+
+**Design implication:** FOIL measures confidence/correctness alignment separately from raw task accuracy and keeps calibration as a cross-cutting facet rather than treating confidence as a proxy for competence.
+
+**Boundary:** this does not establish that FOIL's confidence prompts cause metacognitive improvement.
+
 ## Creativity and open production
 
 The Divergent Association Task (DAT) uses semantic distance among generated words as one quick measure of divergent verbal creativity while explicitly covering only a slice of creativity.
@@ -110,13 +151,16 @@ The extended public registry adds common work families only to improve automatic
 
 This is an engineering extension motivated by learner-modeling research; no source above establishes FOIL's exact domain-promotion rule. The promotion rule is therefore a falsifiable design choice, not an empirical fact.
 
-## Layer 2 readiness gate
+## Layer 2 structured screen and readiness gate
 
-`tools/foil_calibration.py` uses an engineering coverage gate before labeling a profile `DEEP_PROFILE_READY`. It requires evidence diversity across domains, facets, transfer, real work, adversarial/error-detection probes, confidence-bearing outcomes, and open production.
+`tools/foil_layer2.py` supplies a reproducible second-stage screen with two objective micro-scenarios per cross-cutting facet plus open production. `tools/foil_calibration.py` then uses an engineering coverage gate before labeling a profile `DEEP_PROFILE_READY`; it requires evidence diversity across domains, facets, transfer, real work, adversarial/error-detection probes, confidence-bearing outcomes, and open production.
 
-The purpose is to prevent a false-deep profile caused by many repeated successes in one narrow task family.
+The purpose is to prevent two opposite failures:
 
-**Boundary:** the thresholds are intentionally explicit and testable, but they are not empirically calibrated. Prospective work must compare alternative thresholds against future task-prediction and routing outcomes.
+1. a **shallow profile** based only on topic knowledge;
+2. a **false-deep profile** caused by many repeated successes in one narrow task family.
+
+**Boundary:** the Layer 2 scenarios and readiness thresholds are intentionally explicit and testable, but they are not empirically calibrated. Prospective work must compare alternative item sets/thresholds against future task prediction and routing outcomes.
 
 ## Validation needed
 
@@ -129,5 +173,6 @@ Before claiming a validated personalizer, the project needs:
 5. prospective prediction of later independent task performance;
 6. an ablation showing profile-driven assistance beats a strong non-profile baseline at matched model/tool budget;
 7. evidence that dynamic domain expansion improves routing rather than creating noisy labels;
-8. an ablation of Layer 1 alone vs Layer 1 + Layer 2 deep calibration;
-9. evidence that the `DEEP_PROFILE_READY` thresholds predict better downstream personalization rather than merely more collected data.
+8. an ablation of Layer 1 alone vs Layer 1 + structured Layer 2A vs full Layer 2B real-work calibration;
+9. evidence that the `DEEP_PROFILE_READY` thresholds predict better downstream personalization rather than merely more collected data;
+10. evidence that prompt-time facet relevance improves routing without causing false competence updates.
