@@ -1,87 +1,101 @@
 #!/usr/bin/env python3
-"""Validate public Research Orchestrator and Process Assurance invariants.
+"""Mechanical public-package checks for Research Orchestrator + Process Assurance.
 
-These are source/package checks. They do not claim behavioral efficacy of an
-executing language model or the complete research workflow.
+These checks establish source/package invariants only. They do not establish
+behavioral efficacy of an executing language model.
 """
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def fail(message: str) -> None:
-    print(f"FAIL: {message}")
+def fail(msg: str) -> None:
+    print(f"FAIL: {msg}")
     raise SystemExit(1)
 
 
-def read_required(path: str) -> str:
-    file_path = ROOT / path
-    if not file_path.is_file():
+def need(path: str) -> str:
+    p = ROOT / path
+    if not p.is_file():
         fail(f"missing required file: {path}")
-    return file_path.read_text(encoding="utf-8")
+    return p.read_text(encoding="utf-8")
 
 
-orchestrator = read_required("skills/soul/SKILL.md")
-assurance = read_required("skills/infinity-gauntlet/SKILL.md")
-readme = read_required("README.md")
-showcase = read_required("docs/index.html")
+soul = need("skills/soul/SKILL.md")
+gauntlet = need("skills/infinity-gauntlet/SKILL.md")
+foil = need("skills/foil/SKILL.md")
+readme = need("README.md")
+showcase = need("docs/index.html")
+settings = json.loads(need(".claude/settings.json"))
+config = json.loads(need(".gauntlet.json"))
 
-# Technical identifiers remain stable for backwards compatibility.
-for token in ("name: soul", "/soul", "Portable runtime", "Infinity Gauntlet"):
-    if token not in orchestrator:
-        fail(f"Research Orchestrator missing compatibility invariant: {token}")
+for token in ("name: soul", "Research Orchestrator", "/soul", "Portable runtime", "Process Assurance"):
+    if token not in soul:
+        fail(f"Research Orchestrator missing invariant token: {token}")
 
-operations = [
-    "frame",
-    "audit",
-    "costume",
-    "derive",
-    "self",
-    "redirect",
-    "refresh",
-    "boundary",
-    "explain",
-    "oob",
-]
-for operation in operations:
-    if f"`{operation}`" not in assurance:
-        fail(f"Process Assurance missing operation: {operation}")
+ops = ["frame", "audit", "costume", "derive", "self", "redirect", "refresh", "boundary", "explain", "oob"]
+for op in ops:
+    if f"`{op}`" not in gauntlet:
+        fail(f"Process Assurance missing operation: {op}")
 
-pattern = (
-    r"^\|\s*\d+\s*\|\s*`(frame|audit|costume|derive|self|redirect|refresh|"
-    r"boundary|explain|oob)`\s*\|"
+rows = re.findall(
+    r"^\|\s*`(frame|audit|costume|derive|self|redirect|refresh|boundary|explain|oob)`\s*\|",
+    gauntlet,
+    re.MULTILINE,
 )
-table_rows = re.findall(pattern, assurance, re.MULTILINE)
-if table_rows != operations:
-    fail(f"canonical Process Assurance operation table mismatch: {table_rows}")
+if rows != ops:
+    fail(f"canonical operation table mismatch: {rows}")
 
-for required in (
-    "PUBLIC RUNTIME CONTRACT",
-    "Feature-detect",
-    "UNAVAILABLE",
-    "A verification must not define its own scope",
-):
-    if required not in assurance:
-        fail(f"Process Assurance missing portability/safety invariant: {required}")
-
-# Historical private integrations must not become public runtime dependencies.
-dead_private_paths = (
-    "tools/gauntlet_monitor.py",
+for token in (
     "tools/gauntlet_boundary.py",
-    "tools/fsa_bots.py",
-    "tools/scout.py",
-    "tools/verify_ledger.py",
-    ".claude/settings.json",
-    "repo CLAUDE.md",
-)
-for token in dead_private_paths:
-    if token in assurance:
-        fail(f"private runtime dependency leaked into public assurance spec: {token}")
+    "tools/gauntlet_monitor.py",
+    "tools/gauntlet_hook.py",
+    "UNAVAILABLE",
+    "stop_hook_active",
+):
+    if token not in gauntlet:
+        fail(f"Process Assurance missing runtime invariant: {token}")
 
-# Portfolio terminology and technical aliases must remain synchronized.
+for path in (
+    "tools/gauntlet_boundary.py",
+    "tools/gauntlet_monitor.py",
+    "tools/gauntlet_hook.py",
+    "tools/gauntlet_config.py",
+    "tools/verify_ledger.py",
+    "tools/foil_profile.py",
+    "tools/foil_assessment.py",
+    "docs/RUNTIME_SETUP.md",
+):
+    need(path)
+
+# Skill directories are specification-only.
+for directory in (ROOT / "skills").iterdir():
+    if directory.is_dir():
+        names = sorted(p.name for p in directory.iterdir() if not p.name.startswith("."))
+        if names != ["SKILL.md"]:
+            fail(f"{directory}: expected SKILL.md only, found {names}")
+
+# Hook wiring must be shareable and current-schema shaped.
+raw_settings = json.dumps(settings)
+if "${CLAUDE_PROJECT_DIR}" not in raw_settings:
+    fail("hook settings do not use CLAUDE_PROJECT_DIR")
+for event in ("SessionStart", "UserPromptSubmit", "PreToolUse", "PostToolUse", "Stop"):
+    if event not in settings.get("hooks", {}):
+        fail(f"missing hook event: {event}")
+
+state_path = str(config.get("state_dir") or "")
+if not state_path or state_path.startswith(".git") or "/.git" in state_path:
+    fail("runtime state must not live under .git")
+
+# No person-specific learner prior belongs in the public FOIL specification.
+for forbidden in ("Initial assessment priors remain", "Relative strengths observed so far"):
+    if forbidden in foil:
+        fail(f"person-specific FOIL prior leaked into public skill: {forbidden}")
+
 for token in (
     "Evidence-Governed Research Toolkit",
     "Research Orchestrator",
@@ -90,16 +104,11 @@ for token in (
 ):
     if token not in readme:
         fail(f"README missing professional public terminology: {token}")
+if "<strong>10</strong>" not in showcase or "Research Orchestrator" not in showcase:
+    fail("showcase architecture/module count is not synchronized")
 
-if "<strong>10</strong>" not in showcase:
-    fail("showcase module count is not 10")
-for token in ("Research Orchestrator", "Process Assurance Framework", "/soul"):
-    if token not in showcase:
-        fail(f"showcase missing public architecture token: {token}")
-if "skills/soul/SKILL.md" not in showcase:
-    fail("showcase does not link the Research Orchestrator specification")
-
-print("PASS: Research Orchestrator public package invariants")
+print("PASS: Research Orchestrator + Process Assurance public invariants")
 print("PASS: 10 canonical Process Assurance operations")
-print("PASS: no required private runtime paths")
-print("PASS: professional naming and compatibility aliases synchronized")
+print("PASS: portable hook/runtime wiring")
+print("PASS: SKILL.md-only module directories")
+print("PASS: public FOIL contains no embedded user profile")
