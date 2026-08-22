@@ -1,0 +1,159 @@
+{
+  "schema": "foil-diverse-paired-suite-manifest/v1",
+  "status": "prospective_unscored",
+  "protocol": "benchmarks/PAIRED_DIVERSE_SUITE_PROTOCOL.md",
+  "model": "GPT-5.6 Sol",
+  "general_profile": {
+    "path": "benchmarks/profiles/GENERAL_BENCHMARK_PROFILE_V1.json",
+    "freeze_commit": "124c06b173ba6eff2fe0d23660a1ced8b7b975c2"
+  },
+  "browsecomp_profile": {
+    "path": "benchmarks/profiles/BROWSECOMP_BENCHMARK_PROFILE.json",
+    "freeze_commit": "013a728bfd6f57a8592fc3fc6e098ea52da357d5"
+  },
+  "conditions": [
+    "BASE",
+    "FOIL",
+    "FOIL_GENERAL_PROFILE",
+    "FOIL_MM"
+  ],
+  "items_per_benchmark": 10,
+  "benchmark_count": 10,
+  "diversity_execution_units": 400,
+  "browsecomp_paired40_execution_units": 200,
+  "browsecomp_reused_execution_units": 40,
+  "total_unique_execution_units": 560,
+  "benchmarks": [
+    {
+      "id": "browsecomp",
+      "name": "BrowseComp",
+      "task_family": "long-tail open-web discovery and multi-constraint entity resolution",
+      "source": "https://openaipublic.blob.core.windows.net/simple-evals/browse_comp_test_set.csv",
+      "source_authority": "OpenAI simple-evals / BrowseComp",
+      "license_or_terms": "upstream benchmark terms; do not republish question text or answers in repository",
+      "regime": "open_web",
+      "budget": {"max_search_queries": 12, "max_source_followups": 12},
+      "scoring": "normalized_exact_audit_plus_optional_official_judge",
+      "selection": "reuse items 0-9 from the fresh paired BrowseComp-40 sample",
+      "adapter_status": "implemented_in_browsecomp_paired40_prepare_score"
+    },
+    {
+      "id": "frames",
+      "name": "FRAMES",
+      "task_family": "multi-hop factual retrieval and reasoning",
+      "source": "https://huggingface.co/datasets/google/frames-benchmark",
+      "source_authority": "Google",
+      "license_or_terms": "Apache-2.0",
+      "regime": "open_web",
+      "budget": {"max_search_queries": 12, "max_source_followups": 12},
+      "scoring": "frozen_semantic_adjudication_with_reference_answer",
+      "selection": "deterministic fresh sample of 10 from the 824-row test split",
+      "adapter_status": "planned"
+    },
+    {
+      "id": "webwalkerqa",
+      "name": "WebWalkerQA",
+      "task_family": "website traversal and multi-hop information seeking",
+      "source": "https://huggingface.co/datasets/callanwu/WebWalkerQA",
+      "source_authority": "WebWalkerQA dataset release",
+      "license_or_terms": "Apache-2.0 according to current dataset card; verify upstream terms at execution freeze",
+      "regime": "open_web",
+      "budget": {"max_search_queries": 12, "max_source_followups": 12},
+      "scoring": "frozen_semantic_adjudication_with_reference_answer",
+      "selection": "deterministic English sample of 10 from the public 680-question release",
+      "adapter_status": "planned"
+    },
+    {
+      "id": "freshqa",
+      "name": "FreshQA",
+      "task_family": "freshness-sensitive facts, temporal change, multi-hop facts, and false premises",
+      "source": "https://github.com/freshllms/freshqa",
+      "source_authority": "FreshQA / FreshLLMs",
+      "license_or_terms": "Apache-2.0 repository; record exact mutable dataset snapshot and hash at execution freeze",
+      "regime": "open_web",
+      "budget": {"max_search_queries": 12, "max_source_followups": 12},
+      "scoring": "FreshEval_style_semantic_correctness",
+      "selection": "deterministic sample of 10 from the latest frozen public snapshot with category coverage where feasible",
+      "adapter_status": "planned"
+    },
+    {
+      "id": "hle",
+      "name": "Humanity's Last Exam",
+      "task_family": "broad expert academic reasoning",
+      "source": "https://huggingface.co/datasets/cais/hle",
+      "source_authority": "Center for AI Safety / Scale AI HLE release",
+      "license_or_terms": "verify exact upstream dataset license/terms at snapshot freeze; do not vendor full dataset",
+      "regime": "closed_book_text",
+      "budget": {"max_search_queries": 0, "max_source_followups": 0},
+      "scoring": "exact_multiple_choice_or_native_exact",
+      "selection": "10 fresh text-only items excluding every HLE item previously exposed in repository pilots",
+      "adapter_status": "planned"
+    },
+    {
+      "id": "gpqa_diamond",
+      "name": "GPQA-Diamond",
+      "task_family": "graduate-level science reasoning",
+      "source": "https://raw.githubusercontent.com/idavidrein/gpqa/main/dataset.zip",
+      "source_authority": "GPQA official repository",
+      "license_or_terms": "CC BY 4.0",
+      "regime": "closed_book_multiple_choice",
+      "budget": {"max_search_queries": 0, "max_source_followups": 0},
+      "scoring": "exact_option_letter",
+      "selection": "10 fresh Diamond rows excluding all source indices sampled by the prior GPQA pilot",
+      "adapter_status": "planned"
+    },
+    {
+      "id": "arc_agi_2",
+      "name": "ARC-AGI-2",
+      "task_family": "abstract transformation, induction, and generalization",
+      "source": "https://github.com/arcprize/ARC-AGI-2",
+      "source_authority": "ARC Prize Foundation",
+      "license_or_terms": "Apache-2.0 repository",
+      "regime": "closed_context_grid",
+      "budget": {"max_search_queries": 0, "max_source_followups": 0},
+      "scoring": "exact_output_grid",
+      "selection": "deterministic sample of 10 public evaluation tasks with one test output and feasible serialized size",
+      "adapter_status": "planned"
+    },
+    {
+      "id": "hotpotqa",
+      "name": "HotpotQA",
+      "task_family": "explainable multi-hop question answering",
+      "source": "https://hotpotqa.github.io/",
+      "source_authority": "HotpotQA authors",
+      "license_or_terms": "CC BY-SA 4.0 for the dataset release",
+      "regime": "closed_context",
+      "budget": {"max_search_queries": 0, "max_source_followups": 0},
+      "scoring": "standard_normalized_answer_em_f1",
+      "selection": "deterministic sample of 10 dev items with supplied context",
+      "adapter_status": "planned"
+    },
+    {
+      "id": "musique",
+      "name": "MuSiQue",
+      "task_family": "compositional multi-hop question answering",
+      "source": "https://github.com/StonyBrookNLP/musique",
+      "source_authority": "MuSiQue authors",
+      "license_or_terms": "CC BY 4.0",
+      "regime": "closed_context",
+      "budget": {"max_search_queries": 0, "max_source_followups": 0},
+      "scoring": "standard_normalized_answer_em_f1",
+      "selection": "deterministic sample of 10 answerable dev items with supplied context",
+      "adapter_status": "planned"
+    },
+    {
+      "id": "drop",
+      "name": "DROP",
+      "task_family": "reading comprehension with discrete and numerical reasoning",
+      "source": "https://s3-us-west-2.amazonaws.com/allennlp/datasets/drop/drop_dataset.zip",
+      "source_authority": "AllenNLP DROP release",
+      "license_or_terms": "verify exact upstream dataset terms at snapshot freeze; do not vendor full dataset",
+      "regime": "closed_context",
+      "budget": {"max_search_queries": 0, "max_source_followups": 0},
+      "scoring": "standard_DROP_normalized_em_f1",
+      "selection": "deterministic sample of 10 dev items with supplied passage",
+      "adapter_status": "planned"
+    }
+  ],
+  "publication_boundary": "This manifest preregisters a prospective mechanism screen. No benchmark result exists until the complete isolated prediction matrix is committed and scored under the frozen protocol."
+}
