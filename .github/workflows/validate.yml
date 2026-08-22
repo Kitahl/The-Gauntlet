@@ -3,7 +3,7 @@ name: Validate public package
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, showcase/foil-gauntlet, public/foil-personalizer]
 
 permissions:
   contents: read
