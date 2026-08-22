@@ -11,7 +11,7 @@
 
 **Demo:** https://kitahl.github.io/The-Gauntlet/  
 **5-minute evaluator path:** [`docs/EVALUATOR_QUICKSTART.md`](docs/EVALUATOR_QUICKSTART.md)  
-**Benchmark pilots:** [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) · **machine-readable receipt:** [`benchmarks/results/2026-08-22-blinded-pilot.json`](benchmarks/results/2026-08-22-blinded-pilot.json)  
+**Benchmark pilots:** [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) · **earlier blinded receipt:** [`benchmarks/results/2026-08-22-blinded-pilot.json`](benchmarks/results/2026-08-22-blinded-pilot.json) · **BrowseComp four-way receipt:** [`benchmark_runs/2026-08-22/browsecomp_four_way_results.json`](benchmark_runs/2026-08-22/browsecomp_four_way_results.json)  
 **Runtime setup:** [`docs/RUNTIME_SETUP.md`](docs/RUNTIME_SETUP.md) · **FOIL onboarding:** [`docs/FOIL_ONBOARDING.md`](docs/FOIL_ONBOARDING.md) · **Deep calibration:** [`docs/FOIL_DEEP_CALIBRATION.md`](docs/FOIL_DEEP_CALIBRATION.md)  
 **Research statement:** [`RESEARCH.md`](RESEARCH.md) · **Reproducibility:** [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) · **Roadmap:** [`ROADMAP.md`](ROADMAP.md)
 
@@ -29,7 +29,7 @@ The toolkit routes work according to the **epistemic obligation**: what must be 
 
 ## Exploratory benchmark pilots
 
-The repository reports positive **and null** results. The newer blinded pilots compare GPT-5.6 Sol `BASE` with the same underlying model using a frozen **Frontier-Exam FOIL + Mastermind** pre-commit procedure (`FOIL_MM`). Because both conditions were executed in one conversation, items are deterministic **disjoint subsets**; these are exploratory estimates, not official submissions or isolated same-item causal A/B tests.
+The repository reports positive, null, and mixed/negative results. Earlier blinded pilots compare GPT-5.6 Sol `BASE` with the same underlying model using a frozen **Frontier-Exam FOIL + Mastermind** pre-commit procedure (`FOIL_MM`). A newer BrowseComp ablation separates `BASE`, generic `FOIL`, `FOIL_PROFILE`, and `FOIL_MM`. Because the conditions were executed in one conversation, items are deterministic **disjoint subsets**; these are exploratory estimates, not official submissions or isolated same-item causal A/B tests.
 
 | Evaluation | BASE | Assisted condition | Delta | Status |
 |---|---:|---:|---:|---|
@@ -39,7 +39,18 @@ The repository reports positive **and null** results. The newer blinded pilots c
 | SimpleBench public subset | 3/5 · 60% | FOIL 5/5 · 100% | +40 pp | legacy manual pilot |
 | Current-evidence retrieval holdout | 0/5 · 0% | FOIL 5/5 · 100% | +100 pp | custom mechanism holdout; not a standard benchmark |
 
-**Do not combine these rows into a single headline accuracy.** Samples are small and the evaluations measure different constructs. The GPQA null result is retained because negative results are part of the research record. Several math/error-localization pilots were also discarded when BASE saturated at or near 100%, rather than being used as non-discriminating evidence.
+**BrowseComp four-way exploratory ablation:**
+
+| Condition | Correct / n | Exact-normalized accuracy |
+|---|---:|---:|
+| **BASE** | 1/2 | **50%** |
+| **FOIL** | 2/2 | **100%** |
+| **FOIL_PROFILE** | 1/2 | **50%** |
+| **FOIL_MM** | 0/2 | **0%** |
+
+The BrowseComp result is **not** evidence that generic FOIL is generally superior or that Mastermind is generally harmful: there are only two different scored items per condition, several complete pre-commit blocks were retired for contamination or execution-integrity reasons, and the exploratory scorer uses normalized exact string match rather than the official BrowseComp LLM judge.
+
+**Do not combine these rows into a single headline accuracy.** Samples are small and the evaluations measure different constructs. Null, negative, and mixed outcomes are retained because the research question is whether mechanisms help, not whether every benchmark can be made to show an improvement. Several math/error-localization pilots were also discarded when BASE saturated at or near 100%, rather than being used as non-discriminating evidence.
 
 Methodology, exclusions, sources, reproduction commands, and validity boundaries: **[`docs/BENCHMARKS.md`](docs/BENCHMARKS.md)**.
 
@@ -162,7 +173,7 @@ The personalizer is an **experimental onboarding/calibration system**, not an IQ
 | FOIL structured-calibration falsification history is preserved | audit record | `validation/FOIL_LAYER2_MASTERMIND_AUDIT.md` |
 | FOIL research-integration structure/source/regression checks passed the recorded validator | **94/94 PASS** | `validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json` |
 | FOIL frozen behavioral-contract cases are represented in the specification | **18/18 PASS-SPEC** | `validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json` |
-| HLE/ARC/GPQA pilot score receipts exist under blinded question-generation/scoring harnesses | exploratory benchmark evidence | `docs/BENCHMARKS.md`, `benchmarks/results/2026-08-22-blinded-pilot.json` |
+| HLE/ARC/GPQA/BrowseComp pilot score receipts exist under blinded question-generation/scoring harnesses | exploratory benchmark evidence | `docs/BENCHMARKS.md`, `benchmarks/results/2026-08-22-blinded-pilot.json`, `benchmark_runs/2026-08-22/browsecomp_four_way_results.json` |
 | Public claims have a machine-readable provenance map | implemented | `docs/content-provenance.json` |
 | FOIL improves independent human reasoning in deployment | **not established** | planned in `ROADMAP.md` |
 
