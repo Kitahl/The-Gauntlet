@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kitahl.github.io/The-Gauntlet/sitemap.xml
