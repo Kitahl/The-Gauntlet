@@ -1,0 +1,49 @@
+name: Reproduction report
+description: Report an independent reproduction, failed reproduction, or result divergence.
+title: "[Reproduction]: "
+labels: ["reproduction"]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Repository version / commit
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python/tool versions, hardware or model/runtime details when material.
+    validations:
+      required: true
+  - type: textarea
+    id: procedure
+    attributes:
+      label: Exact reproduction procedure
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Observed result
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected/source result
+      description: Link or repository path to the result being reproduced.
+    validations:
+      required: true
+  - type: dropdown
+    id: verdict
+    attributes:
+      label: Outcome
+      options: ["Reproduced", "Partially reproduced", "Did not reproduce", "Infrastructure prevented measurement"]
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Claim impact / interpretation
+      description: Which stated claim, if any, changes because of this result?
