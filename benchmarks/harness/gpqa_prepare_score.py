@@ -15,6 +15,7 @@ OUT = ROOT / "benchmark_runs" / "2026-08-22"
 OUT.mkdir(parents=True, exist_ok=True)
 
 GPQA_URL = "https://raw.githubusercontent.com/idavidrein/gpqa/main/dataset.zip"
+GPQA_ZIP_PASSWORD = b"deserted-untie-orchid"
 SEED = 20260825
 TARGET = 24
 LETTERS = "ABCD"
@@ -35,7 +36,7 @@ def load_diamond() -> list[dict[str, str]]:
     names = [name for name in archive.namelist() if name.lower().endswith(".csv") and "diamond" in name.lower()]
     if not names:
         raise RuntimeError(f"GPQA archive contains no Diamond CSV: {archive.namelist()[:50]}")
-    raw = archive.read(sorted(names)[0]).decode("utf-8-sig")
+    raw = archive.read(sorted(names)[0], pwd=GPQA_ZIP_PASSWORD).decode("utf-8-sig")
     rows = list(csv.DictReader(io.StringIO(raw)))
     required = {"Question", "Correct Answer", "Incorrect Answer 1", "Incorrect Answer 2", "Incorrect Answer 3"}
     if not rows or not required.issubset(rows[0]):
