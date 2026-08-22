@@ -6,6 +6,35 @@ The project follows semantic versioning for public releases.
 
 ## [Unreleased]
 
+### Planned
+- Prospective behavioral evaluation of FOIL against direct-assistance and static-scaffolding baselines.
+- Layer 1 vs Layer 1 + Layer 2 personalization ablation.
+- Empirical calibration of profile-maturity thresholds and item difficulty.
+- Reproducible benchmark harnesses and independent reproduction reports.
+- Archival DOI integration after the first evidence-bearing stable release.
+
+## [0.3.0] - 2026-08-21
+
+### Added
+- Second-stage FOIL deep-calibration engine (`tools/foil_calibration.py`).
+- Profile-dependent transfer, discriminator, adversarial, real-work, open-production, and verifier-selection probes.
+- Cross-domain facet evidence for formalization, systems decomposition, error detection, evidence discipline, causal/quantitative reasoning, execution, design, creativity, explanation, planning, calibration, transfer, tool selection, and uncertainty management.
+- Engineering profile-maturity states: `NOT_STARTED`, `CALIBRATING`, `BROAD_PROFILE`, and `DEEP_PROFILE_READY`.
+- Extended automatic domain-relevance registry covering additional professional, scientific, engineering, business, creative, and public-sector work families.
+- Deep-calibration context injection into the FOIL hook.
+- `docs/FOIL_DEEP_CALIBRATION.md` and expanded research basis for cold-start, multidimensional assessment, and transfer.
+- Regression tests for deep-profile gating, duplicate-probe protection, assistance/verification boundaries, transfer confirmation, and extended domain discovery.
+
+### Changed
+- FOIL now uses an explicit two-layer personalization model: broad cold start followed by evidence-driven deep calibration and continued usage-time updating.
+- Apparent strengths are confirmed with changed-representation/transfer evidence before FOIL relies on them strongly.
+- Open-ended deep probes require rubric/artifact/proof/execution or independent review before being marked verified.
+
+### Evidence boundary
+This release establishes the mechanics and explicit evidence gates for second-stage calibration. It does not establish psychometric validity, calibrated ability estimates, or causal improvement in downstream learning/research performance.
+
+## [0.2.0] - 2026-08-21
+
 ### Added
 - Portable Claude Code Process Assurance hooks in `.claude/settings.json`.
 - Config-driven assurance runtime under `tools/` with state outside `.git/`.
@@ -22,10 +51,8 @@ The project follows semantic versioning for public releases.
 - Evidence Review Panel no longer bundles named-persona/private-project roster material.
 - FOIL no longer embeds any specific user's assessment priors or strengths.
 
-### Planned
-- Prospective behavioral evaluation of FOIL against direct-assistance and static-scaffolding baselines.
-- Reproducible benchmark harnesses and ablation results.
-- Archival DOI integration after the first evidence-bearing stable release.
+### Evidence boundary
+This release establishes portable runtime/profile mechanics and conservative cold-start personalization rules. It does not establish that profile-driven FOIL improves future outcomes.
 
 ## [0.1.0] - 2026-08-21
 

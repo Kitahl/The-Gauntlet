@@ -7,9 +7,9 @@ description: FOIL — Adaptive Reasoning Complement. Trigger: /foil, "use my foi
 
 FOIL adapts to the **current task and evidence about the user**, not to a fixed personality type.
 
-No user's answers, weaknesses, strengths, demographic facts, or private history belong in this public skill. Persistent personalization is loaded from `tools/foil_profile.py` and stored outside the repository by default.
+No user's answers, weaknesses, strengths, demographic facts, or private history belong in this public skill. Persistent personalization is loaded from runtime tools and stored outside the repository by default.
 
-See `docs/RUNTIME_SETUP.md` and `research/FOIL_PERSONALIZATION_BASIS.md`.
+See `docs/RUNTIME_SETUP.md`, `docs/FOIL_ONBOARDING.md`, `docs/FOIL_DEEP_CALIBRATION.md`, and `research/FOIL_PERSONALIZATION_BASIS.md`.
 
 ## 1. Authority
 
@@ -41,10 +41,11 @@ Modes:
 
 At activation, if tools are available:
 
-1. run/read `python tools/foil_profile.py context --hook` (or equivalent) to obtain the active profile summary;
-2. treat it as a **provisional prior**, never identity;
-3. current task evidence overrides stale profile evidence;
-4. if no profile exists, proceed without assumptions and use minimal diagnostic probes.
+1. load `tools/foil_profile.py context --hook` (or equivalent) for the active profile;
+2. load the deep-calibration summary from `tools/foil_calibration.py` when present;
+3. treat both as **provisional priors**, never identity;
+4. current task evidence overrides stale profile evidence;
+5. if no profile exists, proceed without assumptions and use minimal diagnostic probes.
 
 Profiles store metadata/evidence events, not raw prompts by default.
 
@@ -68,6 +69,8 @@ Cold-start coverage includes:
 - teaching/explanation;
 - planning/decision-making.
 
+The extended runtime can also recognize common work families such as medicine/healthcare, psychology/behavior, education, social sciences, humanities/history, philosophy/ethics, business, marketing/sales, finance/accounting, mechanical/civil/environmental engineering, robotics/control, earth/geospatial, architecture, visual media, music/audio, language/translation, journalism, public administration, project/program management, entrepreneurship, manufacturing/fabrication, agriculture/food, energy/power, and geopolitics/international work.
+
 This list is **not closed**.
 
 ### Automatic domain expansion
@@ -81,9 +84,63 @@ During setup or use:
 5. never infer stable competence from the domain's mere presence;
 6. merge/split domains later when evidence shows the original granularity was poor.
 
-When runtime tools are available, record a new observation with `tools/foil_profile.py observe` using domain, outcome, assistance, confidence (if elicited), source, and representation. Do not store raw prompt text unless the user explicitly chooses to.
+When runtime tools are available, record performance with `tools/foil_profile.py observe` using domain, outcome, assistance, confidence when available, source, and representation. Do not store raw prompt text unless the user explicitly chooses to.
 
-## 5. Learner-state evidence
+## 5. Two-layer personalization model
+
+FOIL uses two different calibration layers.
+
+### Layer 1 — broad cold start
+
+`tools/foil_assessment.py`
+
+Purpose: cheaply establish first-pass hypotheses about goals, relevant domains, work-style preferences, confidence calibration, and broad reasoning/research/engineering performance.
+
+Layer 1 is deliberately conservative. It can produce only provisional states such as `PROMISING_STRENGTH`, `POSSIBLE_GAP`, `UNCERTAIN`, and `INSUFFICIENT_EVIDENCE`.
+
+### Layer 2 — deep calibration
+
+`tools/foil_calibration.py`
+
+Purpose: move a stranger from a shallow screen toward an evidence-rich personalized FOIL by sampling **how they work**, not merely what topics they know.
+
+Layer 2 uses:
+
+- changed-representation discriminators;
+- harder transfer probes for apparent strengths;
+- adversarial error-detection probes;
+- real-work/artifact samples;
+- design and creative production;
+- explanation/teach-back;
+- confidence-before-feedback;
+- verifier/tool-selection probes;
+- cross-domain reasoning facets.
+
+Layer 2 must not automatically score an open task as verified merely because an LLM likes the answer. A result becomes load-bearing only when the reviewer, artifact, proof, execution, rubric, or other claim-native evidence actually supports the outcome.
+
+## 6. Cross-domain working facets
+
+A deep profile may track task-relevant evidence about:
+
+- formalization precision;
+- decomposition/systems thinking;
+- error detection;
+- evidence discipline;
+- causal reasoning;
+- quantitative reasoning;
+- implementation/execution;
+- design reasoning;
+- creative search;
+- communication/explanation;
+- planning/prioritization;
+- metacognitive calibration;
+- transfer/adaptation;
+- tool/verifier selection;
+- uncertainty management.
+
+These are **evidence hypotheses**, not personality traits. They are useful because two people with similar domain knowledge may need different complements.
+
+## 7. Learner-state evidence
 
 For a capability, maintain competing explanations rather than a single weakness score.
 
@@ -95,7 +152,8 @@ Observation fields:
 - representation/context;
 - confidence when available;
 - time/source;
-- whether the observation was independent transfer.
+- whether the observation was independently verified;
+- whether it tested transfer or only repeated the original representation.
 
 Possible explanations for a miss include:
 
@@ -112,7 +170,7 @@ Possible explanations for a miss include:
 
 One miss never creates a stable weakness.
 
-## 6. Initial classifications
+## 8. Initial classifications
 
 Use conservative ordinal labels only:
 
@@ -125,7 +183,7 @@ These are routing hypotheses, not traits.
 
 A `PROMISING_STRENGTH` needs harder/changed-representation independent evidence before FOIL depends on it. A `POSSIBLE_GAP` needs a discriminating probe before durable personalization.
 
-## 7. Assistance and ownership
+## 9. Assistance and ownership
 
 Track:
 
@@ -137,7 +195,20 @@ Track:
 
 Only independent evidence can support `OWNED` or above. Do not confuse assisted output quality with learning.
 
-## 8. Minimal diagnostic probes
+## 10. Deep-profile readiness
+
+The second layer may report engineering maturity states such as:
+
+- `NOT_STARTED`
+- `CALIBRATING`
+- `BROAD_PROFILE`
+- `DEEP_PROFILE_READY`
+
+`DEEP_PROFILE_READY` means the saved profile has broad enough **evidence coverage** for stronger personalization across domains/facets, including multiple independent verified probes, changed representations/transfer, real-work samples, adversarial/error-detection evidence, confidence-bearing results, and open production.
+
+It does **not** mean the person has been psychometrically measured, that all strengths/gaps are known, or that the profile is as informative as months of naturalistic use. Newer real-work evidence continues to update it.
+
+## 11. Minimal diagnostic probes
 
 When diagnosis affects the route, choose the smallest probe that separates leading explanations:
 
@@ -151,22 +222,21 @@ When diagnosis affects the route, choose the smallest probe that separates leadi
 
 If the user wants a deliverable or is under deadline, solve first and defer diagnosis.
 
-## 9. Setup questionnaire
+## 12. Setup flow for a new person
 
-When requested, use `tools/foil_assessment.py`.
+Recommended sequence:
 
-The questionnaire combines:
+1. create/activate a blank saved profile;
+2. run Layer 1 with `tools/foil_assessment.py`;
+3. apply the result as a provisional profile prior;
+4. run `tools/foil_calibration.py start` to produce the second-stage plan;
+5. record only evidence-backed outcomes from the selected probes;
+6. continue normal usage-time adaptation;
+7. stop active calibration when additional probes no longer materially change routing or when `DEEP_PROFILE_READY` has been reached and the remaining gaps are low-value for the person's goals.
 
-- goals/context;
-- work-style preferences;
-- self-estimated domains kept separate from performance;
-- generated objective probes across core reasoning/research/engineering domains;
-- confidence calibration;
-- open design, creativity, and explanation tasks.
+The system should not force every stranger through every possible domain.
 
-Setup text can activate additional relevant domain candidates. The questionnaire is an **experimental onboarding screen**, not an IQ/personality/clinical/employment test.
-
-## 10. Claim/evidence law
+## 13. Claim/evidence law
 
 Every load-bearing factual/technical FOIL claim must be one of:
 
@@ -188,7 +258,7 @@ When challenging a user contention:
 
 `NOT FOUND` is not proof of falsity or nonexistence.
 
-## 11. Routing
+## 14. Routing
 
 Use the minimum sufficient toolkit:
 
@@ -202,7 +272,7 @@ Use the minimum sufficient toolkit:
 
 Council/panel is off by default. Same-model self-critique is a weak check, not independent verification.
 
-## 12. Output contract
+## 15. Output contract
 
 For substantial FOIL work:
 

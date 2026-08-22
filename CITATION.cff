@@ -7,7 +7,7 @@ authors:
 repository-code: "https://github.com/Kitahl/The-Gauntlet"
 url: "https://kitahl.github.io/The-Gauntlet/"
 license: MIT
-version: 0.2.0
+version: 0.3.0
 date-released: 2026-08-21
 keywords:
   - research software
@@ -18,7 +18,10 @@ keywords:
   - evaluation
   - evidence provenance
   - adaptive assistance
+  - personalized calibration
+  - transfer assessment
 abstract: >-
   A modular research-software toolkit for evidence-governed AI-assisted reasoning,
   prior-art discovery, formal reasoning, engineering verification, evaluation,
-  process assurance, and adaptive complementary assistance with saved user profiles.
+  process assurance, and adaptive complementary assistance with saved user profiles
+  and multi-stage calibration.
