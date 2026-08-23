@@ -27,7 +27,6 @@ from experiments.foil_vnext6.runtime_policy import (
     StrategyTaskContext,
 )
 
-
 POLICY = ComposableRuntimePolicy()
 BUDGET = StrategyBudget()
 TASK_ID = "test-task"
