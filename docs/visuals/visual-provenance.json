@@ -1,12 +1,25 @@
 {
   "schema": "egrt/visual-provenance-1",
-  "showcase_revision": 14,
-  "research_software_version": "0.5.0",
+  "showcase_revision": 15,
+  "research_software_version": "0.5.1",
   "visuals": [
+    {
+      "id": "gauntlet-hero",
+      "file": "docs/visuals/gauntlet-hero.svg",
+      "purpose": "Stage the Gauntlet as a research control interface: task nodes route selectively toward five specialist Gems and converge on a typed receipt core.",
+      "sources": [
+        "docs/ARCHITECTURE.md",
+        "skills/soul/SKILL.md",
+        "skills/foil/SKILL.md",
+        "skills/infinity-gauntlet/SKILL.md"
+      ],
+      "design_reference_boundary": "Original Gauntlet artwork. It transfers focal-object staging, constellation/node formation, reveal/beam grammar, and progressive power legibility observed in user-provided cinematic and card-interface references; it copies no external imagery and imports no reference runtime.",
+      "boundary": "Conceptual control-interface illustration; it is not an execution trace, capability measurement, or behavioral-efficacy result."
+    },
     {
       "id": "gauntlet-system-map",
       "file": "docs/visuals/gauntlet-system-map.svg",
-      "purpose": "Explain the public control plane and bounded research-module responsibilities in the R14 editorial visual system.",
+      "purpose": "Demonstrate selective routing on one example research goal: obligation nodes activate Space, Reality, Power and Time while Mind remains explicitly on standby because no formal proof is load-bearing.",
       "sources": [
         "docs/ARCHITECTURE.md",
         "skills/soul/SKILL.md",
@@ -20,12 +33,13 @@
         "skills/meditate/SKILL.md",
         "skills/foil/SKILL.md"
       ],
-      "boundary": "Conceptual architecture rendering; it is not behavioral evidence or an execution trace."
+      "boundary": "Illustrative routing example derived from module contracts; it does not claim this exact route is chosen for every similar prompt and it is not behavioral evidence."
     },
     {
       "id": "foil-diagnostic-loop",
+      "public_name": "Mirror",
       "file": "docs/visuals/foil-diagnostic-loop.svg",
-      "purpose": "Expose FOIL's competing-explanation, complement, verification, transfer, and evidence-update logic in the R14 editorial visual system.",
+      "purpose": "Expose Mirror's competing-explanation, complement, verification, transfer, and evidence-update logic while retaining the legacy FOIL technical path.",
       "sources": [
         "skills/foil/SKILL.md",
         "research/FOIL_RESEARCH_BASIS.md",
