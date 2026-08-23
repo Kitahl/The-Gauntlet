@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://the-gauntlet.invalid/schemas/foil-vnext-policy-trace-v1.json",
+  "title": "FOIL vNext experimental public policy trace",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_regime",
+    "load_bearing_uncertainty_count",
+    "profile_influence",
+    "primary_effort_mode",
+    "stop_reason"
+  ],
+  "properties": {
+    "task_regime": {
+      "enum": [
+        "external_retrieval",
+        "freshness_sensitive_retrieval",
+        "closed_book_technical_reasoning",
+        "abstract_transformation",
+        "closed_context_multi_hop",
+        "mixed_tool_task"
+      ]
+    },
+    "load_bearing_uncertainty_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "profile_influence": {
+      "enum": ["none", "low", "moderate", "high"]
+    },
+    "primary_effort_mode": {
+      "enum": ["discovery", "reasoning", "verification", "mixed"]
+    },
+    "stop_reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    }
+  }
+}
