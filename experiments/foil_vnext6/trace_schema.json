@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://the-gauntlet.invalid/schemas/foil-vnext6-policy-trace-v1.json",
+  "title": "FOIL vNext6 composable public policy trace",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "controller_version",
+    "task_regime",
+    "strategy_operator",
+    "strategy_lineage",
+    "reason_code",
+    "minimum_evidence_authority",
+    "required_verifier",
+    "may_discharge_load_bearing_uncertainty",
+    "load_bearing_uncertainty_count",
+    "profile_influence",
+    "deliberation_units_remaining",
+    "tool_calls_remaining",
+    "branch_slots_remaining",
+    "revision_slots_remaining",
+    "independent_reviews_remaining",
+    "mastermind_loops_remaining",
+    "stop_reason"
+  ],
+  "properties": {
+    "controller_version": {
+      "const": "FOIL_vNEXT6_COMPOSABLE_POLICY_V1"
+    },
+    "task_regime": {
+      "enum": [
+        "external_retrieval",
+        "freshness_sensitive_retrieval",
+        "closed_book_technical_reasoning",
+        "abstract_transformation",
+        "closed_context_multi_hop",
+        "mixed_tool_task"
+      ]
+    },
+    "strategy_operator": {
+      "enum": [
+        "stop",
+        "direct",
+        "decompose",
+        "react",
+        "exact_execution",
+        "claim_native_verify",
+        "bounded_challenger_search",
+        "evidence_triggered_reflection",
+        "independent_review",
+        "mastermind_causal_audit",
+        "blocked"
+      ]
+    },
+    "strategy_lineage": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "reason_code": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "minimum_evidence_authority": {
+      "enum": [
+        "none",
+        "internal_heuristic",
+        "external_observation",
+        "claim_native",
+        "independent_review"
+      ]
+    },
+    "required_verifier": {
+      "oneOf": [
+        {
+          "enum": [
+            "source_evidence",
+            "current_source",
+            "exact_calculation",
+            "supplied_example_consistency",
+            "execution_test",
+            "contradiction_counterexample",
+            "output_contract"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "may_discharge_load_bearing_uncertainty": {
+      "type": "boolean"
+    },
+    "load_bearing_uncertainty_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "profile_influence": {
+      "enum": ["none", "low", "moderate", "high"]
+    },
+    "deliberation_units_remaining": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "tool_calls_remaining": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "branch_slots_remaining": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "revision_slots_remaining": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "independent_reviews_remaining": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "mastermind_loops_remaining": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3
+    },
+    "stop_reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    }
+  }
+}
