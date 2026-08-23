@@ -31,6 +31,15 @@ jobs:
       - name: Prepare blinded four-way BrowseComp questions; score committed predictions when present
         run: python benchmarks/harness/browsecomp_four_way_prepare_score.py
 
+      # Offline. --check-only never downloads a dataset: it revalidates the
+      # preregistration, the sealed condition map hash, and (once prepared) every
+      # manifest prompt digest against the committed question-only item file.
+      - name: Validate the four-config preregistration and manifest hashes (offline)
+        run: python benchmarks/harness/claude_four_config_runner.py prepare --benchmark gpqa --check-only
+
+      - name: Paired-statistics checks
+        run: python -m unittest tests.test_paired_stats -v
+
       - name: Upload blinded HLE and ARC questions
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:

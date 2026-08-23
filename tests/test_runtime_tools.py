@@ -109,7 +109,28 @@ class RuntimeToolTests(unittest.TestCase):
                     profile["domains"]["new_domain_name"]["classification"],
                     "INSUFFICIENT_EVIDENCE",
                 )
-                fp.observe(profile, "new_domain_name", "incorrect", "none")
+                # Unverified usage outcomes never become a competence verdict,
+                # however many of them accumulate. This previously reached
+                # POSSIBLE_GAP after two unchecked misses.
+                for _ in range(9):
+                    fp.observe(profile, "new_domain_name", "incorrect", "none")
+                self.assertEqual(
+                    profile["domains"]["new_domain_name"]["classification"],
+                    "INSUFFICIENT_EVIDENCE",
+                )
+                self.assertEqual(
+                    profile["domains"]["new_domain_name"]["independent_incorrect"], 0
+                )
+                # Verified, independent, user-executed misses do decide it.
+                for _ in range(4):
+                    fp.observe(
+                        profile,
+                        "new_domain_name",
+                        "incorrect",
+                        "none",
+                        verified=True,
+                        verifier="rubric",
+                    )
                 self.assertEqual(
                     profile["domains"]["new_domain_name"]["classification"],
                     "POSSIBLE_GAP",
@@ -147,18 +168,20 @@ class RuntimeToolTests(unittest.TestCase):
             all(item["choice"] is None for item in blank["objective"].values())
         )
 
-    def test_assessment_perfect_is_promising_not_owned(self) -> None:
+    def test_assessment_perfect_is_screen_signal_not_a_verdict(self) -> None:
+        """Previously asserted PROMISING_STRENGTH for a perfect screen."""
         session = fa.build(seed=5)
         responses = session["response_schema"]
         for item in session["objective_items"]:
             responses["objective"][item["id"]]["choice"] = fa.answer(item)
         report = fa.score(session, responses)
-        self.assertTrue(
-            all(
-                result["classification"] == "PROMISING_STRENGTH"
-                for result in report["domain_evidence"].values()
-            )
-        )
+        screened = [
+            row for row in report["domain_evidence"].values() if row["screened"]
+        ]
+        self.assertTrue(screened)
+        for row in screened:
+            self.assertEqual(row["classification"], "INSUFFICIENT_EVIDENCE")
+            self.assertEqual(row["screen_signal"], "ALL_CORRECT")
         self.assertIn("cannot certify OWNED", report["ownership_ceiling"])
 
     def test_settings_use_project_dir_and_current_foil_hook(self) -> None:

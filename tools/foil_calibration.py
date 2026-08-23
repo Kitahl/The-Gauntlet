@@ -13,6 +13,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+import foil_evidence
 import foil_profile
 
 SCHEMA = "egrt.foil-deep-calibration.v1"
@@ -167,17 +168,21 @@ def _facet_row(deep: dict[str, Any], facet: str) -> dict[str, Any]:
 
 
 def _classification(row: dict[str, Any]) -> str:
+    """Facet classification through the shared estimator.
+
+    Deep-calibration probes are independently verified real-work observations,
+    so they enter as REAL_WORK. `mixed` outcomes are skipped rather than counted:
+    a partially correct result is not a Bernoulli draw, and forcing it into one
+    would decide the direction of the evidence by fiat.
+    """
     passed = int(row.get("independent_verified_pass", 0))
     failed = int(row.get("independent_verified_fail", 0))
-    mixed = int(row.get("independent_verified_mixed", 0))
-    total = passed + failed + mixed
-    if total < 2:
-        return "INSUFFICIENT_EVIDENCE"
-    if passed >= 2 and failed == 0:
-        return "PROMISING_STRENGTH"
-    if failed >= 2 and passed == 0:
-        return "POSSIBLE_GAP"
-    return "UNCERTAIN"
+    tier = foil_evidence.EvidenceTier.REAL_WORK
+    observations = (
+        [foil_evidence.Observation(correct=True, tier=tier)] * passed
+        + [foil_evidence.Observation(correct=False, tier=tier)] * failed
+    )
+    return foil_evidence.classify(observations).value
 
 
 def _relevant_domains(profile: dict[str, Any], limit: int = 6) -> list[tuple[str, dict[str, Any]]]:
@@ -351,6 +356,7 @@ def record(
     confidence: float | None = None,
     representation: str | None = None,
     source: str = "deep_calibration",
+    verifier: str | None = None,
     note: str | None = None,
 ) -> None:
     if facet not in FACETS:
@@ -375,6 +381,7 @@ def record(
         "confidence": confidence,
         "representation": representation or kind,
         "source": source,
+        "verifier": verifier,
     }
     if note:
         event["note"] = note[:400]
@@ -406,6 +413,8 @@ def record(
             dom,
             "correct" if outcome == "pass" else "incorrect",
             assistance,
+            verified=True,
+            verifier=verifier or f"{source}_review",
             confidence=confidence,
             source=source,
             representation=representation or kind,

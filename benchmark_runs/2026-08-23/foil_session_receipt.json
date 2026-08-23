@@ -1,0 +1,415 @@
+{
+  "schema": "foil-session-bench/v1",
+  "generated_at": "2026-08-23T11:19:10.790274+00:00",
+  "policy_source": "foil_policy.RuntimePolicyV2",
+  "python": "3.12.10",
+  "gold_opened": false,
+  "searches_issued": 0,
+  "child_sessions_spawned": 0,
+  "model_completions_issued": 0,
+  "sections": {
+    "invariants": {
+      "decide_calls": 1161440,
+      "task_states": 224,
+      "profile_states": 5185,
+      "domain_sizes": {
+        "direction": 3,
+        "complement_kind": 6,
+        "relevance": 4,
+        "support": 3,
+        "independent_observations": 4,
+        "transfer_confirmations": 3,
+        "stale": 2
+      },
+      "exhaustive": true,
+      "policy_errors": [],
+      "invariants": {
+        "I01": {
+          "statement": "relevance alone never becomes competence",
+          "checked": 1161440,
+          "violations": 0,
+          "counterexamples": [],
+          "verdict": "PASS"
+        },
+        "I02": {
+          "statement": "stale profile evidence never routes",
+          "checked": 1161440,
+          "violations": 0,
+          "counterexamples": [],
+          "verdict": "PASS"
+        },
+        "I03": {
+          "statement": "weak profile evidence never routes",
+          "checked": 1161440,
+          "violations": 0,
+          "counterexamples": [],
+          "verdict": "PASS"
+        },
+        "I04": {
+          "statement": "STRENGTH evidence never triggers extra assistance",
+          "checked": 1161440,
+          "violations": 0,
+          "counterexamples": [],
+          "verdict": "PASS"
+        },
+        "I05": {
+          "statement": "UNCERTAIN evidence never triggers extra assistance",
+          "checked": 1161440,
+          "violations": 0,
+          "counterexamples": [],
+          "verdict": "PASS"
+        },
+        "I06": {
+          "statement": "only supported GAP evidence can route",
+          "checked": 1161440,
+          "violations": 0,
+          "counterexamples": [],
+          "verdict": "PASS"
+        },
+        "I07": {
+          "statement": "transfer confirmation is required to route",
+          "checked": 1161440,
+          "violations": 0,
+          "counterexamples": [],
+          "verdict": "PASS"
+        },
+        "I08": {
+          "statement": "routed complement matches a current task requirement",
+          "checked": 1161440,
+          "violations": 0,
+          "counterexamples": [],
+          "verdict": "PASS"
+        },
+        "I09": {
+          "statement": "wrong or irrelevant profile gaps are rejected",
+          "checked": 1161440,
+          "violations": 0,
+          "counterexamples": [],
+          "verdict": "PASS"
+        },
+        "I10": {
+          "statement": "at most one targeted complement per decision",
+          "checked": 1161440,
+          "violations": 0,
+          "counterexamples": [],
+          "verdict": "PASS"
+        },
+        "I11": {
+          "statement": "profile routing never expands the tool budget",
+          "checked": 1161440,
+          "violations": 0,
+          "counterexamples": [],
+          "verdict": "PASS"
+        },
+        "I12": {
+          "statement": "profile routing never removes a mandatory verifier",
+          "checked": 1161440,
+          "violations": 0,
+          "counterexamples": [],
+          "verdict": "PASS"
+        },
+        "I13": {
+          "statement": "a completed task receives no gratuitous extra review",
+          "checked": 1161440,
+          "violations": 0,
+          "counterexamples": [],
+          "verdict": "PASS"
+        },
+        "I14": {
+          "statement": "no profile means no profile influence",
+          "checked": 1161440,
+          "violations": 0,
+          "counterexamples": [],
+          "verdict": "PASS"
+        }
+      },
+      "routed_states": 336,
+      "positive_control": {
+        "statement": "the candidate routes in at least one enumerated state",
+        "verdict": "PASS",
+        "message": null
+      },
+      "verdict": "PASS",
+      "message": null,
+      "boundary": "Exhaustive over the declared domain: for this finite input space the result is a proof, not a sample. It says nothing about answer quality."
+    },
+    "selfcheck": {
+      "returncode": 0,
+      "verdict": "PASS",
+      "summary": [
+        "Ran 248 tests in 51.324s",
+        "",
+        "OK (expected failures=2)"
+      ]
+    },
+    "power": {
+      "alpha": 0.05,
+      "target_power": 0.8,
+      "resolvability": {
+        "5": {
+          "max_discordant": 5,
+          "best_two_sided_p": 0.0625,
+          "alpha_reachable": false
+        },
+        "6": {
+          "max_discordant": 6,
+          "best_two_sided_p": 0.03125,
+          "alpha_reachable": true
+        },
+        "10": {
+          "max_discordant": 10,
+          "best_two_sided_p": 0.00195,
+          "alpha_reachable": true
+        },
+        "25": {
+          "max_discordant": 25,
+          "best_two_sided_p": 0.0,
+          "alpha_reachable": true
+        }
+      },
+      "grid": [
+        {
+          "p_discordant": 0.2,
+          "p_favouring": 0.7,
+          "replicates": 1,
+          "power": {
+            "5": 0.0,
+            "25": 0.041,
+            "50": 0.147,
+            "75": 0.252,
+            "100": 0.354,
+            "150": 0.524,
+            "200": 0.673,
+            "300": 0.858
+          },
+          "items_for_target_power": 300
+        },
+        {
+          "p_discordant": 0.2,
+          "p_favouring": 0.7,
+          "replicates": 3,
+          "power": {
+            "5": 0.0,
+            "25": 0.081,
+            "50": 0.321,
+            "75": 0.52,
+            "100": 0.677,
+            "150": 0.857,
+            "200": 0.949,
+            "300": 0.995
+          },
+          "items_for_target_power": 150
+        },
+        {
+          "p_discordant": 0.3,
+          "p_favouring": 0.75,
+          "replicates": 1,
+          "power": {
+            "5": 0.0,
+            "25": 0.156,
+            "50": 0.403,
+            "75": 0.598,
+            "100": 0.745,
+            "150": 0.914,
+            "200": 0.975,
+            "300": 0.998
+          },
+          "items_for_target_power": 150
+        },
+        {
+          "p_discordant": 0.3,
+          "p_favouring": 0.75,
+          "replicates": 3,
+          "power": {
+            "5": 0.0,
+            "25": 0.331,
+            "50": 0.734,
+            "75": 0.907,
+            "100": 0.972,
+            "150": 0.998,
+            "200": 1.0,
+            "300": 1.0
+          },
+          "items_for_target_power": 75
+        },
+        {
+          "p_discordant": 0.3,
+          "p_favouring": 0.85,
+          "replicates": 1,
+          "power": {
+            "5": 0.0,
+            "25": 0.346,
+            "50": 0.752,
+            "75": 0.918,
+            "100": 0.977,
+            "150": 0.999,
+            "200": 1.0,
+            "300": 1.0
+          },
+          "items_for_target_power": 75
+        },
+        {
+          "p_discordant": 0.3,
+          "p_favouring": 0.85,
+          "replicates": 3,
+          "power": {
+            "5": 0.0,
+            "25": 0.603,
+            "50": 0.963,
+            "75": 0.998,
+            "100": 1.0,
+            "150": 1.0,
+            "200": 1.0,
+            "300": 1.0
+          },
+          "items_for_target_power": 50
+        }
+      ],
+      "items_for_target_power": {
+        "p_disc=0.2,p_fav=0.7,reps=1": 300,
+        "p_disc=0.2,p_fav=0.7,reps=3": 150,
+        "p_disc=0.3,p_fav=0.75,reps=1": 150,
+        "p_disc=0.3,p_fav=0.75,reps=3": 75,
+        "p_disc=0.3,p_fav=0.85,reps=1": 75,
+        "p_disc=0.3,p_fav=0.85,reps=3": 50
+      },
+      "note": "Six discordant pairs is the minimum at which a two-sided exact test can reach alpha=0.05 at all. Replicates shrink per-item measurement noise and roughly halve the items required.",
+      "non_inferiority_warning": "Published persona/profile results predict a null for the profile arm. A non-inferiority test against a stated harm margin needs more items than superiority, not fewer."
+    },
+    "models": {
+      "verdict": "PASS",
+      "configured": false,
+      "config": ".foil\\models.json",
+      "reason": "no model configuration found",
+      "next": "python tools/foil_setup.py init --auto  (then `add` your provider)",
+      "note": "The invariant and power sections need no model. Only the behavioural arm does."
+    },
+    "design": {
+      "schema": "foil-behavioural-arm-design/v1",
+      "primary_endpoint": {
+        "comparison": "VNEXT_NOPROFILE vs FOIL_GENERIC",
+        "metric": "per-item pass rate across replicates",
+        "test": "exact McNemar on replicate-majority item outcomes",
+        "alpha": 0.05,
+        "sided": "two",
+        "rationale": "One preregistered primary comparison. Every other contrast is secondary and alpha-controlled by Holm."
+      },
+      "secondary_endpoints": [
+        {
+          "comparison": "FOIL_GENERIC vs BASE",
+          "family": "secondary"
+        },
+        {
+          "comparison": "VNEXT_CORRECT_PROFILE vs VNEXT_NOPROFILE",
+          "family": "secondary",
+          "framing": "non-inferiority first, superiority only if non-inferiority holds"
+        },
+        {
+          "comparison": "VNEXT_WRONG_PROFILE vs VNEXT_NOPROFILE",
+          "family": "secondary",
+          "framing": "non-inferiority against a preregistered harm margin"
+        }
+      ],
+      "multiplicity": "Holm across the secondary family; primary is not adjusted.",
+      "items": {
+        "count": 75,
+        "selection_rule": "Select for discriminability, not benchmark coverage: pilot each candidate item under BASE with 5 replicates and keep items whose pass rate lies in [0.2, 0.8]. Floored and ceilinged items carry no information about the contrast.",
+        "excluded_by_rule": [
+          "items with BASE pass rate <0.2 or >0.8",
+          "items whose benchmark reports sub-5% frontier accuracy",
+          "items from a near-saturated benchmark subset"
+        ]
+      },
+      "replicates_per_cell": 3,
+      "replicates_rationale": "at least one model in the pool has no seed control, so a single sample per cell measures noise rather than effect (forced by: no model configured)",
+      "model_pool": {
+        "configured": false,
+        "roles": {},
+        "requires_replicates": []
+      },
+      "model_agnostic": "No condition in this design names a vendor. Conditions differ only in the policy text supplied. Record the resolved model id and decoding in every receipt so a result is attributable to a model without the design depending on one.",
+      "blinding": {
+        "condition_label_in_prompt": false,
+        "mechanism": "Deliver only the policy text. The harness holds the condition->policy map; no unit prompt contains CONDITION= or the benchmark name.",
+        "control_arm_instruction": "None. Asking a control arm not to sandbag is unverifiable and is itself a treatment.",
+        "placebo_arm": "Include a length-matched, content-irrelevant scaffold arm so the specific policy is separable from generic instruction volume."
+      },
+      "ordering": {
+        "rule": "randomise condition order within item; run an item's conditions adjacently",
+        "reason": "Condition-outer loops confound condition with elapsed time. For live-web items the two arms otherwise query different web states."
+      },
+      "gold_pinning": {
+        "required_fields": [
+          "dataset_revision",
+          "as_of",
+          "volatility_class",
+          "scoring_mode"
+        ],
+        "rule": "Any dataset whose answers are maintained on a schedule must be pinned to a revision and an as-of date, and its scoring mode preregistered where the dataset defines more than one."
+      },
+      "grading": {
+        "graders": 2,
+        "blind_to_condition": true,
+        "agreement_statistic": "Cohen's kappa, reported with the result",
+        "minimum_agreement": 0.8,
+        "adjudication": "a third blinded grader resolves disagreements; log every adjudication"
+      },
+      "contamination": {
+        "pre_run_checks": [
+          "canary-string completion probe where the benchmark ships one",
+          "record the probe result in the receipt whether or not it fires"
+        ],
+        "on_exposure": "mark the unit CONTAMINATED, keep the record, do not silently retry"
+      },
+      "receipt_required_fields": [
+        "schema",
+        "condition",
+        "benchmark",
+        "item_id",
+        "replicate_index",
+        "isolation_session_id",
+        "model",
+        "decoding",
+        "final_answer",
+        "prediction_sha256",
+        "profile_payload_sha256",
+        "dataset_revision",
+        "as_of",
+        "scoring_mode",
+        "budget",
+        "policy_trace",
+        "timestamp",
+        "status",
+        "exclusion_reason"
+      ],
+      "failure_handling": {
+        "rule": "Preserve diagnostics on failure. Never delete the log or branch a failed unit's error message points at; record status and continue so the matrix stays auditable."
+      },
+      "stop_rule": "Preregister a group-sequential or anytime-valid boundary if you intend to look at results before the full item set is complete. Unplanned peeking invalidates the stated alpha."
+    }
+  },
+  "chain": [
+    {
+      "section": "invariants",
+      "digest": "7d5c47bbde1d9bcffa15a02437a91e97adb72831d12b502f9300f715202f8774"
+    },
+    {
+      "section": "selfcheck",
+      "digest": "03cfd8ddbcbe9e535a29ff4eb9f5d32ff1c6df74f766157b3eca2d851c902b77"
+    },
+    {
+      "section": "power",
+      "digest": "b31044910f0d36259c388bda14b9abf4953e40a59ddf41f0549099ffef72d6e5"
+    },
+    {
+      "section": "models",
+      "digest": "f0d4fd1865db45f098a0bf508bf5cc7cfa1a496c43f68d16fa849e7427e139f7"
+    },
+    {
+      "section": "design",
+      "digest": "681e96591c9ed51207748a07e23c463ac405e4d185371fb10fb48d3f95488751"
+    }
+  ],
+  "head": "681e96591c9ed51207748a07e23c463ac405e4d185371fb10fb48d3f95488751",
+  "boundary": "Invariant results are exhaustive over the declared domain and are a proof for that domain. Power and design sections are calculations, not results. Nothing here is evidence about answer quality."
+}

@@ -18,6 +18,12 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "WebSearch|WebFetch|Edit|Write|MultiEdit|NotebookEdit|Bash|PowerShell|mcp__.*",
+        "hooks": [
+          {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/foil_tool_broker.py"], "timeout": 10}
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/gauntlet_hook.py", "pre-tool"], "timeout": 20}

@@ -29,9 +29,55 @@ This is an **exploratory directional ablation with only two scored items per con
 
 The BrowseComp scorer uses **normalized exact string match**, not the official BrowseComp LLM-judge scoring method. The permanent result receipt is [`benchmark_runs/2026-08-22/browsecomp_four_way_results.json`](../benchmark_runs/2026-08-22/browsecomp_four_way_results.json).
 
+### vNext re-score: descriptive evidence only
+
+An internal evidence ledger circulated figures for a "vNext" configuration (a pooled 32/36 with
+an exact McNemar p of .125). Those figures came from an unarchived scoring session and could not
+be reproduced: the audit that checked them
+([`validation/FOIL_LEDGER_AUDIT_2026-08-23.md`](../validation/FOIL_LEDGER_AUDIT_2026-08-23.md),
+item A6) found no such result file in any branch or on disk. A mechanical re-score of the same
+48-item vNext prediction file against the harness gold gives **ARC 12/12, GPQA 23/24, pooled
+35/36**, with 8 discordant pairs all favouring vNext and an exact two-sided McNemar p of 0.0078.
+
+**That stronger number is not superiority evidence and must never be reported as validated.** The
+historical predictions it is compared against came from earlier *disjoint-subset* sessions, while
+the vNext predictions came from a later *same-item* re-run in a different session with the
+questions already public. Gold-blindness of the vNext session rests on a question-only pack
+rather than on a verifiable receipt, and both benchmarks are public. The comparison is
+**directional only**, and it is recorded here because the ledger's unreproducible figures should
+not be the version that survives.
+
 **Do not average these rows or conditions into one headline accuracy.** The evaluations measure different constructs, use different protocols, and have small sample sizes.
 
 The earlier blinded receipt is [`benchmarks/results/2026-08-22-blinded-pilot.json`](../benchmarks/results/2026-08-22-blinded-pilot.json).
+
+## 0.5.1 four-config Claude contract test (preregistered, not yet run)
+
+A same-item paired comparison of **BASE vs FOIL** under four Claude Code configurations —
+`C-SL`, `C-SH`, `C-OL`, `C-OH` = `{sonnet, opus} x {low, high}` effort — is preregistered in
+[`benchmarks/CLAUDE_FOUR_CONFIG_PROTOCOL.md`](../benchmarks/CLAUDE_FOUR_CONFIG_PROTOCOL.md) and
+implemented in `benchmarks/harness/claude_four_config_runner.py`.
+
+**No unit has been executed. There are no results, and none should be inferred from the design.**
+
+What it is: a **contract test of the FOIL skill text at matched cost**. The FOIL arm differs from
+BASE by exactly two things — the skill file appended as a system prompt, and the `/foil solve`
+invocation line in front of an otherwise byte-identical prompt. Model, effort, tools, tool
+budget, working directory and settings are identical. It is **not** a personalization test; the
+profile arms are a separate later experiment.
+
+What it fixes relative to the pilots above: same items rather than disjoint subsets; isolated
+per-unit executions in fresh working directories with the parent session's environment stripped;
+opaque condition ids with the mapping sealed and hash-pinned before any run; a preregistered
+analysis (mid-p McNemar primary, exact conditional as sensitivity, Wilson intervals, Holm across
+the four configurations); and a scorer that refuses to open gold until the predictions are
+committed.
+
+What it still cannot do: **it is not powered.** At 24 GPQA items and 12 BrowseComp items with one
+replicate, the power to detect even a large effect (30 % of items discordant, 85 % favouring
+FOIL) is about **0.33** and **0.04** respectively. A non-significant result from this run means
+"not powered to detect", never "no effect" and never "equivalent". The protocol's §10 carries the
+full table and the reasoning.
 
 ## What the blinded runs test
 

@@ -1,0 +1,10 @@
+{
+  "schema": "foil-four-config-condition-map/v1",
+  "run_date": "2026-08-23",
+  "order_seed": 20260823,
+  "map": {
+    "A": "BASE",
+    "B": "FOIL"
+  },
+  "note": "Written before any run. Prevents post-hoc relabelling of arms. It does not blind the operator, who necessarily knows which arm carries the skill text."
+}
