@@ -19,7 +19,6 @@ from experiments.foil_vnext7.runtime_policy import (
     EvidenceTypedTaskContext,
 )
 
-
 POLICY = EvidenceTypedRuntimePolicy()
 
 
