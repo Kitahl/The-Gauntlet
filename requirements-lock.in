@@ -1,0 +1,3 @@
+# Canonical combined dependency-lock input for Python 3.12 release environments.
+-r requirements-runtime.txt
+-r requirements-dev.txt
