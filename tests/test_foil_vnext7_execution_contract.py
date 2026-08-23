@@ -54,6 +54,7 @@ def source_decision(*, cached=False, current=False):
     )
     hints = (
         CachedEvidenceHint(
+            TASK_ID,
             "C1",
             verifier,
             freshness_checked=current,
@@ -62,6 +63,7 @@ def source_decision(*, cached=False, current=False):
     return POLICY.decide(
         EvidenceTypedTaskContext(
             StrategyTaskContext(task),
+            task_instance_id=TASK_ID,
             cached_evidence=hints,
         ),
         BUDGET,
@@ -73,12 +75,14 @@ def cached_record(
     verifier=VerifierKind.SOURCE_EVIDENCE,
     basis=EvidenceBasis.PRIMARY_SOURCE,
     target_id="C1",
+    task_instance_id=TASK_ID,
     qualification=QualificationKind.CLAIM_NATIVE_CHECK,
     stale=False,
     freshness=False,
 ):
     return CachedEvidenceRecord(
         evidence_id="E1",
+        task_instance_id=task_instance_id,
         target_id=target_id,
         verifier=verifier,
         basis=basis,
@@ -97,6 +101,7 @@ class EvidenceTypedExecutionTests(unittest.TestCase):
         decision = source_decision()
         request = build_request(decision, task_instance_id=TASK_ID)
         self.assertEqual(request.target_claim_ids, ("C1",))
+        self.assertEqual(request.task_instance_id, TASK_ID)
 
     def test_02_regime_level_obligation_is_executable(self):
         decision = POLICY.decide(
@@ -107,7 +112,8 @@ class EvidenceTypedExecutionTests(unittest.TestCase):
                         has_viable_candidate=True,
                         freshness_sensitive=True,
                     )
-                )
+                ),
+                task_instance_id=TASK_ID,
             ),
             BUDGET,
         )
@@ -121,6 +127,7 @@ class EvidenceTypedExecutionTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             CachedEvidenceRecord(
                 evidence_id="E1",
+                task_instance_id=TASK_ID,
                 target_id="C1",
                 verifier=VerifierKind.SOURCE_EVIDENCE,
                 basis=EvidenceBasis.PRIMARY_SOURCE,
@@ -188,13 +195,15 @@ class EvidenceTypedExecutionTests(unittest.TestCase):
                     task,
                     high_impact=True,
                     independent_reviewer_available=True,
-                )
+                ),
+                task_instance_id=TASK_ID,
             ),
             StrategyBudget(independent_reviews_remaining=1),
         )
         self.assertIs(base.operator, StrategyOperator.INDEPENDENT_REVIEW)
         forced = EvidenceTypedDecision(
             controller_version=base.controller_version,
+            task_instance_id=TASK_ID,
             strategy=base.strategy,
             verification_targets=base.verification_targets,
             reuse_cached_evidence=True,
@@ -221,12 +230,14 @@ class EvidenceTypedExecutionTests(unittest.TestCase):
                     task,
                     high_impact=True,
                     independent_reviewer_available=True,
-                )
+                ),
+                task_instance_id=TASK_ID,
             ),
             StrategyBudget(independent_reviews_remaining=1),
         )
         forced = EvidenceTypedDecision(
             controller_version=base.controller_version,
+            task_instance_id=TASK_ID,
             strategy=base.strategy,
             verification_targets=base.verification_targets,
             reuse_cached_evidence=True,
@@ -280,8 +291,10 @@ class EvidenceTypedExecutionTests(unittest.TestCase):
         decision = POLICY.decide(
             EvidenceTypedTaskContext(
                 StrategyTaskContext(task),
+                task_instance_id=TASK_ID,
                 cached_evidence=(
                     CachedEvidenceHint(
+                        TASK_ID,
                         "C1",
                         VerifierKind.EXACT_CALCULATION,
                     ),
@@ -320,6 +333,19 @@ class EvidenceTypedExecutionTests(unittest.TestCase):
         validation = validate_outcome(decision, request, outcome)
         self.assertFalse(validation.valid)
         self.assertIn("evidence_target_outside_decision", validation.errors)
+
+    def test_15_cached_evidence_from_another_task_is_rejected(self):
+        decision = source_decision(cached=True)
+        with self.assertRaises(ValueError):
+            qualify_cached_evidence(
+                decision,
+                cached_record(task_instance_id="other-task"),
+            )
+
+    def test_16_request_scope_cannot_override_decision_scope(self):
+        decision = source_decision()
+        with self.assertRaises(ValueError):
+            build_request(decision, task_instance_id="other-task")
 
 
 if __name__ == "__main__":
