@@ -9,7 +9,8 @@ Parent:
 
 - frozen epistemic policy: `experiments/foil_vnext/`
 - composable operator policy: `experiments/foil_vnext6/`
-- vNext7 adds an evidence-target and cached-qualification layer only.
+- vNext7 adds explicit verification/discovery targets, evidence qualification,
+  and task-scoped cache reuse.
 
 ## 1. Goal
 
@@ -18,7 +19,7 @@ FOIL is not trying to be the longest reasoning loop. Its goal is to supply the
 claim**, while:
 
 - preserving uncertainty when evidence is insufficient;
-- separating candidate generation from verification;
+- separating candidate generation, information acquisition, and verification;
 - tracking complete cost;
 - avoiding benchmark/task-specific memory;
 - keeping personalization provisional and evidence-conditioned;
@@ -33,7 +34,8 @@ The external methods are therefore operators under FOIL, not a fixed chain.
 | Direct answer | `DIRECT` | yes for simple work | candidate only |
 | CoT / least-to-most | `DECOMPOSE` | conditional | internal heuristic |
 | Self-Discover-style structure selection | compressed inside complex decomposition; no separate permanent loop | conditional | internal heuristic |
-| ReAct | `REACT` | only for sequential discovery/environment interaction | external observation, not claim closure |
+| ReAct | `REACT`, targeted at load-bearing information gain per cost | only for sequential discovery/environment interaction | external observation, not claim closure |
+| UoT / adaptive information control | compressed into ReAct target/query selection and retrieval stopping | conditional | discovery policy, not evidence authority |
 | PAL / PoT / CodeSteer-style symbolic routing | `EXACT_EXECUTION` | when exact calculation/execution is the matched route | claim-native only after admitted execution/calculation evidence |
 | CoVe / CRITIC | `CLAIM_NATIVE_VERIFY` | when a mandatory verifier is pending | claim-native verifier |
 | Self-consistency / ToT | `BOUNDED_CHALLENGER_SEARCH` | only on genuine candidate disagreement | challenger generation, never vote-as-proof |
@@ -43,7 +45,7 @@ The external methods are therefore operators under FOIL, not a fixed chain.
 | LATS / large tree search | not a default operator | no | defer until matched-budget evidence justifies it |
 | generic Self-Refine / repeated same-model critique | rejected as a default loop | no | weakly independent or circular |
 | multi-agent majority/debate | rejected as default evidence | no | agreement is not proof |
-| learned adaptive test-time allocator | not frozen into vNext7 | no | promising future calibration layer, needs prospective data |
+| learned paradigm/test-time router | not frozen into vNext7 | no | promising calibration layer after prospective trace collection |
 
 This preserves the useful parts of the methods without turning FOIL into:
 
@@ -63,7 +65,7 @@ vNext6 one-operator composer
         |
         v
 vNext7 target/receipt layer
-(explicit verifier targets, cache eligibility)
+(discovery target OR verifier target, task scope, cache eligibility)
         |
         v
 execute exactly one operator
@@ -135,12 +137,16 @@ tool calls, but:
 
 - the raw observation is still not evidence;
 - the cached content needs a content SHA-256;
-- the exact target/verifier must match;
+- the exact task/target/verifier must match;
 - stale material is rejected;
 - current-source material needs freshness checking;
 - a qualification receipt and explicit verdict are required;
 - the parent vNext6 admission validator still decides whether the claim/verifier
   update is admitted.
+
+Task-local target names such as `C1` are namespaced by `task_instance_id`, and
+that task scope is also bound into the canonical request SHA-256. Cross-task
+cache replay is therefore not an allowed reuse path.
 
 This is evidence reuse, not verification bypass.
 
@@ -165,6 +171,32 @@ Mechanical qualification is restricted to mechanical bases:
 
 It cannot mechanically certify source entailment merely by being reproducible.
 
+### 4.5 Discovery targets are not verification targets
+
+vNext6's ReAct decision can carry the verifier whose evidence it is trying to
+find, while still being explicitly non-verifying. Treating that pending verifier
+as a vNext7 `VerificationTarget` blurred acquisition and claim closure.
+
+vNext7 now gives ReAct a separate `discovery_target_ids` channel:
+
+- if an external/fresh load-bearing uncertainty already has an atomic label,
+  target that label;
+- if sequential external interaction is required before an atomic claim exists,
+  use the synthetic discovery obligation `D:external_observation`.
+
+The public discovery objective is:
+
+`load_bearing_information_gain_per_cost`.
+
+That means the ReAct executor should prefer the next query/action most likely to
+reduce a decisive unresolved uncertainty for the least complete cost, and stop
+retrieval when another observation is no longer expected to change the answer or
+satisfy a pending evidence need.
+
+This absorbs the useful information-seeking idea from uncertainty-aware planning
+and adaptive retrieval-control work without adding a simulated-future tree or
+turning model confidence into evidence.
+
 ## 5. How each method helps FOIL
 
 ### CoT / least-to-most
@@ -174,16 +206,24 @@ Self-Discover's useful mechanism is absorbed here: choose a task-specific
 reasoning structure when decomposition itself is nontrivial, rather than adding
 another permanent controller.
 
-### ReAct
+### ReAct + uncertainty-aware information control
 
-Use to acquire observations from an external environment. ReAct is discovery,
-not truth. Its useful output is a candidate plus captured references/receipts.
+Use ReAct to acquire observations from an external environment. ReAct is
+discovery, not truth. Its useful output is a candidate plus captured
+references/receipts.
+
+When more than one observation/query is possible, target the load-bearing
+uncertainty with the highest expected discriminating value relative to cost.
+Do not keep retrieving merely because tool budget remains. Full UoT-style
+future-simulation trees are not required by default; the transferable mechanism
+is targeted uncertainty reduction and an information-sufficiency stopping rule.
 
 ### Exact execution / CodeSteer-style routing
 
 When the uncertainty is numerical or executable, prefer an exact route to more
-language-only deliberation. vNext7 keeps this as a claim-matched operator rather
-than a generic "use code" rule.
+language-only deliberation. vNext6 already permits exact calculation/execution
+to construct the candidate before a prose candidate exists. vNext7 keeps this as
+a claim-matched operator rather than a generic "use code" rule.
 
 ### CoVe / CRITIC
 
@@ -217,6 +257,13 @@ It can increase search power, but it also increases cost, method stacking, and
 causal ambiguity. A future operator is justified only if prospective
 equal-budget evidence shows a regime where it beats bounded challenger search.
 
+### Full UoT simulation by default
+
+The information-gain objective is useful. A permanent simulated-future tree is
+not yet justified for FOIL because it adds branch cost and relies on model-made
+future probabilities. vNext7 adopts targeted uncertainty reduction inside ReAct
+without treating simulated probabilities as evidentiary authority.
+
 ### Generic Self-Refine
 
 Repeated same-model criticism can change prose without adding evidence. Keep
@@ -227,12 +274,14 @@ revision tied to demonstrated failure.
 Multiple branches or agents can share the same false premise. Agreement is a
 routing signal, not a verifier.
 
-### Learned test-time compute allocation now
+### Learned test-time compute/paradigm allocation now
 
-Recent work on adaptive test-time allocation is relevant to FOIL's future cost
-policy, but learning a routing classifier from the current tiny benchmark history
-would risk overfitting. vNext7 records explicit operator costs and decisions so a
-prospective training set can be built later.
+Recent routing work supports the general premise that no single reasoning
+paradigm dominates every task and that per-task selection can outperform a fixed
+paradigm. That strengthens FOIL's controller architecture, but learning a router
+from the current small benchmark history would risk overfitting. vNext7 records
+explicit operator choices, costs, discovery targets and outcomes so a
+prospective routing dataset can be built first.
 
 ## 7. Promotion experiment
 
@@ -259,6 +308,8 @@ Primary outputs:
 - inference tokens;
 - latency;
 - unnecessary-intervention rate;
+- redundant-retrieval rate;
+- discovery-target hit rate;
 - verifier completion rate;
 - blocked/unresolved rate;
 - answer reversal after verification;
@@ -277,6 +328,7 @@ It does **not** prove:
 - cached qualification labels are correct;
 - references are authentic;
 - the routing thresholds are optimal;
+- the information-gain objective is calibrated;
 - Self-Discover, challenger search, reflection, independent review, or Mastermind
   add positive value under matched budgets.
 
