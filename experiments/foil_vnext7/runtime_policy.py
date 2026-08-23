@@ -178,12 +178,8 @@ class EvidenceTypedRuntimePolicy:
         return min(candidates, key=lambda item: VERIFIER_PRIORITY[item])
 
     @staticmethod
-    def _targets(decision: StrategyDecision) -> tuple[VerificationTarget, ...]:
-        # Discovery operators may carry the verifier they are gathering material
-        # for, but they cannot discharge the claim. Keep their acquisition
-        # targets separate from true verifier targets.
-        if not decision.may_discharge_load_bearing_uncertainty:
-            return ()
+    def _pending_targets(decision: StrategyDecision) -> tuple[VerificationTarget, ...]:
+        """Derive the targets a pending verifier would need if it could run."""
 
         verifier = decision.required_verifier
         if verifier is None:
@@ -217,6 +213,15 @@ class EvidenceTypedRuntimePolicy:
                 synthetic=True,
             ),
         )
+
+    @staticmethod
+    def _targets(decision: StrategyDecision) -> tuple[VerificationTarget, ...]:
+        # Discovery and blocked operators may carry the verifier they are
+        # gathering or waiting for, but only authorized verifier operators may
+        # expose executable verification targets.
+        if not decision.may_discharge_load_bearing_uncertainty:
+            return ()
+        return EvidenceTypedRuntimePolicy._pending_targets(decision)
 
     @staticmethod
     def _discovery_targets(decision: StrategyDecision) -> tuple[str, ...]:
@@ -350,10 +355,10 @@ class EvidenceTypedRuntimePolicy:
                     required_verifier=verifier,
                 )
 
-        targets = self._targets(decision)
+        pending_targets = self._pending_targets(decision)
         verifier = decision.required_verifier
         cache_covers = self._cache_covers(
-            targets,
+            pending_targets,
             context.cached_evidence,
             task_instance_id=context.task_instance_id,
         )
