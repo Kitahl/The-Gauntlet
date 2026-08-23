@@ -1,8 +1,10 @@
 """FOIL vNext6 composable post-freeze research candidate."""
 
 from .execution_contract import (
+    ClaimResolution,
     EvidenceBasis,
     EvidencePacket,
+    EvidenceVerdict,
     OperatorOutcome,
     OperatorRequest,
     OutcomeStatus,
@@ -25,10 +27,12 @@ from .runtime_policy import (
 )
 
 __all__ = [
+    "ClaimResolution",
     "ComposableRuntimePolicy",
     "EvidenceAuthority",
     "EvidenceBasis",
     "EvidencePacket",
+    "EvidenceVerdict",
     "OperatorCost",
     "OperatorOutcome",
     "OperatorRequest",
