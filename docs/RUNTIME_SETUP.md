@@ -46,6 +46,8 @@ Expected minimal ledger shape:
 - `Stop` runs the Process Assurance `frame`/`costume` turn-boundary evaluator and respects `stop_hook_active` to avoid continuation loops.
 - `UserPromptSubmit` updates compact task-domain and cross-cutting-facet relevance metadata and injects the active FOIL context. It does **not** store raw prompts.
 
+The turn-boundary state stores only lossy similarity fingerprints of recent assistant messages; the assistant-message text itself is not persisted by this runtime.
+
 ## Optional OpenRouter judgment / multi-agent tools
 
 No API key is required for deterministic monitoring or strong repeated-tool-loop detection.
@@ -60,6 +62,14 @@ export GAUNTLET_JUDGE_MODEL="provider/model"
 Additional fall-over credentials may be supplied as `OPENROUTER_API_KEY_1` through `_16`.
 
 Credentials are environment-only. The public runtime never reads a project-specific keystore.
+
+### Privacy and external-data boundary
+
+Deterministic Gauntlet monitoring and FOIL profile/relevance updates are local. They do not require OpenRouter and do not send prompt content to an external model provider.
+
+When an optional OpenRouter-backed boundary judge, independent red-team review, or SNAP run is enabled, the content supplied to that optional tool — including a prompt, brief, target, and generated review context as applicable — is transmitted to OpenRouter and the configured model provider. Do not enable those optional paths for secrets or material that must remain local. Provider retention/privacy terms apply independently of this repository.
+
+Local FOIL profile directories and Gauntlet state directories are owner-restricted to `0700` and their files to `0600` on POSIX systems. Windows uses the normal user-profile/filesystem ACL model. These controls are defense in depth; users should still protect their operating-system account and backups.
 
 ## FOIL saved profiles
 
@@ -177,3 +187,7 @@ python tools/foil_profile.py observe alice \
 If a task requires a domain not already present, `observe` accepts any domain name and creates it as a candidate. The expanded relevance registry covers more than forty common research/professional families, and arbitrary custom domains remain supported.
 
 Two independent consistent observations may support `PROMISING_STRENGTH` or `POSSIBLE_GAP`; mixed evidence stays `UNCERTAIN`. Newer task-diagnostic evidence overrides stale onboarding evidence.
+
+## Repository boundary
+
+This repository's runtime contains Gauntlet and FOIL. Mastermind is not imported, installed, or required by the hooks/runtime. Historical validation prose may record that an external audit procedure was used, but its implementation and benchmark-control material must remain outside this repository; CI contains a regression test for that boundary.
