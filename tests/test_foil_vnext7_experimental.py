@@ -15,6 +15,7 @@ from experiments.foil_vnext6.runtime_policy import (
 )
 from experiments.foil_vnext7.runtime_policy import (
     CachedEvidenceHint,
+    DiscoveryObjective,
     EvidenceTypedRuntimePolicy,
     EvidenceTypedTaskContext,
 )
@@ -60,6 +61,7 @@ class EvidenceTypedRuntimePolicyTests(unittest.TestCase):
         decision = decide()
         self.assertIs(decision.operator, StrategyOperator.DIRECT)
         self.assertEqual(decision.verification_targets, ())
+        self.assertEqual(decision.discovery_target_ids, ())
 
     def test_02_claim_verifier_gets_atomic_target(self):
         decision = decide(
@@ -238,6 +240,7 @@ class EvidenceTypedRuntimePolicyTests(unittest.TestCase):
         self.assertIs(decision.operator, StrategyOperator.STOP)
         self.assertTrue(decision.should_stop)
         self.assertEqual(decision.verification_targets, ())
+        self.assertEqual(decision.discovery_target_ids, ())
 
     def test_13_mastermind_remains_nonverifying(self):
         decision = decide(
@@ -281,6 +284,8 @@ class EvidenceTypedRuntimePolicyTests(unittest.TestCase):
         self.assertEqual(trace["controller_version"], POLICY.version)
         self.assertEqual(trace["task_instance_id"], TASK_ID)
         self.assertEqual(trace["verification_target_count"], 1)
+        self.assertEqual(trace["discovery_target_count"], 0)
+        self.assertIsNone(trace["discovery_objective"])
         self.assertFalse(trace["cached_evidence_reused"])
         for forbidden in (
             "chain_of_thought",
@@ -330,6 +335,38 @@ class EvidenceTypedRuntimePolicyTests(unittest.TestCase):
         )
         self.assertTrue(decision.blocked)
         self.assertFalse(decision.reuse_cached_evidence)
+
+    def test_18_react_targets_load_bearing_external_uncertainty(self):
+        decision = decide(
+            TaskContext(
+                uncertainties=(
+                    LoadBearingUncertainty("C1", ClaimKind.EXTERNAL_FACT),
+                ),
+            )
+        )
+        self.assertIs(decision.operator, StrategyOperator.REACT)
+        self.assertEqual(decision.verification_targets, ())
+        self.assertEqual(decision.discovery_target_ids, ("C1",))
+        self.assertIs(
+            decision.discovery_objective,
+            DiscoveryObjective.LOAD_BEARING_INFORMATION_GAIN_PER_COST,
+        )
+
+    def test_19_react_without_atomic_claim_gets_discovery_obligation(self):
+        decision = decide(
+            TaskContext(requires_external_retrieval=True),
+            sequential_tool_interaction=True,
+        )
+        self.assertIs(decision.operator, StrategyOperator.REACT)
+        self.assertEqual(decision.verification_targets, ())
+        self.assertEqual(
+            decision.discovery_target_ids,
+            ("D:external_observation",),
+        )
+        self.assertIs(
+            decision.discovery_objective,
+            DiscoveryObjective.LOAD_BEARING_INFORMATION_GAIN_PER_COST,
+        )
 
 
 if __name__ == "__main__":
