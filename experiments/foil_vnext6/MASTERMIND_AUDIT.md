@@ -211,13 +211,29 @@ when a required source/execution/calculation call is unaffordable.
 **Correction:** mandatory verifier unavailability or budget exhaustion emits
 `BLOCKED`; it never degrades silently to a weaker operator.
 
+## D4 — Test suite was not discoverable by repository CI
+
+The first uploaded contract suite used pytest-style free functions and imported
+`pytest`. The repository workflow installs no pytest dependency and runs
+`python -m unittest discover -s tests -v`. The file would therefore fail at
+import or contribute no discovered tests, despite passing in a separate local
+pytest environment.
+
+**Correction:** converted the suite to `unittest.TestCase` methods, removed the
+pytest dependency, reran the exact repository discovery command, and retained
+all 24 contract cases.
+
 # Mechanical validation
 
 Local executable checks:
 
-- `24 passed` for `tests/test_foil_vnext6_experimental.py`;
-- Python compilation completed successfully;
-- the local environment did not provide an importable `ruff` module, so lint is left to repository CI and is not claimed as locally passed.
+- repository-compatible `unittest` discovery: **24/24 PASS**;
+- targeted pytest execution before the CI-compatibility conversion: **24/24
+  PASS**;
+- Python compilation: **PASS**;
+- public trace validation against `trace_schema.json`: **PASS**;
+- the local environment did not provide an importable `ruff` module, so lint is
+  **NOT MEASURED** locally and is left to repository CI.
 
 The contract suite covers:
 
@@ -244,7 +260,8 @@ The contract suite covers:
 
 - The candidate is implemented as a separate post-freeze module.
 - Frozen V1 remains imported and authoritative.
-- The three causal defects above are represented by explicit mechanisms and executable contract tests.
+- The three design defects and one CI-discovery defect above are represented by
+  explicit mechanisms or executable contract tests.
 - The local targeted test suite passed 24/24.
 - The controller has direct, stop, and blocked paths.
 - CoT, branching, reflection, and Mastermind are explicitly non-verifying.
@@ -254,7 +271,8 @@ The contract suite covers:
 # Further evidence required
 
 - Behavioral evidence that an LLM faithfully executes the selected operator.
-- Same-item equal-budget comparison against direct, CoT, ReAct/CoVe, Reflexion, frozen V1, and vNext6.
+- Same-item equal-budget comparison against direct, CoT, ReAct/CoVe, Reflexion,
+  frozen V1, and vNext6.
 - Calibration of operator routing thresholds.
 - Cost/accuracy curves using actual tokens, latency, and tool calls.
 - Evidence that bounded branching adds value beyond a single challenger.
