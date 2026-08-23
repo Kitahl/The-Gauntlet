@@ -1,41 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
-  <title id="title">Research obligation constellation</title>
-  <desc id="desc">A cinematic dark node field that cycles through galaxy, web, orbital, and ring-like research formations. Task nodes route toward five colored specialist nodes and a central evidence release point. No literal gauntlet is depicted.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 700" role="img" aria-labelledby="title desc">
+  <title id="title">Selective research routing trace</title>
+  <desc id="desc">One research goal is decomposed into three obligations. Each obligation is routed to one specialist tool, produces one evidence receipt, and the receipts converge on a scoped release.</desc>
   <defs>
-    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <filter id="soft" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
     <style>
-      .bg{fill:#030509}.star{fill:#bac7d8}.faint{fill:#73849a}.edge{fill:none;stroke:#58687d;stroke-width:1}.edge2{fill:none;stroke:#394757;stroke-width:1}.hot{fill:none;stroke:#ff7a66;stroke-width:1.6;stroke-dasharray:4 11}.node{fill:#0b1119;stroke:#8c99aa;stroke-width:1}.mind{fill:#e4c66f}.space{fill:#8ab4f8}.reality{fill:#e58bd4}.power{fill:#66d7e4}.time{fill:#8ed19d}.release{fill:#ff7a66;stroke:#fff0ed;stroke-width:1.5}.label{font:700 11px Consolas,Menlo,monospace;letter-spacing:2px;fill:#738196}.accent{fill:#ff7a66}
-      .driftA{animation:driftA 18s ease-in-out infinite}.driftB{animation:driftB 24s ease-in-out infinite}.pulse{animation:pulse 3.8s ease-in-out infinite}.flow{animation:flow 9s linear infinite}.phaseA{animation:phaseA 32s ease-in-out infinite}.phaseB{animation:phaseB 32s ease-in-out infinite}.phaseC{animation:phaseC 32s ease-in-out infinite}.phaseD{animation:phaseD 32s ease-in-out infinite}
-      @keyframes driftA{0%,100%{transform:translate(0,0)}50%{transform:translate(18px,-8px)}}@keyframes driftB{0%,100%{transform:translate(0,0)}50%{transform:translate(-12px,10px)}}@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}@keyframes flow{to{stroke-dashoffset:-180}}
-      @keyframes phaseA{0%,19%{opacity:.72}24%,100%{opacity:.12}}@keyframes phaseB{0%,20%{opacity:.10}25%,44%{opacity:.7}49%,100%{opacity:.10}}@keyframes phaseC{0%,45%{opacity:.10}50%,69%{opacity:.72}74%,100%{opacity:.10}}@keyframes phaseD{0%,70%{opacity:.10}75%,94%{opacity:.72}99%,100%{opacity:.10}}
-      @media(prefers-reduced-motion:reduce){*{animation:none!important}.phaseA{opacity:.5}.phaseB,.phaseC,.phaseD{opacity:.16}}
+      .bg{fill:#05080c}.rule{fill:none;stroke:#26313e;stroke-width:1}.route{fill:none;stroke:#ff735f;stroke-width:2}.box{fill:#090e14;stroke:#4a5869;stroke-width:1.2}.goal{fill:#0d131b;stroke:#cbd3dc;stroke-width:1.3}.tool{fill:#0d131b;stroke-width:1.5}.space{stroke:#8ab4f8}.power{stroke:#66d7e4}.council{stroke:#e58bd4}.receipt{fill:#111820;stroke:#ff735f;stroke-width:1.3}.release{fill:#17110f;stroke:#ff735f;stroke-width:1.8}.txt{fill:#e4e8ed}.dim{fill:#788596}.accent{fill:#ff735f}.mono{font-family:Consolas,Menlo,monospace}.tiny{font-size:16px;letter-spacing:1.5px}.small{font-size:18px;letter-spacing:1.7px}.label{font-size:23px;font-weight:700;letter-spacing:1px}
     </style>
   </defs>
-  <rect width="1600" height="900" class="bg"/>
-  <g opacity=".45"><path d="M0 120H1600M0 300H1600M0 480H1600M0 660H1600M220 0V900M520 0V900M820 0V900M1120 0V900M1420 0V900" class="edge2"/></g>
-  <g class="phaseA driftA">
-    <path d="M840 520C960 310 1280 260 1480 420C1320 330 1080 370 920 560C1080 470 1310 470 1510 580" class="edge"/>
-    <path d="M900 610C1090 430 1320 430 1510 610" class="edge2"/>
-    <g class="faint"><circle cx="930" cy="575" r="3"/><circle cx="985" cy="494" r="2"/><circle cx="1040" cy="420" r="3"/><circle cx="1115" cy="367" r="2"/><circle cx="1194" cy="344" r="3"/><circle cx="1286" cy="354" r="2"/><circle cx="1372" cy="397" r="3"/><circle cx="1450" cy="456" r="2"/><circle cx="1042" cy="546" r="2"/><circle cx="1120" cy="505" r="3"/><circle cx="1208" cy="484" r="2"/><circle cx="1302" cy="488" r="3"/><circle cx="1390" cy="522" r="2"/><circle cx="1480" cy="581" r="3"/></g>
-  </g>
-  <g class="phaseB driftB">
-    <path d="M820 300L970 220L1110 310L1260 205L1410 290L1530 190M860 520L1030 430L1160 520L1310 420L1490 510M930 220L1030 430M1110 310L1160 520M1260 205L1310 420M1410 290L1490 510" class="edge"/>
-    <g class="faint"><circle cx="820" cy="300" r="4"/><circle cx="970" cy="220" r="4"/><circle cx="1110" cy="310" r="5"/><circle cx="1260" cy="205" r="4"/><circle cx="1410" cy="290" r="4"/><circle cx="1530" cy="190" r="3"/><circle cx="860" cy="520" r="4"/><circle cx="1030" cy="430" r="5"/><circle cx="1160" cy="520" r="4"/><circle cx="1310" cy="420" r="5"/><circle cx="1490" cy="510" r="4"/></g>
-  </g>
-  <g class="phaseC">
-    <ellipse cx="1220" cy="430" rx="330" ry="130" transform="rotate(-18 1220 430)" class="edge"/><ellipse cx="1220" cy="430" rx="280" ry="92" transform="rotate(24 1220 430)" class="edge2"/><ellipse cx="1220" cy="430" rx="220" ry="56" transform="rotate(-42 1220 430)" class="edge"/>
-    <g class="faint"><circle cx="947" cy="514" r="3"/><circle cx="1025" cy="356" r="2"/><circle cx="1112" cy="289" r="3"/><circle cx="1230" cy="303" r="2"/><circle cx="1374" cy="350" r="3"/><circle cx="1465" cy="465" r="2"/><circle cx="1360" cy="540" r="3"/><circle cx="1196" cy="559" r="2"/><circle cx="1066" cy="510" r="3"/></g>
-  </g>
-  <g class="phaseD">
-    <ellipse cx="1240" cy="430" rx="290" ry="210" class="edge"/><ellipse cx="1240" cy="430" rx="235" ry="166" class="edge2"/><ellipse cx="1240" cy="430" rx="176" ry="122" class="edge"/><ellipse cx="1240" cy="430" rx="118" ry="79" class="edge2"/>
-    <g class="faint"><circle cx="1240" cy="220" r="3"/><circle cx="1420" cy="300" r="2"/><circle cx="1515" cy="430" r="3"/><circle cx="1430" cy="585" r="2"/><circle cx="1240" cy="640" r="3"/><circle cx="1035" cy="570" r="2"/><circle cx="955" cy="430" r="3"/><circle cx="1042" cy="292" r="2"/></g>
-  </g>
-  <g opacity=".7" class="driftB"><circle cx="770" cy="160" r="2" class="star"/><circle cx="900" cy="102" r="1.5" class="star"/><circle cx="1070" cy="126" r="2" class="star"/><circle cx="1340" cy="112" r="1.5" class="star"/><circle cx="1510" cy="152" r="2" class="star"/><circle cx="760" cy="710" r="2" class="star"/><circle cx="940" cy="762" r="1.5" class="star"/><circle cx="1160" cy="720" r="2" class="star"/><circle cx="1350" cy="780" r="1.5" class="star"/><circle cx="1515" cy="720" r="2" class="star"/></g>
-  <g class="flow"><path d="M790 250C900 300 900 390 1040 430M820 650C930 610 960 535 1080 492M1510 260C1435 305 1420 370 1365 420M1520 650C1428 608 1410 540 1358 490" class="hot"/></g>
-  <g filter="url(#glow)"><circle cx="1120" cy="400" r="13" class="mind pulse"/><circle cx="1210" cy="350" r="13" class="space pulse"/><circle cx="1300" cy="400" r="13" class="reality pulse"/><circle cx="1172" cy="492" r="13" class="power pulse"/><circle cx="1262" cy="492" r="13" class="time pulse"/></g>
-  <g class="flow"><path d="M1120 400L1215 560M1210 350L1215 560M1300 400L1215 560M1172 492L1215 560M1262 492L1215 560" class="hot"/></g>
-  <circle cx="1215" cy="560" r="14" class="release" filter="url(#soft)"/><circle cx="1215" cy="560" r="34" fill="none" stroke="#ff7a66" stroke-width="1" stroke-dasharray="3 8" class="pulse"/>
-  <path d="M1215 574V720" class="hot flow"/>
-  <text x="1510" y="82" text-anchor="end" class="label accent">OBLIGATION FIELD / SELECTIVE ROUTING</text><text x="1510" y="108" text-anchor="end" class="label">FORM → ROUTE → RECEIPT → RELEASE</text>
+  <rect width="1600" height="700" class="bg"/>
+  <path d="M72 104H1528" class="rule"/>
+  <text x="72" y="66" class="mono accent small">SELECTIVE ROUTING / TRACE 001</text>
+  <text x="1528" y="66" text-anchor="end" class="mono dim tiny">ONE GOAL · THREE OBLIGATIONS · THREE RECEIPTS</text>
+
+  <rect x="78" y="350" width="250" height="120" class="goal"/>
+  <text x="108" y="385" class="mono dim tiny">GOAL</text>
+  <text x="108" y="425" class="mono txt label">VERIFY A NEW</text>
+  <text x="108" y="456" class="mono txt label">RESEARCH METHOD</text>
+
+  <path d="M328 410H408V222H484M408 410H484M408 410V598H484" class="route"/>
+
+  <rect x="484" y="180" width="236" height="84" class="box"/>
+  <rect x="484" y="368" width="236" height="84" class="box"/>
+  <rect x="484" y="556" width="236" height="84" class="box"/>
+  <text x="510" y="211" class="mono dim tiny">OBLIGATION 01</text><text x="510" y="244" class="mono txt label">PRIOR ART</text>
+  <text x="510" y="399" class="mono dim tiny">OBLIGATION 02</text><text x="510" y="432" class="mono txt label">EXECUTABLE CLAIM</text>
+  <text x="510" y="587" class="mono dim tiny">OBLIGATION 03</text><text x="510" y="620" class="mono txt label">INDEPENDENT REVIEW</text>
+
+  <path d="M720 222H812M720 410H812M720 598H812" class="route"/>
+  <rect x="812" y="180" width="170" height="84" class="tool space"/>
+  <rect x="812" y="368" width="170" height="84" class="tool power"/>
+  <rect x="812" y="556" width="170" height="84" class="tool council"/>
+  <text x="897" y="211" text-anchor="middle" class="mono dim tiny">SELECTED TOOL</text><text x="897" y="244" text-anchor="middle" class="mono txt label">SPACE</text>
+  <text x="897" y="399" text-anchor="middle" class="mono dim tiny">SELECTED TOOL</text><text x="897" y="432" text-anchor="middle" class="mono txt label">POWER</text>
+  <text x="897" y="587" text-anchor="middle" class="mono dim tiny">SELECTED TOOL</text><text x="897" y="620" text-anchor="middle" class="mono txt label">COUNCIL</text>
+
+  <path d="M982 222H1060M982 410H1060M982 598H1060" class="route"/>
+  <rect x="1060" y="180" width="190" height="84" class="receipt"/>
+  <rect x="1060" y="368" width="190" height="84" class="receipt"/>
+  <rect x="1060" y="556" width="190" height="84" class="receipt"/>
+  <text x="1086" y="211" class="mono dim tiny">RECEIPT 01</text><text x="1086" y="244" class="mono txt small">SEARCH SCOPE</text>
+  <text x="1086" y="399" class="mono dim tiny">RECEIPT 02</text><text x="1086" y="432" class="mono txt small">EXECUTION</text>
+  <text x="1086" y="587" class="mono dim tiny">RECEIPT 03</text><text x="1086" y="620" class="mono txt small">REVIEW</text>
+
+  <path d="M1250 222H1320V410H1372M1250 410H1372M1250 598H1320V410" class="route"/>
+  <rect x="1372" y="350" width="156" height="120" class="release"/>
+  <text x="1450" y="385" text-anchor="middle" class="mono accent tiny">RELEASE</text>
+  <text x="1450" y="425" text-anchor="middle" class="mono txt label">SCOPED</text>
+  <text x="1450" y="456" text-anchor="middle" class="mono txt label">RESULT</text>
+
 </svg>
