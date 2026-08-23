@@ -130,3 +130,23 @@ whose `required_module == "foil"`; a missing profile yields `available=False` an
   decision hash is deterministic, and it never clears a `PROOF` obligation;
 - replaying a strike with an injected maximal adaptation event leaves the verdict and
   `output_hash` byte-identical.
+
+## Deferred hardening (adversarial-acceptance review, 2026-08-23)
+
+A cross-vendor acceptance pass confirmed the never-CLEARED invariant holds and found
+audit-trail gaps. Three were fixed (independence requires distinct model ids, not just
+provenance labels; the caller verdict token is reconciled against the stored transcript;
+the genuine transcript artifact is un-suppressable and caller artifacts dedup on
+`(locator, sha256)`). Two remain deferred because neither can produce a false CLEARED —
+Black Gem structurally cannot clear an obligation — so they are audit-trail quality, not
+release-safety:
+
+- **Canary technique binding.** `probe_canary` scores `CAUGHT` on a structured
+  `costume_verdict: COSTUME` plus any non-empty `prior_technique`; it does not check the
+  named technique against the planted costume's known answer. TRIGGER: when a canary bank
+  with per-canary expected-technique labels ships, require the named technique to match the
+  planted answer for `CAUGHT`.
+- **Budget accounting.** `budget_hash` is recorded but `run_strike`'s `max_tokens` is spent
+  per phase with no cumulative accounting against the committed budget. TRIGGER: when a
+  strike must run under a hard matched-budget ablation, add cumulative token accounting and
+  fail closed on overspend.

@@ -429,3 +429,84 @@ def len_checker(text: str) -> str:
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DesignHardeningTests(BlackGemTestCase):
+    """Mastermind+FOIL+Codex acceptance loop (2026-08-23): bind the verdict and
+    the trust gate to the stored transcript, not to caller-supplied arguments."""
+
+    def _trusted_run(self, text_a=SURVIVES_TEXT, text_b=SURVIVES_TEXT, group_b="vendor-b"):
+        state = self.make(group_b)
+        bg.probe_canary(self.root, state.strike_id, CANARY, fetch=Transport(constant(CAUGHT_TEXT)))
+        result = bg.run_strike(
+            self.root, state.strike_id, CANDIDATE,
+            fetch=Transport(per_model({"model-a": text_a, "model-b": text_b})),
+        )
+        return state, result
+
+    def _same_model_run(self):
+        from egrt_types import text_digest
+        seats = [
+            bg.Breaker("a", "model-x", "2026-01", 0.2, "vendor-a"),
+            bg.Breaker("b", "model-x", "2026-02", 0.2, "vendor-b"),
+        ]
+        state = bg.create_strike(
+            self.root, seats,
+            candidate_hash=text_digest(CANDIDATE), budget_hash="budget-1",
+        )
+        bg.probe_canary(self.root, state.strike_id, CANARY, fetch=Transport(constant(CAUGHT_TEXT)))
+        result = bg.run_strike(
+            self.root, state.strike_id, CANDIDATE,
+            fetch=Transport(per_model({"model-x": SURVIVES_TEXT})),
+        )
+        return state, result
+
+    def test_two_seats_on_one_model_are_not_independent(self) -> None:
+        # FIX (independence): distinct provenance LABELS but one model_id must not
+        # read as independent (same-model errors correlate). Pre-fix _trusted only
+        # counted distinct_provenance_groups and would mark this trusted.
+        state, result = self._same_model_run()
+        receipt = bg.finalize(
+            self.root, state.strike_id, "obl-indep",
+            synthesis=SURVIVES_TEXT, break_triples=result["break_triples"],
+        )
+        self.assertIn("independence-not-established", receipt.unresolved)
+        self.assertEqual(receipt.verdict, Verdict.UNKNOWN)
+
+    def test_caller_verdict_token_must_match_the_transcript(self) -> None:
+        # FIX (audit trail): the caller adjudicates surviving breaks, but a verdict
+        # token that the stored synthesis never produced is flagged. Pre-fix finalize
+        # reparsed only its argument and recorded no disagreement.
+        state, result = self._trusted_run()  # stored synthesis = SURVIVES_TO_GATE
+        receipt = bg.finalize(
+            self.root, state.strike_id, "obl-mismatch",
+            synthesis=KILL_TEXT, break_triples=[],  # caller claims KILL
+        )
+        self.assertIn("synthesis-verdict-does-not-match-transcript", receipt.unresolved)
+
+    def test_caller_cannot_shadow_the_genuine_transcript_artifact(self) -> None:
+        # FIX (audit trail): a caller ArtifactRef sharing the stored locator with a
+        # different hash cannot suppress the genuine artifact. Pre-fix dedup compared
+        # locator only, so the fake ref won and the real one was dropped.
+        from egrt_types import ArtifactRef
+        state, result = self._trusted_run()
+        genuine = bg.artifact_ref(self.root, state.strike_id)
+        self.assertIsNotNone(genuine)
+        fake = ArtifactRef(locator=genuine.locator, sha256="0" * 64)
+        receipt = bg.finalize(
+            self.root, state.strike_id, "obl-shadow",
+            synthesis=SURVIVES_TEXT, break_triples=result["break_triples"],
+            evidence_artifacts=[fake],
+        )
+        self.assertIn("caller-artifact-shadows-transcript", receipt.unresolved)
+        locators = {(a.locator, a.sha256) for a in _all_artifacts(receipt)}
+        self.assertIn((genuine.locator, genuine.sha256), locators)
+        self.assertNotIn((genuine.locator, "0" * 64), locators)
+
+
+def _all_artifacts(receipt):
+    seen = []
+    for ev in receipt.evidence:
+        if getattr(ev, "artifact", None) is not None:
+            seen.append(ev.artifact)
+    return seen

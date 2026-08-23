@@ -448,12 +448,18 @@ def _participation(records: list[dict[str, Any]], breakers: list[Breaker]) -> di
         for sid, row in per_seat.items()
         if sid in contributing
     })
+    models = sorted({
+        row["model_id"]
+        for sid, row in per_seat.items()
+        if sid in contributing
+    })
     return {
         "per_seat": per_seat,
         "n_contributing": len(contributing),
         "n_partial": len(partial),
         "complete": len(contributing) >= 2 and not partial,
         "distinct_provenance_groups": len(groups),
+        "distinct_models": len(models),
         "transport_available": bool(contributing),
     }
 
@@ -593,6 +599,7 @@ def _trusted(state: StrikeState) -> tuple[bool, list[str]]:
     participation = state.participation or {}
     complete = bool(participation.get("complete"))
     groups = int(participation.get("distinct_provenance_groups") or 0)
+    models = int(participation.get("distinct_models") or 0)
     if not canary:
         unresolved.append("canary-probe-not-run")
     elif not probe_trusted:
@@ -602,11 +609,19 @@ def _trusted(state: StrikeState) -> tuple[bool, list[str]]:
             unresolved.append("canary-probe-untrusted")
     if not complete:
         unresolved.append("participation-incomplete")
-    if groups < 2:
+    if groups < 2 or models < 2:
+        # Two seats on one model are not independent however they are labelled
+        # (same-model errors are correlated; a provenance label cannot fix that).
         unresolved.append("independence-not-established")
     if participation.get("injection_canary_hits"):
         unresolved.append("injection-canary-succeeded")
-    trusted = probe_trusted and complete and groups >= 2 and not participation.get("injection_canary_hits")
+    trusted = (
+        probe_trusted
+        and complete
+        and groups >= 2
+        and models >= 2
+        and not participation.get("injection_canary_hits")
+    )
     return trusted, unresolved
 
 
@@ -626,6 +641,13 @@ def finalize(
     trusted, unresolved = _trusted(state)
     token = parse_verdict_token(synthesis)
     surviving = [t for t in break_triples]
+    # The caller adjudicates which breaks survived, but the verdict token it
+    # supplies must agree with the one run_strike stored from the live synthesis.
+    # A mismatch is recorded, not silently trusted (the caller could pass a token
+    # the transcript never produced).
+    stored_token = participation.get("verdict_token")
+    if stored_token is not None and stored_token != "UNKNOWN" and token != stored_token:
+        unresolved.append("synthesis-verdict-does-not-match-transcript")
 
     transport = bool(participation.get("transport_available"))
     contributing = int(participation.get("n_contributing") or 0)
@@ -671,10 +693,17 @@ def finalize(
         for seat_id, row in sorted((participation.get("per_seat") or {}).items())
     )
 
-    artifacts = list(evidence_artifacts)
+    # The genuine stored transcript artifact is authoritative and always leads
+    # the list; caller-supplied artifacts follow. Dedup on (locator, sha256) so a
+    # caller cannot shadow the real artifact with a same-locator, different-hash ref.
     stored = artifact_ref(root, strike_id)
-    if stored is not None and not any(a.locator == stored.locator for a in artifacts):
-        artifacts.insert(0, stored)
+    artifacts = [stored] if stored is not None else []
+    for ref in evidence_artifacts:
+        if stored is not None and ref.locator == stored.locator and ref.sha256 != stored.sha256:
+            unresolved.append("caller-artifact-shadows-transcript")
+            continue
+        if not any(a.locator == ref.locator and a.sha256 == ref.sha256 for a in artifacts):
+            artifacts.append(ref)
 
     derived = EvidenceRef(
         evidence_class=EvidenceClass.DERIVED,
