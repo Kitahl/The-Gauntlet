@@ -4,6 +4,12 @@
 
 The rename changes the human-facing concept, not the compatibility contract.
 
+## Disambiguation
+
+This project's **Mirror — Adaptive Reasoning Complement** is not the 2025 research framework **MIRROR: Multi-agent Intra- and Inter-Reflection for Optimized Reasoning in Tool Learning**, and it is not a persona-cloning or self-reflection product. No novelty claim is made for the word "Mirror" itself.
+
+Here, **Mirror** specifically means the task/user complement mechanism described below. The technical identifier `foil` is retained as a stable disambiguating implementation name.
+
 ## What Mirror does
 
 Mirror exists to make a large toolset easier to use.
