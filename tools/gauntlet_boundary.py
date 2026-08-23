@@ -1,12 +1,10 @@
-"""Turn-boundary Process Assurance evaluator.
+"""Turn-boundary Process Assurance evaluator with incident-keyed suppression.
 
-A sanitized, portable descendant of the original two-stage Gauntlet evaluator.
-It detects repeated/stuck work and unsupported novelty/survivor framing, then
-optionally asks an independently configured OpenRouter model for a precision
-judgment. Strong deterministic tool-loop evidence can fire without an API key.
-
-Persisted turn history contains only lossy 64-bit similarity fingerprints, never
-assistant-message text.
+This legacy natural-language boundary remains deliberately narrow. Deterministic
+repeated-tool-loop evidence can fire without an LLM. Free-text frame/costume
+candidates use an optional independent semantic precision judge; judge absence is
+reported as UNAVAILABLE rather than silently interpreted as a negative judgment.
+Persisted history contains lossy fingerprints only, never assistant-message text.
 """
 from __future__ import annotations
 
@@ -40,9 +38,9 @@ def message_fingerprint(message: str) -> str:
     features = tokens if len(tokens) == 1 else [f"{a}\x1f{b}" for a, b in zip(tokens, tokens[1:])]
     weights = [0] * 64
     for feature in set(features):
-        digest = int.from_bytes(hashlib.blake2b(feature.encode(), digest_size=8).digest(), "big")
+        hashed = int.from_bytes(hashlib.blake2b(feature.encode(), digest_size=8).digest(), "big")
         for bit in range(64):
-            weights[bit] += 1 if digest & (1 << bit) else -1
+            weights[bit] += 1 if hashed & (1 << bit) else -1
     value = 0
     for bit, weight in enumerate(weights):
         if weight >= 0:
@@ -77,7 +75,7 @@ def stage1(message: str, previous: list[str], threshold: float) -> str | None:
 
 
 def _tail_tool_calls(transcript: str, limit: int = 14) -> list[tuple[str, str, bool]]:
-    """Return only tool name + normalized input hash + error flag; never raw output."""
+    """Return tool name + normalized input hash + error flag; never raw output."""
     calls: list[tuple[str, str, bool, str]] = []
     results: dict[str, bool] = {}
     try:
@@ -101,14 +99,11 @@ def _tail_tool_calls(transcript: str, limit: int = 14) -> list[tuple[str, str, b
             if block.get("type") == "tool_use":
                 name = str(block.get("name") or "unknown")
                 canonical = json.dumps(block.get("input", {}), sort_keys=True, separators=(",", ":"))
-                digest = hashlib.sha256(canonical.encode()).hexdigest()[:16]
-                calls.append((name, digest, False, block.get("id", "")))
+                input_hash = hashlib.sha256(canonical.encode()).hexdigest()[:16]
+                calls.append((name, input_hash, False, str(block.get("id") or "")))
             elif block.get("type") == "tool_result":
                 results[str(block.get("tool_use_id") or "")] = bool(block.get("is_error"))
-    out: list[tuple[str, str, bool]] = []
-    for name, digest, _, ident in calls[-limit:]:
-        out.append((name, digest, results.get(ident, False)))
-    return out
+    return [(name, input_hash, results.get(ident, False)) for name, input_hash, _, ident in calls[-limit:]]
 
 
 def action_loop(transcript: str) -> str | None:
@@ -116,8 +111,8 @@ def action_loop(transcript: str) -> str | None:
     if len(calls) < 3:
         return None
     stats: dict[str, list] = {}
-    for name, digest, err in calls:
-        row = stats.setdefault(digest, [name, 0, 0, False])
+    for name, input_hash, err in calls:
+        row = stats.setdefault(input_hash, [name, 0, 0, False])
         row[1] += 1
         row[2] += int(err)
         row[3] = bool(err)
@@ -134,9 +129,9 @@ def action_loop(transcript: str) -> str | None:
     return None
 
 
-def llm_judge(op: str, message: str, model: str | None) -> bool:
+def llm_judge(op: str, message: str, model: str | None) -> bool | None:
     if not model or not available():
-        return False
+        return None
     system = (
         "You are a precision filter for a research-process audit. Return JSON only: "
         '{"fires":true|false,"reason":"..."}. For frame: fire only when the work is '
@@ -148,7 +143,7 @@ def llm_judge(op: str, message: str, model: str | None) -> bool:
         data = json.loads(text)
         return bool(data.get("fires"))
     except (OpenRouterError, json.JSONDecodeError, TypeError, KeyError):
-        return False
+        return None
 
 
 def load_state(path: Path) -> dict:
@@ -165,11 +160,29 @@ def save_state(path: Path, state: dict) -> None:
 def reset(root: Path | None = None) -> int:
     root = root or project_root()
     path = state_dir(root) / "gauntlet_boundary.json"
-    save_state(path, {"turn": 0, "judge_calls": 0, "fired": {}, "history": []})
+    save_state(path, {"turn": 0, "judge_calls": 0, "history": [], "incidents": {}, "last_unavailable": None})
     return 0
 
 
-def evaluate(message: str, transcript: str, *, root: Path | None = None, judge: Callable[[str, str, str | None], bool] = llm_judge) -> tuple[str | None, str]:
+def _incident_key(op: str, message: str, action_ev: str | None) -> str:
+    if action_ev:
+        raw = f"{op}|tool-loop|{action_ev}"
+        return hashlib.sha256(raw.encode()).hexdigest()[:16]
+    return f"{op}:{message_fingerprint(message)}"
+
+
+def _suppressed(state: dict, incident: str, turn: int, refractory_turns: int) -> bool:
+    last = (state.get("incidents") or {}).get(incident)
+    return isinstance(last, int) and turn - last <= refractory_turns
+
+
+def evaluate(
+    message: str,
+    transcript: str,
+    *,
+    root: Path | None = None,
+    judge: Callable[[str, str, str | None], bool | None] = llm_judge,
+) -> tuple[str | None, str]:
     root = root or project_root()
     cfg = load_config(root)
     bc = cfg.get("boundary", {})
@@ -177,7 +190,8 @@ def evaluate(message: str, transcript: str, *, root: Path | None = None, judge: 
         return None, ""
     path = state_dir(root, cfg) / "gauntlet_boundary.json"
     st = load_state(path)
-    st["turn"] = int(st.get("turn", 0)) + 1
+    turn = int(st.get("turn", 0)) + 1
+    st["turn"] = turn
     history = [_as_fingerprint(item) for item in list(st.get("history", []))[-2:]]
     threshold = float(bc.get("near_duplicate_threshold", 0.72))
     op = stage1(message, history, threshold)
@@ -187,25 +201,37 @@ def evaluate(message: str, transcript: str, *, root: Path | None = None, judge: 
     history.append(message_fingerprint(message))
     st["history"] = history[-3:]
     if not op:
+        st["last_unavailable"] = None
         save_state(path, st)
         return None, ""
 
-    budgets = {"frame": int(bc.get("frame_budget", 3)), "costume": int(bc.get("costume_budget", 2))}
-    fired = st.setdefault("fired", {})
-    count = int(fired.get(op, 0))
-    if count >= budgets[op]:
+    incident = _incident_key(op, message, action_ev)
+    refractory = max(0, int(bc.get("incident_refractory_turns", 3)))
+    if _suppressed(st, incident, turn, refractory):
         save_state(path, st)
         return None, ""
 
     model = os.environ.get("GAUNTLET_JUDGE_MODEL") or bc.get("judge_model")
-    confirmed = bool(action_ev) if op == "frame" else False
+    confirmed: bool | None = True if (op == "frame" and action_ev) else judge(op, message, model)
+    if confirmed is None:
+        st["last_unavailable"] = {"operation": op, "incident": incident, "turn": turn}
+        save_state(path, st)
+        return None, (
+            f"{MARKER} /{op}] Semantic precision judge UNAVAILABLE for a free-text audit candidate. "
+            "No pass/fail inference was made; use typed runtime evidence or configure GAUNTLET_JUDGE_MODEL."
+        )
     if not confirmed:
-        confirmed = judge(op, message, model)
-    if not confirmed:
+        st["last_unavailable"] = None
         save_state(path, st)
         return None, ""
 
-    fired[op] = count + 1
+    st.setdefault("incidents", {})[incident] = turn
+    st["last_unavailable"] = None
+    # Retain only a bounded incident ledger; keys are non-recoverable fingerprints.
+    if len(st["incidents"]) > 64:
+        oldest = sorted(st["incidents"], key=lambda key: st["incidents"][key])[:-64]
+        for key in oldest:
+            st["incidents"].pop(key, None)
     save_state(path, st)
     if op == "frame":
         detail = f" Tool evidence: {action_ev}." if action_ev else ""
@@ -237,6 +263,8 @@ def main(argv: list[str] | None = None) -> int:
     op, reason = evaluate(message, str(payload.get("transcript_path") or ""))
     if op:
         print(json.dumps({"decision": "block", "reason": reason}))
+    elif reason:
+        print(json.dumps({"systemMessage": reason}))
     return 0
 
 

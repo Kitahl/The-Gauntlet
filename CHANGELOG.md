@@ -14,6 +14,70 @@ The project follows semantic versioning for public releases.
 - Independent reproduction reports.
 - Archival DOI integration after the first evidence-bearing stable release.
 
+## [0.5.1] - 2026-08-23
+
+Research-repair release. It closes measured defects in FOIL's evidence
+estimator, vocabulary, ledger, budget guard, and model layer. It closes **no**
+efficacy question: retrieval and personalization quality remain `NOT_MEASURED`,
+and no result in this release licenses a superiority claim.
+
+### D1–D11 defect disposition
+
+| ID | Defect | Disposition |
+|---|---|---|
+| D1 | Classification was a non-monotone count rule — one verified miss permanently blocked a strength verdict (`correct=20, incorrect=1 → UNCERTAIN`) | **CLOSED.** Beta posterior with a Jeffreys prior in `tools/foil_evidence.py`; monotonicity proved by exhaustive enumeration over a finite grid in `tests/test_foil_evidence.py`. Measured: 20/1 now yields `PROMISING_STRENGTH`, `P(θ>0.70)=0.997999`. |
+| D2 | No stated evidence floor and no way to check what a screen length buys | **CLOSED.** `EvidenceTier` (`REAL_WORK`/`SCREEN`/`ASSISTED`/`UNVERIFIED`) with weights 1.0/0.4/0.0/0.0; `min_effective_n` expressed in `REAL_WORK` units so a screen alone can never be load-bearing; exact rate calculators `false_classification_rates` and `items_for_target_error` tabulated in `docs/FOIL_EVIDENCE_ESTIMATOR.md`. `items_for_target_error` reports honest non-convergence at the module defaults rather than a fabricated k. |
+| D3 | `skills/foil/SKILL.md` and the runtime enums could drift silently; the documented `A0..A4` ladder and the runtime's `{"none","independent"}` check had an empty intersection, so conforming records were discarded | **CLOSED.** `foil_assistance.ladder_contract_block()` and `foil_interventions.gap_kinds_contract_block()` are pasted verbatim into `SKILL.md` sections 7 and 5; both drift tests are live gates (the two `@unittest.expectedFailure` decorators are removed and the tests pass). |
+| D4 | Stale evidence retained full authority; a superseded pass could be reported as a transfer | **CLOSED (recency weight + freshness gate; horizon UNRESOLVED).** Two mechanisms, because the weight alone was insufficient: (a) exponential recency decay with a `min_weight = 0.05` floor, and (b) a `freshness_horizon_days = 360.0` gate requiring one admissible `REAL_WORK` observation inside the horizon before any verdict is offered, exposed as `stale_only` / `freshest_age_days` on the summary. The decay floor is a floor, not a cutoff, so on weight alone 80 verified misses aged 3600 days still summed past `min_effective_n` and classified `POSSIBLE_GAP` — measured, now a pinned regression in `FreshnessGateTests`. Old evidence still contributes its decayed weight whenever one fresh observation exists, so supersession is unaffected; `intervention_status()` remains time-ordered so a later verified failure supersedes an earlier pass. **Both time constants are UNRESOLVED** — the 180-day half-life and the 360-day horizon are engineering choices, not measured forgetting laws. |
+| D5 | Capability/profile writes could fail silently | **CLOSED.** `CapabilityWriteError` raised on write failure instead of a silent no-op. |
+| D6 | The task guard was described as "mechanically enforced" when it counted `authorize()` calls, not tool calls | **CLOSED ONLY UNDER THE PreToolUse BROKER, ADVISORY ELSEWHERE.** `tools/foil_task_guard.py` is a tamper-evident SHA-256 hash-chained ledger; enforcement exists only via `tools/foil_tool_broker.py` when `FOIL_TASK_RUN` is set, and only for tools the broker budgets. Outside that path the budget is advisory. Budget is charged at reservation, so a receipt records attempts admitted, not successful retrievals. |
+| D7 | The concurrency lock was not a lock: an `O_EXCL` sentinel serialised nothing once created, and its PID/TTL liveness heuristic refused live contenders (12 workers against a budget of 5 produced 2 grants and 10 `LockTimeout`s) | **CLOSED.** Real kernel locks — `fcntl.flock` on POSIX, `msvcrt.locking` with `LK_NBLCK` byte-range locks on Windows — released by the kernel on close or crash. The timeout-forwarding bug that dropped the caller's timeout is fixed; the descriptor is closed exactly once. |
+| D8 | Semantic repairs existed only as prose | **CLOSED.** Applied as tested commits: one assistance/ownership vocabulary, `ExecutionOwner` as an axis separate from assistance, and `independent_mastery_eligible = verified AND assistance == A0_INDEPENDENT AND execution_owner == USER`. |
+| D9 | The V2 policy kernel lived only on an experiment ref and was cited by a commit id that resolves on no ref | **CLOSED BY RELOCATION.** Ported verbatim in substance as `tools/foil_policy.py` from `origin/experiment/foil-vnext5-vnext@9540860`; exhaustive enumeration of 14 invariants with a `routed_states` positive control, so a suite that refuses everything cannot pass. Invariant I10 ("at most one targeted complement per decision") is recorded as **tautological**: its predicate asserts only that `targeted_complement` is `None` or a `str`, which the field's type already guarantees, so it proves nothing about the property it names. It is left in place and labelled rather than counted as evidence. |
+| D10 | "Underpowered benchmark comparison" | **NOT A CODE DEFECT.** A power table is supplied in `docs/FOIL_EVIDENCE_ESTIMATOR.md`; the protocol change belongs to Phase 5 and is not in this release. |
+| D11 | The language model was a build-time assumption, so anything built on FOIL inherited the harness's hard-coded model | **CLOSED.** Model-agnostic adapters in `tools/foil_models.py` (`openai_chat`, `anthropic_messages`, `ollama_chat`, `cli`, `mock`) with a `claude_json` output parser, role-based resolution (`primary`/`reviewer`/`verifier`/`benchmark`), declared determinism classes, and secrets referenced by environment-variable name only. An unfilled role reports `NOT-MEASURED` rather than substituting the primary for the reviewer. |
+
+### Added
+
+- `tools/foil_evidence.py` — Beta-posterior competence estimator, evidence tiers, recency weighting, a freshness gate (`freshness_horizon_days`, with `stale_only` / `freshest_age_days` on the summary and `PosteriorSummary.as_dict()`), exact false-classification-rate calculators, and an SPRT diagnostic cross-check. No third-party dependencies: the regularized incomplete beta is implemented in-module.
+- `tools/foil_assistance.py` — single-source assistance ladder and `ExecutionOwner` axis, with generated contract blocks.
+- `tools/foil_policy.py` — ported V2 evidence-gated routing kernel; regime is derived from task properties, never from a benchmark name.
+- `tools/foil_tool_broker.py` — PreToolUse enforcement boundary for frozen-run tool budgets.
+- `tools/foil_models.py`, `tools/foil_setup.py` — provider-neutral model layer and `foil setup` CLI.
+- `docs/FOIL_EVIDENCE_ESTIMATOR.md` — measured operating characteristics, the SPRT cross-check table, and the UNRESOLVED list.
+- `research/FOIL_RESEARCH_BASIS.md` — 2026-08-23 locator ledger separating fetched sources from unverified report locators.
+- `validation/FOIL_LEDGER_AUDIT_2026-08-23.md` — claim-by-claim audit of the 2026-08-22 evidence ledger.
+
+### Changed
+
+- `skills/foil/SKILL.md` restructured task-model-first, with generated vocabulary blocks, the Beta-posterior classification section, the `ExecutionOwner` rule, and honest budget/broker scope wording.
+- `tools/foil_interventions.py` and `tools/foil_profile.py` record execution ownership and verification status; profile payloads are sanitized, closed-vocabulary, and length-capped.
+
+### Not adopted
+
+Pydantic, Sybil, LibCST, lm-eval, Hypothesis, Z3, and Lean were evaluated and **not
+adopted**. The repository is stdlib-only with a hash-locked dependency graph, and
+each of these would add a runtime or CI dependency for a capability the existing
+code already covers. This is a scope decision, not a judgement about those tools.
+
+PROV / RO-Crate provenance export is **DEFERRED**. Trigger: an external consumer
+that actually needs machine-readable provenance interchange. Until then the
+receipts in `benchmark_runs/` and the hash-chained guard ledger are the
+provenance record.
+
+### Evidence boundary
+
+Corrected vNext evidence is recorded in
+[`validation/FOIL_LEDGER_AUDIT_2026-08-23.md`](validation/FOIL_LEDGER_AUDIT_2026-08-23.md).
+Two corrections carry forward:
+
+- The ledger's frozen-V2 locator `8a44d68...` resolves on no ref and is **REFUTED as a locator**. The correct locator is **`9540860`** on `origin/experiment/foil-vnext5-vnext`.
+- The ledger's vNext figure of 32/36 is refuted by mechanical re-score. The re-score gives ARC 12/12, GPQA 23/24, **pooled 35/36**, discordant 8 vNext-only / 0 historical-only, exact two-sided McNemar p = 0.0078. **This 35/36 re-score is DESCRIPTIVE ONLY.** It is not superiority evidence: the historical predictions came from earlier disjoint-subset sessions, the vNext run was a later same-item re-run with the questions already public, and gold-blindness rests on a question-only pack rather than a verifiable receipt. It must never be presented as validated.
+
+Retrieval and personalization quality remain `NOT_MEASURED`. No prospective,
+matched-budget, same-item randomized comparison exists for any FOIL
+configuration.
+
 ## [0.5.0] - 2026-08-22
 
 ### Added

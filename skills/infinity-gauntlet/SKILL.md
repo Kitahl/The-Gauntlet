@@ -56,3 +56,7 @@ Use the smallest relevant set; do not ritualize all ten.
 - Result: `CLEARED | ISSUE | UNKNOWN | UNAVAILABLE`
 - Consequence: `<what can proceed>`
 - Next discriminator: `<only if unresolved>`
+
+## Typed runtime contract
+
+`tools/gauntlet_runtime.py` now declares the implementation/support mode and required typed state for all ten operations. Automatic monitors may return `UNKNOWN` when their required state is absent and `UNAVAILABLE` when a required semantic method/tool cannot run; silence is not equivalent to a negative finding. Existing boundary/monitor hooks remain compatibility detectors during migration. See `docs/specs/GAUNTLET_ENGINEERING_SPEC.md`.

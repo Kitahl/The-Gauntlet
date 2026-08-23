@@ -1,4 +1,4 @@
-"""Config-driven stale-authority monitor for the Process Assurance Framework."""
+"""Config-driven stale-authority monitor with typed runtime events."""
 from __future__ import annotations
 
 import hashlib
@@ -7,6 +7,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from egrt_store import RuntimeStore, new_id, utcnow
+from egrt_types import RuntimeEvent, digest
 from gauntlet_config import load_config, project_root, state_dir
 from private_io import write_private_text
 
@@ -19,9 +21,9 @@ def file_hash(path: Path) -> str | None:
 
 def git_head(root: Path) -> str:
     try:
-        p = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, text=True, capture_output=True, timeout=5)
-        return p.stdout.strip() if p.returncode == 0 else ""
-    except Exception:
+        proc = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, text=True, capture_output=True, timeout=5, shell=False)
+        return proc.stdout.strip() if proc.returncode == 0 else ""
+    except (OSError, subprocess.TimeoutExpired):
         return ""
 
 
@@ -46,16 +48,38 @@ def diff_state(before: dict, after: dict, governing: list[str]) -> list[str]:
     return out
 
 
-def snapshot(root: Path | None = None) -> int:
+def _active_task(store: RuntimeStore) -> str | None:
+    path = store.base / "active_task"
+    if not path.exists():
+        return None
+    value = path.read_text(encoding="utf-8").strip()
+    return value or None
+
+
+def _emit(root: Path, event_type: str, payload: dict, metadata: dict, *, task_id: str | None = None) -> None:
+    store = RuntimeStore(root)
+    store.append_event(RuntimeEvent(
+        event_id=new_id("evt"), event_type=event_type, component="gauntlet",
+        task_id=task_id if task_id is not None else _active_task(store),
+        payload_hash=digest(payload), timestamp=utcnow(), metadata=metadata,
+    ))
+
+
+def snapshot(root: Path | None = None, *, task_id: str | None = None) -> int:
     root = root or project_root()
     cfg = load_config(root)
     governing = [str(x) for x in cfg.get("governing_files", [])]
+    state = build_state(root, governing)
     path = state_dir(root, cfg) / "gauntlet_monitor.json"
-    write_private_text(path, json.dumps(build_state(root, governing), indent=2) + "\n")
+    write_private_text(path, json.dumps(state, indent=2) + "\n")
+    _emit(root, "authority.snapshot", state, {
+        "governing_count": len(governing),
+        "registered_authority_set_hash": digest(sorted(governing)),
+    }, task_id=task_id)
     return 0
 
 
-def check(root: Path | None = None) -> tuple[int, list[str]]:
+def check(root: Path | None = None, *, emit_event: bool = True) -> tuple[int, list[str]]:
     root = root or project_root()
     cfg = load_config(root)
     governing = [str(x) for x in cfg.get("governing_files", [])]
@@ -66,7 +90,13 @@ def check(root: Path | None = None) -> tuple[int, list[str]]:
         before = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return 0, []
-    drift = diff_state(before, build_state(root, governing), governing)
+    after = build_state(root, governing)
+    drift = diff_state(before, after, governing)
+    if drift and emit_event:
+        _emit(root, "authority.changed", {"before": before, "after": after}, {
+            "drift_count": len(drift),
+            "drift_hash": digest(drift),
+        })
     return (1 if drift else 0), drift
 
 

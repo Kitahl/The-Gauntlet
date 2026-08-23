@@ -37,3 +37,7 @@ Depending on the system, inspect:
 A green unit suite certifies only those tests. Before "fixed" or "verified", name at least one plausible relevant failure class outside the gate set or justify why the scope is exhaustive.
 
 Use linters/type checkers/static analysis/fuzzing/security scans/formal tools where they are diagnostic of the claim, not for badge collection.
+
+## Typed runtime contract
+
+`tools/power_runtime.py` executes explicit verification plans with `shell=False`, timeouts, mandatory/optional checks, output hashes and named defect-class coverage. A green plan is scoped to the checks/coverage represented in its receipt. Missing mandatory tooling is `UNAVAILABLE`. See `docs/specs/POWER_ENGINEERING_SPEC.md`.

@@ -37,3 +37,7 @@ A candidate is not promoted because it is creative. Require:
 - regression against existing supported behavior.
 
 Unverified novelty remains `NOVELTY UNKNOWN`.
+
+## Typed runtime contract
+
+`tools/reality_runtime.py` represents every candidate as a falsifiable machine-readable mechanism object with prior art, actual delta, negative control, transfer, ablation and verifier plan. A candidate can be admitted for testing only with a real stored cleared Space receipt; admission does not prove novelty or efficacy. See `docs/specs/REALITY_ENGINEERING_SPEC.md`.

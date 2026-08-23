@@ -83,17 +83,21 @@ class FoilLayer2Tests(unittest.TestCase):
             )
         )
 
-    def test_standard_perfect_independent_is_only_promising(self) -> None:
+    def test_standard_perfect_independent_is_not_load_bearing(self) -> None:
+        """Previously asserted PROMISING_STRENGTH for a two-item-per-facet screen."""
         session = fl2.build(fp.load(), seed=3)
         responses = session["response_schema"]
         for item in session["objective_items"]:
             responses["objective"][item["id"]]["choice"] = fl2.answer(item)
             responses["objective"][item["id"]]["confidence"] = 100
         report = fl2.score(session, responses)
+        for row in report["facet_evidence"].values():
+            self.assertEqual(row["classification"], "INSUFFICIENT_EVIDENCE")
+            self.assertEqual(row["screen_signal"], "ALL_CORRECT")
         self.assertTrue(
             all(
-                row["classification"] == "PROMISING_STRENGTH"
-                for row in report["facet_evidence"].values()
+                entry["action"].startswith("confirm with harder")
+                for entry in report["follow_up"]
             )
         )
         self.assertEqual(report["calibration"]["brier"], 0.0)
@@ -131,9 +135,15 @@ class FoilLayer2Tests(unittest.TestCase):
         deep = saved["deep_calibration"]
         self.assertEqual(len(deep["probe_history"]), 24)
         for facet in session["self_estimate_facets"]:
+            # Two screen items per facet are recorded in full but, as with
+            # Layer 1, cannot reach a load-bearing verdict. This previously
+            # asserted PROMISING_STRENGTH.
             self.assertEqual(
                 deep["facet_evidence"][facet]["classification"],
-                "PROMISING_STRENGTH",
+                "INSUFFICIENT_EVIDENCE",
+            )
+            self.assertEqual(
+                deep["facet_evidence"][facet]["independent_verified_pass"], 2
             )
 
     def test_layer2_screen_alone_cannot_satisfy_deep_profile_gate(self) -> None:

@@ -18,3 +18,7 @@ Use when execution is about to outrun the evidence state.
 5. **RELEASE** — choose the single next action with the highest information/progress value.
 
 Do not use this protocol as ceremonial delay. If the task is simple, stable, reversible, and well-specified, skip it.
+
+## Typed runtime contract
+
+`tools/meditate_runtime.py` represents the preflight as a `DecisionState`. Numeric value-of-computation is used only when probabilities, utilities and costs are explicitly supplied and valid. Otherwise Meditate uses labeled ordinal dominance or returns `UNKNOWN`; it never invents pseudo-precise values. See `docs/specs/MEDITATE_ENGINEERING_SPEC.md`.

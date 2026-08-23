@@ -50,3 +50,7 @@ When killing an approach, give the nearest viable alternative and its cost.
 ## Tools
 
 Use available Python/symbolic solvers/provers/SMT/ITP systems only after feature detection. Never reference machine-specific paths. For external theorem status or prior art, route to Research Discovery.
+
+## Typed runtime contract
+
+`tools/mind_runtime.py` records explicit proof obligations and verifier receipts. Initial adapters provide restricted exact arithmetic and optional Z3 SMT2 execution; missing solvers are `UNAVAILABLE`. Solver/proof receipts apply to the supplied formal encoding, not automatically to unstated natural-language scope. See `docs/specs/MIND_ENGINEERING_SPEC.md`.
