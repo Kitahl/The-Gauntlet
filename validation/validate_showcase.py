@@ -177,16 +177,17 @@ checks["visual_dimensions_declared"] = all(
     for image in parser.images
     if image.get("src", "") in expected_visual_srcs
 )
+release_version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
 checks["showcase_revision_separate_from_software_version"] = (
     "SHOWCASE R14" in html
     and "Research software" in html
-    and "0.5.0" in html
+    and release_version in html
     and "Showcase revision" in html
 )
 visual_version_text = VISUAL_VERSION.read_text(encoding="utf-8") if VISUAL_VERSION.exists() else ""
 checks["showcase_revision_file_consistent"] = (
     "showcase-revision=14" in visual_version_text
-    and "research-software-version=0.5.0" in visual_version_text
+    and f"research-software-version={release_version}" in visual_version_text
 )
 checks["editorial_representation_contract"] = all(
     token in html
@@ -312,7 +313,6 @@ checks["reproducibility_surface"] = all(
 )
 
 citation_text = (ROOT / "CITATION.cff").read_text(encoding="utf-8")
-release_version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
 checks["release_identity_consistent"] = all(
     token in citation_text
     for token in (
