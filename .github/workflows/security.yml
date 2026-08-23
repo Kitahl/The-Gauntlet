@@ -43,3 +43,27 @@ jobs:
         run: python -m pip_audit -r requirements-runtime.txt
       - name: Audit development requirements
         run: python -m pip_audit -r requirements-dev.txt
+
+  dependency-lock:
+    name: Generate hashed dependency lock
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Generate hash-locked dependency graph
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pip-tools==7.6.1
+          python -m piptools compile \
+            --generate-hashes \
+            --resolver=backtracking \
+            --output-file=requirements-lock.txt \
+            requirements-lock.in
+      - name: Upload generated lock
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: requirements-lock
+          path: requirements-lock.txt
+          if-no-files-found: error
