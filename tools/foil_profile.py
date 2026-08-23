@@ -13,6 +13,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from private_io import ensure_private_dir, write_private_text
+
 SCHEMA = "egrt.foil-profile.v1"
 CORE_DOMAINS = [
     "formal_reasoning",
@@ -84,7 +86,8 @@ def profile_home() -> Path:
         xdg = os.environ.get("XDG_CONFIG_HOME")
         root = Path(xdg).expanduser() if xdg else Path.home() / ".config"
         root = root / "egrt" / "foil"
-    (root / "profiles").mkdir(parents=True, exist_ok=True)
+    root = ensure_private_dir(root)
+    ensure_private_dir(root / "profiles")
     return root
 
 
@@ -129,7 +132,7 @@ def new_profile(name: str, display_name: str | None = None) -> dict[str, Any]:
 def save(profile: dict[str, Any]) -> Path:
     profile["updated_at"] = now()
     path = path_for(str(profile["id"]))
-    path.write_text(json.dumps(profile, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    write_private_text(path, json.dumps(profile, indent=2, ensure_ascii=False) + "\n")
     return path
 
 
@@ -143,7 +146,7 @@ def load(name: str | None = None) -> dict[str, Any]:
 def activate(name: str) -> None:
     if not path_for(name).exists():
         raise FileNotFoundError(f"profile does not exist: {name}")
-    (profile_home() / "active_profile").write_text(slug(name) + "\n", encoding="utf-8")
+    write_private_text(profile_home() / "active_profile", slug(name) + "\n")
 
 
 def active_name() -> str | None:
