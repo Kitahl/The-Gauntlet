@@ -10,6 +10,7 @@ from .execution_contract import (
 )
 from .runtime_policy import (
     CachedEvidenceHint,
+    DiscoveryObjective,
     EvidenceTypedDecision,
     EvidenceTypedRuntimePolicy,
     EvidenceTypedTaskContext,
@@ -21,6 +22,7 @@ __all__ = [
     "AUTHORITY_ACCEPTANCE",
     "CachedEvidenceHint",
     "CachedEvidenceRecord",
+    "DiscoveryObjective",
     "EvidenceTypedDecision",
     "EvidenceTypedRuntimePolicy",
     "EvidenceTypedTaskContext",
