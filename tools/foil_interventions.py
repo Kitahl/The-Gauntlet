@@ -90,6 +90,27 @@ def _content_id(prefix: str, payload: dict[str, Any]) -> str:
     return f"{prefix}{hashlib.sha256(blob.encode('utf-8')).hexdigest()[:12]}"
 
 
+GAP_KINDS_MARKER = "<!-- generated from tools/foil_interventions.py: do not edit by hand -->"
+
+
+def gap_kinds_contract_block() -> str:
+    """The exact Markdown block `skills/foil/SKILL.md` must contain.
+
+    Same mechanism as `foil_assistance.ladder_contract_block`: the documented
+    gap/bottleneck vocabulary and the vocabulary `add_gap` actually accepts
+    cannot drift apart silently, because the drift test asserts the file
+    contains this verbatim. `add_gap` rejects any kind outside `GAP_KINDS`, so a
+    label that appears only in the skill text is a label the runtime refuses at
+    write time - a failure the person would meet mid-task instead of in CI.
+    """
+    lines = [GAP_KINDS_MARKER]
+    for kind in sorted(GAP_KINDS):
+        lines.append(f"- `{kind}`")
+    lines.append("")
+    lines.append(GAP_KINDS_MARKER)
+    return "\n".join(lines)
+
+
 def new_ledger(profile_id: str) -> dict[str, Any]:
     stamp = now()
     return {

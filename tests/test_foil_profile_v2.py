@@ -284,6 +284,15 @@ class MigrationTests(ProfileTestCase):
         legacy = v1_profile([v1_event("correct"), v1_event("incorrect", source="assessment")])
         first, _ = fp.migrate_v1_to_v2(copy.deepcopy(legacy))
         second, _ = fp.migrate_v1_to_v2(copy.deepcopy(legacy))
+        # `migrations` and `migration` are wall-clock provenance records, so they
+        # differ between two runs by design. Comparing the digests they carry is
+        # a stronger check than dropping them: it asserts the two runs derived
+        # byte-identical content, not merely that they agree once the records
+        # are removed.
+        first_receipt = first.pop("migration")
+        second_receipt = second.pop("migration")
+        self.assertEqual(first_receipt["old_sha256"], second_receipt["old_sha256"])
+        self.assertEqual(first_receipt["new_sha256"], second_receipt["new_sha256"])
         first.pop("migrations")
         second.pop("migrations")
         self.assertEqual(first, second)

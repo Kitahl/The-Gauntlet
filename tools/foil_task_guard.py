@@ -130,6 +130,65 @@ def attest(state: dict[str, Any]) -> dict[str, Any]:
 # state                                                                        #
 # --------------------------------------------------------------------------- #
 
+SESSION_INDEX_SUFFIX = ".sessions.json"
+
+
+def session_index_path(state: Path) -> Path:
+    """Sidecar index that records which isolation sessions a state file claimed."""
+    return state.with_name(state.name + SESSION_INDEX_SUFFIX)
+
+
+def claimed_isolation_sessions(state_dir: Path) -> dict[str, str]:
+    """Every isolation session id already claimed anywhere in `state_dir`.
+
+    The index is written per state file (`<state>.sessions.json`) but read across
+    the whole directory. A run directory is the unit an evaluation actually shares,
+    so two different state files reusing one isolation session id is exactly the
+    collision worth catching - and a per-file-only check would miss it.
+    """
+    claimed: dict[str, str] = {}
+    if not state_dir.is_dir():
+        return claimed
+    for sidecar in sorted(state_dir.glob("*" + SESSION_INDEX_SUFFIX)):
+        try:
+            rows = json.loads(sidecar.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            # A damaged sidecar must not hand out a session id as if it were
+            # free. Fail closed by naming it, so the caller sees a mismatch
+            # rather than a silent reuse.
+            claimed.setdefault("<unreadable:" + sidecar.name + ">", sidecar.name)
+            continue
+        if not isinstance(rows, dict):
+            continue
+        for session_id, owner in rows.items():
+            claimed.setdefault(str(session_id), str(owner))
+    return claimed
+
+
+def _claim_isolation_session(state: Path, isolation_session_id: str, task_id: str) -> None:
+    """Record the claim, or refuse it. Fails closed on a duplicate."""
+    state_dir = state.parent
+    claimed = claimed_isolation_sessions(state_dir)
+    if isolation_session_id in claimed:
+        raise BindingMismatch(
+            f"isolation_session_id {isolation_session_id!r} was already claimed by "
+            f"{claimed[isolation_session_id]!r} in {state_dir}; a reused session is not "
+            "an isolated run"
+        )
+    sidecar = session_index_path(state)
+    try:
+        rows = json.loads(sidecar.read_text(encoding="utf-8"))
+        if not isinstance(rows, dict):
+            rows = {}
+    except (OSError, json.JSONDecodeError):
+        rows = {}
+    rows[isolation_session_id] = f"{state.name}:{task_id}"
+    sidecar.parent.mkdir(parents=True, exist_ok=True)
+    temp = sidecar.with_suffix(sidecar.suffix + ".tmp")
+    temp.write_text(json.dumps(rows, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    temp.replace(sidecar)
+
+
 def start_state(
     *,
     task_id: str,
@@ -141,10 +200,28 @@ def start_state(
     dataset_revision: str | None = None,
     as_of: str | None = None,
     decoding: dict[str, Any] | None = None,
+    model: str | None = None,
+    effort: str | None = None,
+    allowed_tools: list[str] | None = None,
+    isolation_session_id: str | None = None,
+    state_path: Path | None = None,
 ) -> dict[str, Any]:
+    """Open a frozen run.
+
+    `model`, `effort`, `allowed_tools` and `isolation_session_id` are part of the
+    binding, not decoration: a result is only attributable to a configuration if
+    the configuration is recorded with it, and an "isolated" run that silently
+    shared a session with another run is not isolated. Pass `state_path` (the
+    file the state will be saved to) together with `isolation_session_id` and the
+    claim is registered in a sidecar index; a second run claiming the same id
+    anywhere in that directory raises `BindingMismatch`.
+    """
     clean_budgets = {str(k): int(v) for k, v in budgets.items()}
     if any(value < 0 for value in clean_budgets.values()):
         raise ValueError("budgets must be non-negative")
+    tools = [str(item) for item in (allowed_tools or [])]
+    if isolation_session_id is not None and state_path is not None:
+        _claim_isolation_session(Path(state_path), str(isolation_session_id), task_id)
     state = {
         "schema": SCHEMA,
         "task_id": task_id,
@@ -155,6 +232,10 @@ def start_state(
         "dataset_revision": dataset_revision,
         "as_of": as_of,
         "decoding": dict(decoding or {}),
+        "model": model,
+        "effort": effort,
+        "allowed_tools": tools,
+        "isolation_session_id": isolation_session_id,
         "budgets": clean_budgets,
         "used": {key: 0 for key in clean_budgets},
         "events": [],
@@ -417,6 +498,12 @@ def main(argv: list[str] | None = None) -> int:
     start.add_argument("--profile-payload-sha256")
     start.add_argument("--dataset-revision")
     start.add_argument("--as-of")
+    start.add_argument("--model")
+    start.add_argument("--effort")
+    start.add_argument("--allowed-tool", action="append", default=[],
+                       help="repeatable; the tools this run is permitted to use")
+    start.add_argument("--isolation-session-id",
+                       help="claimed in a sidecar index; reuse in the same state directory fails closed")
 
     spend = sub.add_parser("spend", help="reserve and immediately commit one operation")
     spend.add_argument("state", type=Path)
@@ -441,7 +528,11 @@ def main(argv: list[str] | None = None) -> int:
                             condition=args.condition, budgets=_parse_budget(args.budget),
                             profile_freeze=args.profile_freeze,
                             profile_payload_sha256=args.profile_payload_sha256,
-                            dataset_revision=args.dataset_revision, as_of=args.as_of)
+                            dataset_revision=args.dataset_revision, as_of=args.as_of,
+                            model=args.model, effort=args.effort,
+                            allowed_tools=args.allowed_tool,
+                            isolation_session_id=args.isolation_session_id,
+                            state_path=args.state)
         _atomic_save(args.state, state)
         print(args.state)
         return 0
