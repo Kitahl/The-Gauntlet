@@ -1,121 +1,36 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
-  <title id="title">The Gauntlet selective research route</title>
-  <desc id="desc">A dark technical plate showing one research goal decomposed into obligation nodes. Relevant nodes snap to Space, Reality, Power and Time while Mind remains on standby because no formal proof is load-bearing. The active routes converge into typed receipts and a scoped release gate.</desc>
+  <title id="title">Selective research routing field</title>
+  <desc id="desc">A research goal is decomposed into explicit obligations. Those obligations connect selectively to Mind, Space, Reality, Power, and Time specialist nodes. Typed evidence receipts then converge into a scoped release. There is no literal gauntlet illustration.</desc>
   <defs>
-    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="g" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
     <style>
-      .sans{font-family:Arial,Helvetica,sans-serif}.serif{font-family:Georgia,'Times New Roman',serif}.mono{font-family:Consolas,Menlo,monospace}
-      .bg{fill:#090b10}.panel{fill:#0d1219;stroke:#2c3745;stroke-width:1.2}.panel2{fill:#111821;stroke:#3b4859;stroke-width:1.2}.line{fill:none;stroke:#2d3948;stroke-width:1.1}.strong{fill:none;stroke:#56657a;stroke-width:1.4}.snap{fill:none;stroke:#ff7a66;stroke-width:1.8;stroke-dasharray:3 7;filter:url(#soft)}.idle{fill:none;stroke:#465264;stroke-width:1.1;stroke-dasharray:2 8}
-      .text{fill:#f4f1e8}.muted{fill:#9aa6b5}.red{fill:#ff7a66}.mind{fill:#e0c46c}.space{fill:#8ab4f8}.reality{fill:#e88ed6}.power{fill:#67d6e3}.time{fill:#8fd19e}
-      .gem{stroke:#f4f1e8;stroke-width:1.8}.gemFacet{fill:none;stroke:#f4f1e8;stroke-width:.65;opacity:.72}.node{fill:#111821;stroke:#67768a;stroke-width:1.2}.hot{fill:#ff7a66;stroke:#fff0eb;stroke-width:1.3;filter:url(#glow)}.receipt{fill:#0d1219;stroke:#ff7a66;stroke-width:1.5}.gate{fill:#ff7a66;stroke:#fff0eb;stroke-width:1.6;filter:url(#soft)}
-      .micro{font-size:9px;letter-spacing:1.35px}.tiny{font-size:8px;letter-spacing:1.1px}.body{font-size:11px}.label{font-size:13px;font-weight:700}.name{font-size:20px}.headline{font-size:34px}.sub{font-size:17px}
+      .bg{fill:#06090e}.grid{fill:none;stroke:#131b25;stroke-width:1}.edge{fill:none;stroke:#536276;stroke-width:1.2}.edgeHot{fill:none;stroke:#ff7a66;stroke-width:1.8;stroke-dasharray:4 8}.node{fill:#0d141d;stroke:#718095;stroke-width:1.2}.goal{fill:#eef2f5;stroke:#fff}.ob{fill:#111923;stroke:#8290a2}.mind{fill:#e4c66f}.space{fill:#8ab4f8}.reality{fill:#e58bd4}.power{fill:#66d7e4}.time{fill:#8ed19d}.receipt{fill:#ff7a66;stroke:#fff0ed}.pass{fill:#8ed19d;stroke:#effff3}.muted{fill:#7d8999}.txt{fill:#edf1f5}.accent{fill:#ff7a66}.mono{font-family:Consolas,Menlo,monospace}.sans{font-family:Arial,Helvetica,sans-serif}.tiny{font-size:10px;letter-spacing:1.2px}.small{font-size:12px;letter-spacing:.5px}.label{font-size:15px;font-weight:700}.big{font-size:23px;font-weight:700}
     </style>
   </defs>
   <rect width="1200" height="720" class="bg"/>
-  <text x="48" y="42" class="mono red micro">PLATE 01 / THE GAUNTLET · SELECTIVE POWER ROUTE</text>
-  <text x="1152" y="42" text-anchor="end" class="mono muted tiny">NODE FIELD → SNAP → SPECIALIST → RECEIPT</text>
-  <path d="M48 64H1152" class="strong"/>
+  <g opacity=".6"><path d="M0 90H1200M0 180H1200M0 270H1200M0 360H1200M0 450H1200M0 540H1200M0 630H1200M150 0V720M300 0V720M450 0V720M600 0V720M750 0V720M900 0V720M1050 0V720" class="grid"/></g>
+  <text x="48" y="54" class="mono accent tiny">THE GAUNTLET / SELECTIVE ROUTING FIELD</text><text x="1152" y="54" text-anchor="end" class="mono muted tiny">OBLIGATIONS FIRST · METHODS SECOND</text>
 
-  <!-- input task -->
-  <rect x="48" y="94" width="314" height="112" rx="12" class="panel"/>
-  <text x="68" y="118" class="mono red tiny">EXAMPLE GOAL</text>
-  <text x="68" y="151" class="serif text headline">Is this method</text>
-  <text x="68" y="184" class="serif text headline">new, runnable, and better?</text>
+  <g><rect x="54" y="274" width="180" height="116" rx="8" class="node"/><text x="78" y="306" class="mono accent tiny">RESEARCH GOAL</text><text x="78" y="342" class="sans txt big">Is the method</text><text x="78" y="371" class="sans txt big">new, runnable, better?</text></g>
 
-  <!-- obligation field -->
-  <text x="48" y="244" class="mono muted tiny">OBLIGATION FIELD / THE TASK IS DECOMPOSED BEFORE TOOLS ARE CHOSEN</text>
-  <g>
-    <path d="M101 301L181 274L267 307L327 269L386 310M87 391L162 353L248 390L325 354L401 397M90 482L169 450L248 484L331 446L408 490" class="line"/>
-    <circle cx="101" cy="301" r="8" class="node"/><circle cx="181" cy="274" r="7" class="node"/><circle cx="267" cy="307" r="8" class="node"/><circle cx="327" cy="269" r="7" class="node"/><circle cx="386" cy="310" r="8" class="node"/>
-    <circle cx="87" cy="391" r="7" class="node"/><circle cx="162" cy="353" r="9" class="hot"/><circle cx="248" cy="390" r="8" class="node"/><circle cx="325" cy="354" r="9" class="hot"/><circle cx="401" cy="397" r="8" class="node"/>
-    <circle cx="90" cy="482" r="7" class="node"/><circle cx="169" cy="450" r="9" class="hot"/><circle cx="248" cy="484" r="8" class="node"/><circle cx="331" cy="446" r="9" class="hot"/><circle cx="408" cy="490" r="7" class="node"/>
+  <g class="mono tiny"><text x="304" y="130" class="muted">OBLIGATIONS</text></g>
+  <g><circle cx="350" cy="190" r="22" class="ob"/><circle cx="350" cy="290" r="22" class="ob"/><circle cx="350" cy="390" r="22" class="ob"/><circle cx="350" cy="490" r="22" class="ob"/><text x="388" y="194" class="sans txt small">Prior art?</text><text x="388" y="294" class="sans txt small">Named gap?</text><text x="388" y="394" class="sans txt small">Executable?</text><text x="388" y="494" class="sans txt small">Better under matched test?</text></g>
+  <path d="M234 332C286 320 292 194 328 190M234 332C286 330 292 291 328 290M234 332C286 342 292 388 328 390M234 332C286 356 292 486 328 490" class="edge"/>
+
+  <g><text x="594" y="130" class="mono muted tiny">SPECIALIST ROUTES</text>
+    <circle cx="650" cy="190" r="26" class="mind" filter="url(#g)"/><circle cx="770" cy="190" r="26" class="space" filter="url(#g)"/><circle cx="890" cy="290" r="26" class="reality" filter="url(#g)"/><circle cx="770" cy="390" r="26" class="power" filter="url(#g)"/><circle cx="650" cy="490" r="26" class="time" filter="url(#g)"/>
+    <text x="650" y="238" text-anchor="middle" class="mono txt tiny">MIND</text><text x="770" y="238" text-anchor="middle" class="mono txt tiny">SPACE</text><text x="890" y="338" text-anchor="middle" class="mono txt tiny">REALITY</text><text x="770" y="438" text-anchor="middle" class="mono txt tiny">POWER</text><text x="650" y="538" text-anchor="middle" class="mono txt tiny">TIME</text>
   </g>
-  <text x="148" y="337" class="mono red tiny">PRIOR ART?</text>
-  <text x="301" y="338" class="mono red tiny">NAMED GAP?</text>
-  <text x="144" y="433" class="mono red tiny">EXECUTABLE?</text>
-  <text x="306" y="429" class="mono red tiny">BETTER?</text>
-  <text x="48" y="531" class="mono muted tiny">OTHER NODES REMAIN UNSPENT · ROUTING IS NOT “RUN EVERYTHING”</text>
+  <path d="M372 190C470 190 540 190 624 190" class="edge" opacity=".28"/><path d="M372 190C470 190 584 190 744 190" class="edgeHot"/>
+  <path d="M372 290C500 290 634 290 864 290" class="edgeHot"/>
+  <path d="M372 390C510 390 620 390 744 390" class="edgeHot"/>
+  <path d="M372 490C470 490 550 490 624 490" class="edgeHot"/>
+  <text x="598" y="174" class="mono muted tiny">STANDBY</text>
 
-  <!-- snap rails -->
-  <path d="M162 353C440 333 468 280 541 244" class="snap"/>
-  <path d="M325 354C457 363 496 360 541 348" class="snap"/>
-  <path d="M169 450C447 469 488 459 541 452" class="snap"/>
-  <path d="M331 446C462 495 500 531 541 556" class="snap"/>
-  <path d="M267 307C432 233 485 171 541 145" class="idle"/>
+  <g><text x="975" y="130" class="mono muted tiny">EVIDENCE</text><circle cx="1010" cy="215" r="18" class="receipt"/><circle cx="1010" cy="315" r="18" class="receipt"/><circle cx="1010" cy="415" r="18" class="receipt"/><circle cx="1010" cy="515" r="18" class="receipt"/><text x="1042" y="219" class="sans txt small">source receipt</text><text x="1042" y="319" class="sans txt small">gap / synthesis receipt</text><text x="1042" y="419" class="sans txt small">execution receipt</text><text x="1042" y="519" class="sans txt small">evaluation receipt</text></g>
+  <path d="M796 190C900 190 930 214 992 215M916 290C955 290 970 304 992 315M796 390C900 390 930 414 992 415M676 490C830 490 920 514 992 515" class="edgeHot"/>
 
-  <!-- gauntlet specialist stack -->
-  <rect x="520" y="96" width="238" height="526" rx="14" class="panel"/>
-  <text x="542" y="120" class="mono muted tiny">THE FIVE GEMS / CLAIM-NATIVE SPECIALISTS</text>
-
-  <g transform="translate(0 0)">
-    <rect x="540" y="134" width="198" height="70" rx="10" class="panel2"/>
-    <path d="M574 150L590 161L585 179L568 186L558 171L562 156Z" class="gem mind"/>
-    <path d="M562 156L585 179M558 171L590 161" class="gemFacet"/>
-    <text x="608" y="162" class="serif text name">Mind</text><text x="608" y="183" class="mono muted tiny">FORMAL REASONING</text>
-    <text x="720" y="151" text-anchor="end" class="mono muted tiny">STANDBY</text>
-  </g>
-
-  <g>
-    <rect x="540" y="220" width="198" height="70" rx="10" class="panel2"/>
-    <path d="M574 236L590 247L585 265L568 272L558 257L562 242Z" class="gem space" filter="url(#glow)"/>
-    <path d="M562 242L585 265M558 257L590 247" class="gemFacet"/>
-    <text x="608" y="248" class="serif text name">Space</text><text x="608" y="269" class="mono muted tiny">DISCOVERY</text>
-    <text x="720" y="237" text-anchor="end" class="mono red tiny">ACTIVE</text>
-  </g>
-
-  <g>
-    <rect x="540" y="306" width="198" height="70" rx="10" class="panel2"/>
-    <path d="M574 322L590 333L585 351L568 358L558 343L562 328Z" class="gem reality" filter="url(#glow)"/>
-    <path d="M562 328L585 351M558 343L590 333" class="gemFacet"/>
-    <text x="608" y="334" class="serif text name">Reality</text><text x="608" y="355" class="mono muted tiny">METHOD SYNTHESIS</text>
-    <text x="720" y="323" text-anchor="end" class="mono red tiny">ACTIVE</text>
-  </g>
-
-  <g>
-    <rect x="540" y="392" width="198" height="70" rx="10" class="panel2"/>
-    <path d="M574 408L590 419L585 437L568 444L558 429L562 414Z" class="gem power" filter="url(#glow)"/>
-    <path d="M562 414L585 437M558 429L590 419" class="gemFacet"/>
-    <text x="608" y="420" class="serif text name">Power</text><text x="608" y="441" class="mono muted tiny">ENGINEERING</text>
-    <text x="720" y="409" text-anchor="end" class="mono red tiny">ACTIVE</text>
-  </g>
-
-  <g>
-    <rect x="540" y="478" width="198" height="70" rx="10" class="panel2"/>
-    <path d="M574 494L590 505L585 523L568 530L558 515L562 500Z" class="gem time" filter="url(#glow)"/>
-    <path d="M562 500L585 523M558 515L590 505" class="gemFacet"/>
-    <text x="608" y="506" class="serif text name">Time</text><text x="608" y="527" class="mono muted tiny">EVALUATION</text>
-    <text x="720" y="495" text-anchor="end" class="mono red tiny">ACTIVE</text>
-  </g>
-
-  <text x="542" y="582" class="mono muted tiny">MIRROR ADAPTS ROUTE · SOUL INTEGRATES</text>
-  <text x="542" y="600" class="mono muted tiny">GAUNTLET AUDITS PROCESS · COUNCIL SELECTIVE</text>
-
-  <!-- receipt assembly -->
-  <path d="M758 255C790 255 796 263 820 278M758 341C790 341 797 327 820 314M758 427C790 427 797 392 820 350M758 513C790 513 797 456 820 386" class="snap"/>
-  <rect x="820" y="226" width="330" height="232" rx="14" class="panel"/>
-  <text x="842" y="251" class="mono red tiny">TYPED RECEIPT ASSEMBLY</text>
-
-  <g class="mono tiny">
-    <circle cx="842" cy="282" r="6" class="hot"/><text x="860" y="286" class="text">SPACE</text><text x="930" y="286" class="muted">nearest methods + scoped search</text>
-    <circle cx="842" cy="318" r="6" class="hot"/><text x="860" y="322" class="text">REALITY</text><text x="930" y="322" class="muted">candidate only after named gap</text>
-    <circle cx="842" cy="354" r="6" class="hot"/><text x="860" y="358" class="text">POWER</text><text x="930" y="358" class="muted">execution + regression receipt</text>
-    <circle cx="842" cy="390" r="6" class="hot"/><text x="860" y="394" class="text">TIME</text><text x="930" y="394" class="muted">matched baseline + uncertainty</text>
-  </g>
-  <path d="M842 414H1128" class="line"/>
-  <text x="842" y="436" class="mono muted tiny">MIND: NOT INVOKED · NO FORMAL CLAIM WAS LOAD-BEARING</text>
-
-  <!-- release gate -->
-  <path d="M985 458V502" class="snap"/>
-  <rect x="820" y="502" width="330" height="100" rx="14" class="panel2"/>
-  <circle cx="848" cy="552" r="13" class="gate"/>
-  <text x="876" y="537" class="mono red tiny">SCOPED RELEASE</text>
-  <text x="876" y="560" class="serif text sub">Supported result + explicit limits</text>
-  <text x="876" y="582" class="mono muted tiny">CLEARED · ISSUE · UNKNOWN · UNAVAILABLE</text>
-
-  <!-- footer law -->
-  <path d="M48 646H1152" class="strong"/>
-  <text x="48" y="674" class="mono muted tiny">POWER = CORRECT TOOL SELECTION + CLAIM-MATCHED EVIDENCE + EXPLICIT UNRESOLVED STATE</text>
-  <text x="1152" y="674" text-anchor="end" class="mono red tiny">AGREEMENT ≠ VERIFICATION</text>
-  <text x="48" y="699" class="serif text sub">The Gauntlet does not make every tool speak. It makes the right tool accountable.</text>
+  <g><rect x="860" y="596" width="286" height="78" rx="8" class="node"/><circle cx="891" cy="635" r="12" class="pass"/><text x="918" y="630" class="mono accent tiny">SCOPED RELEASE</text><text x="918" y="653" class="sans txt label">Evidence supports only the stated claim.</text></g>
+  <path d="M1010 533C1010 565 982 580 930 596" class="edgeHot"/>
+  <text x="50" y="676" class="mono muted tiny">NODES = EXPLICIT OBLIGATIONS · ROUTES = SELECTIVE SPECIALIST METHODS · RECEIPTS = INSPECTABLE EVIDENCE</text><text x="1150" y="676" text-anchor="end" class="mono accent tiny">AGREEMENT ≠ VERIFICATION</text>
 </svg>
