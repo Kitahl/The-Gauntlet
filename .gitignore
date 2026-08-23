@@ -1,9 +1,41 @@
-.mastermind/runtime/
-.mastermind/runs/
+# Never track external Mastermind runtime/state in this repository
 .mastermind/
+mastermind/
+
+# Python bytecode, caches, environments, packaging output
 __pycache__/
-*.pyc
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+.venv/
+venv/
+env/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# Common editor/OS files
 .DS_Store
+.idea/
+.vscode/
+
+# Generic local secrets and credential material
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+credentials*.json
+secrets*.json
 
 # Generated showcase screenshots
 validation/showcase-*.png

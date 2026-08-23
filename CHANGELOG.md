@@ -12,13 +12,24 @@ The project follows semantic versioning for public releases.
 - Permanent machine-readable benchmark receipt at `benchmarks/results/2026-08-22-blinded-pilot.json`.
 - Public benchmark methodology and evidence-boundary report in `docs/BENCHMARKS.md`.
 - Scoped benchmark evidence on the repository README and public Pages showcase, including the GPQA-Diamond null result.
+- Full-history Gitleaks and Python dependency-audit CI gates.
+- Linux, Windows, and macOS runtime portability CI.
+- Owner-restricted atomic persistence helper for local Gauntlet state and FOIL profiles.
+- Release regression checks requiring immutable GitHub Action SHAs, generic secret-file ignores, documented external-model egress, and a Gauntlet/FOIL-only runtime boundary.
 
 ### Changed
 - Benchmark workflows publish blinded questions and public score receipts only; decrypted BrowseComp reference answers are not uploaded as public artifacts.
 - Superseded experimental benchmark harness revisions were consolidated into three canonical runners.
+- GitHub Actions are pinned to verified immutable full commit SHAs; CodeQL uses the supported v4 line.
+- FOIL profile/state storage uses owner-only POSIX modes (`0700` directories, `0600` files) where supported.
+- Process Assurance turn history persists only lossy similarity fingerprints, not assistant-message text.
+- Optional OpenRouter data egress and local privacy behavior are now explicit in runtime/security documentation.
+- Ruff development pin advanced from 0.16.2 to 0.16.3.
+- Research Discovery's OpenAlex user agent derives the toolkit version from `VERSION` rather than a stale hard-coded release number.
+- Mastermind implementation/runtime/control material is explicitly forbidden from tracked Gauntlet runtime paths; historical audit prose remains evidence only.
 
 ### Evidence boundary
-The current HLE, ARC-AGI-1, and GPQA results are exploratory deterministic disjoint-subset pilots using GPT-5.6 Sol, not official benchmark submissions or isolated same-item randomized A/B evidence. The GPQA-Diamond pilot produced no accuracy gain and is retained as a null result. Legacy SimpleBench and freshness-routing results have weaker/manual evidence labels.
+The current HLE, ARC-AGI-1, and GPQA results are exploratory deterministic disjoint-subset pilots using GPT-5.6 Sol, not official benchmark submissions or isolated same-item randomized A/B evidence. The GPQA-Diamond pilot produced no accuracy gain and is retained as a null result. Legacy SimpleBench and freshness-routing results have weaker/manual evidence labels. Security-tool passes reduce specific known risks but do not prove the absence of all vulnerabilities or undiscoverable secrets.
 
 ### Planned
 - Prospective behavioral evaluation of FOIL against direct-assistance and static-scaffolding baselines.

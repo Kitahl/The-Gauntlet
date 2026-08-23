@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 from gauntlet_config import load_config, project_root, state_dir
+from private_io import write_private_text
 
 
 def file_hash(path: Path) -> str | None:
@@ -50,7 +51,7 @@ def snapshot(root: Path | None = None) -> int:
     cfg = load_config(root)
     governing = [str(x) for x in cfg.get("governing_files", [])]
     path = state_dir(root, cfg) / "gauntlet_monitor.json"
-    path.write_text(json.dumps(build_state(root, governing), indent=2) + "\n", encoding="utf-8")
+    write_private_text(path, json.dumps(build_state(root, governing), indent=2) + "\n")
     return 0
 
 

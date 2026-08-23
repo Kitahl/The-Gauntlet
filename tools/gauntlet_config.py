@@ -6,6 +6,8 @@ import os
 from pathlib import Path
 from typing import Any
 
+from private_io import ensure_private_dir
+
 CONFIG_NAME = ".gauntlet.json"
 DEFAULT_CONFIG: dict[str, Any] = {
     "state_dir": ".egrt/state",
@@ -66,5 +68,4 @@ def state_dir(root: Path | None = None, config: dict[str, Any] | None = None) ->
     p = Path(str(config.get("state_dir") or ".egrt/state"))
     if not p.is_absolute():
         p = root / p
-    p.mkdir(parents=True, exist_ok=True)
-    return p
+    return ensure_private_dir(p)
