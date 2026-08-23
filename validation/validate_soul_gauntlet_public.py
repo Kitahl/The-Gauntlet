@@ -28,6 +28,7 @@ def need(path: str) -> str:
 soul = need("skills/soul/SKILL.md")
 gauntlet = need("skills/infinity-gauntlet/SKILL.md")
 foil = need("skills/foil/SKILL.md")
+mirror = need("docs/MIRROR.md")
 readme = need("README.md")
 showcase = need("docs/index.html")
 settings = json.loads(need(".claude/settings.json"))
@@ -112,16 +113,25 @@ for path in runtime_files:
 
 for forbidden in ("Initial assessment priors remain", "Relative strengths observed so far"):
     if forbidden in foil:
-        fail(f"person-specific FOIL prior leaked into public skill: {forbidden}")
+        fail(f"person-specific Mirror/legacy-foil prior leaked into public skill: {forbidden}")
 
+# Public identity changed from FOIL to Mirror; the legacy technical namespace must
+# remain explicit so profiles, hooks, benchmarks, and old links do not silently break.
 for token in (
     "Evidence-Governed Research Toolkit", "Research Orchestrator",
-    "Process Assurance Framework", "FOIL — Adaptive Reasoning Complement",
+    "Process Assurance Framework", "Mirror — Adaptive Reasoning Complement",
 ):
     if token not in readme:
         fail(f"README missing professional public terminology: {token}")
-if "<strong>10</strong>" not in showcase or "Research Orchestrator" not in showcase:
-    fail("showcase architecture/module count is not synchronized")
+for token in (
+    "Mirror — Adaptive Reasoning Complement", "technical skill name: `foil`",
+    "slash command: `/foil`", "runtime modules: `tools/foil_*`",
+    "historical benchmark condition names",
+):
+    if token not in mirror:
+        fail(f"Mirror compatibility contract missing token: {token}")
+if "<strong>10</strong>" not in showcase or "Research Orchestrator" not in showcase or "Mirror" not in showcase:
+    fail("showcase architecture/module count or Mirror public name is not synchronized")
 
 pipeline = need("docs/VNEXT_RUNTIME_PIPELINE.md")
 for token in ("CLEARED", "ISSUE", "UNKNOWN", "UNAVAILABLE", "SPEC", "STATE", "RECEIPT", "FOIL", "Mastermind"):
@@ -134,4 +144,5 @@ print("PASS: privacy-preserving typed hook/runtime wiring")
 print("PASS: per-component engineering specifications present")
 print("PASS: SKILL.md-only module directories preserved")
 print("PASS: Mastermind absent from runtime imports")
-print("PASS: public FOIL contains no embedded user profile")
+print("PASS: Mirror public identity + legacy foil compatibility contract")
+print("PASS: public Mirror/legacy-foil skill contains no embedded user profile")
