@@ -1,0 +1,49 @@
+{
+  "receipt_schema": "foil-vnext5-per-unit-receipt/v1",
+  "status": "completed_unscored",
+  "preregistration_metadata": {
+    "selection_freeze_sha": "a5cda388385e576a447fabd06f5154808c5aadac",
+    "vnext_spec_sha": "d320943d3fd34b3891054acf9e95d70c02531220",
+    "manifest_path": "benchmarks/VNEXT5_ITEM_MANIFEST.json",
+    "manifest_blob_sha": "2c107ec98886fa090395d5055f7a990bf1975b41",
+    "manifest_item_verified": true,
+    "benchmark": "FreshQA",
+    "item_id": "freshqa-282",
+    "condition": "BASE",
+    "isolation_session_id": "base-freshqa-001",
+    "source_revision_or_hash": "FreshQA_v042126; freshllms/freshqa commit 7d2d3683991916f3633e480548a6aa5c9a62e3db",
+    "regime": "public_web",
+    "budget": {
+      "max_search_queries": 12,
+      "max_source_followups": 12
+    }
+  },
+  "benchmark": "FreshQA",
+  "item_id": "freshqa-282",
+  "condition": "BASE",
+  "isolation_session_id": "base-freshqa-001",
+  "question": "In what city is the Louvre Museum?",
+  "answer": "Paris.",
+  "confidence": 0.999,
+  "confidence_before_reveal": 0.999,
+  "tool_counts": {
+    "public_web_search_queries": 4,
+    "public_web_source_followups": 2,
+    "google_sheets_source_reads": 5,
+    "github_read_calls": 7,
+    "connector_schema_or_skill_calls": 8,
+    "github_repository_write_calls_including_this_commit": 2
+  },
+  "phase_allocation": {
+    "manifest_and_isolation": 0.20,
+    "question_acquisition": 0.35,
+    "public_web_verification": 0.30,
+    "receipt_finalization_and_commit": 0.15
+  },
+  "viable_candidate_before_verification": true,
+  "sibling_outputs_visible": false,
+  "target_gold_visible": false,
+  "contaminated": false,
+  "failure_code": null,
+  "scored": false
+}
