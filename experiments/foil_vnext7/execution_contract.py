@@ -210,6 +210,28 @@ def build_request(
     )
 
 
+def _request_identity_matches_scope(
+    decision: EvidenceTypedDecision,
+    request: OperatorRequest,
+) -> bool:
+    """Check task scope without widening the parent public request schema.
+
+    vNext6 binds `task_instance_id` into the canonical request SHA-256. Rebuild
+    the same public request fields under vNext7's task scope and compare hashes.
+    """
+
+    expected = build_v6_request(
+        decision.strategy,
+        task_instance_id=decision.task_instance_id,
+        target_claim_ids=request.target_claim_ids,
+        tool_effect=request.tool_effect,
+        idempotency_key=request.idempotency_key,
+        retry_attempt=request.retry_attempt,
+        prior_postcondition_checked=request.prior_postcondition_checked,
+    )
+    return expected.request_id == request.request_id
+
+
 def _invalid_validation(
     parent: OutcomeValidation,
     errors: tuple[str, ...],
@@ -234,12 +256,12 @@ def validate_outcome(
     request: OperatorRequest,
     outcome: OperatorOutcome,
 ) -> OutcomeValidation:
-    """Apply vNext6 admission plus the vNext7 non-ordinal authority contract."""
+    """Apply vNext6 admission plus vNext7 scope/authority requirements."""
 
     parent = validate_v6_outcome(decision.strategy, request, outcome)
     extra: list[str] = []
 
-    if request.task_instance_id != decision.task_instance_id:
+    if not _request_identity_matches_scope(decision, request):
         extra.append("request_task_scope_mismatch")
 
     accepted = AUTHORITY_ACCEPTANCE.get(
