@@ -1,0 +1,13 @@
+{
+  "schema": "foil-vnext5-unit/v1",
+  "benchmark": "BrowseComp",
+  "item_id": "browsecomp-test-0611",
+  "condition": "BASE",
+  "answer": "John James",
+  "confidence": 0.88,
+  "tool_counts": {
+    "search_queries": 12,
+    "source_followups": 3
+  },
+  "execution_status": "complete"
+}
