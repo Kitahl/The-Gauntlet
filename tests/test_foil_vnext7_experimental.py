@@ -20,6 +20,7 @@ from experiments.foil_vnext7.runtime_policy import (
 )
 
 POLICY = EvidenceTypedRuntimePolicy()
+TASK_ID = "v7-policy-task"
 
 
 def budget(**overrides):
@@ -38,6 +39,7 @@ def budget(**overrides):
 def decide(task=None, *, remaining=None, cached=(), **strategy):
     context = EvidenceTypedTaskContext(
         StrategyTaskContext(task or TaskContext(), **strategy),
+        task_instance_id=TASK_ID,
         cached_evidence=cached,
     )
     return POLICY.decide(context, remaining or budget())
@@ -122,7 +124,7 @@ class EvidenceTypedRuntimePolicyTests(unittest.TestCase):
 
     def test_06_cached_source_reprices_external_call_to_zero(self):
         cached = (
-            CachedEvidenceHint("C1", VerifierKind.SOURCE_EVIDENCE),
+            CachedEvidenceHint(TASK_ID, "C1", VerifierKind.SOURCE_EVIDENCE),
         )
         decision = decide(
             TaskContext(
@@ -140,7 +142,7 @@ class EvidenceTypedRuntimePolicyTests(unittest.TestCase):
 
     def test_07_cached_source_recovers_tool_budget_block(self):
         cached = (
-            CachedEvidenceHint("C1", VerifierKind.SOURCE_EVIDENCE),
+            CachedEvidenceHint(TASK_ID, "C1", VerifierKind.SOURCE_EVIDENCE),
         )
         decision = decide(
             TaskContext(
@@ -159,6 +161,7 @@ class EvidenceTypedRuntimePolicyTests(unittest.TestCase):
     def test_08_stale_cache_does_not_bypass_tool_budget(self):
         cached = (
             CachedEvidenceHint(
+                TASK_ID,
                 "C1",
                 VerifierKind.SOURCE_EVIDENCE,
                 stale=True,
@@ -179,7 +182,7 @@ class EvidenceTypedRuntimePolicyTests(unittest.TestCase):
 
     def test_09_current_source_cache_requires_freshness(self):
         cached = (
-            CachedEvidenceHint("C1", VerifierKind.CURRENT_SOURCE),
+            CachedEvidenceHint(TASK_ID, "C1", VerifierKind.CURRENT_SOURCE),
         )
         decision = decide(
             TaskContext(
@@ -197,6 +200,7 @@ class EvidenceTypedRuntimePolicyTests(unittest.TestCase):
     def test_10_fresh_current_source_cache_is_reusable(self):
         cached = (
             CachedEvidenceHint(
+                TASK_ID,
                 "C1",
                 VerifierKind.CURRENT_SOURCE,
                 freshness_checked=True,
@@ -275,6 +279,7 @@ class EvidenceTypedRuntimePolicyTests(unittest.TestCase):
         trace = decision.trace()
         json.dumps(trace)
         self.assertEqual(trace["controller_version"], POLICY.version)
+        self.assertEqual(trace["task_instance_id"], TASK_ID)
         self.assertEqual(trace["verification_target_count"], 1)
         self.assertFalse(trace["cached_evidence_reused"])
         for forbidden in (
@@ -291,6 +296,7 @@ class EvidenceTypedRuntimePolicyTests(unittest.TestCase):
             remaining=budget(independent_reviews_remaining=1),
             cached=(
                 CachedEvidenceHint(
+                    TASK_ID,
                     "C1",
                     VerifierKind.CONTRADICTION_COUNTEREXAMPLE,
                 ),
@@ -303,6 +309,26 @@ class EvidenceTypedRuntimePolicyTests(unittest.TestCase):
             decision.strategy.minimum_evidence_authority,
             EvidenceAuthority.INDEPENDENT_REVIEW,
         )
+        self.assertFalse(decision.reuse_cached_evidence)
+
+    def test_17_cache_from_another_task_cannot_change_routing(self):
+        decision = decide(
+            TaskContext(
+                has_viable_candidate=True,
+                uncertainties=(
+                    LoadBearingUncertainty("C1", ClaimKind.EXTERNAL_FACT),
+                ),
+            ),
+            remaining=budget(tool_calls_remaining=0),
+            cached=(
+                CachedEvidenceHint(
+                    "other-task",
+                    "C1",
+                    VerifierKind.SOURCE_EVIDENCE,
+                ),
+            ),
+        )
+        self.assertTrue(decision.blocked)
         self.assertFalse(decision.reuse_cached_evidence)
 
 
