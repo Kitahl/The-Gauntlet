@@ -44,15 +44,23 @@ jobs:
       - name: Audit development requirements
         run: python -m pip_audit -r requirements-dev.txt
 
-  dependency-lock:
-    name: Generate hashed dependency lock
+  dependency-lock-bootstrap:
+    name: Bootstrap reviewed hashed dependency lock
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.head_ref == 'release/hardening-0.5.0' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: release/hardening-0.5.0
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
-      - name: Generate hash-locked dependency graph
+      - name: Regenerate reviewed dependency lock
         run: |
           python -m pip install --upgrade pip
           python -m pip install pip-tools==7.6.1
@@ -61,9 +69,15 @@ jobs:
             --resolver=backtracking \
             --output-file=requirements-lock.txt \
             requirements-lock.in
-      - name: Upload generated lock
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: requirements-lock
-          path: requirements-lock.txt
-          if-no-files-found: error
+          echo "c691104c36101259f69f27d4e09ede3dc64b08c326b0ca8fa2021a1c2cacfd12  requirements-lock.txt" | sha256sum -c -
+      - name: Commit exact reviewed lock when missing
+        run: |
+          if git diff --quiet -- requirements-lock.txt && git ls-files --error-unmatch requirements-lock.txt >/dev/null 2>&1; then
+            echo "Reviewed lock already tracked; no bootstrap commit needed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add requirements-lock.txt
+          git commit -m "Add reviewed hash-locked dependencies"
+          git push origin HEAD:release/hardening-0.5.0
