@@ -312,14 +312,15 @@ checks["reproducibility_surface"] = all(
 )
 
 citation_text = (ROOT / "CITATION.cff").read_text(encoding="utf-8")
+release_version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
 checks["release_identity_consistent"] = all(
     token in citation_text
     for token in (
         'title: "Evidence-Governed Research Toolkit"',
-        "version: 0.5.0",
+        f"version: {release_version}",
         "license: MIT",
     )
-) and all(token in html for token in ("v0.5.0", "MIT"))
+) and all(token in html for token in (f"v{release_version}", "MIT"))
 
 checks["activation_surface"] = all(
     command in html
