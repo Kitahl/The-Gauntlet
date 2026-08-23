@@ -84,6 +84,22 @@ generated from it or tested against it.
 | `tools/gauntlet_config.py` | `.gauntlet.json` policy loading |
 | `tools/verify_ledger.py` | optional evidence-ledger commit gate |
 
+### Adversarial review — Black Gem
+
+| Module | Authoritative for |
+|---|---|
+| `tools/blackgem_runtime.py` | **the `ADVERSARY` obligation.** Independent multi-seat attack, off-diagonal cross-critique, and synthesis over a frozen candidate, with a planted-costume canary probe and whole-run participation accounting. |
+
+Black Gem produces the `ADVERSARY` obligation in the release gate's producer row.
+It can raise an `ISSUE` (a surviving break, a `KILL`, or an `AMEND`), and it can
+report `UNKNOWN` or `UNAVAILABLE` — but it **never emits `CLEARED`**, enforced by an
+assertion in `finalize`. Surviving an attack panel is the absence of a found break,
+not evidence that a candidate is correct, so clearing an obligation is not a state
+this module can reach. `probe_trusted` (a canary caught this run) is kept separate
+from `trusted` (probe trust *and* complete participation *and* at least two distinct
+provenance groups), and raw model text lives only in a declared evidence artifact
+referenced by `ArtifactRef`, never in generic state or the receipt.
+
 ### FOIL — vocabularies and estimators
 
 | Module | Authoritative for |

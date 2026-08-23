@@ -8,7 +8,9 @@ from __future__ import annotations
 
 import argparse
 import json
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Mapping, Sequence
 
 import foil_profile
 from egrt_store import RuntimeStore, new_id, utcnow
@@ -20,6 +22,15 @@ from egrt_types import (
     Verdict,
     digest,
     text_digest,
+)
+
+#: Attack axes that are always in scope. FOIL routing ADDS emphasis; it can never
+#: remove a baseline axis, so no profile state can narrow what gets attacked.
+BASELINE_AXES = (
+    "classic-technique-disguise",
+    "circularity",
+    "instrument-vs-reality",
+    "unmandated-flaw-sweep",
 )
 
 
@@ -164,6 +175,169 @@ def record_prompt_adaptation(
         store.write_receipt(receipt)
         receipts.append(receipt)
     return receipts
+
+
+
+# --------------------------------------------------------------- red-team routing
+
+
+@dataclass(frozen=True)
+class RedteamRoutingDecision:
+    """Pure routing metadata for an adversarial strike.
+
+    This is emphasis and seat assignment, never a verdict input and never a
+    competence judgment about a seat. The A/B mandate split is a deterministic
+    permutation of the axis list keyed on the domain-set hash: it distributes
+    work reproducibly, and says nothing about which seat is better at what.
+    """
+
+    available: bool
+    axes: tuple[str, ...]
+    seat_a_axes: tuple[str, ...]
+    seat_b_axes: tuple[str, ...]
+    domain_set_hash: str
+    facet_set_hash: str
+    canary_id: str | None
+    canary_hash: str | None
+    decision_hash: str
+    profile_status: str | None = None
+
+
+def select_redteam_profile(
+    domains: Sequence[str],
+    facets: Sequence[str],
+    *,
+    canary_bank: Mapping[str, str] | None = None,
+    profile: dict | None = None,
+) -> RedteamRoutingDecision:
+    """Deterministically derive attack emphasis from FOIL domain/facet state."""
+    domain_list = sorted({str(item) for item in domains if str(item).strip()})
+    facet_list = sorted({str(item) for item in facets if str(item).strip()})
+    domain_set_hash = digest(domain_list)
+    facet_set_hash = digest(facet_list)
+
+    axes = list(BASELINE_AXES)
+    for domain in domain_list:
+        axes.append("domain-emphasis:" + domain)
+    for facet in facet_list:
+        axes.append("facet-emphasis:" + facet)
+
+    offset = int(domain_set_hash[:8], 16) % len(axes)
+    rotated = axes[offset:] + axes[:offset]
+    seat_a = tuple(rotated[0::2])
+    seat_b = tuple(rotated[1::2])
+
+    canary_id: str | None = None
+    canary_hash: str | None = None
+    if canary_bank:
+        keys = sorted(canary_bank)
+        canary_id = keys[int(domain_set_hash[8:16], 16) % len(keys)]
+        canary_hash = text_digest(str(canary_bank[canary_id]))
+
+    available = profile is not None
+    decision_hash = digest({
+        "axes": axes,
+        "seat_a": list(seat_a),
+        "seat_b": list(seat_b),
+        "domain_set_hash": domain_set_hash,
+        "facet_set_hash": facet_set_hash,
+        "canary_id": canary_id,
+        "canary_hash": canary_hash,
+        "available": available,
+    })
+    return RedteamRoutingDecision(
+        available=available,
+        axes=tuple(axes),
+        seat_a_axes=seat_a,
+        seat_b_axes=seat_b,
+        domain_set_hash=domain_set_hash,
+        facet_set_hash=facet_set_hash,
+        canary_id=canary_id,
+        canary_hash=canary_hash,
+        decision_hash=decision_hash,
+        profile_status=(profile or {}).get("profile_status") if profile else None,
+    )
+
+
+def routing_metadata(decision: RedteamRoutingDecision) -> dict:
+    """Hashes, counts and enums only. Axis text never reaches a receipt."""
+    return {
+        "available": decision.available,
+        "axis_count": len(decision.axes),
+        "baseline_axis_count": len(BASELINE_AXES),
+        "baseline_axes_included": set(BASELINE_AXES).issubset(set(decision.axes)),
+        "seat_a_axis_count": len(decision.seat_a_axes),
+        "seat_b_axis_count": len(decision.seat_b_axes),
+        "domain_set_hash": decision.domain_set_hash,
+        "facet_set_hash": decision.facet_set_hash,
+        "canary_id": decision.canary_id,
+        "canary_hash": decision.canary_hash,
+        "decision_hash": decision.decision_hash,
+        "profile_status": decision.profile_status,
+        "scope": "routing metadata on a Black Gem receipt; never a verdict input",
+    }
+
+
+def _obligation_module(store: RuntimeStore, obligation_id: str) -> str | None:
+    task_id = store.task_for_obligation(obligation_id)
+    if not task_id:
+        return None
+    task = store.read_task(task_id) or {}
+    for row in task.get("obligations", []):
+        if row.get("obligation_id") == obligation_id:
+            return row.get("required_module")
+    return None
+
+
+def record_redteam_routing(
+    root: Path,
+    decision: RedteamRoutingDecision,
+    obligation_id: str | None = None,
+) -> Receipt:
+    """Record the routing decision. Only a FOIL-owned obligation can be cleared."""
+    store = RuntimeStore(root)
+    task_id = _active_task(store)
+    if obligation_id is None:
+        candidates = _adaptation_obligations(store, task_id)
+        obligation_id = candidates[0] if candidates else "unassigned"
+        module = "foil" if candidates else None
+    else:
+        module = _obligation_module(store, obligation_id)
+
+    metadata = routing_metadata(decision)
+    unresolved: list[str] = []
+    if not decision.available:
+        verdict = Verdict.UNAVAILABLE
+        unresolved.append("no-foil-profile-available-for-redteam-routing")
+    elif module != "foil":
+        verdict = Verdict.UNKNOWN
+        unresolved.append("obligation-not-owned-by-foil")
+    else:
+        verdict = Verdict.CLEARED
+
+    receipt = Receipt(
+        receipt_id=new_id("rcpt"), module="foil", obligation_id=obligation_id,
+        verdict=verdict, action="redteam-routing-selection",
+        input_hash=digest({
+            "domain_set_hash": decision.domain_set_hash,
+            "facet_set_hash": decision.facet_set_hash,
+        }),
+        output_hash=decision.decision_hash,
+        evidence=(EvidenceRef(
+            evidence_class=EvidenceClass.OBSERVED,
+            verifier="foil_runtime_bridge",
+            metadata=metadata,
+        ),),
+        verifier="foil_runtime_bridge", started_at=utcnow(), finished_at=utcnow(),
+        unresolved=tuple(unresolved),
+        notes=(
+            "FOIL output is routing metadata on the Black Gem receipt; never a verdict input."
+            " This receipt can clear an ADAPTATION obligation only."
+        ),
+        task_id=task_id,
+    )
+    store.write_receipt(receipt)
+    return receipt
 
 
 def main(argv: list[str] | None = None) -> int:

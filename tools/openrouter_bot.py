@@ -40,6 +40,7 @@ def ask(
     model: str | None = None,
     json_mode: bool = False,
     max_tokens: int = 900,
+    temperature: float = 0.0,
     timeout: float = 45.0,
     fetch: Callable[..., Any] | None = None,
 ) -> dict[str, Any]:
@@ -53,7 +54,7 @@ def ask(
         "model": model,
         "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
         "max_tokens": max_tokens,
-        "temperature": 0,
+        "temperature": temperature,
     }
     if json_mode:
         body["response_format"] = {"type": "json_object"}

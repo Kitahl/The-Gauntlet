@@ -18,7 +18,7 @@ RUNTIME_FILES = [
     "tools/soul_runtime.py", "tools/gauntlet_runtime.py", "tools/meditate_runtime.py",
     "tools/council_runtime.py", "tools/mind_runtime.py", "tools/space_runtime.py",
     "tools/reality_runtime.py", "tools/power_runtime.py", "tools/time_runtime.py",
-    "tools/foil_runtime_bridge.py",
+    "tools/foil_runtime_bridge.py", "tools/blackgem_runtime.py",
 ]
 SPEC_FILES = [
     "docs/specs/COMMON_RUNTIME_CONTRACT.md", "docs/specs/SOUL_ENGINEERING_SPEC.md",
@@ -26,7 +26,7 @@ SPEC_FILES = [
     "docs/specs/COUNCIL_ENGINEERING_SPEC.md", "docs/specs/MIND_ENGINEERING_SPEC.md",
     "docs/specs/SPACE_ENGINEERING_SPEC.md", "docs/specs/REALITY_ENGINEERING_SPEC.md",
     "docs/specs/POWER_ENGINEERING_SPEC.md", "docs/specs/TIME_ENGINEERING_SPEC.md",
-    "docs/specs/FOIL_INTEGRATION_SPEC.md",
+    "docs/specs/FOIL_INTEGRATION_SPEC.md", "docs/specs/BLACKGEM_ENGINEERING_SPEC.md",
 ]
 SKILLS = [
     "soul", "mathbot", "scoutbot", "novelbot", "codebot", "benchbot",
@@ -86,6 +86,23 @@ checks["meditate_common_utility"] = "current_best_eu" in (ROOT / "tools/meditate
 checks["power_no_shell"] = "shell=False" in (ROOT / "tools/power_runtime.py").read_text(encoding="utf-8") and "EGR_POWER_ALLOW_CUSTOM_COMMANDS" in (ROOT / "tools/power_runtime.py").read_text(encoding="utf-8")
 checks["time_fixed_n_boundary"] = "not provided by this fixed-n implementation" in (ROOT / "tools/time_runtime.py").read_text(encoding="utf-8")
 checks["foil_factual_boundary"] = "cannot clear non-ADAPTATION obligations" in (ROOT / "tools/foil_runtime_bridge.py").read_text(encoding="utf-8")
+
+blackgem_src = (ROOT / "tools/blackgem_runtime.py").read_text(encoding="utf-8")
+# Black Gem must be structurally incapable of clearing an obligation: the only
+# occurrence of Verdict.CLEARED in the module is the guard assertion.
+checks["blackgem_never_clears"] = (
+    'assert verdict != Verdict.CLEARED' in blackgem_src
+    and blackgem_src.count("Verdict.CLEARED") == 1
+)
+checks["blackgem_probe_trust_separated"] = "probe_trusted" in blackgem_src and "trusted" in blackgem_src
+checks["blackgem_adversary_kind_registered"] = (
+    'ADVERSARY = "ADVERSARY"' in (ROOT / "tools/egrt_types.py").read_text(encoding="utf-8")
+    and 'ObligationKind.ADVERSARY: "blackgem"' in (ROOT / "tools/soul_runtime.py").read_text(encoding="utf-8")
+)
+checks["blackgem_redteam_routing_boundary"] = (
+    "routing metadata on the Black Gem receipt; never a verdict input"
+    in (ROOT / "tools/foil_runtime_bridge.py").read_text(encoding="utf-8")
+)
 
 status = "PASS" if all(checks.values()) else "FAIL"
 output = {"status": status, "checks": checks, "total": len(checks), "passed": sum(checks.values())}

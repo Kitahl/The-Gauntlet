@@ -15,7 +15,7 @@ Runtime automation is external to this skill:
 - `tools/gauntlet_monitor.py`
 - `tools/gauntlet_hook.py`
 - `tools/verify_ledger.py`
-- optional `tools/scout.py`, `tools/fsa_bots.py`, `tools/snap.py`
+- optional `tools/scout.py`, `tools/blackgem_runtime.py`, `tools/snap.py`
 
 See `docs/RUNTIME_SETUP.md`.
 
