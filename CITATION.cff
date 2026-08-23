@@ -7,8 +7,8 @@ authors:
 repository-code: "https://github.com/Kitahl/The-Gauntlet"
 url: "https://kitahl.github.io/The-Gauntlet/"
 license: MIT
-version: 0.4.0
-date-released: 2026-08-21
+version: 0.5.0
+date-released: 2026-08-22
 keywords:
   - research software
   - AI-assisted research
