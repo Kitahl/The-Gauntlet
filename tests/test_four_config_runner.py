@@ -405,7 +405,9 @@ class ExecutionTests(_RunHarness):
         # The per-unit working directory is removed after the receipt is written,
         # so the settings content is read back from the argv the child recorded.
         self.assertEqual(settings.name, "foil_settings.json")
-        self.assertEqual(settings.parent, Path(call["cwd"]))
+        # macOS reports the child cwd through /private/var while the tempdir is
+        # handed out as /var; compare resolved paths so a symlink is not a failure.
+        self.assertEqual(settings.parent.resolve(), Path(call["cwd"]).resolve())
 
     def test_is_error_envelope_is_recorded_invalid(self) -> None:
         os.environ["FAKE_CLAUDE_MODE"] = "error"
