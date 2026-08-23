@@ -13,9 +13,15 @@ from fractions import Fraction
 from pathlib import Path
 from typing import Any, Callable
 
+import foil_evidence
 import foil_profile
 
 SCHEMA = "egrt.foil-assessment.v1"
+
+#: Every layer classifies through `foil_evidence.summarize`. Onboarding items are
+#: SCREEN-tier: admissible, but they can never on their own reach a load-bearing
+#: verdict, which is exactly the property a two-item-per-domain screen must have.
+SCREEN_TIER = foil_evidence.EvidenceTier.SCREEN
 SCREEN_DOMAINS = [
     "quantitative_reasoning",
     "formal_reasoning",
@@ -405,11 +411,30 @@ def normalize_choice(item: dict[str, Any], value: Any) -> str | None:
     return text or None
 
 
+def screen_signal(independent_n: int, independent_correct: int) -> str:
+    """Raw shape of a screen result, used to pick the next probe.
+
+    This is deliberately *not* a competence classification. Which follow-up
+    probe to run next is a routing decision that may act on a two-item pattern;
+    saying something about the person may not. Keeping the two separate is what
+    lets `classification` become honestly non-load-bearing without gutting the
+    report's usefulness.
+    """
+    if independent_n < 2:
+        return "TOO_FEW_ITEMS"
+    if independent_correct == independent_n:
+        return "ALL_CORRECT"
+    if independent_correct == 0:
+        return "NONE_CORRECT"
+    return "MIXED"
+
+
 def score(session: dict[str, Any], responses: dict[str, Any]) -> dict[str, Any]:
     by_domain: dict[str, list[dict[str, Any]]] = {
         domain: [] for domain in session["selected_domains"]
     }
     brier_terms: list[float] = []
+    item_results: list[dict[str, Any]] = []
 
     for item in session["objective_items"]:
         raw = responses.get("objective", {}).get(item["id"], {})
@@ -428,9 +453,17 @@ def score(session: dict[str, Any], responses: dict[str, Any]) -> dict[str, Any]:
         if confidence is not None:
             probability = confidence / 100.0
             brier_terms.append((probability - (1.0 if correct else 0.0)) ** 2)
-        by_domain[item["domain"]].append(
-            {"correct": correct, "confidence": confidence, "assistance": assistance}
-        )
+        result = {
+            "item_id": item["id"],
+            "domain": item["domain"],
+            "kind": item["kind"],
+            "correct": correct,
+            "confidence": confidence,
+            "assistance": assistance,
+            "representation": item["kind"],
+        }
+        by_domain[item["domain"]].append(result)
+        item_results.append(result)
 
     domain_evidence: dict[str, Any] = {}
     follow_up: list[dict[str, str]] = []
@@ -439,29 +472,32 @@ def score(session: dict[str, Any], responses: dict[str, Any]) -> dict[str, Any]:
         independent = [row for row in rows if row["assistance"] in {"none", "independent"}]
         correct = sum(bool(row["correct"]) for row in independent)
         count = len(independent)
-        if count < 2:
-            classification = "INSUFFICIENT_EVIDENCE"
-        elif correct == count:
-            classification = "PROMISING_STRENGTH"
-        elif correct == 0:
-            classification = "POSSIBLE_GAP"
-        else:
-            classification = "UNCERTAIN"
+        classification = foil_evidence.classify(
+            [
+                foil_evidence.Observation(correct=bool(row["correct"]), tier=SCREEN_TIER)
+                for row in independent
+            ]
+        ).value
+        signal = screen_signal(count, correct)
         domain_evidence[domain] = {
             "screened": domain in SCREEN_DOMAINS,
             "answered": len(rows),
             "independent_n": count,
             "independent_correct": correct,
             "classification": classification,
-            "note": "Requires fresh follow-up before a stable competence label.",
+            "screen_signal": signal,
+            "note": (
+                "Screen-tier evidence. It routes the next probe but cannot on its own "
+                "reach a load-bearing competence verdict; real-work evidence can."
+            ),
         }
-        if classification == "POSSIBLE_GAP":
+        if signal == "NONE_CORRECT":
             follow_up.append(
                 {"domain": domain, "action": "fresh changed-representation no-help discriminator"}
             )
-        elif classification == "UNCERTAIN":
+        elif signal == "MIXED":
             follow_up.append({"domain": domain, "action": "one independent discriminator"})
-        elif classification == "PROMISING_STRENGTH":
+        elif signal == "ALL_CORRECT":
             follow_up.append(
                 {"domain": domain, "action": "harder transfer probe before relying on strength"}
             )
@@ -473,6 +509,7 @@ def score(session: dict[str, Any], responses: dict[str, Any]) -> dict[str, Any]:
         "profile_status": "PROVISIONAL",
         "setup_relevant_domains": session.get("setup_relevant_domains", []),
         "domain_evidence": domain_evidence,
+        "item_results": item_results,
         "calibration": {"brier": brier, "n": len(brier_terms), "lower_is_better": True},
         "style": responses.get("style", {}),
         "self_estimates": responses.get("self_estimates", {}),
@@ -506,18 +543,22 @@ def apply_to_profile(name: str, report: dict[str, Any]) -> None:
     for domain in relevant_domains:
         foil_profile.ensure_domain(profile, domain, declared=True)
 
-    for domain, row in report.get("domain_evidence", {}).items():
-        count = int(row.get("independent_n", 0))
-        correct = int(row.get("independent_correct", 0))
-        for index in range(count):
-            foil_profile.observe(
-                profile,
-                domain,
-                "correct" if index < correct else "incorrect",
-                "none",
-                source="assessment",
-                representation=f"screen-{index + 1}",
-            )
+    # Replay the actual items. Reconstructing N generic correct/incorrect events
+    # from domain totals discarded item identity, assistance, and confidence, so
+    # the profile could not later tell which item produced which evidence.
+    for result in report.get("item_results", []):
+        foil_profile.observe(
+            profile,
+            result["domain"],
+            "correct" if result["correct"] else "incorrect",
+            result.get("assistance") or "none",
+            verified=True,
+            verifier="mechanical_assessment_key",
+            confidence=result.get("confidence"),
+            source="assessment",
+            representation=result.get("representation") or result["item_id"],
+            note=f"assessment item {result['item_id']}",
+        )
 
     for key, value in report.get("style", {}).items():
         if value is not None:

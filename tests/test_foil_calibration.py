@@ -39,8 +39,22 @@ class FoilCalibrationTests(unittest.TestCase):
     def test_promising_strength_gets_harder_transfer_probe(self) -> None:
         profile = fp.load()
         fp.ensure_domain(profile, "formal_reasoning", declared=True)
-        fp.observe(profile, "formal_reasoning", "correct", "none", representation="proof-a")
-        fp.observe(profile, "formal_reasoning", "correct", "none", representation="proof-b")
+        # Four verified independent passes: two unverified ones no longer reach a
+        # verdict at all, and four is the smallest count that clears the default
+        # min_effective_n of 4.0 real-work weight.
+        for index in range(4):
+            fp.observe(
+                profile,
+                "formal_reasoning",
+                "correct",
+                "none",
+                verified=True,
+                verifier="rubric",
+                representation=f"proof-{index}",
+            )
+        self.assertEqual(
+            profile["domains"]["formal_reasoning"]["classification"], "PROMISING_STRENGTH"
+        )
         plan = fc.build_plan(profile)
         probes = [p for p in plan["probes"] if p["domain"] == "formal_reasoning"]
         self.assertTrue(any(p["kind"] == "harder_transfer" for p in probes))
@@ -48,8 +62,16 @@ class FoilCalibrationTests(unittest.TestCase):
     def test_possible_gap_gets_discriminator_not_permanent_label(self) -> None:
         profile = fp.load()
         fp.ensure_domain(profile, "probability_statistics", declared=True)
-        fp.observe(profile, "probability_statistics", "incorrect", "none", representation="fraction")
-        fp.observe(profile, "probability_statistics", "incorrect", "none", representation="bayes")
+        for representation in ("fraction", "bayes", "odds", "tree"):
+            fp.observe(
+                profile,
+                "probability_statistics",
+                "incorrect",
+                "none",
+                verified=True,
+                verifier="rubric",
+                representation=representation,
+            )
         self.assertEqual(profile["domains"]["probability_statistics"]["classification"], "POSSIBLE_GAP")
         plan = fc.build_plan(profile)
         probes = [p for p in plan["probes"] if p["domain"] == "probability_statistics"]
@@ -81,9 +103,10 @@ class FoilCalibrationTests(unittest.TestCase):
         self.assertEqual(row["classification"], "INSUFFICIENT_EVIDENCE")
         self.assertEqual(row["independent_verified_pass"], 0)
 
-    def test_two_verified_independent_changed_representation_passes_are_promising(self) -> None:
+    def test_four_verified_independent_changed_representation_passes_are_promising(self) -> None:
+        """Two verified passes used to be enough; the evidence gate is now 4.0."""
         profile = fp.load()
-        for index in (1, 2):
+        for index in (1, 2, 3, 4):
             fc.record(
                 profile,
                 probe_id=f"formal_reasoning:harder_transfer:{index}",
@@ -99,6 +122,29 @@ class FoilCalibrationTests(unittest.TestCase):
         row = profile["deep_calibration"]["facet_evidence"]["transfer_adaptation"]
         self.assertEqual(row["classification"], "PROMISING_STRENGTH")
         self.assertEqual(profile["domains"]["formal_reasoning"]["classification"], "PROMISING_STRENGTH")
+
+    def test_two_verified_independent_passes_are_not_yet_a_verdict(self) -> None:
+        """D2: the old two-observation gate is closed at every layer."""
+        profile = fp.load()
+        for index in (1, 2):
+            fc.record(
+                profile,
+                probe_id=f"formal_reasoning:harder_transfer:{index}",
+                domain="formal_reasoning",
+                facet="transfer_adaptation",
+                kind="harder_transfer",
+                outcome="pass",
+                assistance="none",
+                verified=True,
+                confidence=80,
+                representation=f"representation-{index}",
+            )
+        row = profile["deep_calibration"]["facet_evidence"]["transfer_adaptation"]
+        self.assertEqual(row["classification"], "INSUFFICIENT_EVIDENCE")
+        self.assertEqual(
+            profile["domains"]["formal_reasoning"]["classification"],
+            "INSUFFICIENT_EVIDENCE",
+        )
 
     def test_duplicate_probe_id_is_rejected(self) -> None:
         profile = fp.load()

@@ -81,21 +81,61 @@ class FoilAssessmentTests(unittest.TestCase):
             )
         )
 
-    def test_perfect_independent_screen_is_only_promising(self) -> None:
+    def test_perfect_independent_screen_is_not_load_bearing(self) -> None:
+        """A perfect two-item-per-domain screen is SCREEN-tier evidence only.
+
+        Previously this asserted PROMISING_STRENGTH, which is the defect the
+        shared estimator closes: two mechanically scored items cannot license a
+        competence claim. The routing signal is kept separate and still fires.
+        """
         session = fa.build(seed=5)
         responses = session["response_schema"]
         for item in session["objective_items"]:
             responses["objective"][item["id"]]["choice"] = fa.answer(item)
             responses["objective"][item["id"]]["confidence"] = 100
         report = fa.score(session, responses)
+        screened = [
+            row for row in report["domain_evidence"].values() if row["screened"]
+        ]
+        self.assertTrue(screened)
+        for row in screened:
+            self.assertEqual(row["classification"], "INSUFFICIENT_EVIDENCE")
+            self.assertEqual(row["screen_signal"], "ALL_CORRECT")
         self.assertTrue(
-            all(
-                row["classification"] == "PROMISING_STRENGTH"
-                for row in report["domain_evidence"].values()
+            any(
+                entry["action"].startswith("harder transfer probe")
+                for entry in report["follow_up"]
             )
         )
         self.assertEqual(report["calibration"]["brier"], 0.0)
         self.assertIn("cannot certify OWNED", report["ownership_ceiling"])
+
+    def test_replayed_items_match_the_domain_aggregates(self) -> None:
+        """patch-002: item identity survives into the report."""
+        session = fa.build(seed=11)
+        responses = session["response_schema"]
+        for index, item in enumerate(session["objective_items"]):
+            responses["objective"][item["id"]]["choice"] = (
+                fa.answer(item) if index % 2 == 0 else "definitely wrong"
+            )
+        report = fa.score(session, responses)
+        self.assertEqual(len(report["item_results"]), len(session["objective_items"]))
+        self.assertEqual(
+            {row["item_id"] for row in report["item_results"]},
+            {item["id"] for item in session["objective_items"]},
+        )
+        for domain, row in report["domain_evidence"].items():
+            replayed = [
+                result
+                for result in report["item_results"]
+                if result["domain"] == domain
+                and result["assistance"] in {"none", "independent"}
+            ]
+            self.assertEqual(row["independent_n"], len(replayed))
+            self.assertEqual(
+                row["independent_correct"],
+                sum(bool(result["correct"]) for result in replayed),
+            )
 
     def test_setup_adds_optional_and_custom_domains_without_scoring_them(self) -> None:
         session = fa.build(

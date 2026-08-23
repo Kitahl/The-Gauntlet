@@ -186,7 +186,47 @@ python tools/foil_profile.py observe alice \
 
 If a task requires a domain not already present, `observe` accepts any domain name and creates it as a candidate. The expanded relevance registry covers more than forty common research/professional families, and arbitrary custom domains remain supported.
 
-Two independent consistent observations may support `PROMISING_STRENGTH` or `POSSIBLE_GAP`; mixed evidence stays `UNCERTAIN`. Newer task-diagnostic evidence overrides stale onboarding evidence.
+Classification is a decision on a Beta posterior over verified, independent, user-executed evidence (`tools/foil_evidence.py`), not a count rule. Two observations are no longer enough: the default policy requires at least `min_effective_n` (4.0) of real-work weight before any load-bearing verdict, unverified and assisted observations carry zero weight, and onboarding-screen evidence is admissible but can never on its own reach `PROMISING_STRENGTH` or `POSSIBLE_GAP`. Newer task-diagnostic evidence outranks stale onboarding evidence by exponential recency decay, which downweights old evidence without erasing it.
+
+
+## Frozen-run tool broker (PreToolUse)
+
+`tools/foil_task_guard.py` is an accounting ledger and says so: it cannot stop a caller that never invokes it. `tools/foil_tool_broker.py` is the enforcement half. It is registered as the first `PreToolUse` hook in `.claude/settings.json` and runs before the tool executes, so a budgeted operation cannot be spent without being charged.
+
+`FOIL_TASK_RUN` is the single activation switch.
+
+| Variable | Meaning |
+| --- | --- |
+| `FOIL_TASK_RUN` | Path to an existing task-guard state file. **Unset or empty: the hook is inert.** Set: a frozen run is asserted to be in progress. |
+| `FOIL_TASK_ID` | Task id the run was opened with. |
+| `FOIL_TASK_CONDITION` | Condition the run was opened with. |
+| `FOIL_TASK_PROMPT` **or** `FOIL_TASK_PROMPT_SHA256` | Prompt text, or its SHA-256. A hook process normally holds only the digest, so `verify_binding` accepts either. |
+| `FOIL_TASK_ALLOW_WRITES` | Optional. `1` admits write-capable tools for this run. No other value opts in. |
+
+With `FOIL_TASK_RUN` unset or empty the hook prints nothing and exits 0, so ordinary sessions are unaffected.
+
+Once `FOIL_TASK_RUN` is set, a broken configuration **denies** rather than falling back to inert. A missing state file gives `frozen FOIL run state file missing: <path>; failing closed`; a missing `FOIL_TASK_ID`, `FOIL_TASK_CONDITION`, or prompt binding gives `frozen FOIL run is only partially configured: ...; failing closed`. Setting the variable is an assertion that a run is in progress, so anything wrong with the rest of it is misconfiguration, not absence — and allowing there would let a partially configured run proceed completely unguarded while looking exactly like a healthy one. The refusal is scoped to the tools the broker budgets: an unbudgeted tool is guarded by nothing in any case, so refusing it would break unrelated work without protecting a single budget unit.
+
+Tool mapping:
+
+| Tool | Budgeted operation |
+| --- | --- |
+| `WebSearch`, `mcp__*search*` | `search` |
+| `WebFetch`, `mcp__*fetch*`, `mcp__*read_url*` | `followup` |
+| `Edit`, `Write`, `MultiEdit`, `NotebookEdit`, `Bash`, `PowerShell` | `write` |
+| anything else | not brokered; the call is allowed untouched |
+
+Deny contract. On a refusal the hook writes exactly one JSON object to stdout and exits 0:
+
+```json
+{"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": "..."}}
+```
+
+A call is denied when the budget for its operation is exhausted, when `FOIL_TASK_ID`/`FOIL_TASK_CONDITION`/prompt digest do not match the frozen run, when the run is configured but incomplete or its state file is absent, when the ledger cannot be locked, when the state file is unreadable or corrupt, and for write-capable tools unless `FOIL_TASK_ALLOW_WRITES=1` (no capability in `tools/foil_capabilities.py` declares `writes=True`, so the registry has nothing to route a write through). Every unexpected failure denies rather than allowing: the hook fails closed. On allow it prints nothing and exits 0.
+
+Charging point, stated plainly: a `PreToolUse` hook cannot observe the tool result, so the budget unit is charged at reservation. A call the host subsequently fails still consumes its unit. The ledger therefore records attempts admitted, not successful retrievals, and a receipt must be read that way. Both allows and denies are appended to the run's hash-chained event ledger, so `foil_task_guard.py attest` covers the broker's decisions too.
+
+Ledgers written under `.foil/` are gitignored; nothing here transmits data anywhere. Model egress remains only what the OpenRouter section above describes.
 
 ## Repository boundary
 

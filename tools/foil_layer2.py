@@ -13,9 +13,13 @@ from pathlib import Path
 from typing import Any
 
 import foil_calibration as fc
+import foil_evidence
 import foil_profile
 
 SCHEMA = "egrt.foil-layer2.v1"
+
+#: Layer 2 micro-scenarios are SCREEN-tier for the same reason Layer 1 items are.
+SCREEN_TIER = foil_evidence.EvidenceTier.SCREEN
 
 # Two independently scored scenarios per facet. Correct responses live in this
 # module, never in the generated session payload.
@@ -384,6 +388,17 @@ def _normalize(item: dict[str, Any], value: Any) -> str | None:
     return text or None
 
 
+def screen_signal(independent_n: int, independent_pass: int) -> str:
+    """Raw screen shape used for probe routing; not a competence classification."""
+    if independent_n < 2:
+        return "TOO_FEW_ITEMS"
+    if independent_pass == independent_n:
+        return "ALL_CORRECT"
+    if independent_pass == 0:
+        return "NONE_CORRECT"
+    return "MIXED"
+
+
 def score(session: dict[str, Any], responses: dict[str, Any]) -> dict[str, Any]:
     rows: dict[str, list[dict[str, Any]]] = {}
     brier_terms: list[float] = []
@@ -423,24 +438,24 @@ def score(session: dict[str, Any], responses: dict[str, Any]) -> dict[str, Any]:
         independent = [row for row in observations if row["assistance"] in {"none", "independent"}]
         passed = sum(bool(row["correct"]) for row in independent)
         count = len(independent)
-        if count < 2:
-            classification = "INSUFFICIENT_EVIDENCE"
-        elif passed == count:
-            classification = "PROMISING_STRENGTH"
-        elif passed == 0:
-            classification = "POSSIBLE_GAP"
-        else:
-            classification = "UNCERTAIN"
+        classification = foil_evidence.classify(
+            [
+                foil_evidence.Observation(correct=bool(row["correct"]), tier=SCREEN_TIER)
+                for row in independent
+            ]
+        ).value
+        signal = screen_signal(count, passed)
         facet_evidence[facet] = {
             "independent_n": count,
             "independent_pass": passed,
             "classification": classification,
+            "screen_signal": signal,
             "representations": sorted({row["representation"] for row in independent}),
             "note": "Provisional cross-cutting evidence; real-work and transfer evidence outrank this screen.",
         }
-        if classification == "PROMISING_STRENGTH":
+        if signal == "ALL_CORRECT":
             action = "confirm with harder real-work or changed-context transfer"
-        elif classification == "POSSIBLE_GAP":
+        elif signal == "NONE_CORRECT":
             action = "run a discriminator before durable personalization"
         else:
             action = "collect a second changed-representation or real-work observation"
