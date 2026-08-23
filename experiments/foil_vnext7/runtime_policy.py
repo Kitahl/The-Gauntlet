@@ -1,0 +1,311 @@
+"""Evidence-typed post-vNext6 FOIL controller.
+
+vNext7 is an additive repair over the vNext6 composable controller. It keeps the
+frozen vNext epistemic policy and vNext6 operator library, but makes verifier
+targets explicit, preserves the verifier identity during independent-review
+escalation, and permits already-captured claim-native evidence to be re-used
+without repeating an external tool call.
+
+Public traces contain controller state only; never private reasoning.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, replace
+
+from experiments.foil_vnext.runtime_policy import (
+    CLAIM_VERIFIER,
+    ProfileSignal,
+    VerifierKind,
+)
+from experiments.foil_vnext6.runtime_policy import (
+    EXACT_VERIFIERS,
+    OPERATOR_LINEAGE,
+    VERIFIER_PRIORITY,
+    ComposableRuntimePolicy,
+    EvidenceAuthority,
+    OperatorCost,
+    StrategyBudget,
+    StrategyDecision,
+    StrategyOperator,
+    StrategyTaskContext,
+)
+
+
+@dataclass(frozen=True)
+class VerificationTarget:
+    """A stable public target for one verifier obligation.
+
+    `target_id` may name an atomic claim (for example C3) or a synthetic
+    obligation such as O:current_source when the frozen policy imposes a
+    regime-level verifier that is not attached to a user-authored claim.
+    """
+
+    target_id: str
+    verifier: VerifierKind
+    synthetic: bool = False
+
+    def __post_init__(self) -> None:
+        if not self.target_id.strip():
+            raise ValueError("verification target_id is required")
+
+
+@dataclass(frozen=True)
+class CachedEvidenceHint:
+    """Receipt-safe metadata saying a prior observation may satisfy a verifier.
+
+    This hint is never evidence by itself. The execution contract must still
+    validate the referenced basis, verdict, freshness, and content fingerprint.
+    """
+
+    target_id: str
+    verifier: VerifierKind
+    stale: bool = False
+    freshness_checked: bool = False
+
+    def __post_init__(self) -> None:
+        if not self.target_id.strip():
+            raise ValueError("cached target_id is required")
+
+    def eligible_for(self, target: VerificationTarget) -> bool:
+        if self.target_id != target.target_id or self.verifier is not target.verifier:
+            return False
+        if self.stale:
+            return False
+        if (
+            target.verifier is VerifierKind.CURRENT_SOURCE
+            and not self.freshness_checked
+        ):
+            return False
+        return True
+
+
+@dataclass(frozen=True)
+class EvidenceTypedTaskContext:
+    strategy: StrategyTaskContext
+    cached_evidence: tuple[CachedEvidenceHint, ...] = ()
+
+
+@dataclass(frozen=True)
+class EvidenceTypedDecision:
+    controller_version: str
+    strategy: StrategyDecision
+    verification_targets: tuple[VerificationTarget, ...]
+    reuse_cached_evidence: bool = False
+
+    @property
+    def operator(self) -> StrategyOperator:
+        return self.strategy.operator
+
+    @property
+    def required_verifier(self) -> VerifierKind | None:
+        return self.strategy.required_verifier
+
+    @property
+    def should_stop(self) -> bool:
+        return self.strategy.should_stop
+
+    @property
+    def blocked(self) -> bool:
+        return self.strategy.blocked
+
+    @property
+    def cost(self) -> OperatorCost:
+        return self.strategy.cost
+
+    @property
+    def budget_after(self) -> StrategyBudget:
+        return self.strategy.budget_after
+
+    def trace(self) -> dict[str, object]:
+        trace = dict(self.strategy.trace())
+        trace["controller_version"] = self.controller_version
+        trace["verification_target_count"] = len(self.verification_targets)
+        trace["cached_evidence_reused"] = self.reuse_cached_evidence
+        return trace
+
+
+class EvidenceTypedRuntimePolicy:
+    """FOIL vNext7 evidence-target and cache-reuse layer."""
+
+    version = "FOIL_vNEXT7_EVIDENCE_TYPED_POLICY_V1"
+
+    def __init__(self, parent: ComposableRuntimePolicy | None = None) -> None:
+        self.parent = parent or ComposableRuntimePolicy()
+
+    @staticmethod
+    def _residual_verifier(decision: StrategyDecision) -> VerifierKind | None:
+        candidates = {
+            CLAIM_VERIFIER[uncertainty.claim_kind]
+            for uncertainty in decision.base_decision.unresolved_uncertainties
+        }
+        if not candidates:
+            return None
+        return min(candidates, key=lambda item: VERIFIER_PRIORITY[item])
+
+    @staticmethod
+    def _targets(decision: StrategyDecision) -> tuple[VerificationTarget, ...]:
+        verifier = decision.required_verifier
+        if verifier is None:
+            return ()
+
+        targets = [
+            VerificationTarget(
+                target_id=uncertainty.label,
+                verifier=verifier,
+                synthetic=False,
+            )
+            for uncertainty in decision.base_decision.unresolved_uncertainties
+            if CLAIM_VERIFIER[uncertainty.claim_kind] is verifier
+        ]
+        if targets:
+            # Preserve order while removing duplicate labels.
+            seen: set[str] = set()
+            unique: list[VerificationTarget] = []
+            for target in targets:
+                if target.target_id not in seen:
+                    seen.add(target.target_id)
+                    unique.append(target)
+            return tuple(unique)
+
+        # Frozen V1 can impose verifier obligations at the regime/output level
+        # even when no unresolved LoadBearingUncertainty names them.
+        return (
+            VerificationTarget(
+                target_id=f"O:{verifier.value}",
+                verifier=verifier,
+                synthetic=True,
+            ),
+        )
+
+    @staticmethod
+    def _cache_covers(
+        targets: tuple[VerificationTarget, ...],
+        cached: tuple[CachedEvidenceHint, ...],
+    ) -> bool:
+        if not targets:
+            return False
+        return all(
+            any(hint.eligible_for(target) for hint in cached)
+            for target in targets
+        )
+
+    @staticmethod
+    def _native_cached_decision(
+        decision: StrategyDecision,
+        *,
+        verifier: VerifierKind,
+        budget: StrategyBudget,
+    ) -> StrategyDecision:
+        cost = OperatorCost(deliberation_units=1)
+        if not budget.can_afford(cost):
+            return replace(
+                decision,
+                operator=StrategyOperator.BLOCKED,
+                operator_lineage=OPERATOR_LINEAGE[StrategyOperator.BLOCKED],
+                reason_code="cached_evidence_admission_budget_exhausted",
+                minimum_evidence_authority=EvidenceAuthority.NONE,
+                required_verifier=verifier,
+                may_discharge_load_bearing_uncertainty=False,
+                cost=OperatorCost(),
+                budget_before=budget,
+                budget_after=budget,
+                should_stop=False,
+                blocked=True,
+            )
+
+        operator = (
+            StrategyOperator.EXACT_EXECUTION
+            if verifier in EXACT_VERIFIERS
+            else StrategyOperator.CLAIM_NATIVE_VERIFY
+        )
+        return replace(
+            decision,
+            operator=operator,
+            operator_lineage=OPERATOR_LINEAGE[operator],
+            reason_code="admit_cached_claim_native_evidence",
+            minimum_evidence_authority=EvidenceAuthority.CLAIM_NATIVE,
+            required_verifier=verifier,
+            may_discharge_load_bearing_uncertainty=True,
+            cost=cost,
+            budget_before=budget,
+            budget_after=budget.spend(cost),
+            should_stop=False,
+            blocked=False,
+        )
+
+    def decide(
+        self,
+        context: EvidenceTypedTaskContext,
+        budget: StrategyBudget,
+        profile: ProfileSignal | None = None,
+    ) -> EvidenceTypedDecision:
+        decision = self.parent.decide(context.strategy, budget, profile)
+
+        # vNext6 can escalate a residual uncertainty to independent review after
+        # the native verifier has run, but in that path the verifier field can
+        # be None. Preserve the claim-native verifier identity so the review has
+        # a machine-checkable evidentiary obligation.
+        if (
+            decision.operator is StrategyOperator.INDEPENDENT_REVIEW
+            and decision.required_verifier is None
+        ):
+            verifier = self._residual_verifier(decision)
+            if verifier is not None:
+                decision = replace(
+                    decision,
+                    reason_code=(
+                        "residual_uncertainty_independent_review_with_native_verifier"
+                    ),
+                    required_verifier=verifier,
+                )
+
+        targets = self._targets(decision)
+        verifier = decision.required_verifier
+        cache_covers = self._cache_covers(targets, context.cached_evidence)
+
+        # Cached receipt-backed evidence never closes a claim directly. It only
+        # removes a repeat external tool call; the ordinary verifier operator
+        # and execution admission contract still run.
+        recoverable_block = (
+            decision.operator is StrategyOperator.BLOCKED
+            and decision.reason_code
+            in {
+                "required_verifier_budget_exhausted",
+                "required_verifier_unavailable",
+            }
+        )
+        verifying_operator = decision.operator in {
+            StrategyOperator.CLAIM_NATIVE_VERIFY,
+            StrategyOperator.EXACT_EXECUTION,
+            StrategyOperator.INDEPENDENT_REVIEW,
+        }
+
+        if (
+            verifier is not None
+            and cache_covers
+            and (recoverable_block or verifying_operator)
+        ):
+            decision = self._native_cached_decision(
+                decision,
+                verifier=verifier,
+                budget=budget,
+            )
+            targets = self._targets(decision)
+            return EvidenceTypedDecision(
+                controller_version=self.version,
+                strategy=decision,
+                verification_targets=targets,
+                reuse_cached_evidence=True,
+            )
+
+        return EvidenceTypedDecision(
+            controller_version=self.version,
+            strategy=decision,
+            verification_targets=targets,
+            reuse_cached_evidence=False,
+        )
+
+
+def evidence_typed_trace(decision: EvidenceTypedDecision) -> dict[str, object]:
+    return decision.trace()
