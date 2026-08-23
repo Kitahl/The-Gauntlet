@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass, field
+from fractions import Fraction
 from pathlib import Path
 from statistics import NormalDist
 from typing import Any
@@ -41,6 +42,7 @@ class PairedBinaryPlan:
     alpha: float = 0.05
     multiplicity_family: str | None = None
     exclusions: tuple[Exclusion, ...] = ()
+    item_ids: tuple[str, ...] = ()
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
@@ -49,6 +51,12 @@ class PairedBinaryPlan:
         ids = [row.item_id for row in self.exclusions]
         if len(ids) != len(set(ids)):
             raise ValueError("exclusion item IDs must be unique")
+        if self.item_ids and len(self.item_ids) != len(set(self.item_ids)):
+            raise ValueError("frozen item_ids must be unique")
+        if self.item_ids:
+            off_list = sorted(set(ids) - set(self.item_ids))
+            if off_list:
+                raise ValueError(f"exclusions reference items outside the frozen manifest: {off_list}")
 
 
 def wilson_interval(successes: int, n: int, alpha: float = 0.05) -> tuple[float, float]:
@@ -64,18 +72,38 @@ def wilson_interval(successes: int, n: int, alpha: float = 0.05) -> tuple[float,
     return max(0.0, center - half), min(1.0, center + half)
 
 
+MIN_POSITIVE_P = 5e-324
+"""Smallest positive float64. An exact tail is never truly zero, so a p-value that
+underflows the float representation is reported at this floor and flagged, never as 0.0
+(which would read as impossible rather than as very small)."""
+
+
 def _binom_pmf(k: int, n: int, p: float = 0.5) -> float:
     return math.comb(n, k) * (p**k) * ((1 - p) ** (n - k))
 
 
-def mcnemar_exact(b: int, c: int) -> float:
+def mcnemar_exact_fraction(b: int, c: int) -> Fraction:
+    """Exact two-sided conditional McNemar p-value as a rational number.
+
+    Computed in integer arithmetic so it is exact at any discordant n; the float
+    implementation overflows around n >= 1030 and silently returns 0.0 in the far tail.
+    """
     if b < 0 or c < 0:
         raise ValueError("discordant counts must be non-negative")
     n = b + c
     if n == 0:
-        return 1.0
+        return Fraction(1)
     k = min(b, c)
-    return min(1.0, 2 * sum(_binom_pmf(i, n, 0.5) for i in range(k + 1)))
+    tail = sum(math.comb(n, i) for i in range(k + 1))
+    return min(Fraction(1), Fraction(2 * tail, 1 << n))
+
+
+def mcnemar_exact(b: int, c: int) -> float:
+    exact = mcnemar_exact_fraction(b, c)
+    value = float(exact)
+    if value <= 0.0 and exact > 0:
+        return MIN_POSITIVE_P
+    return min(1.0, value)
 
 
 def paired_binary(base: list[bool], candidate: list[bool], *, alpha: float = 0.05) -> dict[str, Any]:
@@ -88,11 +116,14 @@ def paired_binary(base: list[bool], candidate: list[bool], *, alpha: float = 0.0
     n = len(base)
     base_correct = a + b
     cand_correct = a + c
+    exact_p = mcnemar_exact_fraction(b, c)
+    p_value = mcnemar_exact(b, c)
     return {
         "n": n, "both_correct": a, "base_only": b, "candidate_only": c, "both_wrong": d,
         "base_accuracy": base_correct / n, "candidate_accuracy": cand_correct / n,
         "delta": (cand_correct - base_correct) / n,
-        "mcnemar_exact_p": mcnemar_exact(b, c),
+        "mcnemar_exact_p": p_value,
+        "p_underflow": bool(exact_p > 0 and float(exact_p) <= 0.0),
         "base_wilson": wilson_interval(base_correct, n, alpha),
         "candidate_wilson": wilson_interval(cand_correct, n, alpha),
         "confidence_level": 1 - alpha,
@@ -117,6 +148,20 @@ def apply_exclusions(plan: PairedBinaryPlan, observations: list[PairedBinaryObse
     ids = [row.item_id for row in observations]
     if len(ids) != len(set(ids)):
         raise ValueError("paired observations contain duplicate item IDs")
+    excluded_ids = {row.item_id for row in plan.exclusions}
+    if plan.item_ids:
+        # The denominator is the frozen manifest minus the frozen exclusions and
+        # nothing else: a silently shrunk or extended item set is a different study.
+        # Excluded items may be submitted (and then dropped) or omitted outright.
+        required = set(plan.item_ids) - excluded_ids
+        actual = set(ids)
+        if not required <= actual or not actual <= set(plan.item_ids):
+            missing = sorted(required - actual)
+            extra = sorted(actual - set(plan.item_ids))
+            raise ValueError(
+                "observations do not match the frozen item manifest minus frozen exclusions"
+                f" (missing={missing}, unexpected={extra})"
+            )
     exclusion_map = {row.item_id: row for row in plan.exclusions}
     included: list[PairedBinaryObservation] = []
     applied: list[dict[str, Any]] = []
@@ -133,15 +178,67 @@ def apply_exclusions(plan: PairedBinaryPlan, observations: list[PairedBinaryObse
             "condition": exclusion.condition,
             "contamination": exclusion.contamination,
         })
-    unmatched = sorted(set(exclusion_map) - set(ids))
+    unmatched = sorted(set(exclusion_map) - set(ids) - set(plan.item_ids))
     if unmatched:
         raise ValueError(f"frozen exclusions reference absent item IDs: {unmatched}")
     return included, applied
 
 
+def family_results(store: RuntimeStore, family: str) -> list[dict[str, Any]]:
+    """Every stored `time` analysis declaring this multiplicity family, plan-id ordered."""
+    directory = store.base / "time"
+    rows: list[dict[str, Any]] = []
+    if not directory.exists():
+        return rows
+    for path in sorted(directory.glob("*.json")):
+        row = store.read_named_state("time", path.stem)
+        if not isinstance(row, dict):
+            continue
+        if row.get("multiplicity_family") != family:
+            continue
+        if not isinstance(row.get("mcnemar_exact_p"), (int, float)):
+            continue
+        rows.append(row)
+    rows.sort(key=lambda r: str(r.get("plan_id") or ""))
+    return rows
+
+
+def _significant(store: RuntimeStore, plan: PairedBinaryPlan, result: dict[str, Any]) -> tuple[bool, bool, int]:
+    """Was the null rejected for this plan? Holm-adjusted when a family is declared.
+
+    A declared multiplicity family means the plan is one of several tests; judging it
+    at the unadjusted alpha would inflate the family-wise error rate exactly as many
+    times as the family has members.
+    """
+    p_value = float(result["mcnemar_exact_p"])
+    if not plan.multiplicity_family:
+        return p_value < plan.alpha, False, 1
+    rows = family_results(store, plan.multiplicity_family)
+    ids = [str(row.get("plan_id") or "") for row in rows]
+    if plan.plan_id not in ids:
+        rows = rows + [dict(result)]
+        ids = ids + [plan.plan_id]
+    p_values = [float(row["mcnemar_exact_p"]) for row in rows]
+    rejects = holm(p_values, plan.alpha)
+    return rejects[ids.index(plan.plan_id)], True, len(p_values)
+
+
+def _verdict_for(result: dict[str, Any], significant: bool) -> Verdict:
+    candidate_only = int(result["candidate_only"])
+    base_only = int(result["base_only"])
+    if significant and candidate_only > base_only:
+        return Verdict.CLEARED
+    if significant and candidate_only < base_only:
+        result["reason"] = "candidate is significantly worse than base on discordant pairs"
+        return Verdict.ISSUE
+    result["reason"] = "inconclusive at fixed n"
+    return Verdict.UNKNOWN
+
+
 def record_paired_observations(root: Path, plan: PairedBinaryPlan, observations: list[PairedBinaryObservation]) -> Receipt:
     store = RuntimeStore(root)
     included, applied = apply_exclusions(plan, observations)
+    gate_note = ""
     if not included:
         result = {"n": 0, "status": "NO_INCLUDED_ITEMS", "applied_exclusions": applied}
         verdict = Verdict.UNKNOWN
@@ -156,8 +253,23 @@ def record_paired_observations(root: Path, plan: PairedBinaryPlan, observations:
             "included_item_ids": [row.item_id for row in included],
             "applied_exclusions": applied,
             "multiplicity_family": plan.multiplicity_family,
+            "plan_id": plan.plan_id,
+            "alpha": plan.alpha,
         })
-        verdict = Verdict.CLEARED
+        store.write_named_state("time", plan.plan_id, result)
+        significant, holm_adjusted, family_size = _significant(store, plan, result)
+        result["holm_adjusted"] = holm_adjusted
+        result["family_size"] = family_size
+        result["significant"] = significant
+        verdict = _verdict_for(result, significant)
+        gate_note = (
+            f" Gate rule: CLEARED only when candidate_only > base_only and the test rejects at"
+            f" alpha={plan.alpha}"
+            + (f" after Holm adjustment over multiplicity family {plan.multiplicity_family!r}"
+               f" (family size {family_size})" if holm_adjusted else "")
+            + "; ISSUE when the candidate is worse and the test rejects; otherwise UNKNOWN"
+            " (inconclusive at fixed n). Running the analysis is not itself a result."
+        )
     receipt = Receipt(
         receipt_id=new_id("rcpt"), module="time", obligation_id=plan.obligation_id,
         verdict=verdict, action="paired-binary-fixed-n-analysis",
@@ -171,11 +283,19 @@ def record_paired_observations(root: Path, plan: PairedBinaryPlan, observations:
                 "n_included": result.get("n", 0),
                 "exclusion_count": len(applied),
                 "alpha": plan.alpha,
+                "holm_adjusted": bool(result.get("holm_adjusted")),
+                "multiplicity_family": plan.multiplicity_family,
             },
         ),),
         verifier="time_runtime", started_at=utcnow(), finished_at=utcnow(),
-        unresolved=("anytime-valid inference is not provided by this fixed-n implementation; preregister a validated sequential method before repeated monitoring",),
-        notes="Exact conditional McNemar + Wilson intervals. Exclusions are frozen/item-addressed; contamination cannot be silently included or dropped.",
+        unresolved=(
+            ("anytime-valid inference is not provided by this fixed-n implementation; preregister a validated sequential method before repeated monitoring",)
+            + ((str(result.get("reason")),) if verdict == Verdict.UNKNOWN and result.get("reason") else ())
+        ),
+        notes=(
+            "Exact conditional McNemar + Wilson intervals. Exclusions are frozen/item-addressed;"
+            " contamination cannot be silently included or dropped." + gate_note
+        ),
     )
     store.write_named_state("time", plan.plan_id, result)
     store.write_receipt(receipt)

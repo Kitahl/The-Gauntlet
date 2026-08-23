@@ -7,6 +7,7 @@ same-budget DIRECT control receipt. Agreement alone never clears the obligation.
 from __future__ import annotations
 
 import json
+import secrets
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -99,7 +100,29 @@ def _load(root: Path, council_id: str) -> CouncilState:
     return CouncilState(**raw)
 
 
-def commit(root: Path, council_id: str, seat_id: str, submission: SeatSubmission) -> str:
+def commitment_digest(seat_id: str, nonce: str, submission: SeatSubmission) -> str:
+    """Hiding + binding commitment over one seat's submission.
+
+    The nonce is what makes it hiding: without it the commitment is a digest over a
+    low-entropy structured value, so an observer can confirm a guessed submission,
+    and two seats submitting identical text produce identical commitments.
+    """
+    return digest({"seat_id": seat_id, "nonce": nonce, "submission": submission})
+
+
+def commit(
+    root: Path,
+    council_id: str,
+    seat_id: str,
+    submission: SeatSubmission,
+    *,
+    nonce: str | None = None,
+) -> tuple[str, str]:
+    """Record a seat commitment. Returns (commitment, nonce).
+
+    The submission itself is NOT stored here: storing it at commit time would defeat
+    the point of committing, since the sealed copy is readable before any reveal.
+    """
     store = RuntimeStore(root)
     state = _load(root, council_id)
     if state.phase != "COMMIT":
@@ -108,23 +131,32 @@ def commit(root: Path, council_id: str, seat_id: str, submission: SeatSubmission
         raise KeyError(seat_id)
     if seat_id in state.commitments:
         raise ValueError("seat already committed")
-    commitment = digest(submission)
+    nonce = nonce or secrets.token_hex(16)
+    commitment = commitment_digest(seat_id, nonce, submission)
     state.commitments[seat_id] = commitment
-    state.sealed[seat_id] = json.loads(json.dumps(submission, default=lambda o: o.__dict__))
     if len(state.commitments) == len(state.seats):
         state.phase = "REVEAL"
     store.write_named_state("councils", council_id, _plain_state(state))
-    return commitment
+    return commitment, nonce
 
 
-def reveal(root: Path, council_id: str, seat_id: str, submission: SeatSubmission) -> bool:
+def reveal(
+    root: Path,
+    council_id: str,
+    seat_id: str,
+    submission: SeatSubmission,
+    nonce: str | None = None,
+) -> bool:
     store = RuntimeStore(root)
     state = _load(root, council_id)
     if state.phase not in ("REVEAL", "CROSS_CRITIQUE"):
         raise ValueError("Council is not in reveal phase")
     expected = state.commitments.get(seat_id)
-    if not expected or digest(submission) != expected:
+    if not expected or not nonce:
         return False
+    if commitment_digest(seat_id, nonce, submission) != expected:
+        return False
+    state.sealed[seat_id] = {"commitment": expected}
     state.revealed[seat_id] = json.loads(json.dumps(submission, default=lambda o: o.__dict__))
     if len(state.revealed) == len(state.seats):
         state.phase = "CROSS_CRITIQUE"
@@ -214,11 +246,14 @@ def record_control(root: Path, obligation_id: str, *, artifact_hash: str, budget
     return receipt
 
 
-def _matched_control(store: RuntimeStore, receipt_id: str | None, kind: str, artifact_hash: str, budget_hash: str) -> bool:
+def _matched_control(store: RuntimeStore, receipt_id: str | None, kind: str, artifact_hash: str, budget_hash: str, obligation_id: str | None = None) -> bool:
     if not receipt_id:
         return False
     receipt = store.read_receipt(receipt_id)
     if not receipt or receipt.get("module") != "council":
+        return False
+    # A control run for a different obligation is not this obligation's control.
+    if obligation_id is not None and receipt.get("obligation_id") != obligation_id:
         return False
     for evidence in receipt.get("evidence", []):
         meta = evidence.get("metadata", {}) if isinstance(evidence, dict) else {}
@@ -249,8 +284,10 @@ def finalize(
 ) -> Receipt:
     store = RuntimeStore(root)
     state = _load(root, council_id)
-    direct_exists = _matched_control(store, direct_control_receipt, "DIRECT", state.artifact_hash, state.budget_hash)
-    vote_exists = _matched_control(store, vote_control_receipt, "VOTE", state.artifact_hash, state.budget_hash)
+    if state.phase == "CLOSED":
+        raise ValueError("Council is already CLOSED; finalize is not re-callable")
+    direct_exists = _matched_control(store, direct_control_receipt, "DIRECT", state.artifact_hash, state.budget_hash, obligation_id)
+    vote_exists = _matched_control(store, vote_control_receipt, "VOTE", state.artifact_hash, state.budget_hash, obligation_id)
     reveal_complete = len(state.revealed) == len(state.seats)
     critique_complete = _cross_critique_complete(state)
     missing: list[str] = list(unresolved or [])

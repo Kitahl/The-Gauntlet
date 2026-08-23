@@ -49,6 +49,14 @@
         ]
       }
     ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/egrt_hook.py", "post-tool-failure"], "timeout": 10}
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [

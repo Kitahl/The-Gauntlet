@@ -18,9 +18,12 @@ ALIASES = {
 
 def _payload() -> dict:
     try:
-        return json.load(sys.stdin)
-    except json.JSONDecodeError:
+        data = json.load(sys.stdin)
+    except (json.JSONDecodeError, UnicodeDecodeError, ValueError):
         return {}
+    # Valid JSON that is not an object (list/null/number/string) would crash every
+    # downstream `.get(...)`; treat it as an empty payload rather than raising.
+    return data if isinstance(data, dict) else {}
 
 
 def _store() -> RuntimeStore:
@@ -93,11 +96,21 @@ def pre_tool() -> int:
     return 0
 
 
-def post_tool() -> int:
+def _is_error(data: dict) -> bool:
+    if data.get("is_error") or data.get("tool_error") or data.get("error"):
+        return True
+    response = data.get("tool_response")
+    return bool(isinstance(response, dict) and response.get("is_error"))
+
+
+def post_tool(*, force_error: bool = False) -> int:
     data = _payload()
     store = _store()
     tool_name, _, input_hash = _tool_fields(data)
-    is_error = bool(data.get("is_error") or data.get("tool_error"))
+    # PostToolUse fires only on success; the separate PostToolUseFailure event carries
+    # the failure and routes here with force_error set, so a failed Bash call still
+    # produces the action.failed signal Frame relies on.
+    is_error = force_error or _is_error(data)
     _event(store, "tool.post", "soul", input_hash, {"tool_name": tool_name, "is_error": is_error})
     if is_error:
         _event(store, "action.failed", "soul", input_hash, {
@@ -154,6 +167,8 @@ def main(argv: list[str] | None = None) -> int:
         return pre_tool()
     if mode == "post-tool":
         return post_tool()
+    if mode == "post-tool-failure":
+        return post_tool(force_error=True)
     if mode == "pre-write":
         return pre_write()
     if mode == "stop":

@@ -244,12 +244,15 @@ class CouncilTests(unittest.TestCase):
                 "s2": council.SeatSubmission("h2", ("c2",), ("e2", "shared"), ("p2",), 0.6, ("f2",)),
                 "s3": council.SeatSubmission("h3", ("c3",), ("e3",), ("p3",), 0.8, ("f3",)),
             }
+            nonces: dict[str, str] = {}
             for sid, sub in subs.items():
-                council.commit(root, state.council_id, sid, sub)
+                _, nonces[sid] = council.commit(root, state.council_id, sid, sub)
             tampered = council.SeatSubmission("changed", ("c1",), ("e1",), ("p1",), 0.7, ("f1",))
-            self.assertFalse(council.reveal(root, state.council_id, "s1", tampered))
+            self.assertFalse(council.reveal(root, state.council_id, "s1", tampered, nonces["s1"]))
+            # A correct submission with the wrong nonce must also fail to open.
+            self.assertFalse(council.reveal(root, state.council_id, "s1", subs["s1"], "deadbeef"))
             for sid, sub in subs.items():
-                self.assertTrue(council.reveal(root, state.council_id, sid, sub))
+                self.assertTrue(council.reveal(root, state.council_id, sid, sub, nonces[sid]))
             loaded = council._load(root, state.council_id)
             matrix = council.overlap_matrix(loaded)
             self.assertEqual(len(matrix["pairs"]), 3)
@@ -261,10 +264,11 @@ class CouncilTests(unittest.TestCase):
             init_root(root)
             state = council.create_council(root, "artifact", "budget", self._seats())
             sub = council.SeatSubmission("h", ("c",), ("e",), ("p",), 0.5, ("f",))
+            nonces: dict[str, str] = {}
             for seat in self._seats():
-                council.commit(root, state.council_id, seat.seat_id, sub)
+                _, nonces[seat.seat_id] = council.commit(root, state.council_id, seat.seat_id, sub)
             for seat in self._seats():
-                council.reveal(root, state.council_id, seat.seat_id, sub)
+                council.reveal(root, state.council_id, seat.seat_id, sub, nonces[seat.seat_id])
             self._critiques(root, state.council_id)
             r = council.finalize(root, state.council_id, "obl", synthesis_hash="s", supported_findings=["f"], direct_control_receipt="missing")
             self.assertEqual(r.verdict, Verdict.UNKNOWN)
@@ -275,13 +279,16 @@ class CouncilTests(unittest.TestCase):
             init_root(root)
             state = council.create_council(root, "artifact", "budget-1", self._seats())
             sub = council.SeatSubmission("h", ("c",), ("e",), ("p",), 0.5, ("f",))
+            nonces: dict[str, str] = {}
             for seat in self._seats():
-                council.commit(root, state.council_id, seat.seat_id, sub)
+                _, nonces[seat.seat_id] = council.commit(root, state.council_id, seat.seat_id, sub)
             for seat in self._seats():
-                council.reveal(root, state.council_id, seat.seat_id, sub)
+                council.reveal(root, state.council_id, seat.seat_id, sub, nonces[seat.seat_id])
             self._critiques(root, state.council_id)
+            # The control must be recorded under the same obligation the Council is
+            # clearing; a control for a different obligation no longer counts.
             direct = council.record_control(
-                root, "control", artifact_hash="artifact", budget_hash="budget-1",
+                root, "obl", artifact_hash="artifact", budget_hash="budget-1",
                 kind="DIRECT", output_hash="direct-output", verdict=Verdict.CLEARED, verifier="direct",
             )
             r = council.finalize(root, state.council_id, "obl", synthesis_hash="s", supported_findings=["f"], direct_control_receipt=direct.receipt_id)
@@ -293,10 +300,11 @@ class CouncilTests(unittest.TestCase):
             init_root(root)
             state = council.create_council(root, "artifact", "budget", self._seats())
             sub = council.SeatSubmission("h", ("c",), ("e",), ("p",), 0.5, ("f",))
+            nonces: dict[str, str] = {}
             for seat in self._seats():
-                council.commit(root, state.council_id, seat.seat_id, sub)
+                _, nonces[seat.seat_id] = council.commit(root, state.council_id, seat.seat_id, sub)
             for seat in self._seats():
-                council.reveal(root, state.council_id, seat.seat_id, sub)
+                council.reveal(root, state.council_id, seat.seat_id, sub, nonces[seat.seat_id])
             wrong = council.record_control(
                 root, "control", artifact_hash="other-artifact", budget_hash="budget",
                 kind="DIRECT", output_hash="x", verdict=Verdict.CLEARED, verifier="direct",

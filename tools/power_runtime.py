@@ -10,6 +10,7 @@ from __future__ import annotations
 import os
 import shutil
 import subprocess
+import sys
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -42,10 +43,59 @@ class VerificationPlan:
 
 
 KNOWN_KINDS = {"python-unittest", "compileall", "pytest", "ruff", "z3", "semgrep", "mutmut", "custom"}
+# Modules the constrained python-module families may invoke via `-m`.
+ALLOWED_PY_MODULES = {"unittest", "pytest", "compileall", "ruff"}
+# Flags that turn a constrained module command into an arbitrary-code vector:
+# `-c` executes source, `-W` can import an arbitrary module, `-p` loads a plugin.
+BLOCKED_MODULE_FLAGS = ("-c", "-W", "-p")
+_PATHY_SUFFIXES = (".py", ".pyi", ".txt", ".cfg", ".toml", ".json", ".ini")
 
 
 def _basename(value: str) -> str:
     return Path(value).name.lower()
+
+
+def _has_sep(value: str) -> bool:
+    return os.sep in value or "/" in value
+
+
+def _same_file(a: str, b: str) -> bool:
+    try:
+        return os.path.samefile(a, b)
+    except OSError:
+        return os.path.normcase(os.path.abspath(a)) == os.path.normcase(os.path.abspath(b))
+
+
+def _looks_like_path(token: str) -> bool:
+    if token == "discover":
+        return True
+    if _has_sep(token) or token.endswith(_PATHY_SUFFIXES):
+        return True
+    return Path(token).exists()
+
+
+def _module_args_allowed(args: list[str], *, allow_custom: bool) -> tuple[bool, str | None]:
+    """A constrained module command may carry only paths and safe flags.
+
+    A bare non-path token after `-m unittest`/`-m pytest` is a dotted module name,
+    which executes arbitrary code at import; that is exactly the vector this guards.
+    """
+    if allow_custom:
+        return True, None
+    for token in args:
+        if token.startswith("-"):
+            if any(token == flag or token.startswith(flag) for flag in BLOCKED_MODULE_FLAGS):
+                return False, (
+                    f"disallowed flag {token!r} in constrained module command; "
+                    "set EGR_POWER_ALLOW_CUSTOM_COMMANDS=1 at the outer boundary to override"
+                )
+            continue
+        if not _looks_like_path(token):
+            return False, (
+                f"argument {token!r} is not a path or safe flag; arbitrary module names are "
+                "refused (set EGR_POWER_ALLOW_CUSTOM_COMMANDS=1 at the outer boundary to override)"
+            )
+    return True, None
 
 
 def _command_shape_allowed(check: VerificationCheck) -> tuple[bool, str | None]:
@@ -56,19 +106,55 @@ def _command_shape_allowed(check: VerificationCheck) -> tuple[bool, str | None]:
     command = list(check.command)
     exe = _basename(command[0])
     pythonish = exe.startswith("python") or exe in {"py"}
+    allow_custom = os.environ.get("EGR_POWER_ALLOW_CUSTOM_COMMANDS") == "1"
     if check.kind == "custom":
-        if os.environ.get("EGR_POWER_ALLOW_CUSTOM_COMMANDS") != "1":
+        if not allow_custom:
             return False, "custom command disabled; set EGR_POWER_ALLOW_CUSTOM_COMMANDS=1 at the outer execution boundary"
         return True, None
-    if check.kind == "python-unittest":
-        return (pythonish and command[1:3] == ["-m", "unittest"] and "-c" not in command), "python-unittest command must be python -m unittest ..."
-    if check.kind == "compileall":
-        return (pythonish and command[1:3] == ["-m", "compileall"] and "-c" not in command), "compileall command must be python -m compileall ..."
+    if check.kind in {"python-unittest", "compileall"}:
+        module = "unittest" if check.kind == "python-unittest" else "compileall"
+        if not (pythonish and command[1:3] == ["-m", module]):
+            return False, f"{check.kind} command must be python -m {module} ..."
+        return _module_args_allowed(command[3:], allow_custom=allow_custom)
     if check.kind == "pytest":
-        allowed = exe == "pytest" or (pythonish and command[1:3] == ["-m", "pytest"])
-        return allowed, "pytest command must be pytest ... or python -m pytest ..."
-    expected = {"ruff": "ruff", "z3": "z3", "semgrep": "semgrep", "mutmut": "mutmut"}[check.kind]
+        if pythonish and command[1:3] == ["-m", "pytest"]:
+            return _module_args_allowed(command[3:], allow_custom=allow_custom)
+        if exe == "pytest":
+            return _module_args_allowed(command[1:], allow_custom=allow_custom)
+        return False, "pytest command must be pytest ... or python -m pytest ..."
+    if check.kind == "ruff":
+        if pythonish and command[1:3] == ["-m", "ruff"]:
+            return _module_args_allowed(command[3:], allow_custom=allow_custom)
+        if exe == "ruff":
+            return _module_args_allowed(command[1:], allow_custom=allow_custom)
+        return False, "ruff command must be ruff ... or python -m ruff ..."
+    expected = {"z3": "z3", "semgrep": "semgrep", "mutmut": "mutmut"}[check.kind]
     return exe == expected, f"{check.kind} command must execute {expected} directly"
+
+
+def _resolve_executable(check: VerificationCheck) -> tuple[str | None, str | None]:
+    """Resolve argv[0] to a trusted absolute path or refuse it.
+
+    Path-existence is not trust: a binary named `z3`/`ruff`/`pytest` sitting in a
+    scratch directory must not run just because its file exists. Python families must
+    be the active interpreter; direct-binary families must resolve on PATH by name.
+    """
+    argv0 = check.command[0]
+    exe = _basename(argv0)
+    pythonish = exe.startswith("python") or exe in {"py"}
+    if pythonish or check.kind in {"python-unittest", "compileall"}:
+        if _same_file(argv0, sys.executable):
+            return sys.executable, None
+        resolved = shutil.which(argv0)
+        if resolved and _same_file(resolved, sys.executable):
+            return resolved, None
+        return None, f"python-family verifier must run the active interpreter (sys.executable), got {argv0!r}"
+    on_path = shutil.which(exe)
+    if on_path is None:
+        return None, f"tool not found on PATH: {exe}"
+    if _has_sep(argv0) and not _same_file(argv0, on_path):
+        return None, f"refusing {argv0!r}: not the {exe} resolved on PATH"
+    return on_path, None
 
 
 def _as_text(value: str | bytes | None) -> str:
@@ -81,12 +167,13 @@ def run_check(root: Path, check: VerificationCheck) -> dict[str, Any]:
     allowed, reason = _command_shape_allowed(check)
     if not allowed:
         return {"check_id": check.check_id, "kind": check.kind, "verdict": Verdict.UNAVAILABLE.value, "reason": reason}
-    executable = check.command[0]
-    if shutil.which(executable) is None and not Path(executable).exists():
-        return {"check_id": check.check_id, "kind": check.kind, "verdict": Verdict.UNAVAILABLE.value, "reason": f"tool not found: {executable}"}
+    resolved, resolve_reason = _resolve_executable(check)
+    if resolved is None:
+        return {"check_id": check.check_id, "kind": check.kind, "verdict": Verdict.UNAVAILABLE.value, "reason": resolve_reason}
+    command = [resolved, *list(check.command)[1:]]
     started = time.monotonic()
     try:
-        proc = subprocess.run(list(check.command), cwd=root, text=True, capture_output=True, timeout=check.timeout_seconds, shell=False)
+        proc = subprocess.run(command, cwd=root, text=True, capture_output=True, timeout=check.timeout_seconds, shell=False)
     except subprocess.TimeoutExpired as exc:
         return {
             "check_id": check.check_id, "kind": check.kind, "verdict": Verdict.UNKNOWN.value,

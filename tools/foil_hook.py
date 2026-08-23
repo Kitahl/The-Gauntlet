@@ -46,9 +46,11 @@ MIN_PROFILE_BUDGET = 600
 
 def _input() -> dict:
     try:
-        return json.load(sys.stdin)
+        data = json.load(sys.stdin)
     except (json.JSONDecodeError, UnicodeDecodeError, ValueError):
         return {}
+    # Valid non-object JSON (list/null/number) must not reach the `.get(...)` calls.
+    return data if isinstance(data, dict) else {}
 
 
 def build_payload(profile: dict, task_line: str = "") -> str:
@@ -103,7 +105,14 @@ def prompt() -> int:
     except Exception:  # noqa: BLE001 - relevance marking is best-effort, never fatal
         domains, facets = [], []
     try:
-        typed_receipts = record_prompt_adaptation(project_root(), profile, domains, facets)
+        try:
+            from egrt_hook import _explicit_aliases
+            foil_alias = "foil" in _explicit_aliases(text)
+        except Exception:  # noqa: BLE001 - alias detection is best-effort, default to non-explicit
+            foil_alias = False
+        typed_receipts = record_prompt_adaptation(
+            project_root(), profile, domains, facets, prompt_text=text, foil_alias=foil_alias,
+        )
         typed_status = f"receipts={len(typed_receipts)}"
     except Exception as exc:  # noqa: BLE001 - availability signal, never a factual judgment
         # This is an integration availability signal, never a competence/factual

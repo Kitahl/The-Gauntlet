@@ -72,7 +72,7 @@ def monitor_structured(operation: str, events: list[dict[str, Any]], receipts: l
 
     if operation == "audit":
         if "release.attempted" not in types:
-            return Verdict.CLEARED, "audit trigger absent: no release attempt in typed trace"
+            return Verdict.UNKNOWN, "not-applicable: audit trigger absent: no release attempt in typed trace"
         states = _latest_obligation_states(events)
         if not states:
             return Verdict.UNKNOWN, "release was attempted but no typed obligation-state evidence is observable"
@@ -84,7 +84,7 @@ def monitor_structured(operation: str, events: list[dict[str, Any]], receipts: l
     if operation == "derive":
         inherited = [e for e in events if e.get("event_type") == "claim.adopted" and e.get("metadata", {}).get("inherited")]
         if not inherited:
-            return Verdict.CLEARED, "derive trigger absent: no typed inherited claim"
+            return Verdict.UNKNOWN, "not-applicable: derive trigger absent: no typed inherited claim"
         derivations = {
             r.get("obligation_id")
             for r in receipts
@@ -98,7 +98,7 @@ def monitor_structured(operation: str, events: list[dict[str, Any]], receipts: l
         if not evidence_events:
             if "release.attempted" in types:
                 return Verdict.UNKNOWN, "release attempted without observable evidence-provenance events"
-            return Verdict.CLEARED, "self trigger absent: no typed evidence attachment"
+            return Verdict.UNKNOWN, "not-applicable: self trigger absent: no typed evidence attachment"
         for event in evidence_events:
             metadata = event.get("metadata", {})
             if metadata.get("producer") and metadata.get("producer") == metadata.get("verifier"):
@@ -110,7 +110,7 @@ def monitor_structured(operation: str, events: list[dict[str, Any]], receipts: l
     if operation == "redirect":
         attempts = [e for e in events if e.get("event_type") == "action.attempted"][-6:]
         if len(attempts) < 3:
-            return Verdict.CLEARED, "redirect trigger absent: fewer than three recent typed attempts"
+            return Verdict.UNKNOWN, "not-applicable: redirect trigger absent: fewer than three recent typed attempts"
         recent = attempts[-3:]
         blockers = [e.get("metadata", {}).get("blocker_hash") for e in recent]
         progress = [e.get("metadata", {}).get("progress_hash") for e in recent]
@@ -123,7 +123,7 @@ def monitor_structured(operation: str, events: list[dict[str, Any]], receipts: l
     if operation == "boundary":
         handoffs = [e for e in events if e.get("event_type") == "handoff.started"]
         if not handoffs:
-            return Verdict.CLEARED, "boundary trigger absent: no typed handoff"
+            return Verdict.UNKNOWN, "not-applicable: boundary trigger absent: no typed handoff"
         contracts = {e.get("metadata", {}).get("handoff_id") for e in events if e.get("event_type") == "contract.bound"}
         if any(e.get("metadata", {}).get("handoff_id") not in contracts for e in handoffs):
             return Verdict.ISSUE, "handoff lacks a bound contract"
@@ -131,7 +131,7 @@ def monitor_structured(operation: str, events: list[dict[str, Any]], receipts: l
 
     if operation == "oob":
         if "release.attempted" not in types:
-            return Verdict.CLEARED, "oob trigger absent: no release attempt"
+            return Verdict.UNKNOWN, "not-applicable: oob trigger absent: no release attempt"
         probes = [e for e in events if e.get("event_type") == "coverage.probe"]
         if not probes:
             return Verdict.UNKNOWN, "release has no named out-of-band coverage probe"
@@ -181,7 +181,7 @@ def monitor_structured(operation: str, events: list[dict[str, Any]], receipts: l
     if operation == "frame":
         failures = [e for e in events if e.get("event_type") == "action.failed"][-4:]
         if len(failures) < 3:
-            return Verdict.CLEARED, "frame trigger absent: fewer than three recent typed failures"
+            return Verdict.UNKNOWN, "not-applicable: frame trigger absent: fewer than three recent typed failures"
         signatures = [e.get("metadata", {}).get("failure_signature") for e in failures[-3:]]
         if any(signature is None for signature in signatures):
             return Verdict.UNKNOWN, "recent failures lack failure_signature required for structural repetition check"

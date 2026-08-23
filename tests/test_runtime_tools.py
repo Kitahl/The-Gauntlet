@@ -140,7 +140,10 @@ class RuntimeToolTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             with patch.dict(
                 os.environ,
-                {"EGR_FOIL_PROFILE_DIR": directory},
+                # CLAUDE_PROJECT_DIR redirects the typed bridge's .egrt/ state into the
+                # temp dir; without it fh.prompt() writes runtime state into the repo
+                # root and the untracked-file leak test would flag it.
+                {"EGR_FOIL_PROFILE_DIR": directory, "CLAUDE_PROJECT_DIR": directory},
                 clear=False,
             ):
                 raw_prompt = "Help me reason about quantum physics and a causal DAG"

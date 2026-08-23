@@ -89,10 +89,26 @@ def snapshot_adaptation(root: Path, obligation_id: str, profile_name: str | None
     return receipt
 
 
-def record_prompt_adaptation(root: Path, profile: dict, domains: list[str], facets: list[str]) -> list[Receipt]:
-    """Record that FOIL actually applied prompt-time relevance routing metadata."""
+def record_prompt_adaptation(
+    root: Path,
+    profile: dict,
+    domains: list[str],
+    facets: list[str],
+    *,
+    prompt_text: str = "",
+    foil_alias: bool = False,
+) -> list[Receipt]:
+    """Record that FOIL applied prompt-time relevance routing metadata.
+
+    A load-bearing ADAPTATION obligation is CLEARED only when the user's prompt
+    explicitly asked for it: it named the obligation id, or it carried the `/foil`
+    alias. Otherwise the routing metadata is still recorded, but the obligation stays
+    UNKNOWN so an ambient prompt cannot silently satisfy a load-bearing obligation.
+    `prompt_text` is used transiently for that membership check and never persisted.
+    """
     store = RuntimeStore(root)
     task_id = _active_task(store)
+    low = (prompt_text or "").lower()
     summary = _profile_summary(profile)
     routing = {
         "domain_count": len(domains),
@@ -111,22 +127,38 @@ def record_prompt_adaptation(root: Path, profile: dict, domains: list[str], face
     ))
     receipts: list[Receipt] = []
     for obligation_id in _adaptation_obligations(store, task_id):
+        explicit = foil_alias or obligation_id.lower() in low
+        verdict = Verdict.CLEARED if explicit else Verdict.UNKNOWN
+        if explicit:
+            action = "prompt-routing-adaptation"
+            notes = "CLEARED means the requested FOIL routing/adaptation action ran. It cannot clear non-ADAPTATION obligations."
+            unresolved: tuple[str, ...] = ()
+        else:
+            action = "prompt-routing-adaptation-unrequested"
+            notes = (
+                "Routing metadata recorded, but the prompt did not explicitly request adaptation "
+                "(no /foil alias and no obligation id named), so this load-bearing ADAPTATION "
+                "obligation is not cleared without user action."
+            )
+            unresolved = ("adaptation not explicitly requested by the prompt; awaiting /foil or an obligation-id reference",)
         receipt = Receipt(
             receipt_id=new_id("rcpt"), module="foil", obligation_id=obligation_id,
-            verdict=Verdict.CLEARED, action="prompt-routing-adaptation",
+            verdict=verdict, action=action,
             input_hash=summary["profile_hash"], output_hash=digest(routing),
             evidence=(EvidenceRef(
                 evidence_class=EvidenceClass.OBSERVED,
                 verifier="foil_runtime_bridge",
                 metadata={
                     "scope": "FOIL task-relevance adaptation only; no competence or factual correctness inference",
+                    "explicit_request": explicit,
                     "domain_count": len(domains), "facet_count": len(facets),
                     "domain_set_hash": routing["domain_set_hash"], "facet_set_hash": routing["facet_set_hash"],
                     "raw_prompts_stored": summary["raw_prompts_stored"],
                 },
             ),),
             verifier="foil_runtime_bridge", started_at=utcnow(), finished_at=utcnow(),
-            notes="CLEARED means the requested FOIL routing/adaptation action ran. It cannot clear non-ADAPTATION obligations.",
+            unresolved=unresolved,
+            notes=notes,
             task_id=task_id,
         )
         store.write_receipt(receipt)

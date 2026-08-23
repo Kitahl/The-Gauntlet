@@ -30,6 +30,27 @@ MODULE_FOR_KIND = {
 }
 
 
+# Release severity, worst first. UNAVAILABLE must outrank CLEARED: a module that
+# could not run has not cleared anything.
+_SEVERITY = {
+    Verdict.CLEARED: 0,
+    Verdict.UNKNOWN: 1,
+    Verdict.UNAVAILABLE: 2,
+    Verdict.ISSUE: 3,
+}
+
+
+def _worse(left: Verdict, right: Verdict) -> Verdict:
+    return right if _SEVERITY[right] > _SEVERITY[left] else left
+
+
+def _module_for(obligation: dict) -> str | None:
+    try:
+        return MODULE_FOR_KIND[ObligationKind(obligation["kind"])]
+    except (KeyError, ValueError):
+        return None
+
+
 def start_task(root: Path, goal: str, *, metadata: dict | None = None) -> TaskState:
     store = RuntimeStore(root)
     task = TaskState(task_id=new_id("task"), goal_hash=text_digest(goal), metadata=metadata or {})
@@ -54,9 +75,6 @@ def start_task(root: Path, goal: str, *, metadata: dict | None = None) -> TaskSt
 
 def add_obligation(root: Path, task_id: str, kind: ObligationKind, claim: str, *, load_bearing: bool = True, metadata: dict | None = None) -> Obligation:
     store = RuntimeStore(root)
-    raw = store.read_task(task_id)
-    if raw is None:
-        raise KeyError(f"unknown task {task_id}")
     obligation = Obligation(
         obligation_id=new_id("obl"),
         kind=kind,
@@ -65,8 +83,14 @@ def add_obligation(root: Path, task_id: str, kind: ObligationKind, claim: str, *
         required_module=MODULE_FOR_KIND[kind],
         metadata=metadata or {},
     )
-    raw.setdefault("obligations", []).append(json.loads(json.dumps(obligation, default=lambda o: getattr(o, "value", o.__dict__))))
-    store.write_named_state("tasks", task_id, raw)
+    # Read-modify-write under an advisory lock: concurrent hook processes otherwise
+    # each append to a stale copy and all but the last obligation is lost.
+    with store.lock(f"task-{task_id}"):
+        raw = store.read_task(task_id)
+        if raw is None:
+            raise KeyError(f"unknown task {task_id}")
+        raw.setdefault("obligations", []).append(json.loads(json.dumps(obligation, default=lambda o: getattr(o, "value", o.__dict__))))
+        store.write_task(raw)
     store.append_event(RuntimeEvent(
         event_id=new_id("evt"), event_type="obligation.created", component="soul",
         task_id=task_id, payload_hash=digest(obligation), timestamp=utcnow(),
@@ -86,11 +110,17 @@ def release_gate(root: Path, task_id: str) -> tuple[Verdict, dict]:
         if not obligation.get("load_bearing", True):
             continue
         receipts = store.receipts_for(obligation["obligation_id"])
-        expected = obligation.get("required_module")
-        receipts = [r for r in receipts if not expected or r.get("module") == expected]
+        # An obligation with no explicit required_module still has one implied by its
+        # kind; falling back to "accept any module" would let an unrelated module
+        # clear it.
+        expected = obligation.get("required_module") or _module_for(obligation)
+        receipts = [
+            r for r in receipts
+            if r.get("module") == expected and r.get("task_id") == task_id
+        ]
         if not receipts:
             details.append({"obligation_id": obligation["obligation_id"], "verdict": Verdict.UNKNOWN.value, "reason": "missing-receipt"})
-            overall = Verdict.UNKNOWN if overall != Verdict.ISSUE else overall
+            overall = _worse(overall, Verdict.UNKNOWN)
             continue
         # Each module owns the aggregate current state of its obligation. Historical
         # receipts remain auditable, but the most recently stored valid receipt is
@@ -106,12 +136,7 @@ def release_gate(root: Path, task_id: str) -> tuple[Verdict, dict]:
             "receipt_id": current.get("receipt_id"),
             "historical_receipt_ids": [r.get("receipt_id") for r in receipts[:-1]],
         })
-        if verdict == Verdict.ISSUE:
-            overall = Verdict.ISSUE
-        elif verdict == Verdict.UNKNOWN and overall not in (Verdict.ISSUE,):
-            overall = Verdict.UNKNOWN
-        elif verdict == Verdict.UNAVAILABLE and overall == Verdict.CLEARED:
-            overall = Verdict.UNAVAILABLE
+        overall = _worse(overall, verdict)
     return overall, {"task_id": task_id, "obligations": details}
 
 
@@ -126,7 +151,7 @@ def release_task(root: Path, task_id: str) -> tuple[Verdict, dict]:
         return Verdict.UNKNOWN, {"reason": "task-not-found", "task_id": task_id}
     task["active"] = False
     task["released"] = True
-    store.write_named_state("tasks", task_id, task)
+    store.write_task(task)
     active = store.base / "active_task"
     if active.exists() and active.read_text(encoding="utf-8").strip() == task_id:
         active.unlink()
