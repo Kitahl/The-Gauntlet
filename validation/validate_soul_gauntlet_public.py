@@ -130,7 +130,7 @@ for token in (
 ):
     if token not in mirror:
         fail(f"Mirror compatibility contract missing token: {token}")
-if "<strong>10</strong>" not in showcase or "Research Orchestrator" not in showcase or "Mirror" not in showcase:
+if showcase.count('class="tool-entry"') != 10 or "Research Orchestrator" not in showcase or "Mirror" not in showcase:
     fail("showcase architecture/module count or Mirror public name is not synchronized")
 
 pipeline = need("docs/VNEXT_RUNTIME_PIPELINE.md")
