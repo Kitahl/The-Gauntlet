@@ -10,6 +10,8 @@ It stores no private reasoning or chain-of-thought.
 
 from __future__ import annotations
 
+import hashlib
+import json
 from dataclasses import dataclass
 from enum import Enum
 from typing import Mapping
@@ -50,6 +52,12 @@ class EvidenceBasis(str, Enum):
     PROOF_OR_COUNTEREXAMPLE = "proof_or_counterexample"
     SUPPLIED_CONTEXT = "supplied_context"
     OUTPUT_CONTRACT = "output_contract"
+
+
+class EvidenceVerdict(str, Enum):
+    SUPPORTS = "supports"
+    REFUTES = "refutes"
+    INCONCLUSIVE = "inconclusive"
 
 
 AUTHORITY_RANK: Mapping[EvidenceAuthority, int] = {
@@ -103,6 +111,7 @@ NON_VERIFYING_OPERATORS = frozenset(
 
 @dataclass(frozen=True)
 class OperatorRequest:
+    request_id: str
     controller_version: str
     operator: StrategyOperator
     reason_code: str
@@ -115,6 +124,8 @@ class OperatorRequest:
     prior_postcondition_checked: bool = False
 
     def __post_init__(self) -> None:
+        if not self.request_id.strip():
+            raise ValueError("request_id is required")
         if not self.controller_version:
             raise ValueError("controller_version is required")
         if not self.reason_code:
@@ -138,6 +149,7 @@ class OperatorRequest:
     def trace(self) -> dict[str, object]:
         return {
             "trace_type": "operator_request",
+            "request_id": self.request_id,
             "controller_version": self.controller_version,
             "operator": self.operator.value,
             "reason_code": self.reason_code,
@@ -162,7 +174,7 @@ class EvidencePacket:
     verifier: VerifierKind
     basis: EvidenceBasis
     reference: str
-    entails_claim: bool
+    verdict: EvidenceVerdict
     stale: bool = False
     freshness_checked: bool = False
 
@@ -183,39 +195,59 @@ class EvidencePacket:
 
 
 @dataclass(frozen=True)
+class ClaimResolution:
+    claim_id: str
+    verdict: EvidenceVerdict
+
+    def __post_init__(self) -> None:
+        if not self.claim_id.strip():
+            raise ValueError("claim_id is required")
+        if self.verdict is EvidenceVerdict.INCONCLUSIVE:
+            raise ValueError("an inconclusive verdict cannot resolve a claim")
+
+
+@dataclass(frozen=True)
 class OperatorOutcome:
+    request_id: str
     operator: StrategyOperator
     status: OutcomeStatus
     candidate_created: bool = False
     candidate_revised: bool = False
     evidence: tuple[EvidencePacket, ...] = ()
     completed_verifiers: frozenset[VerifierKind] = frozenset()
-    resolved_claim_ids: tuple[str, ...] = ()
+    claim_resolutions: tuple[ClaimResolution, ...] = ()
     defect_id: str | None = None
     postcondition_verified: bool = False
     observed_state_fingerprint: str | None = None
     error_code: str | None = None
 
     def __post_init__(self) -> None:
-        if len(set(self.resolved_claim_ids)) != len(self.resolved_claim_ids):
-            raise ValueError("resolved_claim_ids must be unique")
-        if any(not claim_id.strip() for claim_id in self.resolved_claim_ids):
-            raise ValueError("resolved claim IDs must be non-empty")
+        if not self.request_id.strip():
+            raise ValueError("request_id is required")
+        claim_ids = [resolution.claim_id for resolution in self.claim_resolutions]
+        if len(set(claim_ids)) != len(claim_ids):
+            raise ValueError("claim resolutions must use unique claim IDs")
+        evidence_ids = [packet.evidence_id for packet in self.evidence]
+        if len(set(evidence_ids)) != len(evidence_ids):
+            raise ValueError("evidence IDs must be unique within an outcome")
         if self.defect_id is not None and not self.defect_id.strip():
             raise ValueError("defect_id cannot be blank")
         if self.status is OutcomeStatus.COMPLETED and self.error_code:
             raise ValueError("completed outcomes cannot carry an error code")
+        if self.status is not OutcomeStatus.COMPLETED and not self.error_code:
+            raise ValueError("failed or blocked outcomes require an error code")
 
     def trace(self) -> dict[str, object]:
         return {
             "trace_type": "operator_outcome",
+            "request_id": self.request_id,
             "operator": self.operator.value,
             "status": self.status.value,
             "candidate_created": self.candidate_created,
             "candidate_revised": self.candidate_revised,
             "evidence_count": len(self.evidence),
             "completed_verifier_count": len(self.completed_verifiers),
-            "resolved_claim_count": len(self.resolved_claim_ids),
+            "resolved_claim_count": len(self.claim_resolutions),
             "defect_localized": self.defect_id is not None,
             "postcondition_verified": self.postcondition_verified,
             "state_fingerprint_present": (
@@ -230,7 +262,7 @@ class OutcomeValidation:
     valid: bool
     progress: ProgressStatus
     errors: tuple[str, ...]
-    admitted_resolved_claim_ids: tuple[str, ...]
+    admitted_claim_resolutions: tuple[ClaimResolution, ...]
     admitted_completed_verifiers: tuple[VerifierKind, ...]
 
     def trace(self) -> dict[str, object]:
@@ -240,7 +272,7 @@ class OutcomeValidation:
             "progress": self.progress.value,
             "error_count": len(self.errors),
             "admitted_resolved_claim_count": len(
-                self.admitted_resolved_claim_ids
+                self.admitted_claim_resolutions
             ),
             "admitted_completed_verifier_count": len(
                 self.admitted_completed_verifiers
@@ -248,20 +280,70 @@ class OutcomeValidation:
         }
 
 
+def _request_id(
+    decision: StrategyDecision,
+    *,
+    task_instance_id: str,
+    target_claim_ids: tuple[str, ...],
+    tool_effect: ToolEffect,
+    idempotency_key: str | None,
+    retry_attempt: int,
+    prior_postcondition_checked: bool,
+) -> str:
+    payload = {
+        "task_instance_id": task_instance_id,
+        "controller_version": decision.controller_version,
+        "operator": decision.operator.value,
+        "reason_code": decision.reason_code,
+        "required_verifier": (
+            decision.required_verifier.value
+            if decision.required_verifier
+            else None
+        ),
+        "minimum_evidence_authority": (
+            decision.minimum_evidence_authority.value
+        ),
+        "target_claim_ids": list(target_claim_ids),
+        "tool_effect": tool_effect.value,
+        "idempotency_key": idempotency_key,
+        "retry_attempt": retry_attempt,
+        "prior_postcondition_checked": prior_postcondition_checked,
+    }
+    canonical = json.dumps(
+        payload,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return hashlib.sha256(canonical).hexdigest()
+
+
 def build_request(
     decision: StrategyDecision,
     *,
+    task_instance_id: str,
     target_claim_ids: tuple[str, ...] = (),
     tool_effect: ToolEffect = ToolEffect.NONE,
     idempotency_key: str | None = None,
     retry_attempt: int = 0,
     prior_postcondition_checked: bool = False,
 ) -> OperatorRequest:
+    if not task_instance_id.strip():
+        raise ValueError("task_instance_id is required")
     if decision.may_discharge_load_bearing_uncertainty and not target_claim_ids:
         raise ValueError(
             "evidence-bearing operators require explicit target claim IDs"
         )
+    request_id = _request_id(
+        decision,
+        task_instance_id=task_instance_id,
+        target_claim_ids=target_claim_ids,
+        tool_effect=tool_effect,
+        idempotency_key=idempotency_key,
+        retry_attempt=retry_attempt,
+        prior_postcondition_checked=prior_postcondition_checked,
+    )
     return OperatorRequest(
+        request_id=request_id,
         controller_version=decision.controller_version,
         operator=decision.operator,
         reason_code=decision.reason_code,
@@ -285,7 +367,7 @@ def _progress(outcome: OperatorOutcome) -> ProgressStatus:
         or outcome.candidate_revised
         or outcome.evidence
         or outcome.completed_verifiers
-        or outcome.resolved_claim_ids
+        or outcome.claim_resolutions
         or outcome.defect_id
         or outcome.postcondition_verified
     ):
@@ -293,22 +375,19 @@ def _progress(outcome: OperatorOutcome) -> ProgressStatus:
     return ProgressStatus.STALLED
 
 
-def _packet_supports(
+def _packet_admissible(
     packet: EvidencePacket,
     *,
-    claim_id: str,
     required_verifier: VerifierKind,
     minimum_authority: EvidenceAuthority,
 ) -> bool:
-    if packet.claim_id != claim_id:
-        return False
     if packet.verifier is not required_verifier:
         return False
     if packet.basis not in VERIFIER_BASES[required_verifier]:
         return False
     if AUTHORITY_RANK[packet.authority] < AUTHORITY_RANK[minimum_authority]:
         return False
-    if not packet.entails_claim or packet.stale:
+    if packet.stale:
         return False
     if (
         required_verifier is VerifierKind.CURRENT_SOURCE
@@ -316,6 +395,25 @@ def _packet_supports(
     ):
         return False
     return True
+
+
+def _packet_supports_resolution(
+    packet: EvidencePacket,
+    *,
+    resolution: ClaimResolution,
+    required_verifier: VerifierKind,
+    minimum_authority: EvidenceAuthority,
+) -> bool:
+    return (
+        packet.claim_id == resolution.claim_id
+        and packet.verdict is resolution.verdict
+        and resolution.verdict is not EvidenceVerdict.INCONCLUSIVE
+        and _packet_admissible(
+            packet,
+            required_verifier=required_verifier,
+            minimum_authority=minimum_authority,
+        )
+    )
 
 
 def validate_outcome(
@@ -329,6 +427,8 @@ def validate_outcome(
         errors.append("controller_version_mismatch")
     if request.operator is not decision.operator:
         errors.append("request_operator_mismatch")
+    if outcome.request_id != request.request_id:
+        errors.append("request_id_mismatch")
     if outcome.operator is not request.operator:
         errors.append("outcome_operator_mismatch")
     if request.required_verifier is not decision.required_verifier:
@@ -339,6 +439,30 @@ def validate_outcome(
     ):
         errors.append("minimum_authority_mismatch")
 
+    evidence_keys = [
+        (
+            packet.claim_id,
+            packet.verifier,
+            packet.basis,
+            packet.reference,
+        )
+        for packet in outcome.evidence
+    ]
+    if len(set(evidence_keys)) != len(evidence_keys):
+        errors.append("duplicate_evidence_reference")
+
+    if outcome.status is not OutcomeStatus.COMPLETED:
+        if outcome.candidate_created or outcome.candidate_revised:
+            errors.append("non_completed_outcome_changed_candidate")
+        if outcome.completed_verifiers:
+            errors.append("non_completed_outcome_completed_verifier")
+        if outcome.claim_resolutions:
+            errors.append("non_completed_outcome_resolved_claim")
+        if outcome.defect_id is not None:
+            errors.append("non_completed_outcome_localized_defect")
+        if outcome.postcondition_verified:
+            errors.append("non_completed_outcome_verified_postcondition")
+
     if (
         request.tool_effect is ToolEffect.SIDE_EFFECTING
         and outcome.status is OutcomeStatus.COMPLETED
@@ -347,7 +471,7 @@ def validate_outcome(
         errors.append("side_effect_postcondition_unverified")
 
     if outcome.operator in NON_VERIFYING_OPERATORS:
-        if outcome.resolved_claim_ids:
+        if outcome.claim_resolutions:
             errors.append("non_verifying_operator_resolved_claim")
         if outcome.completed_verifiers:
             errors.append("non_verifying_operator_completed_verifier")
@@ -383,29 +507,31 @@ def validate_outcome(
             or outcome.candidate_revised
             or outcome.evidence
             or outcome.completed_verifiers
-            or outcome.resolved_claim_ids
+            or outcome.claim_resolutions
             or outcome.defect_id
             or outcome.postcondition_verified
         ):
             errors.append("terminal_operator_reported_state_change")
 
-    admitted_claims: list[str] = []
+    admitted_resolutions: list[ClaimResolution] = []
     admitted_verifiers: list[VerifierKind] = []
 
-    if outcome.resolved_claim_ids:
+    if outcome.claim_resolutions:
         if not decision.may_discharge_load_bearing_uncertainty:
             errors.append("decision_did_not_authorize_resolution")
         if decision.required_verifier is None:
             errors.append("resolution_without_required_verifier")
         else:
-            for claim_id in outcome.resolved_claim_ids:
-                if claim_id not in request.target_claim_ids:
-                    errors.append(f"untargeted_claim_resolution:{claim_id}")
+            for resolution in outcome.claim_resolutions:
+                if resolution.claim_id not in request.target_claim_ids:
+                    errors.append(
+                        f"untargeted_claim_resolution:{resolution.claim_id}"
+                    )
                     continue
                 supporting = any(
-                    _packet_supports(
+                    _packet_supports_resolution(
                         packet,
-                        claim_id=claim_id,
+                        resolution=resolution,
                         required_verifier=decision.required_verifier,
                         minimum_authority=(
                             decision.minimum_evidence_authority
@@ -414,9 +540,11 @@ def validate_outcome(
                     for packet in outcome.evidence
                 )
                 if not supporting:
-                    errors.append(f"unsupported_claim_resolution:{claim_id}")
+                    errors.append(
+                        f"unsupported_claim_resolution:{resolution.claim_id}"
+                    )
                 else:
-                    admitted_claims.append(claim_id)
+                    admitted_resolutions.append(resolution)
 
     if outcome.completed_verifiers:
         if decision.required_verifier is None:
@@ -428,32 +556,51 @@ def validate_outcome(
             if unexpected:
                 errors.append("unexpected_completed_verifier")
             if decision.required_verifier in outcome.completed_verifiers:
-                relevant_packets = [
-                    packet
-                    for packet in outcome.evidence
-                    if packet.verifier is decision.required_verifier
-                    and packet.basis
-                    in VERIFIER_BASES[decision.required_verifier]
-                    and AUTHORITY_RANK[packet.authority]
-                    >= AUTHORITY_RANK[
-                        decision.minimum_evidence_authority
-                    ]
-                    and not packet.stale
-                    and (
-                        decision.required_verifier
-                        is not VerifierKind.CURRENT_SOURCE
-                        or packet.freshness_checked
-                    )
-                ]
-                if not relevant_packets:
-                    errors.append("completed_verifier_without_admissible_evidence")
+                if not request.target_claim_ids:
+                    errors.append("verifier_completion_without_target_claims")
                 else:
-                    admitted_verifiers.append(decision.required_verifier)
+                    for claim_id in request.target_claim_ids:
+                        target_packets = [
+                            packet
+                            for packet in outcome.evidence
+                            if packet.claim_id == claim_id
+                            and _packet_admissible(
+                                packet,
+                                required_verifier=decision.required_verifier,
+                                minimum_authority=(
+                                    decision.minimum_evidence_authority
+                                ),
+                            )
+                        ]
+                        if not target_packets:
+                            errors.append(
+                                "completed_verifier_missing_target_evidence:"
+                                f"{claim_id}"
+                            )
+                    if not any(
+                        error.startswith(
+                            "completed_verifier_missing_target_evidence:"
+                        )
+                        for error in errors
+                    ):
+                        admitted_verifiers.append(decision.required_verifier)
+
+    valid = not errors
+    if not valid:
+        admitted_resolutions = []
+        admitted_verifiers = []
+        progress = (
+            ProgressStatus.BLOCKED
+            if outcome.status is OutcomeStatus.BLOCKED
+            else ProgressStatus.STALLED
+        )
+    else:
+        progress = _progress(outcome)
 
     return OutcomeValidation(
-        valid=not errors,
-        progress=_progress(outcome),
+        valid=valid,
+        progress=progress,
         errors=tuple(errors),
-        admitted_resolved_claim_ids=tuple(admitted_claims),
+        admitted_claim_resolutions=tuple(admitted_resolutions),
         admitted_completed_verifiers=tuple(admitted_verifiers),
     )
