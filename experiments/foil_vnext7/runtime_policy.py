@@ -265,8 +265,9 @@ class EvidenceTypedRuntimePolicy:
         cache_covers = self._cache_covers(targets, context.cached_evidence)
 
         # Cached receipt-backed evidence never closes a claim directly. It only
-        # removes a repeat external tool call; the ordinary verifier operator
-        # and execution admission contract still run.
+        # removes a repeat external tool call from ordinary claim-native
+        # verification. It must never downgrade an explicitly selected
+        # independent-review escalation.
         recoverable_block = (
             decision.operator is StrategyOperator.BLOCKED
             and decision.reason_code
@@ -275,16 +276,15 @@ class EvidenceTypedRuntimePolicy:
                 "required_verifier_unavailable",
             }
         )
-        verifying_operator = decision.operator in {
+        native_verifying_operator = decision.operator in {
             StrategyOperator.CLAIM_NATIVE_VERIFY,
             StrategyOperator.EXACT_EXECUTION,
-            StrategyOperator.INDEPENDENT_REVIEW,
         }
 
         if (
             verifier is not None
             and cache_covers
-            and (recoverable_block or verifying_operator)
+            and (recoverable_block or native_verifying_operator)
         ):
             decision = self._native_cached_decision(
                 decision,
