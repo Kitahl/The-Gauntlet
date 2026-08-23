@@ -1,0 +1,67 @@
+{
+  "schema": "foil-vnext5-item-manifest/v1",
+  "selection_seed": 20260902,
+  "replacement_seed": 20260903,
+  "items": [
+    {
+      "benchmark": "BrowseComp",
+      "item_id": "browsecomp-test-0611",
+      "source": "https://openaipublic.blob.core.windows.net/simple-evals/browse_comp_test_set.csv",
+      "source_revision_or_hash": "OpenResearcher/web-bench encrypted canonical-row mirror parquet sha256:bdabfe94b66f72c0805a1046e84920a8939768f1e6741aa558c5e3e6bcd6df66",
+      "regime": "public_web",
+      "budget": {
+        "max_search_queries": 12,
+        "max_source_followups": 12
+      },
+      "selection_reason": "deterministic eligible sample"
+    },
+    {
+      "benchmark": "FreshQA",
+      "item_id": "freshqa-282",
+      "source": "https://docs.google.com/spreadsheets/d/1_8mi-yuK30mvoDJu1KQXD6ODem7MKMcIgVAwDSzJkjM/edit?usp=sharing",
+      "source_revision_or_hash": "FreshQA_v042126; freshllms/freshqa commit 7d2d3683991916f3633e480548a6aa5c9a62e3db",
+      "regime": "public_web",
+      "budget": {
+        "max_search_queries": 12,
+        "max_source_followups": 12
+      },
+      "selection_reason": "deterministic eligible sample"
+    },
+    {
+      "benchmark": "GPQA-Diamond",
+      "item_id": "gpqa-diamond-082",
+      "source": "https://github.com/idavidrein/gpqa/blob/56686c06f5e19865c153de0fdb11be3890014df7/dataset.zip",
+      "source_revision_or_hash": "commit 56686c06f5e19865c153de0fdb11be3890014df7; dataset.zip blob 80788cb325c4d63bbccad56c2e393b33389348fe",
+      "regime": "closed_book",
+      "budget": {
+        "max_search_queries": 0,
+        "max_source_followups": 0
+      },
+      "selection_reason": "deterministic eligible sample"
+    },
+    {
+      "benchmark": "ARC-AGI-2",
+      "item_id": "db695cfb",
+      "source": "https://github.com/arcprize/ARC-AGI-2/blob/f3283f727488ad98fe575ea6a5ac981e4a188e49/data/evaluation/db695cfb.json",
+      "source_revision_or_hash": "commit f3283f727488ad98fe575ea6a5ac981e4a188e49; blob e9fd394ba6d38037e79f51526ba1f6d1fd8b7ed3",
+      "regime": "supplied_task_context_only",
+      "budget": {
+        "max_search_queries": 0,
+        "max_source_followups": 0
+      },
+      "selection_reason": "deterministic eligible sample"
+    },
+    {
+      "benchmark": "HotpotQA",
+      "item_id": "hotpotqa-distractor-validation-6691",
+      "source": "https://curtis.ml.cmu.edu/datasets/hotpot/hotpot_dev_distractor_v1.json",
+      "source_revision_or_hash": "sha256:4e9ecb5c8d3b719f624d66b60f8d56bf227f03914f5f0753d6fa1b359d7104ea",
+      "regime": "supplied_benchmark_context_only",
+      "budget": {
+        "max_search_queries": 0,
+        "max_source_followups": 0
+      },
+      "selection_reason": "deterministic eligible sample"
+    }
+  ]
+}
