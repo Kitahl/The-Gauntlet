@@ -1,0 +1,35 @@
+{
+  "schema_version": "vnext5-1",
+  "run_id": "base-browsecomp-001",
+  "isolation_session_id": "base-browsecomp-001",
+  "timestamp_utc": "2026-08-23T01:00:57Z",
+  "selection_freeze_sha": "a5cda388385e576a447fabd06f5154808c5aadac",
+  "condition": "BASE",
+  "benchmark": "BrowseComp",
+  "item_id": "browsecomp-test-0611",
+  "source_dataset": "https://openaipublic.blob.core.windows.net/simple-evals/browse_comp_test_set.csv",
+  "source_row_index": 611,
+  "vnext_spec_sha": null,
+  "status": "completed",
+  "final_answer": "Cole Zanetti",
+  "confidence_before_reveal": 0.93,
+  "tool_counts": {
+    "public_web_search_queries_charged": 12,
+    "public_web_source_followups_charged": 12,
+    "local_dataset_downloads": 1,
+    "local_question_decryptions": 1
+  },
+  "phase_allocation": {
+    "preflight_and_item_retrieval": {
+      "public_web_search_queries": 10
+    },
+    "answer_research": {
+      "public_web_search_queries": 2
+    },
+    "final_synthesis": {
+      "public_web_search_queries": 0
+    }
+  },
+  "failure_code": null,
+  "notes": "BASE only. Public-source follow-ups were conservatively charged at the preregistered cap. No benchmark answer, answer key, sibling-condition answer, prior prediction, VNEXT receipt, or scoring output was inspected. No scoring performed."
+}
