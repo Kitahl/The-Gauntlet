@@ -3,6 +3,7 @@ from __future__ import annotations
 import io
 import json
 import os
+import stat
 import sys
 import tempfile
 import unittest
@@ -34,6 +35,27 @@ class RuntimeToolTests(unittest.TestCase):
             gb.stage1("This is similar to an existing known method", [], 0.72)
         )
 
+    def test_boundary_persists_only_lossy_history_fingerprints(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / ".gauntlet.json").write_text(
+                json.dumps({"state_dir": ".state"}),
+                encoding="utf-8",
+            )
+            raw = "This failed again with confidential-marker-48219"
+            gb.reset(root)
+            op, _ = gb.evaluate(raw, "", root=root, judge=lambda *_: True)
+            self.assertEqual(op, "frame")
+            state_path = root / ".state" / "gauntlet_boundary.json"
+            serialized = state_path.read_text(encoding="utf-8")
+            self.assertNotIn(raw, serialized)
+            state = json.loads(serialized)
+            self.assertTrue(state["history"])
+            self.assertTrue(all(gb.FINGERPRINT.fullmatch(item) for item in state["history"]))
+            if os.name != "nt":
+                self.assertEqual(stat.S_IMODE(state_path.stat().st_mode), 0o600)
+                self.assertEqual(stat.S_IMODE(state_path.parent.stat().st_mode), 0o700)
+
     def test_stop_hook_active_short_circuits(self) -> None:
         stream = io.StringIO(json.dumps({"stop_hook_active": True, "last_assistant_message": "failed again"}))
         with patch("sys.stdin", stream):
@@ -48,6 +70,9 @@ class RuntimeToolTests(unittest.TestCase):
             )
             (root / "A.md").write_text("a", encoding="utf-8")
             gm.snapshot(root)
+            state_path = root / ".state" / "gauntlet_monitor.json"
+            if os.name != "nt":
+                self.assertEqual(stat.S_IMODE(state_path.stat().st_mode), 0o600)
             (root / "A.md").write_text("b", encoding="utf-8")
             code, drift = gm.check(root)
             self.assertEqual(code, 1)
@@ -61,8 +86,14 @@ class RuntimeToolTests(unittest.TestCase):
                 clear=False,
             ):
                 profile = fp.new_profile("Research User")
-                fp.save(profile)
+                profile_path = fp.save(profile)
                 fp.activate("Research User")
+                active_path = fp.profile_home() / "active_profile"
+                if os.name != "nt":
+                    self.assertEqual(stat.S_IMODE(fp.profile_home().stat().st_mode), 0o700)
+                    self.assertEqual(stat.S_IMODE(profile_path.parent.stat().st_mode), 0o700)
+                    self.assertEqual(stat.S_IMODE(profile_path.stat().st_mode), 0o600)
+                    self.assertEqual(stat.S_IMODE(active_path.stat().st_mode), 0o600)
                 profile = fp.load()
                 fp.observe(
                     profile,
