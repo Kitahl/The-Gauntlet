@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Exploratory benchmark evidence plate</title>
+  <desc id="desc">Dark editorial data plate comparing the published base and assisted results for HLE, ARC-AGI-1, GPQA-Diamond, and the small four-way BrowseComp pilot, retaining the GPQA null result and BrowseComp mixed result.</desc>
+  <rect width="1200" height="620" fill="#090b10"/>
+  <style>
+    .sans{font-family:Arial,Helvetica,sans-serif}.serif{font-family:Georgia,'Times New Roman',serif}.mono{font-family:Consolas,Menlo,monospace}.text{fill:#f4f1e8}.muted{fill:#aab3c0}.red{fill:#ff7a66}.line{stroke:#2b3442;stroke-width:1.2}.strong{stroke:#566277;stroke-width:1.4}.bar{fill:#d9dee5}.accent{fill:#ff7a66}.small{font-size:10px;letter-spacing:1.4px}.micro{font-size:9px;letter-spacing:1px}.body{font-size:12px}.value{font-size:27px}.dataset{font-size:20px}
+  </style>
+  <text x="54" y="46" class="mono red small">PLATE 03 / EXPLORATORY PILOTS</text>
+  <text x="1146" y="46" text-anchor="end" class="mono muted micro">DESCRIPTIVE RECEIPTS / NO GENERAL-EFFICACY CLAIM</text>
+  <line x1="54" y1="68" x2="1146" y2="68" class="strong"/>
+  <text x="54" y="118" class="serif text" font-size="44">Positive. Null. Mixed.</text>
+  <text x="1146" y="118" text-anchor="end" class="sans muted body">Published together.</text>
+  <line x1="54" y1="146" x2="1146" y2="146" class="line"/>
+  <text x="54" y="174" class="mono muted micro">DATASET</text><text x="350" y="174" class="mono muted micro">BASE</text><text x="580" y="174" class="mono muted micro">ASSISTED</text><text x="1100" y="174" text-anchor="end" class="mono muted micro">OBSERVED DELTA</text>
+  <line x1="54" y1="194" x2="1146" y2="194" class="line"/>
+  <text x="54" y="235" class="serif text dataset">HLE / public text</text><rect x="350" y="211" width="104" height="28" class="bar"/><rect x="580" y="211" width="208" height="28" class="accent"/><text x="466" y="233" class="mono muted body">16.7%</text><text x="800" y="233" class="mono red body">33.3%</text><text x="1100" y="235" text-anchor="end" class="serif red value">+16.7 pp</text>
+  <line x1="54" y1="262" x2="1146" y2="262" class="line"/>
+  <text x="54" y="303" class="serif text dataset">ARC-AGI-1</text><rect x="350" y="279" width="416" height="28" class="bar"/><rect x="580" y="279" width="520" height="28" class="accent"/><text x="778" y="301" class="mono muted body">66.7%</text><text x="1112" y="301" class="mono red body">83.3%</text><text x="1100" y="339" text-anchor="end" class="serif red value">+16.7 pp</text>
+  <line x1="54" y1="354" x2="1146" y2="354" class="line"/>
+  <text x="54" y="395" class="serif text dataset">GPQA-Diamond</text><rect x="350" y="371" width="468" height="28" class="bar"/><rect x="580" y="371" width="468" height="28" fill="none" stroke="#ff7a66" stroke-width="3"/><text x="830" y="393" class="mono muted body">75.0%</text><text x="1060" y="393" class="mono red body">75.0%</text><text x="1100" y="431" text-anchor="end" class="serif text value">0.0 pp</text>
+  <line x1="54" y1="446" x2="1146" y2="446" class="strong"/>
+  <text x="54" y="478" class="mono red micro">BROWSECOMP / FOUR-WAY / N=2 PER CONDITION</text>
+  <text x="54" y="523" class="serif text dataset">BASE</text><text x="174" y="523" class="serif text value">1/2</text><text x="310" y="523" class="serif text dataset">FOIL</text><text x="420" y="523" class="serif red value">2/2</text><text x="558" y="523" class="serif text dataset">PROFILE</text><text x="690" y="523" class="serif text value">1/2</text><text x="822" y="523" class="serif text dataset">MASTERMIND</text><text x="1030" y="523" class="serif text value">0/2</text>
+  <text x="1146" y="555" text-anchor="end" class="mono muted micro">DIFFERENT QUESTIONS / NOT STATISTICALLY INTERPRETABLE</text>
+  <line x1="54" y1="574" x2="1146" y2="574" class="strong"/>
+  <text x="54" y="602" class="mono muted micro">DISJOINT SUBSETS · SMALL N · SCOPED VALIDITY LIMITS</text><text x="1146" y="602" text-anchor="end" class="mono red micro">NULL RESULT RETAINED</text>
+</svg>
