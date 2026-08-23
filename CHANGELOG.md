@@ -6,6 +6,16 @@ The project follows semantic versioning for public releases.
 
 ## [Unreleased]
 
+### Planned
+- Prospective behavioral evaluation of FOIL against direct-assistance and static-scaffolding baselines.
+- Layer 1 vs Layer 1 + Layer 2A vs full Layer 2B personalization ablation.
+- Empirical calibration of profile-maturity thresholds and item difficulty.
+- Isolated same-item randomized benchmark A/B runs with confidence intervals and mechanism ablations.
+- Independent reproduction reports.
+- Archival DOI integration after the first evidence-bearing stable release.
+
+## [0.5.0] - 2026-08-22
+
 ### Added
 - Reproducible blinded benchmark harnesses for HLE/ARC-AGI-1, GPQA-Diamond, and BrowseComp under `benchmarks/harness/`.
 - Benchmark-only `Frontier-Exam FOIL` protocol combining the existing FOIL verification behavior with a final Mastermind causal-defect pass without changing the permanent FOIL architecture.
@@ -13,9 +23,11 @@ The project follows semantic versioning for public releases.
 - Public benchmark methodology and evidence-boundary report in `docs/BENCHMARKS.md`.
 - Scoped benchmark evidence on the repository README and public Pages showcase, including the GPQA-Diamond null result.
 - Full-history Gitleaks and Python dependency-audit CI gates.
-- Linux, Windows, and macOS runtime portability CI.
+- Deterministic `pip-tools`-generated dependency lock with package hashes, clean-regeneration verification, and `--require-hashes` installation.
+- Linux, Windows, and macOS runtime portability CI using the locked dependency graph.
 - Owner-restricted atomic persistence helper for local Gauntlet state and FOIL profiles.
 - Release regression checks requiring immutable GitHub Action SHAs, generic secret-file ignores, documented external-model egress, and a Gauntlet/FOIL-only runtime boundary.
+- Stable LF normalization for release/source text and the dependency lock across platforms.
 
 ### Changed
 - Benchmark workflows publish blinded questions and public score receipts only; decrypted BrowseComp reference answers are not uploaded as public artifacts.
@@ -27,17 +39,10 @@ The project follows semantic versioning for public releases.
 - Ruff development pin advanced from 0.16.2 to 0.16.3.
 - Research Discovery's OpenAlex user agent derives the toolkit version from `VERSION` rather than a stale hard-coded release number.
 - Mastermind implementation/runtime/control material is explicitly forbidden from tracked Gauntlet runtime paths; historical audit prose remains evidence only.
+- Reachable branch/tag commit history was rewritten to use the GitHub private `noreply` identity instead of a personal author/committer email.
 
 ### Evidence boundary
 The current HLE, ARC-AGI-1, and GPQA results are exploratory deterministic disjoint-subset pilots using GPT-5.6 Sol, not official benchmark submissions or isolated same-item randomized A/B evidence. The GPQA-Diamond pilot produced no accuracy gain and is retained as a null result. Legacy SimpleBench and freshness-routing results have weaker/manual evidence labels. Security-tool passes reduce specific known risks but do not prove the absence of all vulnerabilities or undiscoverable secrets.
-
-### Planned
-- Prospective behavioral evaluation of FOIL against direct-assistance and static-scaffolding baselines.
-- Layer 1 vs Layer 1 + Layer 2A vs full Layer 2B personalization ablation.
-- Empirical calibration of profile-maturity thresholds and item difficulty.
-- Isolated same-item randomized benchmark A/B runs with confidence intervals and mechanism ablations.
-- Independent reproduction reports.
-- Archival DOI integration after the first evidence-bearing stable release.
 
 ## [0.4.0] - 2026-08-21
 
