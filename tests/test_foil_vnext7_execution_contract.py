@@ -40,7 +40,7 @@ TASK_ID = "v7-test-task"
 HASH = "a" * 64
 
 
-def source_decision(*, cached=False, current=False):
+def source_decision(*, cached=False, current=False, task_instance_id=TASK_ID):
     kind = ClaimKind.FRESH_FACT if current else ClaimKind.EXTERNAL_FACT
     verifier = (
         VerifierKind.CURRENT_SOURCE
@@ -54,7 +54,7 @@ def source_decision(*, cached=False, current=False):
     )
     hints = (
         CachedEvidenceHint(
-            TASK_ID,
+            task_instance_id,
             "C1",
             verifier,
             freshness_checked=current,
@@ -63,7 +63,7 @@ def source_decision(*, cached=False, current=False):
     return POLICY.decide(
         EvidenceTypedTaskContext(
             StrategyTaskContext(task),
-            task_instance_id=TASK_ID,
+            task_instance_id=task_instance_id,
             cached_evidence=hints,
         ),
         BUDGET,
@@ -101,7 +101,6 @@ class EvidenceTypedExecutionTests(unittest.TestCase):
         decision = source_decision()
         request = build_request(decision, task_instance_id=TASK_ID)
         self.assertEqual(request.target_claim_ids, ("C1",))
-        self.assertEqual(request.task_instance_id, TASK_ID)
 
     def test_02_regime_level_obligation_is_executable(self):
         decision = POLICY.decide(
@@ -346,6 +345,13 @@ class EvidenceTypedExecutionTests(unittest.TestCase):
         decision = source_decision()
         with self.assertRaises(ValueError):
             build_request(decision, task_instance_id="other-task")
+
+    def test_17_task_scope_changes_request_identity(self):
+        first = source_decision(task_instance_id=TASK_ID)
+        second = source_decision(task_instance_id="other-task")
+        first_request = build_request(first)
+        second_request = build_request(second)
+        self.assertNotEqual(first_request.request_id, second_request.request_id)
 
 
 if __name__ == "__main__":
