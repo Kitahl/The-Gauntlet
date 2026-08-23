@@ -285,6 +285,26 @@ class EvidenceTypedRuntimePolicyTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, trace)
 
+    def test_16_cache_cannot_downgrade_independent_review(self):
+        decision = decide(
+            logical_residual(),
+            remaining=budget(independent_reviews_remaining=1),
+            cached=(
+                CachedEvidenceHint(
+                    "C1",
+                    VerifierKind.CONTRADICTION_COUNTEREXAMPLE,
+                ),
+            ),
+            high_impact=True,
+            independent_reviewer_available=True,
+        )
+        self.assertIs(decision.operator, StrategyOperator.INDEPENDENT_REVIEW)
+        self.assertIs(
+            decision.strategy.minimum_evidence_authority,
+            EvidenceAuthority.INDEPENDENT_REVIEW,
+        )
+        self.assertFalse(decision.reuse_cached_evidence)
+
 
 if __name__ == "__main__":
     unittest.main()
