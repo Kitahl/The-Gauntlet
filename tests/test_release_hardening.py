@@ -7,6 +7,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 USES = re.compile(r"^\s*-\s+uses:\s+([^\s#]+)", re.MULTILINE)
+GITLEAKS_IMAGE = (
+    "ghcr.io/gitleaks/gitleaks@"
+    "sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f"
+)
 
 
 class ReleaseHardeningTests(unittest.TestCase):
@@ -25,6 +29,15 @@ class ReleaseHardeningTests(unittest.TestCase):
                     FULL_SHA,
                     f"action is not pinned by immutable full SHA in {workflow.name}: {spec}",
                 )
+
+    def test_secret_gate_scans_full_history_with_digest_pinned_image(self) -> None:
+        security = (ROOT / ".github" / "workflows" / "security.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("fetch-depth: 0", security)
+        self.assertIn(GITLEAKS_IMAGE, security)
+        self.assertIn('--log-opts="--full-history --all"', security)
+        self.assertNotIn("gitleaks/gitleaks-action@", security)
 
     def test_generic_secret_and_environment_files_are_ignored(self) -> None:
         ignored = (ROOT / ".gitignore").read_text(encoding="utf-8").splitlines()
