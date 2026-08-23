@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 660" role="img" aria-labelledby="title desc">
-  <title id="title">FOIL diagnosis and transfer cycle</title>
-  <desc id="desc">Editorial diagram showing FOIL moving from observed behavior to competing explanations, the smallest useful complement, claim-matched verification, transfer without assistance or under changed representation, and an evidence update.</desc>
+  <title id="title">Mirror diagnosis and transfer cycle</title>
+  <desc id="desc">Editorial diagram showing Mirror moving from observed behavior to competing explanations, the smallest useful complement, claim-matched verification, transfer without assistance or under changed representation, and an evidence update. FOIL remains the legacy technical identifier.</desc>
   <rect width="1200" height="660" fill="#10100f"/>
   <style>
     .sans{font-family:Arial,Helvetica,sans-serif}.serif{font-family:Georgia,'Times New Roman',serif}.mono{font-family:Consolas,Menlo,monospace}.paper{fill:#f2f0e9}.muted{fill:#aaa69d}.red{fill:#ff6a54}.line{stroke:#57534d;stroke-width:1}.redline{stroke:#ff6a54;stroke-width:2}.small{font-size:10px;letter-spacing:1.4px}.micro{font-size:9px;letter-spacing:1px}.big{font-size:32px}.body{font-size:12px}.num{font-size:10px}
   </style>
 
-  <text x="54" y="46" class="mono red small">PLATE 02 / FOIL</text>
+  <text x="54" y="46" class="mono red small">PLATE 02 / MIRROR</text>
   <text x="1146" y="46" text-anchor="end" class="mono muted micro">DIAGNOSE · COMPLEMENT · VERIFY · TRANSFER</text>
   <line x1="54" y1="68" x2="1146" y2="68" class="line"/>
 
@@ -64,5 +64,5 @@
   <text x="54" y="574" class="serif paper" font-size="23">Assisted success ≠ independent competence.</text>
   <text x="54" y="608" class="serif paper" font-size="23">One failure ≠ enduring weakness.</text>
   <text x="1146" y="590" text-anchor="end" class="mono red micro">HUMAN AUTHORITY / EVIDENCE-GOVERNED WARRANT</text>
-  <text x="1146" y="610" text-anchor="end" class="mono muted micro">FOIL PUBLIC SPECIFICATION</text>
+  <text x="1146" y="610" text-anchor="end" class="mono muted micro">MIRROR · LEGACY TECHNICAL ID: FOIL</text>
 </svg>

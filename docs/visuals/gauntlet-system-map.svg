@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
   <title id="title">The Gauntlet and five specialist Gems</title>
-  <desc id="desc">A dark editorial system plate with an original abstract gauntlet carrying five colored nodes for Mind, Space, Reality, Power and Time. The nodes route to typed receipts and a scoped release gate, with control, adaptation and review modules shown below.</desc>
+  <desc id="desc">A dark editorial system plate with an original abstract gauntlet carrying five colored nodes for Mind, Space, Reality, Power and Time. The nodes route to typed receipts and a scoped release gate, with Soul, Mirror, Gauntlet, Meditate and Council shown as control, adaptation, assurance, preflight and review modules.</desc>
   <rect width="1200" height="720" fill="#090b10"/>
   <style>
     .sans{font-family:Arial,Helvetica,sans-serif}.serif{font-family:Georgia,'Times New Roman',serif}.mono{font-family:Consolas,Menlo,monospace}.text{fill:#f4f1e8}.muted{fill:#aab3c0}.red{fill:#ff7a66}.line{stroke:#2b3442;stroke-width:1.3}.strong{stroke:#566277;stroke-width:1.5}.route{stroke:#657289;stroke-width:1.5;fill:none}.small{font-size:10px;letter-spacing:1.4px}.micro{font-size:9px;letter-spacing:1px}.body{font-size:12px}.name{font-size:24px}.label{font-size:14px;font-weight:700}.gauntlet{fill:#171d27;stroke:#7e899a;stroke-width:2.6;stroke-linejoin:round}.palm{fill:#1b2330;stroke:#7e899a;stroke-width:2.6}.gem{stroke:#f4f1e8;stroke-width:2}.mind{fill:#e0c46c}.space{fill:#8ab4f8}.reality{fill:#e88ed6}.power{fill:#67d6e3}.time{fill:#8fd19e}.receipt{fill:#ff7a66;stroke:#f4f1e8;stroke-width:2}
@@ -54,7 +54,7 @@
   <line x1="512" y1="574" x2="1146" y2="574" class="strong"/>
   <text x="512" y="604" class="mono muted micro">CONTROL / ADAPTATION / ASSURANCE / REVIEW</text>
   <text x="512" y="636" class="sans text label">Soul</text><text x="580" y="636" class="sans muted body">route</text>
-  <text x="662" y="636" class="sans text label">FOIL</text><text x="724" y="636" class="sans muted body">adapt</text>
+  <text x="662" y="636" class="sans text label">Mirror</text><text x="724" y="636" class="sans muted body">adapt</text>
   <text x="808" y="636" class="sans text label">Gauntlet</text><text x="893" y="636" class="sans muted body">assure</text>
   <text x="985" y="636" class="sans text label">Meditate</text><text x="1068" y="636" class="sans muted body">preflight</text>
   <text x="512" y="666" class="sans text label">Council</text><text x="580" y="666" class="sans muted body">selective review</text>

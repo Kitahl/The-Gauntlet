@@ -1,6 +1,6 @@
 # Evidence-Governed Research Toolkit
 
-**Modular research software for evidence-governed AI-assisted reasoning, verification, evaluation, process assurance, and adaptive assistance.**
+**Modular research software for evidence-governed AI-assisted reasoning, verification, evaluation, process assurance, and adaptive complementary assistance.**
 
 [![Research software validation](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml)
 [![CodeQL](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml)
@@ -12,14 +12,16 @@
 **Demo:** https://kitahl.github.io/The-Gauntlet/  
 **5-minute evaluator path:** [`docs/EVALUATOR_QUICKSTART.md`](docs/EVALUATOR_QUICKSTART.md)  
 **Benchmark pilots:** [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) · **earlier blinded receipt:** [`benchmarks/results/2026-08-22-blinded-pilot.json`](benchmarks/results/2026-08-22-blinded-pilot.json) · **BrowseComp four-way receipt:** [`benchmark_runs/2026-08-22/browsecomp_four_way_results.json`](benchmark_runs/2026-08-22/browsecomp_four_way_results.json)  
-**Runtime setup:** [`docs/RUNTIME_SETUP.md`](docs/RUNTIME_SETUP.md) · **FOIL onboarding:** [`docs/FOIL_ONBOARDING.md`](docs/FOIL_ONBOARDING.md) · **Deep calibration:** [`docs/FOIL_DEEP_CALIBRATION.md`](docs/FOIL_DEEP_CALIBRATION.md)  
+**Runtime setup:** [`docs/RUNTIME_SETUP.md`](docs/RUNTIME_SETUP.md) · **Mirror:** [`docs/MIRROR.md`](docs/MIRROR.md) · **Mirror onboarding (legacy FOIL paths):** [`docs/FOIL_ONBOARDING.md`](docs/FOIL_ONBOARDING.md) · **Deep calibration:** [`docs/FOIL_DEEP_CALIBRATION.md`](docs/FOIL_DEEP_CALIBRATION.md)  
 **Research statement:** [`RESEARCH.md`](RESEARCH.md) · **Reproducibility:** [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) · **Roadmap:** [`ROADMAP.md`](ROADMAP.md)
 
 ---
 
 ## Why this project exists
 
-AI-assisted research can fail even when the prose is persuasive, multiple agents agree, software tests are green, or a benchmark score is high. This project treats those signals as **evidence with scope**, not as automatic proof.
+The practical problem was simple: **there are many powerful research, reasoning, search, coding, verification, benchmarking, and review tools, but using them well means repeatedly deciding which one to call, in what order, what evidence it actually produced, and what still has not been established.** The Gauntlet is an attempt to make that easier: one control surface that routes the work to the right specialist method instead of requiring the user to manually orchestrate every tool.
+
+AI-assisted research can also fail even when the prose is persuasive, multiple agents agree, software tests are green, or a benchmark score is high. This project treats those signals as **evidence with scope**, not as automatic proof.
 
 The core research question is:
 
@@ -27,9 +29,11 @@ The core research question is:
 
 The toolkit routes work according to the **epistemic obligation**: what must be proved, searched, executed, measured, independently checked, or left unresolved.
 
+**Mirror** is the adaptive complement layer. It asks what the current task requires, what the user already covers, and which load-bearing capability is least covered; it then requests the smallest useful complement from the existing Gems/tools. Mirror is the public name. The technical ID, `/foil` command, `tools/foil_*` modules, historical benchmark condition names, and existing FOIL-named files remain stable for backwards compatibility.
+
 ## Exploratory benchmark pilots
 
-The repository reports positive, null, and mixed/negative results. Earlier blinded pilots compare GPT-5.6 Sol `BASE` with the same underlying model using a frozen **Frontier-Exam FOIL + Mastermind** pre-commit procedure (`FOIL_MM`). A newer BrowseComp ablation separates `BASE`, generic `FOIL`, `FOIL_PROFILE`, and `FOIL_MM`. Because the conditions were executed in one conversation, items are deterministic **disjoint subsets**; these are exploratory estimates, not official submissions or isolated same-item causal A/B tests.
+The repository reports positive, null, and mixed/negative results. Earlier blinded pilots compare GPT-5.6 Sol `BASE` with the same underlying model using a frozen **Frontier-Exam FOIL + Mastermind** pre-commit procedure (`FOIL_MM`). A newer BrowseComp ablation separates `BASE`, generic `FOIL`, `FOIL_PROFILE`, and `FOIL_MM`. These are historical technical condition names retained after the public rename to Mirror. Because the conditions were executed in one conversation, items are deterministic **disjoint subsets**; these are exploratory estimates, not official submissions or isolated same-item causal A/B tests.
 
 | Evaluation | BASE | Assisted condition | Delta | Status |
 |---|---:|---:|---:|---|
@@ -48,7 +52,7 @@ The repository reports positive, null, and mixed/negative results. Earlier blind
 | **FOIL_PROFILE** | 1/2 | **50%** |
 | **FOIL_MM** | 0/2 | **0%** |
 
-The BrowseComp result is **not** evidence that generic FOIL is generally superior or that Mastermind is generally harmful: there are only two different scored items per condition, several complete pre-commit blocks were retired for contamination or execution-integrity reasons, and the exploratory scorer uses normalized exact string match rather than the official BrowseComp LLM judge.
+The BrowseComp result is **not** evidence that generic FOIL/Mirror is generally superior or that Mastermind is generally harmful: there are only two different scored items per condition, several complete pre-commit blocks were retired for contamination or execution-integrity reasons, and the exploratory scorer uses normalized exact string match rather than the official BrowseComp LLM judge.
 
 **Do not combine these rows into a single headline accuracy.** Samples are small and the evaluations measure different constructs. Null, negative, and mixed outcomes are retained because the research question is whether mechanisms help, not whether every benchmark can be made to show an improvement. Several math/error-localization pilots were also discarded when BASE saturated at or near 100%, rather than being used as non-discriminating evidence.
 
@@ -65,7 +69,7 @@ flowchart LR
     O --> E[Engineering Verification]
     O --> B[Evaluation & Benchmarking]
     O --> P[Process Assurance]
-    O --> A[FOIL: Adaptive Reasoning Complement]
+    O --> A[Mirror: Adaptive Reasoning Complement]
     P --> O
     A --> O
     F --> O
@@ -93,15 +97,15 @@ Professional display names are used for the research portfolio. Existing technic
 | **Process Assurance Framework** | `infinity-gauntlet`, `/gauntlet` | Frame/process audit, stale-state checks, inherited-number checks, false-green defense |
 | **Decision Preflight Protocol** | `meditate` | Grounding before consequential decisions and after failures |
 | **Evidence Review Panel** | `council-of-elders`, `/council` | Selective independent evidence/method review with matched control |
-| **FOIL — Adaptive Reasoning Complement** | `foil`, `/foil` | User/task-specific missing-method support, multi-stage calibration, and independent-transfer tracking |
+| **Mirror — Adaptive Reasoning Complement** | `foil`, `/foil` | User/task-specific missing-capability support, multi-stage calibration, and independent-transfer tracking |
 
 Every `skills/<id>/` directory contains **`SKILL.md` only**. Hooks, executable helpers, state policy, profiles, and benchmark harnesses deliberately live elsewhere.
 
 ## Executable runtime
 
-Version 0.2.0 introduced the portable runtime. Version 0.3.0 added adaptive real-work deep calibration. Version 0.4.0 added a reproducible structured calibration layer for previously unknown users. Version 0.5.0 hardens release security, privacy, reproducibility, dependency identity, and cross-platform CI without changing FOIL's Layer 1 / Layer 2A / Layer 2B architecture.
+Version 0.2.0 introduced the portable runtime. Version 0.3.0 added adaptive real-work deep calibration. Version 0.4.0 added a reproducible structured calibration layer for previously unknown users. Version 0.5.0 hardens release security, privacy, reproducibility, dependency identity, and cross-platform CI without changing the technical `foil` subsystem's Layer 1 / Layer 2A / Layer 2B architecture.
 
-**Version 0.5.1** is a research-repair release. It replaces FOIL's non-monotone competence count rule with a Beta-posterior estimator carrying evidence tiers and a recency weight (`tools/foil_evidence.py`, characterized in [`docs/FOIL_EVIDENCE_ESTIMATOR.md`](docs/FOIL_EVIDENCE_ESTIMATOR.md)); makes the assistance ladder, execution-ownership axis, and gap vocabulary generated contracts that fail a test on drift; states honestly that the frozen-run tool budget is a tamper-evident ledger enforced only under the PreToolUse broker and advisory everywhere else; replaces a lock that was not a lock with real kernel byte-range locks; ports the V2 routing kernel into `tools/foil_policy.py`, where the routing regime comes from task properties and a benchmark name is receipt metadata only; and makes the language model itself a configured capability via provider-neutral adapters. It closes no efficacy question — retrieval and personalization quality remain `NOT_MEASURED`. Full defect disposition (D1–D11), the not-adopted list, and the corrected vNext evidence boundary are in [`CHANGELOG.md`](CHANGELOG.md).
+**Version 0.5.1** is a research-repair release. It replaces the technical `foil` subsystem's non-monotone competence count rule with a Beta-posterior estimator carrying evidence tiers and a recency weight (`tools/foil_evidence.py`, characterized in [`docs/FOIL_EVIDENCE_ESTIMATOR.md`](docs/FOIL_EVIDENCE_ESTIMATOR.md)); makes the assistance ladder, execution-ownership axis, and gap vocabulary generated contracts that fail a test on drift; states honestly that the frozen-run tool budget is a tamper-evident ledger enforced only under the PreToolUse broker and advisory everywhere else; replaces a lock that was not a lock with real kernel byte-range locks; ports the V2 routing kernel into `tools/foil_policy.py`, where the routing regime comes from task properties and a benchmark name is receipt metadata only; and makes the language model itself a configured capability via provider-neutral adapters. It closes no efficacy question — retrieval and personalization quality remain `NOT_MEASURED`. Full defect disposition (D1–D11), the not-adopted list, and the corrected vNext evidence boundary are in [`CHANGELOG.md`](CHANGELOG.md).
 
 - `.claude/settings.json` — shareable Claude Code hooks using `${CLAUDE_PROJECT_DIR}`;
 - `.gauntlet.json` — configurable governing files, audit budgets, optional evidence-ledger policy;
@@ -110,7 +114,7 @@ Version 0.2.0 introduced the portable runtime. Version 0.3.0 added adaptive real
 - `tools/gauntlet_hook.py` — Pre/Post tool integration;
 - `tools/verify_ledger.py` — optional generic evidence-ledger commit gate;
 - `tools/openrouter_bot.py`, `tools/blackgem_runtime.py`, `tools/snap.py` — optional model-backed independent review;
-- `tools/foil_profile.py` / `tools/foil_hook.py` — persistent profiles and prompt-time domain/facet relevance adaptation;
+- `tools/foil_profile.py` / `tools/foil_hook.py` — Mirror's persistent profiles and prompt-time domain/facet relevance adaptation;
 - `tools/foil_assessment.py` — Layer 1 blank cold-start domain questionnaire;
 - `tools/foil_layer2.py` — Layer 2A structured cross-cutting stranger calibration;
 - `tools/foil_calibration.py` — Layer 2B transfer/adversarial/real-work deep calibration;
@@ -118,9 +122,9 @@ Version 0.2.0 introduced the portable runtime. Version 0.3.0 added adaptive real
 
 Runtime state is written under gitignored `.egrt/state/`, not `.git/`. Model credentials are environment-only. No private workstation path or project-specific keystore is required.
 
-## FOIL profiles and multi-stage calibration
+## Mirror profiles and multi-stage calibration
 
-FOIL contains no built-in profile for any individual. A first hooked session creates a **blank local `default` profile** when needed; named profiles support multiple users on one installation.
+Mirror contains no built-in profile for any individual. A first hooked session creates a **blank local `default` profile** when needed; named profiles support multiple users on one installation. The implementation retains the `foil` technical ID and existing FOIL-named paths for compatibility.
 
 Profiles are stored outside the repository by default and record evidence metadata rather than raw prompts. Topic or facet mentions can change routing relevance without changing competence classification.
 
@@ -169,15 +173,15 @@ The personalizer is an **experimental onboarding/calibration system**, not an IQ
 |---|---|---|
 | Process Assurance hooks/tools are portable, config-driven, and state-isolated | release-gated source/runtime checks | `validation/RUNTIME_FOIL_MASTERMIND_AUDIT.md`, `tests/` |
 | Public skill directories contain `SKILL.md` only and private-lineage regressions are tested | release-gated checks | `tests/test_skill_layout.py`, `tests/test_private_leaks.py` |
-| FOIL Layer 1 saved-profile/questionnaire mechanics enforce conservative initial classifications | release-gated tests | `tests/test_runtime_tools.py`, `tests/test_foil_assessment.py` |
-| FOIL Layer 2A has blank-session, answer-isolation, assistance, confidence, and no-false-deep regressions | release-gated tests | `tests/test_foil_layer2.py` |
-| FOIL Layer 2B mechanics enforce transfer breadth, independent verification, duplicate protection, and multi-domain maturity gates | release-gated tests | `tests/test_foil_calibration.py` |
-| FOIL structured-calibration falsification history is preserved | audit record | `validation/FOIL_LAYER2_MASTERMIND_AUDIT.md` |
-| FOIL research-integration structure/source/regression checks passed the recorded validator | **94/94 PASS** | `validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json` |
-| FOIL frozen behavioral-contract cases are represented in the specification | **18/18 PASS-SPEC** | `validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json` |
+| Mirror Layer 1 saved-profile/questionnaire mechanics enforce conservative initial classifications | release-gated tests | `tests/test_runtime_tools.py`, `tests/test_foil_assessment.py` |
+| Mirror Layer 2A has blank-session, answer-isolation, assistance, confidence, and no-false-deep regressions | release-gated tests | `tests/test_foil_layer2.py` |
+| Mirror Layer 2B mechanics enforce transfer breadth, independent verification, duplicate protection, and multi-domain maturity gates | release-gated tests | `tests/test_foil_calibration.py` |
+| Mirror structured-calibration falsification history is preserved | audit record | `validation/FOIL_LAYER2_MASTERMIND_AUDIT.md` |
+| Mirror/FOIL research-integration structure/source/regression checks passed the recorded validator | **94/94 PASS** | `validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json` |
+| Mirror's frozen behavioral-contract cases are represented in the specification | **18/18 PASS-SPEC** | `validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json` |
 | HLE/ARC/GPQA/BrowseComp pilot score receipts exist under blinded question-generation/scoring harnesses | exploratory benchmark evidence | `docs/BENCHMARKS.md`, `benchmarks/results/2026-08-22-blinded-pilot.json`, `benchmark_runs/2026-08-22/browsecomp_four_way_results.json` |
 | Public claims have a machine-readable provenance map | implemented | `docs/content-provenance.json` |
-| FOIL improves independent human reasoning in deployment | **not established** | planned in `ROADMAP.md` |
+| Mirror improves independent human reasoning in deployment | **not established** | planned in `ROADMAP.md` |
 
 `PASS-SPEC` means the specification contains the required decision behavior; it is not a behavioral execution result. Benchmark pilots measure model-output accuracy under particular benchmark protocols; they are not evidence of human learning efficacy.
 
@@ -211,7 +215,9 @@ python -m compileall -q validation tools tests benchmarks/harness
 
 For interpretation and evidence boundaries, read [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md).
 
-### 3. Optional FOIL stranger calibration
+### 3. Optional Mirror stranger calibration
+
+The commands retain their `foil_*` filenames for backwards compatibility:
 
 ```bash
 python tools/foil_assessment.py start --out foil_assessment.json --responses foil_responses.json
@@ -246,7 +252,7 @@ The repository separates:
 5. **Evaluation** — strong baselines, matched budgets, ablations, uncertainty, and negative results.
 6. **Human learning** — assisted performance kept distinct from later independent ownership and transfer.
 
-Planned behavioral comparisons include strong direct AI, static rules, adaptive FOIL, Layer 1-only vs Layer 1 + Layer 2A vs full Layer 2B, module ablations, native verification vs same-model critique, and Evidence Review Panel vs matched-evidence direct control. See [`RESEARCH.md`](RESEARCH.md).
+Planned behavioral comparisons include strong direct AI, static rules, adaptive Mirror (technical/historical `FOIL` identifiers), Layer 1-only vs Layer 1 + Layer 2A vs full Layer 2B, module ablations, native verification vs same-model critique, and Evidence Review Panel vs matched-evidence direct control. See [`RESEARCH.md`](RESEARCH.md).
 
 ## Repository structure
 
