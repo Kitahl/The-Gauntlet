@@ -49,12 +49,13 @@ class CachedEvidenceRecord:
     """A content-addressed verifier result derived from already-captured data.
 
     A raw ReAct observation is not enough. The cached material must first be
-    checked against the exact target and verifier, yielding a verdict and a
-    qualification receipt. That local qualification can avoid a second network
-    or environment call while preserving FOIL's verification boundary.
+    checked against the exact task, target and verifier, yielding a verdict and
+    a qualification receipt. That local qualification can avoid a second
+    network or environment call while preserving FOIL's verification boundary.
     """
 
     evidence_id: str
+    task_instance_id: str
     target_id: str
     verifier: VerifierKind
     basis: EvidenceBasis
@@ -69,6 +70,7 @@ class CachedEvidenceRecord:
     def __post_init__(self) -> None:
         fields = (
             self.evidence_id,
+            self.task_instance_id,
             self.target_id,
             self.reference,
             self.qualification_receipt,
@@ -123,6 +125,8 @@ def qualify_cached_evidence(
 
     if not decision.reuse_cached_evidence:
         raise ValueError("decision did not authorize cached evidence reuse")
+    if record.task_instance_id != decision.task_instance_id:
+        raise ValueError("cached evidence belongs to a different task instance")
 
     target = next(
         (
@@ -179,13 +183,16 @@ def qualify_cached_evidence(
 def build_request(
     decision: EvidenceTypedDecision,
     *,
-    task_instance_id: str,
+    task_instance_id: str | None = None,
     tool_effect: ToolEffect = ToolEffect.NONE,
     idempotency_key: str | None = None,
     retry_attempt: int = 0,
     prior_postcondition_checked: bool = False,
 ) -> OperatorRequest:
     """Build a vNext6-compatible request from explicit vNext7 targets."""
+
+    if task_instance_id is not None and task_instance_id != decision.task_instance_id:
+        raise ValueError("request task_instance_id does not match the decision")
 
     target_ids = (
         tuple(target.target_id for target in decision.verification_targets)
@@ -194,7 +201,7 @@ def build_request(
     )
     return build_v6_request(
         decision.strategy,
-        task_instance_id=task_instance_id,
+        task_instance_id=decision.task_instance_id,
         target_claim_ids=target_ids,
         tool_effect=tool_effect,
         idempotency_key=idempotency_key,
@@ -231,6 +238,9 @@ def validate_outcome(
 
     parent = validate_v6_outcome(decision.strategy, request, outcome)
     extra: list[str] = []
+
+    if request.task_instance_id != decision.task_instance_id:
+        extra.append("request_task_scope_mismatch")
 
     accepted = AUTHORITY_ACCEPTANCE.get(
         decision.strategy.minimum_evidence_authority,
