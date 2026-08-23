@@ -9,18 +9,27 @@ Some GitHub security and governance controls are repository settings rather than
 - Repository visibility: **Public**
 - Default branch: **main**
 - Issues: **Enabled**
+- Repository description: **Evidence-governed research toolkit with Gauntlet process assurance and FOIL adaptive reasoning support.**
+- Homepage: **https://kitahl.github.io/The-Gauntlet/**
+- Suggested topics: `research-software`, `ai-assisted-research`, `verification`, `reproducibility`, `evaluation`, `foil`
 - Discussions: optional; enable only if there is enough external use to justify maintaining it
+
+### Commit identity privacy
+
+If a personal email address should not be public in future Git metadata, enable GitHub's **Keep my email addresses private** setting and configure local Git to use the account's GitHub `noreply` address before committing. Existing Git history is immutable unless deliberately rewritten; rewriting public history should be done only after evaluating clone/fork/tag consequences.
 
 ### Pull requests / branch protection
 
 Protect `main` with a ruleset or branch protection requiring:
 
 - pull request before merge;
-- required status checks: **Research software validation** and **CodeQL**;
+- required status checks for the validation, CodeQL, security-gate, and portability jobs;
 - branch up to date before merge when practical;
 - conversation resolution before merge;
 - no force pushes to `main`;
 - no branch deletion of `main`.
+
+The repository currently treats green CI as evidence, not as an enforced merge gate, until these server-side settings are enabled.
 
 ### Security and analysis
 
@@ -29,11 +38,13 @@ Enable:
 - Dependency Graph;
 - Dependabot alerts;
 - Dependabot security updates;
-- secret scanning / push protection when available for the account/repository;
+- secret scanning and push protection;
 - private vulnerability reporting;
 - CodeQL / code scanning.
 
-After **Dependency Graph** is enabled, restore a blocking PR dependency-review workflow using `actions/dependency-review-action`.
+The tracked `Security gates` workflow adds a full-history Gitleaks scan and Python dependency audit. GitHub-native secret scanning/push protection should still be enabled because it can block credentials before they enter history.
+
+After **Dependency Graph** is enabled, restore a blocking PR dependency-review workflow using `actions/dependency-review-action` pinned to an immutable full commit SHA.
 
 ### Pages
 
@@ -50,6 +61,12 @@ Expected URL: `https://kitahl.github.io/The-Gauntlet/`
 - publish a GitHub Release with the corresponding changelog section;
 - archive the first evidence-bearing stable release with Zenodo or an equivalent archival service;
 - add the minted DOI to `CITATION.cff`.
+
+Do not create a stable tag until the exact candidate SHA has passed validation, CodeQL, security, and portability gates.
+
+## Runtime boundary
+
+The repository runtime is Gauntlet + FOIL and the documented public research modules. Mastermind implementation, packages, hooks, state, skills, and benchmark-control files are not part of this repository. Historical audit prose may name an external evaluation procedure without importing its implementation.
 
 ## Why these settings matter
 
