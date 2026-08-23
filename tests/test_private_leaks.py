@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import subprocess
 import unittest
 from pathlib import Path
 
@@ -31,6 +32,27 @@ MASTERMIN_RUNTIME_PATTERNS = [
 ]
 
 
+def tracked_paths() -> list[str]:
+    try:
+        result = subprocess.run(
+            ["git", "ls-files", "-z"],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            timeout=5,
+            check=False,
+        )
+    except OSError:
+        result = None
+    if result is not None and result.returncode == 0:
+        return [item for item in result.stdout.split("\0") if item]
+    return [
+        path.relative_to(ROOT).as_posix()
+        for path in ROOT.rglob("*")
+        if path.is_file() and ".git" not in path.parts
+    ]
+
+
 class PrivateLeakTests(unittest.TestCase):
     def test_candidate_has_no_private_project_lineage(self) -> None:
         files = [
@@ -46,17 +68,18 @@ class PrivateLeakTests(unittest.TestCase):
         for pattern in FORBIDDEN:
             self.assertIsNone(re.search(pattern, joined, re.IGNORECASE), pattern)
 
-    def test_mastermind_runtime_is_not_part_of_gauntlet(self) -> None:
-        for path in [
-            ROOT / "mastermind",
-            ROOT / ".mastermind",
-            ROOT / "skills" / "mastermind",
-        ]:
-            self.assertFalse(path.exists(), str(path.relative_to(ROOT)))
-        if (ROOT / "tools").exists():
+    def test_mastermind_runtime_is_not_tracked(self) -> None:
+        tracked = [path.lower() for path in tracked_paths()]
+        forbidden_prefixes = (
+            "mastermind/",
+            ".mastermind/",
+            "skills/mastermind/",
+            "tools/mastermind",
+        )
+        for path in tracked:
             self.assertFalse(
-                any("mastermind" in path.name.lower() for path in (ROOT / "tools").iterdir()),
-                "Mastermind runtime/helper found under tools/",
+                path == "mastermind" or any(path.startswith(prefix) for prefix in forbidden_prefixes),
+                f"Mastermind runtime/control material is tracked: {path}",
             )
 
         runtime_files = [
