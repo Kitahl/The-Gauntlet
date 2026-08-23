@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://the-gauntlet.invalid/schemas/foil-vnext6-execution-trace-v1.json",
+  "$id": "https://the-gauntlet.invalid/schemas/foil-vnext6-execution-trace-v2.json",
   "title": "FOIL vNext6 execution boundary public traces",
   "oneOf": [
     {"$ref": "#/$defs/operator_request"},
@@ -8,6 +8,10 @@
     {"$ref": "#/$defs/outcome_validation"}
   ],
   "$defs": {
+    "request_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
     "operator": {
       "enum": [
         "stop",
@@ -53,6 +57,7 @@
       "additionalProperties": false,
       "required": [
         "trace_type",
+        "request_id",
         "controller_version",
         "operator",
         "reason_code",
@@ -65,6 +70,7 @@
       ],
       "properties": {
         "trace_type": {"const": "operator_request"},
+        "request_id": {"$ref": "#/$defs/request_id"},
         "controller_version": {"type": "string", "minLength": 1},
         "operator": {"$ref": "#/$defs/operator"},
         "reason_code": {"type": "string", "minLength": 1},
@@ -81,6 +87,7 @@
       "additionalProperties": false,
       "required": [
         "trace_type",
+        "request_id",
         "operator",
         "status",
         "candidate_created",
@@ -95,6 +102,7 @@
       ],
       "properties": {
         "trace_type": {"const": "operator_outcome"},
+        "request_id": {"$ref": "#/$defs/request_id"},
         "operator": {"$ref": "#/$defs/operator"},
         "status": {"enum": ["completed", "failed", "blocked"]},
         "candidate_created": {"type": "boolean"},
