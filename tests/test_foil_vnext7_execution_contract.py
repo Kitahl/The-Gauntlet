@@ -263,7 +263,44 @@ class EvidenceTypedExecutionTests(unittest.TestCase):
             (ClaimResolution("C1", EvidenceVerdict.SUPPORTS),),
         )
 
-    def test_12_outside_target_evidence_is_rejected(self):
+    def test_12_mechanical_check_cannot_certify_source_entailment(self):
+        decision = source_decision(cached=True)
+        with self.assertRaises(ValueError):
+            qualify_cached_evidence(
+                decision,
+                cached_record(
+                    qualification=QualificationKind.MECHANICAL_CHECK,
+                ),
+            )
+
+    def test_13_mechanical_check_can_certify_exact_calculation(self):
+        task = TaskContext(
+            has_viable_candidate=True,
+            uncertainties=(LoadBearingUncertainty("C1", ClaimKind.NUMERIC),),
+        )
+        decision = POLICY.decide(
+            EvidenceTypedTaskContext(
+                StrategyTaskContext(task),
+                cached_evidence=(
+                    CachedEvidenceHint(
+                        "C1",
+                        VerifierKind.EXACT_CALCULATION,
+                    ),
+                ),
+            ),
+            BUDGET,
+        )
+        packet = qualify_cached_evidence(
+            decision,
+            cached_record(
+                verifier=VerifierKind.EXACT_CALCULATION,
+                basis=EvidenceBasis.CALCULATION,
+                qualification=QualificationKind.MECHANICAL_CHECK,
+            ),
+        )
+        self.assertIs(packet.authority, EvidenceAuthority.CLAIM_NATIVE)
+
+    def test_14_outside_target_evidence_is_rejected(self):
         decision = source_decision()
         request = build_request(decision, task_instance_id=TASK_ID)
         packet = EvidencePacket(
