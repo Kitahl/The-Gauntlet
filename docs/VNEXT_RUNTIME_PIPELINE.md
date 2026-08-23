@@ -40,7 +40,7 @@ USER / ARTIFACT
 | SYNTHESIS / ENGINEERING /    |
 | EVALUATION / ASSURANCE /     |
 | PREFLIGHT / REVIEW /         |
-| ADAPTATION                   |
+| ADAPTATION / ADVERSARY       |
 +------------------------------+
       |
       +---------------------+
@@ -57,7 +57,8 @@ USER / ARTIFACT
                   v
 +---------------------------------------------------------+
 | 5. ROUTE CLAIM-NATIVE WORK                              |
-| MIND | SPACE | REALITY | POWER | TIME | COUNCIL         |
+| MIND | SPACE | REALITY | POWER | TIME | COUNCIL |        |
+| BLACK GEM (ADVERSARY)                                   |
 +---------------------------------------------------------+
                   |
                   v
@@ -142,6 +143,7 @@ It does not store raw prompts or generic raw tool output. Component-specific art
 - Council synthesis without full commit/reveal + per-seat cross-critique + same-artifact/same-budget DIRECT control -> REVIEW remains `UNKNOWN`.
 - Solver success -> formal encoding only; English entailment remains a separate obligation when nontrivial.
 - Green engineering checks -> only named check/defect-class coverage.
+- Black Gem surviving an attack panel -> `UNKNOWN`, never `CLEARED`; ADVERSARY receipts can raise an issue but never clear one.
 
 ## 6. FOIL integration
 
@@ -152,6 +154,23 @@ FOIL remains the adaptive complementary-assistance layer. It may:
 - contribute adaptation evidence about the user/task.
 
 FOIL may not mark another obligation `CLEARED` merely because it recommended or assisted the action. Factual warrant comes from the claim-native receipt.
+
+## 6b. Black Gem — adversarial review
+
+Black Gem is the producer for the `ADVERSARY` obligation. It runs a frozen attack
+rubric across two or more independently provenanced breaker seats — a blind
+independent pass, off-diagonal cross-critique, then one synthesis — over a frozen
+candidate, and probes each seat with a planted-costume canary at the graded
+temperature before trusting its verdict.
+
+Its verdict range is deliberately incomplete: a surviving break, a `KILL`, or an
+`AMEND` produces `ISSUE`; a trusted `SURVIVES_TO_GATE` produces `UNKNOWN`; an
+untrusted canary, unestablished independence, or a successful injection canary
+produces `UNKNOWN` with unresolved items; fewer than two contributing seats or no
+transport produces `UNAVAILABLE`. **Black Gem never emits `CLEARED`** (asserted in
+`finalize`). The absence of a found break is not warrant that the candidate is
+correct, so a downstream claim-native receipt — not this one — is what can clear a
+substantive obligation.
 
 ## 7. Mastermind boundary
 

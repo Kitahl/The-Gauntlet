@@ -109,7 +109,7 @@ Version 0.2.0 introduced the portable runtime. Version 0.3.0 added adaptive real
 - `tools/gauntlet_boundary.py` — Stop-hook `frame` / `costume` boundary checks;
 - `tools/gauntlet_hook.py` — Pre/Post tool integration;
 - `tools/verify_ledger.py` — optional generic evidence-ledger commit gate;
-- `tools/openrouter_bot.py`, `tools/fsa_bots.py`, `tools/snap.py` — optional model-backed independent review;
+- `tools/openrouter_bot.py`, `tools/blackgem_runtime.py`, `tools/snap.py` — optional model-backed independent review;
 - `tools/foil_profile.py` / `tools/foil_hook.py` — persistent profiles and prompt-time domain/facet relevance adaptation;
 - `tools/foil_assessment.py` — Layer 1 blank cold-start domain questionnaire;
 - `tools/foil_layer2.py` — Layer 2A structured cross-cutting stranger calibration;

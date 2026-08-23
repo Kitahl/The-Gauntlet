@@ -27,6 +27,7 @@ MODULE_FOR_KIND = {
     ObligationKind.PREFLIGHT: "meditate",
     ObligationKind.REVIEW: "council",
     ObligationKind.ADAPTATION: "foil",
+    ObligationKind.ADVERSARY: "blackgem",
 }
 
 

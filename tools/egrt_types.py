@@ -39,6 +39,7 @@ class ObligationKind(str, Enum):
     PREFLIGHT = "PREFLIGHT"
     REVIEW = "REVIEW"
     ADAPTATION = "ADAPTATION"
+    ADVERSARY = "ADVERSARY"
 
 
 class EvidenceClass(str, Enum):
