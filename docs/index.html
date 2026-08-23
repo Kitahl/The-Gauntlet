@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="The Gauntlet is an evidence-governed research-software toolkit for AI-assisted reasoning, verification, evaluation, reproducibility, and adaptive complementary assistance." />
-  <meta name="theme-color" content="#f2f0e9" />
-  <meta name="color-scheme" content="light" />
+  <meta name="description" content="The Gauntlet is evidence-governed research software that routes claims to bounded specialist methods, records typed evidence receipts, and keeps unsupported conclusions explicitly unresolved." />
+  <meta name="theme-color" content="#090b10" />
+  <meta name="color-scheme" content="dark" />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://kitahl.github.io/The-Gauntlet/" />
   <meta property="og:title" content="The Gauntlet — Evidence-Governed Research Toolkit" />
-  <meta property="og:description" content="Open research software for evidence-governed AI-assisted reasoning, reproducible verification, and explicit uncertainty." />
+  <meta property="og:description" content="Open research software for evidence-governed AI-assisted reasoning, reproducible verification, explicit uncertainty, and adaptive complementary assistance." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://kitahl.github.io/The-Gauntlet/" />
   <meta property="og:site_name" content="The Gauntlet" />
@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="visuals.css" />
 </head>
 <body>
+  <!-- Previous public showcase revision: SHOWCASE R14 -->
   <a class="skip-link" href="#main">Skip to main content</a>
 
   <header class="topbar">
@@ -27,12 +28,12 @@
       <span>Evidence-Governed Research Toolkit</span>
     </a>
     <nav class="site-nav" aria-label="Primary">
+      <a href="#how">How it works</a>
+      <a href="#gems">Gems</a>
+      <a href="#modules">Modules</a>
       <a href="#research">Research</a>
-      <a href="#system">System</a>
-      <a href="#foil">FOIL</a>
       <a href="#evidence">Evidence</a>
-      <a href="#benchmarks">Pilots</a>
-      <a href="#skills">Index</a>
+      <a href="#reproduce">Reproduce</a>
       <a class="repo-link" href="https://github.com/Kitahl/The-Gauntlet">GitHub ↗</a>
     </nav>
   </header>
@@ -42,276 +43,307 @@
 
     <section class="hero shell" aria-labelledby="hero-title">
       <div class="issue-line">
-        <span>OPEN RESEARCH SOFTWARE</span>
+        <span>Research software</span>
         <span>v0.5.1</span>
         <span>MIT</span>
-        <span class="revision-chip">SHOWCASE R14</span>
+        <span class="revision-chip">Showcase revision · R15</span>
       </div>
 
-      <h1 id="hero-title"><span>The</span> Gauntlet</h1>
-
       <div class="hero-editorial">
-        <p class="hero-deck">Evidence-governed AI research, built to be inspected.</p>
-        <div class="hero-copy">
-          <p>The Gauntlet routes AI-assisted work by the obligation that must be satisfied: prove it, find prior art, execute it, measure it, independently verify it, or leave it unresolved.</p>
+        <div class="hero-copy-main">
+          <p class="eyebrow">RESEARCH CONTROL PLANE</p>
+          <h1 id="hero-title">The Gauntlet</h1>
+          <p class="hero-deck">Route each claim to the smallest method that can actually support it.</p>
+          <p class="hero-summary">The Gauntlet is a modular research workflow for AI-assisted work. It frames the question, sends each load-bearing obligation to the right specialist, records what was actually checked, audits the process, and releases only the conclusion the evidence supports.</p>
           <div class="hero-actions">
-            <a class="button primary" href="#research">Open the research dossier</a>
-            <a class="button quiet" href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/EVALUATOR_QUICKSTART.md">5-minute evaluator path ↗</a>
+            <a class="button primary" href="#how">Understand it in 60 seconds</a>
+            <a class="button secondary" href="#gems">Explore the five Gems</a>
           </div>
         </div>
+
+        <figure class="hero-schematic" aria-labelledby="hero-schematic-title hero-schematic-desc">
+          <svg viewBox="0 0 600 520" role="img">
+            <title id="hero-schematic-title">Conceptual Gauntlet control interface</title>
+            <desc id="hero-schematic-desc">An original abstract research gauntlet with five colored nodes representing Mind, Space, Reality, Power, and Time, feeding evidence into a central release path.</desc>
+            <rect x="42" y="38" width="516" height="444" rx="28" class="schematic-frame" />
+            <path d="M186 391 L165 263 L202 128 L250 99 L278 226 L306 74 L345 88 L342 226 L382 93 L420 115 L391 242 L438 145 L471 175 L419 301 L398 397 Z" class="gauntlet-body" />
+            <path d="M207 386 L400 386 L427 457 L188 457 Z" class="gauntlet-cuff" />
+            <path d="M225 295 C258 254 348 248 393 293 L384 365 L216 365 Z" class="gauntlet-palm" />
+            <circle cx="245" cy="260" r="20" class="node mind" />
+            <circle cx="301" cy="222" r="20" class="node space" />
+            <circle cx="356" cy="248" r="20" class="node reality" />
+            <circle cx="279" cy="314" r="20" class="node power" />
+            <circle cx="348" cy="318" r="20" class="node time" />
+            <path d="M245 260 L315 356 M301 222 L315 356 M356 248 L315 356 M279 314 L315 356 M348 318 L315 356" class="route-line" />
+            <circle cx="315" cy="356" r="13" class="receipt-node" />
+            <path d="M315 369 L315 432" class="release-line" />
+            <text x="80" y="80" class="svg-kicker">CONCEPTUAL CONTROL INTERFACE</text>
+            <text x="80" y="455" class="svg-note">five specialist routes → typed evidence → scoped release</text>
+          </svg>
+          <figcaption>Original schematic. The Gems are functional mnemonics for real modules, not independent sources of authority.</figcaption>
+        </figure>
       </div>
 
       <div class="hero-ledger" aria-label="Current research status">
-        <div><span>01</span><b>Research software</b><strong>0.5.1</strong></div>
-        <div><span>02</span><b>Showcase revision</b><strong>R14</strong></div>
+        <div><span>01</span><b>Public skills</b><strong>10</strong></div>
+        <div><span>02</span><b>Typed runtime</b><strong>vNext</strong></div>
         <div><span>03</span><b>Structural validation</b><strong>94 / 94</strong></div>
         <div><span>04</span><b>Contract coverage</b><strong>18 / 18 PASS-SPEC</strong></div>
         <div><span>05</span><b>Behavioral efficacy</b><strong>OPEN</strong></div>
       </div>
+      <p class="hero-boundary">Specification and source checks are reproducible. Behavioral efficacy remains a research question.</p>
+    </section>
 
-      <p class="hero-boundary">Specification/source checks are reproducible. Behavioral efficacy remains a research question.</p>
+    <section id="how" class="chapter shell" aria-labelledby="how-title">
+      <div class="chapter-marker"><span>00</span><b>HOW IT WORKS</b></div>
+      <div class="chapter-intro wide-copy">
+        <h2 id="how-title">A research task moves through five explicit stages.</h2>
+        <p>The point is not to make more agents talk. The point is to turn a vague request into explicit obligations, use claim-native methods, preserve evidence provenance, and keep unresolved claims unresolved.</p>
+      </div>
+
+      <ol class="process-line" aria-label="Gauntlet research flow">
+        <li><span>01</span><b>Frame</b><small>goal · scope · stakes · success</small></li>
+        <li><span>02</span><b>Obligate</b><small>what must actually be established?</small></li>
+        <li><span>03</span><b>Route</b><small>Gem · tool · verifier · review</small></li>
+        <li><span>04</span><b>Receipt</b><small>input · output · provenance · limits</small></li>
+        <li><span>05</span><b>Release</b><small>cleared · issue · unknown · unavailable</small></li>
+      </ol>
+
+      <figure class="visual-card plate system-plate">
+        <div class="plate-label"><span>PLATE 01</span><b>THE GAUNTLET / FIVE SPECIALIST GEMS</b></div>
+        <img src="visuals/gauntlet-system-map.svg" alt="Dark research-system schematic showing an original abstract Gauntlet, the five specialist Gems Mind, Space, Reality, Power and Time, and the evidence receipt and release path." width="1200" height="720" loading="lazy" />
+        <figcaption>
+          <div><b>The names are mnemonic; the obligations are literal.</b><span>Mind proves or formalizes. Space finds prior art and current evidence. Reality synthesizes only after a named gap. Power executes software claims. Time designs evaluation and stop/go tests.</span></div>
+          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/ARCHITECTURE.md">Architecture source ↗</a>
+        </figcaption>
+      </figure>
+    </section>
+
+    <section id="gems" class="chapter chapter-tinted" aria-labelledby="gems-title">
+      <div class="shell">
+        <div class="chapter-marker"><span>01</span><b>THE FIVE GEMS</b></div>
+        <div class="chapter-intro wide-copy">
+          <h2 id="gems-title">Click a Gem to see what it does.</h2>
+          <p>Each Gem is a bounded specialist route with a different evidentiary job. They are not five personalities voting on the same answer.</p>
+        </div>
+
+        <div class="gem-grid">
+          <details class="gem-card gem-mind">
+            <summary><span class="gem-symbol" aria-hidden="true">◆</span><span><b>Mind</b><small>Formal Reasoning · <code>/mind</code></small></span><i>Open</i></summary>
+            <div class="detail-body">
+              <p class="detail-lead">Turns mathematical and logical claims into explicit objects, assumptions, negations, and proof obligations.</p>
+              <div class="mini-flow"><span>formalize</span><b>→</b><span>choose verifier</span><b>→</b><span>counterexample search</span><b>→</b><span>scoped verdict</span></div>
+              <dl class="detail-list"><div><dt>Use when</dt><dd>Proof, logic, probability/statistics, causal formalization, optimization, complexity, or exact countermodels are load-bearing.</dd></div><div><dt>Power</dt><dd>Exact derivation, solver/proof-checker execution, enumeration, numerical computation, theorem/source entailment.</dd></div><div><dt>Evidence states</dt><dd><code>PROVEN</code>, <code>MEASURED</code>, <code>CITED</code>, <code>DERIVED</code>, otherwise unresolved.</dd></div></dl>
+              <a class="source-link" href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/mathbot/SKILL.md">Read the Mind specification ↗</a>
+            </div>
+          </details>
+
+          <details class="gem-card gem-space">
+            <summary><span class="gem-symbol" aria-hidden="true">◆</span><span><b>Space</b><small>Research Discovery · <code>/space</code></small></span><i>Open</i></summary>
+            <div class="detail-body">
+              <p class="detail-lead">Searches before novelty: papers, repositories, standards, current facts, implementations, and cross-domain prior art.</p>
+              <div class="mini-flow"><span>translate mechanism</span><b>→</b><span>search primary sources</span><b>→</b><span>expand &amp; dedupe</span><b>→</b><span>scope the finding</span></div>
+              <dl class="detail-list"><div><dt>Use when</dt><dd>“Has this been done?”, literature review, prior art, current external facts, source verification, or reusable code/tool discovery.</dd></div><div><dt>Power</dt><dd>Multi-index discovery, citation/source inspection, license/version/guarantee checks, transport-limit analysis.</dd></div><div><dt>Boundary</dt><dd><code>NOT FOUND</code> means not found within the stated search scope; it never proves nonexistence.</dd></div></dl>
+              <a class="source-link" href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/scoutbot/SKILL.md">Read the Space specification ↗</a>
+            </div>
+          </details>
+
+          <details class="gem-card gem-reality">
+            <summary><span class="gem-symbol" aria-hidden="true">◆</span><span><b>Reality</b><small>Method Synthesis · <code>/reality</code></small></span><i>Open</i></summary>
+            <div class="detail-body">
+              <p class="detail-lead">Invents only after Space establishes the nearest known approaches and a named constraint they fail.</p>
+              <div class="mini-flow"><span>named gap</span><b>→</b><span>constraint table</span><b>→</b><span>candidate mechanisms</span><b>→</b><span>recheck &amp; falsify</span></div>
+              <dl class="detail-list"><div><dt>Use when</dt><dd>A verified prior-art boundary leaves a concrete unresolved mechanism gap.</dd></div><div><dt>Power</dt><dd>Changes assumptions or representations, records inputs/outputs/invariants/dependencies/failures, and proposes verification plans.</dd></div><div><dt>Admission</dt><dd>Causal adequacy, negative control, transfer, ablation, regression, and renewed prior-art checking.</dd></div></dl>
+              <a class="source-link" href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/novelbot/SKILL.md">Read the Reality specification ↗</a>
+            </div>
+          </details>
+
+          <details class="gem-card gem-power">
+            <summary><span class="gem-symbol" aria-hidden="true">◆</span><span><b>Power</b><small>Engineering Verification · <code>/power</code></small></span><i>Open</i></summary>
+            <div class="detail-body">
+              <p class="detail-lead">Converts executable software claims into runnable checks and preservation obligations.</p>
+              <div class="mini-flow"><span>inspect artifact</span><b>→</b><span>smallest complete change</span><b>→</b><span>execute</span><b>→</b><span>regressions &amp; receipt</span></div>
+              <dl class="detail-list"><div><dt>Use when</dt><dd>Implementation, debugging, integration, architecture, software correctness, runtime behavior, or code review is load-bearing.</dd></div><div><dt>Power</dt><dd>Targeted tests, real-entrypoint execution, static/dynamic checks, failure-class coverage, hashes and verifier receipts.</dd></div><div><dt>Boundary</dt><dd>A green unit suite certifies only those tests; relevant unobserved failure classes must still be named.</dd></div></dl>
+              <a class="source-link" href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/codebot/SKILL.md">Read the Power specification ↗</a>
+            </div>
+          </details>
+
+          <details class="gem-card gem-time">
+            <summary><span class="gem-symbol" aria-hidden="true">◆</span><span><b>Time</b><small>Evaluation &amp; Benchmarking · <code>/time</code></small></span><i>Open</i></summary>
+            <div class="detail-body">
+              <p class="detail-lead">Tests whether a mechanism improves the construct that actually matters under an evaluation design that can distinguish the cause.</p>
+              <div class="mini-flow"><span>construct</span><b>→</b><span>strong baseline</span><b>→</b><span>matched ablation</span><b>→</b><span>uncertainty &amp; stop/go</span></div>
+              <dl class="detail-list"><div><dt>Use when</dt><dd>Benchmarking, baselines, capability claims, ceilings, cost, ablations, matched-budget comparisons, or stop/go decisions.</dd></div><div><dt>Power</dt><dd>Frozen endpoints, strong controls, matched resource budgets, paired inference, exclusions, raw failure preservation.</dd></div><div><dt>Boundary</dt><dd>Benchmark score is not general capability; more compute is not routing gain; negative results are retained.</dd></div></dl>
+              <a class="source-link" href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/benchbot/SKILL.md">Read the Time specification ↗</a>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section id="modules" class="chapter shell" aria-labelledby="modules-title">
+      <div class="chapter-marker"><span>02</span><b>CONTROL, ADAPTATION &amp; REVIEW</b></div>
+      <div class="chapter-intro wide-copy">
+        <h2 id="modules-title">The Gems do specialist work. These modules control when and how that work is used.</h2>
+        <p>Click any module for its trigger, workflow, authority boundary, and canonical specification.</p>
+      </div>
+
+      <div class="module-index interactive-index">
+        <details class="module-card" open>
+          <summary><span>01 / CONTROL</span><h3>Research Orchestrator</h3><p>Frame → decompose → route → integrate → assure → release.</p><code>/soul</code></summary>
+          <div class="detail-body compact"><p>Owns routing and synthesis, not domain authority. It creates load-bearing obligations, invokes only the needed specialist routes, compares evidence by quality/independence/recency/scope, then releases a scoped result.</p><a class="source-link" href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/soul/SKILL.md">Research Orchestrator spec ↗</a></div>
+        </details>
+        <details id="foil" class="module-card">
+          <summary><span>02 / ADAPTIVE</span><h3>FOIL</h3><p>Find the smallest task-relevant missing complement and supply only what is needed.</p><code>/foil</code></summary>
+          <div class="detail-body compact"><p>FOIL keeps competing gap hypotheses, conditions observations on assistance and execution ownership, routes tools by capability rather than brand, and separates immediate joint success from later independent transfer.</p><div class="mode-row"><code>/foil solve</code><code>/foil both</code><code>/foil teach</code><code>/foil defense</code><code>/foil formalize</code><code>/foil verify</code><code>/foil research</code></div><a class="source-link" href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/foil/SKILL.md">FOIL specification ↗</a></div>
+        </details>
+        <details class="module-card">
+          <summary><span>03 / ASSURANCE</span><h3>Process Assurance Framework</h3><p>Audit the frame, process, stale state, inherited premises, and false-green gaps.</p><code>/gauntlet</code></summary>
+          <div class="detail-body compact"><p>The Gauntlet fires the smallest relevant subset of ten assurance operations: <code>frame</code>, <code>audit</code>, <code>costume</code>, <code>derive</code>, <code>self</code>, <code>redirect</code>, <code>refresh</code>, <code>boundary</code>, <code>explain</code>, and <code>oob</code>.</p><a class="source-link" href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/infinity-gauntlet/SKILL.md">Process Assurance spec ↗</a></div>
+        </details>
+        <details class="module-card">
+          <summary><span>04 / PREFLIGHT</span><h3>Decision Preflight Protocol</h3><p>Ground the current state before consequential action or after drift.</p><code>orchestrator-invoked</code></summary>
+          <div class="detail-body compact"><p><strong>STILL → GROUND → ORIENT → WEIGH → RELEASE.</strong> It is a short reset, not ceremony: confirm authoritative state, goal, supported facts, assumptions, unknowns and irreversible costs, then choose one high-value next action.</p><a class="source-link" href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/meditate/SKILL.md">Decision Preflight spec ↗</a></div>
+        </details>
+        <details class="module-card">
+          <summary><span>05 / REVIEW</span><h3>Evidence Review Panel</h3><p>Selective independent review with commit-reveal and a strong direct control.</p><code>/council</code></summary>
+          <div class="detail-body compact"><p>Off by default. When justified, 3–6 artifact-derived seats independently commit before cross-critique, include a skeptic, preserve disagreement, and are compared against a matched direct analysis. Agreement is never treated as proof.</p><a class="source-link" href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/council-of-elders/SKILL.md">Evidence Review Panel spec ↗</a></div>
+        </details>
+      </div>
+
+      <figure class="visual-card plate plate-dark">
+        <div class="plate-label"><span>PLATE 02</span><b>FOIL / DIAGNOSIS → COMPLEMENT → TRANSFER</b></div>
+        <img src="visuals/foil-diagnostic-loop.svg" alt="Dark FOIL diagnostic-loop diagram showing observed behavior, competing explanations, smallest useful complement, claim-matched verification, changed-context transfer and evidence update." width="1200" height="660" loading="lazy" />
+        <figcaption><div><b>Assistance and ownership stay separate.</b><span>Observed behavior is evidence about a task state, not a permanent label. Assisted success is not independent competence.</span></div><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/research/FOIL_RESEARCH_BASIS.md">FOIL research basis ↗</a></figcaption>
+      </figure>
+    </section>
+
+    <section id="runtime" class="chapter chapter-tinted" aria-labelledby="runtime-title">
+      <div class="shell">
+        <div class="chapter-marker"><span>03</span><b>RUNTIME TOOLBELT</b></div>
+        <div class="chapter-intro wide-copy">
+          <h2 id="runtime-title">The visible skills sit on a typed execution layer.</h2>
+          <p>The public page does not pretend every helper is a separate agent. The runtime is grouped by the job it is authoritative for, with direct source links for inspection.</p>
+        </div>
+
+        <div class="tool-grid">
+          <details class="tool-card" open><summary><b>Typed evidence core</b><span>SPEC → STATE → ACTION/TOOL → RECEIPT → VERDICT</span></summary><div><p>Common obligation types, content-addressed storage, hooks, runtime state, and the release gate.</p><div class="file-row"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/egrt_types.py">egrt_types.py</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/egrt_store.py">egrt_store.py</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/egrt_runtime.py">egrt_runtime.py</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/soul_runtime.py">soul_runtime.py</a></div></div></details>
+          <details class="tool-card"><summary><b>Gem runtimes</b><span>Claim-native execution behind the five specialist routes</span></summary><div><p>Typed proof obligations, search plans, mechanism candidates, verification plans, and evaluation receipts.</p><div class="file-row"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/mind_runtime.py">mind_runtime.py</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/space_runtime.py">space_runtime.py</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/reality_runtime.py">reality_runtime.py</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/power_runtime.py">power_runtime.py</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/time_runtime.py">time_runtime.py</a></div></div></details>
+          <details class="tool-card"><summary><b>FOIL adaptation</b><span>Evidence estimator, assistance, capability routing, profile and budget boundaries</span></summary><div><p>FOIL keeps evidence semantics, assistance/ownership, gap vocabulary, provider-neutral capabilities, persistent profile state and benchmark guardrails in separate source-of-truth modules.</p><div class="file-row"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/foil_evidence.py">foil_evidence.py</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/foil_assistance.py">foil_assistance.py</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/foil_capabilities.py">foil_capabilities.py</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/foil_profile.py">foil_profile.py</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/foil_tool_broker.py">foil_tool_broker.py</a></div></div></details>
+          <details class="tool-card"><summary><b>Assurance &amp; adversarial review</b><span>Process monitors plus Black Gem attack runtime</span></summary><div><p>Gauntlet hooks monitor process hazards. Black Gem produces the typed <code>ADVERSARY</code> obligation: it can expose an <code>ISSUE</code>, but surviving the attack never becomes <code>CLEARED</code>.</p><div class="file-row"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/gauntlet_runtime.py">gauntlet_runtime.py</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/gauntlet_monitor.py">gauntlet_monitor.py</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/blackgem_runtime.py">blackgem_runtime.py</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/specs/BLACKGEM_ENGINEERING_SPEC.md">Black Gem spec</a></div></div></details>
+          <details class="tool-card"><summary><b>Preflight &amp; review runtimes</b><span>Decision state, commit-reveal review, provenance diagnostics</span></summary><div><p>Typed support for the Decision Preflight and Evidence Review Panel, with explicit unavailable/unknown states rather than fabricated certainty.</p><div class="file-row"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/meditate_runtime.py">meditate_runtime.py</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/council_runtime.py">council_runtime.py</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/RUNTIME_SETUP.md">Runtime setup</a></div></div></details>
+        </div>
+        <p class="runtime-note">Full runtime ownership map: <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/ARCHITECTURE.md">docs/ARCHITECTURE.md ↗</a></p>
+      </div>
     </section>
 
     <section id="research" class="chapter shell" aria-labelledby="research-title">
-      <div class="chapter-marker"><span>00</span><b>RESEARCH DOSSIER</b></div>
+      <div class="chapter-marker"><span>04</span><b>RESEARCH DOSSIER</b></div>
       <div class="chapter-intro wide-copy">
-        <h2 id="research-title">The question, the artifacts, and the next evidence—without repository archaeology.</h2>
-        <p>The current research question is whether an evidence-governed modular reasoning workflow can improve traceability, verification discipline, and independent usefulness of AI-assisted research without confusing agreement, confidence, or passing software checks with scientific validity. The repository implements the architecture and mechanical/specification checks; a positive answer to the full behavioral question has not been established.</p>
+        <h2 id="research-title">The research question, artifacts, and next evidence are one click away.</h2>
+        <p>The current question is whether an evidence-governed modular reasoning workflow can improve traceability, verification discipline, and independent usefulness of AI-assisted research without confusing agreement, confidence, or passing software checks with scientific validity. The complete behavioral answer has not been established.</p>
       </div>
 
       <div class="document-index three" aria-label="Evaluator research paths">
         <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/RESEARCH.md"><span>01 / QUESTION</span><b>Research statement</b><small>Question, method, endpoints, baselines, integrity boundary ↗</small></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/RESEARCH_WEBSITE_BENCHMARK_2026-08-22.md"><span>02 / BENCHMARK</span><b>Research-site benchmark</b><small>Ten research websites/repos, FOIL diagnosis, Mastermind transfer gates ↗</small></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/ROADMAP.md"><span>03 / NEXT</span><b>Research roadmap</b><small>Release engineering, behavioral harness, FOIL study, ablations, external reproduction ↗</small></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/RESEARCH_WEBSITE_BENCHMARK_2026-08-22.md"><span>02 / SITE BENCHMARK</span><b>10-site research benchmark</b><small>Arc, DeepMind, Anthropic, OpenAI, OWID, Ai2, Broad, Janelia, scikit-learn, PyTorch ↗</small></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/ROADMAP.md"><span>03 / NEXT</span><b>Research roadmap</b><small>Behavioral harness, FOIL study, ablations, external reproduction ↗</small></a>
         <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/REPRODUCIBILITY.md"><span>04 / REPRODUCE</span><b>Reproducibility</b><small>Mechanical checks and interpretation boundary ↗</small></a>
         <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/CITATION.cff"><span>05 / CITE</span><b>Citation metadata</b><small>Machine-readable software citation record ↗</small></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet"><span>06 / SOURCE</span><b>Source repository</b><small>Code, issues, validation, benchmark receipts, change history ↗</small></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet"><span>06 / SOURCE</span><b>Source repository</b><small>Code, issues, validation, receipts, change history ↗</small></a>
       </div>
 
       <div class="archive-table" role="region" aria-label="Research output index" tabindex="0">
         <div class="archive-head"><span>RESEARCH OBJECT</span><span>TYPE</span><span>CURRENT STATE</span><span>CANONICAL SOURCE</span></div>
         <div><b>Evidence-governed modular workflow question</b><span>Research question</span><span>OPEN</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/RESEARCH.md">RESEARCH.md ↗</a></div>
-        <div><b>Research Orchestrator + bounded module architecture</b><span>Specification / software</span><span>Implemented</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/ARCHITECTURE.md">ARCHITECTURE.md ↗</a></div>
+        <div><b>Research Orchestrator + typed module architecture</b><span>Specification / software</span><span>Implemented</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/ARCHITECTURE.md">ARCHITECTURE.md ↗</a></div>
         <div><b>FOIL adaptive complementary-assistance mechanism</b><span>Research basis / specification</span><span>Documented; efficacy open</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/research/FOIL_RESEARCH_BASIS.md">FOIL_RESEARCH_BASIS.md ↗</a></div>
         <div><b>FOIL structural and source invariants</b><span>Mechanical evidence</span><span>94 / 94 recorded pass</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json">Validation receipt ↗</a></div>
         <div><b>Required FOIL decision behavior represented in specification</b><span>Specification evidence</span><span>18 / 18 PASS-SPEC</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json">Contract receipt ↗</a></div>
         <div><b>Selected model-task benchmark pilots</b><span>Exploratory empirical</span><span>Mixed; small-n</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/BENCHMARKS.md">BENCHMARKS.md ↗</a></div>
         <div><b>Complete-system matched-budget behavioral evaluation</b><span>Prospective study</span><span>NOT ESTABLISHED</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/ROADMAP.md">ROADMAP R2–R4 ↗</a></div>
-        <div><b>Independent external reproduction</b><span>Prospective validation</span><span>NOT YET COMPLETED</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/ROADMAP.md">ROADMAP R5 ↗</a></div>
-      </div>
-
-      <div class="validity-strip"><b>Next evidence program</b><p>R2–R4 remain the main scientific bottleneck: matched-budget behavioral testing across materially different task families, a prospective FOIL adaptation study with delayed assistance-free transfer, and mechanism-level routing/review ablations. Release tags, archival DOI, and independent reproduction remain separate open obligations.</p><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/ROADMAP.md">Inspect the roadmap ↗</a></div>
-    </section>
-
-    <section id="system" class="chapter shell" aria-labelledby="system-title">
-      <div class="chapter-marker"><span>01</span><b>THE SYSTEM</b></div>
-      <div class="chapter-intro">
-        <h2 id="system-title">A research control plane, not an agent popularity contest.</h2>
-        <p>The Research Orchestrator frames the task, routes bounded work to specialist modules, integrates outputs, and releases only what the available evidence warrants. Agreement among agents is not treated as verification.</p>
-      </div>
-
-      <ol class="process-line" aria-label="Research control flow">
-        <li><span>01</span><b>Frame</b><small>claim · scope · decision</small></li>
-        <li><span>02</span><b>Route</b><small>proof · search · build · test</small></li>
-        <li><span>03</span><b>Execute</b><small>native evidence-producing method</small></li>
-        <li><span>04</span><b>Verify</b><small>claim-matched independent check</small></li>
-        <li><span>05</span><b>Release</b><small>supported · unresolved · blocked</small></li>
-      </ol>
-
-      <figure class="visual-card plate system-plate">
-        <div class="plate-label"><span>PLATE 01</span><b>CONTROL PLANE / EVIDENCE LANES</b></div>
-        <img src="visuals/gauntlet-system-map.svg" alt="Editorial system map of the Gauntlet Research Orchestrator connected to formal reasoning, research discovery, method synthesis, engineering verification, evaluation, process assurance, evidence review, decision preflight, and FOIL." width="1200" height="720" loading="lazy" />
-        <figcaption>
-          <div><b>The Gauntlet as a research control system.</b><span>The visual maps actual public module responsibilities. It is specification-derived explanatory material, not an execution trace.</span></div>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/ARCHITECTURE.md">Architecture source ↗</a>
-        </figcaption>
-      </figure>
-
-      <div class="lane-index" aria-label="Evidence-producing lanes">
-        <article><span>01</span><b>Formal Reasoning</b><p>Proof, logic, probability, statistics, optimization, countermodels.</p></article>
-        <article><span>02</span><b>Research Discovery</b><p>Prior art, literature, existing code, reuse, and cross-domain anchors.</p></article>
-        <article><span>03</span><b>Method Synthesis</b><p>New mechanisms only after existing approaches fail a named constraint.</p></article>
-        <article><span>04</span><b>Engineering Verification</b><p>Architecture, implementation, integration, execution, and software verification.</p></article>
-        <article><span>05</span><b>Evaluation &amp; Benchmarking</b><p>Baselines, ablations, ceilings, uncertainty, cost, and stop decisions.</p></article>
-        <article><span>06</span><b>Process Assurance Framework</b><p>Audit frame, process, inherited assumptions, stale state, and false-green verification.</p></article>
       </div>
     </section>
 
-    <section id="foil" class="dark-chapter" aria-labelledby="foil-title">
+    <section id="evidence" class="chapter chapter-tinted" aria-labelledby="evidence-title">
       <div class="shell">
-        <div class="chapter-marker inverse"><span>02</span><b>ADAPTIVE REASONING COMPLEMENT</b></div>
-        <div class="foil-statement">
-          <h2 id="foil-title">A weak result is a clue.<br><em>Not a permanent label.</em></h2>
-          <p>FOIL maintains competing explanations for observed performance, conditions evidence on assistance and context, supplies the smallest useful complement, and separates immediate joint success from later independent competence.</p>
+        <div class="chapter-marker"><span>05</span><b>EVIDENCE LEDGER</b></div>
+        <div class="chapter-intro wide-copy">
+          <h2 id="evidence-title">Four evidence classes. Never blended into one score.</h2>
+          <p>A green engineering gate is not converted into a behavioral research claim. Structural checks, specification coverage, exploratory pilots, and prospective efficacy remain separate.</p>
         </div>
 
-        <figure class="visual-card plate plate-dark">
-          <div class="plate-label"><span>PLATE 02</span><b>DIAGNOSIS / COMPLEMENT / TRANSFER</b></div>
-          <img src="visuals/foil-diagnostic-loop.svg" alt="Editorial FOIL diagnostic loop from observed result through competing explanations, smallest useful complement, claim-matched verification, changed-context transfer, and evidence update." width="1200" height="660" loading="lazy" />
-          <figcaption>
-            <div><b>Observed behavior is not automatically an enduring weakness.</b><span>Assisted success is also not automatically independent competence. The loop keeps those states separate.</span></div>
-            <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/foil/SKILL.md">FOIL specification ↗</a>
-          </figcaption>
-        </figure>
-
-        <div class="foil-index">
-          <div><span>01</span><b>Observe</b><p>What behavior actually occurred?</p></div>
-          <div><span>02</span><b>Model</b><p>Gap, ambiguity, retrieval failure, representation mismatch, or slip?</p></div>
-          <div><span>03</span><b>Route</b><p>Use the minimum evidence-producing method.</p></div>
-          <div><span>04</span><b>Verify</b><p>Match the verifier to the exact claim and scope.</p></div>
-          <div><span>05</span><b>Transfer</b><p>What remains when assistance is removed or representation changes?</p></div>
+        <div class="evidence-ledger">
+          <article><span>MECHANICAL</span><strong>94 / 94</strong><h3>FOIL structural validation</h3><p>Source, structure, and regression checks recorded as passed.</p></article>
+          <article><span>SPECIFICATION</span><strong>18 / 18</strong><h3>Behavioral-contract coverage</h3><p>PASS-SPEC means the required decision behavior is represented in specification; it is not execution evidence.</p></article>
+          <article><span>EXPLORATORY</span><strong>MIXED</strong><h3>Selected benchmark pilots</h3><p>Small, scoped model-task pilots include positive, null, and mixed outcomes.</p></article>
+          <article><span>PROSPECTIVE</span><strong>OPEN</strong><h3>Complete-system efficacy</h3><p>Matched-budget and independent-transfer evidence remains on the research roadmap.</p></article>
         </div>
 
-        <div class="authority-boundary"><b>Authority boundary</b><span>Human authority governs voluntary decisions. Evidence governs factual warrant.</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/research/FOIL_RESEARCH_BASIS.md">FOIL_RESEARCH_BASIS.md ↗</a></div>
-      </div>
-    </section>
-
-    <section id="evidence" class="chapter shell" aria-labelledby="evidence-title">
-      <div class="chapter-marker"><span>03</span><b>EVIDENCE LEDGER</b></div>
-      <div class="chapter-intro wide-copy">
-        <h2 id="evidence-title">Four evidence classes.<br>Never blended into one score.</h2>
-        <p>A green engineering gate is not converted into a behavioral research claim. Structural checks, specification coverage, exploratory model pilots, and prospective complete-system efficacy remain separate.</p>
-      </div>
-
-      <div class="evidence-ledger">
-        <article><span>MECHANICAL</span><strong>94 / 94</strong><h3>FOIL structural validation</h3><p>Source, structure, and regression checks recorded as passed.</p></article>
-        <article><span>SPECIFICATION</span><strong>18 / 18</strong><h3>Behavioral-contract coverage</h3><p>PASS-SPEC means required decision behavior is represented in specification; it is not execution evidence.</p></article>
-        <article><span>EXPLORATORY</span><strong>MIXED</strong><h3>Model benchmark pilots</h3><p>Positive, null, and mixed/negative results are published together under scoped validity limits.</p></article>
-        <article><span>PROSPECTIVE</span><strong>OPEN</strong><h3>Complete-system efficacy</h3><p>Matched-budget, independent-transfer evidence remains on the research roadmap.</p></article>
-      </div>
-
-      <div class="archive-table" role="region" aria-label="Evidence claim table" tabindex="0">
-        <div class="archive-head"><span>CLAIM SURFACE</span><span>CLASS</span><span>STATUS</span><span>PRIMARY ARTIFACT</span></div>
-        <div><b>Repository / FOIL structural invariants</b><span>Mechanical</span><span>94 / 94 recorded pass</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json">Validation JSON ↗</a></div>
-        <div><b>Required FOIL decision behavior represented in specification</b><span>Specification</span><span>18 / 18 PASS-SPEC</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json">Contract validation ↗</a></div>
-        <div><b>Selected model-task benchmark performance</b><span>Exploratory empirical</span><span>Mixed; scoped pilots</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/BENCHMARKS.md">Benchmark report ↗</a></div>
-        <div><b>Complete-system behavioral efficacy</b><span>Prospective research</span><span>OPEN</span><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/RESEARCH.md">Research statement ↗</a></div>
+        <div class="validity-strip"><b>Interpretation rule</b><p>Passing software/specification gates establishes only the properties those gates observe. It does not prove model behavior, research efficacy, or downstream scientific validity.</p><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/REPRODUCIBILITY.md">Reproducibility contract ↗</a></div>
       </div>
     </section>
 
     <section id="benchmarks" class="chapter shell" aria-labelledby="benchmarks-title">
-      <div class="chapter-marker"><span>04</span><b>EXPLORATORY PILOTS</b></div>
-      <div class="chapter-intro">
+      <div class="chapter-marker"><span>06</span><b>EXPLORATORY PILOTS</b></div>
+      <div class="chapter-intro wide-copy">
         <h2 id="benchmarks-title">Publish the null result beside the positive result.</h2>
-        <p>These are small deterministic disjoint-subset pilots using GPT-5.6 Sol, not official leaderboard submissions or isolated same-item causal A/B tests. Earlier closed-book pilots use a frozen Frontier-Exam FOIL + Mastermind condition; the BrowseComp pilot separately ablates generic FOIL, a frozen benchmark-blind profile, and a Mastermind final audit.</p>
+        <p>These are small deterministic disjoint-subset pilots using GPT-5.6 Sol, not official leaderboard submissions or complete-system efficacy studies. The goal is to preserve raw directional evidence, including the null result, rather than optimize the story.</p>
       </div>
 
       <figure class="visual-card plate benchmark-visual">
         <div class="plate-label"><span>PLATE 03</span><b>PUBLIC PILOT RECEIPTS</b></div>
-        <img src="visuals/benchmark-evidence.svg" alt="Editorial benchmark evidence plate showing HLE base 16.7 percent versus assisted 33.3 percent, ARC-AGI-1 base 66.7 versus assisted 83.3, GPQA-Diamond base and assisted both 75 percent, and the small BrowseComp four-way pilot." width="1200" height="620" loading="lazy" />
-        <figcaption>
-          <div><b>Descriptive rendering of already published receipts.</b><span>The plate adds no statistical significance, causal identification, leaderboard status, or general-efficacy claim.</span></div>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/BENCHMARKS.md">Benchmark report ↗</a>
-        </figcaption>
+        <img src="visuals/benchmark-evidence.svg" alt="Dark benchmark evidence plate showing the published HLE and ARC-AGI positive deltas, the GPQA-Diamond null result, and the small BrowseComp four-condition mixed result." width="1200" height="620" loading="lazy" />
+        <figcaption><div><b>Descriptive rendering of published receipts.</b><span>The plate adds no statistical significance, causal identification, leaderboard status, or general-efficacy claim.</span></div><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/BENCHMARKS.md">Benchmark report ↗</a></figcaption>
       </figure>
 
       <div class="pilot-index">
-        <article><span>HLE / PUBLIC TEXT SUBSET</span><strong>+16.7 pp</strong><p>BASE 1/6 → assisted 2/6. Blinded CI-scored pilot; 16.7% to 33.3%.</p></article>
-        <article><span>ARC-AGI-1</span><strong>+16.7 pp</strong><p>BASE 4/6 → assisted 5/6. Blinded CI-scored pilot; 66.7% to 83.3%.</p></article>
-        <article><span>GPQA-DIAMOND</span><strong>0.0 pp</strong><p>BASE 9/12 → assisted 9/12. The larger follow-up produced a null result.</p></article>
-        <article><span>BROWSECOMP / FOUR-WAY</span><strong>1/2 · 2/2 · 1/2 · 0/2</strong><p>BASE · FOIL · PROFILE · MASTERMIND. Two disjoint items per condition; exact-normalized scoring, no significance claim.</p></article>
+        <article><span>HLE / PUBLIC TEXT SUBSET</span><strong>+16.7 pp</strong><p>BASE 1/6 → assisted 2/6. Small blinded pilot.</p></article>
+        <article><span>ARC-AGI-1</span><strong>+16.7 pp</strong><p>BASE 4/6 → assisted 5/6. Small blinded pilot.</p></article>
+        <article><span>GPQA-DIAMOND</span><strong>0.0 pp</strong><p>BASE 9/12 → assisted 9/12. The follow-up produced a null result.</p></article>
+        <article><span>BROWSECOMP / FOUR-WAY</span><strong>1/2 · 2/2 · 1/2 · 0/2</strong><p>BASE · FOIL · PROFILE · MASTERMIND. Disjoint items; descriptive only.</p></article>
       </div>
-
-      <div class="validity-strip"><b>Validity boundary</b><p>Disjoint subsets, small n, documented contamination/execution exclusions, and exact-normalized scoring where specified. Pilot benchmark results do not establish general efficacy.</p><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/BENCHMARKS.md">Receipts, seeds, exclusions and harnesses ↗</a></div>
+      <p class="benchmark-boundary">Pilot benchmark results do not establish general efficacy.</p>
     </section>
 
     <section id="reproduce" class="chapter reproduce-chapter" aria-labelledby="reproduce-title">
       <div class="shell">
-        <div class="chapter-marker"><span>05</span><b>REPRODUCIBILITY</b></div>
-        <div class="chapter-intro">
+        <div class="chapter-marker"><span>07</span><b>REPRODUCIBILITY</b></div>
+        <div class="chapter-intro wide-copy">
           <h2 id="reproduce-title">A reviewer should be able to rerun the mechanical claims.</h2>
-          <p>The public reproducibility contract distinguishes repository/specification properties from behavioral research. A validation pass establishes only the invariants that the validator actually checks.</p>
+          <p>The reproducibility contract distinguishes repository/specification properties from behavioral research. A validation pass establishes only the invariants the validator actually checks.</p>
         </div>
-
-        <div class="command-sheet" aria-label="Mechanical validation commands">
-          <span>MECHANICAL VALIDATION / CLEAN CHECKOUT</span>
-          <pre><code>python validation/validate_soul_gauntlet_public.py
+        <div class="command-sheet" aria-label="Mechanical validation commands"><span>MECHANICAL VALIDATION / CLEAN CHECKOUT</span><pre><code>python validation/validate_soul_gauntlet_public.py
 python validation/validate_showcase.py
-python -m compileall -q validation</code></pre>
-        </div>
-
-        <div class="meaning-grid">
-          <div><span>WHAT A PASS MEANS</span><ul><li>Checked repository, package, and showcase invariants passed.</li><li>Referenced source artifacts are present and internally consistent.</li><li>Browser layout checks pass in the documented validator environment.</li></ul></div>
-          <div><span>WHAT IT DOES NOT MEAN</span><ul><li>It does not prove model behavior, research efficacy, or downstream scientific validity.</li><li>PASS-SPEC does not mean the complete executing system has been behaviorally validated.</li></ul></div>
-        </div>
-
-        <div class="document-index three">
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/REPRODUCIBILITY.md"><span>01</span><b>REPRODUCIBILITY.md</b><small>Commands, interpretation, behavioral evidence requirements ↗</small></a>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/EVALUATOR_QUICKSTART.md"><span>02</span><b>Evaluator quickstart</b><small>What it is, what exists, what remains open ↗</small></a>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/content-provenance.json"><span>03</span><b>Claim provenance</b><small>Machine-readable public claim → source mapping ↗</small></a>
-        </div>
+python -m compileall -q validation</code></pre></div>
+        <div class="meaning-grid"><div><span>WHAT A PASS MEANS</span><ul><li>Checked repository, package, and showcase invariants passed.</li><li>Referenced source artifacts are present and internally consistent.</li><li>Browser layout checks pass in the documented validator environment.</li></ul></div><div><span>WHAT IT DOES NOT MEAN</span><ul><li>It does not prove model behavior, research efficacy, or downstream scientific validity.</li><li>PASS-SPEC does not mean the complete executing system has been behaviorally validated.</li></ul></div></div>
+        <div class="document-index three"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/REPRODUCIBILITY.md"><span>01</span><b>REPRODUCIBILITY.md</b><small>Commands and interpretation boundary ↗</small></a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/EVALUATOR_QUICKSTART.md"><span>02</span><b>Evaluator quickstart</b><small>Five-minute technical path ↗</small></a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/content-provenance.json"><span>03</span><b>Claim provenance</b><small>Public claim → source mapping ↗</small></a></div>
       </div>
     </section>
 
-    <section id="skills" class="chapter shell" aria-labelledby="skills-title">
-      <div class="chapter-marker"><span>06</span><b>MODULE INDEX</b></div>
-      <div class="chapter-intro">
-        <h2 id="skills-title"><strong>10</strong> bounded modules.<br>Ten explicit obligations.</h2>
-        <p>The control plane coordinates them; it does not erase their verification responsibilities. Professional names are public; technical aliases remain backwards-compatible.</p>
-      </div>
-
-      <div class="module-index">
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/soul/SKILL.md"><span>01 / CONTROL</span><h3>Research Orchestrator</h3><p>Frame, decompose, route, integrate, audit, and release.</p><code>/soul</code></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/foil/SKILL.md"><span>02 / ADAPTIVE</span><h3>FOIL</h3><p>Supply missing methods, verify, teach, and test independent transfer.</p><code>/foil</code></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/mathbot/SKILL.md"><span>03 / FORMAL</span><h3>Formal Reasoning</h3><p>Proof, logic, probability/statistics, optimization, countermodels.</p><code>/mind</code></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/scoutbot/SKILL.md"><span>04 / DISCOVERY</span><h3>Research Discovery</h3><p>Existing tools, literature, code, and cross-domain anchors.</p><code>/space</code></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/novelbot/SKILL.md"><span>05 / SYNTHESIS</span><h3>Method Synthesis</h3><p>New mechanisms only after existing methods fail a named constraint.</p><code>/reality</code></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/codebot/SKILL.md"><span>06 / ENGINEERING</span><h3>Engineering Verification</h3><p>Architecture, implementation, integration, execution, and software verification.</p><code>/power</code></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/benchbot/SKILL.md"><span>07 / EVALUATION</span><h3>Evaluation &amp; Benchmarking</h3><p>Baselines, capability measurement, ceilings, cost, and stop decisions.</p><code>/time</code></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/infinity-gauntlet/SKILL.md"><span>08 / ASSURANCE</span><h3>Process Assurance Framework</h3><p>Audit frames, process, inherited assumptions, stale state, false-green verification.</p><code>/gauntlet</code></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/meditate/SKILL.md"><span>09 / PREFLIGHT</span><h3>Decision Preflight Protocol</h3><p>Artifact-grounded orientation before consequential action or after failure.</p><code>orchestrator-invoked</code></a>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/council-of-elders/SKILL.md"><span>10 / REVIEW</span><h3>Evidence Review Panel</h3><p>Selective independent perspectives with evidence packs and control comparison.</p><code>/council</code></a>
-      </div>
-
-      <p class="alias-note">Technical aliases retained: <code>/soul</code> <code>/foil</code> <code>/mind</code> <code>/space</code> <code>/reality</code> <code>/power</code> <code>/time</code> <code>/gauntlet</code> <code>/council</code>.</p>
-    </section>
-
-    <section id="trust" class="trust-chapter" aria-labelledby="trust-title">
-      <div class="shell">
-        <div class="chapter-marker inverse"><span>07</span><b>TRUST / COLOPHON</b></div>
-        <div class="trust-intro">
-          <h2 id="trust-title">Research software should show its paperwork.</h2>
-          <p>Governance, security, citation, change history, reproducibility, and open research obligations are first-class review surfaces—not footer archaeology.</p>
-        </div>
-
-        <div class="document-index">
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/SECURITY.md"><span>01</span><b>SECURITY.md</b><small>Supported versions, private reporting route, security scope.</small></a>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/GOVERNANCE.md"><span>02</span><b>GOVERNANCE.md</b><small>Decision rights, maintenance, evidence-bearing change control.</small></a>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/CONTRIBUTING.md"><span>03</span><b>CONTRIBUTING.md</b><small>Contribution path and validation expectations.</small></a>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/CITATION.cff"><span>04</span><b>CITATION.cff</b><small>Machine-readable software citation metadata.</small></a>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/CHANGELOG.md"><span>05</span><b>CHANGELOG.md</b><small>Versioned public changes and release history.</small></a>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/ROADMAP.md"><span>06</span><b>ROADMAP.md</b><small>Open validation obligations and planned evidence.</small></a>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/RESEARCH.md"><span>07</span><b>RESEARCH.md</b><small>Hypotheses, baselines, endpoints, and research boundary.</small></a>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/REPRODUCIBILITY.md"><span>08</span><b>REPRODUCIBILITY.md</b><small>Exact mechanical validation path and interpretation.</small></a>
-        </div>
-      </div>
+    <section id="trust" class="chapter shell" aria-labelledby="trust-title">
+      <div class="chapter-marker"><span>08</span><b>TRUST / COLOPHON</b></div>
+      <div class="chapter-intro wide-copy"><h2 id="trust-title">Research software should show its paperwork.</h2><p>Security, governance, contribution rules, citation, change history, research state, and reproduction are public review surfaces—not footer archaeology.</p></div>
+      <div class="document-index"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/SECURITY.md"><span>01</span><b>SECURITY.md</b><small>Security scope and private reporting route.</small></a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/GOVERNANCE.md"><span>02</span><b>GOVERNANCE.md</b><small>Decision rights and evidence-bearing change control.</small></a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/CONTRIBUTING.md"><span>03</span><b>CONTRIBUTING.md</b><small>Contribution path and validation expectations.</small></a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/CITATION.cff"><span>04</span><b>CITATION.cff</b><small>Machine-readable software citation metadata.</small></a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/CHANGELOG.md"><span>05</span><b>CHANGELOG.md</b><small>Versioned public changes and release history.</small></a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/ROADMAP.md"><span>06</span><b>ROADMAP.md</b><small>Open validation obligations and planned evidence.</small></a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/RESEARCH.md"><span>07</span><b>RESEARCH.md</b><small>Hypotheses, baselines, endpoints, research boundary.</small></a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/REPRODUCIBILITY.md"><span>08</span><b>REPRODUCIBILITY.md</b><small>Mechanical validation and interpretation.</small></a></div>
     </section>
 
     <section class="principles shell" aria-label="Research principles">
       <div><span>01</span><h3>Search before novelty.</h3><p>Absence and novelty are scoped research claims.</p></div>
       <div><span>02</span><h3>Execute when executable.</h3><p>Observed software behavior outranks plausible software prose.</p></div>
-      <div><span>03</span><h3>Audit the frame.</h3><p>Verification must cover the claim's externally defined scope, not merely its own checklist.</p></div>
+      <div><span>03</span><h3>Audit the frame.</h3><p>Verification must cover the externally defined claim, not merely its own checklist.</p></div>
       <div><span>04</span><h3>Measure what remains.</h3><p>Behavioral efficacy must be demonstrated prospectively, not inferred from specification quality.</p></div>
     </section>
 
     <section class="closing shell">
-      <p>RESEARCH SOFTWARE v0.5.1 · SHOWCASE R14</p>
+      <p>RESEARCH SOFTWARE v0.5.1 · SHOWCASE R15 · MIT</p>
       <h2>Inspect the source.<br>Reproduce the checks.<br><em>Challenge the claims.</em></h2>
-      <div>
-        <p>The repository includes an MIT license, machine-readable citation metadata, research statement, reproducibility protocol, benchmark receipts, roadmap, contribution governance, security policy, source-level validation, and a public benchmark of research-site information architecture.</p>
-        <a class="button primary" href="https://github.com/Kitahl/The-Gauntlet">Open research repository ↗</a>
-      </div>
+      <div><p>The repository exposes the system specification, skill contracts, typed runtimes, research statement, reproducibility protocol, benchmark receipts, roadmap, governance, security policy, and a public benchmark of research-site information architecture.</p><a class="button primary" href="https://github.com/Kitahl/The-Gauntlet">Open research repository ↗</a></div>
     </section>
   </main>
 
   <footer class="footer shell">
-    <div><strong>The Gauntlet</strong><span>Evidence-Governed Research Toolkit · Showcase R14</span></div>
-    <nav aria-label="Footer">
-      <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/LICENSE">MIT License</a>
-      <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/CITATION.cff">Citation</a>
-      <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/SECURITY.md">Security</a>
-      <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/GOVERNANCE.md">Governance</a>
-    </nav>
+    <div><strong>The Gauntlet</strong><span>Evidence-Governed Research Toolkit · Showcase R15</span></div>
+    <nav aria-label="Footer"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/LICENSE">MIT License</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/CITATION.cff">Citation</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/SECURITY.md">Security</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/GOVERNANCE.md">Governance</a></nav>
   </footer>
 </body>
 </html>
