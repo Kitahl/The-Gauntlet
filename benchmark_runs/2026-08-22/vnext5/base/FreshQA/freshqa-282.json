@@ -1,0 +1,13 @@
+{
+  "schema": "foil-vnext5-unit/v1",
+  "benchmark": "FreshQA",
+  "item_id": "freshqa-282",
+  "condition": "BASE",
+  "answer": "Paris",
+  "confidence": 0.999,
+  "tool_counts": {
+    "search_queries": 0,
+    "source_followups": 0
+  },
+  "execution_status": "complete"
+}
