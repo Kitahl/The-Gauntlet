@@ -1,0 +1,63 @@
+{
+  "schema_version": "foil-vnext6-validation-receipt-v1",
+  "candidate": "FOIL_vNEXT6_COMPOSABLE_POLICY_V1",
+  "date": "2026-08-23",
+  "branch": "feature/foil-vnext6-composable-controller",
+  "frozen_parent_sha": "d320943d3fd34b3891054acf9e95d70c02531220",
+  "validated_blobs": {
+    "experiments/foil_vnext6/__init__.py": "5236ea7d33e54f040ada4994a8bc1d9d03edc376",
+    "experiments/foil_vnext6/runtime_policy.py": "8280db493bc56b7c350af250608c59a63f24a009",
+    "experiments/foil_vnext6/trace_schema.json": "43376914730ab96fa292c3e1f3c2815bbf8c010e",
+    "experiments/foil_vnext6/SPEC_V2.md": "f4601baba444959bcea54daa10d5432a136fcb6b",
+    "experiments/foil_vnext6/PRIOR_ART_V2.md": "989e9aaebcafd0b5a0c312a643c709cff9bd0d42",
+    "experiments/foil_vnext6/MASTERMIND_AUDIT.md": "7b2a290955101ea2a7fc9e45c860c3790fff1eea",
+    "tests/test_foil_vnext6_experimental.py": "33da9ded24116c01705e27692e056db6528bfafe"
+  },
+  "checks": [
+    {
+      "name": "repository_compatible_unittest_discovery",
+      "command": "python -m unittest discover -s tests -v",
+      "scope": "reconstructed experimental workspace containing the frozen V1 runtime and the vNext6 candidate",
+      "result": "PASS",
+      "tests_run": 24,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "name": "seeded_randomized_invariant_sweep",
+      "seed": 20260823,
+      "cases": 20000,
+      "result": "PASS",
+      "assertions": [
+        "budget_after is component-wise less than or equal to budget_before",
+        "remaining budgets are non-negative",
+        "frozen V1 stop always selects STOP",
+        "DIRECT, DECOMPOSE, bounded branching, reflection, and Mastermind are internal heuristics and cannot discharge load-bearing uncertainty",
+        "Mastermind requires high impact, a causal or process defect, at least two route failures, and one remaining loop",
+        "STOP consumes no budget"
+      ]
+    },
+    {
+      "name": "python_compilation",
+      "command": "python -m py_compile experiments/foil_vnext6/runtime_policy.py tests/test_foil_vnext6_experimental.py",
+      "result": "PASS"
+    },
+    {
+      "name": "public_trace_schema_validation",
+      "schema": "experiments/foil_vnext6/trace_schema.json",
+      "result": "PASS"
+    },
+    {
+      "name": "ruff",
+      "pinned_version": "0.16.2",
+      "result": "NOT_MEASURED",
+      "reason": "The local execution environment did not contain the pinned Ruff executable and network installation was unavailable."
+    },
+    {
+      "name": "github_actions",
+      "result": "NOT_RUN",
+      "reason": "The repository validation workflow triggers on pushes to main or pull requests targeting main. The frozen experimental lineage is not currently comparable to main as a pull-request branch."
+    }
+  ],
+  "evidence_boundary": "This receipt supports implementation consistency and tested invariants only. It does not establish behavioral accuracy, cost improvement, user-learning benefit, or superiority over CoT, ReAct, Reflexion, CoVe, CRITIC, Tree of Thoughts, or any other baseline."
+}
