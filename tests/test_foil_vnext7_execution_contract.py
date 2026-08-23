@@ -34,7 +34,6 @@ from experiments.foil_vnext7.runtime_policy import (
     EvidenceTypedTaskContext,
 )
 
-
 POLICY = EvidenceTypedRuntimePolicy()
 BUDGET = StrategyBudget()
 TASK_ID = "v7-test-task"
