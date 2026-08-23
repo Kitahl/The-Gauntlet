@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://the-gauntlet.invalid/schemas/foil-vnext6-execution-trace-v1.json",
+  "title": "FOIL vNext6 execution boundary public traces",
+  "oneOf": [
+    {"$ref": "#/$defs/operator_request"},
+    {"$ref": "#/$defs/operator_outcome"},
+    {"$ref": "#/$defs/outcome_validation"}
+  ],
+  "$defs": {
+    "operator": {
+      "enum": [
+        "stop",
+        "direct",
+        "decompose",
+        "react",
+        "exact_execution",
+        "claim_native_verify",
+        "bounded_challenger_search",
+        "evidence_triggered_reflection",
+        "independent_review",
+        "mastermind_causal_audit",
+        "blocked"
+      ]
+    },
+    "verifier": {
+      "oneOf": [
+        {
+          "enum": [
+            "source_evidence",
+            "current_source",
+            "exact_calculation",
+            "supplied_example_consistency",
+            "execution_test",
+            "contradiction_counterexample",
+            "output_contract"
+          ]
+        },
+        {"type": "null"}
+      ]
+    },
+    "authority": {
+      "enum": [
+        "none",
+        "internal_heuristic",
+        "external_observation",
+        "claim_native",
+        "independent_review"
+      ]
+    },
+    "operator_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trace_type",
+        "controller_version",
+        "operator",
+        "reason_code",
+        "required_verifier",
+        "minimum_evidence_authority",
+        "target_claim_count",
+        "tool_effect",
+        "retry_attempt",
+        "prior_postcondition_checked"
+      ],
+      "properties": {
+        "trace_type": {"const": "operator_request"},
+        "controller_version": {"type": "string", "minLength": 1},
+        "operator": {"$ref": "#/$defs/operator"},
+        "reason_code": {"type": "string", "minLength": 1},
+        "required_verifier": {"$ref": "#/$defs/verifier"},
+        "minimum_evidence_authority": {"$ref": "#/$defs/authority"},
+        "target_claim_count": {"type": "integer", "minimum": 0},
+        "tool_effect": {"enum": ["none", "read_only", "side_effecting"]},
+        "retry_attempt": {"type": "integer", "minimum": 0},
+        "prior_postcondition_checked": {"type": "boolean"}
+      }
+    },
+    "operator_outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trace_type",
+        "operator",
+        "status",
+        "candidate_created",
+        "candidate_revised",
+        "evidence_count",
+        "completed_verifier_count",
+        "resolved_claim_count",
+        "defect_localized",
+        "postcondition_verified",
+        "state_fingerprint_present",
+        "error_code"
+      ],
+      "properties": {
+        "trace_type": {"const": "operator_outcome"},
+        "operator": {"$ref": "#/$defs/operator"},
+        "status": {"enum": ["completed", "failed", "blocked"]},
+        "candidate_created": {"type": "boolean"},
+        "candidate_revised": {"type": "boolean"},
+        "evidence_count": {"type": "integer", "minimum": 0},
+        "completed_verifier_count": {"type": "integer", "minimum": 0},
+        "resolved_claim_count": {"type": "integer", "minimum": 0},
+        "defect_localized": {"type": "boolean"},
+        "postcondition_verified": {"type": "boolean"},
+        "state_fingerprint_present": {"type": "boolean"},
+        "error_code": {
+          "oneOf": [
+            {"type": "string", "minLength": 1},
+            {"type": "null"}
+          ]
+        }
+      }
+    },
+    "outcome_validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trace_type",
+        "valid",
+        "progress",
+        "error_count",
+        "admitted_resolved_claim_count",
+        "admitted_completed_verifier_count"
+      ],
+      "properties": {
+        "trace_type": {"const": "outcome_validation"},
+        "valid": {"type": "boolean"},
+        "progress": {"enum": ["progressed", "stalled", "blocked"]},
+        "error_count": {"type": "integer", "minimum": 0},
+        "admitted_resolved_claim_count": {"type": "integer", "minimum": 0},
+        "admitted_completed_verifier_count": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}
