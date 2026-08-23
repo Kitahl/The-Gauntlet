@@ -8,7 +8,7 @@ The Evidence-Governed Research Toolkit separates **control**, **specialist reaso
 flowchart TD
     U[User / Researcher] --> O[Research Orchestrator / Soul]
     O --> Q[Decision Preflight / Meditate]
-    O --> A[FOIL: Adaptive Reasoning Complement]
+    O --> A[Mirror: Adaptive Reasoning Complement]
     O --> F[Formal Reasoning / Mind]
     O --> D[Research Discovery / Space]
     O --> S[Method Synthesis / Reality]
@@ -64,7 +64,9 @@ The full integration flow is frozen in [`VNEXT_RUNTIME_PIPELINE.md`](VNEXT_RUNTI
 | Process Assurance Framework | `infinity-gauntlet`, `/gauntlet` | process hazards and false-green defense | `tools/gauntlet_runtime.py` + compatibility hooks |
 | Decision Preflight Protocol | `meditate` | resource-rational preflight/control | `tools/meditate_runtime.py` |
 | Evidence Review Panel | `council-of-elders`, `/council` | commit-reveal evidence review | `tools/council_runtime.py` |
-| FOIL — Adaptive Reasoning Complement | `foil`, `/foil` | adaptive routing/support and transfer tracking | existing FOIL runtime + `tools/foil_runtime_bridge.py` |
+| Mirror — Adaptive Reasoning Complement | `foil`, `/foil` | adaptive complement selection, support, and transfer tracking | existing `foil` runtime + `tools/foil_runtime_bridge.py` |
+
+**Mirror** is the public display name. `foil`, `/foil`, `tools/foil_*`, `FOIL_TASK_RUN`, historical benchmark conditions, and FOIL-named artifact files remain stable compatibility identifiers. See [`MIRROR.md`](MIRROR.md).
 
 Technical identifiers remain stable for backwards compatibility. Names are user-facing mnemonics; evidence authority comes from receipts, not naming.
 
@@ -100,7 +102,7 @@ from `trusted` (probe trust *and* complete participation *and* at least two dist
 provenance groups), and raw model text lives only in a declared evidence artifact
 referenced by `ArtifactRef`, never in generic state or the receipt.
 
-### FOIL — vocabularies and estimators
+### Mirror (`foil`) — vocabularies and estimators
 
 | Module | Authoritative for |
 |---|---|
@@ -115,7 +117,7 @@ Drift between a contract block and its runtime enum is a **test failure**, not a
 documentation task: `tests/test_foil_assistance.py::ContractDriftTests` and
 `tests/test_foil_ledger_b_items.py::GapVocabularyDriftTests` are live gates.
 
-### FOIL — profile, calibration, and policy
+### Mirror (`foil`) — profile, calibration, and policy
 
 | Module | Authoritative for |
 |---|---|
@@ -133,20 +135,20 @@ evidence into a small deterministic policy. Two properties matter architecturall
 - **The routing regime is derived from task properties** — freshness sensitivity, closed context, multi-hop structure, abstract transformation, closed-book technical reasoning, external-retrieval need. **Benchmark identity is receipt metadata and never a policy selector**, so the same task properties yield the same policy inside and outside an evaluation.
 - **A profile can trigger help only** when it describes a verified gap matching a capability the current task actually requires. A wrong, irrelevant, or stale profile is a negative control that cannot route.
 
-### FOIL — model layer
+### Mirror (`foil`) — model layer
 
 | Module | Authoritative for |
 |---|---|
 | `tools/foil_models.py` | provider adapters (`openai_chat`, `anthropic_messages`, `ollama_chat`, `cli`, `mock`), determinism classes, `probe()` |
 | `tools/foil_setup.py` | `.foil/models.json`, role assignment (`primary`/`reviewer`/`verifier`/`benchmark`) |
 
-The language model is a configured capability, not a build-time assumption. FOIL
+The language model is a configured capability, not a build-time assumption. Mirror
 requests a role; the host decides which model fills it. An unfilled role reports
 `NOT-MEASURED` rather than silently substituting the primary for the reviewer,
 because a model critiquing its own output is not independent evidence. Secrets are
 referenced by environment-variable *name* and are never stored.
 
-### FOIL — frozen-evaluation boundary
+### Mirror (`foil`) — frozen-evaluation boundary
 
 | Module | Authoritative for |
 |---|---|
@@ -208,7 +210,7 @@ layer.
 1. **Frame** — define goal, success condition, constraints, stakes and decision boundary.
 2. **Obligations** — create typed claims that must be proved, searched, synthesized, executed, measured, assured, preflighted, reviewed or adapted.
 3. **Preflight** — when explicit triggers are present, Meditate decides whether another computation is worth performing.
-4. **Adapt** — FOIL may alter routing priority or representation, never factual authority.
+4. **Adapt** — Mirror may alter routing priority or representation, never factual authority.
 5. **Route** — select the minimum claim-native module set.
 6. **Act** — run proof/search/synthesis/test/evaluation/review methods.
 7. **Receipt** — record hashes, verifier/tool identity, provenance, scope, uncertainty and unresolved state.
@@ -259,12 +261,13 @@ State remains gitignored and owner-restricted where POSIX permissions are availa
 ```text
 .
 ├── skills/                  # executable research-method specifications (SKILL.md only)
-├── tools/                   # portable runtime: typed runtime + Process Assurance + FOIL modules
+├── tools/                   # portable runtime: typed runtime + Process Assurance + Mirror/legacy foil modules
 ├── tests/                   # runtime, privacy, layout, contract-drift regressions
 ├── benchmarks/              # blinded benchmark protocols, harnesses, receipts
 ├── research/                # evidence basis for research mechanisms
 ├── validation/              # deterministic/specification evidence
 ├── docs/specs/              # per-component engineering contracts
+├── docs/MIRROR.md           # public name and compatibility contract for the foil subsystem
 ├── docs/VNEXT_RUNTIME_PIPELINE.md
 ├── .claude/settings.json    # hook wiring
 ├── .gauntlet.json           # runtime/assurance configuration
