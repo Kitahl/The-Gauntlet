@@ -52,22 +52,33 @@ class VerificationTarget:
 
 @dataclass(frozen=True)
 class CachedEvidenceHint:
-    """Receipt-safe metadata saying a prior observation may satisfy a verifier.
+    """Receipt-safe metadata saying prior task-local material may be reusable.
 
     This hint is never evidence by itself. The execution contract must still
-    validate the referenced basis, verdict, freshness, and content fingerprint.
+    validate the referenced basis, verdict, freshness, content fingerprint, and
+    task scope.
     """
 
+    task_instance_id: str
     target_id: str
     verifier: VerifierKind
     stale: bool = False
     freshness_checked: bool = False
 
     def __post_init__(self) -> None:
+        if not self.task_instance_id.strip():
+            raise ValueError("cached task_instance_id is required")
         if not self.target_id.strip():
             raise ValueError("cached target_id is required")
 
-    def eligible_for(self, target: VerificationTarget) -> bool:
+    def eligible_for(
+        self,
+        target: VerificationTarget,
+        *,
+        task_instance_id: str,
+    ) -> bool:
+        if self.task_instance_id != task_instance_id:
+            return False
         if self.target_id != target.target_id or self.verifier is not target.verifier:
             return False
         if self.stale:
@@ -83,12 +94,18 @@ class CachedEvidenceHint:
 @dataclass(frozen=True)
 class EvidenceTypedTaskContext:
     strategy: StrategyTaskContext
+    task_instance_id: str
     cached_evidence: tuple[CachedEvidenceHint, ...] = ()
+
+    def __post_init__(self) -> None:
+        if not self.task_instance_id.strip():
+            raise ValueError("task_instance_id is required")
 
 
 @dataclass(frozen=True)
 class EvidenceTypedDecision:
     controller_version: str
+    task_instance_id: str
     strategy: StrategyDecision
     verification_targets: tuple[VerificationTarget, ...]
     reuse_cached_evidence: bool = False
@@ -120,6 +137,7 @@ class EvidenceTypedDecision:
     def trace(self) -> dict[str, object]:
         trace = dict(self.strategy.trace())
         trace["controller_version"] = self.controller_version
+        trace["task_instance_id"] = self.task_instance_id
         trace["verification_target_count"] = len(self.verification_targets)
         trace["cached_evidence_reused"] = self.reuse_cached_evidence
         return trace
@@ -182,11 +200,16 @@ class EvidenceTypedRuntimePolicy:
     def _cache_covers(
         targets: tuple[VerificationTarget, ...],
         cached: tuple[CachedEvidenceHint, ...],
+        *,
+        task_instance_id: str,
     ) -> bool:
         if not targets:
             return False
         return all(
-            any(hint.eligible_for(target) for hint in cached)
+            any(
+                hint.eligible_for(target, task_instance_id=task_instance_id)
+                for hint in cached
+            )
             for target in targets
         )
 
@@ -262,7 +285,11 @@ class EvidenceTypedRuntimePolicy:
 
         targets = self._targets(decision)
         verifier = decision.required_verifier
-        cache_covers = self._cache_covers(targets, context.cached_evidence)
+        cache_covers = self._cache_covers(
+            targets,
+            context.cached_evidence,
+            task_instance_id=context.task_instance_id,
+        )
 
         # Cached receipt-backed evidence never closes a claim directly. It only
         # removes a repeat external tool call from ordinary claim-native
@@ -294,6 +321,7 @@ class EvidenceTypedRuntimePolicy:
             targets = self._targets(decision)
             return EvidenceTypedDecision(
                 controller_version=self.version,
+                task_instance_id=context.task_instance_id,
                 strategy=decision,
                 verification_targets=targets,
                 reuse_cached_evidence=True,
@@ -301,6 +329,7 @@ class EvidenceTypedRuntimePolicy:
 
         return EvidenceTypedDecision(
             controller_version=self.version,
+            task_instance_id=context.task_instance_id,
             strategy=decision,
             verification_targets=targets,
             reuse_cached_evidence=False,
