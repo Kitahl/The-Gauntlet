@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Mechanical public-package checks for Research Orchestrator + Process Assurance.
+"""Mechanical public-package checks for Soul + typed runtime + Process Assurance.
 
-These checks establish source/package invariants only. They do not establish
-behavioral efficacy of an executing language model.
+These checks establish source/package/wiring invariants only. They do not establish
+behavioral efficacy of an executing language model or semantic truth of receipts.
 """
 from __future__ import annotations
 
@@ -51,64 +51,87 @@ if rows != ops:
     fail(f"canonical operation table mismatch: {rows}")
 
 for token in (
-    "tools/gauntlet_boundary.py",
-    "tools/gauntlet_monitor.py",
-    "tools/gauntlet_hook.py",
-    "UNAVAILABLE",
-    "stop_hook_active",
+    "tools/gauntlet_boundary.py", "tools/gauntlet_monitor.py", "tools/gauntlet_hook.py",
+    "UNAVAILABLE", "stop_hook_active",
 ):
     if token not in gauntlet:
         fail(f"Process Assurance missing runtime invariant: {token}")
 
-for path in (
-    "tools/gauntlet_boundary.py",
-    "tools/gauntlet_monitor.py",
-    "tools/gauntlet_hook.py",
-    "tools/gauntlet_config.py",
-    "tools/verify_ledger.py",
-    "tools/foil_profile.py",
-    "tools/foil_assessment.py",
-    "docs/RUNTIME_SETUP.md",
-):
+runtime_files = (
+    "tools/egrt_types.py", "tools/egrt_store.py", "tools/egrt_hook.py", "tools/egrt_runtime.py",
+    "tools/soul_runtime.py", "tools/gauntlet_runtime.py", "tools/meditate_runtime.py",
+    "tools/council_runtime.py", "tools/mind_runtime.py", "tools/space_runtime.py",
+    "tools/reality_runtime.py", "tools/power_runtime.py", "tools/time_runtime.py", "tools/foil_runtime_bridge.py",
+    "tools/gauntlet_boundary.py", "tools/gauntlet_monitor.py", "tools/gauntlet_hook.py",
+    "tools/gauntlet_config.py", "tools/verify_ledger.py", "tools/foil_profile.py",
+    "tools/foil_assessment.py", "docs/RUNTIME_SETUP.md", "docs/VNEXT_RUNTIME_PIPELINE.md",
+)
+for path in runtime_files:
     need(path)
 
-# Skill directories are specification-only.
+specs = (
+    "COMMON_RUNTIME_CONTRACT.md", "SOUL_ENGINEERING_SPEC.md", "GAUNTLET_ENGINEERING_SPEC.md",
+    "MEDITATE_ENGINEERING_SPEC.md", "COUNCIL_ENGINEERING_SPEC.md", "MIND_ENGINEERING_SPEC.md",
+    "SPACE_ENGINEERING_SPEC.md", "REALITY_ENGINEERING_SPEC.md", "POWER_ENGINEERING_SPEC.md",
+    "TIME_ENGINEERING_SPEC.md", "FOIL_INTEGRATION_SPEC.md",
+)
+for name in specs:
+    need(f"docs/specs/{name}")
+
+# Skill directories remain specification-only; runtime helpers never move into skills/.
 for directory in (ROOT / "skills").iterdir():
     if directory.is_dir():
         names = sorted(p.name for p in directory.iterdir() if not p.name.startswith("."))
         if names != ["SKILL.md"]:
             fail(f"{directory}: expected SKILL.md only, found {names}")
 
-# Hook wiring must be shareable and current-schema shaped.
 raw_settings = json.dumps(settings)
 if "${CLAUDE_PROJECT_DIR}" not in raw_settings:
     fail("hook settings do not use CLAUDE_PROJECT_DIR")
 for event in ("SessionStart", "UserPromptSubmit", "PreToolUse", "PostToolUse", "Stop"):
     if event not in settings.get("hooks", {}):
         fail(f"missing hook event: {event}")
+for token in ("tools/egrt_hook.py", "tools/gauntlet_hook.py", "tools/gauntlet_boundary.py", "tools/foil_hook.py"):
+    if token not in raw_settings:
+        fail(f"hook settings missing typed/compatibility runtime: {token}")
 
 state_path = str(config.get("state_dir") or "")
 if not state_path or state_path.startswith(".git") or "/.git" in state_path:
     fail("runtime state must not live under .git")
+runtime_cfg = config.get("runtime") or {}
+if runtime_cfg.get("schema") != "egrt.runtime.v1":
+    fail("typed runtime schema is not pinned to egrt.runtime.v1")
+if runtime_cfg.get("persist_raw_prompts") is not False or runtime_cfg.get("persist_raw_tool_output") is not False:
+    fail("generic typed runtime must not persist raw prompts/tool output")
 
-# No person-specific learner prior belongs in the public FOIL specification.
+# Mastermind must not become a runtime dependency. Historical prose may name it.
+for path in runtime_files:
+    text = need(path)
+    if re.search(r"(^|\n)\s*(?:from|import)\s+mastermind\b", text, re.I):
+        fail(f"Mastermind runtime import forbidden: {path}")
+
 for forbidden in ("Initial assessment priors remain", "Relative strengths observed so far"):
     if forbidden in foil:
         fail(f"person-specific FOIL prior leaked into public skill: {forbidden}")
 
 for token in (
-    "Evidence-Governed Research Toolkit",
-    "Research Orchestrator",
-    "Process Assurance Framework",
-    "FOIL — Adaptive Reasoning Complement",
+    "Evidence-Governed Research Toolkit", "Research Orchestrator",
+    "Process Assurance Framework", "FOIL — Adaptive Reasoning Complement",
 ):
     if token not in readme:
         fail(f"README missing professional public terminology: {token}")
 if "<strong>10</strong>" not in showcase or "Research Orchestrator" not in showcase:
     fail("showcase architecture/module count is not synchronized")
 
-print("PASS: Research Orchestrator + Process Assurance public invariants")
-print("PASS: 10 canonical Process Assurance operations")
-print("PASS: portable hook/runtime wiring")
-print("PASS: SKILL.md-only module directories")
+pipeline = need("docs/VNEXT_RUNTIME_PIPELINE.md")
+for token in ("CLEARED", "ISSUE", "UNKNOWN", "UNAVAILABLE", "SPEC", "STATE", "RECEIPT", "FOIL", "Mastermind"):
+    if token not in pipeline:
+        fail(f"vNext pipeline missing contract token: {token}")
+
+print("PASS: Research Orchestrator + typed runtime public invariants")
+print("PASS: 10 canonical Process Assurance operations + explicit support registry")
+print("PASS: privacy-preserving typed hook/runtime wiring")
+print("PASS: per-component engineering specifications present")
+print("PASS: SKILL.md-only module directories preserved")
+print("PASS: Mastermind absent from runtime imports")
 print("PASS: public FOIL contains no embedded user profile")

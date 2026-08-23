@@ -2,50 +2,71 @@
 
 ## Overview
 
-The Evidence-Governed Research Toolkit separates **control**, **specialist reasoning**, **assurance**, and **adaptation**.
+The Evidence-Governed Research Toolkit separates **control**, **specialist reasoning**, **assurance**, **preflight**, **review**, and **adaptation**. vNext adds a common typed runtime so each module can produce machine-readable state and receipts without collapsing distinct epistemic obligations into one generic agent interface.
 
 ```mermaid
 flowchart TD
-    U[User / Researcher] --> O[Research Orchestrator]
-    O --> F[Formal Reasoning]
-    O --> D[Research Discovery]
-    O --> S[Method Synthesis]
-    O --> E[Engineering Verification]
-    O --> B[Evaluation & Benchmarking]
-    O --> P[Process Assurance]
-    O --> Q[Decision Preflight]
-    O --> R[Evidence Review Panel]
+    U[User / Researcher] --> O[Research Orchestrator / Soul]
+    O --> Q[Decision Preflight / Meditate]
     O --> A[FOIL: Adaptive Reasoning Complement]
+    O --> F[Formal Reasoning / Mind]
+    O --> D[Research Discovery / Space]
+    O --> S[Method Synthesis / Reality]
+    O --> E[Engineering Verification / Power]
+    O --> B[Evaluation & Benchmarking / Time]
+    O --> R[Evidence Review Panel / Council]
 
-    F --> O
-    D --> O
-    S --> O
-    E --> O
-    B --> O
-    P --> O
     Q --> O
-    R --> O
     A --> O
-
-    O --> X[Supported result / explicit unresolved state]
+    F --> X[Typed receipts]
+    D --> X
+    S --> X
+    E --> X
+    B --> X
+    R --> X
+    X --> P[Process Assurance / Gauntlet]
+    P --> O
+    X --> O
+    O --> G[Release gate]
+    G --> Z[CLEARED / ISSUE / UNKNOWN / UNAVAILABLE]
 ```
+
+## Common typed runtime
+
+Every component exposes five layers:
+
+1. **SPEC** — the obligation and authority boundary.
+2. **STATE** — typed machine-readable state/events.
+3. **ACTION/TOOL** — actual evidence-producing method.
+4. **RECEIPT** — content-addressed result with verifier/provenance/scope.
+5. **VERDICT** — scoped `CLEARED | ISSUE | UNKNOWN | UNAVAILABLE`.
+
+Shared runtime files:
+
+- `tools/egrt_types.py`
+- `tools/egrt_store.py`
+- `tools/egrt_hook.py`
+- `tools/egrt_runtime.py`
+- `tools/soul_runtime.py`
+
+The full integration flow is frozen in [`VNEXT_RUNTIME_PIPELINE.md`](VNEXT_RUNTIME_PIPELINE.md). Component engineering contracts live under `docs/specs/`.
 
 ## Public names and compatibility aliases
 
-| Professional display name | Technical ID / legacy alias | Primary responsibility |
-|---|---|---|
-| Research Orchestrator | `soul`, `/soul` | frame, decompose, route, integrate, release |
-| Formal Reasoning | `mathbot`, `/mind` | proof, logic, probability, formalization |
-| Research Discovery | `scoutbot`, `/space` | literature, prior art, existing software, terminology transfer |
-| Method Synthesis | `novelbot`, `/reality` | constrained mechanism generation after existing routes fail |
-| Engineering Verification | `codebot`, `/power` | implementation, execution, integration, tests |
-| Evaluation & Benchmarking | `benchbot`, `/time` | baselines, capability measurement, cost, stop/go |
-| Process Assurance Framework | `infinity-gauntlet`, `/gauntlet` | frame/process audit, false-green defense, stale-state checks |
-| Decision Preflight Protocol | `meditate` | grounding before consequential dispatch or after failure |
-| Evidence Review Panel | `council-of-elders`, `/council` | selective independent evidence/perspective review |
-| FOIL — Adaptive Reasoning Complement | `foil`, `/foil` | task/user-specific missing-method support and transfer tracking |
+| Professional display name | Technical ID / legacy alias | Primary responsibility | Runtime |
+|---|---|---|---|
+| Research Orchestrator | `soul`, `/soul` | frame, obligations, route, integrate, release | `tools/soul_runtime.py` |
+| Formal Reasoning | `mathbot`, `/mind` | proof, logic, exact derivation, formalization | `tools/mind_runtime.py` |
+| Research Discovery | `scoutbot`, `/space` | literature, prior art, current evidence | `tools/space_runtime.py` + `tools/scout.py` |
+| Method Synthesis | `novelbot`, `/reality` | constrained, falsifiable mechanism generation | `tools/reality_runtime.py` |
+| Engineering Verification | `codebot`, `/power` | executable software verification | `tools/power_runtime.py` |
+| Evaluation & Benchmarking | `benchbot`, `/time` | baselines, paired inference, cost, stop/go | `tools/time_runtime.py` |
+| Process Assurance Framework | `infinity-gauntlet`, `/gauntlet` | process hazards and false-green defense | `tools/gauntlet_runtime.py` + compatibility hooks |
+| Decision Preflight Protocol | `meditate` | resource-rational preflight/control | `tools/meditate_runtime.py` |
+| Evidence Review Panel | `council-of-elders`, `/council` | commit-reveal evidence review | `tools/council_runtime.py` |
+| FOIL — Adaptive Reasoning Complement | `foil`, `/foil` | adaptive routing/support and transfer tracking | existing FOIL runtime + `tools/foil_runtime_bridge.py` |
 
-Technical identifiers remain stable for backwards compatibility. Public research materials use the professional display names.
+Technical identifiers remain stable for backwards compatibility. Names are user-facing mnemonics; evidence authority comes from receipts, not naming.
 
 ## Runtime module map
 
@@ -168,40 +189,73 @@ layer.
 
 ## Evidence flow
 
-1. **Frame** — define the goal, constraints, claim scope, and decision boundary.
-2. **Obligations** — identify what must be proved, searched, executed, measured, or left unresolved.
-3. **Route** — select the minimum module set needed to satisfy those obligations.
-4. **Native verification** — match verifier to claim type: proof, source, execution, benchmark, counterexample, or independent observation.
-5. **Assurance** — audit the reasoning/process when release triggers apply.
-6. **Synthesis** — integrate by evidence quality and independence rather than votes or confidence.
-7. **Release** — return supported conclusions plus an explicit unresolved-work queue.
+1. **Frame** — define goal, success condition, constraints, stakes and decision boundary.
+2. **Obligations** — create typed claims that must be proved, searched, synthesized, executed, measured, assured, preflighted, reviewed or adapted.
+3. **Preflight** — when explicit triggers are present, Meditate decides whether another computation is worth performing.
+4. **Adapt** — FOIL may alter routing priority or representation, never factual authority.
+5. **Route** — select the minimum claim-native module set.
+6. **Act** — run proof/search/synthesis/test/evaluation/review methods.
+7. **Receipt** — record hashes, verifier/tool identity, provenance, scope, uncertainty and unresolved state.
+8. **Assure** — Gauntlet checks typed process hazards and declares monitorability limits.
+9. **Release gate** — Soul checks all load-bearing obligations.
+10. **Release** — return a supported result or explicit `ISSUE`, `UNKNOWN`, or `UNAVAILABLE` state.
 
 ## Architectural constraints
 
 - user authority governs voluntary goals/actions; evidence governs factual warrant;
-- no tool or agent may self-certify merely by labeling its output verified;
-- missing integrations fail closed as `UNAVAILABLE`;
-- multi-agent agreement is not independent evidence by itself;
+- no tool, module or agent may self-certify by label;
+- missing integrations become `UNAVAILABLE`, not fabricated pass/fail;
+- incomplete state becomes `UNKNOWN`, not silent negative evidence;
+- solver results apply to the encoding checked, not automatically to an English generalization;
+- multi-agent agreement is not independent evidence;
+- search saturation does not prove nonexistence;
+- green software checks certify only named checks/defect classes;
 - benchmark results do not silently become claims about general capability;
 - behavioral efficacy is separate from software/specification correctness;
-- public runtime must not depend on private project paths.
+- generic runtime persists prompt/tool hashes, not raw prompt/tool content;
+- public runtime must not depend on private workstation paths;
+- Mastermind is not part of this repository runtime.
+
+## Runtime state
+
+Default state root: `.egrt/state/`.
+
+```text
+.egrt/state/
+├── runtime/
+│   ├── tasks/
+│   ├── receipts/
+│   ├── events/
+│   ├── councils/
+│   ├── meditate/
+│   ├── space/
+│   ├── reality/
+│   ├── power/
+│   └── time/
+├── gauntlet_boundary.json
+└── gauntlet_monitor.json
+```
+
+State remains gitignored and owner-restricted where POSIX permissions are available.
 
 ## Repository structure
 
 ```text
 .
 ├── skills/                  # executable research-method specifications (SKILL.md only)
-├── tools/                   # portable runtime: Process Assurance + FOIL modules
+├── tools/                   # portable runtime: typed runtime + Process Assurance + FOIL modules
 ├── tests/                   # runtime, privacy, layout, contract-drift regressions
 ├── benchmarks/              # blinded benchmark protocols, harnesses, receipts
 ├── research/                # evidence basis for research mechanisms
 ├── validation/              # deterministic/specification evidence
-├── docs/                    # public technical showcase and architecture
-├── .github/                 # CI, security automation, contribution templates
-├── RESEARCH.md              # research question, method, baselines, ablations
-├── REPRODUCIBILITY.md       # reproduction protocol and evidence boundaries
-├── ROADMAP.md               # evidence-first research roadmap
-├── CITATION.cff             # machine-readable citation metadata
-├── CHANGELOG.md             # version history
-└── LICENSE                  # open-source license
+├── docs/specs/              # per-component engineering contracts
+├── docs/VNEXT_RUNTIME_PIPELINE.md
+├── .claude/settings.json    # hook wiring
+├── .gauntlet.json           # runtime/assurance configuration
+├── RESEARCH.md
+├── REPRODUCIBILITY.md
+├── ROADMAP.md
+├── CITATION.cff
+├── CHANGELOG.md
+└── LICENSE
 ```

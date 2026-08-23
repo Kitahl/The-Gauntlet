@@ -3,30 +3,8 @@ name: Runtime portability
 on:
   push:
     branches: [main]
-    paths:
-      - 'tools/**'
-      - 'tests/**'
-      - 'skills/**'
-      - '.claude/**'
-      - '.gauntlet.json'
-      - 'requirements-runtime.txt'
-      - 'requirements-dev.txt'
-      - 'requirements-lock.in'
-      - 'requirements-lock.txt'
-      - '.github/workflows/portability.yml'
   pull_request:
     branches: [main]
-    paths:
-      - 'tools/**'
-      - 'tests/**'
-      - 'skills/**'
-      - '.claude/**'
-      - '.gauntlet.json'
-      - 'requirements-runtime.txt'
-      - 'requirements-dev.txt'
-      - 'requirements-lock.in'
-      - 'requirements-lock.txt'
-      - '.github/workflows/portability.yml'
 
 permissions:
   contents: read
@@ -52,3 +30,19 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Compile runtime sources
         run: python -m compileall -q tools tests
+
+  portability-gate:
+    name: Runtime portability gate
+    if: ${{ always() }}
+    needs: [runtime]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require all portability jobs to pass
+        env:
+          RUNTIME_RESULT: ${{ needs.runtime.result }}
+        run: |
+          if [ "$RUNTIME_RESULT" != "success" ]; then
+            echo "Runtime portability matrix result: $RUNTIME_RESULT" >&2
+            exit 1
+          fi
+          echo "Runtime portability matrix passed on Linux, Windows, and macOS."

@@ -13,17 +13,30 @@ DEFAULT_CONFIG: dict[str, Any] = {
     "state_dir": ".egrt/state",
     "governing_files": [
         "README.md", "RESEARCH.md", "REPRODUCIBILITY.md", "ROADMAP.md",
-        "skills/soul/SKILL.md", "skills/infinity-gauntlet/SKILL.md",
-        "skills/foil/SKILL.md",
+        "docs/ARCHITECTURE.md", "docs/VNEXT_RUNTIME_PIPELINE.md",
+        "docs/specs/COMMON_RUNTIME_CONTRACT.md",
+        "skills/soul/SKILL.md", "skills/mathbot/SKILL.md",
+        "skills/scoutbot/SKILL.md", "skills/novelbot/SKILL.md",
+        "skills/codebot/SKILL.md", "skills/benchbot/SKILL.md",
+        "skills/infinity-gauntlet/SKILL.md", "skills/meditate/SKILL.md",
+        "skills/council-of-elders/SKILL.md", "skills/foil/SKILL.md",
     ],
+
+    "runtime": {
+        "enabled": True,
+        "schema": "egrt.runtime.v1",
+        "persist_raw_prompts": False,
+        "persist_raw_tool_output": False,
+        "release_gate": True,
+        "active_task_required_for_gate": True,
+    },
     "boundary": {
         "enabled": True,
         "near_duplicate_threshold": 0.72,
-        "frame_budget": 3,
-        "costume_budget": 2,
+        "incident_refractory_turns": 3,
         "judge_model": None,
     },
-    "ledger": {"enabled": False, "path": None},
+    "ledger": {"enabled": False, "path": None, "accept_runtime_receipts": True},
 }
 
 

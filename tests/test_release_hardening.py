@@ -78,6 +78,13 @@ class ReleaseHardeningTests(unittest.TestCase):
             workflow = (ROOT / ".github" / "workflows" / name).read_text(encoding="utf-8")
             self.assertIn("--require-hashes -r requirements-lock.txt", workflow)
 
+    def test_portability_has_stable_required_gate(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "portability.yml").read_text(encoding="utf-8")
+        self.assertNotIn("    paths:\n", workflow)
+        self.assertIn("name: Runtime portability gate", workflow)
+        self.assertIn("needs: [runtime]", workflow)
+        self.assertIn("if: ${{ always() }}", workflow)
+
     def test_generic_secret_and_environment_files_are_ignored(self) -> None:
         ignored = (ROOT / ".gitignore").read_text(encoding="utf-8").splitlines()
         for required in [

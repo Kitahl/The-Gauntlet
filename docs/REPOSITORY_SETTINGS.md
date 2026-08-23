@@ -11,7 +11,7 @@ Some GitHub security and governance controls are repository settings rather than
 - Issues: **Enabled**
 - Repository description: **Evidence-governed research toolkit with Gauntlet process assurance and FOIL adaptive reasoning support.**
 - Homepage: **https://kitahl.github.io/The-Gauntlet/**
-- Suggested topics: `research-software`, `ai-assisted-research`, `verification`, `reproducibility`, `evaluation`, `foil`
+- Suggested topics: `research-software`, `ai-assisted-research`, `verification`, `reproducibility`, `evaluation`, `foil`, `metareasoning`, `runtime-verification`
 - Discussions: optional; enable only if there is enough external use to justify maintaining it
 
 ### Commit identity privacy
@@ -23,13 +23,14 @@ If a personal email address should not be public in future Git metadata, enable 
 Protect `main` with a ruleset or branch protection requiring:
 
 - pull request before merge;
-- required status checks for the validation, CodeQL, security-gate, and portability jobs;
-- branch up to date before merge when practical;
+- required status checks for Research software validation (`validate`), CodeQL (`analyze`), the three Security gates jobs, and the stable `Runtime portability gate`;
+- branch up to date before merge;
+- for a single-maintainer phase, PR review may use **0 required external approvals** while CI remains mandatory; increase approvals when regular maintainers/reviewers exist;
 - conversation resolution before merge;
 - no force pushes to `main`;
 - no branch deletion of `main`.
 
-The repository currently treats green CI as evidence, not as an enforced merge gate, until these server-side settings are enabled.
+The portability workflow intentionally runs on every pull request and exposes one stable `Runtime portability gate`, avoiding GitHub required-check deadlocks caused by workflow-level path filtering. These server-side settings are still the enforcement layer and must be enabled separately.
 
 ### Security and analysis
 

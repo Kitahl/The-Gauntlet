@@ -55,3 +55,7 @@ For substantial work report:
 - **EVIDENCE STATE** — supported claims, unresolved claims, relevant counterevidence.
 - **ROUTING** — modules/tools actually used and unavailable dependencies.
 - **NEXT** — one action that materially reduces uncertainty or advances the goal.
+
+## Typed runtime contract
+
+For registered substantial work, `tools/soul_runtime.py` represents the workflow as `TaskState` + load-bearing `Obligation` objects and enforces a receipt-based release gate. The generic typed runtime uses `egrt.runtime.v1`; it does not persist raw prompts. A missing load-bearing receipt is `UNKNOWN`, not success. See `docs/VNEXT_RUNTIME_PIPELINE.md` and `docs/specs/SOUL_ENGINEERING_SPEC.md`.

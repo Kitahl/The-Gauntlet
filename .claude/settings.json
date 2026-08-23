@@ -3,6 +3,7 @@
     "SessionStart": [
       {
         "hooks": [
+          {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/egrt_hook.py", "session"], "timeout": 10},
           {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/gauntlet_monitor.py", "snapshot"], "timeout": 10},
           {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/gauntlet_boundary.py", "reset"], "timeout": 10},
           {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/foil_hook.py", "session"], "timeout": 10}
@@ -12,6 +13,7 @@
     "UserPromptSubmit": [
       {
         "hooks": [
+          {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/egrt_hook.py", "prompt"], "timeout": 10},
           {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/foil_hook.py", "prompt"], "timeout": 10}
         ]
       }
@@ -26,12 +28,14 @@
       {
         "matcher": "Bash",
         "hooks": [
+          {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/egrt_hook.py", "pre-tool"], "timeout": 10},
           {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/gauntlet_hook.py", "pre-tool"], "timeout": 20}
         ]
       },
       {
         "matcher": "Edit|Write|NotebookEdit",
         "hooks": [
+          {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/egrt_hook.py", "pre-write"], "timeout": 10},
           {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/gauntlet_hook.py", "pre-write"], "timeout": 10}
         ]
       }
@@ -40,6 +44,7 @@
       {
         "matcher": "Bash",
         "hooks": [
+          {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/egrt_hook.py", "post-tool"], "timeout": 10},
           {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/gauntlet_hook.py", "post-tool"], "timeout": 10}
         ]
       }
@@ -47,7 +52,8 @@
     "Stop": [
       {
         "hooks": [
-          {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/gauntlet_boundary.py"], "timeout": 45}
+          {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/gauntlet_boundary.py"], "timeout": 45},
+          {"type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/tools/egrt_hook.py", "stop"], "timeout": 20}
         ]
       }
     ]

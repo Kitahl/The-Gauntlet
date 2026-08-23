@@ -47,3 +47,7 @@ Include a skeptic role. Add a role only when it has a distinct question, evidenc
 Run one strong direct analysis with access to the same combined evidence budget when feasible. Attribute panel value only to findings the control did not produce or to stronger verification/coverage.
 
 Panel output remains a claim until independently checked when the conclusion is load-bearing.
+
+## Typed runtime contract
+
+`tools/council_runtime.py` enforces 3–6 distinct seat questions, a skeptic/adversarial seat, frozen commitment hashes before reveal, reveal integrity, and evidence/provenance overlap diagnostics. Council's REVIEW verdict remains `UNKNOWN` until commit/reveal is complete, every seat contributes cross-critique, and a real DIRECT control matches the same frozen artifact and total-budget hashes. Confidence is recorded as uncalibrated unless later scored prospectively. See `docs/specs/COUNCIL_ENGINEERING_SPEC.md`.

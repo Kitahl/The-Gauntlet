@@ -41,3 +41,7 @@ Before novelty credit, provide:
 ## Tooling
 
 The optional public helper `tools/scout.py` performs a keyless OpenAlex lookup. Web/API tools may be used when available. No private account, email, path, or project index is assumed.
+
+## Typed runtime contract
+
+`tools/space_runtime.py` adds a registered multi-index search plan, deduplication, round-by-round novel-yield state, explicit adapter failures and bounded saturation. `NOT_FOUND_WITHIN_SCOPE` remains `UNKNOWN` for nonexistence claims. OpenAlex/Crossref are initial adapters; citation-chasing/screening adapters can be added without changing verdict semantics. See `docs/specs/SPACE_ENGINEERING_SPEC.md`.

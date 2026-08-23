@@ -1,8 +1,9 @@
-"""Claude Code hook adapter for automatic FOIL profile bootstrap/relevance.
+"""Claude Code hook adapter for FOIL profile relevance + typed adaptation events.
 
 The prompt hook stores only inferred domain/facet relevance metadata. It does
 not store raw prompt text. Deep-calibration state is injected as compact routing
-context when available.
+context when available. The typed bridge records hashed routing metadata and can
+clear only explicit ADAPTATION obligations; factual warrant remains outside FOIL.
 
 Two properties this adapter owes the session:
 
@@ -14,7 +15,9 @@ Two properties this adapter owes the session:
   once more before it is printed.
 * **Fail-soft.** A malformed, unreadable or partially-written profile file makes
   the hook print nothing and exit 0. A hook that raises would take the user's
-  prompt down with it, and a profile is never worth that.
+  prompt down with it, and a profile is never worth that. The typed bridge is
+  held to the same rule: an unavailable bridge is reported in the task line, it
+  never raises through the hook.
 """
 from __future__ import annotations
 
@@ -33,6 +36,8 @@ from foil_profile import (
     mark_relevance,
     save,
 )
+from foil_runtime_bridge import record_prompt_adaptation
+from gauntlet_config import project_root
 
 #: The profile block never shrinks below this, however large the other blocks
 #: get: a payload with no provenance header is worse than no payload.
@@ -97,10 +102,18 @@ def prompt() -> int:
             save(profile)
     except Exception:  # noqa: BLE001 - relevance marking is best-effort, never fatal
         domains, facets = [], []
+    try:
+        typed_receipts = record_prompt_adaptation(project_root(), profile, domains, facets)
+        typed_status = f"receipts={len(typed_receipts)}"
+    except Exception as exc:  # noqa: BLE001 - availability signal, never a factual judgment
+        # This is an integration availability signal, never a competence/factual
+        # judgment. Preserve ordinary FOIL routing output even if typed logging fails.
+        typed_status = f"UNAVAILABLE:{type(exc).__name__}"
     current_domains = ", ".join(domains) if domains else "unclassified"
     current_facets = ", ".join(facets) if facets else "unclassified"
     task_line = (
-        f"<FOIL_CURRENT_TASK domains={current_domains!r} facets={current_facets!r}>"
+        f"<FOIL_CURRENT_TASK domains={current_domains!r} facets={current_facets!r} "
+        f"typed_runtime={typed_status!r}>"
         "Domain/facet relevance is routing metadata, not competence evidence."
         "</FOIL_CURRENT_TASK>"
     )

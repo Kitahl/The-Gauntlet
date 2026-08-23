@@ -36,3 +36,7 @@ Ask:
 - what is the cheapest discriminating experiment?
 
 A negative result is a valid output and should be recorded rather than optimized away.
+
+## Typed runtime contract
+
+`tools/time_runtime.py` provides reusable paired-binary analysis with the discordance table, exact conditional McNemar p-value, Wilson intervals, Holm correction and first-class exclusion metadata. Fixed-n inference is not represented as anytime-valid; adaptive monitoring requires a separately validated sequential method. See `docs/specs/TIME_ENGINEERING_SPEC.md`.

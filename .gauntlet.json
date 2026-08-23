@@ -5,19 +5,38 @@
     "RESEARCH.md",
     "REPRODUCIBILITY.md",
     "ROADMAP.md",
+    "docs/ARCHITECTURE.md",
+    "docs/VNEXT_RUNTIME_PIPELINE.md",
+    "docs/specs/COMMON_RUNTIME_CONTRACT.md",
     "skills/soul/SKILL.md",
+    "skills/mathbot/SKILL.md",
+    "skills/scoutbot/SKILL.md",
+    "skills/novelbot/SKILL.md",
+    "skills/codebot/SKILL.md",
+    "skills/benchbot/SKILL.md",
     "skills/infinity-gauntlet/SKILL.md",
+    "skills/meditate/SKILL.md",
+    "skills/council-of-elders/SKILL.md",
     "skills/foil/SKILL.md"
   ],
+  "runtime": {
+    "enabled": true,
+    "schema": "egrt.runtime.v1",
+    "persist_raw_prompts": false,
+    "persist_raw_tool_output": false,
+    "release_gate": true,
+    "active_task_required_for_gate": true
+  },
   "boundary": {
     "enabled": true,
     "near_duplicate_threshold": 0.72,
-    "frame_budget": 3,
-    "costume_budget": 2,
-    "judge_model": null
+    "judge_model": null,
+    "incident_refractory_turns": 3
   },
   "ledger": {
     "enabled": false,
-    "path": null
+    "path": null,
+    "accept_runtime_receipts": true,
+    "require_content_hash_when_present": true
   }
 }
