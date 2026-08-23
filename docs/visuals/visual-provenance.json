@@ -1,7 +1,7 @@
 {
   "schema": "egrt/visual-provenance-1",
   "showcase_revision": 14,
-  "research_software_version": "0.4.0",
+  "research_software_version": "0.5.0",
   "visuals": [
     {
       "id": "gauntlet-system-map",

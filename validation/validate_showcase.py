@@ -180,13 +180,13 @@ checks["visual_dimensions_declared"] = all(
 checks["showcase_revision_separate_from_software_version"] = (
     "SHOWCASE R14" in html
     and "Research software" in html
-    and "0.4.0" in html
+    and "0.5.0" in html
     and "Showcase revision" in html
 )
 visual_version_text = VISUAL_VERSION.read_text(encoding="utf-8") if VISUAL_VERSION.exists() else ""
 checks["showcase_revision_file_consistent"] = (
     "showcase-revision=14" in visual_version_text
-    and "research-software-version=0.4.0" in visual_version_text
+    and "research-software-version=0.5.0" in visual_version_text
 )
 checks["editorial_representation_contract"] = all(
     token in html
@@ -316,10 +316,10 @@ checks["release_identity_consistent"] = all(
     token in citation_text
     for token in (
         'title: "Evidence-Governed Research Toolkit"',
-        "version: 0.4.0",
+        "version: 0.5.0",
         "license: MIT",
     )
-) and all(token in html for token in ("v0.4.0", "MIT"))
+) and all(token in html for token in ("v0.5.0", "MIT"))
 
 checks["activation_surface"] = all(
     command in html
