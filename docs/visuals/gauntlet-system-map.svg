@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">The Gauntlet and five specialist Gems</title>
+  <desc id="desc">A dark editorial system plate with an original abstract gauntlet carrying five colored nodes for Mind, Space, Reality, Power and Time. The nodes route to typed receipts and a scoped release gate, with control, adaptation and review modules shown below.</desc>
+  <rect width="1200" height="720" fill="#090b10"/>
+  <style>
+    .sans{font-family:Arial,Helvetica,sans-serif}.serif{font-family:Georgia,'Times New Roman',serif}.mono{font-family:Consolas,Menlo,monospace}.text{fill:#f4f1e8}.muted{fill:#aab3c0}.red{fill:#ff7a66}.line{stroke:#2b3442;stroke-width:1.3}.strong{stroke:#566277;stroke-width:1.5}.route{stroke:#657289;stroke-width:1.5;fill:none}.small{font-size:10px;letter-spacing:1.4px}.micro{font-size:9px;letter-spacing:1px}.body{font-size:12px}.name{font-size:24px}.label{font-size:14px;font-weight:700}.gauntlet{fill:#171d27;stroke:#7e899a;stroke-width:2.6;stroke-linejoin:round}.palm{fill:#1b2330;stroke:#7e899a;stroke-width:2.6}.gem{stroke:#f4f1e8;stroke-width:2}.mind{fill:#e0c46c}.space{fill:#8ab4f8}.reality{fill:#e88ed6}.power{fill:#67d6e3}.time{fill:#8fd19e}.receipt{fill:#ff7a66;stroke:#f4f1e8;stroke-width:2}
+  </style>
+
+  <text x="54" y="44" class="mono red small">PLATE 01 / THE GAUNTLET</text>
+  <text x="1146" y="44" text-anchor="end" class="mono muted micro">FUNCTIONAL MNEMONICS / REAL MODULE BOUNDARIES</text>
+  <line x1="54" y1="66" x2="1146" y2="66" class="strong"/>
+
+  <text x="54" y="105" class="mono muted micro">ORIGINAL SYSTEM SCHEMATIC</text>
+  <text x="54" y="150" class="serif text" font-size="42">Five specialist routes.</text>
+  <text x="54" y="188" class="serif muted" font-size="24">One evidence-governed release path.</text>
+
+  <g transform="translate(75 195)">
+    <path d="M112 337 L92 214 L125 83 L168 57 L193 190 L218 36 L253 48 L250 190 L287 52 L321 72 L294 205 L337 100 L367 128 L320 249 L303 344 Z" class="gauntlet"/>
+    <path d="M130 331 L303 331 L328 397 L113 397 Z" class="gauntlet"/>
+    <path d="M147 246 C177 208 257 205 298 244 L289 315 L139 315 Z" class="palm"/>
+    <circle cx="164" cy="220" r="18" class="gem mind"/><circle cx="216" cy="184" r="18" class="gem space"/><circle cx="267" cy="209" r="18" class="gem reality"/><circle cx="196" cy="270" r="18" class="gem power"/><circle cx="259" cy="274" r="18" class="gem time"/>
+    <path d="M164 220 L228 306 M216 184 L228 306 M267 209 L228 306 M196 270 L228 306 M259 274 L228 306" class="route"/>
+    <circle cx="228" cy="306" r="11" class="receipt"/>
+  </g>
+
+  <text x="54" y="640" class="mono muted micro">THE GAUNTLET NAME DOES NOT GRANT AUTHORITY</text>
+  <text x="54" y="666" class="serif text" font-size="20">Evidence, proof, executed observation, and scoped sources do.</text>
+
+  <line x1="475" y1="104" x2="475" y2="603" class="strong"/>
+  <text x="512" y="108" class="mono muted micro">SPECIALIST GEMS / CLAIM-NATIVE OBLIGATIONS</text>
+
+  <g>
+    <line x1="512" y1="127" x2="1146" y2="127" class="line"/>
+    <circle cx="530" cy="163" r="7" class="mind"/><text x="552" y="169" class="serif text name">Mind</text><text x="690" y="167" class="sans muted body">Formal Reasoning</text><text x="1146" y="167" text-anchor="end" class="mono muted micro">PROOF · LOGIC · COUNTEREXAMPLE</text>
+    <line x1="512" y1="191" x2="1146" y2="191" class="line"/>
+
+    <circle cx="530" cy="227" r="7" class="space"/><text x="552" y="233" class="serif text name">Space</text><text x="690" y="231" class="sans muted body">Research Discovery</text><text x="1146" y="231" text-anchor="end" class="mono muted micro">PRIOR ART · SOURCES · REUSE</text>
+    <line x1="512" y1="255" x2="1146" y2="255" class="line"/>
+
+    <circle cx="530" cy="291" r="7" class="reality"/><text x="552" y="297" class="serif text name">Reality</text><text x="690" y="295" class="sans muted body">Method Synthesis</text><text x="1146" y="295" text-anchor="end" class="mono muted micro">NAMED GAP · MECHANISM · FALSIFY</text>
+    <line x1="512" y1="319" x2="1146" y2="319" class="line"/>
+
+    <circle cx="530" cy="355" r="7" class="power"/><text x="552" y="361" class="serif text name">Power</text><text x="690" y="359" class="sans muted body">Engineering Verification</text><text x="1146" y="359" text-anchor="end" class="mono muted micro">EXECUTE · TEST · INTEGRATE</text>
+    <line x1="512" y1="383" x2="1146" y2="383" class="line"/>
+
+    <circle cx="530" cy="419" r="7" class="time"/><text x="552" y="425" class="serif text name">Time</text><text x="690" y="423" class="sans muted body">Evaluation &amp; Benchmarking</text><text x="1146" y="423" text-anchor="end" class="mono muted micro">BASELINE · ABLATION · STOP/GO</text>
+    <line x1="512" y1="447" x2="1146" y2="447" class="line"/>
+  </g>
+
+  <text x="512" y="483" class="mono red micro">TYPED EVIDENCE PATH</text>
+  <text x="512" y="518" class="sans text label">SPEC</text><text x="576" y="518" class="mono muted body">→</text><text x="606" y="518" class="sans text label">STATE</text><text x="680" y="518" class="mono muted body">→</text><text x="710" y="518" class="sans text label">ACTION / TOOL</text><text x="825" y="518" class="mono muted body">→</text><text x="855" y="518" class="sans text label">RECEIPT</text><text x="934" y="518" class="mono muted body">→</text><text x="964" y="518" class="sans text label">VERDICT</text>
+  <text x="512" y="547" class="mono muted micro">CLEARED · ISSUE · UNKNOWN · UNAVAILABLE</text>
+
+  <line x1="512" y1="574" x2="1146" y2="574" class="strong"/>
+  <text x="512" y="604" class="mono muted micro">CONTROL / ADAPTATION / ASSURANCE / REVIEW</text>
+  <text x="512" y="636" class="sans text label">Soul</text><text x="580" y="636" class="sans muted body">route</text>
+  <text x="662" y="636" class="sans text label">FOIL</text><text x="724" y="636" class="sans muted body">adapt</text>
+  <text x="808" y="636" class="sans text label">Gauntlet</text><text x="893" y="636" class="sans muted body">assure</text>
+  <text x="985" y="636" class="sans text label">Meditate</text><text x="1068" y="636" class="sans muted body">preflight</text>
+  <text x="512" y="666" class="sans text label">Council</text><text x="580" y="666" class="sans muted body">selective review</text>
+  <text x="1146" y="666" text-anchor="end" class="mono red micro">AGREEMENT ≠ VERIFICATION</text>
+</svg>

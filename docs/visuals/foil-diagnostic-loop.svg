@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 660" role="img" aria-labelledby="title desc">
+  <title id="title">FOIL diagnosis and transfer cycle</title>
+  <desc id="desc">Editorial diagram showing FOIL moving from observed behavior to competing explanations, the smallest useful complement, claim-matched verification, transfer without assistance or under changed representation, and an evidence update.</desc>
+  <rect width="1200" height="660" fill="#10100f"/>
+  <style>
+    .sans{font-family:Arial,Helvetica,sans-serif}.serif{font-family:Georgia,'Times New Roman',serif}.mono{font-family:Consolas,Menlo,monospace}.paper{fill:#f2f0e9}.muted{fill:#aaa69d}.red{fill:#ff6a54}.line{stroke:#57534d;stroke-width:1}.redline{stroke:#ff6a54;stroke-width:2}.small{font-size:10px;letter-spacing:1.4px}.micro{font-size:9px;letter-spacing:1px}.big{font-size:32px}.body{font-size:12px}.num{font-size:10px}
+  </style>
+
+  <text x="54" y="46" class="mono red small">PLATE 02 / FOIL</text>
+  <text x="1146" y="46" text-anchor="end" class="mono muted micro">DIAGNOSE · COMPLEMENT · VERIFY · TRANSFER</text>
+  <line x1="54" y1="68" x2="1146" y2="68" class="line"/>
+
+  <text x="54" y="118" class="serif paper" font-size="48">A result enters as evidence,</text>
+  <text x="54" y="166" class="serif red" font-size="48" font-style="italic">not as a permanent label.</text>
+
+  <line x1="54" y1="214" x2="1146" y2="214" class="line"/>
+
+  <g>
+    <text x="54" y="252" class="mono red num">01</text>
+    <text x="94" y="255" class="serif paper big">Observed result</text>
+    <text x="94" y="280" class="sans muted body">What actually happened?</text>
+
+    <line x1="322" y1="248" x2="390" y2="248" class="redline"/>
+    <polygon points="390,248 379,242 379,254" fill="#ff6a54"/>
+
+    <text x="418" y="252" class="mono red num">02</text>
+    <text x="458" y="255" class="serif paper big">Competing explanations</text>
+    <text x="458" y="280" class="sans muted body">gap · ambiguity · retrieval · representation · slip</text>
+
+    <line x1="860" y1="248" x2="930" y2="248" class="redline"/>
+    <polygon points="930,248 919,242 919,254" fill="#ff6a54"/>
+
+    <text x="958" y="252" class="mono red num">03</text>
+    <text x="998" y="255" class="serif paper" font-size="28">Smallest useful</text>
+    <text x="998" y="287" class="serif paper" font-size="28">complement</text>
+  </g>
+
+  <line x1="54" y1="326" x2="1146" y2="326" class="line"/>
+
+  <g>
+    <text x="54" y="374" class="mono red num">06</text>
+    <text x="94" y="378" class="serif paper big">Evidence update</text>
+    <text x="94" y="403" class="sans muted body">Revise the working model; keep uncertainty explicit.</text>
+
+    <line x1="392" y1="372" x2="322" y2="372" class="redline"/>
+    <polygon points="322,372 333,366 333,378" fill="#ff6a54"/>
+
+    <text x="418" y="374" class="mono red num">05</text>
+    <text x="458" y="378" class="serif paper big">Transfer</text>
+    <text x="458" y="403" class="sans muted body">Remove assistance or change the representation/context.</text>
+
+    <line x1="930" y1="372" x2="860" y2="372" class="redline"/>
+    <polygon points="860,372 871,366 871,378" fill="#ff6a54"/>
+
+    <text x="958" y="374" class="mono red num">04</text>
+    <text x="998" y="378" class="serif paper big">Verify</text>
+    <text x="998" y="403" class="sans muted body">Claim-matched check.</text>
+  </g>
+
+  <path d="M1098 304 C1136 304 1142 322 1142 348 C1142 390 1100 436 1002 456 C835 490 660 506 494 506 C318 506 166 478 96 432 C58 407 48 374 48 342 C48 322 54 304 88 304" fill="none" class="line"/>
+
+  <text x="54" y="518" class="mono muted micro">DISCRIMINATORS, NOT LABELS</text>
+  <line x1="54" y1="536" x2="1146" y2="536" class="line"/>
+  <text x="54" y="574" class="serif paper" font-size="23">Assisted success ≠ independent competence.</text>
+  <text x="54" y="608" class="serif paper" font-size="23">One failure ≠ enduring weakness.</text>
+  <text x="1146" y="590" text-anchor="end" class="mono red micro">HUMAN AUTHORITY / EVIDENCE-GOVERNED WARRANT</text>
+  <text x="1146" y="610" text-anchor="end" class="mono muted micro">FOIL PUBLIC SPECIFICATION</text>
+</svg>
