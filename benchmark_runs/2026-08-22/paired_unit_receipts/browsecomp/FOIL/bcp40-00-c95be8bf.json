@@ -1,0 +1,24 @@
+{
+  "schema": "foil-browsecomp-paired40-unit-receipt/v1",
+  "prediction": {
+    "id": "bcp40-00-c95be8bf",
+    "condition": "FOIL",
+    "answer": "Madhumalti",
+    "trace": {
+      "isolation_session_id": "bcp40-00-FOIL-15f345a0a811",
+      "sibling_outputs_visible": false,
+      "search_queries": 8,
+      "source_followups": 3,
+      "phase_allocation": {
+        "discovery": 3,
+        "candidate_testing": 2,
+        "verification": 5,
+        "disconfirmation": 1,
+        "final_audit": 0
+      },
+      "viable_candidate_before_verification": true,
+      "confidence": 0.99,
+      "failure_code": null
+    }
+  }
+}
