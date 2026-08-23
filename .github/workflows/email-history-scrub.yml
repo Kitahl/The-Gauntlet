@@ -1,0 +1,81 @@
+name: One-time commit email privacy scrub
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/email-history-scrub.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  scrub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Rewrite reachable branch and tag metadata
+        env:
+          OLD_EMAIL: 666purplezombie666@gmail.com
+          NEW_EMAIL: 222771578+Kitahl@users.noreply.github.com
+        run: |
+          set -euo pipefail
+          git config user.name "Kitahl"
+          git config user.email "$NEW_EMAIL"
+
+          # Capture every branch under an isolated local namespace so the rewrite
+          # can update all reachable branch histories without fetching into the
+          # currently checked-out branch.
+          git fetch origin '+refs/heads/*:refs/heads/rewrite/*' '+refs/tags/*:refs/tags/*' --force
+
+          export FILTER_BRANCH_SQUELCH_WARNING=1
+          export OLD_EMAIL NEW_EMAIL
+          git filter-branch --force --env-filter '
+            if [ "$GIT_AUTHOR_EMAIL" = "$OLD_EMAIL" ]; then
+              export GIT_AUTHOR_EMAIL="$NEW_EMAIL"
+            fi
+            if [ "$GIT_COMMITTER_EMAIL" = "$OLD_EMAIL" ]; then
+              export GIT_COMMITTER_EMAIL="$NEW_EMAIL"
+            fi
+          ' --tag-name-filter cat -- --all
+
+          # Remove filter-branch backup refs so verification sees only the
+          # rewritten reachable graph.
+          git for-each-ref --format='%(refname)' refs/original/ | while read -r ref; do
+            [ -n "$ref" ] && git update-ref -d "$ref"
+          done
+
+          # Make rewritten main the canonical local branch, then remove this
+          # one-time workflow in a final noreply-authored commit. The resulting
+          # tree is the already-tested v0.5.0 release tree.
+          git checkout -B main refs/heads/rewrite/main
+          git rm .github/workflows/email-history-scrub.yml
+          git commit -m 'Remove one-time email history scrub workflow'
+
+          # Verify no reachable branch/tag commit metadata contains the old
+          # address. Also inspect annotated tag objects directly when present.
+          if git log --all --format='%ae%n%ce' | grep -F "$OLD_EMAIL"; then
+            echo 'Old email remains in reachable commit metadata' >&2
+            exit 1
+          fi
+          while read -r ref type; do
+            if [ "$type" = tag ] && git cat-file -p "$ref" | grep -F "$OLD_EMAIL"; then
+              echo "Old email remains in annotated tag $ref" >&2
+              exit 1
+            fi
+          done < <(git for-each-ref refs/tags --format='%(objectname) %(objecttype)')
+
+          # Force-update each real branch from its rewritten namespace. Main
+          # uses the final self-removal commit above.
+          git for-each-ref --format='%(refname)' refs/heads/rewrite/ | while read -r ref; do
+            branch="${ref#refs/heads/rewrite/}"
+            if [ "$branch" = main ]; then
+              sha="$(git rev-parse main)"
+            else
+              sha="$(git rev-parse "$ref")"
+            fi
+            git push origin "$sha:refs/heads/$branch" --force
+          done
+          git push origin --force --tags
