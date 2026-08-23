@@ -1,0 +1,13 @@
+# Keep release/source text byte-stable across operating systems.
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.txt text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.cff text eol=lf
+*.in text eol=lf
+
+# The generated dependency lock has a recorded canonical SHA-256.
+requirements-lock.txt text eol=lf
+requirements-lock.in text eol=lf
