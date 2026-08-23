@@ -1,0 +1,13 @@
+{
+  "schema": "foil-vnext5-unit/v1",
+  "benchmark": "GPQA-Diamond",
+  "item_id": "gpqa-diamond-082",
+  "condition": "BASE",
+  "answer": "A",
+  "confidence": 0.99,
+  "tool_counts": {
+    "search_queries": 0,
+    "source_followups": 0
+  },
+  "execution_status": "complete"
+}
