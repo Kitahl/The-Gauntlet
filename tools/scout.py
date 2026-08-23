@@ -4,10 +4,19 @@ from __future__ import annotations
 import argparse
 import json
 import urllib.parse
+from pathlib import Path
 
 import requests
 
-UA = "Evidence-Governed-Research-Toolkit/0.2 (+https://github.com/Kitahl/The-Gauntlet)"
+
+def toolkit_version() -> str:
+    try:
+        return (Path(__file__).resolve().parents[1] / "VERSION").read_text(encoding="utf-8").strip()
+    except OSError:
+        return "unknown"
+
+
+UA = f"Evidence-Governed-Research-Toolkit/{toolkit_version()} (+https://github.com/Kitahl/The-Gauntlet)"
 
 
 def search_openalex(query: str, limit: int = 8, timeout: float = 20.0) -> list[dict]:
