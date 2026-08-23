@@ -82,6 +82,16 @@ class CachedEvidenceRecord:
             raise ValueError("content_sha256 must contain a 64-character SHA-256")
 
 
+MECHANICAL_BASES = frozenset(
+    {
+        EvidenceBasis.EXECUTION,
+        EvidenceBasis.CALCULATION,
+        EvidenceBasis.SUPPLIED_CONTEXT,
+        EvidenceBasis.OUTPUT_CONTRACT,
+    }
+)
+
+
 AUTHORITY_ACCEPTANCE = {
     EvidenceAuthority.CLAIM_NATIVE: frozenset(
         {
@@ -132,6 +142,13 @@ def qualify_cached_evidence(
         raise ValueError("cached evidence basis does not match the verifier")
     if record.stale:
         raise ValueError("stale cached evidence cannot be admitted")
+    if (
+        record.qualification is QualificationKind.MECHANICAL_CHECK
+        and record.basis not in MECHANICAL_BASES
+    ):
+        raise ValueError(
+            "mechanical qualification cannot certify this evidence basis"
+        )
     if (
         record.verifier is VerifierKind.CURRENT_SOURCE
         and not record.freshness_checked
