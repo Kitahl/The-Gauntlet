@@ -7,7 +7,7 @@
 .visual-card figcaption div{display:grid;gap:5px}.visual-card figcaption b{font:500 18px/1.15 var(--serif)}.visual-card figcaption span{max-width:780px;color:var(--muted);font-size:11px;line-height:1.55}.visual-card figcaption a{min-height:32px;display:inline-flex;align-items:center;font:750 10px/1 var(--sans);text-transform:uppercase;text-underline-offset:3px;color:#e9edf3}
 .plate-dark{background:#0a0d12}.benchmark-visual{margin-top:34px}
 
-/* R15 cinematic enhancement: Tribunal/Card Game formation grammar translated into static, inspectable research graphics. */
+/* R15 cinematic enhancement: user-provided cinematic/card-interface formation grammar translated into static, inspectable research graphics. */
 .hero-schematic{position:relative;overflow:hidden;background:#07090d url("visuals/gauntlet-hero.svg") center top/100% auto no-repeat;border-color:#59677a}
 .hero-schematic svg{display:block;width:100%;height:620px;opacity:0;pointer-events:none}
 .hero-schematic figcaption{position:relative;background:#0b0f15;border-top-color:#394554;color:#9eabb9}
