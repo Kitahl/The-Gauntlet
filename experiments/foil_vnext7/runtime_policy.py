@@ -3,8 +3,9 @@
 vNext7 is an additive repair over the vNext6 composable controller. It keeps the
 frozen vNext epistemic policy and vNext6 operator library, but makes verifier
 targets explicit, preserves the verifier identity during independent-review
-escalation, and permits already-captured claim-native evidence to be re-used
-without repeating an external tool call.
+escalation, targets ReAct discovery at load-bearing information gaps, and
+permits already-captured claim-native evidence to be re-used without repeating
+an external tool call.
 
 Public traces contain controller state only; never private reasoning.
 """
@@ -12,6 +13,7 @@ Public traces contain controller state only; never private reasoning.
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
+from enum import Enum
 
 from experiments.foil_vnext.runtime_policy import (
     CLAIM_VERIFIER,
@@ -30,6 +32,14 @@ from experiments.foil_vnext6.runtime_policy import (
     StrategyOperator,
     StrategyTaskContext,
 )
+
+
+class DiscoveryObjective(str, Enum):
+    """Public objective for non-verifying information acquisition."""
+
+    LOAD_BEARING_INFORMATION_GAIN_PER_COST = (
+        "load_bearing_information_gain_per_cost"
+    )
 
 
 @dataclass(frozen=True)
@@ -108,6 +118,8 @@ class EvidenceTypedDecision:
     task_instance_id: str
     strategy: StrategyDecision
     verification_targets: tuple[VerificationTarget, ...]
+    discovery_target_ids: tuple[str, ...] = ()
+    discovery_objective: DiscoveryObjective | None = None
     reuse_cached_evidence: bool = False
 
     @property
@@ -139,6 +151,10 @@ class EvidenceTypedDecision:
         trace["controller_version"] = self.controller_version
         trace["task_instance_id"] = self.task_instance_id
         trace["verification_target_count"] = len(self.verification_targets)
+        trace["discovery_target_count"] = len(self.discovery_target_ids)
+        trace["discovery_objective"] = (
+            self.discovery_objective.value if self.discovery_objective else None
+        )
         trace["cached_evidence_reused"] = self.reuse_cached_evidence
         return trace
 
@@ -163,6 +179,12 @@ class EvidenceTypedRuntimePolicy:
 
     @staticmethod
     def _targets(decision: StrategyDecision) -> tuple[VerificationTarget, ...]:
+        # Discovery operators may carry the verifier they are gathering material
+        # for, but they cannot discharge the claim. Keep their acquisition
+        # targets separate from true verifier targets.
+        if not decision.may_discharge_load_bearing_uncertainty:
+            return ()
+
         verifier = decision.required_verifier
         if verifier is None:
             return ()
@@ -195,6 +217,28 @@ class EvidenceTypedRuntimePolicy:
                 synthetic=True,
             ),
         )
+
+    @staticmethod
+    def _discovery_targets(decision: StrategyDecision) -> tuple[str, ...]:
+        if decision.operator is not StrategyOperator.REACT:
+            return ()
+
+        labels = [
+            uncertainty.label
+            for uncertainty in decision.base_decision.unresolved_uncertainties
+            if CLAIM_VERIFIER[uncertainty.claim_kind]
+            in {
+                VerifierKind.SOURCE_EVIDENCE,
+                VerifierKind.CURRENT_SOURCE,
+            }
+        ]
+        if labels:
+            return tuple(dict.fromkeys(labels))
+
+        # Some mixed/sequential tool tasks require an observation before a
+        # stable atomic claim exists. Give the acquisition step a public target
+        # without pretending that target is already a verifiable claim.
+        return ("D:external_observation",)
 
     @staticmethod
     def _cache_covers(
@@ -255,6 +299,29 @@ class EvidenceTypedRuntimePolicy:
             budget_after=budget.spend(cost),
             should_stop=False,
             blocked=False,
+        )
+
+    @staticmethod
+    def _decorate(
+        decision: StrategyDecision,
+        *,
+        task_instance_id: str,
+        reuse_cached_evidence: bool,
+    ) -> EvidenceTypedDecision:
+        discovery_targets = EvidenceTypedRuntimePolicy._discovery_targets(decision)
+        objective = (
+            DiscoveryObjective.LOAD_BEARING_INFORMATION_GAIN_PER_COST
+            if discovery_targets
+            else None
+        )
+        return EvidenceTypedDecision(
+            controller_version=EvidenceTypedRuntimePolicy.version,
+            task_instance_id=task_instance_id,
+            strategy=decision,
+            verification_targets=EvidenceTypedRuntimePolicy._targets(decision),
+            discovery_target_ids=discovery_targets,
+            discovery_objective=objective,
+            reuse_cached_evidence=reuse_cached_evidence,
         )
 
     def decide(
@@ -318,20 +385,15 @@ class EvidenceTypedRuntimePolicy:
                 verifier=verifier,
                 budget=budget,
             )
-            targets = self._targets(decision)
-            return EvidenceTypedDecision(
-                controller_version=self.version,
+            return self._decorate(
+                decision,
                 task_instance_id=context.task_instance_id,
-                strategy=decision,
-                verification_targets=targets,
                 reuse_cached_evidence=True,
             )
 
-        return EvidenceTypedDecision(
-            controller_version=self.version,
+        return self._decorate(
+            decision,
             task_instance_id=context.task_instance_id,
-            strategy=decision,
-            verification_targets=targets,
             reuse_cached_evidence=False,
         )
 
