@@ -352,10 +352,15 @@ class ReleaseGateTests(BlackGemTestCase):
         ]
         state = council.create_council(self.root, "artifact", "budget", seats, task_id=task.task_id)
         sub = council.SeatSubmission("h", ("c",), ("e",), ("p",), 0.5, ("f",))
+        nonces = {}
         for seat in seats:
-            council.commit(self.root, state.council_id, seat.seat_id, sub)
+            _, nonces[seat.seat_id] = council.commit(
+                self.root, state.council_id, seat.seat_id, sub
+            )
         for seat in seats:
-            council.reveal(self.root, state.council_id, seat.seat_id, sub)
+            council.reveal(
+                self.root, state.council_id, seat.seat_id, sub, nonces[seat.seat_id]
+            )
         council.record_cross_critique(self.root, state.council_id, council.CrossCritique("s1", "s2", challenged_findings=("f2",)))
         council.record_cross_critique(self.root, state.council_id, council.CrossCritique("s2", "s3", surviving_findings=("f3",)))
         council.record_cross_critique(self.root, state.council_id, council.CrossCritique("s3", "s1", challenged_findings=("f1",)))
