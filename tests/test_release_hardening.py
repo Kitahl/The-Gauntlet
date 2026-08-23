@@ -49,8 +49,11 @@ class ReleaseHardeningTests(unittest.TestCase):
     def test_hash_lock_is_exact_and_enforced(self) -> None:
         lock = ROOT / "requirements-lock.txt"
         self.assertTrue(lock.is_file())
-        self.assertEqual(hashlib.sha256(lock.read_bytes()).hexdigest(), LOCK_SHA256)
-        text = lock.read_text(encoding="utf-8")
+        # Text-mode reads normalize CRLF to LF on Windows. The release identity is
+        # the canonical LF form enforced by .gitattributes, not platform checkout bytes.
+        canonical = lock.read_text(encoding="utf-8").encode("utf-8")
+        self.assertEqual(hashlib.sha256(canonical).hexdigest(), LOCK_SHA256)
+        text = canonical.decode("utf-8")
         for pin in [
             "requests==2.34.2",
             "rapidfuzz==3.14.5",
@@ -59,6 +62,10 @@ class ReleaseHardeningTests(unittest.TestCase):
         ]:
             self.assertIn(pin, text)
         self.assertIn("--hash=sha256:", text)
+
+        attributes = (ROOT / ".gitattributes").read_text(encoding="utf-8")
+        self.assertIn("requirements-lock.txt text eol=lf", attributes)
+        self.assertIn("requirements-lock.in text eol=lf", attributes)
 
         security = (ROOT / ".github" / "workflows" / "security.yml").read_text(
             encoding="utf-8"
