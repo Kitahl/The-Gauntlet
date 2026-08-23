@@ -112,6 +112,104 @@ class TaskGuardTests(unittest.TestCase):
         del deleted["events"][1]
         self.assertFalse(tg.attest(deleted)["valid"])
 
+    def test_attest_records_the_tip_of_the_chain_in_the_state(self):
+        self._spend()
+        state = json.loads(self.state.read_text())
+        self.assertEqual(state["event_count"], len(state["events"]))
+        self.assertEqual(state["head"], state["events"][-1]["digest"])
+        receipt = tg.attest(state)
+        self.assertTrue(receipt["valid"], receipt)
+        self.assertEqual(receipt["head"], state["head"])
+        self.assertEqual(receipt["event_count"], state["event_count"])
+
+    def test_untouched_state_attests_valid(self):
+        """Positive control for every truncation case below."""
+        for _ in range(3):
+            self._spend()
+        self.assertTrue(tg.attest(json.loads(self.state.read_text()))["valid"])
+
+    def test_tail_truncation_is_detected(self):
+        """C1 - the chain alone cannot see events removed from its end.
+
+        Deleting the last N events leaves every remaining digest correct, so v2
+        attested valid while `used` still reported the full spend: a receipt
+        showing three searches with the evidence of two.
+        """
+        for _ in range(3):
+            self._spend()
+        for cut in (1, 3):
+            state = json.loads(self.state.read_text())
+            before = dict(state["used"])
+            del state["events"][-cut:]
+            receipt = tg.attest(state)
+            self.assertFalse(receipt["valid"], f"cut={cut}: {receipt}")
+            self.assertIn("truncation", receipt["reason"], receipt)
+            self.assertEqual(state["used"], before,
+                             "the attack leaves `used` intact; that is what makes it one")
+
+    def test_tail_truncation_with_a_repaired_count_and_head_is_still_detected(self):
+        """The determined version: trim, then fix the two tip fields to match.
+
+        The chain is consistent and the tip agrees with it, so only the
+        `used` replay is left to catch it - which is why the replay exists.
+        """
+        for _ in range(3):
+            self._spend()
+        state = json.loads(self.state.read_text())
+        del state["events"][-3:]
+        state["event_count"] = len(state["events"])
+        state["head"] = state["events"][-1]["digest"]
+        receipt = tg.attest(state)
+        self.assertFalse(receipt["valid"], receipt)
+        self.assertEqual(receipt["reason"], "used does not match replay")
+
+    def test_editing_used_without_touching_the_events_is_detected(self):
+        for _ in range(2):
+            self._spend()
+        state = json.loads(self.state.read_text())
+        state["used"]["q"] = 0
+        receipt = tg.attest(state)
+        self.assertFalse(receipt["valid"], receipt)
+        self.assertEqual(receipt["reason"], "used does not match replay")
+        self.assertEqual(receipt["replayed_used"], {"q": 2})
+
+    def test_removing_the_tip_fields_is_not_a_way_around_the_check(self):
+        self._spend()
+        for field in ("event_count", "head"):
+            state = json.loads(self.state.read_text())
+            del state[field]
+            receipt = tg.attest(state)
+            self.assertFalse(receipt["valid"], field)
+            self.assertIn(field, receipt["reason"])
+
+    def test_replay_ignores_events_that_do_not_move_the_counter(self):
+        """A refusal and a broker journal row both carry `operation`.
+
+        Counting either would make a healthy run fail its own replay.
+        """
+        for _ in range(3):
+            self._spend()
+        with tg.exclusive_state_lock(self.state):
+            state = tg.load(self.state)
+            tg._append_event(state, {"time": tg.now(), "kind": "BLOCKED_BUDGET",
+                                     "operation": "q", "used": 3, "limit": 3})
+            tg._append_event(state, {"time": tg.now(), "kind": "BROKER", "operation": "q",
+                                     "decision": "deny", "tool": "WebSearch"})
+            tg._atomic_save(self.state, state)
+        state = json.loads(self.state.read_text())
+        self.assertEqual(tg.replay_used(state["events"]), {"q": 3})
+        self.assertTrue(tg.attest(state)["valid"])
+
+    def test_a_released_reservation_replays_to_a_refund(self):
+        with self.assertRaises(RuntimeError):
+            with tg.guarded_operation(self.state, task_id="t", prompt="p", condition="C",
+                                      operation="q"):
+                raise RuntimeError("transport failure")
+        state = json.loads(self.state.read_text())
+        self.assertEqual(state["used"]["q"], 0)
+        self.assertEqual(tg.replay_used(state["events"]), {"q": 0})
+        self.assertTrue(tg.attest(state)["valid"])
+
     def test_receipt_fields_required_by_the_prescoring_checklist_exist(self):
         state = json.loads(self.state.read_text())
         for field in ("profile_payload_sha256", "dataset_revision", "as_of", "decoding",

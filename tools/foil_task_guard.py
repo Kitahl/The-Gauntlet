@@ -28,7 +28,11 @@ Fixes over v1
   released by the kernel when the handle closes, including on a crash, so no
   liveness heuristic is needed and the lock file is never unlinked.
 * Events form a SHA-256 hash chain, so a deleted or edited event is detectable
-  by `attest()`.
+  by `attest()`.  The chain alone only covers *interior* edits: removing events
+  from the end leaves a self-consistent chain, so the state also records
+  `event_count` and `head`, and `attest()` re-derives `used` from the events.
+  A tail truncation, or an edit to `used` that the events do not support, is a
+  failed attestation rather than a valid receipt that under-reports the spend.
 * Budget is spent only on success by default, so a transport failure does not
   silently consume a query; pass `spend_on_error=True` to charge attempts.
 """
@@ -96,27 +100,119 @@ def _event_digest(previous: str, event: dict[str, Any]) -> str:
 
 
 def _append_event(state: dict[str, Any], event: dict[str, Any]) -> dict[str, Any]:
+    """Append to the chain and re-anchor the state-level tip.
+
+    `event_count` and `head` are written here, on every append, because a chain
+    that only knows its own links cannot detect that links were removed from its
+    *end*: truncating the tail leaves a perfectly self-consistent chain. The tip
+    has to be recorded outside the list it summarises for that to be checkable.
+    """
     events = state.setdefault("events", [])
     previous = events[-1]["digest"] if events else GENESIS
     event["previous"] = previous
     event["digest"] = _event_digest(previous, event)
     events.append(event)
+    state["event_count"] = len(events)
+    state["head"] = event["digest"]
     return event
 
 
+#: Event kinds that move the reservation counter, and by how much. `SPENT`
+#: (and the `COMMITTED` spelling a closed run uses for its result) keep the hold
+#: placed at reservation time, so they move nothing - see `_commit`.
+_USED_DELTAS: dict[str, int] = {"RESERVED": 1, "RELEASED": -1, "SPENT": 0, "COMMITTED": 0}
+
+
+def replay_used(events: list[dict[str, Any]]) -> dict[str, int]:
+    """Recompute `used` per operation from the event chain alone.
+
+    Mirrors `authorize`/`_commit` exactly, including the `max(0, ...)` floor a
+    release applies, so a healthy run replays to the recorded counters. Any
+    event kind that is not a reservation movement - `OPEN`, `CLOSE`,
+    `BLOCKED_BUDGET`, and the broker's `BROKER` journal rows - is ignored even
+    though several of them carry an `operation` field.
+    """
+    used: dict[str, int] = {}
+    for event in events:
+        delta = _USED_DELTAS.get(str(event.get("kind") or ""))
+        operation = event.get("operation")
+        if not delta or operation is None:
+            continue
+        used[str(operation)] = max(0, int(used.get(str(operation), 0)) + delta)
+    return used
+
+
 def attest(state: dict[str, Any]) -> dict[str, Any]:
-    """Verify the event chain and return a signable summary."""
+    """Verify the event chain and return a signable summary.
+
+    Three independent checks, because the chain alone is not enough:
+
+    1. **Link integrity** - an edited or removed *interior* event breaks a digest.
+    2. **Tip integrity** - `event_count` and `head` are compared against the
+       events actually present. Deleting the last N events leaves an intact
+       chain, so without this a tail truncation attested as valid while `used`
+       still reported the spend.
+    3. **Accounting integrity** - `used` is recomputed from the events and must
+       match what the state records. This is what catches the two halves being
+       edited apart: trimming events without touching `used`, or editing `used`
+       without touching events.
+    """
+    events = list(state.get("events", []))
     previous = GENESIS
-    for index, event in enumerate(state.get("events", [])):
+    for index, event in enumerate(events):
         if event.get("previous") != previous:
             return {"valid": False, "broken_at": index, "reason": "previous digest mismatch"}
         expected = _event_digest(previous, event)
         if event.get("digest") != expected:
             return {"valid": False, "broken_at": index, "reason": "event digest mismatch"}
         previous = expected
+
+    recorded_count = state.get("event_count")
+    if recorded_count is None:
+        return {
+            "valid": False,
+            "reason": "state records no event_count, so a tail truncation would be undetectable",
+        }
+    if int(recorded_count) != len(events):
+        return {
+            "valid": False,
+            "broken_at": len(events),
+            "reason": (
+                f"event count mismatch (truncation): state records {int(recorded_count)} "
+                f"events, {len(events)} are present"
+            ),
+        }
+    recorded_head = state.get("head")
+    if recorded_head is None:
+        return {
+            "valid": False,
+            "reason": "state records no head digest, so a tail truncation would be undetectable",
+        }
+    if str(recorded_head) != previous:
+        return {
+            "valid": False,
+            "broken_at": len(events),
+            "reason": (
+                "head digest mismatch (truncation or replacement): the recomputed chain head "
+                "is not the head the state records"
+            ),
+        }
+
+    replayed = replay_used(events)
+    recorded_used = {str(k): int(v) for k, v in dict(state.get("used", {})).items()}
+    for key in set(replayed) | set(recorded_used):
+        if recorded_used.get(key, 0) != replayed.get(key, 0):
+            return {
+                "valid": False,
+                "reason": "used does not match replay",
+                "recorded_used": recorded_used,
+                "replayed_used": replayed,
+            }
+
     return {
         "valid": True,
-        "events": len(state.get("events", [])),
+        "events": len(events),
+        "event_count": len(events),
         "head": previous,
         "task_id": state.get("task_id"),
         "condition": state.get("condition"),

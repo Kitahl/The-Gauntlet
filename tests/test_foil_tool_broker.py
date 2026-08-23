@@ -19,6 +19,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 
 import foil_capabilities as caps  # noqa: E402
 import foil_task_guard as tg  # noqa: E402
+import foil_tool_broker as broker  # noqa: E402
 
 BROKER = ROOT / "tools" / "foil_tool_broker.py"
 PROMPT = "the frozen prompt"
@@ -265,15 +266,86 @@ class FailClosedTests(BrokerTestCase):
         reason = self.assertDenied(self.run_hook("WebSearch", self.active_env()))
         self.assertIn("not budgeted", reason)
 
-    def test_malformed_stdin_does_not_crash_the_hook(self):
-        result = subprocess.run(
+
+class MalformedPayloadTests(BrokerTestCase):
+    """B2 - an unreadable payload inside a frozen run fails closed.
+
+    The hook cannot tell which tool an unparseable payload was about, so it
+    cannot tell whether the call is budgeted. Treating that as "nothing to
+    broker" made corrupting stdin a way to run a budgeted tool for free: the
+    call proceeds, no unit is charged, and the receipt reports a spend that
+    never happened. Outside a run there is nothing to protect, so the hook
+    stays inert - that difference is the whole design.
+    """
+
+    MALFORMED = ("{not json", "", "[]", '"str"', "   ", "null", "123")
+
+    def run_raw(self, stdin: str, env: dict[str, str]):
+        return subprocess.run(
             [sys.executable, str(BROKER)],
-            input="not json",
-            capture_output=True, text=True, env=self.active_env(), timeout=120, check=False,
+            input=stdin,
+            capture_output=True, text=True, env=env, timeout=120, check=False,
         )
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(result.stdout.strip(), "",
-                         "an unrecognisable payload names no tool, so there is nothing to broker")
+
+    def test_malformed_stdin_denies_while_a_run_is_active(self):
+        for stdin in self.MALFORMED:
+            reason = self.assertDenied(self.run_raw(stdin, self.active_env()))
+            self.assertEqual(reason, "hook payload unreadable; failing closed", repr(stdin))
+
+    def test_malformed_stdin_stays_inert_with_no_run(self):
+        """Same inputs, one variable different: FOIL_TASK_RUN is unset."""
+        for stdin in self.MALFORMED:
+            result = self.run_raw(stdin, base_env())
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(result.stdout.strip(), "", repr(stdin))
+
+    def test_a_blank_run_variable_is_also_inert(self):
+        env = self.active_env(FOIL_TASK_RUN="   ")
+        self.assertEqual(self.run_raw("{not json", env).stdout.strip(), "")
+
+    def test_a_well_formed_payload_is_the_positive_control(self):
+        """Without this, the deny above could just be "the hook always denies"."""
+        self.assertAllowed(self.run_hook("Read", self.active_env()))
+
+    def test_a_denial_on_malformed_input_charges_nothing(self):
+        self.assertDenied(self.run_raw("{not json", self.active_env()))
+        self.assertEqual(self.used(), {"search": 0, "followup": 0})
+
+
+class ToolNameNormalisationTests(BrokerTestCase):
+    """B4 - the exact-name table matched case-sensitively, the patterns did not.
+
+    `mcp__x__SEARCH` was budgeted but `websearch` was not, so a change of case
+    on a built-in name walked around the budget entirely.
+    """
+
+    def test_case_and_whitespace_variants_classify_as_the_canonical_name(self):
+        for variant in ("websearch", "WEBSEARCH", " WebSearch ", "\tWebSearch\n"):
+            self.assertEqual(broker.classify_tool(variant), "search", repr(variant))
+        for variant in ("bash", "BASH", "Bash "):
+            self.assertEqual(broker.classify_tool(variant), "write", repr(variant))
+        for variant in ("webfetch", " WEBFETCH"):
+            self.assertEqual(broker.classify_tool(variant), "followup", repr(variant))
+
+    def test_every_canonical_name_survives_the_variants(self):
+        for name, operation in broker.TOOL_OPERATIONS.items():
+            for variant in (name, name.lower(), name.upper(), f"  {name}  "):
+                self.assertEqual(broker.classify_tool(variant), operation, variant)
+
+    def test_normalisation_does_not_invent_budgeted_tools(self):
+        """Negative control: unrelated names still classify as unbudgeted."""
+        for name in ("", "   ", "Read", "read", " Grep ", "WebSearchExtra", "notbash"):
+            self.assertIsNone(broker.classify_tool(name), repr(name))
+
+    def test_a_lowercased_search_is_charged_end_to_end(self):
+        """The unit test above is in-process; this is the host's contract."""
+        self.assertAllowed(self.run_hook("websearch", self.active_env()))
+        self.assertEqual(self.used()["search"], 1)
+        self.assertDenied(self.run_hook(" WebSearch ", self.active_env()))
+
+    def test_a_lowercased_write_tool_is_still_refused(self):
+        reason = self.assertDenied(self.run_hook("bash", self.active_env(), command="ls"))
+        self.assertIn("capability_writes", reason)
 
 
 class UnbudgetedToolTests(BrokerTestCase):

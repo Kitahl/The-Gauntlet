@@ -528,6 +528,51 @@ class ScoreGateTests(unittest.TestCase):
                 runner.cmd_score("gpqa")
 
 
+class ScoreRefusalPresentationTests(unittest.TestCase):
+    """E1 - the CLI reports a refusal, it does not crash with one.
+
+    `NotCommitted` reaching the top level printed a traceback, which reads as a
+    broken harness rather than a gate holding, and invites a rerun with the
+    guard taken out. The exit code still has to be non-zero: a refusal that
+    exits 0 is worse than a traceback.
+    """
+
+    def _run_score(self, exc: Exception) -> tuple[int, str, str]:
+        out, err = io.StringIO(), io.StringIO()
+        with mock.patch.object(runner, "cmd_score", side_effect=exc):
+            with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+                code = runner.main(["score", "--benchmark", "gpqa"])
+        return code, out.getvalue(), err.getvalue()
+
+    def test_not_committed_prints_one_line_and_exits_one(self) -> None:
+        code, _, err = self._run_score(
+            runner.NotCommitted("predictions.json has uncommitted changes")
+        )
+        self.assertEqual(code, 1)
+        self.assertEqual(len(err.strip().splitlines()), 1, err)
+        self.assertIn("REFUSED", err)
+        self.assertIn("uncommitted changes", err)
+        self.assertNotIn("Traceback", err)
+
+    def test_a_multiline_reason_is_collapsed_to_one_line(self) -> None:
+        code, _, err = self._run_score(
+            runner.NotCommitted("line one\n line two\n\tline three")
+        )
+        self.assertEqual(code, 1)
+        self.assertEqual(err.strip(), "REFUSED: line one line two line three")
+
+    def test_other_errors_are_not_swallowed(self) -> None:
+        """Negative control: only the gate's own refusal is formatted."""
+        with self.assertRaises(runner.PrepareError):
+            self._run_score(runner.PrepareError("selection failed"))
+
+    def test_a_successful_score_still_returns_its_own_code(self) -> None:
+        """Positive control: the wrapper is not what produces the exit code."""
+        with mock.patch.object(runner, "cmd_score", return_value=0) as scored:
+            self.assertEqual(runner.main(["score", "--benchmark", "gpqa"]), 0)
+        scored.assert_called_once_with("gpqa")
+
+
 class CheckOnlyTests(unittest.TestCase):
     def test_check_only_passes_offline_against_the_committed_protocol(self) -> None:
         with mock.patch.object(runner, "_select_gpqa",

@@ -1045,7 +1045,15 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_check_only(args.benchmark) if args.check_only else cmd_prepare(args.benchmark)
     if args.command == "run":
         return cmd_run(args.benchmark, args.config or sorted(CONFIGS), args.limit, args.dry_run)
-    return cmd_score(args.benchmark)
+    try:
+        return cmd_score(args.benchmark)
+    except NotCommitted as exc:
+        # A refusal to open gold is the gate working, not a crash. A traceback
+        # reads as a broken harness and invites a retry with the guard removed;
+        # one line naming the unmet condition, and a non-zero exit, says what
+        # has to happen instead.
+        print(f"REFUSED: {' '.join(str(exc).split())}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":

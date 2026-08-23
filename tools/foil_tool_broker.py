@@ -93,15 +93,33 @@ TOOL_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
 
 WRITE_OPERATION = "write"
 
+#: Case-folded index over `TOOL_OPERATIONS`. The exact-name table and the
+#: `TOOL_PATTERNS` regexes disagreed on strictness: the patterns are IGNORECASE,
+#: so `mcp__x__SEARCH` was budgeted while `websearch` fell through the exact
+#: lookup and was treated as an unbudgeted tool. A budget that a change of case
+#: walks around is not a budget.
+_TOOL_OPERATIONS_FOLDED: dict[str, str] = {
+    name.casefold(): operation for name, operation in TOOL_OPERATIONS.items()
+}
+
 
 def classify_tool(tool_name: str) -> str | None:
-    """Budgeted operation for a tool name, or None to leave the call alone."""
+    """Budgeted operation for a tool name, or None to leave the call alone.
+
+    Surrounding whitespace is stripped and the exact-name lookup is
+    case-insensitive, so the two classification paths admit exactly the same set
+    of spellings.
+    """
     if not tool_name:
         return None
-    if tool_name in TOOL_OPERATIONS:
-        return TOOL_OPERATIONS[tool_name]
+    name = str(tool_name).strip()
+    if not name:
+        return None
+    operation = _TOOL_OPERATIONS_FOLDED.get(name.casefold())
+    if operation is not None:
+        return operation
     for pattern, operation in TOOL_PATTERNS:
-        if pattern.fullmatch(tool_name):
+        if pattern.fullmatch(name):
             return operation
     return None
 
@@ -256,18 +274,43 @@ def handle(payload: dict[str, Any]) -> int:
     return 0
 
 
-def main(argv: list[str] | None = None) -> int:
-    del argv
+UNREADABLE_PAYLOAD_REASON = "hook payload unreadable; failing closed"
+
+
+def _read_payload() -> dict[str, Any] | None:
+    """The hook payload, or None if stdin did not carry a usable one.
+
+    Empty input, invalid JSON, and valid JSON that is not an object are all the
+    same condition: the hook cannot tell which tool it was asked about. They are
+    reported as one so the caller does not have to re-derive the distinction.
+    """
     try:
         raw = sys.stdin.read()
     except OSError:
-        return 0
+        return None
+    if not raw.strip():
+        return None
     try:
-        payload = json.loads(raw) if raw.strip() else {}
+        payload = json.loads(raw)
     except json.JSONDecodeError:
-        payload = {}
-    if not isinstance(payload, dict):
-        payload = {}
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def main(argv: list[str] | None = None) -> int:
+    del argv
+    payload = _read_payload()
+    if payload is None:
+        # An unreadable payload names no tool, so the hook cannot know whether
+        # the call it is being asked about is budgeted. Outside a frozen run
+        # that is harmless and the hook stays inert. Inside one it is the
+        # dangerous case: treating it as "nothing to broker" is exactly how an
+        # unbudgeted-looking WebSearch would be admitted free, and a caller that
+        # can corrupt the payload can then spend the budget without recording
+        # it. A run was asserted, so the missing information fails closed.
+        if (os.environ.get("FOIL_TASK_RUN") or "").strip():
+            return deny(UNREADABLE_PAYLOAD_REASON)
+        return 0
     try:
         return handle(payload)
     except Exception as exc:  # noqa: BLE001 - a hook crash must not silently allow
