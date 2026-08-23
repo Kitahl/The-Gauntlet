@@ -259,12 +259,9 @@ class GapVocabularyDriftTests(unittest.TestCase):
         self.assertTrue(iv.add_gap(ledger, task_id="t", capability="c",
                                    kind="MISSING_PROCEDURE", confidence=0.5))
 
-    # MEASURED 2026-08-23: skills/foil/SKILL.md has no gap/bottleneck vocabulary
-    # section at all - `grep -in "gap\|bottleneck"` returns only prose mentions
-    # (lines 25, 99, 192, 196, 221, 227, 229, 248) and none of them enumerates
-    # GAP_KINDS. The SKILL.md lane lands the generated block next; remove this
-    # decorator in the same change that pastes it.
-    @unittest.expectedFailure
+    # MEASURED 2026-08-23: skills/foil/SKILL.md section 5 now carries the
+    # generated GAP_KINDS block verbatim, so this is a live drift gate rather
+    # than an expected failure.
     def test_skill_file_embeds_the_generated_gap_kinds_block(self):
         text = self.SKILL.read_text(encoding="utf-8")
         self.assertIn(iv.gap_kinds_contract_block(), text,

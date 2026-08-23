@@ -198,11 +198,11 @@ class RecencyTests(unittest.TestCase):
 class DecayFloorTests(unittest.TestCase):
     """Evidence at the decay floor cannot decide, in either direction.
 
-    Boundary, stated rather than hidden: `min_weight` is a floor, not a cutoff,
-    so `min_weight * N` still crosses `min_effective_n` once N >= 80 at the
-    defaults. These tests therefore cap N at 20, which is the regime the claim
-    "fully decayed evidence cannot decide" actually holds in. The estimator
-    docstring names the same boundary.
+    `min_weight` is a floor, not a cutoff, so on decay weight alone
+    `min_weight * N` crossed `min_effective_n` once N >= 80 at the defaults.
+    These tests cap N at 20 and therefore only ever exercised the regime below
+    that boundary. The freshness gate is what makes the claim hold at every N;
+    `FreshnessGateTests` pins the N = 80 case these tests never reached.
     """
 
     HALF_LIVES = 10
@@ -232,6 +232,118 @@ class DecayFloorTests(unittest.TestCase):
                          ev.Classification.INSUFFICIENT_EVIDENCE)
 
 
+class FreshnessGateTests(unittest.TestCase):
+    """D4 - a verdict requires one load-bearing observation inside the horizon.
+
+    Decay weight alone did not deliver "stale evidence cannot decide": the
+    decay floor let a large enough pile of ancient observations sum past
+    `min_effective_n`. Each test below names what it separates, and the
+    disabled-gate control shows the gate is what changes the verdict rather
+    than some other property of these inputs.
+    """
+
+    ANCIENT_DAYS = 3600
+    N = 80
+
+    def setUp(self):
+        self.now = datetime.now(timezone.utc)
+        self.policy = ev.EvidencePolicy()
+
+    def _aged(self, correct: bool, days: float, count: int):
+        stamp = self.now - timedelta(days=days)
+        return [ev.Observation(correct, time=stamp) for _ in range(count)]
+
+    def test_eighty_ancient_misses_are_insufficient_not_a_gap(self):
+        """Regression: this exact input classified as POSSIBLE_GAP before the gate."""
+        rows = self._aged(False, self.ANCIENT_DAYS, self.N)
+        summary = ev.summarize(rows, self.policy, now=self.now)
+        self.assertEqual(summary.classification, ev.Classification.INSUFFICIENT_EVIDENCE)
+        self.assertTrue(summary.stale_only)
+        self.assertTrue(summary.reason.startswith("stale_only"))
+        self.assertAlmostEqual(summary.freshest_age_days, self.ANCIENT_DAYS, places=3)
+        # The refusal is caused by the gate, not by a shortage of weight: the
+        # sufficiency floor was cleared on decayed weight alone. Compared at the
+        # module's own tolerance, because 80 rows pinned at the decay floor sum
+        # to 3.999999999999994, not exactly 4.0.
+        self.assertGreaterEqual(
+            summary.load_bearing_n,
+            self.policy.min_effective_n - ev.SUFFICIENCY_TOLERANCE,
+        )
+
+    def test_disabling_the_gate_restores_the_pre_gate_verdict(self):
+        """Negative control: the gate, not the input, is what withholds the verdict."""
+        rows = self._aged(False, self.ANCIENT_DAYS, self.N)
+        open_policy = ev.EvidencePolicy(freshness_horizon_days=None)
+        summary = ev.summarize(rows, open_policy, now=self.now)
+        self.assertEqual(summary.classification, ev.Classification.POSSIBLE_GAP)
+        self.assertFalse(summary.stale_only)
+
+    def test_one_fresh_miss_reopens_the_verdict(self):
+        """Positive control: the same ancient pile decides once anything is fresh."""
+        rows = self._aged(False, self.ANCIENT_DAYS, self.N) + self._aged(False, 0.0, 1)
+        summary = ev.summarize(rows, self.policy, now=self.now)
+        self.assertEqual(summary.classification, ev.Classification.POSSIBLE_GAP)
+        self.assertFalse(summary.stale_only)
+        self.assertAlmostEqual(summary.freshest_age_days, 0.0, places=6)
+
+    def test_ancient_weight_still_counts_once_one_observation_is_fresh(self):
+        """Old evidence is downweighted, not discarded, when the gate is open."""
+        fresh = self._aged(True, 0.0, 1)
+        ancient = self._aged(True, 3650, 79)
+        summary = ev.summarize(fresh + ancient, self.policy, now=self.now)
+        self.assertEqual(summary.classification, ev.Classification.PROMISING_STRENGTH)
+        self.assertFalse(summary.stale_only)
+        # 1.0 fresh + 79 rows pinned at the decay floor.
+        expected = 1.0 + self.policy.min_weight * 79
+        self.assertAlmostEqual(summary.effective_correct, expected, places=6)
+        self.assertGreater(summary.load_bearing_n, self.policy.min_effective_n)
+        # Discriminator: the fresh observation alone cannot reach a verdict, so
+        # the decayed history is doing the work rather than riding along.
+        alone = ev.summarize(fresh, self.policy, now=self.now)
+        self.assertEqual(alone.classification, ev.Classification.INSUFFICIENT_EVIDENCE)
+        self.assertFalse(alone.stale_only)
+
+    def test_horizon_boundary_is_inclusive_of_fresh_side(self):
+        """Only the age differs across this pair; both clear the weight floor."""
+        horizon = self.policy.freshness_horizon_days
+        inside = ev.summarize(self._aged(True, horizon - 1, self.N), self.policy, now=self.now)
+        outside = ev.summarize(self._aged(True, horizon + 1, self.N), self.policy, now=self.now)
+
+        self.assertFalse(inside.stale_only)
+        self.assertEqual(inside.classification, ev.Classification.PROMISING_STRENGTH)
+
+        self.assertTrue(outside.stale_only)
+        self.assertEqual(outside.classification, ev.Classification.INSUFFICIENT_EVIDENCE)
+        # Weight is essentially identical one day either side of the horizon, so
+        # the flipped verdict is the gate and nothing else. One day of decay at a
+        # 180-day half-life is ~0.4% of the weight, compared relatively rather
+        # than by absolute places since both sides carry ~20 units.
+        self.assertGreaterEqual(outside.load_bearing_n, self.policy.min_effective_n)
+        drift = abs(inside.load_bearing_n - outside.load_bearing_n) / inside.load_bearing_n
+        self.assertLess(drift, 0.01, f"weight differs by {drift:.4%}, not just the gate")
+
+    def test_no_load_bearing_evidence_is_absence_not_staleness(self):
+        screen = obs(20, 0, ev.EvidenceTier.SCREEN)
+        summary = ev.summarize(screen, self.policy, now=self.now)
+        self.assertEqual(summary.classification, ev.Classification.INSUFFICIENT_EVIDENCE)
+        self.assertFalse(summary.stale_only)
+        self.assertIsNone(summary.freshest_age_days)
+
+    def test_untimed_observations_count_as_fresh(self):
+        """Legacy rows predate timestamping; treating them as stale would void them."""
+        summary = ev.summarize(obs(4, 0), self.policy, now=self.now)
+        self.assertFalse(summary.stale_only)
+        self.assertEqual(summary.freshest_age_days, 0.0)
+        self.assertEqual(summary.classification, ev.Classification.PROMISING_STRENGTH)
+
+    def test_summary_dict_exposes_the_gate_fields(self):
+        payload = ev.summarize(self._aged(False, self.ANCIENT_DAYS, self.N),
+                               self.policy, now=self.now).as_dict()
+        self.assertTrue(payload["stale_only"])
+        self.assertAlmostEqual(payload["freshest_age_days"], self.ANCIENT_DAYS, places=3)
+        self.assertEqual(payload["classification"], "INSUFFICIENT_EVIDENCE")
+
+
 class PolicyValidationTests(unittest.TestCase):
     def test_incoherent_policies_are_rejected(self):
         for kwargs in (
@@ -240,6 +352,8 @@ class PolicyValidationTests(unittest.TestCase):
             {"prior_a": 0.0},
             {"half_life_days": -1.0},
             {"min_weight": 1.5},
+            {"freshness_horizon_days": 0.0},
+            {"freshness_horizon_days": -1.0},
         ):
             with self.assertRaises(ValueError, msg=kwargs):
                 ev.EvidencePolicy(**kwargs)

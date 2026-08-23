@@ -36,9 +36,23 @@ units.
 
 Recency
 -------
-Observations decay by an exponential half-life at *routing* time.  History is
-never erased; its authority decreases.  Decay produces fractional effective
-counts, which the Beta posterior accepts natively.
+Recency is enforced by two separate mechanisms, because a weight alone was not
+enough.
+
+1. *Decay.*  Observations decay by an exponential half-life at *routing* time.
+   History is never erased; its authority decreases.  Decay produces fractional
+   effective counts, which the Beta posterior accepts natively.
+2. *Freshness gate.*  A verdict additionally requires at least one admissible
+   REAL_WORK observation newer than `freshness_horizon_days`.  Decay alone could
+   not deliver "stale evidence cannot decide", because `min_weight` is a floor
+   rather than a cutoff: at the defaults, 80 fully decayed REAL_WORK
+   observations still summed past `min_effective_n` and produced a verdict from
+   evidence that was years old.  The gate closes that path outright, at every N.
+
+The gate governs only whether a verdict may be *offered*.  Once one fresh
+load-bearing observation exists, older evidence still contributes its decayed
+weight, so supersession still works: recent verified failures outweigh older
+passes rather than erasing them.
 
 No third-party dependencies: the regularized incomplete beta function is
 implemented here with the standard continued-fraction expansion.
@@ -134,17 +148,23 @@ class EvidencePolicy:
     capability bands the classification is *about*; a claim is only made when the
     posterior puts `confidence` mass beyond the band edge.
 
-    Decay-floor boundary, stated explicitly
-    ---------------------------------------
+    Why the decay floor needs a separate gate
+    -----------------------------------------
     `min_weight` is a floor, not a cutoff: arbitrarily old evidence keeps
-    `min_weight` of its authority forever.  That means a large enough pile of
-    fully decayed REAL_WORK observations can still cross `min_effective_n`,
+    `min_weight` of its authority forever.  On weight alone, a large enough pile
+    of fully decayed REAL_WORK observations still crossed `min_effective_n`,
     because `min_weight * N >= min_effective_n` once `N >= min_effective_n /
-    min_weight` (with the defaults, N >= 80).  This is deliberate - history is
-    downweighted, never erased - but it is a real boundary, so a claim that
-    "old evidence cannot decide" holds only for N < 80 at the defaults.
-    `tests/test_foil_evidence.py::DecayFloorTests` pins the small-N behaviour
-    and names the boundary.
+    min_weight` (with the defaults, N >= 80).  Measured before the gate existed:
+    80 verified misses aged 3600 days classified as POSSIBLE_GAP.  Downweighting
+    history is deliberate; letting a decade-old pile decide is not.
+
+    `freshness_horizon_days` closes that at every N.  A verdict requires one
+    admissible REAL_WORK observation newer than the horizon; otherwise the
+    result is INSUFFICIENT_EVIDENCE with `stale_only = True`.  Old evidence
+    still contributes its decayed weight whenever a fresh one exists, so
+    supersession is unaffected.
+    `tests/test_foil_evidence.py::FreshnessGateTests` pins the behaviour,
+    including the N = 80 regression and the horizon boundary.
     """
 
     theta_lo: float = 0.45
@@ -159,6 +179,13 @@ class EvidencePolicy:
     #: (None) and should not read the default as a measured constant.
     half_life_days: float | None = 180.0
     min_weight: float = 0.05          # decay floor: old evidence loses authority, never vanishes
+    #: Freshness gate; a verdict requires one admissible REAL_WORK observation
+    #: newer than this. Like the half-life it is an engineering choice and the
+    #: horizon is UNRESOLVED: 360.0 is two default half-lives, not a measured
+    #: staleness threshold. `None` disables the gate, which restores the
+    #: pre-gate behaviour where a large enough pile of fully decayed evidence
+    #: can decide.
+    freshness_horizon_days: float | None = 360.0
     tier_weights: dict[str, float] = field(
         default_factory=lambda: {
             EvidenceTier.REAL_WORK.value: 1.0,
@@ -179,6 +206,8 @@ class EvidencePolicy:
             raise ValueError("half_life_days must be positive or None")
         if not 0.0 <= self.min_weight <= 1.0:
             raise ValueError("min_weight must be in [0, 1]")
+        if self.freshness_horizon_days is not None and self.freshness_horizon_days <= 0:
+            raise ValueError("freshness_horizon_days must be positive or None")
 
     def weight_for(self, tier: EvidenceTier) -> float:
         return float(self.tier_weights.get(tier.value, 0.0))
@@ -195,6 +224,30 @@ class PosteriorSummary:
     p_above_hi: float
     p_below_lo: float
     reason: str
+    #: Age of the newest admissible REAL_WORK observation, or None when there is
+    #: no such observation. An untimed observation cannot be shown to be stale
+    #: and counts as fresh (age 0.0), matching `_recency_weight`.
+    freshest_age_days: float | None = None
+    #: True when load-bearing evidence exists but none of it is inside
+    #: `freshness_horizon_days`. This is why the verdict was withheld; it is
+    #: distinct from having no load-bearing evidence at all.
+    stale_only: bool = False
+
+    def as_dict(self) -> dict[str, Any]:
+        """Summary as a plain dict, for receipts and hook payloads."""
+        return {
+            "classification": self.classification.value,
+            "effective_correct": self.effective_correct,
+            "effective_incorrect": self.effective_incorrect,
+            "effective_n": self.effective_n,
+            "load_bearing_n": self.load_bearing_n,
+            "posterior_mean": self.posterior_mean,
+            "p_above_hi": self.p_above_hi,
+            "p_below_lo": self.p_below_lo,
+            "reason": self.reason,
+            "freshest_age_days": self.freshest_age_days,
+            "stale_only": self.stale_only,
+        }
 
 
 # --------------------------------------------------------------------------- #
@@ -296,6 +349,35 @@ def _effective_counts(
     return correct, incorrect, load_bearing
 
 
+def _freshest_load_bearing_age_days(
+    observations: Sequence[Observation],
+    policy: EvidencePolicy,
+    now: datetime,
+) -> float | None:
+    """Age in days of the newest admissible REAL_WORK observation.
+
+    Returns `None` when there is no admissible REAL_WORK observation at all,
+    which is *absence* of load-bearing evidence rather than staleness of it; the
+    caller must not conflate the two.
+
+    An observation with no timestamp counts as fresh (age 0.0). It cannot be
+    shown to be stale, and `_recency_weight` already declines to decay it, so
+    treating it as stale here would silently invalidate every legacy record that
+    predates timestamping.
+    """
+    ages: list[float] = []
+    for obs in observations:
+        if obs.tier is not EvidenceTier.REAL_WORK:
+            continue
+        if policy.weight_for(obs.tier) <= 0.0:
+            continue
+        if obs.time is None:
+            ages.append(0.0)
+        else:
+            ages.append(max(0.0, (now - obs.time).total_seconds() / 86400.0))
+    return min(ages) if ages else None
+
+
 # --------------------------------------------------------------------------- #
 # classification                                                               #
 # --------------------------------------------------------------------------- #
@@ -318,8 +400,24 @@ def summarize(
     mean = a / (a + b)
     total = correct + incorrect
 
-    sufficient = load_bearing >= policy.min_effective_n - SUFFICIENCY_TOLERANCE
-    if sufficient and p_above >= policy.confidence:
+    freshest_age = _freshest_load_bearing_age_days(rows, policy, now)
+    stale_only = (
+        policy.freshness_horizon_days is not None
+        and freshest_age is not None
+        and freshest_age > policy.freshness_horizon_days
+    )
+
+    sufficient = (
+        load_bearing >= policy.min_effective_n - SUFFICIENCY_TOLERANCE
+        and not stale_only
+    )
+    if stale_only:
+        cls, reason = (
+            Classification.INSUFFICIENT_EVIDENCE,
+            f"stale_only: freshest load-bearing evidence is {freshest_age:.1f} d old, "
+            f"past the {policy.freshness_horizon_days:.1f} d freshness horizon",
+        )
+    elif sufficient and p_above >= policy.confidence:
         cls, reason = (
             Classification.PROMISING_STRENGTH,
             f"P(theta>{policy.theta_hi:.2f})={p_above:.3f} >= {policy.confidence:.2f}",
@@ -350,6 +448,8 @@ def summarize(
         p_above_hi=p_above,
         p_below_lo=p_below,
         reason=reason,
+        freshest_age_days=freshest_age,
+        stale_only=stale_only,
     )
 
 

@@ -37,9 +37,14 @@ just an argv token, so no adapter code is needed for it::
 * `""` / `"text"` — stdout is the reply (default).
 * `"claude_json"` — stdout is one JSON object; the reply is its `result` field.
   `session_id`, `total_cost_usd`, `num_turns` and `duration_ms` are recorded in
-  the response `usage` when present. Malformed JSON, or JSON with no `result`,
-  raises `ModelError` — it is never silently downgraded to raw stdout, because a
-  usage line or an error blob would then be scored as a model answer.
+  the response `usage` when present. `is_error` (bool, always present, default
+  `False`) and `subtype` (string, `""` when absent) are recorded too: whether a
+  failed run is a scoreable answer is the caller's policy, not the parser's, so
+  the parser reports the flag rather than raising on it. Reading the error state
+  out of `subtype` alone was a lossy proxy for the field the envelope actually
+  carries. Malformed JSON, or JSON with no `result`, still raises `ModelError` —
+  that is never silently downgraded to raw stdout, because a usage line or an
+  error blob would then be scored as a model answer.
 
 Rules this module keeps
 -----------------------
@@ -319,6 +324,11 @@ def _parse_claude_json(spec: ModelSpec, stdout: str) -> tuple[str, dict[str, Any
     usage = {key: data[key] for key in CLAUDE_JSON_USAGE_FIELDS if key in data}
     if isinstance(data.get("usage"), dict):
         usage["tokens"] = data["usage"]
+    # Always present, unlike the optional fields above. A caller that has to ask
+    # "did this run fail?" must not have to distinguish "false" from "the key was
+    # missing"; an absent `is_error` in a well-formed envelope means no error.
+    usage["is_error"] = bool(data.get("is_error", False))
+    usage["subtype"] = str(data.get("subtype") or "")
     finish = str(data.get("subtype") or data.get("type") or "cli")
     return result, usage, finish
 

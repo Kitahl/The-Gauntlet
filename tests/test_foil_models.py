@@ -142,6 +142,71 @@ class ClaudeJsonParserTests(unittest.TestCase):
             if key != "session_id":
                 self.assertNotIn(key, response.usage)
 
+    def test_is_error_and_subtype_are_surfaced_without_raising(self):
+        """The parser reports the failure; it does not decide what to do about it.
+
+        Whether a failed run is scoreable is the caller's policy. Raising here
+        would force every caller into one answer, and inferring the failure from
+        `subtype` alone would miss an envelope that sets the flag without
+        changing the subtype.
+        """
+        spec = _script_spec(
+            "import json,sys\n"
+            "sys.stdin.read()\n"
+            "print(json.dumps({'type':'result','subtype':'error_during_execution',\n"
+            "  'is_error':True,'result':'the session failed','session_id':'sess-e'}))\n",
+            output_parser="claude_json",
+        )
+        response = fm.complete(spec, "hi")
+        self.assertEqual(response.text, "the session failed")
+        self.assertIs(response.usage["is_error"], True)
+        self.assertEqual(response.usage["subtype"], "error_during_execution")
+        self.assertEqual(response.finish_reason, "error_during_execution")
+
+    def test_is_error_defaults_to_false_and_is_always_present(self):
+        spec = _script_spec(
+            "import json,sys\n"
+            "sys.stdin.read()\n"
+            "print(json.dumps({'type':'result','subtype':'success','result':'ok'}))\n",
+            output_parser="claude_json",
+        )
+        response = fm.complete(spec, "hi")
+        self.assertIn("is_error", response.usage)
+        self.assertIs(response.usage["is_error"], False)
+        self.assertEqual(response.usage["subtype"], "success")
+
+    def test_absent_subtype_is_an_empty_string_not_a_missing_key(self):
+        spec = _script_spec(
+            "import json,sys\n"
+            "sys.stdin.read()\n"
+            "print(json.dumps({'result':'ok'}))\n",
+            output_parser="claude_json",
+        )
+        response = fm.complete(spec, "hi")
+        self.assertEqual(response.usage["subtype"], "")
+        self.assertIs(response.usage["is_error"], False)
+        # `finish_reason` still falls back through `type` to "cli". The error
+        # state and the finish label are different questions and are not conflated.
+        self.assertEqual(response.finish_reason, "cli")
+
+    def test_the_flag_and_the_subtype_are_not_derived_from_each_other(self):
+        """An envelope may flag an error while still reporting subtype "success".
+
+        This is the case a subtype-only check misses, and the reason the runner
+        consults both signals.
+        """
+        spec = _script_spec(
+            "import json,sys\n"
+            "sys.stdin.read()\n"
+            "print(json.dumps({'type':'result','subtype':'success','is_error':True,\n"
+            "  'result':'partial'}))\n",
+            output_parser="claude_json",
+        )
+        response = fm.complete(spec, "hi")
+        self.assertIs(response.usage["is_error"], True)
+        self.assertEqual(response.usage["subtype"], "success")
+        self.assertEqual(response.finish_reason, "success")
+
     def test_missing_result_field_raises_rather_than_returning_the_envelope(self):
         spec = _script_spec(
             "import json,sys\nsys.stdin.read()\n"

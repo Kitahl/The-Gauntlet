@@ -110,10 +110,9 @@ class ContractDriftTests(unittest.TestCase):
     def test_skill_file_exists(self):
         self.assertTrue(self.SKILL.is_file(), f"missing contract file: {self.SKILL}")
 
-    # The generated block is pasted into SKILL.md by the SKILL.md lane; this
-    # lane deliberately does not edit that file. Remove the expectedFailure
-    # decorator there, in the same change that pastes the block.
-    @unittest.expectedFailure
+    # MEASURED 2026-08-23: the generated block is now pasted verbatim into
+    # skills/foil/SKILL.md section 7, so this is a live gate rather than an
+    # expected failure. It fails if the file and the runtime enums drift.
     def test_skill_file_embeds_the_generated_ladder_block(self):
         text = self.SKILL.read_text(encoding="utf-8")
         self.assertIn(ladder_contract_block(), text,
