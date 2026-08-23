@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 980" role="img" aria-labelledby="title desc">
+  <title id="title">The Gauntlet research control interface</title>
+  <desc id="desc">A dark technical illustration of an original plated gauntlet carrying five faceted specialist Gems. A sparse constellation of task nodes routes toward the Gems and converges on a receipt core, illustrating selective research-tool orchestration.</desc>
+  <defs>
+    <filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="lineGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .mono{font-family:Consolas,Menlo,monospace}.sans{font-family:Arial,Helvetica,sans-serif}
+      .field{fill:#080a0e}.frame{fill:none;stroke:#242d39;stroke-width:1}.hair{fill:none;stroke:#303b49;stroke-width:1}.faint{fill:none;stroke:#202936;stroke-width:1}
+      .metal0{fill:#0d1219;stroke:#566478;stroke-width:2.4}.metal1{fill:#131a24;stroke:#69788c;stroke-width:2.4}.metal2{fill:#1b2431;stroke:#7c8999;stroke-width:2.2}.metal3{fill:#222d3b;stroke:#8d99a8;stroke-width:1.8}
+      .joint{fill:#0b0f15;stroke:#596779;stroke-width:1.8}.facet{fill:none;stroke:#3b4858;stroke-width:1.2}.bright{fill:none;stroke:#b6c0cb;stroke-width:1.1;opacity:.72}
+      .mind{fill:#e0c46c;stroke:#fff5ce}.space{fill:#8ab4f8;stroke:#dceaff}.reality{fill:#e88ed6;stroke:#ffe1f8}.power{fill:#67d6e3;stroke:#d9fbff}.time{fill:#8fd19e;stroke:#e5ffeb}
+      .gem{stroke-width:2.3}.gemline{fill:none;stroke:#f4f1e8;stroke-width:.8;opacity:.72}.orbit{fill:none;stroke-width:1.2;stroke-dasharray:3 9;opacity:.62}
+      .route{fill:none;stroke:#66778c;stroke-width:1.2;stroke-dasharray:2 7}.routeHot{fill:none;stroke:#ff7a66;stroke-width:2;stroke-dasharray:3 8;filter:url(#lineGlow)}
+      .receipt{fill:#ff7a66;stroke:#fff0eb;stroke-width:2;filter:url(#softGlow)}.node{fill:#101720;stroke:#627188;stroke-width:1.1}.nodeHot{fill:#ff7a66;stroke:#ffe9e4;stroke-width:1.3}
+      .txt{fill:#f4f1e8}.muted{fill:#8c98a8}.accent{fill:#ff7a66}.micro{font-size:10px;letter-spacing:1.7px}.tiny{font-size:9px;letter-spacing:1.3px}.label{font-size:12px;font-weight:700;letter-spacing:1px}
+    </style>
+  </defs>
+  <rect width="900" height="980" class="field"/>
+  <rect x="28" y="28" width="844" height="924" rx="20" class="frame"/>
+  <path d="M60 132H230M670 132H840M60 842H246M654 842H840" class="hair"/>
+  <text x="60" y="78" class="mono accent micro">THE GAUNTLET / CONTROL FIELD</text>
+  <text x="840" y="78" text-anchor="end" class="mono muted tiny">TASK → COMPLEMENT → EVIDENCE → RELEASE</text>
+  <text x="60" y="112" class="mono muted tiny">FIVE SPECIALISTS · SELECTIVE ROUTING · NO VOTE</text>
+
+  <!-- sparse constellation / task substrate -->
+  <g opacity=".9">
+    <path d="M82 226L146 190L205 232L270 182L333 218M622 182L684 225L750 185L824 239M88 650L158 608L217 664L277 621M632 650L696 610L760 662L826 620" class="faint"/>
+    <circle cx="82" cy="226" r="4" class="node"/><circle cx="146" cy="190" r="3" class="node"/><circle cx="205" cy="232" r="4" class="node"/><circle cx="270" cy="182" r="3" class="node"/><circle cx="333" cy="218" r="4" class="node"/>
+    <circle cx="622" cy="182" r="4" class="node"/><circle cx="684" cy="225" r="3" class="node"/><circle cx="750" cy="185" r="4" class="node"/><circle cx="824" cy="239" r="3" class="node"/>
+    <circle cx="88" cy="650" r="3" class="node"/><circle cx="158" cy="608" r="4" class="node"/><circle cx="217" cy="664" r="3" class="node"/><circle cx="277" cy="621" r="4" class="node"/>
+    <circle cx="632" cy="650" r="4" class="node"/><circle cx="696" cy="610" r="3" class="node"/><circle cx="760" cy="662" r="4" class="node"/><circle cx="826" cy="620" r="3" class="node"/>
+  </g>
+
+  <!-- task lines snapping inward -->
+  <path d="M82 226C172 275 208 322 290 372M824 239C730 284 700 320 615 374M88 650C180 612 221 575 298 541M826 620C734 592 694 559 614 536" class="route"/>
+
+  <!-- wrist / cuff -->
+  <path d="M278 754L622 754L665 914L236 914Z" class="metal0"/>
+  <path d="M298 770H601L622 885H271Z" class="metal1"/>
+  <path d="M322 787H577L589 858H306Z" class="metal2"/>
+  <path d="M258 808H642M271 850H630" class="facet"/>
+  <path d="M341 785L331 875M559 785L569 875M405 782L401 883M495 782L499 883" class="facet"/>
+
+  <!-- palm chassis -->
+  <path d="M274 700L251 559L278 398L340 342L450 313L560 342L622 398L649 559L626 700L560 767H340Z" class="metal1"/>
+  <path d="M304 679L286 556L307 425L360 380L450 356L540 380L593 425L614 556L596 679L540 730H360Z" class="metal2"/>
+  <path d="M341 655L329 553L346 452L385 418L450 400L515 418L554 452L571 553L559 655L515 692H385Z" class="metal3"/>
+  <path d="M304 679L341 655M596 679L559 655M307 425L346 452M593 425L554 452M360 380L385 418M540 380L515 418" class="facet"/>
+  <path d="M450 356V400M329 553H286M571 553H614M385 692L360 730M515 692L540 730" class="bright"/>
+
+  <!-- fingers -->
+  <path d="M283 426L205 301L213 184L246 152L283 170L312 296L340 390Z" class="metal1"/>
+  <path d="M347 368L318 216L340 108L373 86L407 110L414 268L423 354Z" class="metal2"/>
+  <path d="M430 346L435 178L469 77L505 69L532 101L510 266L503 356Z" class="metal2"/>
+  <path d="M514 371L548 224L594 126L630 121L652 155L606 306L566 397Z" class="metal1"/>
+  <path d="M584 411L652 300L713 240L744 249L756 286L678 409L620 469Z" class="metal0"/>
+
+  <!-- finger joints -->
+  <path d="M217 225L282 218M328 175L411 181M445 143L520 153M565 191L635 215M668 288L735 308" class="facet"/>
+  <path d="M232 279L299 273M329 250L414 255M439 221L514 232M551 263L621 286M638 346L704 370" class="bright"/>
+  <ellipse cx="260" cy="326" rx="36" ry="25" class="joint"/><ellipse cx="378" cy="314" rx="37" ry="25" class="joint"/><ellipse cx="472" cy="306" rx="37" ry="25" class="joint"/><ellipse cx="556" cy="326" rx="36" ry="25" class="joint"/><ellipse cx="622" cy="423" rx="35" ry="25" class="joint"/>
+
+  <!-- five gem seats / orbits -->
+  <ellipse cx="356" cy="466" rx="58" ry="43" class="orbit" stroke="#e0c46c"/>
+  <ellipse cx="450" cy="430" rx="58" ry="43" class="orbit" stroke="#8ab4f8"/>
+  <ellipse cx="544" cy="466" rx="58" ry="43" class="orbit" stroke="#e88ed6"/>
+  <ellipse cx="397" cy="564" rx="58" ry="43" class="orbit" stroke="#67d6e3"/>
+  <ellipse cx="503" cy="564" rx="58" ry="43" class="orbit" stroke="#8fd19e"/>
+
+  <g filter="url(#softGlow)">
+    <path d="M356 431L387 452L377 487L344 500L326 471L333 443Z" class="gem mind"/>
+    <path d="M450 394L482 416L471 452L438 465L420 435L427 407Z" class="gem space"/>
+    <path d="M544 431L575 452L566 487L533 500L514 471L521 443Z" class="gem reality"/>
+    <path d="M397 529L429 551L418 587L385 600L367 570L374 542Z" class="gem power"/>
+    <path d="M503 529L535 551L524 587L491 600L473 570L480 542Z" class="gem time"/>
+  </g>
+  <path d="M333 443L377 487M326 471L387 452M427 407L471 452M420 435L482 416M521 443L566 487M514 471L575 452M374 542L418 587M367 570L429 551M480 542L524 587M473 570L535 551" class="gemline"/>
+
+  <!-- convergence / receipt core -->
+  <path d="M356 500C370 612 406 650 450 682M450 465V682M544 500C530 612 494 650 450 682M397 600C409 632 429 659 450 682M503 600C491 632 471 659 450 682" class="route"/>
+  <path d="M292 372C318 394 330 414 342 438M608 374C582 396 570 416 558 438M298 541C325 548 347 553 370 559M614 536C585 545 558 552 530 559" class="routeHot"/>
+  <circle cx="450" cy="682" r="15" class="receipt"/>
+  <circle cx="450" cy="682" r="34" fill="none" stroke="#ff7a66" stroke-width="1" stroke-dasharray="3 7" opacity=".72"/>
+  <path d="M450 698V746" class="routeHot"/>
+
+  <!-- labels -->
+  <g class="mono tiny">
+    <text x="308" y="526" class="muted">MIND</text><text x="421" y="486" class="muted">SPACE</text><text x="552" y="526" class="muted">REALITY</text>
+    <text x="337" y="623" class="muted">POWER</text><text x="514" y="623" class="muted">TIME</text>
+  </g>
+  <text x="450" y="722" text-anchor="middle" class="mono accent tiny">TYPED RECEIPT CORE</text>
+  <text x="60" y="893" class="mono muted tiny">NODES ARE TASK OBLIGATIONS · ROUTES ACTIVATE ONLY WHEN LOAD-BEARING</text>
+  <text x="840" y="893" text-anchor="end" class="mono txt tiny">EVIDENCE, NOT AGREEMENT</text>
+  <text x="60" y="928" class="sans txt label">One control surface. Many specialist methods.</text>
+  <text x="840" y="928" text-anchor="end" class="mono accent tiny">MIRROR ADAPTS · GAUNTLET ASSURES</text>
+</svg>
