@@ -13,7 +13,7 @@
         "skills/foil/SKILL.md",
         "skills/infinity-gauntlet/SKILL.md"
       ],
-      "design_reference_boundary": "Original Gauntlet artwork. It transfers focal-object staging, constellation/node formation, reveal/beam grammar, and progressive power legibility observed in the user's Tribunal and Card Game interface references; it copies no external imagery and imports no reference runtime.",
+      "design_reference_boundary": "Original Gauntlet artwork. It transfers focal-object staging, constellation/node formation, reveal/beam grammar, and progressive power legibility observed in user-provided cinematic and card-interface references; it copies no external imagery and imports no reference runtime.",
       "boundary": "Conceptual control-interface illustration; it is not an execution trace, capability measurement, or behavioral-efficacy result."
     },
     {
