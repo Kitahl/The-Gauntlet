@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import re
 import unittest
 from pathlib import Path
@@ -11,6 +12,7 @@ GITLEAKS_IMAGE = (
     "ghcr.io/gitleaks/gitleaks@"
     "sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f"
 )
+LOCK_SHA256 = "c691104c36101259f69f27d4e09ede3dc64b08c326b0ca8fa2021a1c2cacfd12"
 
 
 class ReleaseHardeningTests(unittest.TestCase):
@@ -30,6 +32,11 @@ class ReleaseHardeningTests(unittest.TestCase):
                     f"action is not pinned by immutable full SHA in {workflow.name}: {spec}",
                 )
 
+    def test_release_workflows_are_read_only(self) -> None:
+        for workflow in sorted((ROOT / ".github" / "workflows").glob("*.yml")):
+            text = workflow.read_text(encoding="utf-8")
+            self.assertNotIn("contents: write", text, workflow.name)
+
     def test_secret_gate_scans_full_history_with_digest_pinned_image(self) -> None:
         security = (ROOT / ".github" / "workflows" / "security.yml").read_text(
             encoding="utf-8"
@@ -38,6 +45,31 @@ class ReleaseHardeningTests(unittest.TestCase):
         self.assertIn(GITLEAKS_IMAGE, security)
         self.assertIn('--log-opts="--full-history --all"', security)
         self.assertNotIn("gitleaks/gitleaks-action@", security)
+
+    def test_hash_lock_is_exact_and_enforced(self) -> None:
+        lock = ROOT / "requirements-lock.txt"
+        self.assertTrue(lock.is_file())
+        self.assertEqual(hashlib.sha256(lock.read_bytes()).hexdigest(), LOCK_SHA256)
+        text = lock.read_text(encoding="utf-8")
+        for pin in [
+            "requests==2.34.2",
+            "rapidfuzz==3.14.5",
+            "playwright==1.62.0",
+            "ruff==0.16.3",
+        ]:
+            self.assertIn(pin, text)
+        self.assertIn("--hash=sha256:", text)
+
+        security = (ROOT / ".github" / "workflows" / "security.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("git diff --exit-code -- requirements-lock.txt", security)
+        self.assertIn(LOCK_SHA256, security)
+        self.assertIn("--require-hashes -r requirements-lock.txt", security)
+
+        for name in ["validate.yml", "portability.yml"]:
+            workflow = (ROOT / ".github" / "workflows" / name).read_text(encoding="utf-8")
+            self.assertIn("--require-hashes -r requirements-lock.txt", workflow)
 
     def test_generic_secret_and_environment_files_are_ignored(self) -> None:
         ignored = (ROOT / ".gitignore").read_text(encoding="utf-8").splitlines()
