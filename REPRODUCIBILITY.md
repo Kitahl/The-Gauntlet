@@ -4,10 +4,10 @@ This repository distinguishes **mechanical/specification reproducibility** from 
 
 ## 1. Mechanical validation
 
-From a clean checkout of the release under test:
+From a clean checkout of the release under test with Python 3.12:
 
 ```bash
-python -m pip install -r requirements-dev.txt -r requirements-runtime.txt
+python -m pip install --require-hashes -r requirements-lock.txt
 python -m playwright install chromium
 ruff check validation tools tests benchmarks/harness
 python -m unittest discover -s tests -v
@@ -15,6 +15,8 @@ python validation/validate_soul_gauntlet_public.py
 python validation/validate_showcase.py
 python -m compileall -q validation tools tests benchmarks/harness
 ```
+
+`requirements-lock.txt` is generated from `requirements-lock.in`, which includes the exact direct runtime and development pins. The lock records the fully resolved dependency graph and distribution hashes. CI regenerates the lock with pinned `pip-tools`, requires a byte-for-byte clean Git diff, checks the recorded lock SHA-256, installs with `--require-hashes`, and exercises that same lock on Linux, Windows, and macOS.
 
 The browser validator requires Python Playwright plus Chromium. CI installs those dependencies before execution.
 
@@ -28,12 +30,14 @@ Expected interpretation:
 Release candidates also run:
 
 - CodeQL Python analysis;
-- a full-history Gitleaks scan from `fetch-depth: 0`;
-- `pip-audit` over runtime and development requirement sets;
-- the full unit-test suite on Linux, Windows, and macOS;
-- regression checks that no Mastermind runtime/package/skill/control path is tracked in this repository.
+- a full-history Gitleaks scan from `fetch-depth: 0` using a digest-pinned container;
+- `pip-audit` over runtime, development, and fully resolved lock requirement sets;
+- deterministic regeneration and SHA-256 verification of the hash lock;
+- the full unit-test suite and source compilation on Linux, Windows, and macOS;
+- regression checks that no Mastermind runtime/package/skill/control path is tracked in this repository;
+- regression checks that tracked release workflows remain read-only and external GitHub Actions remain pinned to immutable full commit SHAs.
 
-GitHub Actions are pinned to immutable full commit SHAs. Dependabot remains responsible for proposing pinned-action and Python dependency updates.
+Dependabot remains responsible for proposing pinned-action and Python dependency updates. Any accepted direct-dependency update must regenerate the lock and re-pass the full release gate.
 
 A passing security scan means the configured scanners found no matching issue in the exact scanned state. It is not a proof that no undiscoverable vulnerability or secret exists.
 
@@ -73,7 +77,7 @@ No repository-wide claim of improved human research performance is currently mad
 
 ## 6. Archival releases
 
-Evidence-bearing stable releases should be tagged and archived only after the **exact candidate SHA** has passed validation, CodeQL, security, and portability gates. A DOI should be added to `CITATION.cff` after an archival service such as Zenodo has minted one for the corresponding release.
+Evidence-bearing stable releases should be tagged and archived only after the **exact candidate SHA** has passed validation, CodeQL, security, portability, and benchmark-harness gates. A DOI should be added to `CITATION.cff` after an archival service such as Zenodo has minted one for the corresponding release.
 
 ## 7. Reproduction report
 
