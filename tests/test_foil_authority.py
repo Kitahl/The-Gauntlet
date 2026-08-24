@@ -36,7 +36,6 @@ from foil_authority import (  # noqa: E402
     decide_authority,
 )
 
-
 BASE = "a" * 64
 CANDIDATE = "b" * 64
 SCOPE = "c" * 64
