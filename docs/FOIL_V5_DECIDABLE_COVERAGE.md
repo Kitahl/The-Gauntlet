@@ -186,8 +186,8 @@ P0_NOT_PROMOTED.
 
 ## Evidence status
 
-The repository-wide contract suite ran locally on 2026-08-24: **703 tests
-passed in 56.843 seconds**.
+The repository-wide contract suite ran locally on 2026-08-24: **704 tests
+passed in 54.620 seconds**.
 That demonstrates the named in-process contracts behaved as tested. It is not
 evidence for natural-error recall, repair safety, model ladders,
 personalization, or human learning.

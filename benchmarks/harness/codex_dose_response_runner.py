@@ -160,17 +160,27 @@ def development_ids() -> set[str]:
     return {str(unit["item_id"]) for unit in payload["units"]}
 
 
+def hard_difficulty(value: object) -> bool:
+    label = str(value).strip().lower()
+    return label.startswith(
+        (
+            "hard undergraduate level",
+            "hard graduate level",
+            "post-graduate level or harder",
+        )
+    )
+
+
 def eligible_rows(rows: list[dict[str, str]]) -> list[tuple[int, dict[str, str]]]:
     excluded = development_ids()
     candidates: list[tuple[int, dict[str, str]]] = []
     for index, row in enumerate(rows):
         question = normalize_space(row["Question"])
-        difficulty = row["Writer's Difficulty Estimate"].strip().lower()
         item_id = f"gpqa-diamond-{index:03d}"
         if (
             parse_accuracy(row["Expert Validator Accuracy"]) <= 0.50
             and parse_accuracy(row["Non-Expert Validator Accuracy"]) <= 0.34
-            and difficulty in {"graduate", "postgraduate", "hard graduate", "hard postgraduate"}
+            and hard_difficulty(row["Writer's Difficulty Estimate"])
             and len(question) < 900
             and item_id not in excluded
         ):

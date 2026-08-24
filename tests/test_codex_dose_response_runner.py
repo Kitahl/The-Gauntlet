@@ -80,6 +80,17 @@ def item(index: int) -> dict[str, object]:
 
 
 class FrozenPilotTests(unittest.TestCase):
+    def test_canonical_gpqa_difficulty_labels_are_closed_and_match_expected_scope(self) -> None:
+        self.assertTrue(
+            runner.hard_difficulty(
+                "Hard undergraduate level (could be a question on a hard undergraduate exam)"
+            )
+        )
+        self.assertTrue(runner.hard_difficulty("Hard graduate level (PhD exam)"))
+        self.assertTrue(runner.hard_difficulty("Post-graduate level or harder"))
+        self.assertFalse(runner.hard_difficulty("Easy undergraduate level (or easier)"))
+        self.assertFalse(runner.hard_difficulty("graduate"))
+
     def test_three_item_matrix_and_call_cap_are_exact(self) -> None:
         self.assertEqual((runner.TARGET, runner.EXPECTED_UNITS), (3, 36))
         self.assertEqual((runner.EXPECTED_PAIRS, runner.MAX_CALLS), (18, 42))

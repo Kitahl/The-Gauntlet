@@ -21,7 +21,7 @@ Use GPQA-Diamond at repository revision
 
 - expert validator accuracy at most 0.50;
 - non-expert validator accuracy at most 0.34;
-- graduate/postgraduate difficulty;
+- canonical source difficulty of hard undergraduate level or harder;
 - normalized question length below 900 characters;
 - item absent from the 2026-08-23 development manifest.
 
