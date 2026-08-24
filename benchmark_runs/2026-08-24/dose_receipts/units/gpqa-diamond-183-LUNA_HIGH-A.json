@@ -1,0 +1,34 @@
+{
+  "answer": "C",
+  "call_id": "gpqa-diamond-183-LUNA_HIGH-A",
+  "codex_version": "codex-cli 0.147.0",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-24T10:40:07.381037+00:00",
+  "invalid_reasons": [],
+  "kind": "units",
+  "last_output_sha256": "690c869a3835c8bb35a8d3f202791264447c58efca84bc96fcfe7fb7bea819a8",
+  "model": "gpt-5.6-luna",
+  "pre_call_commit": "22fb5c315645a299a52f05a61e574b97d6f4a2de",
+  "prompt_sha256": "7ec57922bd1dfddfdb8b331d6475e1389ffa441bf0b5cfb7ac9c8d1a29b8bf7f",
+  "returncode": 0,
+  "schema": "foil-codex-dose-receipt/v1",
+  "started_at": "2026-08-24T10:39:16.865171+00:00",
+  "stderr_sha256": "18124706643bd725702ae504b0466ceb50505c3e027e9a285f27145d489b9dd7",
+  "stdout_sha256": "07c3fb39bc4ed428754b2a3eb51bc92b1c0cb4aabb63085417ee0b3b54643b41",
+  "timed_out": false,
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 16893,
+    "output_tokens": 2605,
+    "reasoning_output_tokens": 2588
+  },
+  "valid": true,
+  "wall_seconds": 50.51600000000326
+}

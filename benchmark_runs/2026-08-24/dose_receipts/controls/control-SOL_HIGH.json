@@ -1,0 +1,34 @@
+{
+  "answer": "A",
+  "call_id": "control-SOL_HIGH",
+  "codex_version": "codex-cli 0.147.0",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-24T10:20:49.053445+00:00",
+  "invalid_reasons": [],
+  "kind": "controls",
+  "last_output_sha256": "ae174266a26b7a56a85c0665f563091caeb5bf79c86a24a8cd0cafb36a6c22dc",
+  "model": "gpt-5.6-sol",
+  "pre_call_commit": "22fb5c315645a299a52f05a61e574b97d6f4a2de",
+  "prompt_sha256": "bdfc69b934c1a9ed5cd50de454b5f93cf2e46fbed0141af838adc03b303d815b",
+  "returncode": 0,
+  "schema": "foil-codex-dose-receipt/v1",
+  "started_at": "2026-08-24T10:20:44.262740+00:00",
+  "stderr_sha256": "ae12d5863feedde470509c3615de59aa233192d5b076bdde06fc4f57bd1f6f4d",
+  "stdout_sha256": "0a3cf5c9ff6bcd22ddf304dfd5971e453678b67690132d71fa2b73827c9e7692",
+  "timed_out": false,
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 17423,
+    "output_tokens": 15,
+    "reasoning_output_tokens": 0
+  },
+  "valid": true,
+  "wall_seconds": 4.796999999991385
+}

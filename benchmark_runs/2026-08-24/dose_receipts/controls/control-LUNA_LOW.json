@@ -1,0 +1,34 @@
+{
+  "answer": "A",
+  "call_id": "control-LUNA_LOW",
+  "codex_version": "codex-cli 0.147.0",
+  "effort": "low",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-24T10:20:25.707022+00:00",
+  "invalid_reasons": [],
+  "kind": "controls",
+  "last_output_sha256": "ae174266a26b7a56a85c0665f563091caeb5bf79c86a24a8cd0cafb36a6c22dc",
+  "model": "gpt-5.6-luna",
+  "pre_call_commit": "22fb5c315645a299a52f05a61e574b97d6f4a2de",
+  "prompt_sha256": "bdfc69b934c1a9ed5cd50de454b5f93cf2e46fbed0141af838adc03b303d815b",
+  "returncode": 0,
+  "schema": "foil-codex-dose-receipt/v1",
+  "started_at": "2026-08-24T10:20:19.258254+00:00",
+  "stderr_sha256": "95df4b3910fdd07956214d6820e61532616d148e0cca1db91dcb32b88bb0c38d",
+  "stdout_sha256": "b692089477484f035912cec04697ba58e4825e17d3b751583ed53d2854b0d496",
+  "timed_out": false,
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 16509,
+    "output_tokens": 15,
+    "reasoning_output_tokens": 0
+  },
+  "valid": true,
+  "wall_seconds": 6.437999999994645
+}

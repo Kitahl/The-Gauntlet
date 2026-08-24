@@ -1,0 +1,34 @@
+{
+  "answer": "C",
+  "call_id": "gpqa-diamond-185-SOL_LOW-B",
+  "codex_version": "codex-cli 0.147.0",
+  "effort": "low",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-24T10:29:48.240450+00:00",
+  "invalid_reasons": [],
+  "kind": "units",
+  "last_output_sha256": "690c869a3835c8bb35a8d3f202791264447c58efca84bc96fcfe7fb7bea819a8",
+  "model": "gpt-5.6-sol",
+  "pre_call_commit": "22fb5c315645a299a52f05a61e574b97d6f4a2de",
+  "prompt_sha256": "66eef1941add21ab2b8a830e0ff00c72f1687ebe49e0ce451d9e08233887567c",
+  "returncode": 0,
+  "schema": "foil-codex-dose-receipt/v1",
+  "started_at": "2026-08-24T10:29:15.299707+00:00",
+  "stderr_sha256": "1ec275a99474370b214c2422fe99cfe9d0cea61b3a1962b1f0279ac610d809b8",
+  "stdout_sha256": "a6a01033d9648fc558cba0e78418211c78ac97f49ef24fcea4ab2119fe68c592",
+  "timed_out": false,
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 24790,
+    "output_tokens": 1083,
+    "reasoning_output_tokens": 1066
+  },
+  "valid": true,
+  "wall_seconds": 32.9380000000092
+}

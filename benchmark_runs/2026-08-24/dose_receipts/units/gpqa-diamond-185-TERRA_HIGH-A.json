@@ -1,0 +1,34 @@
+{
+  "answer": "B",
+  "call_id": "gpqa-diamond-185-TERRA_HIGH-A",
+  "codex_version": "codex-cli 0.147.0",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-24T10:34:23.820617+00:00",
+  "invalid_reasons": [],
+  "kind": "units",
+  "last_output_sha256": "5ef6fe1feeb2e1e141d6849fbcfec781d8069e00d4d32d3185a48ae908db3546",
+  "model": "gpt-5.6-terra",
+  "pre_call_commit": "22fb5c315645a299a52f05a61e574b97d6f4a2de",
+  "prompt_sha256": "99c700fb35c26d36138b30f9a212f263a36bd57e1559b3c4d1583abf50db33de",
+  "returncode": 0,
+  "schema": "foil-codex-dose-receipt/v1",
+  "started_at": "2026-08-24T10:33:42.377195+00:00",
+  "stderr_sha256": "f6dbbd581d395f027d6cdc4cdd038dc4ac79110df39b56528273877325355cfc",
+  "stdout_sha256": "c1c9fccd1917477e9c8003e74474c6aa42887e251b48763a097ff42522fe2d86",
+  "timed_out": false,
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 11008,
+    "input_tokens": 18741,
+    "output_tokens": 2066,
+    "reasoning_output_tokens": 2049
+  },
+  "valid": true,
+  "wall_seconds": 41.453999999997905
+}

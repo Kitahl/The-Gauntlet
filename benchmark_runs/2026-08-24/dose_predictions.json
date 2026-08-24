@@ -1,0 +1,331 @@
+{
+  "complete": true,
+  "manifest_sha256": "bc2f7394a5bcfad90b63a3832ea1eb13076df27289fc5a869ffe3542ffbf03ad",
+  "predictions": [
+    {
+      "answer": "C",
+      "condition_id": "B",
+      "config_id": "LUNA_HIGH",
+      "item_id": "gpqa-diamond-183",
+      "receipt_sha256": "2c1087b71447651e0c1e2d0403aca0df3a277bfa0cf624f6d54d4a7b22970a65",
+      "unit_id": "gpqa-diamond-183-LUNA_HIGH-B",
+      "valid": true
+    },
+    {
+      "answer": "C",
+      "condition_id": "B",
+      "config_id": "SOL_HIGH",
+      "item_id": "gpqa-diamond-183",
+      "receipt_sha256": "d9b15145b3cfd88f48475a193db7afee7fc058c6d3d62e8e8bd7c306218ffca9",
+      "unit_id": "gpqa-diamond-183-SOL_HIGH-B",
+      "valid": true
+    },
+    {
+      "answer": "C",
+      "condition_id": "B",
+      "config_id": "SOL_HIGH",
+      "item_id": "gpqa-diamond-185",
+      "receipt_sha256": "2f49e3cdd391dd131a3173a9808ad842e3118fa7fa78286b2a7cbae5cc34ae39",
+      "unit_id": "gpqa-diamond-185-SOL_HIGH-B",
+      "valid": true
+    },
+    {
+      "answer": "C",
+      "condition_id": "B",
+      "config_id": "TERRA_LOW",
+      "item_id": "gpqa-diamond-185",
+      "receipt_sha256": "d9310f3dec8857b3e8d54541b7d4135067bed9d4c70c85fd30f1584cb7ddfdf3",
+      "unit_id": "gpqa-diamond-185-TERRA_LOW-B",
+      "valid": true
+    },
+    {
+      "answer": "C",
+      "condition_id": "A",
+      "config_id": "TERRA_LOW",
+      "item_id": "gpqa-diamond-183",
+      "receipt_sha256": "8d15387584300a2a93213dc7e92923e0fa2083158c686ce5e1a2745db31b0cd5",
+      "unit_id": "gpqa-diamond-183-TERRA_LOW-A",
+      "valid": true
+    },
+    {
+      "answer": "D",
+      "condition_id": "B",
+      "config_id": "SOL_HIGH",
+      "item_id": "gpqa-diamond-188",
+      "receipt_sha256": "648a5c4f84467c17480d70c6637b3b7f3c71c872830dd844e3ccd9f091fe5f7d",
+      "unit_id": "gpqa-diamond-188-SOL_HIGH-B",
+      "valid": true
+    },
+    {
+      "answer": "D",
+      "condition_id": "B",
+      "config_id": "SOL_LOW",
+      "item_id": "gpqa-diamond-188",
+      "receipt_sha256": "d57e23e9f18057c40cccebcac0f97263747a0d4cf6c4a6353f8f1f5c1d26dce6",
+      "unit_id": "gpqa-diamond-188-SOL_LOW-B",
+      "valid": true
+    },
+    {
+      "answer": "C",
+      "condition_id": "B",
+      "config_id": "TERRA_HIGH",
+      "item_id": "gpqa-diamond-185",
+      "receipt_sha256": "8d9bdfc053eae2fe93710fbac1f7412f691e22e77fb6dbb5e95bf9bf3e4de68d",
+      "unit_id": "gpqa-diamond-185-TERRA_HIGH-B",
+      "valid": true
+    },
+    {
+      "answer": "A",
+      "condition_id": "A",
+      "config_id": "LUNA_LOW",
+      "item_id": "gpqa-diamond-185",
+      "receipt_sha256": "99bdc9815090d976fe88ab12fa300fedf8b2e9dce7a7f25fb019ce85ec248143",
+      "unit_id": "gpqa-diamond-185-LUNA_LOW-A",
+      "valid": true
+    },
+    {
+      "answer": "D",
+      "condition_id": "B",
+      "config_id": "LUNA_HIGH",
+      "item_id": "gpqa-diamond-188",
+      "receipt_sha256": "c071c38dffd4b29f108de9d66a735817e31878c0efad601692433b5932ef3a8b",
+      "unit_id": "gpqa-diamond-188-LUNA_HIGH-B",
+      "valid": true
+    },
+    {
+      "answer": "C",
+      "condition_id": "A",
+      "config_id": "SOL_HIGH",
+      "item_id": "gpqa-diamond-183",
+      "receipt_sha256": "467aa2b9458b856a308dc22a34ecb2ccc0f2d6fafaa6ae71ccc741c97ae9661e",
+      "unit_id": "gpqa-diamond-183-SOL_HIGH-A",
+      "valid": true
+    },
+    {
+      "answer": "D",
+      "condition_id": "A",
+      "config_id": "TERRA_LOW",
+      "item_id": "gpqa-diamond-188",
+      "receipt_sha256": "2ee0f30284e1094bcf8dab66ab965e33a81e6a552420a5b78a32a0080b56c674",
+      "unit_id": "gpqa-diamond-188-TERRA_LOW-A",
+      "valid": true
+    },
+    {
+      "answer": "D",
+      "condition_id": "A",
+      "config_id": "SOL_LOW",
+      "item_id": "gpqa-diamond-188",
+      "receipt_sha256": "7d71b2232587b02f0d63b762f41972be5487df4059e755ca14ed79f26cd2b458",
+      "unit_id": "gpqa-diamond-188-SOL_LOW-A",
+      "valid": true
+    },
+    {
+      "answer": "C",
+      "condition_id": "B",
+      "config_id": "SOL_LOW",
+      "item_id": "gpqa-diamond-183",
+      "receipt_sha256": "16f993eaedb87b5172705d49a01a92ced90e13d07ca8ff2d66651de9eb93a782",
+      "unit_id": "gpqa-diamond-183-SOL_LOW-B",
+      "valid": true
+    },
+    {
+      "answer": "D",
+      "condition_id": "B",
+      "config_id": "TERRA_HIGH",
+      "item_id": "gpqa-diamond-188",
+      "receipt_sha256": "1b3bfacd3c940eaa617d1dd6079e3bd979391f5fe5fb05024a7c96055dc0f522",
+      "unit_id": "gpqa-diamond-188-TERRA_HIGH-B",
+      "valid": true
+    },
+    {
+      "answer": "C",
+      "condition_id": "A",
+      "config_id": "TERRA_LOW",
+      "item_id": "gpqa-diamond-185",
+      "receipt_sha256": "e91d1bee718eb021253f556de6083974e0fec85e7b320ce76cd308e03540ec7e",
+      "unit_id": "gpqa-diamond-185-TERRA_LOW-A",
+      "valid": true
+    },
+    {
+      "answer": "C",
+      "condition_id": "B",
+      "config_id": "SOL_LOW",
+      "item_id": "gpqa-diamond-185",
+      "receipt_sha256": "8e570048059b76a206d1c2906d6548bf3fd7ad30c09d9bb0ec3b361f357a05ed",
+      "unit_id": "gpqa-diamond-185-SOL_LOW-B",
+      "valid": true
+    },
+    {
+      "answer": "D",
+      "condition_id": "A",
+      "config_id": "SOL_HIGH",
+      "item_id": "gpqa-diamond-188",
+      "receipt_sha256": "9b6378861e842484fbe93fc2e8b9d762acd5836247d680a65624e052be69549b",
+      "unit_id": "gpqa-diamond-188-SOL_HIGH-A",
+      "valid": true
+    },
+    {
+      "answer": "C",
+      "condition_id": "A",
+      "config_id": "SOL_LOW",
+      "item_id": "gpqa-diamond-183",
+      "receipt_sha256": "f773bc3e978260e33db54f1bb828c7dead6b42e6861cb21805bdc976a92d1e32",
+      "unit_id": "gpqa-diamond-183-SOL_LOW-A",
+      "valid": true
+    },
+    {
+      "answer": "D",
+      "condition_id": "B",
+      "config_id": "LUNA_LOW",
+      "item_id": "gpqa-diamond-188",
+      "receipt_sha256": "71d7d171a7e899fff3c62403abf5c482b50d05054c6f23033b11f2572166c96a",
+      "unit_id": "gpqa-diamond-188-LUNA_LOW-B",
+      "valid": true
+    },
+    {
+      "answer": "C",
+      "condition_id": "B",
+      "config_id": "TERRA_HIGH",
+      "item_id": "gpqa-diamond-183",
+      "receipt_sha256": "30a7d3781de1d01dbfb1b6154d383906344bbde5ad9be9e72b0914f7a9544b01",
+      "unit_id": "gpqa-diamond-183-TERRA_HIGH-B",
+      "valid": true
+    },
+    {
+      "answer": "C",
+      "condition_id": "A",
+      "config_id": "TERRA_HIGH",
+      "item_id": "gpqa-diamond-183",
+      "receipt_sha256": "9ffb1fb179160c503ce206d1347f87cf6e5388ebdcc60661e0881fd984a5074d",
+      "unit_id": "gpqa-diamond-183-TERRA_HIGH-A",
+      "valid": true
+    },
+    {
+      "answer": "B",
+      "condition_id": "B",
+      "config_id": "LUNA_LOW",
+      "item_id": "gpqa-diamond-185",
+      "receipt_sha256": "7ed779b18526bbc176edb27e8eb8afc143366a69a9d9b539634d26f58d22b3a1",
+      "unit_id": "gpqa-diamond-185-LUNA_LOW-B",
+      "valid": true
+    },
+    {
+      "answer": "D",
+      "condition_id": "B",
+      "config_id": "TERRA_LOW",
+      "item_id": "gpqa-diamond-188",
+      "receipt_sha256": "ac162872593d3153cebfb7601cc924cd51b5419e3979126dc16a31c2a9a11f21",
+      "unit_id": "gpqa-diamond-188-TERRA_LOW-B",
+      "valid": true
+    },
+    {
+      "answer": "C",
+      "condition_id": "A",
+      "config_id": "SOL_HIGH",
+      "item_id": "gpqa-diamond-185",
+      "receipt_sha256": "17656aa55ed540a9a90dd9ff8050333f5947037d545d63f13ed5102449151943",
+      "unit_id": "gpqa-diamond-185-SOL_HIGH-A",
+      "valid": true
+    },
+    {
+      "answer": "B",
+      "condition_id": "A",
+      "config_id": "TERRA_HIGH",
+      "item_id": "gpqa-diamond-185",
+      "receipt_sha256": "75ce83e1b2111c475ca44503e54b6731063bfd619a716dafa8d98b0ec9255641",
+      "unit_id": "gpqa-diamond-185-TERRA_HIGH-A",
+      "valid": true
+    },
+    {
+      "answer": "D",
+      "condition_id": "A",
+      "config_id": "LUNA_LOW",
+      "item_id": "gpqa-diamond-188",
+      "receipt_sha256": "4954fd0b90e6cfab1ba144de1e139d2af82abeaf63bbca365318b69fbb6d0fcd",
+      "unit_id": "gpqa-diamond-188-LUNA_LOW-A",
+      "valid": true
+    },
+    {
+      "answer": "A",
+      "condition_id": "B",
+      "config_id": "LUNA_HIGH",
+      "item_id": "gpqa-diamond-185",
+      "receipt_sha256": "716065ed4d8d892a770b844383ce4fd6c453c4a4420f97cb5a09307e9a2d818a",
+      "unit_id": "gpqa-diamond-185-LUNA_HIGH-B",
+      "valid": true
+    },
+    {
+      "answer": "C",
+      "condition_id": "A",
+      "config_id": "LUNA_HIGH",
+      "item_id": "gpqa-diamond-183",
+      "receipt_sha256": "46fc34b0d198d2970711b64c0ede20aec43f8c2f2254ce6a39c2fdd1f3c3da33",
+      "unit_id": "gpqa-diamond-183-LUNA_HIGH-A",
+      "valid": true
+    },
+    {
+      "answer": "B",
+      "condition_id": "A",
+      "config_id": "LUNA_LOW",
+      "item_id": "gpqa-diamond-183",
+      "receipt_sha256": "0baf0cbeae98557582518077d34ddca5257dcc8c5f7e003ac2da33d0f849462c",
+      "unit_id": "gpqa-diamond-183-LUNA_LOW-A",
+      "valid": true
+    },
+    {
+      "answer": "C",
+      "condition_id": "A",
+      "config_id": "LUNA_HIGH",
+      "item_id": "gpqa-diamond-185",
+      "receipt_sha256": "118de39332ceafef200ea8bf86c88d8ac9cda8365059adcb5fd77c40380d1080",
+      "unit_id": "gpqa-diamond-185-LUNA_HIGH-A",
+      "valid": true
+    },
+    {
+      "answer": "D",
+      "condition_id": "A",
+      "config_id": "TERRA_HIGH",
+      "item_id": "gpqa-diamond-188",
+      "receipt_sha256": "0309b8a53d7f7b93f9947366e69c5a71f94b2a9c502474aeef816b49ec1b761a",
+      "unit_id": "gpqa-diamond-188-TERRA_HIGH-A",
+      "valid": true
+    },
+    {
+      "answer": "B",
+      "condition_id": "B",
+      "config_id": "LUNA_LOW",
+      "item_id": "gpqa-diamond-183",
+      "receipt_sha256": "697849115c515a9790600abb985436de1a00060eb97c3b77c17ec66cc224ae74",
+      "unit_id": "gpqa-diamond-183-LUNA_LOW-B",
+      "valid": true
+    },
+    {
+      "answer": "D",
+      "condition_id": "A",
+      "config_id": "LUNA_HIGH",
+      "item_id": "gpqa-diamond-188",
+      "receipt_sha256": "a5da1b1c6e005fe7853bd6d59e606d9b591d81157841a88c6196708d7132ef39",
+      "unit_id": "gpqa-diamond-188-LUNA_HIGH-A",
+      "valid": true
+    },
+    {
+      "answer": "A",
+      "condition_id": "A",
+      "config_id": "SOL_LOW",
+      "item_id": "gpqa-diamond-185",
+      "receipt_sha256": "a167b15b15db9f85499823bbab095ba5b3a74064a115c134c08b1687ddb8572c",
+      "unit_id": "gpqa-diamond-185-SOL_LOW-A",
+      "valid": true
+    },
+    {
+      "answer": "C",
+      "condition_id": "B",
+      "config_id": "TERRA_LOW",
+      "item_id": "gpqa-diamond-183",
+      "receipt_sha256": "14eab42154a0b61fd722a7445af7a09bb71f7d0a2ab5d117b51c2006c633bce1",
+      "unit_id": "gpqa-diamond-183-TERRA_LOW-B",
+      "valid": true
+    }
+  ],
+  "schema": "foil-codex-dose-predictions/v1"
+}
