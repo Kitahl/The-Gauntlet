@@ -1,0 +1,65 @@
+{
+  "cases": [
+    {
+      "case_id": "host-defect-full",
+      "expected": "DEFECT/FULL",
+      "invariant_passed": true,
+      "observed": "DEFECT/FULL",
+      "passed": true
+    },
+    {
+      "case_id": "host-clear-direct",
+      "expected": "CLEARED/DIRECT",
+      "invariant_passed": true,
+      "observed": "CLEARED/DIRECT",
+      "passed": true
+    },
+    {
+      "case_id": "admitted-generated-visible",
+      "expected": "ADMITTED/ADMITTED_GENERATED/FULL",
+      "invariant_passed": true,
+      "observed": "ADMITTED/ADMITTED_GENERATED/FULL",
+      "passed": true
+    },
+    {
+      "case_id": "incomplete-formalization-stands-down",
+      "expected": "STAND_DOWN/mutation_suite_incomplete",
+      "invariant_passed": true,
+      "observed": "STAND_DOWN/mutation_suite_incomplete",
+      "passed": true
+    },
+    {
+      "case_id": "development-gate-nonpromoting",
+      "expected": "PASS/promotion=False",
+      "invariant_passed": true,
+      "observed": "PASS/promotion=False",
+      "passed": true
+    },
+    {
+      "case_id": "development-study-nonpromoting",
+      "expected": "DEVELOPMENT_ONLY/promotion=False",
+      "invariant_passed": true,
+      "observed": "DEVELOPMENT_ONLY/promotion=False",
+      "passed": true
+    }
+  ],
+  "classification": "SYNTHETIC_INTEGRATION_ONLY",
+  "non_claims": [
+    "No external efficacy or promotion evidence was collected.",
+    "The three-item formalization row is synthetic wiring data.",
+    "Development-only PASS cannot promote a candidate."
+  ],
+  "protocol_sha256": "4e2699477e8893757bd6524cc90df71b5455135b80e027331da0e48cb82b3849",
+  "schema": "foil.v5-integrated-small-pilot.v1",
+  "summary": {
+    "all_passed": true,
+    "answer_mutations": 0,
+    "candidate_generations": 0,
+    "elapsed_ms": 4.323,
+    "network_calls": 0,
+    "passed": 6,
+    "provider_calls": 0,
+    "token_spend": 0,
+    "total": 6
+  }
+}

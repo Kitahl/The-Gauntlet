@@ -191,6 +191,12 @@ unauthorized answer changes and zero model/network/token cost. This is wiring
 and fail-closed selection evidence only; its candidates and gate receipts are
 synthetic host fixtures.
 
+RC4 adds the reusable compiler/scanner/controller/ledger pipeline, the
+schema-bound generated-spec admission seam, candidate-bound external gate
+evaluation, and later-study topology contracts. Its preregistered integrated
+pilot passed 6/6 synthetic cases with zero provider/network/token cost and zero
+answer mutation. No generated route was calibrated and no external gate moved.
+
 The provider-neutral offline P0 reproducer in
 [foil_profile_ablation.py](../benchmarks/harness/foil_profile_ablation.py)
 validates the sealed three-arm routing/receipt structure. It has no provider,
@@ -199,7 +205,7 @@ P0_NOT_PROMOTED.
 
 ## Evidence status
 
-The repository-wide contract suite ran locally on 2026-08-24: **711 tests
+The repository-wide contract suite ran locally on 2026-08-24: **729 tests
 passed**.
 That demonstrates the named in-process contracts behaved as tested. It is not
 evidence for natural-error recall, repair safety, model ladders,
@@ -230,8 +236,10 @@ does not forbid a separate offline, default-off residual-scanner candidate.
    benefit, unnecessary intervention, cost, and boundary violations.
 6. Model ladder: run scoped, replicated prompt-policy × answer-policy studies;
    it is not a global runtime ontology.
-7. History: add it only after verified joint-route outcomes plus redaction,
-   provenance, expiry, drift, and rollback rules exist.
+7. History: the topology validator requires redaction, provenance, expiry,
+   drift, and rollback, but verified joint-route outcomes remain unrun.
+8. Human complement: compare user alone, generic AI, static FOIL, and adaptive
+   FOIL, including delayed transfer.
 
 Until those gates pass, FOIL may observe residual evidence but may not
 autonomously act, mutate a returned answer, claim safe repair, claim end-to-end

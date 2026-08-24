@@ -1,7 +1,7 @@
 {
   "schema": "egrt/visual-provenance-1",
   "showcase_revision": 19,
-  "research_software_version": "0.6.0-rc3",
+  "research_software_version": "0.6.0-rc4",
   "visuals": [
     {
       "id": "system-field",

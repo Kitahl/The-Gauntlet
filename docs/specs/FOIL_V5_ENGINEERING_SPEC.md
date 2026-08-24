@@ -1,10 +1,10 @@
 # FOIL v5 Engineering Specification
 
-Status: **implementation contract plus unrun-gate specification**
+Status: **integrated implementation contract plus unrun external-gate specification**
 
 This specification governs the FOIL v5 decidable-coverage candidate. It is
-additive to existing FOIL contracts and does not change repository version,
-public runtime ownership, or default invocation behavior.
+additive to existing FOIL contracts and does not change public runtime
+ownership or default invocation behavior.
 
 ## 1. Scope and invariants
 
@@ -49,13 +49,18 @@ Hard invariants:
 | Offline P0 reproducer | benchmarks/harness/foil_profile_ablation.py | Implemented protocol/receipt structural check; non-efficacy only |
 | Adaptive compute | tools/foil_adaptive_route.py | Implemented; default-off, A0-preserving, shadow-only DIRECT/VERIFY/FULL recommendations |
 | RouteVector history | tools/foil_shadow_route_ledger.py | Implemented; default-off observational ledger; no selection, learning, component credit, or execution |
-| Future transformation admission | docs/FOIL_FORMALIZATION_FIDELITY.md | Specified only; NL-to-obligation generator remains absent |
+| Integrated structured pipeline | tools/foil_v5_pipeline.py | Implemented compiler/scanner/controller/ledger/finalizer seam; host-safe and non-executing |
+| Generated-spec admission | tools/foil_formalization_admission.py; tools/foil_formalization_routing.py | Implemented fail-closed admission; external generator and calibrated routes absent |
+| Promotion-gate evaluator | tools/foil_promotion_gates.py | Implemented exact candidate-bound matrix evaluation; external evidence unrun |
+| Later-study topology | tools/foil_later_studies.py | Implemented P0/RQ-26/ladder/history/human contracts; outcomes unrun |
 
 ## 3. Required flow
 
     frozen task + frozen solver configuration
       -> external answer generator emits A0
-      -> immutable A0/task/spec/compiler/config bindings
+      -> host supplies a strict spec OR an external spec passes formalization admission
+      -> immutable A0/task/spec/compiler/config/admission bindings
+      -> any failed admission preserves A0 and stands down
       -> post-solve compiler emits typed obligations/claims
       -> closed deterministic verifier registry evaluates applicable predicates
       -> optional default-off EV controller recommends DIRECT/VERIFY/FULL in shadow
@@ -143,9 +148,26 @@ The RouteVector ledger is observational-only. Exact-route summaries never imply
 causal superiority and never feed the controller. Component effects require a
 separately frozen matched or randomized experiment.
 
-The current compiler never transforms prose. Generated obligations remain
-ineligible until the separate fidelity and extraction-recall gate is implemented
-and passed.
+The current compiler never transforms prose. The core controller still rejects
+unadmitted generated obligations. A host may pass an externally generated,
+content-addressed spec only through `foil_formalization_admission.py`, whose
+route-scoped calibration, extraction-recall, mutation, freshness, schema,
+mechanical-equivalence, and instance checks must all pass. The admitted wrapper
+keeps `ADMITTED_GENERATED` visible and remains shadow-only. No NL-to-obligation
+generator or production-calibrated generated route exists.
+
+### 4.5 Integrated pipeline and empirical contracts
+
+`foil_v5_pipeline.py` is the reusable production seam for strict compilation,
+deterministic scanning, route selection, and optional observational history. It
+cannot generate A1 or authorize execution; the separate host finalizer still
+requires the existing exact request and approval bindings.
+
+`foil_promotion_gates.py` evaluates a preregistered candidate-bound
+partition/domain/metric matrix with exact one-sided binomial bounds. Missing,
+duplicate, undersized, unexpected, development-only, cost-incomplete, or
+control-failing evidence cannot qualify. `foil_later_studies.py` validates
+frozen study topology only; it always reports efficacy and promotion as false.
 
 ## 5. Gate protocol
 
@@ -195,13 +217,17 @@ through an already READY capability; SUGGEST is display-only. Compare benefit an
 cost with cheaper Gate 2 repair. Discovery, auto-install, trust promotion, and
 silent fallback remain prohibited.
 
-### Later gates (not run)
+### Later gates (contracts implemented; outcomes not run)
 
+- Profile P0: correct profile vs wrong profile vs no profile.
 - RQ-26 complement selection: raw vs checklist vs FOIL vs oracle.
-- Scoped model/effort/domain/task/tool/date calibration and replicated model-policy
-  factorial; no global tier ontology.
-- Evidence-conditioned history with redaction, provenance, expiry, drift, and
-  rollback.
+- Scoped model/effort/domain/task/tool/date calibration and replicated
+  model-policy factorial; no global tier ontology.
+- Evidence-conditioned history with static, simple-history, contextual,
+  Synapse, and Hebbian-mutant arms plus redaction, provenance, expiry, drift,
+  and rollback.
+- Human complement: user alone vs generic AI vs static FOIL vs adaptive FOIL,
+  including delayed transfer.
 
 ## 6. Non-claims
 
@@ -210,3 +236,7 @@ pass. It is never behavioral promotion. Historical profile P0 remains
 P0_NOT_PROMOTED: profile efficacy, smart-monitor benefit, P1/P2 activation, and
 human complementarity are unresolved. Profile P0 and residual Gate 1 are
 separate hypotheses and cannot promote each other.
+
+The preregistered RC4 small pilot passed 6/6 synthetic integration cases with
+zero provider/network/token cost and zero answer mutation. This establishes
+entrypoint wiring only; it advances none of the external gates above.

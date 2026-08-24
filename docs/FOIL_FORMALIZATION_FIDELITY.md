@@ -1,6 +1,6 @@
 # FOIL formalization fidelity and extraction recall
 
-Status: **future admission gate; not part of the current runtime**
+Status: **admission seam implemented; external generator and calibrated routes absent**
 
 ## Current boundary
 
@@ -17,10 +17,25 @@ Closed fields, versions, digests, enums, and a closed verifier registry establis
 structural validity and integrity. They do not establish semantic faithfulness or
 extraction recall.
 
-If any future component generates obligations from natural language, that route
-must pass this gate before its output can feed the existing compiler.
+Any external component that generates obligations from natural language must pass
+this gate before its output can feed the existing compiler.
 
-## The 21-point future contract
+## Implemented admission seam
+
+`foil_formalization_admission.py` implements the fail-closed boundary. It binds
+the exact route, formalizer identities, task regime, compiler schema, source,
+generated spec, calibration, policy, and per-instance evidence. Admission uses
+a conservative one-sided Clopper-Pearson lower bound for both route fidelity and
+separately adjudicated extraction recall; it also requires freshness, a complete
+predeclared mutation suite, instance checks, and—on translation routes—dual
+formalization, mechanical equivalence, and a measured error-correlation ceiling.
+
+`foil_formalization_routing.py` preserves the core controller's closed verifier
+routes while keeping `ADMITTED_GENERATED` visible in the outer trace. Admission
+never grants execution or answer-mutation authority. No generator is shipped, no
+real route has earned calibration, and the host-supplied route remains distinct.
+
+## The 21-point contract
 
 1. Keep the current host-supplied route distinct from every generated route.
 2. Version the generator, prompt/contract, model, task regime, and output schema.
@@ -91,12 +106,12 @@ even when declared-universe coverage is 100%.
 
 ## Pilot policy
 
-The current project will run only a tiny development sample to check the
-measurement procedure and surface obvious route classes. It does not estimate a
-certification floor and will not open a generated-obligation route. No large audit
-budget is authorized by this document.
+The RC4 integrated pilot ran only three synthetic calibration rows to exercise
+the admission wiring. It does not estimate a certification floor, measure real
+fidelity or extraction recall, or open a generated-obligation route. No large
+audit budget is authorized by this document.
 
-The admission rule for future work remains:
+The admission rule remains:
 
 > Narrow routes with earned bounds, independent per-instance checks, abstention
 > outside validated scope, a mutation suite that catches every predeclared defect

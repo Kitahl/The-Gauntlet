@@ -6,6 +6,21 @@ The evaluated conditions use the same underlying model. Closed-book HLE, ARC-AGI
 
 ## Current results
 
+### RC4 integrated v5 contract pilot
+
+The preregistered RC4 pilot passed **6/6** synthetic integration cases: host
+defect routing, correct-answer stand-down, admitted generated-origin retention,
+incomplete-mutation rejection, development-gate non-promotion, and
+development-study non-promotion. It used **0** provider calls, network calls,
+tokens, candidate generations, and answer mutations.
+
+This is executable wiring evidence, not a behavioral benchmark. The three
+formalization rows are synthetic fixtures; no real route was calibrated and no
+external promotion gate advanced.
+
+- Protocol: [`benchmarks/FOIL_V5_INTEGRATED_SMALL_PILOT.md`](../benchmarks/FOIL_V5_INTEGRATED_SMALL_PILOT.md)
+- Result: [`benchmark_runs/2026-08-24/integrated_small_pilot/report.json`](../benchmark_runs/2026-08-24/integrated_small_pilot/report.json)
+
 ### RC3 safe-finalization contract pilot
 
 The preregistered, deterministic RC3 pilot passed **7/7** cases: **3/3**

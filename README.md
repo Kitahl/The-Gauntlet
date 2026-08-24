@@ -5,13 +5,13 @@
 [![Research software validation](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml)
 [![CodeQL](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.6.0--rc3-informational.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.6.0--rc4-informational.svg)](CHANGELOG.md)
 
 > **Research status:** public research-software toolkit with executable runtime checks, evidence-bearing structural/source validation, and exploratory benchmark pilots. The repository does **not** claim that the complete system improves human reasoning, scientific discovery, or general AI capability in prospective deployment.
 
 **Demo:** https://kitahl.github.io/The-Gauntlet/  
 **5-minute evaluator path:** [`docs/EVALUATOR_QUICKSTART.md`](docs/EVALUATOR_QUICKSTART.md)  
-**Benchmark pilots:** [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) · **RC3 safe-finalization contract:** [`benchmark_runs/2026-08-24/safe_finalization_small_pilot/report.md`](benchmark_runs/2026-08-24/safe_finalization_small_pilot/report.md) · **earlier blinded receipt:** [`benchmarks/results/2026-08-22-blinded-pilot.json`](benchmarks/results/2026-08-22-blinded-pilot.json) · **BrowseComp four-way receipt:** [`benchmark_runs/2026-08-22/browsecomp_four_way_results.json`](benchmark_runs/2026-08-22/browsecomp_four_way_results.json)<br>
+**Benchmark pilots:** [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) · **RC4 integrated contract:** [`benchmark_runs/2026-08-24/integrated_small_pilot/report.json`](benchmark_runs/2026-08-24/integrated_small_pilot/report.json) · **RC3 safe-finalization contract:** [`benchmark_runs/2026-08-24/safe_finalization_small_pilot/report.md`](benchmark_runs/2026-08-24/safe_finalization_small_pilot/report.md) · **earlier blinded receipt:** [`benchmarks/results/2026-08-22-blinded-pilot.json`](benchmarks/results/2026-08-22-blinded-pilot.json) · **BrowseComp four-way receipt:** [`benchmark_runs/2026-08-22/browsecomp_four_way_results.json`](benchmark_runs/2026-08-22/browsecomp_four_way_results.json)<br>
 **Runtime setup:** [`docs/RUNTIME_SETUP.md`](docs/RUNTIME_SETUP.md) · **Mirror:** [`docs/MIRROR.md`](docs/MIRROR.md) · **Mirror onboarding (legacy FOIL paths):** [`docs/FOIL_ONBOARDING.md`](docs/FOIL_ONBOARDING.md) · **Deep calibration:** [`docs/FOIL_DEEP_CALIBRATION.md`](docs/FOIL_DEEP_CALIBRATION.md)  
 **Research statement:** [`RESEARCH.md`](RESEARCH.md) · **Reproducibility:** [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) · **Roadmap:** [`ROADMAP.md`](ROADMAP.md)
 
@@ -33,18 +33,22 @@ The toolkit routes work according to the **epistemic obligation**: what must be 
 
 ## FOIL v5 / Mirror testing release candidate
 
-**FOIL in 0.6.0-rc3 remains default-off and shadow-only; this is a testing
+**FOIL in 0.6.0-rc4 remains default-off and shadow-only; this is a testing
 release candidate, not an evidence-bearing stable release.** It includes a
 one-claim post-solve path with typed claims/obligations, deterministic decidable
 coverage, a sealed protocol/run ledger, a closed-verifier residual scanner, and
 calibration-bound sensor receipts. It can emit a shadow repair proposal at the
 admission boundary, but cannot autonomously mutate an answer, write, commit, or
-execute a repair. RC3 adds a separate host-owned finalizer: only a digest-bound,
-one-use ACTIVE request plus explicit request-bound host approval can select A1;
-every missing or mismatched prerequisite returns A0 unchanged. The opt-in
-pre-/post-solve monitor is event-driven and zero-token. RC3 retains the
-non-executing fixed-point DIRECT/VERIFY/FULL recommendation layer,
+execute a repair. RC4 includes the separate host-owned finalizer: only a
+digest-bound, one-use ACTIVE request plus explicit request-bound host approval
+can select A1; every missing or mismatched prerequisite returns A0 unchanged.
+The opt-in pre-/post-solve monitor is event-driven and zero-token. RC4 retains
+the non-executing fixed-point DIRECT/VERIFY/FULL recommendation layer,
 compiler-provenance revalidation, and sealed observational RouteVector ledger.
+It also wires the reusable compiler/scanner/controller pipeline, route-scoped
+generated-spec admission, candidate-bound external gate evaluation, and frozen
+later-study contracts. No natural-language obligation generator or calibrated
+generated route is included.
 Admission now rejects structural and semantic certificates from the same
 provenance group, even under different verifier names. The new v5 post-solve
 monitor is disabled by default; the legacy pre-solve hook remains the

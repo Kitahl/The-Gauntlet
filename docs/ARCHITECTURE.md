@@ -129,6 +129,10 @@ documentation task: `tests/test_foil_assistance.py::ContractDriftTests` and
 | `tools/foil_policy.py` | **the experimental routing kernel.** Deterministic V2 policy, ported from `origin/experiment/foil-vnext5-vnext@9540860`. Its mechanisms are implemented hypotheses whose efficacy is `NOT_MEASURED`. |
 | `tools/foil_adaptive_route.py` | **the default-off adaptive-compute shadow controller.** Retains frozen A0 as DIRECT and may recommend VERIFY/FULL only from positive frozen EV and compiler-created host-declared routes. It never executes or changes authority. |
 | `tools/foil_shadow_route_ledger.py` | **the default-off observational RouteVector ledger.** Exact task/model/contract/route history only; no selector, fitter, controller update, or component credit. |
+| `tools/foil_v5_pipeline.py` | **the integrated structured shadow seam.** Wires compiler, scanner, adaptive route, optional observational ledger, and the pure host finalizer without candidate generation or execution. |
+| `tools/foil_formalization_admission.py`; `tools/foil_formalization_routing.py` | **the external generated-spec admission boundary.** Requires route-scoped fidelity/extraction evidence and preserves generated origin; no generator is included. |
+| `tools/foil_promotion_gates.py` | **the candidate-bound external gate evaluator.** Converts complete preregistered evidence matrices into fail-closed Gate 1/2/3 receipts; it collects no data. |
+| `tools/foil_later_studies.py` | **the later-study topology validator.** Freezes P0, RQ-26, model-ladder, history, and human-complement arms without claiming efficacy. |
 
 `foil_policy` is the experimental kernel and is labelled as such everywhere it is
 referenced. It converts current-task signals plus independently supported profile

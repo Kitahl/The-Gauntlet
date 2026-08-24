@@ -14,6 +14,46 @@ The project follows semantic versioning for public releases.
 - Independent reproduction reports.
 - Archival DOI integration after the first evidence-bearing stable release.
 
+## [0.6.0-rc4] - 2026-08-24
+
+Fourth testing release candidate for **Mirror** (technical ID **FOIL**). RC4
+integrates the v5 structured shadow path and makes every later empirical gate
+runnable without converting development fixtures into promotion evidence. FOIL
+remains default-off, host-invoked, A0-preserving, and non-executing.
+
+### Added
+
+- A reusable structured pipeline that wires strict compilation, deterministic
+  scanning, fixed-point DIRECT/VERIFY/FULL routing, optional observational
+  RouteVector recording, and the existing pure host finalizer.
+- A route-scoped formalization admission boundary for externally generated
+  obligation specs. It enforces freshness, exact compiler schema and route
+  binding, conservative fidelity and extraction-recall bounds, mutation-suite
+  completeness, independent instance checks, mechanical equivalence, and a
+  measured formalizer-correlation ceiling. No natural-language generator is
+  included or enabled.
+- A candidate-bound evaluator for Gate 1/2/3 evidence matrices. Missing,
+  duplicate, undersized, development-only, cost-incomplete, A0-mismatched, or
+  negative-control-failing evidence cannot produce a qualifying receipt.
+- Frozen topology validators for profile P0, RQ-26, model-strength ladder,
+  history-policy, and human-complement studies. Contract completeness never
+  establishes efficacy, promotion, or execution authority.
+- A preregistered six-case, zero-provider integrated small pilot.
+
+### Verification
+
+- The complete repository suite passes **729 tests**.
+- The RC4 integrated pilot passes **6/6** synthetic wiring cases with zero
+  provider calls, network calls, token spend, candidate generation, or answer
+  mutation.
+
+### Evidence boundary
+
+The RC4 pilot is synthetic integration evidence only. Gate 1B, Gate 1C, Gate 2,
+Gate 3, calibrated generated-formalization routes, profile efficacy, RQ-26,
+model-ladder efficacy, history-policy benefit, and human complementarity remain
+**UNRUN / NOT PROMOTED**. A development-only PASS cannot promote a candidate.
+
 ## [0.6.0-rc3] - 2026-08-24
 
 Third testing release candidate for **Mirror** (technical ID **FOIL**). FOIL
