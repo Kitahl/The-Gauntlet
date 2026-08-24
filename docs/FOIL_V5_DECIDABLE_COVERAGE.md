@@ -185,6 +185,12 @@ artifact, request, and explicit approval bindings match. Every ordinary denial
 or mismatch returns the original A0 object; the digest-only trace never stores
 raw answer content.
 
+The preregistered RC3 safe-finalization contract pilot passed 7/7 deterministic
+cases: 3/3 host-supplied rescues and 4/4 preservation/rejection cases, with zero
+unauthorized answer changes and zero model/network/token cost. This is wiring
+and fail-closed selection evidence only; its candidates and gate receipts are
+synthetic host fixtures.
+
 The provider-neutral offline P0 reproducer in
 [foil_profile_ablation.py](../benchmarks/harness/foil_profile_ablation.py)
 validates the sealed three-arm routing/receipt structure. It has no provider,
@@ -193,7 +199,7 @@ P0_NOT_PROMOTED.
 
 ## Evidence status
 
-The repository-wide contract suite ran locally on 2026-08-24: **705 tests
+The repository-wide contract suite ran locally on 2026-08-24: **711 tests
 passed**.
 That demonstrates the named in-process contracts behaved as tested. It is not
 evidence for natural-error recall, repair safety, model ladders,

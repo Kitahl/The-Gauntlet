@@ -11,7 +11,7 @@
 
 **Demo:** https://kitahl.github.io/The-Gauntlet/  
 **5-minute evaluator path:** [`docs/EVALUATOR_QUICKSTART.md`](docs/EVALUATOR_QUICKSTART.md)  
-**Benchmark pilots:** [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) · **earlier blinded receipt:** [`benchmarks/results/2026-08-22-blinded-pilot.json`](benchmarks/results/2026-08-22-blinded-pilot.json) · **BrowseComp four-way receipt:** [`benchmark_runs/2026-08-22/browsecomp_four_way_results.json`](benchmark_runs/2026-08-22/browsecomp_four_way_results.json)  
+**Benchmark pilots:** [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) · **RC3 safe-finalization contract:** [`benchmark_runs/2026-08-24/safe_finalization_small_pilot/report.md`](benchmark_runs/2026-08-24/safe_finalization_small_pilot/report.md) · **earlier blinded receipt:** [`benchmarks/results/2026-08-22-blinded-pilot.json`](benchmarks/results/2026-08-22-blinded-pilot.json) · **BrowseComp four-way receipt:** [`benchmark_runs/2026-08-22/browsecomp_four_way_results.json`](benchmark_runs/2026-08-22/browsecomp_four_way_results.json)<br>
 **Runtime setup:** [`docs/RUNTIME_SETUP.md`](docs/RUNTIME_SETUP.md) · **Mirror:** [`docs/MIRROR.md`](docs/MIRROR.md) · **Mirror onboarding (legacy FOIL paths):** [`docs/FOIL_ONBOARDING.md`](docs/FOIL_ONBOARDING.md) · **Deep calibration:** [`docs/FOIL_DEEP_CALIBRATION.md`](docs/FOIL_DEEP_CALIBRATION.md)  
 **Research statement:** [`RESEARCH.md`](RESEARCH.md) · **Reproducibility:** [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) · **Roadmap:** [`ROADMAP.md`](ROADMAP.md)
 

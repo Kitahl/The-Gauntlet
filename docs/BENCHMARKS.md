@@ -6,6 +6,23 @@ The evaluated conditions use the same underlying model. Closed-book HLE, ARC-AGI
 
 ## Current results
 
+### RC3 safe-finalization contract pilot
+
+The preregistered, deterministic RC3 pilot passed **7/7** cases: **3/3**
+mechanically verified host-supplied rescues (exact arithmetic, canonical JSON,
+and numeric tolerance) and **4/4** preservation/rejection cases (correct-answer
+clear stand-down, semantic-route stand-down, same-provenance rejection, and
+tampered-candidate rejection). It recorded **0 unauthorized answer changes, 0
+model calls, 0 network calls, and 0 token cost**.
+
+This is software-contract evidence, not a model benchmark. Candidate answers and
+promotion-gate receipts were frozen host fixtures, so the result does not measure
+repair discovery, prose-to-obligation extraction, semantic efficacy,
+calibration, or external promotion. See the
+[preregistration](../benchmarks/FOIL_SAFE_FINALIZATION_SMALL_PILOT.md), raw
+[result](../benchmark_runs/2026-08-24/safe_finalization_small_pilot/results.json),
+and [run context](../benchmark_runs/2026-08-24/safe_finalization_small_pilot/RUN_CONTEXT.md).
+
 ### Earlier blinded and legacy pilots
 
 | Evaluation | BASE | Assisted | Delta | Evidence status |

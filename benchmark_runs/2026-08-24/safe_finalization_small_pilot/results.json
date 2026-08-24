@@ -1,0 +1,100 @@
+{
+  "case_count": 7,
+  "cases": [
+    {
+      "admission_state": "COMMITTABLE",
+      "case_id": "arithmetic-rescue",
+      "elapsed_ns": 3312800,
+      "expected_digest": "e93dff0d1076b537cd1bd659d14bb77d5fd47db13204a227cb3cd66e81dd454c",
+      "host_action_applied": true,
+      "initial_route": "VERIFY",
+      "passed": true,
+      "reason": "explicit_host_approval_and_content_bindings_matched",
+      "selected_digest": "e93dff0d1076b537cd1bd659d14bb77d5fd47db13204a227cb3cd66e81dd454c",
+      "state": "CANDIDATE_SELECTED",
+      "verified_defect_route": "FULL"
+    },
+    {
+      "admission_state": "COMMITTABLE",
+      "case_id": "json-rescue",
+      "elapsed_ns": 4124600,
+      "expected_digest": "3a8edbec1d7c68d70b74ad8eef5a106e141105978b8a0aa99a423070f0edd80e",
+      "host_action_applied": true,
+      "initial_route": "VERIFY",
+      "passed": true,
+      "reason": "explicit_host_approval_and_content_bindings_matched",
+      "selected_digest": "3a8edbec1d7c68d70b74ad8eef5a106e141105978b8a0aa99a423070f0edd80e",
+      "state": "CANDIDATE_SELECTED",
+      "verified_defect_route": "FULL"
+    },
+    {
+      "admission_state": "COMMITTABLE",
+      "case_id": "tolerance-rescue",
+      "elapsed_ns": 3014500,
+      "expected_digest": "d8645dc0d481b529ef9791dee202617109c46b3d41defa21754e7cdbd9d569e5",
+      "host_action_applied": true,
+      "initial_route": "VERIFY",
+      "passed": true,
+      "reason": "explicit_host_approval_and_content_bindings_matched",
+      "selected_digest": "d8645dc0d481b529ef9791dee202617109c46b3d41defa21754e7cdbd9d569e5",
+      "state": "CANDIDATE_SELECTED",
+      "verified_defect_route": "FULL"
+    },
+    {
+      "authority_action": "STAND_DOWN",
+      "case_id": "correct-clear-stand-down",
+      "elapsed_ns": 27500,
+      "expected_digest": "e93dff0d1076b537cd1bd659d14bb77d5fd47db13204a227cb3cd66e81dd454c",
+      "host_action_applied": false,
+      "passed": true,
+      "reason": "no_defect_reported",
+      "selected_digest": "e93dff0d1076b537cd1bd659d14bb77d5fd47db13204a227cb3cd66e81dd454c",
+      "state": "BASE_PRESERVED"
+    },
+    {
+      "case_id": "semantic-route-stand-down",
+      "elapsed_ns": 373000,
+      "expected_digest": "37037290d5b497a79aabca251e7cfd79b746d87530aa5d3594ea8b37fa5615fc",
+      "host_action_applied": false,
+      "passed": true,
+      "reason": "HOST_ROUTE_UNAVAILABLE",
+      "route": "DIRECT",
+      "selected_digest": "37037290d5b497a79aabca251e7cfd79b746d87530aa5d3594ea8b37fa5615fc",
+      "state": "BASE_PRESERVED"
+    },
+    {
+      "admission_state": "REJECTED",
+      "case_id": "same-provenance-rejection",
+      "elapsed_ns": 1149000,
+      "expected_digest": "a2d9b3b0ec334d3945839fd6f505d952968bd12087a2900a73fef084a78806da",
+      "host_action_applied": false,
+      "passed": true,
+      "reason": "structural_semantic_provenance_overlap",
+      "selected_digest": "a2d9b3b0ec334d3945839fd6f505d952968bd12087a2900a73fef084a78806da",
+      "state": "BASE_PRESERVED"
+    },
+    {
+      "case_id": "tampered-candidate-rejection",
+      "elapsed_ns": 2001600,
+      "exact_base_object": true,
+      "expected_digest": "af67737a0feae510322d95ff895c2f454de35794ced23e6213a8392b06c430bf",
+      "host_action_applied": false,
+      "passed": true,
+      "reason": "candidate_digest_mismatch",
+      "selected_digest": "af67737a0feae510322d95ff895c2f454de35794ced23e6213a8392b06c430bf",
+      "state": "BASE_PRESERVED"
+    }
+  ],
+  "denial_passed": 4,
+  "denial_total": 4,
+  "failed": 0,
+  "model_calls": 0,
+  "network_calls": 0,
+  "passed": 7,
+  "preregistration": "benchmarks/FOIL_SAFE_FINALIZATION_SMALL_PILOT.md",
+  "rescue_passed": 3,
+  "rescue_total": 3,
+  "schema": "foil.safe-finalization-small-pilot.v1",
+  "token_cost": 0,
+  "unauthorized_answer_changes": 0
+}
