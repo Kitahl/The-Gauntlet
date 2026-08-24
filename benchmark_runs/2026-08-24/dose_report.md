@@ -1,7 +1,7 @@
 # FOIL Codex dose-response benchmark — development report
 
-**Evidence label:** `OBSERVED_IN_THIS_PILOT`  
-**Pairs:** 18 across 3 items and six configurations  
+**Evidence label:** `OBSERVED_IN_THIS_PILOT`
+**Pairs:** 18 across 3 items and six configurations
 **Boundary:** exploratory matched prompt-contract evidence, not a superiority or deployment claim.
 
 | Configuration | BASE | FOIL | FOIL only | BASE only | Paired difference | McNemar p |
