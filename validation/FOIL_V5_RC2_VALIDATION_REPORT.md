@@ -57,9 +57,25 @@ formalization fidelity, extraction recall, calibrated EV inputs, causal route
 effects, personalization value, general superiority, cost savings, or safe
 default activation.
 
-The only planned behavioral run is the separately sealed three-item development
-pilot. Its first preparation attempt stopped before writing artifacts because
-the source uses long canonical difficulty labels; the filter was corrected and
-regression-tested before any model call or frozen run artifact. Whatever the
-pilot observes remains development evidence forever and cannot promote or
-certify RC2.
+## Three-item development pilot
+
+The sealed pilot completed exactly 42 model executions: six positive controls
+and 36 scored calls, yielding 18 matched BASE/FOIL pairs across three GPQA items
+and six model/effort configurations. There were no retries, substitutions,
+timeouts, invalid answers, unknown event shapes, or tool events.
+
+- BASE accuracy: **13/18 (72.2%)**
+- FOIL accuracy: **12/18 (66.7%)**
+- Paired difference: **-1/18 (-5.6 percentage points)**
+- Discordant pairs: **1 FOIL-only correction; 2 BASE-only reversals**
+- Exact McNemar and item-cluster sign-flip tests: **p = 1.0**
+- Mean wall time: **33.17 s BASE; 43.46 s FOIL**
+- Mean input tokens: **17,631 BASE; 24,651 FOIL**
+- Mean output tokens: **1,408 BASE; 1,985 FOIL**
+
+This is `OBSERVED_IN_THIS_PILOT`: the small run did not demonstrate an overall
+benefit and observed higher FOIL time/token use. It remains development evidence
+forever and cannot promote, certify, calibrate, or activate RC2. The first
+preparation attempt stopped before writing artifacts because the source uses
+long canonical difficulty labels; the corrected filter was regression-tested
+and committed before every model call and frozen run artifact.

@@ -1,0 +1,246 @@
+{
+  "claim_boundary": "Three-item development observation of a bundled FOIL prompt-contract effect under independent stochastic calls. No general superiority, causal rescue/damage, validated dose, calibration, certification, personalization, controller, or deployment claim.",
+  "configurations": [
+    {
+      "base_accuracy": 0.6666666666666666,
+      "base_only": 1,
+      "base_only_given_base_correct": 0.5,
+      "base_only_given_base_correct_wilson_95": [
+        0.09453120573423074,
+        0.9054687942657693
+      ],
+      "both_correct": 1,
+      "both_wrong": 1,
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "foil_accuracy": 0.3333333333333333,
+      "foil_only": 0,
+      "foil_only_given_base_wrong": 0.0,
+      "foil_only_given_base_wrong_wilson_95": [
+        0.0,
+        0.7934506856227626
+      ],
+      "mcnemar_exact_two_sided_p": 1.0,
+      "model": "gpt-5.6-luna",
+      "n": 3,
+      "paired_risk_difference": -0.3333333333333333,
+      "rank": 0
+    },
+    {
+      "base_accuracy": 0.6666666666666666,
+      "base_only": 0,
+      "base_only_given_base_correct": 0.0,
+      "base_only_given_base_correct_wilson_95": [
+        0.0,
+        0.6576197724933469
+      ],
+      "both_correct": 2,
+      "both_wrong": 0,
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "foil_accuracy": 1.0,
+      "foil_only": 1,
+      "foil_only_given_base_wrong": 1.0,
+      "foil_only_given_base_wrong_wilson_95": [
+        0.20654931437723745,
+        1.0
+      ],
+      "mcnemar_exact_two_sided_p": 1.0,
+      "model": "gpt-5.6-luna",
+      "n": 3,
+      "paired_risk_difference": 0.3333333333333333,
+      "rank": 1
+    },
+    {
+      "base_accuracy": 0.6666666666666666,
+      "base_only": 0,
+      "base_only_given_base_correct": 0.0,
+      "base_only_given_base_correct_wilson_95": [
+        0.0,
+        0.6576197724933469
+      ],
+      "both_correct": 2,
+      "both_wrong": 1,
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "foil_accuracy": 0.6666666666666666,
+      "foil_only": 0,
+      "foil_only_given_base_wrong": 0.0,
+      "foil_only_given_base_wrong_wilson_95": [
+        0.0,
+        0.7934506856227626
+      ],
+      "mcnemar_exact_two_sided_p": 1.0,
+      "model": "gpt-5.6-terra",
+      "n": 3,
+      "paired_risk_difference": 0.0,
+      "rank": 2
+    },
+    {
+      "base_accuracy": 0.6666666666666666,
+      "base_only": 0,
+      "base_only_given_base_correct": 0.0,
+      "base_only_given_base_correct_wilson_95": [
+        0.0,
+        0.6576197724933469
+      ],
+      "both_correct": 2,
+      "both_wrong": 1,
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "foil_accuracy": 0.6666666666666666,
+      "foil_only": 0,
+      "foil_only_given_base_wrong": 0.0,
+      "foil_only_given_base_wrong_wilson_95": [
+        0.0,
+        0.7934506856227626
+      ],
+      "mcnemar_exact_two_sided_p": 1.0,
+      "model": "gpt-5.6-terra",
+      "n": 3,
+      "paired_risk_difference": 0.0,
+      "rank": 3
+    },
+    {
+      "base_accuracy": 1.0,
+      "base_only": 1,
+      "base_only_given_base_correct": 0.3333333333333333,
+      "base_only_given_base_correct_wilson_95": [
+        0.06149194472039621,
+        0.7923403991979522
+      ],
+      "both_correct": 2,
+      "both_wrong": 0,
+      "config_id": "SOL_LOW",
+      "effort": "low",
+      "foil_accuracy": 0.6666666666666666,
+      "foil_only": 0,
+      "foil_only_given_base_wrong": null,
+      "foil_only_given_base_wrong_wilson_95": null,
+      "mcnemar_exact_two_sided_p": 1.0,
+      "model": "gpt-5.6-sol",
+      "n": 3,
+      "paired_risk_difference": -0.3333333333333333,
+      "rank": 4
+    },
+    {
+      "base_accuracy": 0.6666666666666666,
+      "base_only": 0,
+      "base_only_given_base_correct": 0.0,
+      "base_only_given_base_correct_wilson_95": [
+        0.0,
+        0.6576197724933469
+      ],
+      "both_correct": 2,
+      "both_wrong": 1,
+      "config_id": "SOL_HIGH",
+      "effort": "high",
+      "foil_accuracy": 0.6666666666666666,
+      "foil_only": 0,
+      "foil_only_given_base_wrong": 0.0,
+      "foil_only_given_base_wrong_wilson_95": [
+        0.0,
+        0.7934506856227626
+      ],
+      "mcnemar_exact_two_sided_p": 1.0,
+      "model": "gpt-5.6-sol",
+      "n": 3,
+      "paired_risk_difference": 0.0,
+      "rank": 5
+    }
+  ],
+  "efficiency": {
+    "BASE": {
+      "cached_input_tokens": {
+        "mean": 2176.0,
+        "n": 18,
+        "total": 39168.0
+      },
+      "input_tokens": {
+        "mean": 17631.444444444445,
+        "n": 18,
+        "total": 317366.0
+      },
+      "output_tokens": {
+        "mean": 1407.7777777777778,
+        "n": 18,
+        "total": 25340.0
+      },
+      "wall_seconds": {
+        "mean": 33.173777777775996,
+        "n": 18,
+        "total": 597.1279999999679
+      }
+    },
+    "FOIL": {
+      "cached_input_tokens": {
+        "mean": 1621.3333333333333,
+        "n": 18,
+        "total": 29184.0
+      },
+      "input_tokens": {
+        "mean": 24651.333333333332,
+        "n": 18,
+        "total": 443724.0
+      },
+      "output_tokens": {
+        "mean": 1984.9444444444443,
+        "n": 18,
+        "total": 35729.0
+      },
+      "wall_seconds": {
+        "mean": 43.46088888889062,
+        "n": 18,
+        "total": 782.2960000000312
+      }
+    }
+  },
+  "execution_inventory": {
+    "auxiliary_local_subprocesses": "Git integrity checks and Codex CLI version probes are outside the model-exec cap.",
+    "model_exec_cap": 42,
+    "model_exec_receipts": 42
+  },
+  "invalid_original_primary": {
+    "model": "correct ~ arm * p_hat_config + (1 | item)",
+    "reason": "p_hat_config is computed from outcomes in this same three-item run.",
+    "status": "NOT_RUN_INVALID_GENERATED_REGRESSOR"
+  },
+  "manifest_sha256": "bc2f7394a5bcfad90b63a3832ea1eb13076df27289fc5a869ffe3542ffbf03ad",
+  "n_items": 3,
+  "n_matched_pairs": 18,
+  "overall": {
+    "base_accuracy": 0.7222222222222222,
+    "base_only": 2,
+    "base_only_given_base_correct": 0.15384615384615385,
+    "base_only_given_base_correct_wilson_95": [
+      0.043258178358081184,
+      0.4223463101948254
+    ],
+    "both_correct": 11,
+    "both_wrong": 4,
+    "foil_accuracy": 0.6666666666666666,
+    "foil_only": 1,
+    "foil_only_given_base_wrong": 0.2,
+    "foil_only_given_base_wrong_wilson_95": [
+      0.03622410863243014,
+      0.6244653702374747
+    ],
+    "item_aggregate_differences": [
+      0,
+      -1,
+      0
+    ],
+    "item_cluster_sign_flip_two_sided_p": 1.0,
+    "mcnemar_exact_two_sided_p": 1.0,
+    "n": 18,
+    "paired_risk_difference": -0.05555555555555555
+  },
+  "pattern": {
+    "label": "OBSERVED_IN_THIS_PILOT",
+    "scope": "three-item descriptive development result; no fitted dose-response claim"
+  },
+  "predictions_sha256": "6bd2813cbee28875e1000b9b3dc1b1cf5db7ea361b0b38e441acfceb596fbd96",
+  "schema": "foil-codex-dose-results/v1",
+  "scored_at": "2026-08-24T10:45:23.354882+00:00",
+  "source_revision": "56686c06f5e19865c153de0fdb11be3890014df7"
+}
