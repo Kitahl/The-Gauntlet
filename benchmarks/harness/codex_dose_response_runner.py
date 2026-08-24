@@ -14,7 +14,9 @@ import itertools
 import json
 import math
 import random
+import shutil
 import subprocess
+import sys
 import tempfile
 import time
 import urllib.request
@@ -420,9 +422,42 @@ def validate_lock() -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
     return manifest, items_payload, condition
 
 
+def codex_executable() -> str:
+    """Resolve an executable Python can launch without a Windows shell."""
+    if sys.platform == "win32":
+        cmd_shim = shutil.which("codex.cmd")
+        if cmd_shim is not None:
+            package_root = (
+                Path(cmd_shim).resolve().parent
+                / "node_modules"
+                / "@openai"
+                / "codex"
+                / "node_modules"
+                / "@openai"
+            )
+            packaged = sorted(
+                package_root.glob("codex-win32-*/vendor/*/bin/codex.exe")
+            )
+            if len(packaged) == 1 and packaged[0].is_file():
+                return str(packaged[0])
+        native = shutil.which("codex.exe")
+        if native is not None:
+            return native
+        raise ProtocolError("no native codex.exe is available to Python")
+
+    executable = shutil.which("codex")
+    if executable is None:
+        raise ProtocolError("codex executable is not available")
+    return executable
+
+
 def codex_version() -> str:
     process = subprocess.run(
-        ["codex", "--version"], capture_output=True, text=True, timeout=30, check=False
+        [codex_executable(), "--version"],
+        capture_output=True,
+        text=True,
+        timeout=30,
+        check=False,
     )
     if process.returncode != 0:
         raise ProtocolError(f"codex --version failed: {process.stderr.strip()}")
@@ -435,9 +470,10 @@ def build_argv(
     workdir: Path,
     last_output: Path,
     schema_path: Path = SCHEMA_FILE,
+    executable: str | None = None,
 ) -> list[str]:
     return [
-        "codex",
+        codex_executable() if executable is None else executable,
         "exec",
         "-m",
         model,

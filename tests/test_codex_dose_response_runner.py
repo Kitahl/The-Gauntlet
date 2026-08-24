@@ -104,7 +104,13 @@ class FrozenPilotTests(unittest.TestCase):
         self.assertEqual(len(groups), 36)
 
     def test_execution_flags_are_ephemeral_read_only_and_schema_bound(self) -> None:
-        argv = runner.build_argv("gpt-5.6-terra", "high", Path("work"), Path("last"))
+        argv = runner.build_argv(
+            "gpt-5.6-terra",
+            "high",
+            Path("work"),
+            Path("last"),
+            executable="codex",
+        )
         self.assertEqual(argv[:2], ["codex", "exec"])
         self.assertIn("read-only", argv)
         self.assertIn("--ephemeral", argv)
@@ -112,6 +118,36 @@ class FrozenPilotTests(unittest.TestCase):
         self.assertIn("--ignore-rules", argv)
         self.assertIn("--output-schema", argv)
         self.assertEqual(argv[-1], "-")
+
+    def test_windows_launcher_resolves_packaged_native_executable(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            npm = Path(temporary)
+            shim = npm / "codex.cmd"
+            native = (
+                npm
+                / "node_modules"
+                / "@openai"
+                / "codex"
+                / "node_modules"
+                / "@openai"
+                / "codex-win32-x64"
+                / "vendor"
+                / "x86_64-pc-windows-msvc"
+                / "bin"
+                / "codex.exe"
+            )
+            shim.write_text("@echo off", encoding="utf-8")
+            native.parent.mkdir(parents=True)
+            native.write_bytes(b"MZ")
+            with (
+                mock.patch.object(runner.sys, "platform", "win32"),
+                mock.patch.object(
+                    runner.shutil,
+                    "which",
+                    side_effect=lambda name: str(shim) if name == "codex.cmd" else None,
+                ),
+            ):
+                self.assertEqual(runner.codex_executable(), str(native))
 
     def test_stream_parser_surfaces_tool_events_and_bad_json(self) -> None:
         payload = "\n".join(

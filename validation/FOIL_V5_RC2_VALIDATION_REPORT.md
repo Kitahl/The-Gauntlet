@@ -20,8 +20,8 @@ controls, installs, trust-promotes, or executes either other system.
 
 | Check | Result |
 |---|---|
-| `python -m unittest discover -s tests` | **PASS — 704 tests in 54.620 s** |
-| Focused adaptive/ledger/pilot suite | **PASS — 38 tests** |
+| `python -m unittest discover -s tests` | **PASS — 705 tests** |
+| Focused adaptive/ledger/pilot suite | **PASS — 39 tests** |
 | Pinned Ruff 0.16.3 over changed Python surfaces | **PASS** |
 | `python -m compileall -q tools tests benchmarks/harness validation` | **PASS** |
 | `git diff --check` | **PASS** |
