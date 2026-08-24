@@ -1,64 +1,23 @@
 {
   "schema": "egrt/visual-provenance-1",
-  "showcase_revision": 18,
+  "showcase_revision": 19,
   "research_software_version": "0.5.1",
   "visuals": [
     {
-      "id": "gauntlet-hero",
-      "file": "docs/visuals/gauntlet-hero.svg",
-      "purpose": "Show a professional research task decomposed into prior-art, executable-claim, and independent-review obligations, selectively routed to Space, Power, and Council, then assembled into receipts and a scoped release.",
-      "sources": ["docs/ARCHITECTURE.md", "skills/soul/SKILL.md", "skills/scoutbot/SKILL.md", "skills/codebot/SKILL.md", "skills/council-of-elders/SKILL.md"],
-      "boundary": "Illustrative routing example derived from public module contracts; not an execution trace or efficacy result."
-    },
-    {
-      "id": "gauntlet-system-map",
-      "file": "docs/visuals/gauntlet-system-map.svg",
-      "purpose": "Show frame, obligation creation, selective tool routing, receipt assembly, and scoped release.",
-      "sources": ["docs/ARCHITECTURE.md", "skills/soul/SKILL.md", "skills/scoutbot/SKILL.md", "skills/codebot/SKILL.md", "skills/benchbot/SKILL.md"],
-      "boundary": "Conceptual system map; only example routes are drawn."
-    },
-    {
-      "id": "foil-diagnostic-loop",
-      "public_name": "Mirror",
-      "file": "docs/visuals/foil-diagnostic-loop.svg",
-      "purpose": "Show Mirror task evidence, competing gap hypotheses, minimum discriminator, minimum assistance, verification, transfer, and evidence update.",
-      "sources": ["skills/foil/SKILL.md", "research/FOIL_RESEARCH_BASIS.md"],
-      "boundary": "Specification-derived mechanism visual; not evidence of learning benefit or independent competence."
-    },
-    {
-      "id": "gem-mind",
-      "file": "docs/visuals/gem-mind.svg",
-      "purpose": "Show Mind converting objects, assumptions, and edge cases into a proof obligation with proof and counterexample branches.",
-      "sources": ["skills/mathbot/SKILL.md"],
-      "boundary": "Specification-derived illustration, not a proof receipt."
-    },
-    {
-      "id": "gem-space",
-      "file": "docs/visuals/gem-space.svg",
-      "purpose": "Show Space expanding a mechanism query across papers, repositories, standards, and current evidence into a scoped finding.",
-      "sources": ["skills/scoutbot/SKILL.md"],
-      "boundary": "Specification-derived illustration, not a search result."
-    },
-    {
-      "id": "gem-reality",
-      "file": "docs/visuals/gem-reality.svg",
-      "purpose": "Show Reality moving from known methods and a named gap to candidate mechanisms and a prior-art recheck.",
-      "sources": ["skills/novelbot/SKILL.md"],
-      "boundary": "Specification-derived illustration, not a novelty claim."
-    },
-    {
-      "id": "gem-power",
-      "file": "docs/visuals/gem-power.svg",
-      "purpose": "Show Power moving source through build, test, runtime, regression, receipt, and a separate failure path.",
-      "sources": ["skills/codebot/SKILL.md"],
-      "boundary": "Specification-derived illustration, not an executed verification receipt."
-    },
-    {
-      "id": "gem-time",
-      "file": "docs/visuals/gem-time.svg",
-      "purpose": "Show Time comparing candidate and baseline across matched evaluation cells before a stop or go decision.",
-      "sources": ["skills/benchbot/SKILL.md"],
-      "boundary": "Specification-derived illustration, not a benchmark result."
+      "id": "system-field",
+      "file": "docs/system-field.js",
+      "purpose": "Render one persistent semantic research-system field that reconfigures around the active professional workflow and the five specialist Gems.",
+      "sources": [
+        "docs/ARCHITECTURE.md",
+        "skills/soul/SKILL.md",
+        "skills/mathbot/SKILL.md",
+        "skills/scoutbot/SKILL.md",
+        "skills/novelbot/SKILL.md",
+        "skills/codebot/SKILL.md",
+        "skills/benchbot/SKILL.md"
+      ],
+      "design_reference_boundary": "The constellation reveal, orbital/web formation language, sparse beam motion, and slow camera-like drift are adapted from an earlier cinematic prototype owned by the project author. The public implementation is rewritten as local Canvas2D and imports no external visual asset or runtime.",
+      "boundary": "Conceptual visualization of module contracts and routing semantics. It is not an execution trace, benchmark result, or behavioral-efficacy claim."
     }
   ]
 }
