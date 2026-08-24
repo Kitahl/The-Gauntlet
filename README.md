@@ -5,7 +5,7 @@
 [![Research software validation](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml)
 [![CodeQL](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.6.0--rc2-informational.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.6.0--rc3-informational.svg)](CHANGELOG.md)
 
 > **Research status:** public research-software toolkit with executable runtime checks, evidence-bearing structural/source validation, and exploratory benchmark pilots. The repository does **not** claim that the complete system improves human reasoning, scientific discovery, or general AI capability in prospective deployment.
 
@@ -33,16 +33,22 @@ The toolkit routes work according to the **epistemic obligation**: what must be 
 
 ## FOIL v5 / Mirror testing release candidate
 
-**0.6.0-rc2 is default-off and shadow-only, not a completed release.** It adds a
+**FOIL in 0.6.0-rc3 remains default-off and shadow-only; this is a testing
+release candidate, not an evidence-bearing stable release.** It includes a
 one-claim post-solve path with typed claims/obligations, deterministic decidable
 coverage, a sealed protocol/run ledger, a closed-verifier residual scanner, and
 calibration-bound sensor receipts. It can emit a shadow repair proposal at the
-admission boundary, but cannot mutate an answer or autonomously write, commit,
-or execute a repair. The opt-in pre-/post-solve monitor is event-driven and
-zero-token. RC2 also adds a non-executing fixed-point DIRECT/VERIFY/FULL
-recommendation layer, compiler-provenance revalidation, and a sealed
-observational RouteVector ledger. The new v5 post-solve monitor is disabled by
-default; the legacy pre-solve hook remains the compatibility default.
+admission boundary, but cannot autonomously mutate an answer, write, commit, or
+execute a repair. RC3 adds a separate host-owned finalizer: only a digest-bound,
+one-use ACTIVE request plus explicit request-bound host approval can select A1;
+every missing or mismatched prerequisite returns A0 unchanged. The opt-in
+pre-/post-solve monitor is event-driven and zero-token. RC3 retains the
+non-executing fixed-point DIRECT/VERIFY/FULL recommendation layer,
+compiler-provenance revalidation, and sealed observational RouteVector ledger.
+Admission now rejects structural and semantic certificates from the same
+provenance group, even under different verifier names. The new v5 post-solve
+monitor is disabled by default; the legacy pre-solve hook remains the
+compatibility default.
 
 FOIL remains Mirror's technical identity. FOIL, Gauntlet, and Mastermind remain
 separate: this v5 shadow path neither imports nor controls Gauntlet or

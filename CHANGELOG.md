@@ -14,6 +14,40 @@ The project follows semantic versioning for public releases.
 - Independent reproduction reports.
 - Archival DOI integration after the first evidence-bearing stable release.
 
+## [0.6.0-rc3] - 2026-08-24
+
+Third testing release candidate for **Mirror** (technical ID **FOIL**). FOIL
+itself remains default-off and shadow-only. RC3 completes a separate,
+host-owned final-selection reference path without granting FOIL autonomous
+answer mutation, repair execution, model/tool/network calls, or host writes.
+
+### Added
+
+- A pure host finalizer that accepts the existing digest-only, one-use ACTIVE
+  request and a separately constructed, request-bound explicit host approval.
+  It selects A1 only when the exact A0 bytes, candidate bytes, artifact digest,
+  request digest, and approval digest all bind; every ordinary denial or
+  mismatch returns the original A0 object.
+- A preregistered seven-case, zero-token deterministic small pilot covering
+  arithmetic, JSON, and numeric-tolerance rescues plus correct-answer
+  stand-down, semantic-route stand-down, same-provenance rejection, and
+  tampered-candidate rejection.
+
+### Hardened
+
+- Structural and semantic certificate provenance is preserved through the
+  adapters. Distinct verifier names from one provenance group are no longer
+  treated as independent and are rejected before COMMITTABLE.
+- Finalization traces expose digests and typed reasons only; raw A0/A1 content
+  is returned transiently to the host and is not included in the trace.
+
+### Evidence boundary
+
+The safe-finalization pilot is software-contract evidence only. Its candidates
+and promotion receipts are frozen host fixtures. It does not measure candidate
+discovery, natural-language extraction, semantic efficacy, calibration,
+prospective performance, or any external promotion gate.
+
 ## [0.6.0-rc2] - 2026-08-24
 
 Second testing release candidate for **Mirror** (technical ID **FOIL**). It extends

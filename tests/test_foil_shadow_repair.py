@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 import inspect
 import sys
 import unittest
@@ -85,6 +86,12 @@ def certificate(kind: CertificateClass, verifier_id: str) -> EvidenceCertificate
         if verifier_id == "builtin.json_exact"
         else {"actual": "x", "expected": "x"}
     )
+    verifier = DEFAULT_REGISTRY.run(verifier_id, payload)
+    if kind is CertificateClass.INDEPENDENT_SEMANTIC:
+        verifier = dataclasses.replace(
+            verifier,
+            provenance_group="external.semantic",
+        )
     return EvidenceCertificate(
         certificate_id=f"cert-{kind.value}",
         certificate_class=kind,
@@ -94,7 +101,7 @@ def certificate(kind: CertificateClass, verifier_id: str) -> EvidenceCertificate
         scope_digest=SCOPE,
         obligation_set_digest=OBLIGATIONS,
         bindings=bindings(),
-        verifier=DEFAULT_REGISTRY.run(verifier_id, payload),
+        verifier=verifier,
         environment_digest=ENV,
         evidence_digests=("8" * 64,),
         coverage=coverage(),

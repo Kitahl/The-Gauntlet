@@ -92,6 +92,7 @@ def certificate(
     *,
     status: CheckStatus = CheckStatus.PASS,
     verifier_id: str = "foil.structural-verifier",
+    provenance_group: str = "foil.structural",
     base_digest: str = BASE,
     candidate_digest: str = CANDIDATE,
     scope_digest: str = SCOPE,
@@ -104,6 +105,7 @@ def certificate(
         obligation_set_digest=obligation_set_digest,
         verifier_id=verifier_id,
         verifier_version="1.0.0",
+        provenance_group=provenance_group,
         environment_digest=ENVIRONMENT,
         status=status,
     )
@@ -113,6 +115,7 @@ def semantic(
     *,
     status: CheckStatus = CheckStatus.PASS,
     verifier_id: str = "foil.semantic-verifier",
+    provenance_group: str = "foil.semantic",
     base_digest: str = BASE,
     candidate_digest: str = CANDIDATE,
     scope_digest: str = SCOPE,
@@ -125,6 +128,7 @@ def semantic(
         obligation_set_digest=obligation_set_digest,
         verifier_id=verifier_id,
         verifier_version="1.0.0",
+        provenance_group=provenance_group,
         environment_digest=ENVIRONMENT,
         status=status,
     )
@@ -371,6 +375,15 @@ class CandidateAdmissionTests(unittest.TestCase):
         )
         self.assertEqual(decision.state, AdmissionState.REJECTED)
         self.assertFalse(decision.candidate_committable)
+
+    def test_distinct_verifier_names_from_one_provenance_group_are_rejected(self):
+        decision = decide_admission(
+            candidate(),
+            certificate(verifier_id="structural.a", provenance_group="shared.family"),
+            semantic(verifier_id="semantic.b", provenance_group="shared.family"),
+        )
+        self.assertEqual(decision.state, AdmissionState.REJECTED)
+        self.assertEqual(decision.reason, "structural_semantic_provenance_overlap")
 
     def test_only_pass_pass_is_committable_across_all_status_pairs(self):
         for structural_status, semantic_status in itertools.product(CheckStatus, repeat=2):

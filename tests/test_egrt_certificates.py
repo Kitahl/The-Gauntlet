@@ -57,6 +57,8 @@ def certificate(
         else {"actual": "x", "expected": "x"}
     )
     result = DEFAULT_REGISTRY.run(verifier_id, payload)
+    if kind is CertificateClass.INDEPENDENT_SEMANTIC:
+        result = dataclasses.replace(result, provenance_group="external.semantic")
     return EvidenceCertificate(
         certificate_id="cert-1",
         certificate_class=kind,

@@ -297,6 +297,7 @@ class PatchCertificate:
     obligation_set_digest: str
     verifier_id: str
     verifier_version: str
+    provenance_group: str
     environment_digest: str
     status: CheckStatus
 
@@ -304,6 +305,7 @@ class PatchCertificate:
         _require_instance("status", self.status, CheckStatus)
         _require_text("verifier_id", self.verifier_id)
         _require_text("verifier_version", self.verifier_version)
+        _require_text("provenance_group", self.provenance_group)
         for name in (
             "base_digest",
             "candidate_digest",
@@ -322,6 +324,7 @@ class SemanticVerification:
     obligation_set_digest: str
     verifier_id: str
     verifier_version: str
+    provenance_group: str
     environment_digest: str
     status: CheckStatus
 
@@ -329,6 +332,7 @@ class SemanticVerification:
         _require_instance("status", self.status, CheckStatus)
         _require_text("verifier_id", self.verifier_id)
         _require_text("verifier_version", self.verifier_version)
+        _require_text("provenance_group", self.provenance_group)
         for name in (
             "base_digest",
             "candidate_digest",
@@ -429,6 +433,11 @@ def decide_admission(
         return decision(
             AdmissionState.REJECTED,
             "structural_verifier_reused_for_semantics",
+        )
+    if semantic.provenance_group == certificate.provenance_group:
+        return decision(
+            AdmissionState.REJECTED,
+            "structural_semantic_provenance_overlap",
         )
     if semantic.verifier_id == candidate.repair_producer:
         return decision(AdmissionState.REJECTED, "repair_producer_self_verified_semantics")

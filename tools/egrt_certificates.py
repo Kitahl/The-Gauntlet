@@ -125,6 +125,7 @@ def to_patch_certificate(certificate: EvidenceCertificate):
         obligation_set_digest=certificate.obligation_set_digest,
         verifier_id=certificate.verifier.verifier_id,
         verifier_version=certificate.verifier.verifier_version,
+        provenance_group=certificate.verifier.provenance_group,
         environment_digest=certificate.environment_digest,
         status=_legacy_status(certificate),
     )
@@ -146,6 +147,7 @@ def to_semantic_verification(certificate: EvidenceCertificate):
         obligation_set_digest=certificate.obligation_set_digest,
         verifier_id=certificate.verifier.verifier_id,
         verifier_version=certificate.verifier.verifier_version,
+        provenance_group=certificate.verifier.provenance_group,
         environment_digest=certificate.environment_digest,
         status=_legacy_status(certificate),
     )

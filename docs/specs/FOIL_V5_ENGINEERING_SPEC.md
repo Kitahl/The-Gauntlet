@@ -44,6 +44,7 @@ Hard invariants:
 | Authority/admission | tools/foil_authority.py; tools/foil_residuals.py | Implemented shadow-only policy |
 | Scanner/trigger | tools/foil_residual_scanner.py; tools/foil_postsolve_monitor.py | Implemented default-off/host invoked |
 | External repair adapter | tools/foil_shadow_repair.py; tools/egrt_host_bridge.py | Implemented proposal/admission seam with one-use ACTIVE-token validation; no executor |
+| Host final selection | tools/egrt_host_finalizer.py | Implemented pure host-owned A0/A1 selector; explicit request-bound approval required; every mismatch preserves A0 |
 | Ditto resolver | tools/foil_ditto.py | Implemented closed READY registry and candidate-bound authorization; host-denied/no executor |
 | Offline P0 reproducer | benchmarks/harness/foil_profile_ablation.py | Implemented protocol/receipt structural check; non-efficacy only |
 | Adaptive compute | tools/foil_adaptive_route.py | Implemented; default-off, A0-preserving, shadow-only DIRECT/VERIFY/FULL recommendations |
@@ -64,7 +65,9 @@ Hard invariants:
       -> external producer may create A1
       -> structural certificate + independent semantic certificate
       -> COMMITTABLE | REJECTED | UNKNOWN
-      -> host/owner alone chooses whether to use A1
+      -> one-use ACTIVE host request
+      -> explicit request-bound host approval
+      -> host finalizer selects A1 or returns exact A0
 
 The compiler is post-solve and must not influence A0 generation. Gate 1 permits
 only protocol-allowed local deterministic work. P1, P2, Ditto, model calls,
@@ -99,12 +102,13 @@ universe, never global semantic truth.
 | PREDICATE_SCOPED | named predicate in named environment | unenumerated semantics |
 | REGRESSION_SCOPED | named passing obligations remain passing | complete semantic non-regression |
 | INDEPENDENT_SEMANTIC | independently verified scoped semantic result | host commit by itself |
-| UNKNOWN | no admission | pass, authority, or mutation |
+| INCOMPLETE_SCOPE | no admission | pass, authority, or mutation |
 
 Warrant/evidence class, applicability, authority ceiling, and admission state are
 orthogonal. The repair producer, structural verifier, and semantic verifier must
-be distinct where policy requires it. COMMITTABLE remains host decision input,
-not execution permission.
+be distinct where policy requires it. Different verifier names are insufficient:
+structural and semantic certificates from the same provenance group are rejected.
+COMMITTABLE remains host decision input, not execution permission.
 
 ### 4.3 Candidate release and invocation
 
@@ -112,6 +116,12 @@ Candidate release state is DORMANT, SHADOW, LOCKED, or ACTIVE. Invocation mode
 is independently legacy, off, observe, or smart. A qualifying signed,
 candidate-bound receipt is required for LOCKED/ACTIVE. Even then tokens are
 non-executing and host-action-required.
+
+The reference host finalizer accepts no tool, model, network, process, file, or
+candidate-generation capability. It validates the exact A0 bytes, candidate
+bytes, artifact binding, request binding, and explicit approval binding. It
+returns the original A0 object for every ordinary denial or mismatch. Selecting
+A1 is the host's explicit action and does not grant further execution authority.
 
 The hook and post-solve monitor are event-driven only and have zero
 model/tool/network/polling budget. SCAN merely asks a host to consider a

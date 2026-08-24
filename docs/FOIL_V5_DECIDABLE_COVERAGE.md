@@ -120,14 +120,15 @@ verifier, and retry components. See [FOIL_ADAPTIVE_COMPUTE_SPEC.md](FOIL_ADAPTIV
 ### Certificates, authority, and repair boundary
 
 [egrt_certificates.py](../tools/egrt_certificates.py) defines STRUCTURAL_ONLY,
-PREDICATE_SCOPED, REGRESSION_SCOPED, INDEPENDENT_SEMANTIC, and UNKNOWN
+PREDICATE_SCOPED, REGRESSION_SCOPED, INDEPENDENT_SEMANTIC, and INCOMPLETE_SCOPE
 certificate classes. Certificate class is not action authority.
 
 [foil_authority.py](../tools/foil_authority.py) separates evidence surface,
 applicability, sensor outcome, authority ceiling, and admission state. Unknown
 states preserve A0. A structural certificate does not establish semantic
 admission; an independently represented semantic verification is required for a
-COMMITTABLE candidate.
+COMMITTABLE candidate. Structural and semantic certificates must also carry
+different provenance groups; distinct verifier names alone are not independence.
 
 [foil_shadow_repair.py](../tools/foil_shadow_repair.py) is host-denied. It
 accepts an externally produced candidate, records certificate digests, preserves
@@ -177,6 +178,12 @@ install, trust-promote, or call providers.
 after COMMITTABLE admission plus the same candidate-bound ACTIVE-token checks,
 then consumes the authority token through a one-use replay guard. A valid bridge
 request is still not execution permission and never mutates A0.
+
+[egrt_host_finalizer.py](../tools/egrt_host_finalizer.py) is the separate,
+host-owned selection boundary. It selects A1 only after exact A0, candidate,
+artifact, request, and explicit approval bindings match. Every ordinary denial
+or mismatch returns the original A0 object; the digest-only trace never stores
+raw answer content.
 
 The provider-neutral offline P0 reproducer in
 [foil_profile_ablation.py](../benchmarks/harness/foil_profile_ablation.py)
