@@ -356,6 +356,8 @@ class ExecutionTests(_RunHarness):
         self.assertFalse(receipt["gold_opened"])
         self.assertTrue(receipt["guard_attest"]["valid"])
         self.assertEqual(receipt["prediction_sha256"], runner.sha256_text("B"))
+        self.assertNotIn("response_text", receipt)
+        self.assertNotIn("usage", receipt)
 
         predictions = json.loads(runner.predictions_path("gpqa").read_text(encoding="utf-8"))
         self.assertFalse(predictions["gold_opened"])
@@ -451,6 +453,57 @@ class ExecutionTests(_RunHarness):
         self.assertEqual(prediction["invalid_reason"], "no ANSWER line")
         self.assertIsNone(prediction["answer"])
 
+    def test_resume_skips_ok_without_second_child_call_and_retries_invalid(self) -> None:
+        with quiet():
+            runner.cmd_run("gpqa", ["C-SL"], 1, dry_run=False)
+        self.assertEqual(len(self.fake_calls()), 1)
+        with quiet(), mock.patch.object(runner, "_execute_unit") as execute:
+            runner.cmd_run("gpqa", ["C-SL"], 1, dry_run=False)
+        execute.assert_not_called()
+        predictions = runner._read_json(runner.predictions_path("gpqa"))
+        predictions["predictions"][0]["status"] = "INVALID"
+        runner._write_json(runner.predictions_path("gpqa"), predictions)
+        retry_receipt = {
+            "unit": self.manifest["units"][0]["unit"],
+            "status": "OK",
+            "invalid_reason": None,
+        }
+        with quiet(), mock.patch.object(
+            runner, "_execute_unit", return_value=retry_receipt
+        ) as execute:
+            runner.cmd_run("gpqa", ["C-SL"], 1, dry_run=False)
+        execute.assert_called_once()
+
+    def test_items_cap_rejects_unit_limit_that_could_split_pairs(self) -> None:
+        with quiet(), mock.patch.object(runner, "_execute_unit") as execute:
+            code = runner.cmd_run(
+                "gpqa", ["C-SL"], 1, dry_run=False, items_cap=1
+            )
+        self.assertEqual(code, 1)
+        execute.assert_not_called()
+    def test_items_cap_keeps_complete_item_config_condition_groups(self) -> None:
+        self.items = synthetic_items(3)
+        runner._write_json(runner.items_path("gpqa"), {"items": self.items})
+        self.manifest = runner.build_manifest("gpqa", self.items)
+        runner._write_json(runner.manifest_path("gpqa"), self.manifest)
+        seen: list[dict] = []
+
+        def execute(_benchmark, unit, _item):
+            seen.append(unit)
+            return {"unit": unit["unit"], "status": "OK", "invalid_reason": None}
+
+        with quiet(), mock.patch.object(runner, "_execute_unit", side_effect=execute):
+            code = runner.cmd_run(
+                "gpqa", ["C-SL", "C-SH"], None, dry_run=False, items_cap=2
+            )
+        self.assertEqual(code, 0)
+        self.assertEqual({unit["item_index"] for unit in seen}, {0, 1})
+        self.assertEqual(len(seen), 2 * 2 * 2)
+        triples = {
+            (unit["item_index"], unit["config"], unit["condition_id"])
+            for unit in seen
+        }
+        self.assertEqual(len(triples), len(seen))
     def test_a_reused_isolation_session_id_fails_closed(self) -> None:
         with quiet():
             runner.cmd_run("gpqa", ["C-SL"], 1, dry_run=False)
@@ -470,6 +523,30 @@ class ExecutionTests(_RunHarness):
         second = json.loads(runner.predictions_path("gpqa").read_text(encoding="utf-8"))
         self.assertEqual(len(second["predictions"]), 2)
 
+
+class RunnerCliTests(unittest.TestCase):
+    def test_main_configures_reconfigurable_console_streams_with_replace(self) -> None:
+        class Stream(io.StringIO):
+            def __init__(self) -> None:
+                super().__init__()
+                self.errors_values: list[str] = []
+
+            def reconfigure(self, *, errors: str) -> None:
+                self.errors_values.append(errors)
+
+        stdout, stderr = Stream(), Stream()
+        args = mock.Mock(command="prepare", benchmark="gpqa", check_only=True)
+        with (
+            mock.patch.object(runner.sys, "stdout", stdout),
+            mock.patch.object(runner.sys, "stderr", stderr),
+            mock.patch.object(
+                runner.argparse.ArgumentParser, "parse_args", return_value=args
+            ),
+            mock.patch.object(runner, "cmd_check_only", return_value=0),
+        ):
+            self.assertEqual(runner.main([]), 0)
+        self.assertEqual(stdout.errors_values, ["replace"])
+        self.assertEqual(stderr.errors_values, ["replace"])
 
 class ScoreGateTests(unittest.TestCase):
     """Gold stays shut until the predictions cannot move without a trace."""

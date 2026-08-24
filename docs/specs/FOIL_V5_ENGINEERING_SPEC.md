@@ -46,6 +46,9 @@ Hard invariants:
 | External repair adapter | tools/foil_shadow_repair.py; tools/egrt_host_bridge.py | Implemented proposal/admission seam with one-use ACTIVE-token validation; no executor |
 | Ditto resolver | tools/foil_ditto.py | Implemented closed READY registry and candidate-bound authorization; host-denied/no executor |
 | Offline P0 reproducer | benchmarks/harness/foil_profile_ablation.py | Implemented protocol/receipt structural check; non-efficacy only |
+| Adaptive compute | tools/foil_adaptive_route.py | Implemented; default-off, A0-preserving, shadow-only DIRECT/VERIFY/FULL recommendations |
+| RouteVector history | tools/foil_shadow_route_ledger.py | Implemented; default-off observational ledger; no selection, learning, component credit, or execution |
+| Future transformation admission | docs/FOIL_FORMALIZATION_FIDELITY.md | Specified only; NL-to-obligation generator remains absent |
 
 ## 3. Required flow
 
@@ -54,6 +57,7 @@ Hard invariants:
       -> immutable A0/task/spec/compiler/config bindings
       -> post-solve compiler emits typed obligations/claims
       -> closed deterministic verifier registry evaluates applicable predicates
+      -> optional default-off EV controller recommends DIRECT/VERIFY/FULL in shadow
       -> coverage reports decidable, cleared, failed, unresolved, omitted mass
       -> scanner emits typed shadow evidence and ledger span
       -> authority policy returns stand-down/observe/flag/ask/escalation/repair-proposal
@@ -112,6 +116,26 @@ non-executing and host-action-required.
 The hook and post-solve monitor are event-driven only and have zero
 model/tool/network/polling budget. SCAN merely asks a host to consider a
 separately budgeted scanner invocation.
+
+### 4.4 Adaptive compute and route history
+
+The controller consumes frozen fixed-point EV estimates and compiler-created
+host-declared verifier routes. Missing or non-positive value, insufficient budget,
+unknown/mismatched bindings, and model-generated obligations retain A0. Its output
+is CONTROL_ONLY, host-action-required, and never execution authority.
+
+Optional posterior stand-down requires explicit thresholds, minimum evidence,
+freshness, and exact model/contract/task-regime binding. Optional k=2 returns a
+non-final probe request only; the controller cannot make the calls and agreement
+is not correctness.
+
+The RouteVector ledger is observational-only. Exact-route summaries never imply
+causal superiority and never feed the controller. Component effects require a
+separately frozen matched or randomized experiment.
+
+The current compiler never transforms prose. Generated obligations remain
+ineligible until the separate fidelity and extraction-recall gate is implemented
+and passed.
 
 ## 5. Gate protocol
 

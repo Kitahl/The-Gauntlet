@@ -1,7 +1,7 @@
 # FOIL v5: Decidable Coverage
 
 Status: **implemented software contracts; behavioral efficacy unmeasured**
-Branch inspected: codex/foil-v5-decidable-coverage at 4f088d688fa9e25b4608f44000a5d9812efa45f9.
+Branch base verified: `65044e87a150f33383ab670ad06e21bf80194977`; adaptive work is additive on `codex/foil-v5-full-system`.
 
 FOIL v5 does not label a free-form answer “verified.” After an immutable base
 answer (A0) is sealed, it compiles a declared material-obligation universe,
@@ -91,6 +91,32 @@ coverage/precision, and action-conditioned R_flag, alpha_flag, R_act, alpha_act,
 u_act, and d_act. Wide-bank flag recall cannot be credited as repair benefit
 unless that path was itself action-authorized.
 
+### Vision/build boundary and adaptive compute
+
+The current compiler accepts only a host-supplied declarative obligation
+universe. It never performs the earlier vision's prose-to-predicate transform.
+Declared decidable coverage therefore measures that named universe, not FOIL's
+ability to discover claims in prose. Semantic fidelity and extraction recall are
+upstream authoring questions. Their future admission contract is explicit in
+[FOIL_FORMALIZATION_FIDELITY.md](FOIL_FORMALIZATION_FIDELITY.md); no generated
+obligation route exists in the current runtime.
+
+[foil_adaptive_route.py](../tools/foil_adaptive_route.py) adds a default-off,
+shadow-only DIRECT/VERIFY/FULL expected-value controller over frozen A0. It can
+bind a VERIFY/FULL recommendation only after rederiving the selected
+deterministic cases from the actual `CompiledTaskSpec`; caller-asserted
+provenance is insufficient. Optional conditional k=2 and posterior stand-down
+are host-facing recommendations; the module performs no model call or execution.
+
+[foil_shadow_route_ledger.py](../tools/foil_shadow_route_ledger.py) records exact
+RouteVectors in memory when explicitly enabled. Provider identity is
+digest-only, eligibility reasons are closed, exact eligibility states do not
+pool, and a sealed ledger is immutable. Receipt verification reconstructs the
+closed typed schema rather than trusting a self-consistent digest. Normal
+observations remain selection-biased descriptive data: they cannot update the
+controller, rank a route, or allocate causal credit among provider, compute,
+verifier, and retry components. See [FOIL_ADAPTIVE_COMPUTE_SPEC.md](FOIL_ADAPTIVE_COMPUTE_SPEC.md).
+
 ### Certificates, authority, and repair boundary
 
 [egrt_certificates.py](../tools/egrt_certificates.py) defines STRUCTURAL_ONLY,
@@ -160,8 +186,8 @@ P0_NOT_PROMOTED.
 
 ## Evidence status
 
-The repository-wide contract suite ran locally on 2026-08-24: **661 tests
-passed**.
+The repository-wide contract suite ran locally on 2026-08-24: **703 tests
+passed in 56.843 seconds**.
 That demonstrates the named in-process contracts behaved as tested. It is not
 evidence for natural-error recall, repair safety, model ladders,
 personalization, or human learning.

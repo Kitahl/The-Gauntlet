@@ -365,10 +365,14 @@ def _cli(spec: ModelSpec, messages: list[dict[str, str]],
         raise ModelError(f"{spec.id}: command exited {proc.returncode}: "
                          f"{(proc.stderr or proc.stdout or '')[-600:]}")
     payload = {"argv": argv[1:], "prompt_delivery": "stdin" if uses_stdin else "argv"}
+    # A killed or handle-starved child on Windows can surface None despite
+    # capture_output=True. Route it through the typed parser failure instead of
+    # aborting the whole benchmark with AttributeError.
+    stdout = proc.stdout or ""
     if spec.output_parser == "claude_json":
-        text, usage, finish = _parse_claude_json(spec, proc.stdout.strip())
+        text, usage, finish = _parse_claude_json(spec, stdout.strip())
         return text, {"usage": usage, "finish_reason": finish}, payload
-    return proc.stdout.strip(), {"usage": {}, "finish_reason": "cli"}, payload
+    return stdout.strip(), {"usage": {}, "finish_reason": "cli"}, payload
 
 
 def _mock(spec: ModelSpec, messages: list[dict[str, str]],

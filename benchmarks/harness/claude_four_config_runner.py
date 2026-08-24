@@ -835,10 +835,19 @@ def _execute_unit(benchmark: str, unit: dict[str, Any], item: dict[str, Any]) ->
     return receipt
 
 
-def cmd_run(benchmark: str, configs: list[str], limit: int | None, dry_run: bool) -> int:
+def cmd_run(benchmark: str, configs: list[str], limit: int | None, dry_run: bool,
+            items_cap: int | None = None) -> int:
     manifest = _read_json(manifest_path(benchmark))
     items = {row["index"]: row for row in _read_json(items_path(benchmark))["items"]}
     selected = [unit for unit in manifest["units"] if unit["config"] in configs]
+    if items_cap is not None and limit is not None:
+        print("--items and --limit cannot be combined; --limit may split pairs", file=sys.stderr)
+        return 1
+    if items_cap is not None:
+        if items_cap < 1:
+            print("--items must be a positive integer", file=sys.stderr)
+            return 1
+        selected = [unit for unit in selected if unit["item_index"] < items_cap]
     if limit is not None:
         selected = selected[:limit]
     if not selected:
@@ -872,7 +881,19 @@ def cmd_run(benchmark: str, configs: list[str], limit: int | None, dry_run: bool
                           "billable_calls": 0, "files_written": 0}, indent=2))
         return 0
 
+    done = {
+        row["unit"]
+        for row in _load_predictions(benchmark)["predictions"]
+        if row.get("status") == "OK"
+    }
     for unit in selected:
+        if unit["unit"] in done:
+            print(json.dumps({
+                "unit": unit["unit"],
+                "status": "SKIPPED",
+                "invalid_reason": "already recorded OK",
+            }))
+            continue
         receipt = _execute_unit(benchmark, unit, items[unit["item_index"]])
         print(json.dumps({"unit": receipt["unit"], "status": receipt["status"],
                           "invalid_reason": receipt["invalid_reason"]}))
@@ -1022,6 +1043,11 @@ def cmd_score(benchmark: str) -> int:
 # --------------------------------------------------------------------------- #
 
 def main(argv: list[str] | None = None) -> int:
+    # Legacy Windows consoles must replace unencodable status characters rather
+    # than abort a partially completed benchmark.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(errors="replace")
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -1035,6 +1061,8 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument("--config", action="append", choices=sorted(CONFIGS),
                      help="repeatable; default is all four")
     run.add_argument("--limit", type=int)
+    run.add_argument("--items", type=int, dest="items_cap",
+                     help="first N items per config, both arms (keeps pairs complete)")
     run.add_argument("--dry-run", action="store_true")
 
     score = sub.add_parser("score")
@@ -1044,7 +1072,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "prepare":
         return cmd_check_only(args.benchmark) if args.check_only else cmd_prepare(args.benchmark)
     if args.command == "run":
-        return cmd_run(args.benchmark, args.config or sorted(CONFIGS), args.limit, args.dry_run)
+        return cmd_run(args.benchmark, args.config or sorted(CONFIGS), args.limit,
+                       args.dry_run, items_cap=args.items_cap)
     try:
         return cmd_score(args.benchmark)
     except NotCommitted as exc:

@@ -14,6 +14,55 @@ The project follows semantic versioning for public releases.
 - Independent reproduction reports.
 - Archival DOI integration after the first evidence-bearing stable release.
 
+## [0.6.0-rc2] - 2026-08-24
+
+Second testing release candidate for **Mirror** (technical ID **FOIL**). It extends
+the v5 default-off shadow runtime without merging or cross-controlling FOIL,
+Gauntlet, or Mastermind. No route introduced here can execute a model, tool,
+network call, answer replacement, repair, host write, or authority promotion.
+
+### Added
+
+- A default-off, fixed-point DIRECT/VERIFY/FULL adaptive-compute controller over
+  frozen A0. It accepts only routes rederived from the actual host-supplied
+  `CompiledTaskSpec` and emits non-executing, control-only recommendations.
+- Optional count-backed posterior stand-down with strictly interior thresholds
+  and positive minimum evidence, plus a conditional k=2 host probe request.
+- A default-off observational RouteVector ledger with digest-only provider
+  identity, closed eligibility reasons, exact eligibility/route matching,
+  immutable seals, and no selector, fitter, policy update, causal component
+  credit, or execution authority.
+- An explicit future formalization-fidelity and extraction-recall admission
+  contract. The current runtime still never transforms prose into obligations.
+- A sealed three-item Codex dose-response development pilot and five-claim
+  manual coverage smoke procedure; neither is calibration, certification, or
+  promotion evidence.
+- Legacy benchmark robustness: completed-unit resume skip, paired `--items` cap,
+  typed handling of missing CLI stdout, and Windows console replacement encoding.
+
+### Hardened
+
+- Adaptive routing rejects fabricated host provenance by requiring and
+  rederiving every selected verifier route from a real compiled task spec.
+- Route-ledger verification reconstructs the closed typed record schema, rejects
+  self-rehashed unknown/raw fields, prevents disabled ledgers from carrying
+  records, and makes append-after-seal impossible.
+- The three-item pilot binds the pinned source archive and exclusion manifest,
+  requires one immutable pre-call Git commit, records that commit in every
+  receipt, validates ignored raw streams, fails on unknown Codex JSONL shapes,
+  derives scores from receipts, and requires an exact 42-model-execution
+  inventory before opening gold.
+- The historical four-configuration runner rejects `--items` combined with
+  `--limit` so no allowed flag combination can split a pair.
+
+### Evidence boundary
+
+RC2 software tests establish deterministic implementation contracts only. The
+three-item pilot is development evidence forever and cannot calibrate, certify,
+promote, or establish general FOIL benefit. Future model-generated
+prose-to-obligation routes remain closed behind the separate fidelity and
+extraction-recall contract.
+
 ## [0.6.0-rc1] - 2026-08-24
 
 Testing release candidate for **Mirror** (public name; technical ID **FOIL**).

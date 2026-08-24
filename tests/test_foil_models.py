@@ -15,6 +15,7 @@ import tempfile
 import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
@@ -275,6 +276,20 @@ class CliDeliveryTests(unittest.TestCase):
         self.assertEqual(spec.determinism, fm.Determinism.NONDETERMINISTIC.value)
         self.assertTrue(spec.determinism_class.requires_replicates)
 
+    def test_none_stdout_becomes_model_error_not_attribute_error(self):
+        spec = fm.spec_from_row({
+            "id": "none-stdout",
+            "family": "cli",
+            "command": ["fake-cli"],
+            "output_parser": "claude_json",
+        })
+        completed = mock.Mock(returncode=0, stdout=None, stderr=None)
+        with (
+            mock.patch.object(fm.shutil, "which", return_value="fake-cli"),
+            mock.patch.object(fm.subprocess, "run", return_value=completed),
+            self.assertRaises(fm.ModelError),
+        ):
+            fm.complete(spec, "hi")
     def test_a_failing_command_raises_rather_than_returning_empty_text(self):
         spec = _script_spec("import sys\nsys.stdin.read()\nsys.exit(3)\n")
         with self.assertRaises(fm.ModelError):

@@ -127,6 +127,8 @@ documentation task: `tests/test_foil_assistance.py::ContractDriftTests` and
 | `tools/foil_layer2.py` | Layer 2A structured cross-cutting screen |
 | `tools/foil_calibration.py` | Layer 2B adaptive real-work calibration |
 | `tools/foil_policy.py` | **the experimental routing kernel.** Deterministic V2 policy, ported from `origin/experiment/foil-vnext5-vnext@9540860`. Its mechanisms are implemented hypotheses whose efficacy is `NOT_MEASURED`. |
+| `tools/foil_adaptive_route.py` | **the default-off adaptive-compute shadow controller.** Retains frozen A0 as DIRECT and may recommend VERIFY/FULL only from positive frozen EV and compiler-created host-declared routes. It never executes or changes authority. |
+| `tools/foil_shadow_route_ledger.py` | **the default-off observational RouteVector ledger.** Exact task/model/contract/route history only; no selector, fitter, controller update, or component credit. |
 
 `foil_policy` is the experimental kernel and is labelled as such everywhere it is
 referenced. It converts current-task signals plus independently supported profile

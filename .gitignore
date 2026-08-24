@@ -59,6 +59,7 @@ foil_profile*.json
 
 # Private per-run review material never belongs in the repository
 benchmark_runs/**/browsecomp_review_private.json
+benchmark_runs/**/private/
 
 # Serena MCP local project cache (never tracked)
 .serena/
