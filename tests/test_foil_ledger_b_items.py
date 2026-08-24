@@ -24,6 +24,7 @@ import foil_evidence as ev  # noqa: E402
 import foil_hook as fh  # noqa: E402
 import foil_interventions as iv  # noqa: E402
 import foil_profile as fp  # noqa: E402
+import foil_requirements as req  # noqa: E402
 import foil_task_guard as tg  # noqa: E402
 
 CONTROL_CHARS = "".join(chr(code) for code in list(range(0, 32)) + [127])
@@ -271,12 +272,15 @@ class GapVocabularyDriftTests(unittest.TestCase):
     def test_no_orphan_gap_labels_remain_in_the_skill_text(self):
         """Any GAP_KINDS-shaped label in the skill text must be one the runtime takes.
 
-        `POSSIBLE_GAP` and friends are `foil_evidence.Classification` values, a
-        different vocabulary in the same shape, so they are excluded explicitly
+        Evidence classifications and requirement coverage states are different
+        runtime vocabularies in the same shape, so they are excluded explicitly
         rather than by a looser pattern that would stop catching anything.
         """
         text = self.SKILL.read_text(encoding="utf-8")
-        other_vocabularies = fp.ALLOWED_CLASSIFICATIONS | fp.ALLOWED_TIERS | fp.ALLOWED_STATES
+        other_vocabularies = (
+            fp.ALLOWED_CLASSIFICATIONS | fp.ALLOWED_TIERS | fp.ALLOWED_STATES
+            | {state.value for state in req.CoverageState}
+        )
         for match in set(re.findall(r"`([A-Z][A-Z_]{4,})`", text)):
             if match in other_vocabularies:
                 continue

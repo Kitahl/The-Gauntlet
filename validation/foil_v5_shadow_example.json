@@ -1,0 +1,51 @@
+{
+  "schema": "egrt.foil-v5-shadow-runtime.v1",
+  "g0_mode": "seal",
+  "g0_protocol": {
+    "schema": "egrt.foil-v5-protocol.v1",
+    "candidate_id": "foil-v5-shadow-runtime-example",
+    "candidate_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "bindings": {
+      "model_config_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "system_prompt_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "foil_skill_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "task_prompt_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "tool_regime_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "base_answers_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "scanner_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "diagnostic_bank_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "parser_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "applicability_sha256": "5555555555555555555555555555555555555555555555555555555555555555"
+    },
+    "partitions": {
+      "development": {"artifact_sha256": "6666666666666666666666666666666666666666666666666666666666666666", "item_ids": ["dev-1"]},
+      "lock": {"artifact_sha256": "7777777777777777777777777777777777777777777777777777777777777777", "item_ids": ["lock-1"]},
+      "prospective": {"artifact_sha256": "8888888888888888888888888888888888888888888888888888888888888888", "item_ids": ["prospective-1"]}
+    },
+    "gates": {
+      "compiler_coverage": {"metric": "coverage", "direction": "required", "bound": true},
+      "compiler_precision": {"metric": "precision", "direction": "required", "bound": true},
+      "verifier_validity": {"metric": "validity", "direction": "required", "bound": true},
+      "residual_recall": {"metric": "recall", "direction": "required", "bound": true},
+      "false_activation_rate": {"metric": "false_rate", "direction": "required", "bound": true},
+      "incremental_value": {"metric": "increment", "direction": "required", "bound": true},
+      "cost_completeness": {"metric": "cost", "direction": "required", "bound": true},
+      "negative_controls": {"metric": "control", "direction": "required", "bound": true}
+    },
+    "allowed_effect_classes": ["local", "parser"],
+    "forbidden_effect_classes": ["model", "tool", "network", "subprocess", "retry", "async", "profile", "router"],
+    "no_answer_taxonomy": ["MALFORMED"],
+    "authority": {"issuer": "example-host", "expires_at": "2027-01-01T00:00:00Z", "replay_protection": "example-nonce", "candidate_id": "foil-v5-shadow-runtime-example"}
+  },
+  "bindings": {
+    "a0_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "task_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "spec_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "compiler_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "config_digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+  },
+  "claim": {"statement": "The supplied values are equal.", "kind": "EXACT_MATCH", "decidability": "DETERMINISTIC", "applicability": "APPLICABLE", "reason": "A closed exact-match verifier is available.", "required_verifiers": ["builtin.exact_match"]},
+  "observed_a0_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "diagnostic_needs": [{"need_id": "match-1", "description": "Check the supplied values exactly.", "verifier_id": "builtin.exact_match", "weight_units": 1, "decidability": "DETERMINISTIC", "applicability": "APPLICABLE"}],
+  "cases": [{"need_id": "match-1", "verifier_input": {"actual": "same", "expected": "same"}, "metadata": {"source": "example"}}]
+}

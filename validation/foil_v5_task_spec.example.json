@@ -1,0 +1,47 @@
+{
+  "schema": "egrt.foil-v5.structured-task-spec.v1",
+  "compiler_version": "foil-obligation-compiler.v1",
+  "task_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "a0_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "config_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "claims": [
+    {
+      "claim_key": "arithmetic-total",
+      "statement_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "claim_kind": "EXACT_ARITHMETIC",
+      "decidability": "DETERMINISTIC",
+      "applicability": "APPLICABLE",
+      "reason": "The exact arithmetic predicate and its inputs are declared.",
+      "obligations": [
+        {
+          "obligation_key": "sum",
+          "description": "Check the declared exact total.",
+          "weight_range": {"start": 1, "end": 2},
+          "predicate_kind": "EXACT_ARITHMETIC",
+          "verifier_id": "builtin.exact_arithmetic",
+          "verifier_version": "1",
+          "verifier_input": {"expression": "2 + 3", "expected": "5"}
+        }
+      ]
+    },
+    {
+      "claim_key": "semantic-interpretation",
+      "statement_digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "claim_kind": "OTHER",
+      "decidability": "SEMANTIC",
+      "applicability": "APPLICABLE",
+      "reason": "Interpretive equivalence has no declared deterministic decision procedure.",
+      "obligations": [
+        {
+          "obligation_key": "interpretation",
+          "description": "Retain the semantic residual without an executable case.",
+          "weight_range": {"start": 3, "end": 3},
+          "predicate_kind": "EXACT_MATCH",
+          "verifier_id": "builtin.exact_match",
+          "verifier_version": "1",
+          "verifier_input": {"actual": "declared-only", "expected": "declared-only"}
+        }
+      ]
+    }
+  ]
+}

@@ -31,6 +31,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Mapping
 
+from foil_signal_boundary import SignalAuthority
+
 
 class TaskRegime(str, Enum):
     EXTERNAL_RETRIEVAL = "external_retrieval"
@@ -166,8 +168,10 @@ class ProfileSignal:
     stale: bool = False
     direction: EvidenceDirection = EvidenceDirection.UNCERTAIN
     complement: ComplementKind | None = None
+    authority: SignalAuthority = SignalAuthority.CONTROL_ONLY
 
     def __post_init__(self) -> None:
+        object.__setattr__(self, "authority", SignalAuthority(self.authority))
         if not 0.0 <= self.relevance <= 1.0:
             raise ValueError("relevance must be in [0, 1]")
         if not 0.0 <= self.support <= 1.0:
@@ -176,6 +180,10 @@ class ProfileSignal:
             raise ValueError("profile evidence counts must be non-negative")
         if self.direction is EvidenceDirection.GAP and self.complement is None:
             raise ValueError("gap evidence requires a concrete complement")
+        if self.authority is not SignalAuthority.CONTROL_ONLY:
+            raise ValueError(
+                "profile routing signals are CONTROL_ONLY and cannot become evidence"
+            )
 
 
 @dataclass(frozen=True)
@@ -229,6 +237,7 @@ class PolicyDecision:
     resource_allocation: ResourceAllocation
     should_stop: bool
     stop_reason: str
+    route_basis: str = "none"
 
     def trace(self) -> dict[str, object]:
         """Public policy trace; excludes private reasoning and raw profile data."""
@@ -241,6 +250,8 @@ class PolicyDecision:
             "targeted_complement": (
                 self.targeted_complement.value if self.targeted_complement else None
             ),
+            "route_basis": self.route_basis,
+            "routing_signal_authority": SignalAuthority.CONTROL_ONLY.value,
             "primary_effort_mode": self.primary_effort_mode.value,
             "stop_reason": self.stop_reason,
         }
@@ -375,11 +386,25 @@ class RuntimePolicyV2:
         return ResourceAllocation(has_candidate, 0, 0, "reasoning-first")
 
     def decide(
-        self, task: TaskContext, profile: ProfileSignal | None = None
+        self,
+        task: TaskContext,
+        profile: ProfileSignal | None = None,
+        *,
+        current_task_gap: ComplementKind | None = None,
     ) -> PolicyDecision:
         regime = self.classify_regime(task)
-        influence, route_allowed, targeted = self.profile_gate(task, regime, profile)
+        influence, profile_route_allowed, targeted = self.profile_gate(task, regime, profile)
         task_needs = self.task_complements(task, regime)
+        route_allowed = profile_route_allowed
+        route_basis = "profile" if profile_route_allowed else "none"
+        if current_task_gap is not None:
+            if current_task_gap not in task_needs:
+                raise ValueError("current-task gap must match a task-required complement")
+            # Direct evidence from this task outranks historical profile state.
+            # It is a task-local route, not a profile-derived competence claim.
+            route_allowed = True
+            targeted = current_task_gap
+            route_basis = "current_task_evidence"
         unresolved = tuple(
             uncertainty
             for uncertainty in task.uncertainties
@@ -463,6 +488,7 @@ class RuntimePolicyV2:
         # already complete, and never emit more than one targeted complement.
         effective_route = route_allowed and not should_stop
         effective_target = targeted if effective_route else None
+        effective_basis = route_basis if effective_route else "none"
         if effective_route:
             actions.append(PolicyAction.APPLY_TARGETED_COMPLEMENT)
         if should_stop:
@@ -473,7 +499,7 @@ class RuntimePolicyV2:
             task_regime=regime,
             primary_effort_mode=mode,
             profile_influence=influence,
-            profile_route_allowed=effective_route,
+            profile_route_allowed=profile_route_allowed and not should_stop,
             targeted_complement=effective_target,
             task_complements=task_needs,
             unresolved_uncertainties=unresolved,
@@ -483,6 +509,7 @@ class RuntimePolicyV2:
             resource_allocation=allocation,
             should_stop=should_stop,
             stop_reason=stop_reason,
+            route_basis=effective_basis,
         )
 
     def next_external_action(

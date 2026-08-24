@@ -5,7 +5,7 @@
 [![Research software validation](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml)
 [![CodeQL](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.5.1-informational.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.6.0--rc1-informational.svg)](CHANGELOG.md)
 
 > **Research status:** public research-software toolkit with executable runtime checks, evidence-bearing structural/source validation, and exploratory benchmark pilots. The repository does **not** claim that the complete system improves human reasoning, scientific discovery, or general AI capability in prospective deployment.
 
@@ -30,6 +30,29 @@ The core research question is:
 The toolkit routes work according to the **epistemic obligation**: what must be proved, searched, executed, measured, independently checked, or left unresolved.
 
 **Mirror** is the adaptive complement layer. It asks what the current task requires, what the user already covers, and which load-bearing capability is least covered; it then requests the smallest useful complement from the existing Gems/tools. Mirror is the public name. The technical ID, `/foil` command, `tools/foil_*` modules, historical benchmark condition names, and existing FOIL-named files remain stable for backwards compatibility.
+
+## FOIL v5 / Mirror testing release candidate
+
+**0.6.0-rc1 is default-off and shadow-only, not a completed release.** It adds a
+one-claim post-solve path with typed claims/obligations, deterministic decidable
+coverage, a sealed protocol/run ledger, a closed-verifier residual scanner, and
+calibration-bound sensor receipts. It can emit a shadow repair proposal at the
+admission boundary, but cannot mutate an answer or autonomously write, commit,
+or execute a repair. The opt-in pre-/post-solve monitor is event-driven and
+zero-token. The new v5 post-solve monitor is disabled by default; the legacy
+pre-solve hook remains the compatibility default.
+
+FOIL remains Mirror's technical identity. FOIL, Gauntlet, and Mastermind remain
+separate: this v5 shadow path neither imports nor controls Gauntlet or
+Mastermind. The Ditto resolver surface is implemented with a closed READY
+registry and exact candidate-bound authority checks. It is host-denied and has
+no execution authority; Gate 3 behavioral evaluation is still unrun.
+
+Passing structural or unit tests is implementation-contract evidence only, **not
+Gate-1 efficacy evidence**. P0 was **not promoted**. External lock-partition,
+prospective-partition, and model-ladder gates are **UNRUN**, so neither
+behavioral efficacy nor calibration has been established. See
+[`CHANGELOG.md`](CHANGELOG.md) for the full testing boundary.
 
 ## Exploratory benchmark pilots
 
