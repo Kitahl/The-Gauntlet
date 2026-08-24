@@ -1,0 +1,50 @@
+{
+  "items": [
+    {
+      "choices": {
+        "A": "Phonon",
+        "B": "Magnon",
+        "C": "Pion",
+        "D": "Skyrmion"
+      },
+      "difficulty": "Hard graduate level (could be a question on a hard graduate exam for PhD students in the domain)",
+      "expert_accuracy": 0.5,
+      "id": "gpqa-diamond-188",
+      "item_sha256": "fda3fefbf1d82c4c7e200a9b9573178c6916189239f454975253648311d33e04",
+      "nonexpert_accuracy": 0.3333333333333333,
+      "question": "Which of the following (effective) particles is not associated with a spontaneously-broken symmetry?",
+      "source_index": 188
+    },
+    {
+      "choices": {
+        "A": "4,4a,7,7a-tetrahydro-1H-cyclopenta[c]pyridine",
+        "B": "4,4a,5,6-tetrahydro-1H-cyclopenta[c]pyridine",
+        "C": "4,4a,5,7a-tetrahydro-3H-cyclopenta[c]pyridine",
+        "D": "4,6,7,7a-tetrahydro-3H-cyclopenta[c]pyridine"
+      },
+      "difficulty": "Hard undergraduate level (could be a question on a hard undergraduate exam for students majoring in the subject)",
+      "expert_accuracy": 0.5,
+      "id": "gpqa-diamond-185",
+      "item_sha256": "2b825731fe55b2fee8ce1b75c829d13b2759cf25b2aa34dabb733a5f123eaae1",
+      "nonexpert_accuracy": 0.3333333333333333,
+      "question": "Identify the possible product when (1S,4R)-2-vinyl-2-azabicyclo[2.2.1]hept-5-ene undergoes Cope rearrangement.",
+      "source_index": 185
+    },
+    {
+      "choices": {
+        "A": "i) HNO3/H2SO4 ; ii) Fe/HCl ; iii) tert-butyl chloride/AlCl3 ; iv) HNO3/H2SO4 ; v) NaNO2/HCl ; vi) SO3/H2SO4 ; vii) dilute H2SO4 ; viii) H3O+, H2O/Heat ; ix) NaOH/EtBr",
+        "B": "i) tert-butyl chloride/AlCl3 ; ii) HNO3/H2SO4 ; iii) Fe/HCl ; iv) HNO3/H2SO4 ; v) NaNO2/HCl ; vi) H3O+, H2O/Heat ; vii) NaOH/EtBr ; viii) SO3/H2SO4 ; ix) dilute H2SO4",
+        "C": "i) tert-butyl chloride/AlCl3 ; ii) SO3/H2SO4 ; iii) HNO3/H2SO4 iv) Fe/HCl ; v) NaNO2/HCl ; vi) HNO3/H2SO4 ; vii) H3O+, H2O/Heat ; viii) dilute H2SO4 ix) NaOH/EtBr",
+        "D": "i) tert-butyl chloride/AlCl3 ; ii) HNO3/H2SO4 iv) ; iii) SO3/H2SO4 ; iv) NaNO2/HCl ; v) dilute H2SO4 ; vi) H3O+, H2O/Heat ; vii) NaOH/EtBr ; viii) Fe/HCl ; ix) HNO3/H2SO4"
+      },
+      "difficulty": "Hard undergraduate level (could be a question on a hard undergraduate exam for students majoring in the subject)",
+      "expert_accuracy": 0.5,
+      "id": "gpqa-diamond-183",
+      "item_sha256": "e9dcda63e892220f1902187d7c6fde8b5d7d1155d21daefca00a31cf9be0410f",
+      "nonexpert_accuracy": 0.0,
+      "question": "Which sequence of reactions from the following options would lead to the high-yield synthesis of 2-(tert-butyl)-1-ethoxy-3-nitrobenzene, beginning with benzene?",
+      "source_index": 183
+    }
+  ],
+  "schema": "foil-codex-dose-items/v1"
+}

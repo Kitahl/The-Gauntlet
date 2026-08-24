@@ -1,0 +1,13 @@
+{
+  "files": {
+    "benchmark_runs/2026-08-23/four_config_gpqa_manifest.json": "121c9d74d1705491265287a52bbecb6c5aea56d1d4983fc5cd6ffc06e204f420",
+    "benchmark_runs/2026-08-24/answer_schema.json": "04dd2a9d1efc914d4d63146f65276942d1b866cc93332027392e73b3a5811441",
+    "benchmark_runs/2026-08-24/dose_condition_map.sealed.json": "1442035725cc2178c7834995f8d8da65839354e2bcb38c63c428a5a91de16b60",
+    "benchmark_runs/2026-08-24/dose_items.json": "ea693c25d2e90017e02e634443703da2a9f9cb078970823b305e75a3508b8953",
+    "benchmark_runs/2026-08-24/dose_manifest.json": "bc2f7394a5bcfad90b63a3832ea1eb13076df27289fc5a869ffe3542ffbf03ad",
+    "benchmarks/FOIL_CODEX_DOSE_RESPONSE_SMALL_PILOT.md": "9346f4a716b81fb24389d85120478594ab9a35adfe0626fa4b7e824e2b3e1d17",
+    "benchmarks/harness/codex_dose_response_runner.py": "a57ff56dd33d1b137b0419a3cb5197dbe5ad13d18dc05bb650a4b8598cbbc97c",
+    "skills/foil/SKILL.md": "57d4abc23fbf5b2f4d22d62ea73587797185acfb7f465b1e39686c1d64dbcff9"
+  },
+  "schema": "foil-codex-dose-lock/v1"
+}

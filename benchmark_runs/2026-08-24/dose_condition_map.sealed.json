@@ -1,0 +1,9 @@
+{
+  "boundary": "Committed before calls; prevents post-hoc relabelling, not operator blindness.",
+  "map": {
+    "A": "BASE",
+    "B": "FOIL"
+  },
+  "schema": "foil-codex-dose-condition-map/v1",
+  "seed": 20260824
+}
