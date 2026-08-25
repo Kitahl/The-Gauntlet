@@ -1,0 +1,43 @@
+name: Build Session 2 Test 2 Mind package
+
+on:
+  push:
+    branches:
+      - benchmark/session2-test2-mind-package
+    paths:
+      - "benchmarks/session2_test2_mind/build_package.py"
+      - "benchmarks/session2_test2_mind/validate_package.py"
+      - ".github/workflows/build-session2-test2-mind-package.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-package:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Generate frozen question and gold packs
+        run: python benchmarks/session2_test2_mind/build_package.py
+      - name: Validate package boundaries and counts
+        run: python benchmarks/session2_test2_mind/validate_package.py
+      - name: Commit generated package
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add benchmarks/session2_test2_mind/questions \
+                  benchmarks/session2_test2_mind/gold \
+                  benchmarks/session2_test2_mind/assignments.json \
+                  benchmarks/session2_test2_mind/MANIFEST.json \
+                  benchmarks/session2_test2_mind/grader.py
+          if git diff --cached --quiet; then
+            echo "Package already current"
+          else
+            git commit -m "Generate sealed Session 2 Test 2 Mind package [skip ci]"
+            git push
+          fi

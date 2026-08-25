@@ -1,0 +1,4 @@
+regex==2024.11.6
+sympy==1.13.3
+latex2sympy2==1.9.1
+antlr4-python3-runtime==4.11.1
