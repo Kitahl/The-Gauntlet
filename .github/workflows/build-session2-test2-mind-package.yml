@@ -6,6 +6,7 @@ on:
       - benchmark/session2-test2-mind-package
     paths:
       - "benchmarks/session2_test2_mind/build_package.py"
+      - "benchmarks/session2_test2_mind/build_package_ci.py"
       - "benchmarks/session2_test2_mind/validate_package.py"
       - ".github/workflows/build-session2-test2-mind-package.yml"
   workflow_dispatch:
@@ -23,7 +24,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Generate frozen question and gold packs
-        run: python benchmarks/session2_test2_mind/build_package.py
+        run: python benchmarks/session2_test2_mind/build_package_ci.py
       - name: Validate package boundaries and counts
         run: python benchmarks/session2_test2_mind/validate_package.py
       - name: Commit generated package
