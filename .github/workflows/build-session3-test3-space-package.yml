@@ -6,6 +6,7 @@ on:
       - benchmark/session3-test3-space-package
     paths:
       - benchmarks/session3_test3_space/build_package.py
+      - benchmarks/session3_test3_space/build_package_ci.py
       - benchmarks/session3_test3_space/validate_package.py
       - .github/workflows/build-session3-test3-space-package.yml
 
@@ -23,7 +24,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Generate frozen question and gold packs
-        run: python benchmarks/session3_test3_space/build_package.py
+        run: python benchmarks/session3_test3_space/build_package_ci.py
       - name: Validate package boundaries and counts
         run: python benchmarks/session3_test3_space/validate_package.py
       - name: Commit generated package
