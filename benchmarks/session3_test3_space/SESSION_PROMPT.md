@@ -1,65 +1,66 @@
 # SESSION #3 — TEST #3 — SPACE VS BASE
 
-Run the frozen package as a **fresh-session comparison of GPT-5.6 Sol BASE versus the frozen Space / Research Discovery skill**.
+Run the frozen GitHub package as a **fresh-session comparison of GPT-5.6 Sol BASE versus the frozen Space / Research Discovery skill**.
 
-## Frozen package reference
+## Frozen package
 
 Repository: `Kitahl/The-Gauntlet`
 
-Package commit: `__PACKAGE_COMMIT__`
+Package commit: `6cd91b5c447afc7521e404e6167a729673f5b924`
 
 Development branch: `benchmark/session3-test3-space-package`
 
-Test folder: `benchmarks/session3_test3_space/`
+Folder: `benchmarks/session3_test3_space/`
 
 Frozen Space blob: `a1d91b1d49ac6667f53ed7dfba14d8acb7fe849d`
 
-The package contains 40 unique web-research tasks:
+The frozen experiment contains exactly:
 
 - 20 FreshQA tasks total
 - 20 AssistantBench validation tasks total
-- BASE: 10 FreshQA + 10 AssistantBench
-- SPACE: 10 FreshQA + 10 AssistantBench
+- BASE: 10 FreshQA + 10 AssistantBench = 20
+- SPACE: 10 FreshQA + 10 AssistantBench = 20
+- 40 unique tasks total
+- deterministic seed `2026082503`
 
-Do not alter the frozen assignment.
+Do not regenerate or alter the assignments.
 
 ---
 
-# ABSOLUTE GOLD BOUNDARY
+# 1. ABSOLUTE GOLD BOUNDARY
 
-Before **both BASE and SPACE prediction receipts are committed**, you may fetch only these four package files at the exact frozen package commit:
+Before **both BASE and SPACE prediction receipts are committed**, you may fetch only these four files, always at exact commit `6cd91b5c447afc7521e404e6167a729673f5b924`:
 
-- `benchmarks/session3_test3_space/MANIFEST.json`
-- `benchmarks/session3_test3_space/assignments.json`
-- `benchmarks/session3_test3_space/questions/freshqa_questions.jsonl`
-- `benchmarks/session3_test3_space/questions/assistantbench_questions.jsonl`
+1. `benchmarks/session3_test3_space/MANIFEST.json`
+2. `benchmarks/session3_test3_space/assignments.json`
+3. `benchmarks/session3_test3_space/questions/freshqa_questions.jsonl`
+4. `benchmarks/session3_test3_space/questions/assistantbench_questions.jsonl`
 
 Do **not** list or recursively fetch the package directory.
 
-Do **not** inspect any path containing:
+Before both condition commitments, do not access or inspect:
 
-`gold/SEALED_UNTIL_BOTH_ARMS_COMMIT`
-
-Before both arms commit, also do not inspect:
-
-- `build_package.py`
-- `validate_package.py`
+- any path containing `gold/SEALED_UNTIL_BOTH_ARMS_COMMIT`
 - `score.py`
 - `requirements-score.txt`
 - `scoring/`
+- `build_package.py`
+- `build_package_ci.py`
+- `validate_package.py`
 - workflow files or workflow logs
 - Git history or commit diffs for this package
-- prior Test #3 traces
+- prior Test #3 benchmark traces
+- upstream benchmark source datasets or answer files
 
-If any benchmark answer, gold URL, explanation, reference answer, scorer output, or other answer-key material enters model-visible context before both arms are committed, stop immediately and report exactly:
+If any answer key, benchmark gold, gold URL, explanation, scorer output, reference answer, or equivalent answer material enters model-visible context before both arms are committed, stop immediately and report exactly:
 
 `INVALID — RAW GOLD EXPOSURE`
 
-No comparative result may then be reported.
+No comparative statistics may then be reported.
 
 ---
 
-# MODEL
+# 2. MODEL
 
 Intended model: **GPT-5.6 Sol**.
 
@@ -69,11 +70,11 @@ Record the active model identity if available. If materially different, report:
 
 ---
 
-# PROHIBITED COMPONENTS
+# 3. SKILL ISOLATION
 
-Before BASE commitment, do not read or reconstruct Space from prior context.
+Before BASE is committed, do not read, fetch, reconstruct, summarize, or invoke Space.
 
-Throughout inference do not use:
+During inference do not use:
 
 - Mirror / FOIL
 - Soul
@@ -88,60 +89,65 @@ Throughout inference do not use:
 
 BASE uses ordinary GPT-5.6 Sol research behavior.
 
-SPACE may use **only** the exact frozen Space skill after BASE commitment.
+After BASE commitment, SPACE may use **only** the exact frozen Research Discovery skill blob `a1d91b1d49ac6667f53ed7dfba14d8acb7fe849d`.
+
+Do not load Space runtime helpers or another Gauntlet component.
 
 ---
 
-# TOOL POLICY AND MATCHED BUDGET
+# 4. MATCHED WEB BUDGET
 
 Web research is required and available to both conditions.
 
-For **every task in both conditions**, the hard ceiling is:
+For **every individual task** in both arms, the hard ceiling is:
 
 - **8 individual search queries**
 - **12 source follow-up operations**
 
-Count individual operations, not tool-call envelopes. Four search records in one batched call count as four searches.
+Count individual operations, not tool-call envelopes. A batched call containing four searches counts as four searches.
 
 Follow-ups include page opens, clicks, finds, direct source fetches, or equivalent source-reading operations.
 
 Unused budget does not transfer between tasks.
 
-SPACE gets no additional searches or source reads.
+SPACE receives no additional searches, source reads, tools, or compute.
 
 Permitted during inference:
 
 - public web search
 - opening public webpages
-- primary papers and official sources
-- GitHub/repositories when relevant to the task
-- public documentation
+- official/primary sources
+- academic papers
+- public GitHub repositories and documentation when relevant
 
 Prohibited during inference:
 
 - searching benchmark task IDs
-- searching `FreshQA` or `AssistantBench` together with task text
-- benchmark solutions or answer keys
+- searching `FreshQA` or `AssistantBench` together with the task text
+- benchmark solution/answer pages
 - package gold paths
+- upstream benchmark datasets
 - external LLM judges
-- other Gauntlet skills
+- any other Gauntlet skill
 
 ---
 
-# PHASE 1 — VERIFY QUESTION PACK
+# 5. VERIFY QUESTION PACK
 
-Fetch only the four permitted files from package commit `__PACKAGE_COMMIT__`.
+Fetch only the four permitted files from exact package commit `6cd91b5c447afc7521e404e6167a729673f5b924`.
 
-Verify from the manifest/assignments:
+Verify from the manifest and assignments:
 
 - 40 total tasks
 - 20 BASE assignments
 - 20 SPACE assignments
-- each condition has 10 FreshQA and 10 AssistantBench tasks
-- deterministic seed `2026082503`
-- frozen Space SHA matches `a1d91b1d49ac6667f53ed7dfba14d8acb7fe849d`
+- BASE = 10 FreshQA + 10 AssistantBench
+- SPACE = 10 FreshQA + 10 AssistantBench
+- seed = `2026082503`
+- Space blob SHA = `a1d91b1d49ac6667f53ed7dfba14d8acb7fe849d`
+- web budget = 8 searches + 12 follow-ups per task
 
-State:
+Then state:
 
 `QUESTION PACK VERIFIED — GOLD NOT ACCESSED`
 
@@ -149,24 +155,24 @@ Do not fetch any other package file.
 
 ---
 
-# PHASE 2 — BASE
+# 6. BASE PHASE
 
 Run **all 20 BASE tasks before reading Space**.
 
-Order:
+Frozen order:
 
-1. 10 BASE FreshQA tasks in frozen condition order
-2. 10 BASE AssistantBench tasks in frozen condition order
+1. 10 BASE FreshQA tasks
+2. 10 BASE AssistantBench tasks
 
-For each task:
+For every task:
 
 1. research the underlying real-world question normally;
 2. obey the 8-search / 12-follow-up ceiling;
-3. prefer strong sources where naturally appropriate, but do not apply a memorized Space checklist;
-4. return the benchmark answer as directly as possible;
-5. preserve the evidence URLs actually used.
+3. answer as directly as the benchmark permits;
+4. preserve the evidence URLs actually used;
+5. record exact resource counts.
 
-Create one prediction record per task:
+Create one prediction object per task:
 
 ```json
 {
@@ -181,25 +187,21 @@ Create one prediction record per task:
 }
 ```
 
-Do not use benchmark gold as evidence.
+Do not use benchmark gold or answer-key material as evidence.
 
----
+## Freeze BASE
 
-# FREEZE BASE
-
-After all 20 BASE tasks are complete, freeze the exact prediction block.
-
-Hash it with SHA-256 if practical.
+After all 20 BASE outputs are complete, freeze the exact prediction block. Hash it with SHA-256 if practical.
 
 State exactly:
 
 `BASE COMMITTED — 20 predictions frozen`
 
-After that statement, no BASE answer, URL list, or budget count may be altered.
+After this line, no BASE answer, evidence list, response, or budget count may be changed.
 
 ---
 
-# PHASE 3 — LOAD SPACE
+# 7. LOAD SPACE
 
 Only after BASE commitment, fetch the exact Git blob from `Kitahl/The-Gauntlet`:
 
@@ -209,7 +211,7 @@ Verify the SHA exactly.
 
 Activate only that Space / Research Discovery specification.
 
-Do not fetch `tools/space_runtime.py`, `tools/scout.py`, or another Gauntlet skill. This test measures the procedural skill, not extra runtime capability.
+Do not fetch `tools/space_runtime.py`, `tools/scout.py`, or another Gauntlet module. This experiment measures the procedural skill itself, not extra runtime capability.
 
 If the exact blob cannot be verified, stop and report:
 
@@ -217,64 +219,66 @@ If the exact blob cannot be verified, stop and report:
 
 ---
 
-# PHASE 4 — SPACE
+# 8. SPACE PHASE
 
 Run all 20 SPACE tasks in frozen order:
 
 1. 10 SPACE FreshQA tasks
 2. 10 SPACE AssistantBench tasks
 
-Use the same web tools and exact same per-task budget as BASE.
+Use the exact same web tools and hard budget as BASE.
 
-Space may change **research strategy only**, including query reformulation, mechanism/capability translation, synonym expansion, source prioritization, neighboring-field search, provenance checking, and scope discipline.
+Space may alter **research strategy only**, such as:
 
-It may not receive extra searches or source reads.
+- translating project wording into mechanisms/capabilities;
+- query reformulation;
+- synonym expansion;
+- neighboring-field search;
+- source hierarchy/prioritization;
+- provenance and derivative-source checking;
+- primary-source inspection;
+- scoped absence/novelty discipline.
+
+It may not receive additional resource budget.
 
 Do not use BASE answers as evidence.
 
-Create prediction records in the same schema with `condition: "SPACE"`.
+Create prediction objects using the same schema with `condition: "SPACE"`.
 
----
+## Freeze SPACE
 
-# FREEZE SPACE
-
-After all 20 SPACE tasks are complete, freeze the exact prediction block and hash it if practical.
+After all 20 SPACE outputs are complete, freeze the exact prediction block and hash it if practical.
 
 State exactly:
 
 `SPACE COMMITTED — 20 predictions frozen`
 
-Neither condition may be revised afterward.
+Neither arm may be revised afterward.
 
 ---
 
-# PHASE 5 — GOLD MAY NOW BE OPENED
+# 9. OPEN GOLD AND SCORE
 
-Only after both exact commitment statements may you access:
+Only after both exact commitment statements may you access, at package commit `6cd91b5c447afc7521e404e6167a729673f5b924`:
 
-`benchmarks/session3_test3_space/gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/`
+- `benchmarks/session3_test3_space/gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/`
+- `benchmarks/session3_test3_space/score.py`
+- `benchmarks/session3_test3_space/requirements-score.txt`
+- `benchmarks/session3_test3_space/scoring/`
 
-You may now also access:
+Combine the 40 frozen prediction objects into JSONL.
 
-- `score.py`
-- `requirements-score.txt`
-- `scoring/`
+Install scoring-only dependencies only now if needed.
 
-at package commit `__PACKAGE_COMMIT__`.
-
-Combine the 40 frozen predictions into JSONL.
-
-Install scoring-only dependencies only now if necessary.
-
-Run the package scorer.
+Do not modify predictions during scoring.
 
 ---
 
-# ASSISTANTBENCH SCORING
+# 10. ASSISTANTBENCH SCORING
 
-AssistantBench must be scored with the vendored official BrowserGym AssistantBench evaluator pinned in the package manifest.
+Score AssistantBench using the vendored official BrowserGym AssistantBench evaluator pinned in the manifest.
 
-Report separately:
+Report:
 
 | Condition | Mean score | n | Answer rate |
 |---|---:|---:|---:|
@@ -283,25 +287,23 @@ Report separately:
 
 Also report difficulty breakdown where available.
 
-Do not manually override official AssistantBench scores.
+Do not manually override an official AssistantBench score.
 
 ---
 
-# FRESHQA SCORING
+# 11. FRESHQA SCORING
 
-The package contains the frozen FreshQA answer set captured at package-build time.
+The package contains the frozen FreshQA answer snapshot captured during package generation.
 
-The scorer first performs conservative normalized exact matching against all supplied acceptable answers.
+The package scorer first uses conservative normalized exact matching against all accepted answers in the frozen record.
 
-For any non-exact result it must return:
+Any non-exact case must be marked:
 
 `REVIEW_REQUIRED`
 
-rather than silently marking a semantic variant wrong.
+rather than silently scored incorrect.
 
-After both arms are committed and gold is visible, adjudicate each `REVIEW_REQUIRED` item against the frozen answer set. Record the adjudication explicitly as correct or incorrect and preserve the reason.
-
-Do not change the original prediction.
+After both arms are frozen and gold is visible, manually adjudicate each `REVIEW_REQUIRED` response against the frozen accepted answers. Preserve the original prediction and record the adjudication/reason separately.
 
 Report:
 
@@ -310,32 +312,32 @@ Report:
 | BASE | | 10 | | |
 | SPACE | | 10 | | |
 
-Also report results by available FreshQA metadata such as fact type, hop count, and false-premise status.
+Where sample size permits, also break down by FreshQA metadata such as fact type, hop count, and false-premise status.
 
 ---
 
-# RESOURCE ACCOUNTING
+# 12. RESOURCE ACCOUNTING
 
 For each condition report:
 
-- total search queries
-- total source follow-ups
-- average searches per task
-- average follow-ups per task
-- unique cited source domains
-- budget violations
+- total search queries;
+- total source follow-ups;
+- average searches/task;
+- average follow-ups/task;
+- unique cited source domains;
+- number of budget violations.
 
-Any task exceeding either resource ceiling is marked:
+Any task exceeding either ceiling is marked:
 
 `BUDGET VIOLATION`
 
-Preserve its prediction but do not silently treat it as a clean matched-budget observation.
+Preserve its prediction, but do not present it as a clean matched-budget observation.
 
 ---
 
-# FAILURE AUDIT
+# 13. FAILURE AUDIT
 
-For every failed task, classify the primary observable research failure when possible:
+For every failed task, classify the primary observable research failure where supported:
 
 - query too narrow
 - query too broad
@@ -343,63 +345,56 @@ For every failed task, classify the primary observable research failure when pos
 - wrong entity resolution
 - missed multi-hop connection
 - stopped search too early
-- weak source selected over available primary source
+- weak source chosen despite available stronger source
 - stale source
 - unsupported inference
 - conflicting evidence mishandled
-- false absence / nonexistence claim
+- false absence/nonexistence claim
 - correct source found but answer extracted incorrectly
-- answer formatting error
+- answer-format error
 - budget exhausted
 - other
 - unknown
 
-Do not force an attribution when evidence is insufficient.
+Do not invent a mechanism when uncertain.
 
----
-
-# ABSENCE-CLAIM AUDIT
-
-If either condition claims that something does not exist or cannot be found, distinguish:
+For absence claims distinguish:
 
 `NOT FOUND WITHIN SEARCH SCOPE`
 
-from a global nonexistence claim.
-
-An unsupported global absence claim is a research failure even if the final answer happens to match by luck.
+from a global claim that something does not exist.
 
 ---
 
-# STABILITY VIEWS
+# 14. STABILITY AND INTERPRETATION
 
-For each benchmark report:
+For FreshQA report:
 
-- first 5 tasks per condition
-- all 10 tasks per condition
+- first 5 tasks per condition;
+- all 10 tasks per condition.
 
-Also give the descriptive 20-task condition total, but label it:
+For AssistantBench report:
+
+- first 5 tasks per condition;
+- all 10 tasks per condition.
+
+You may also show the descriptive total across the 20 tasks per condition, but label it:
 
 `DESCRIPTIVE CROSS-BENCHMARK TOTAL — NOT AN OFFICIAL BENCHMARK METRIC`
 
-Do not combine the two benchmark native metrics into a fabricated official score.
+Do not fabricate a single official combined score.
+
+This is a **fresh-session disjoint matched-task exploratory comparison**, not an isolated same-item causal A/B. Report raw results and percentage-point differences. Do not claim general Space efficacy from this sample alone.
 
 ---
 
-# STATISTICAL INTERPRETATION
-
-This is a fresh-session, disjoint matched-task exploratory comparison, not an isolated same-item causal A/B.
-
-Report raw scores and percentage-point differences. Use uncertainty descriptively. Do not make a general efficacy claim from 10 tasks per benchmark per condition.
-
----
-
-# VALIDITY AUDIT
+# 15. VALIDITY AUDIT
 
 Explicitly report:
 
 - fresh session: YES/NO
 - exact package commit used: YES/NO
-- only permitted question files accessed before commitments: YES/NO
+- only four permitted package files accessed before commitments: YES/NO
 - gold concealed until BASE commitment: YES/NO
 - gold concealed until SPACE commitment: YES/NO
 - Space concealed until BASE commitment: YES/NO
@@ -410,15 +405,16 @@ Explicitly report:
 - raw-gold exposure: MUST BE NO
 - budget violations
 - exclusions
-- scorer uncertainty / FreshQA review cases
+- FreshQA manual-review cases
+- scorer uncertainty
 
-If raw gold appears early, the only valid verdict is:
+If raw gold/reference material appears before both arms commit, the only valid verdict is:
 
 `INVALID / INCONCLUSIVE`
 
 ---
 
-# VERDICT
+# 16. VERDICT
 
 Use exactly one:
 
@@ -434,7 +430,7 @@ Use exactly one:
 
 ---
 
-# REQUIRED FINAL REPORT
+# 17. REQUIRED FINAL REPORT
 
 ## SESSION / TEST
 `Session #3 — Test #3 — Space`
@@ -443,22 +439,22 @@ Use exactly one:
 Exact model identity.
 
 ## PACKAGE
-`__PACKAGE_COMMIT__`
+`6cd91b5c447afc7521e404e6167a729673f5b924`
 
 ## FROZEN SPACE
 `a1d91b1d49ac6667f53ed7dfba14d8acb7fe849d`
 
 ## FRESHQA
-BASE and SPACE correct /10, accuracy, delta, review count, metadata breakdown.
+BASE and SPACE correct /10, accuracy, delta, manual-review count, metadata breakdown.
 
 ## ASSISTANTBENCH
-BASE and SPACE mean score /10, delta, answer rate, difficulty breakdown.
+BASE and SPACE mean score, delta, answer rate, difficulty breakdown.
 
 ## RESOURCE USE
-Searches and follow-ups by condition.
+Searches, follow-ups, and budget violations by condition.
 
 ## FAILURES
-Every failed task ID and concise failure classification.
+Every failed task ID with concise failure classification.
 
 ## VALIDITY AUDIT
 Complete checklist.
@@ -467,18 +463,16 @@ Complete checklist.
 One permitted verdict.
 
 ## INTERPRETATION
-State only what this 40-task fresh-session experiment supports.
-
-Do not claim general Space efficacy from this experiment alone.
+State only what this 40-task fresh-session experiment actually supports.
 
 ---
 
 # EXECUTION RULE
 
-Do not ask me to choose questions.
+Do not ask me to choose tasks.
 Do not regenerate the package.
 Do not change assignments.
-Do not fetch benchmark source datasets directly.
+Do not fetch upstream benchmark datasets directly.
 Do not expose gold early.
 Do not load Space early.
 Do not use Mirror/FOIL.
