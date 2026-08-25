@@ -19,7 +19,7 @@ If either receipt or committed hash is missing, stop with:
 
 Repository: `Kitahl/The-Gauntlet`
 
-Frozen package commit: `__PACKAGE_COMMIT__`
+Frozen package commit: `b7d949f711738cfd3485d45ae74c7df964c93245`
 
 Experiment: `SESSION3R_TEST3R_SPACE`
 
@@ -59,7 +59,7 @@ Only after both immutable receipts pass verification may you access:
 - `benchmarks/session3r_test3r_space/gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/gold.jsonl.gz.b64`
 - `benchmarks/session3r_test3r_space/score.py`
 
-at exact commit `__PACKAGE_COMMIT__`.
+at exact commit `b7d949f711738cfd3485d45ae74c7df964c93245`.
 
 The gold is gzip-compressed JSONL encoded as base64. Decode only in this scoring session.
 
