@@ -1,0 +1,38 @@
+{
+  "answer": {
+    "abstain": false,
+    "answer": "OK"
+  },
+  "call_id": "processbench-gsm8k-330-SOL_LOW",
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "SOL_LOW",
+  "effort": "low",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-25T08:32:00.668160+00:00",
+  "invalid_reasons": [],
+  "kind": "base",
+  "last_output_sha256": "71675d7c475c653fe2c6a3866c66057371a8c792b50cf1ced51aaebc8628d8fc",
+  "model": "gpt-5.6-sol",
+  "pre_call_commit": "dfb2cd4f88fa3f4e9987007ce1d460058b56406d",
+  "prompt_sha256": "a61a4f7990cfca3a0930067f0381483689055debebe7938eada3119959a212e1",
+  "returncode": 0,
+  "schema": "foil.adaptive-two-benchmark-receipt.v1",
+  "started_at": "2026-08-25T08:31:54.303387+00:00",
+  "stderr_sha256": "ce92c3e488300f0b70cbea7fd9382c45a47f1aefb7ce49d78c685ee93fb5ae26",
+  "stdout_sha256": "5bc19479953c9836febe35ac7a846cca2c6ae50ed48ec43de1e1e970693a715f",
+  "timed_out": false,
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 17854,
+    "output_tokens": 21,
+    "reasoning_output_tokens": 0
+  },
+  "valid": true,
+  "wall_seconds": 6.375
+}

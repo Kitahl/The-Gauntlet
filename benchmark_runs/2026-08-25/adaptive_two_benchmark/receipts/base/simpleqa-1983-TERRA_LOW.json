@@ -1,0 +1,38 @@
+{
+  "answer": {
+    "abstain": false,
+    "answer": "Patch 1.06."
+  },
+  "call_id": "simpleqa-1983-TERRA_LOW",
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "TERRA_LOW",
+  "effort": "low",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-25T08:30:45.487125+00:00",
+  "invalid_reasons": [],
+  "kind": "base",
+  "last_output_sha256": "ec1270039ee7bdad36d7e3928885967029d56bddc90cdbb020683328f8c30db5",
+  "model": "gpt-5.6-terra",
+  "pre_call_commit": "dfb2cd4f88fa3f4e9987007ce1d460058b56406d",
+  "prompt_sha256": "2f09f169b06bc7bdc813e0f2597541b56f350d54def3aa51f73a25e3588ad352",
+  "returncode": 0,
+  "schema": "foil.adaptive-two-benchmark-receipt.v1",
+  "started_at": "2026-08-25T08:30:38.607956+00:00",
+  "stderr_sha256": "189432a2ca8fd13e47757ff7a033e437d07d74dbe2d23a3237b7683e1d565f31",
+  "stdout_sha256": "403f07e571f68a69eabd179335e6cae2cb19feee794ac190dc3fa45951291c57",
+  "timed_out": false,
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 18619,
+    "output_tokens": 104,
+    "reasoning_output_tokens": 76
+  },
+  "valid": true,
+  "wall_seconds": 6.875
+}

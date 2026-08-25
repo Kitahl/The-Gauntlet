@@ -1,0 +1,38 @@
+{
+  "answer": {
+    "abstain": false,
+    "answer": "Lovedale High School in Alice, Eastern Cape."
+  },
+  "call_id": "simpleqa-1626-SOL_LOW",
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "SOL_LOW",
+  "effort": "low",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-25T08:31:20.141651+00:00",
+  "invalid_reasons": [],
+  "kind": "base",
+  "last_output_sha256": "c790b885ed479f1204d31c0f2340ca81f1bd40077eef9d7513997d0632e40c43",
+  "model": "gpt-5.6-sol",
+  "pre_call_commit": "dfb2cd4f88fa3f4e9987007ce1d460058b56406d",
+  "prompt_sha256": "4dd990b2ec8f175fffd9dbc239453bebac2473aa92eceb4431ea236200721d76",
+  "returncode": 0,
+  "schema": "foil.adaptive-two-benchmark-receipt.v1",
+  "started_at": "2026-08-25T08:31:09.813224+00:00",
+  "stderr_sha256": "3baf922adbac73130f7674fce06869672c7ebe7e2f7454f15eef3354a006428d",
+  "stdout_sha256": "a0a9eb7d81f455c840b689da0c2d70dc1e0323f9e3a1fcc13b458c29c583aac3",
+  "timed_out": false,
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 18640,
+    "output_tokens": 145,
+    "reasoning_output_tokens": 113
+  },
+  "valid": true,
+  "wall_seconds": 10.328000000008615
+}

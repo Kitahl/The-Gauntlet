@@ -1,0 +1,353 @@
+{
+  "answer_mutations": 0,
+  "codex_version": "codex-cli 0.147.0",
+  "pre_call_commit": "dfb2cd4f88fa3f4e9987007ce1d460058b56406d",
+  "predictions": [
+    {
+      "base": {
+        "abstain": false,
+        "answer": "OK"
+      },
+      "base_receipt_sha256": "89a560738033f4c70bbe6e7fca79b19764edbee4b0d23f505e3047fcf2119a82",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "SOL_LOW",
+      "final": {
+        "abstain": false,
+        "answer": "OK"
+      },
+      "full": null,
+      "full_receipt_sha256": null,
+      "item_id": "processbench-gsm8k-330",
+      "route": {
+        "reason": "NO_CERTIFIED_EQUALITY",
+        "route": "DIRECT",
+        "trace": null
+      },
+      "unit_id": "processbench-gsm8k-330-SOL_LOW"
+    },
+    {
+      "base": {
+        "abstain": false,
+        "answer": "OK"
+      },
+      "base_receipt_sha256": "fc663b4f2aee2b3d6c0bf9befcfd9ec7d16671c72d6e508cf3541c057ae40167",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_HIGH",
+      "final": {
+        "abstain": false,
+        "answer": "OK"
+      },
+      "full": null,
+      "full_receipt_sha256": null,
+      "item_id": "processbench-gsm8k-330",
+      "route": {
+        "reason": "NO_CERTIFIED_EQUALITY",
+        "route": "DIRECT",
+        "trace": null
+      },
+      "unit_id": "processbench-gsm8k-330-TERRA_HIGH"
+    },
+    {
+      "base": {
+        "abstain": false,
+        "answer": "OK"
+      },
+      "base_receipt_sha256": "252eac243feff1041de952cc36d845e94533736ba663517919e0b35c08a6fcd5",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_LOW",
+      "final": {
+        "abstain": false,
+        "answer": "OK"
+      },
+      "full": null,
+      "full_receipt_sha256": null,
+      "item_id": "processbench-gsm8k-330",
+      "route": {
+        "reason": "NO_CERTIFIED_EQUALITY",
+        "route": "DIRECT",
+        "trace": null
+      },
+      "unit_id": "processbench-gsm8k-330-TERRA_LOW"
+    },
+    {
+      "base": {
+        "abstain": false,
+        "answer": "OK"
+      },
+      "base_receipt_sha256": "4b494081c159fb9fd19bcaf6c32758d5dbf3c8c095aa7639fc46d35c73030cc5",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "SOL_LOW",
+      "final": {
+        "abstain": false,
+        "answer": "3"
+      },
+      "full": {
+        "abstain": false,
+        "answer": "3"
+      },
+      "full_receipt_sha256": "d3d361ba2223b23c23de03e6c48aefc7c452c8a648eda27fdd5803fd90f3d2e2",
+      "item_id": "processbench-gsm8k-36",
+      "route": {
+        "checkable_equalities": 4,
+        "failed_equalities": 1,
+        "reason": "FULL_POSITIVE_VALUE",
+        "route": "FULL",
+        "trace": {
+          "a0_digest": "ef4c9e9f5e55ef36cd360c4d57317b31bab77874a40cf0b749214ee7c8362167",
+          "base_answer_preserved": true,
+          "binding_digest": "b98cd33beded4b1ec9ce3f7c8044ae31420efec4354a37b90c41b1ef6acf746c",
+          "decision_sha256": "e5d39ca57d99c4cd8175d70d8ae0f4cd429fa5f3b58858188ec7b9844f9c6753",
+          "execution_authorized": false,
+          "expected_value_denominator": 1000000000000,
+          "expected_value_numerator": 365000000000000000,
+          "final": true,
+          "host_action_required": true,
+          "probe_resamples": 0,
+          "raw_answer_stored": false,
+          "raw_obligation_stored": false,
+          "reason": "FULL_POSITIVE_VALUE",
+          "route": "FULL",
+          "routing_signal_authority": "CONTROL_ONLY",
+          "schema": "egrt.foil-adaptive-route.v1",
+          "shadow_only": true,
+          "verifier_route_digests": [
+            "67ba70b6d90a026492eec5db50e837efd971f678dd4a79c08d762f3fa62a7ed0"
+          ]
+        }
+      },
+      "unit_id": "processbench-gsm8k-36-SOL_LOW"
+    },
+    {
+      "base": {
+        "abstain": false,
+        "answer": "3"
+      },
+      "base_receipt_sha256": "ee96475e039a1d987d37fd7c7fcf97122513912587bd71ce7f124085082b2a53",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_HIGH",
+      "final": {
+        "abstain": false,
+        "answer": "OK"
+      },
+      "full": {
+        "abstain": false,
+        "answer": "OK"
+      },
+      "full_receipt_sha256": "b465b10f244bf40c1f3121d4f837ed6d91245946a6c8187208677180bf026003",
+      "item_id": "processbench-gsm8k-36",
+      "route": {
+        "checkable_equalities": 4,
+        "failed_equalities": 1,
+        "reason": "FULL_POSITIVE_VALUE",
+        "route": "FULL",
+        "trace": {
+          "a0_digest": "5dc47e11a809d67425f73bed56e1fcdb616c9ee78781ce1ffab4ea657ed30d09",
+          "base_answer_preserved": true,
+          "binding_digest": "d5520c6a76bf0befb772891bd4d6ddd204cb2cfd29cd6b6d3559e3d90dc3589e",
+          "decision_sha256": "470fd1a66677366f259fa5c5d40c3ac301b4873ca263b528e7b4d58859a4ad37",
+          "execution_authorized": false,
+          "expected_value_denominator": 1000000000000,
+          "expected_value_numerator": 365000000000000000,
+          "final": true,
+          "host_action_required": true,
+          "probe_resamples": 0,
+          "raw_answer_stored": false,
+          "raw_obligation_stored": false,
+          "reason": "FULL_POSITIVE_VALUE",
+          "route": "FULL",
+          "routing_signal_authority": "CONTROL_ONLY",
+          "schema": "egrt.foil-adaptive-route.v1",
+          "shadow_only": true,
+          "verifier_route_digests": [
+            "85ff3723c987f72446a72ccc3a1614a23c26dfeb41fce784a472a5a02891ef70"
+          ]
+        }
+      },
+      "unit_id": "processbench-gsm8k-36-TERRA_HIGH"
+    },
+    {
+      "base": {
+        "abstain": false,
+        "answer": "OK"
+      },
+      "base_receipt_sha256": "cfad0aa30d697f22a122b3b9b9163aa9b3b5f109341c34ad797720424fa4995b",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_LOW",
+      "final": {
+        "abstain": false,
+        "answer": "3"
+      },
+      "full": {
+        "abstain": false,
+        "answer": "3"
+      },
+      "full_receipt_sha256": "b2447ee05dcdcded7ac3e8f969752755c5efb5d918442ec1ddede0604286b957",
+      "item_id": "processbench-gsm8k-36",
+      "route": {
+        "checkable_equalities": 4,
+        "failed_equalities": 1,
+        "reason": "FULL_POSITIVE_VALUE",
+        "route": "FULL",
+        "trace": {
+          "a0_digest": "ef4c9e9f5e55ef36cd360c4d57317b31bab77874a40cf0b749214ee7c8362167",
+          "base_answer_preserved": true,
+          "binding_digest": "7ba55be7761762dcbb3b994aa9fdba6da93c4669c7a2d66282b3a1c7f8bb290b",
+          "decision_sha256": "4383a860cef8fdb39b762b87b74fc1c53639d96a06630f68b43b9a8dccc2a13a",
+          "execution_authorized": false,
+          "expected_value_denominator": 1000000000000,
+          "expected_value_numerator": 365000000000000000,
+          "final": true,
+          "host_action_required": true,
+          "probe_resamples": 0,
+          "raw_answer_stored": false,
+          "raw_obligation_stored": false,
+          "reason": "FULL_POSITIVE_VALUE",
+          "route": "FULL",
+          "routing_signal_authority": "CONTROL_ONLY",
+          "schema": "egrt.foil-adaptive-route.v1",
+          "shadow_only": true,
+          "verifier_route_digests": [
+            "a162a1b36fd548f047378559d19f90150c355a36fc5b32367e2ebd22b8e704ec"
+          ]
+        }
+      },
+      "unit_id": "processbench-gsm8k-36-TERRA_LOW"
+    },
+    {
+      "base": {
+        "abstain": false,
+        "answer": "Lovedale High School in Alice, Eastern Cape."
+      },
+      "base_receipt_sha256": "e9d077ccc98ffe44ae451a72e6adc8a89552b6c58a1ab14cccd1290de91cf1aa",
+      "benchmark": "SIMPLEQA_NO_BROWSE",
+      "config_id": "SOL_LOW",
+      "final": {
+        "abstain": false,
+        "answer": "Lovedale High School in Alice, Eastern Cape."
+      },
+      "full": null,
+      "full_receipt_sha256": null,
+      "item_id": "simpleqa-1626",
+      "route": {
+        "reason": "NO_HOST_DECLARED_DECIDABLE_OBLIGATION",
+        "route": "DIRECT",
+        "trace": null
+      },
+      "unit_id": "simpleqa-1626-SOL_LOW"
+    },
+    {
+      "base": {
+        "abstain": false,
+        "answer": "Lovedale High School."
+      },
+      "base_receipt_sha256": "a4ab60a186d821f114044a97364c6039e3f41480d87a4ad7607a657625fb69f2",
+      "benchmark": "SIMPLEQA_NO_BROWSE",
+      "config_id": "TERRA_HIGH",
+      "final": {
+        "abstain": false,
+        "answer": "Lovedale High School."
+      },
+      "full": null,
+      "full_receipt_sha256": null,
+      "item_id": "simpleqa-1626",
+      "route": {
+        "reason": "NO_HOST_DECLARED_DECIDABLE_OBLIGATION",
+        "route": "DIRECT",
+        "trace": null
+      },
+      "unit_id": "simpleqa-1626-TERRA_HIGH"
+    },
+    {
+      "base": {
+        "abstain": false,
+        "answer": "Lovedale High School."
+      },
+      "base_receipt_sha256": "eacd03fbf745594e19a0847a504853c844d7e9cbed65afb4e50d981fea405f14",
+      "benchmark": "SIMPLEQA_NO_BROWSE",
+      "config_id": "TERRA_LOW",
+      "final": {
+        "abstain": false,
+        "answer": "Lovedale High School."
+      },
+      "full": null,
+      "full_receipt_sha256": null,
+      "item_id": "simpleqa-1626",
+      "route": {
+        "reason": "NO_HOST_DECLARED_DECIDABLE_OBLIGATION",
+        "route": "DIRECT",
+        "trace": null
+      },
+      "unit_id": "simpleqa-1626-TERRA_LOW"
+    },
+    {
+      "base": {
+        "abstain": false,
+        "answer": "Patch 1.06."
+      },
+      "base_receipt_sha256": "7528da3d6d44420ae1200e10c45cdc439946b34fcaaa76a8c2018c2d1bb762ff",
+      "benchmark": "SIMPLEQA_NO_BROWSE",
+      "config_id": "SOL_LOW",
+      "final": {
+        "abstain": false,
+        "answer": "Patch 1.06."
+      },
+      "full": null,
+      "full_receipt_sha256": null,
+      "item_id": "simpleqa-1983",
+      "route": {
+        "reason": "NO_HOST_DECLARED_DECIDABLE_OBLIGATION",
+        "route": "DIRECT",
+        "trace": null
+      },
+      "unit_id": "simpleqa-1983-SOL_LOW"
+    },
+    {
+      "base": {
+        "abstain": false,
+        "answer": "Patch 1.05."
+      },
+      "base_receipt_sha256": "86c35aefca994dff665296275744cd4e79bfd088c303c64d26080b7d5476ac63",
+      "benchmark": "SIMPLEQA_NO_BROWSE",
+      "config_id": "TERRA_HIGH",
+      "final": {
+        "abstain": false,
+        "answer": "Patch 1.05."
+      },
+      "full": null,
+      "full_receipt_sha256": null,
+      "item_id": "simpleqa-1983",
+      "route": {
+        "reason": "NO_HOST_DECLARED_DECIDABLE_OBLIGATION",
+        "route": "DIRECT",
+        "trace": null
+      },
+      "unit_id": "simpleqa-1983-TERRA_HIGH"
+    },
+    {
+      "base": {
+        "abstain": false,
+        "answer": "Patch 1.06."
+      },
+      "base_receipt_sha256": "62f34ef7fa48161a4953a39ea877238ff358f92a621a0690d33c94c4bb79be22",
+      "benchmark": "SIMPLEQA_NO_BROWSE",
+      "config_id": "TERRA_LOW",
+      "final": {
+        "abstain": false,
+        "answer": "Patch 1.06."
+      },
+      "full": null,
+      "full_receipt_sha256": null,
+      "item_id": "simpleqa-1983",
+      "route": {
+        "reason": "NO_HOST_DECLARED_DECIDABLE_OBLIGATION",
+        "route": "DIRECT",
+        "trace": null
+      },
+      "unit_id": "simpleqa-1983-TERRA_LOW"
+    }
+  ],
+  "profile_writes": 0,
+  "provider_calls": 18,
+  "schema": "foil.adaptive-two-benchmark-predictions.v1",
+  "tool_calls": 0
+}

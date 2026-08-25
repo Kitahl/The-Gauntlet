@@ -1,0 +1,38 @@
+{
+  "answer": {
+    "abstain": false,
+    "answer": "Lovedale High School."
+  },
+  "call_id": "simpleqa-1626-TERRA_LOW",
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "TERRA_LOW",
+  "effort": "low",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-25T08:31:42.396011+00:00",
+  "invalid_reasons": [],
+  "kind": "base",
+  "last_output_sha256": "4359451870e4032280b81299d887a0efbdcaae90b560b48fc9f23d95633bcf27",
+  "model": "gpt-5.6-terra",
+  "pre_call_commit": "dfb2cd4f88fa3f4e9987007ce1d460058b56406d",
+  "prompt_sha256": "4dd990b2ec8f175fffd9dbc239453bebac2473aa92eceb4431ea236200721d76",
+  "returncode": 0,
+  "schema": "foil.adaptive-two-benchmark-receipt.v1",
+  "started_at": "2026-08-25T08:31:36.160071+00:00",
+  "stderr_sha256": "f8a55a7afe0e4886c0445835dcf857deeb7d254dd22298b5db5341ab310fd22f",
+  "stdout_sha256": "bef34bd5f8908f54f74433382e322c004c46b453a8c9e0e9ce83e5138bdc9621",
+  "timed_out": false,
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 17478,
+    "output_tokens": 121,
+    "reasoning_output_tokens": 94
+  },
+  "valid": true,
+  "wall_seconds": 6.23399999999674
+}
