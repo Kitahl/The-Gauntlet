@@ -1,6 +1,6 @@
-# Adapt — Adaptive Complement
+# Adapt — Adaptive Reasoning Complement
 
-**Adapt** is the Instrument 01 public name for the adaptive-complement system implemented under the stable **FOIL** protocol/runtime namespace.
+**Adapt** is the Strong Inference public name for the adaptive-complement system implemented under the stable **FOIL** protocol/runtime namespace.
 
 The product rename changes the human-facing concept, not the compatibility contract.
 
@@ -8,7 +8,7 @@ The product rename changes the human-facing concept, not the compatibility contr
 
 Adapt is a task/user complement module, not a persona-cloning system, a generic self-reflection product, or an additional source of factual authority. The technical identifier `foil` remains the stable implementation namespace.
 
-The previous public label **Mirror — Adaptive Reasoning Complement** is retired from the Instrument 01 product surface. It remains here only as migration vocabulary because older documentation and validation receipts used it.
+The previous public label **Mirror — Adaptive Reasoning Complement** is retired from the Strong Inference product surface. It remains here only as migration vocabulary because older documentation and validation receipts used it.
 
 ## What Adapt does
 
@@ -20,7 +20,7 @@ For the current task it asks:
 2. Which capabilities are already well covered by the user/current context?
 3. Which load-bearing capability is missing, uncertain, or unsupported?
 4. What is the smallest useful complement that fills that gap?
-5. Which existing Instrument 01 module, verifier, search tool, runtime, model, or external capability should provide it?
+5. Which existing Strong Inference module, verifier, search tool, runtime, model, or external capability should provide it?
 6. Did that help, was it redundant, or did it take over work unnecessarily?
 
 Adapt is **complementary**, not automatically contrarian. It does not manufacture evidence. The specialist modules still produce claim-native evidence and receipts.
@@ -54,7 +54,7 @@ The following identifiers remain unchanged so existing installations, profiles, 
 - historical benchmark condition names such as `FOIL`, `FOIL_PROFILE`, and `FOIL_MM`
 - existing FOIL-named research, validation, and onboarding files
 
-Those names are **technical/protocol identifiers**, not the Instrument 01 public module name.
+Those names are **technical/protocol identifiers**, not the Strong Inference public module name.
 
 ## Evidence boundary
 
