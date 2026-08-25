@@ -1,6 +1,6 @@
 ---
 name: meditate
-description: Preflight — decision-grounding module for Rigilum Instrument 01. Route-invoked step before consequential action, after repeated failure, or when the task frame is unstable. Produces a compact state/goal/evidence/next-action reset rather than an additional opinion.
+description: Preflight — decision-grounding module for Strong Inference. Route-invoked step before consequential action, after repeated failure, or when the task frame is unstable. Produces a compact state/goal/evidence/next-action reset rather than an additional opinion.
 ---
 
 # Preflight
