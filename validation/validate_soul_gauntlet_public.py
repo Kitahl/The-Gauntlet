@@ -80,7 +80,6 @@ specs = (
 for name in specs:
     need(f"docs/specs/{name}")
 
-# Skill directories remain specification-only; runtime helpers never move into skills/.
 for directory in (ROOT / "skills").iterdir():
     if directory.is_dir():
         names = sorted(p.name for p in directory.iterdir() if not p.name.startswith("."))
@@ -106,7 +105,6 @@ if runtime_cfg.get("schema") != "egrt.runtime.v1":
 if runtime_cfg.get("persist_raw_prompts") is not False or runtime_cfg.get("persist_raw_tool_output") is not False:
     fail("generic typed runtime must not persist raw prompts/tool output")
 
-# Mastermind must not become a runtime dependency. Historical prose may name it.
 for path in runtime_files:
     text = need(path)
     if re.search(r"(^|\n)\s*(?:from|import)\s+mastermind\b", text, re.I):
@@ -116,16 +114,18 @@ for forbidden in ("Initial assessment priors remain", "Relative strengths observ
     if forbidden in foil:
         fail(f"person-specific Adapt/legacy-foil prior leaked into public skill: {forbidden}")
 
-# Public product names change while the legacy namespaces remain explicit so profiles,
-# hooks, benchmarks, and existing integrations do not silently break.
+# Public product names change while legacy namespaces remain explicit.
 for token in (
-    "Rigilum — Instrument 01", "Route", "Assure", "Adapt",
-    "technical ID / command", "working pre-product identity",
+    "# Strong Inference", "Strong Inference Systems", "Route", "Assure", "Adapt",
+    "Stable technical ID / command", "working pre-product identity",
 ):
     if token not in readme:
-        fail(f"README missing Instrument 01 public terminology or compatibility boundary: {token}")
+        fail(f"README missing Strong Inference public terminology or compatibility boundary: {token}")
+for rejected in ("Rigilum", "Instrument 01"):
+    if rejected in readme or rejected in showcase:
+        fail(f"rejected public brand leaked into current surface: {rejected}")
 for token in (
-    "Mirror — Adaptive Reasoning Complement", "technical skill name: `foil`",
+    "Adapt — Adaptive Reasoning Complement", "technical skill name: `foil`",
     "slash command: `/foil`", "runtime modules: `tools/foil_*`",
     "historical benchmark condition names",
 ):
@@ -133,9 +133,9 @@ for token in (
         fail(f"Adapt/foil legacy compatibility contract missing token: {token}")
 if showcase.count('class="tool-entry"') != 10:
     fail("showcase public module count is not synchronized")
-for token in ("Rigilum", "Instrument 01", ">Route<", ">Prove<", ">Discover<", ">Synthesize<", ">Verify<", ">Measure<", ">Assure<", ">Preflight<", ">Review<", ">Adapt<"):
+for token in ("Strong Inference", "Strong Inference Systems", ">Route<", ">Prove<", ">Discover<", ">Synthesize<", ">Verify<", ">Measure<", ">Assure<", ">Preflight<", ">Review<", ">Adapt<"):
     if token not in showcase:
-        fail(f"showcase missing Instrument 01 public name: {token}")
+        fail(f"showcase missing Strong Inference public name: {token}")
 
 pipeline = need("docs/VNEXT_RUNTIME_PIPELINE.md")
 for token in ("CLEARED", "ISSUE", "UNKNOWN", "UNAVAILABLE", "SPEC", "STATE", "RECEIPT", "FOIL", "Mastermind"):
@@ -148,5 +148,5 @@ print("PASS: privacy-preserving typed hook/runtime wiring")
 print("PASS: per-component engineering specifications present")
 print("PASS: SKILL.md-only module directories preserved")
 print("PASS: Mastermind absent from runtime imports")
-print("PASS: Instrument 01 public identity + legacy runtime compatibility contract")
+print("PASS: Strong Inference public identity + legacy runtime compatibility contract")
 print("PASS: public Adapt/legacy-foil skill contains no embedded user profile")
