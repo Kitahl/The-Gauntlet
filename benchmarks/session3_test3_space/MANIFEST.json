@@ -1,0 +1,121 @@
+{
+  "budgets": {
+    "search_queries_per_task": 8,
+    "source_followups_per_task": 12
+  },
+  "counts": {
+    "assistantbench_total": 20,
+    "base_total": 20,
+    "freshqa_total": 20,
+    "space_total": 20
+  },
+  "experiment_id": "SESSION3_TEST3_SPACE",
+  "files": {
+    "assignments.json": {
+      "bytes": 10715,
+      "sha256": "e488792e1e402230e90865fd2b57b5a9f5c66a5cc96f61016b4cc08fe0001afc"
+    },
+    "gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/README.md": {
+      "bytes": 110,
+      "sha256": "9457067e5ef3656bc7ad43f53e5a01083a2764b1b1e3cd00cbb4329578299b0b"
+    },
+    "gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/assistantbench_gold.jsonl": {
+      "bytes": 19521,
+      "sha256": "8273a22468a1603fac6d31117e017d8ad3367d520400266dadae3f96704f0529"
+    },
+    "gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/freshqa_gold.jsonl": {
+      "bytes": 4445,
+      "sha256": "4157cd0c35fafcf3b994be19a0efc488c82b2c9d1cd16f4e8b25ddd90fb52914"
+    },
+    "questions/assistantbench_questions.jsonl": {
+      "bytes": 6111,
+      "sha256": "6f1a1145a13ebf1cb9733c75ed8894a6dc0f2d421e2823907a24b95e69ed141e"
+    },
+    "questions/freshqa_questions.jsonl": {
+      "bytes": 4135,
+      "sha256": "084dcb8c496e6311ad7f07d8c29f78228525ca42a24d26050ffb05d948a1ad61"
+    },
+    "requirements-score.txt": {
+      "bytes": 12,
+      "sha256": "1978c5330a34a48fac00c1107de3949b8c8da3bd11517f59ca9b4510363c6c8a"
+    },
+    "score.py": {
+      "bytes": 2680,
+      "sha256": "5c5a4a50b140bf2f7445e2cce45b8c805e11e1376578e2ccd662b7a6633968a5"
+    },
+    "scoring/assistantbench/evaluate_utils/evaluate_dicts.py": {
+      "bytes": 2090,
+      "sha256": "fd9007e0f85e1ab50c45f546103e8449708531201f51c8c42291d9ce4ce98ddb"
+    },
+    "scoring/assistantbench/evaluate_utils/evaluate_factory.py": {
+      "bytes": 687,
+      "sha256": "63e6706db971a1561c2eedc3dfc6a8a5b168364682a5e9d2a7b0b9c81c2f1ae4"
+    },
+    "scoring/assistantbench/evaluate_utils/evaluate_numbers.py": {
+      "bytes": 836,
+      "sha256": "3e2de7d1afacd0bd71876c10deae51642d7728eac92c6b65c421f4023d050995"
+    },
+    "scoring/assistantbench/evaluate_utils/evaluate_strings.py": {
+      "bytes": 5468,
+      "sha256": "6d130a17dfb939c59f684bb52592afea4a5ebf4fb519969d923ef46029026b05"
+    },
+    "scoring/assistantbench/evaluate_utils/utils.py": {
+      "bytes": 903,
+      "sha256": "61772c837369f9df994032949f0b9143d39b74736f38e1e6855aa06cfc338f8e"
+    },
+    "scoring/assistantbench/evaluator.py": {
+      "bytes": 3538,
+      "sha256": "5a6258137853e06ae2ad164e319e4377acc4ca8325c683bbfd4de9b0b7db0dac"
+    }
+  },
+  "generated_at_utc": "2026-08-25T20:18:25.258456+00:00",
+  "schema": "gauntlet.session3.test3.space-package.v1",
+  "seed": 2026082503,
+  "sources": {
+    "assistantbench": {
+      "dataset": "AssistantBench/AssistantBench",
+      "download_sha256": "c1abd710b99d6f810e2ce95cb6c43f31828dacd778c9e4d9dd4ddad2eaee6ac4",
+      "file": "assistant_bench_v1.0_dev.jsonl",
+      "revision": "482cbbc0400f6d048438c4021727f21a10cbff49"
+    },
+    "assistantbench_scorer": {
+      "commit": "9e779f087de9a65668b6974d11f9ce9816026e96",
+      "repository": "ServiceNow/BrowserGym"
+    },
+    "freshqa": {
+      "detected_columns": [
+        "id",
+        "split",
+        "question",
+        "effective_year",
+        "next_review",
+        "false_premise",
+        "num_hops",
+        "fact_type",
+        "source",
+        "answer_0",
+        "answer_1",
+        "answer_2",
+        "answer_3",
+        "answer_4",
+        "answer_5",
+        "answer_6",
+        "answer_7",
+        "answer_8",
+        "answer_9",
+        "note",
+        "",
+        ""
+      ],
+      "repo_commit": "7d2d3683991916f3633e480548a6aa5c9a62e3db",
+      "repository": "freshllms/freshqa",
+      "sheet_id": "1_8mi-yuK30mvoDJu1KQXD6ODem7MKMcIgVAwDSzJkjM",
+      "snapshot_sha256": "6b19d6db20c8d25930cb3d831590ff6dbcfa5e547c760b873b6fb1d4d76c2a6a"
+    }
+  },
+  "space": {
+    "blob_sha": "a1d91b1d49ac6667f53ed7dfba14d8acb7fe849d",
+    "path": "skills/scoutbot/SKILL.md",
+    "repository": "Kitahl/The-Gauntlet"
+  }
+}

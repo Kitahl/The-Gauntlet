@@ -1,0 +1,366 @@
+{
+  "assignments": [
+    {
+      "benchmark": "FreshQA",
+      "condition": "BASE",
+      "condition_order": 1,
+      "fact_type": "fast-changing",
+      "false_premise": "FALSE",
+      "id": "freshqa:378",
+      "num_hops": "one-hop",
+      "pair_id": "freshqa-pair-01"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "BASE",
+      "condition_order": 2,
+      "fact_type": "never-changing",
+      "false_premise": "TRUE",
+      "id": "freshqa:115",
+      "num_hops": "one-hop",
+      "pair_id": "freshqa-pair-02"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "BASE",
+      "condition_order": 3,
+      "fact_type": "slow-changing",
+      "false_premise": "TRUE",
+      "id": "freshqa:40",
+      "num_hops": "one-hop",
+      "pair_id": "freshqa-pair-03"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "BASE",
+      "condition_order": 4,
+      "fact_type": "never-changing",
+      "false_premise": "FALSE",
+      "id": "freshqa:328",
+      "num_hops": "one-hop",
+      "pair_id": "freshqa-pair-04"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "BASE",
+      "condition_order": 5,
+      "fact_type": "never-changing",
+      "false_premise": "TRUE",
+      "id": "freshqa:120",
+      "num_hops": "multi-hop",
+      "pair_id": "freshqa-pair-05"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "BASE",
+      "condition_order": 6,
+      "fact_type": "slow-changing",
+      "false_premise": "FALSE",
+      "id": "freshqa:134",
+      "num_hops": "one-hop",
+      "pair_id": "freshqa-pair-06"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "BASE",
+      "condition_order": 7,
+      "fact_type": "never-changing",
+      "false_premise": "FALSE",
+      "id": "freshqa:358",
+      "num_hops": "multi-hop",
+      "pair_id": "freshqa-pair-07"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "BASE",
+      "condition_order": 8,
+      "fact_type": "slow-changing",
+      "false_premise": "TRUE",
+      "id": "freshqa:49",
+      "num_hops": "multi-hop",
+      "pair_id": "freshqa-pair-08"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "BASE",
+      "condition_order": 9,
+      "fact_type": "slow-changing",
+      "false_premise": "FALSE",
+      "id": "freshqa:239",
+      "num_hops": "multi-hop",
+      "pair_id": "freshqa-pair-09"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "BASE",
+      "condition_order": 10,
+      "fact_type": "fast-changing",
+      "false_premise": "FALSE",
+      "id": "freshqa:485",
+      "num_hops": "multi-hop",
+      "pair_id": "freshqa-pair-10"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "BASE",
+      "condition_order": 1,
+      "difficulty": "Medium",
+      "id": "assistantbench:2ddae3b7a208e3c25f14d82d7a1faaaa1832fbf950b4dac345e755c4c361f294",
+      "pair_id": "assistantbench-pair-01"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "BASE",
+      "condition_order": 2,
+      "difficulty": "Hard",
+      "id": "assistantbench:291b53e665b4dd4365cde995042db4a6f6fecef3fe3a6f4482f23d61bd673918",
+      "pair_id": "assistantbench-pair-02"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "BASE",
+      "condition_order": 3,
+      "difficulty": "Medium",
+      "id": "assistantbench:52f7224e9c79431e7926afe317782711a0028750693e7456cde22ef6f4bd8bd5",
+      "pair_id": "assistantbench-pair-03"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "BASE",
+      "condition_order": 4,
+      "difficulty": "Medium",
+      "id": "assistantbench:9bdca8677af1e25cb7b0c7992dc62670c3e58e4afcd5ae60bcaa2483556bba00",
+      "pair_id": "assistantbench-pair-04"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "BASE",
+      "condition_order": 5,
+      "difficulty": "Medium",
+      "id": "assistantbench:3af8028c2a59e28ca88baff0e6d91f2a9f170c5ef91003f1c8406755a2760ad4",
+      "pair_id": "assistantbench-pair-05"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "BASE",
+      "condition_order": 6,
+      "difficulty": "Medium",
+      "id": "assistantbench:ccec2229ced20a4b0cb4897e3a99120a3017ea030903e01c9bda6b13d40b0b14",
+      "pair_id": "assistantbench-pair-06"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "BASE",
+      "condition_order": 7,
+      "difficulty": "Medium",
+      "id": "assistantbench:efc0f3a47e9ed2ecdbcc037c2093865fe6e39f4d413a5d1ccdc7357160a4606b",
+      "pair_id": "assistantbench-pair-07"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "BASE",
+      "condition_order": 8,
+      "difficulty": "Medium",
+      "id": "assistantbench:9e31099fffa6a3891c94934fd4fc2f3f522d51c1904ff3561f3a10e4bf245821",
+      "pair_id": "assistantbench-pair-08"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "BASE",
+      "condition_order": 9,
+      "difficulty": "Hard",
+      "id": "assistantbench:e6bc98089608217e45b6956a46518fe3cce64a799b3ac43c6974c449ae14c408",
+      "pair_id": "assistantbench-pair-09"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "BASE",
+      "condition_order": 10,
+      "difficulty": "Hard",
+      "id": "assistantbench:57d9dc6935e8a40b02e7f8ec81768fe70e68a0c05f6866927c9fda38db38a486",
+      "pair_id": "assistantbench-pair-10"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "SPACE",
+      "condition_order": 1,
+      "fact_type": "fast-changing",
+      "false_premise": "FALSE",
+      "id": "freshqa:434",
+      "num_hops": "one-hop",
+      "pair_id": "freshqa-pair-01"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "SPACE",
+      "condition_order": 2,
+      "fact_type": "never-changing",
+      "false_premise": "TRUE",
+      "id": "freshqa:61",
+      "num_hops": "one-hop",
+      "pair_id": "freshqa-pair-02"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "SPACE",
+      "condition_order": 3,
+      "fact_type": "slow-changing",
+      "false_premise": "TRUE",
+      "id": "freshqa:15",
+      "num_hops": "one-hop",
+      "pair_id": "freshqa-pair-03"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "SPACE",
+      "condition_order": 4,
+      "fact_type": "never-changing",
+      "false_premise": "FALSE",
+      "id": "freshqa:332",
+      "num_hops": "one-hop",
+      "pair_id": "freshqa-pair-04"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "SPACE",
+      "condition_order": 5,
+      "fact_type": "never-changing",
+      "false_premise": "TRUE",
+      "id": "freshqa:121",
+      "num_hops": "multi-hop",
+      "pair_id": "freshqa-pair-05"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "SPACE",
+      "condition_order": 6,
+      "fact_type": "slow-changing",
+      "false_premise": "FALSE",
+      "id": "freshqa:131",
+      "num_hops": "one-hop",
+      "pair_id": "freshqa-pair-06"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "SPACE",
+      "condition_order": 7,
+      "fact_type": "never-changing",
+      "false_premise": "FALSE",
+      "id": "freshqa:352",
+      "num_hops": "multi-hop",
+      "pair_id": "freshqa-pair-07"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "SPACE",
+      "condition_order": 8,
+      "fact_type": "slow-changing",
+      "false_premise": "TRUE",
+      "id": "freshqa:48",
+      "num_hops": "multi-hop",
+      "pair_id": "freshqa-pair-08"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "SPACE",
+      "condition_order": 9,
+      "fact_type": "slow-changing",
+      "false_premise": "FALSE",
+      "id": "freshqa:236",
+      "num_hops": "multi-hop",
+      "pair_id": "freshqa-pair-09"
+    },
+    {
+      "benchmark": "FreshQA",
+      "condition": "SPACE",
+      "condition_order": 10,
+      "fact_type": "fast-changing",
+      "false_premise": "FALSE",
+      "id": "freshqa:488",
+      "num_hops": "multi-hop",
+      "pair_id": "freshqa-pair-10"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "SPACE",
+      "condition_order": 1,
+      "difficulty": "Medium",
+      "id": "assistantbench:fb9ba3ab6a13d0adc677f993e90d54914a5cdf211305a1bba6bf16ec4ccb9b7c",
+      "pair_id": "assistantbench-pair-01"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "SPACE",
+      "condition_order": 2,
+      "difficulty": "Hard",
+      "id": "assistantbench:a9074997e698f912b9e751779ea19c1e92fa148404e90e0ae997acea3f9559b0",
+      "pair_id": "assistantbench-pair-02"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "SPACE",
+      "condition_order": 3,
+      "difficulty": "Medium",
+      "id": "assistantbench:99da66d8af02491f98b98c56b26c709e773b5a2ad945fb280375951ba600de09",
+      "pair_id": "assistantbench-pair-03"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "SPACE",
+      "condition_order": 4,
+      "difficulty": "Medium",
+      "id": "assistantbench:2aa5dd83fbcd0dce9a3dd4592106e5b5edf738008d932e357d477bba80e59ccf",
+      "pair_id": "assistantbench-pair-04"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "SPACE",
+      "condition_order": 5,
+      "difficulty": "Medium",
+      "id": "assistantbench:e2dc3a6b10b762e8aba7fa4d4e70f757f6d04dcbc8b56c48fc53fd9928d31d07",
+      "pair_id": "assistantbench-pair-05"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "SPACE",
+      "condition_order": 6,
+      "difficulty": "Medium",
+      "id": "assistantbench:8fa42360185068216f2919935148d4e1ad28ddc18da0abd0f4bb0b6b6f84b127",
+      "pair_id": "assistantbench-pair-06"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "SPACE",
+      "condition_order": 7,
+      "difficulty": "Medium",
+      "id": "assistantbench:c7afe00869f98cf363fd83677ac41757ed5e57f03eacc3d1304feb0a92084bd1",
+      "pair_id": "assistantbench-pair-07"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "SPACE",
+      "condition_order": 8,
+      "difficulty": "Medium",
+      "id": "assistantbench:9baaa267c95f9d8b75741ee9169c50563d297cfa592c20deaffd30dbc5984c74",
+      "pair_id": "assistantbench-pair-08"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "SPACE",
+      "condition_order": 9,
+      "difficulty": "Hard",
+      "id": "assistantbench:748899d9d70c09beb3bd48ac8a3658bdcfd2f9114fe6dc4c4b8d2f9541ef4607",
+      "pair_id": "assistantbench-pair-09"
+    },
+    {
+      "benchmark": "AssistantBench",
+      "condition": "SPACE",
+      "condition_order": 10,
+      "difficulty": "Hard",
+      "id": "assistantbench:4e615af6f0348597b4133cc1ec5418bb3f35328e3d95e23a275027cee97b5e09",
+      "pair_id": "assistantbench-pair-10"
+    }
+  ],
+  "schema": "gauntlet.session3.test3.space.assignments.v1",
+  "seed": 2026082503
+}

@@ -1,0 +1,20 @@
+{"benchmark": "FreshQA", "fact_type": "fast-changing", "false_premise": "FALSE", "id": "freshqa:378", "num_hops": "one-hop", "question": "How many tornadoes have been confirmed by Enhanced Fujita rating in the United States so far this year?"}
+{"benchmark": "FreshQA", "fact_type": "fast-changing", "false_premise": "FALSE", "id": "freshqa:434", "num_hops": "one-hop", "question": "What is the most recent Walt Disney Animation Studios's animated film?"}
+{"benchmark": "FreshQA", "fact_type": "never-changing", "false_premise": "TRUE", "id": "freshqa:115", "num_hops": "one-hop", "question": "When is Peruvian President Pedro Castillo scheduled to visit Chile this year?"}
+{"benchmark": "FreshQA", "fact_type": "never-changing", "false_premise": "TRUE", "id": "freshqa:61", "num_hops": "one-hop", "question": "Will there be 29 days in February in the leap year of 2500?"}
+{"benchmark": "FreshQA", "fact_type": "slow-changing", "false_premise": "TRUE", "id": "freshqa:40", "num_hops": "one-hop", "question": "Who is the 9th American to win the Miss World crown?"}
+{"benchmark": "FreshQA", "fact_type": "slow-changing", "false_premise": "TRUE", "id": "freshqa:15", "num_hops": "one-hop", "question": "When did Jamie Oliver earn his first Michelin Star?"}
+{"benchmark": "FreshQA", "fact_type": "never-changing", "false_premise": "FALSE", "id": "freshqa:328", "num_hops": "one-hop", "question": "Who won the 2022 Nobel Prize in Chemistry from University of Copenhagen, Denmark?"}
+{"benchmark": "FreshQA", "fact_type": "never-changing", "false_premise": "FALSE", "id": "freshqa:332", "num_hops": "one-hop", "question": "When was the Day of Eight Billion?"}
+{"benchmark": "FreshQA", "fact_type": "never-changing", "false_premise": "TRUE", "id": "freshqa:120", "num_hops": "multi-hop", "question": "How much longer will Brittney Griner spend in the Russian prison?"}
+{"benchmark": "FreshQA", "fact_type": "never-changing", "false_premise": "TRUE", "id": "freshqa:121", "num_hops": "multi-hop", "question": "By how many basis points did the Federal Reserve cut interest rates from August to December 2022?"}
+{"benchmark": "FreshQA", "fact_type": "slow-changing", "false_premise": "FALSE", "id": "freshqa:134", "num_hops": "one-hop", "question": "What is the best-selling video game franchise of all time?"}
+{"benchmark": "FreshQA", "fact_type": "slow-changing", "false_premise": "FALSE", "id": "freshqa:131", "num_hops": "one-hop", "question": "What's the world record time for running a mile?"}
+{"benchmark": "FreshQA", "fact_type": "never-changing", "false_premise": "FALSE", "id": "freshqa:358", "num_hops": "multi-hop", "question": "Who is the highest-earning woman in music on the Forbes' Celebrity 100 list in 2020?"}
+{"benchmark": "FreshQA", "fact_type": "never-changing", "false_premise": "FALSE", "id": "freshqa:352", "num_hops": "multi-hop", "question": "Which province borders Shanghai to the north?"}
+{"benchmark": "FreshQA", "fact_type": "slow-changing", "false_premise": "TRUE", "id": "freshqa:49", "num_hops": "multi-hop", "question": "How long has Taylor Swift been a UNICEF Goodwill Ambassador?"}
+{"benchmark": "FreshQA", "fact_type": "slow-changing", "false_premise": "TRUE", "id": "freshqa:48", "num_hops": "multi-hop", "question": "Which cryptocurrency has a higher market cap than Bitcoin?"}
+{"benchmark": "FreshQA", "fact_type": "slow-changing", "false_premise": "FALSE", "id": "freshqa:239", "num_hops": "multi-hop", "question": "Who has the most liked post on Instagram?"}
+{"benchmark": "FreshQA", "fact_type": "slow-changing", "false_premise": "FALSE", "id": "freshqa:236", "num_hops": "multi-hop", "question": "In what city was the person currently acting as the U.S. speaker of house born?"}
+{"benchmark": "FreshQA", "fact_type": "fast-changing", "false_premise": "FALSE", "id": "freshqa:485", "num_hops": "multi-hop", "question": "Who are the current champions of the NBA, NHL, and MLB?"}
+{"benchmark": "FreshQA", "fact_type": "fast-changing", "false_premise": "FALSE", "id": "freshqa:488", "num_hops": "multi-hop", "question": "What is the current age of the oldest person to sail solo across the Pacific Ocean?"}
