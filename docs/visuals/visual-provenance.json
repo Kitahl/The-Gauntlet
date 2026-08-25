@@ -6,7 +6,7 @@
     {
       "id": "system-field",
       "file": "docs/system-field.js",
-      "purpose": "Render one persistent semantic Instrument 01 system field that reconfigures around the active professional workflow and five specialist modules.",
+      "purpose": "Render one persistent semantic Strong Inference system field that reconfigures around the active professional workflow and five specialist modules.",
       "sources": [
         "docs/ARCHITECTURE.md",
         "skills/soul/SKILL.md",
