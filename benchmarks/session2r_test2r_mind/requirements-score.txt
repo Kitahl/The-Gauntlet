@@ -1,4 +1,4 @@
-sympy
-regex
-latex2sympy2
-antlr4-python3-runtime==4.11.*
+sympy==1.13.3
+regex==2024.11.6
+latex2sympy2==1.5.4
+antlr4-python3-runtime==4.7.2
