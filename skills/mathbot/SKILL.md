@@ -1,6 +1,6 @@
 ---
 name: mathbot
-description: Prove — formal reasoning module for Rigilum Instrument 01. Trigger: /mind, /mathbot, formal proof, logical validity, probability/statistics derivation, optimization, counterexample, or formalization requests. Converts claims into explicit objects and proof obligations, then verifies with derivation, computation, solver, or source as appropriate.
+description: Prove — formal reasoning module for Strong Inference. Trigger: /mind, /mathbot, formal proof, logical validity, probability/statistics derivation, optimization, counterexample, or formalization requests. Converts claims into explicit objects and proof obligations, then verifies with derivation, computation, solver, or source as appropriate.
 ---
 
 # Prove
