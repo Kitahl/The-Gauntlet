@@ -10,6 +10,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 sys.path.insert(0, str(ROOT / "benchmarks" / "harness"))
 
+import foil_r16_no_oracle_discovery_pilot as protocol  # noqa: E402
+import foil_r16_no_oracle_discovery_runner as runner  # noqa: E402
+import foil_r16_no_oracle_operators as operators  # noqa: E402
 from egrt_host_finalizer import answer_digest  # noqa: E402
 from egrt_verifiers import DEFAULT_REGISTRY, VerificationStatus, canonical_rational  # noqa: E402
 from foil_obligation_discovery import (  # noqa: E402
@@ -20,11 +23,6 @@ from foil_obligation_discovery import (  # noqa: E402
     discover_obligations,
 )
 from foil_obligation_discovery_admission import compile_admitted_discovery  # noqa: E402
-
-import foil_r16_no_oracle_discovery_pilot as protocol  # noqa: E402
-import foil_r16_no_oracle_discovery_runner as runner  # noqa: E402
-import foil_r16_no_oracle_operators as operators  # noqa: E402
-
 
 QUESTION = "A store has 2 boxes with 3 jars each, adds 4 jars, and keeps 1 group."
 CLEAR = (
@@ -126,7 +124,11 @@ class DiscoveryBoundaryTests(unittest.TestCase):
     def test_unadmitted_envelope_cannot_use_production_admission_bridge(self) -> None:
         envelope = discover_obligations(request(), policy=DiscoveryPolicy(enabled=True))
         with self.assertRaisesRegex(TypeError, "FormalizationAdmissionReceipt"):
-            compile_admitted_discovery(envelope, admission=object())
+            compile_admitted_discovery(
+                envelope,
+                admission=object(),
+                binding=object(),
+            )
 
 
 class NumericVerifierAndScannerTests(unittest.TestCase):

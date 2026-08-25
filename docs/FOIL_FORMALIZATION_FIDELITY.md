@@ -1,14 +1,17 @@
 # FOIL formalization fidelity and extraction recall
 
-Status: **admission seam and one narrow execution-class generator implemented; calibrated routes absent**
+Status: **route-bound admission and narrow execution-class generators implemented; calibrated routes absent**
 
 ## Current boundary
 
 FOIL does not transform general free-form prose into obligations. The host may
 supply a strict versioned declarative task spec; `foil_obligation_compiler.py`
-validates and binds it but never extracts checks from prose. R1.6 adds one narrow,
-default-off execution-class generator for explicit GSM8K-style annotated
-arithmetic. It is not a general prose formalizer.
+validates and binds it but never extracts checks from prose. FOIL also has
+default-off execution-class generators for explicit GSM8K-style annotations and
+for a closed certified arithmetic rule bank. The rule bank recognizes only
+delimited numeric equalities, a separate bounded power rule, complete
+undelimited numeric-equality lines, and same-line joint affine constraint
+consistency. These are not general prose formalizers.
 
 Consequently, current decidable coverage measures only a supplied obligation
 universe. It does not measure FOIL's ability to find decidable structure in prose,
@@ -31,6 +34,10 @@ a conservative one-sided Clopper-Pearson lower bound for both route fidelity and
 separately adjudicated extraction recall; it also requires freshness, a complete
 predeclared mutation suite, instance checks, and—on translation routes—dual
 formalization, mechanical equivalence, and a measured error-correlation ceiling.
+The production discovery bridge additionally requires a known envelope type and
+an exact route binding whose route, generator configuration, complete input,
+generated spec, and target schema match. This closes the earlier v2 wiring gap
+without admitting v2 or the rule bank.
 
 `foil_formalization_routing.py` preserves the core controller's closed verifier
 routes while keeping `ADMITTED_GENERATED` visible in the outer trace. Admission

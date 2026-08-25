@@ -1,0 +1,661 @@
+{
+  "schema": "foil.p05-false-fire-audit.v1",
+  "rows": [
+    {
+      "split": "gsm8k",
+      "id": "gsm8k-278",
+      "generator": "Qwen2.5-Math-72B-Instruct",
+      "failure_mode": "PERCENT_DIMENSION_COLLAPSE",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 3,
+          "source_span": "\\[ \\left( \\frac{2}{4} \\right) \\times 100 = 50\\% \\]",
+          "left_source": "\\left( \\frac{2}{4} \\right) \\times 100",
+          "right_source": "(50/100)",
+          "left_value": "50",
+          "right_value": "1/2",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "Finally, calculate the percentage chance that a baby wearing a bow is wearing purple. The number of purple-wearing babies who wear bows is 2. The total number of babies who wear bows is 4. Therefore, the percentage chance that a baby wearing a bow is wearing purple is: \\[ \\left( \\frac{2}{4} \\right) \\times 100 = 50\\% \\] The final answer is \\(\\boxed{50}\\)."
+      ]
+    },
+    {
+      "split": "gsm8k",
+      "id": "gsm8k-292",
+      "generator": "Qwen2-72B-Instruct",
+      "failure_mode": "SYMBOLIC_CHAIN_FRAGMENT",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 1,
+          "source_span": "\\[ \\text{Alyana's Age} = \\text{Chenny's Age} - 4 = 10 - 4 = 6 \\]",
+          "left_source": "- 4",
+          "right_source": "10 - 4",
+          "left_value": "-4",
+          "right_value": "6",
+          "violating": true
+        },
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 2,
+          "source_span": "\\[ \\text{Anne's Age} = \\text{Alyana's Age} + 2 = 6 + 2 = 8 \\]",
+          "left_source": "+ 2",
+          "right_source": "6 + 2",
+          "left_value": "2",
+          "right_value": "8",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "Second, Alyana is 4 years younger than Chenny. To find Alyana's age, we subtract 4 from Chenny's age: \\[ \\text{Alyana's Age} = \\text{Chenny's Age} - 4 = 10 - 4 = 6 \\]",
+        "Third, Anne is 2 years older than Alyana. To find Anne's age, we add 2 to Alyana's age: \\[ \\text{Anne's Age} = \\text{Alyana's Age} + 2 = 6 + 2 = 8 \\]"
+      ]
+    },
+    {
+      "split": "gsm8k",
+      "id": "gsm8k-311",
+      "generator": "Qwen2.5-7B-Instruct",
+      "failure_mode": "PERCENT_DIMENSION_COLLAPSE",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 3,
+          "source_span": "\\[ \\left( \\frac{60}{150} \\right) \\times 100 = \\left( \\frac{2}{5} \\right) \\times 100 = 40\\% \\]",
+          "left_source": "\\left( \\frac{2}{5} \\right) \\times 100",
+          "right_source": "(40/100)",
+          "left_value": "40",
+          "right_value": "2/5",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "The percentage of blue spools is given by the formula: \\[ \\left( \\frac{\\text{number of blue spools}}{\\text{total number of spools}} \\right) \\times 100 \\] Substituting the values we have: \\[ \\left( \\frac{60}{150} \\right) \\times 100 = \\left( \\frac{2}{5} \\right) \\times 100 = 40\\% \\]"
+      ]
+    },
+    {
+      "split": "gsm8k",
+      "id": "gsm8k-368",
+      "generator": "Qwen2-7B-Instruct",
+      "failure_mode": "CURRENCY_SPAN_CROSSED_DELIMITER",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 2,
+          "source_span": "$80 = \\frac{25}{100} \\times \\$80 = \\$20\\). So, the discounted rate per lesson = $",
+          "left_source": "80",
+          "right_source": "\\frac{25}{100} \\times 80",
+          "left_value": "80",
+          "right_value": "20",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "Next, consider the lessons with the veteran. Charlie has 2 lessons with a veteran where he charges 25% less than the standard rate. First, find the discounted rate: \\(25\\%\\) of $80 = \\frac{25}{100} \\times \\$80 = \\$20\\). So, the discounted rate per lesson = $80 - $20 = $60. Total earnings from these lessons = \\(2 \\times \\$60 = \\$120\\)."
+      ]
+    },
+    {
+      "split": "gsm8k",
+      "id": "gsm8k-375",
+      "generator": "Qwen2-7B-Instruct",
+      "failure_mode": "UNIT_CONVERSION_AS_EQUAL_MAGNITUDE",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 0,
+          "source_span": "\\[2 \\text{ dozen} = 2 \\times 12 = 24 \\text{ cups}\\]",
+          "left_source": "2",
+          "right_source": "2 \\times 12",
+          "left_value": "2",
+          "right_value": "24",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "First, let's determine how many measuring spoons Jonathan originally has. Since he has two dozen cups, we convert this to the number of cups: \\[2 \\text{ dozen} = 2 \\times 12 = 24 \\text{ cups}\\]"
+      ]
+    },
+    {
+      "split": "gsm8k",
+      "id": "gsm8k-378",
+      "generator": "Qwen2.5-7B-Instruct",
+      "failure_mode": "SYMBOLIC_CHAIN_FRAGMENT",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 2,
+          "source_span": "\\[ \\text{Number of rabbits} = \\text{Number of dogs} - 2 = 9 - 2 = 7 \\]",
+          "left_source": "- 2",
+          "right_source": "9 - 2",
+          "left_value": "-2",
+          "right_value": "7",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "Third, Larry has 2 fewer rabbits than dogs.\n\\[ \\text{Number of rabbits} = \\text{Number of dogs} - 2 = 9 - 2 = 7 \\]"
+      ]
+    },
+    {
+      "split": "gsm8k",
+      "id": "gsm8k-396",
+      "generator": "Qwen2.5-Math-72B-Instruct",
+      "failure_mode": "UNIT_CONVERSION_AS_EQUAL_MAGNITUDE",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 2,
+          "source_span": "\\(4 \\text{ hours} = 4 \\times 60 = 240 \\text{ minutes}\\)",
+          "left_source": "4",
+          "right_source": "4 \\times 60",
+          "left_value": "4",
+          "right_value": "240",
+          "violating": true
+        },
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 2,
+          "source_span": "\\(2 \\text{ hours} = 2 \\times 60 = 120 \\text{ minutes}\\)",
+          "left_source": "2",
+          "right_source": "2 \\times 60",
+          "left_value": "2",
+          "right_value": "120",
+          "violating": true
+        },
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 4,
+          "source_span": "\\[ \\text{Percentage spent editing} = \\left( \\frac{90}{450} \\right) \\times 100 = 0.2 \\times 100 = 20\\% \\]",
+          "left_source": "0.2 \\times 100",
+          "right_source": "(20/100)",
+          "left_value": "20",
+          "right_value": "1/5",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "Second, convert all times to the same unit (minutes). - Time spent writing: \\(4 \\text{ hours} = 4 \\times 60 = 240 \\text{ minutes}\\) - Time spent recording: \\(2 \\text{ hours} = 2 \\times 60 = 120 \\text{ minutes}\\) - Time spent editing: \\(90 \\text{ minutes}\\)",
+        "Fourth, calculate the percentage of the total work time spent editing. \\[ \\text{Percentage spent editing} = \\left( \\frac{90}{450} \\right) \\times 100 = 0.2 \\times 100 = 20\\% \\] Therefore, the percentage of her total work time that Carol spent editing is \\(\\boxed{20}\\)."
+      ]
+    },
+    {
+      "split": "math",
+      "id": "math-694",
+      "generator": "Qwen2.5-7B-Instruct",
+      "failure_mode": "UNIT_CONVERSION_AS_EQUAL_MAGNITUDE",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 1,
+          "source_span": "\\[ \\frac{1}{2} \\text{ inch} = 20 \\text{ miles} \\]",
+          "left_source": "\\frac{1}{2}",
+          "right_source": "20",
+          "left_value": "1/2",
+          "right_value": "20",
+          "violating": true
+        },
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 2,
+          "source_span": "\\[ 1 \\text{ inch} = 2 \\times 20 \\text{ miles} = 40 \\text{ miles} \\]",
+          "left_source": "1",
+          "right_source": "2 \\times 20",
+          "left_value": "1",
+          "right_value": "40",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "First, understand the scale. We know that 1/2 inch on the map equals 20 miles in reality. This means: \\[ \\frac{1}{2} \\text{ inch} = 20 \\text{ miles} \\]",
+        "Second, determine how many miles 1 inch represents. Since 1/2 inch represents 20 miles, then 1 inch would represent twice that amount because 1 inch is double 1/2 inch. \\[ 1 \\text{ inch} = 2 \\times 20 \\text{ miles} = 40 \\text{ miles} \\]"
+      ]
+    },
+    {
+      "split": "math",
+      "id": "math-883",
+      "generator": "Qwen2.5-Math-7B-Instruct",
+      "failure_mode": "DECIMAL_APPROXIMATION",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 3,
+          "source_span": "\\[ x^2 = (2.8284)^2 = 8 \\]",
+          "left_source": "(2.8284)^2",
+          "right_source": "8",
+          "left_value": "49999041/6250000",
+          "right_value": "8",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "We are asked to find \\( x^2 \\). Thus, we calculate:\n\\[ x^2 = (2.8284)^2 = 8 \\]"
+      ]
+    },
+    {
+      "split": "math",
+      "id": "math-987",
+      "generator": "Qwen2.5-1.5B-Instruct",
+      "failure_mode": "UNIT_CONVERSION_AS_EQUAL_MAGNITUDE",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 0,
+          "source_span": "\\[ 1,000,000,000 \\text{ meters} = \\frac{1,000,000,000}{1,000} \\text{ kilometers} = 1,000,000 \\text{ kilometers} \\]",
+          "left_source": "1,000,000,000",
+          "right_source": "\\frac{1,000,000,000}{1,000}",
+          "left_value": "1000000000",
+          "right_value": "1000000",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "To determine how many trips around the Earth you could take if you travel one billion meters, we need to follow these steps: First, convert one billion meters to kilometers. Since there are 1,000 meters in a kilometer, we can convert one billion meters to kilometers by dividing one billion by 1,000. \\[ 1,000,000,000 \\text{ meters} = \\frac{1,000,000,000}{1,000} \\text{ kilometers} = 1,000,000 \\text{ kilometers} \\]"
+      ]
+    },
+    {
+      "split": "olympiadbench",
+      "id": "olympiadbench-529",
+      "generator": "Qwen2-7B-Instruct",
+      "failure_mode": "CORPUS_LABEL_FALSE_NEGATIVE_GENUINE_ERROR",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 0,
+          "source_span": "\\[ P(5, 3) = \\frac{5!}{(5-3)!} = \\frac{5!}{2!} = \\frac{5 \\times 4 \\times 3}{2 \\times 1} = 60 \\]",
+          "left_source": "\\frac{5 \\times 4 \\times 3}{2 \\times 1}",
+          "right_source": "60",
+          "left_value": "30",
+          "right_value": "60",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "To solve this problem, let's break it down into steps: First, we need to calculate the total number of ways the medals can be distributed among the five finalists. Since there are three medals (gold, silver, bronze) and five finalists, we use permutations for this calculation. The formula for permutations when selecting \\(r\\) items from \\(n\\) items is given by: \\[ P(n, r) = \\frac{n!}{(n-r)!} \\] For our scenario, we're choosing 3 winners out of 5 finalists, so: \\[ P(5, 3) = \\frac{5!}{(5-3)!} = \\frac{5!}{2!} = \\frac{5 \\times 4 \\times 3}{2 \\times 1} = 60 \\] So, there are 60 possible outcomes for who wins the medals."
+      ]
+    },
+    {
+      "split": "olympiadbench",
+      "id": "olympiadbench-753",
+      "generator": "Qwen2.5-72B-Instruct",
+      "failure_mode": "DECIMAL_APPROXIMATION",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 26,
+          "source_span": "\\[ 98730 \\div 7 = 14104.2857 \\]",
+          "left_source": "98730 \\div 7",
+          "right_source": "14104.2857",
+          "left_value": "98730/7",
+          "right_value": "141042857/10000",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "To check if 98730 is divisible by 7, we perform the division:\n\\[ 98730 \\div 7 = 14104.2857 \\]\nSince the result is not an integer, 98730 is not divisible by 7."
+      ]
+    },
+    {
+      "split": "olympiadbench",
+      "id": "olympiadbench-755",
+      "generator": "Qwen2.5-7B-Instruct",
+      "failure_mode": "DECIMAL_APPROXIMATION",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 4,
+          "source_span": "\\( 280 \\div 120 = 2.333 \\)",
+          "left_source": "280 \\div 120",
+          "right_source": "2.333",
+          "left_value": "7/3",
+          "right_value": "2333/1000",
+          "violating": true
+        },
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 5,
+          "source_span": "\\( 280 \\div 720 = 0.3889 \\)",
+          "left_source": "280 \\div 720",
+          "right_source": "0.3889",
+          "left_value": "7/18",
+          "right_value": "3889/10000",
+          "violating": true
+        },
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 9,
+          "source_span": "\\( 302400 \\div 362880 = 0.8333 \\)",
+          "left_source": "302400 \\div 362880",
+          "right_source": "0.8333",
+          "left_value": "5/6",
+          "right_value": "8333/10000",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "For \\( n = 5 \\):\n- The primes less than or equal to 5 are 2, 3, and 5.\n- The product is \\((2+3)(2+5)(3+5) = 5 \\cdot 7 \\cdot 8 = 280\\).\n- We need \\( 5! = 120 \\) to divide 280.\n- Since \\( 280 \\div 120 = 2.333 \\), 120 does not divide 280.\n- Therefore, \\( n = 5 \\) does not work.",
+        "For \\( n = 6 \\):\n- The primes less than or equal to 6 are 2, 3, and 5.\n- The product is \\((2+3)(2+5)(3+5) = 5 \\cdot 7 \\cdot 8 = 280\\).\n- We need \\( 6! = 720 \\) to divide 280.\n- Since \\( 280 \\div 720 = 0.3889 \\), 720 does not divide 280.\n- Therefore, \\( n = 6 \\) does not work.",
+        "For \\( n = 9 \\):\n- The primes less than or equal to 9 are 2, 3, 5, and 7.\n- The product is \\((2+3)(2+5)(2+7)(3+5)(3+7)(5+7) = 5 \\cdot 7 \\cdot 9 \\cdot 8 \\cdot 10 \\cdot 12 = 302400\\).\n- We need \\( 9! = 362880 \\) to divide 302400.\n- Since \\( 302400 \\div 362880 = 0.8333 \\), 362880 does not divide 302400.\n- Therefore, \\( n = 9 \\) does not work."
+      ]
+    },
+    {
+      "split": "olympiadbench",
+      "id": "olympiadbench-783",
+      "generator": "Llama-3.1-8B-Instruct",
+      "failure_mode": "EXPLICIT_COUNTEREXAMPLE_OR_REJECTED_TRIAL",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 7,
+          "source_span": "\\[ 2 + 1 = 1 \\]",
+          "left_source": "2 + 1",
+          "right_source": "1",
+          "left_value": "3",
+          "right_value": "1",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "Seventh, substitute \\( x = 3 \\) into the original equation:\n\\[ 2 + \\sqrt{3 - 2} = 3 - 2 \\]\n\\[ 2 + \\sqrt{1} = 1 \\]\n\\[ 2 + 1 = 1 \\]\n(False)"
+      ]
+    },
+    {
+      "split": "olympiadbench",
+      "id": "olympiadbench-892",
+      "generator": "Qwen2.5-Math-7B-Instruct",
+      "failure_mode": "INTEGER_QUOTIENT_WITH_REMAINDER",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 2,
+          "source_span": "\\(49 \\div 9 = 5\\)",
+          "left_source": "49 \\div 9",
+          "right_source": "5",
+          "left_value": "49/9",
+          "right_value": "5",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "Since \\(T = 49\\), there are 49 terms in the sequence. To find the last digit of the sum, we need to sum the last digits of these 49 terms. The sequence of last digits repeats every 9 terms, so we can break it down into complete cycles and a remainder. There are \\(49 \\div 9 = 5\\) complete cycles and a remainder of 4."
+      ]
+    },
+    {
+      "split": "olympiadbench",
+      "id": "olympiadbench-976",
+      "generator": "Qwen2.5-7B-Instruct",
+      "failure_mode": "PERCENT_DIMENSION_COLLAPSE",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 7,
+          "source_span": "\\( \\frac{4}{40} \\times 100 = 10\\%\\)",
+          "left_source": "\\frac{4}{40} \\times 100",
+          "right_source": "(10/100)",
+          "left_value": "10",
+          "right_value": "1/10",
+          "violating": true
+        },
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 7,
+          "source_span": "\\( \\frac{4}{20} \\times 100 = 20\\%\\)",
+          "left_source": "\\frac{4}{20} \\times 100",
+          "right_source": "(20/100)",
+          "left_value": "20",
+          "right_value": "1/5",
+          "violating": true
+        },
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 7,
+          "source_span": "\\( \\frac{6}{20} \\times 100 = 30\\%\\)",
+          "left_source": "\\frac{6}{20} \\times 100",
+          "right_source": "(30/100)",
+          "left_value": "30",
+          "right_value": "3/10",
+          "violating": true
+        },
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 8,
+          "source_span": "\\[ \\frac{14}{80} \\times 100 = 17.5\\% \\]",
+          "left_source": "\\frac{14}{80} \\times 100",
+          "right_source": "(17.5/100)",
+          "left_value": "35/2",
+          "right_value": "7/40",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "So, the chemist uses 0 g from bottle A, 30 g from bottle B, and 30 g from bottle C to make the 60 g mixture. The remaining contents in the bottles are:\n- Bottle A: \\(40 - 0 = 40 \\text{ g}\\) with \\(4 \\text{ g}\\) of acid, so the percentage of acid is \\( \\frac{4}{40} \\times 100 = 10\\%\\).\n- Bottle B: \\(50 - 30 = 20 \\text{ g}\\) with \\(10 - 6 = 4 \\text{ g}\\) of acid, so the percentage of acid is \\( \\frac{4}{20} \\times 100 = 20\\%\\).\n- Bottle C: \\(50 - 30 = 20 \\text{ g}\\) with \\(15 - 9 = 6 \\text{ g}\\) of acid, so the percentage of acid is \\( \\frac{6}{20} \\times 100 = 30\\%\\).",
+        "The total remaining mixture is \\(40 + 20 + 20 = 80 \\text{ g}\\) with \\(4 + 4 + 6 = 14 \\text{ g}\\) of acid. The percentage of acid in the remaining mixture is:\n\\[ \\frac{14}{80} \\times 100 = 17.5\\% \\]"
+      ]
+    },
+    {
+      "split": "olympiadbench",
+      "id": "olympiadbench-987",
+      "generator": "Llama-3.1-8B-Instruct",
+      "failure_mode": "CURRENCY_PROSE_CONTEXT_DROPPED",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 2,
+          "source_span": "$\\$1.50 = 0.10 \\times \\$1.50 = \\$0.15$",
+          "left_source": "1.50",
+          "right_source": "0.10 \\times 1.50",
+          "left_value": "3/2",
+          "right_value": "3/20",
+          "violating": true
+        },
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 2,
+          "source_span": "$\\$2.00 = 0.05 \\times \\$2.00 = \\$0.10$",
+          "left_source": "2.00",
+          "right_source": "0.05 \\times 2.00",
+          "left_value": "2",
+          "right_value": "1/10",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "Price Increase:\n- Small cookie price increase: $10\\%$ of $\\$1.50 = 0.10 \\times \\$1.50 = \\$0.15$\n- New price of each small cookie: $\\$1.50 + \\$0.15 = \\$1.65$\n- Large cookie price increase: $5\\%$ of $\\$2.00 = 0.05 \\times \\$2.00 = \\$0.10$\n- New price of each large cookie: $\\$2.00 + \\$0.10 = \\$2.10$"
+      ]
+    },
+    {
+      "split": "omnimath",
+      "id": "omnimath-612",
+      "generator": "Qwen2-72B-Instruct",
+      "failure_mode": "DECIMAL_APPROXIMATION",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 6,
+          "source_span": "\\[ 11.5098 \\times 720 = 8286.656 \\]",
+          "left_source": "11.5098 \\times 720",
+          "right_source": "8286.656",
+          "left_value": "1035882/125",
+          "right_value": "1035832/125",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "However, this calculation represents the **average** number of increasing subsequences per permutation. Since there are \\(6!\\) possible permutations, the total number of increasing subsequences across all permutations is approximately:\n\\[ 11.5098 \\times 720 = 8286.656 \\]"
+      ]
+    },
+    {
+      "split": "omnimath",
+      "id": "omnimath-787",
+      "generator": "Qwen2-7B-Instruct",
+      "failure_mode": "EXPLICIT_COUNTEREXAMPLE_OR_REJECTED_TRIAL",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 1,
+          "source_span": "\\[1 = \\frac{1}{2} + \\frac{1}{3} + \\frac{1}{7}\\]",
+          "left_source": "1",
+          "right_source": "\\frac{1}{2} + \\frac{1}{3} + \\frac{1}{7}",
+          "left_value": "1",
+          "right_value": "41/42",
+          "violating": true
+        },
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 2,
+          "source_span": "\\[1 = \\frac{1}{2} + \\frac{1}{3} + \\frac{1}{8}\\]",
+          "left_source": "1",
+          "right_source": "\\frac{1}{2} + \\frac{1}{3} + \\frac{1}{8}",
+          "left_value": "1",
+          "right_value": "23/24",
+          "violating": true
+        },
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 3,
+          "source_span": "\\[1 = \\frac{1}{2} + \\frac{1}{5} + \\frac{1}{7}\\]",
+          "left_source": "1",
+          "right_source": "\\frac{1}{2} + \\frac{1}{5} + \\frac{1}{7}",
+          "left_value": "1",
+          "right_value": "59/70",
+          "violating": true
+        },
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 4,
+          "source_span": "\\[1 = \\frac{1}{3} + \\frac{1}{5} + \\frac{1}{7}\\]",
+          "left_source": "1",
+          "right_source": "\\frac{1}{3} + \\frac{1}{5} + \\frac{1}{7}",
+          "left_value": "1",
+          "right_value": "71/105",
+          "violating": true
+        },
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 5,
+          "source_span": "\\[1 = \\frac{1}{3} + \\frac{1}{4} + \\frac{1}{5}\\]",
+          "left_source": "1",
+          "right_source": "\\frac{1}{3} + \\frac{1}{4} + \\frac{1}{5}",
+          "left_value": "1",
+          "right_value": "47/60",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "Let's pick some values for \\(a\\), \\(b\\), and \\(c\\) and then solve for \\(d\\). To simplify the process, we'll start with smaller numbers. First, let's try \\(a = 2\\), \\(b = 3\\), and \\(c = 7\\). This gives us: \\[1 = \\frac{1}{2} + \\frac{1}{3} + \\frac{1}{7}\\] The sum of these fractions is: \\[= \\frac{21}{42} + \\frac{14}{42} + \\frac{6}{42} = \\frac{41}{42}\\] Since this does not equal 1, let's adjust our selection.",
+        "Second, if we try \\(a = 2\\), \\(b = 3\\), and \\(c = 8\\) (to ensure \\(d\\) will be distinct and still allow for a whole number solution), we get: \\[1 = \\frac{1}{2} + \\frac{1}{3} + \\frac{1}{8}\\] The sum of these fractions is: \\[= \\frac{12}{24} + \\frac{8}{24} + \\frac{3}{24} = \\frac{23}{24}\\] This also doesn't equal 1. Let's try another combination.",
+        "Third, let's try \\(a = 2\\), \\(b = 5\\), and \\(c = 7\\) for our initial values: \\[1 = \\frac{1}{2} + \\frac{1}{5} + \\frac{1}{7}\\] This sum is: \\[= \\frac{35}{70} + \\frac{14}{70} + \\frac{10}{70} = \\frac{59}{70}\\] Again, it doesn't equal 1. Let's try something different.",
+        "Fourth, considering the complexity, let's select \\(a = 3\\), \\(b = 5\\), and \\(c = 7\\) for our denominators: \\[1 = \\frac{1}{3} + \\frac{1}{5} + \\frac{1}{7}\\] This sum is: \\[= \\frac{35}{105} + \\frac{21}{105} + \\frac{15}{105} = \\frac{71}{105}\\] This still does not equate to 1 directly. Let's think more carefully about how to reach exactly 1 using four distinct unit fractions.",
+        "Upon reconsideration, a key insight is realizing that if one of the denominators is a product of two or more primes, the sum of the fractions might be closer to 1. Let's try \\(a = 3\\), \\(b = 4\\), and \\(c = 5\\) for our denominators: \\[1 = \\frac{1}{3} + \\frac{1}{4} + \\frac{1}{5}\\] This sum is: \\[= \\frac{20}{60} + \\frac{15}{60} + \\frac{12}{60} = \\frac{47}{60}\\] This does not equal 1. Let's try a different combination."
+      ]
+    },
+    {
+      "split": "omnimath",
+      "id": "omnimath-805",
+      "generator": "Qwen2.5-Math-72B-Instruct",
+      "failure_mode": "CORPUS_LABEL_FALSE_NEGATIVE_GENUINE_ERROR",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 5,
+          "source_span": "\\[ 1404 = 2^2 \\times 3^2 \\times 13 \\]",
+          "left_source": "1404",
+          "right_source": "2^2 \\times 3^2 \\times 13",
+          "left_value": "1404",
+          "right_value": "468",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "For \\( y \\) to be a positive integer, \\( \\frac{1404}{d} \\) must be an integer less than 150. Therefore, \\( d \\) must be a divisor of 1404. First, we find the divisors of 1404:\n\\[ 1404 = 2^2 \\times 3^2 \\times 13 \\]\nThe divisors of 1404 are: \\( 1, 2, 3, 4, 6, 9, 12, 13, 18, 26, 36, 39, 52, 78, 117, 156, 234, 468, 702, 1404 \\)"
+      ]
+    },
+    {
+      "split": "omnimath",
+      "id": "omnimath-965",
+      "generator": "Qwen2.5-Math-7B-Instruct",
+      "failure_mode": "DECIMAL_APPROXIMATION",
+      "findings": [
+        {
+          "language": "audit-legacy-v0",
+          "step_index": 4,
+          "source_span": "\\(97 \\div 3 = 32.3333\\)",
+          "left_source": "97 \\div 3",
+          "right_source": "32.3333",
+          "left_value": "97/3",
+          "right_value": "323333/10000",
+          "violating": true
+        }
+      ],
+      "step_contexts": [
+        "Since \\(24 = 2^3 \\times 3\\), we need at least \\(3\\) factors of \\(2\\) and \\(1\\) factor of \\(3\\) for each instance of \\(24\\). The limiting factor here is the power of \\(2\\) because \\(97 \\div 3 = 32.3333\\), which means we can have \\(32\\) groups of \\(2^3\\) in \\(100!\\). The power of \\(3\\) is sufficient since \\(48 \\div 1 = 48\\), which is more than \\(32\\)."
+      ]
+    }
+  ],
+  "failure_modes": {
+    "CORPUS_LABEL_FALSE_NEGATIVE_GENUINE_ERROR": {
+      "count": 2,
+      "example": {
+        "id": "olympiadbench-529",
+        "source_span": "\\[ P(5, 3) = \\frac{5!}{(5-3)!} = \\frac{5!}{2!} = \\frac{5 \\times 4 \\times 3}{2 \\times 1} = 60 \\]"
+      }
+    },
+    "CURRENCY_PROSE_CONTEXT_DROPPED": {
+      "count": 1,
+      "example": {
+        "id": "olympiadbench-987",
+        "source_span": "$\\$1.50 = 0.10 \\times \\$1.50 = \\$0.15$"
+      }
+    },
+    "CURRENCY_SPAN_CROSSED_DELIMITER": {
+      "count": 1,
+      "example": {
+        "id": "gsm8k-368",
+        "source_span": "$80 = \\frac{25}{100} \\times \\$80 = \\$20\\). So, the discounted rate per lesson = $"
+      }
+    },
+    "DECIMAL_APPROXIMATION": {
+      "count": 5,
+      "example": {
+        "id": "math-883",
+        "source_span": "\\[ x^2 = (2.8284)^2 = 8 \\]"
+      }
+    },
+    "EXPLICIT_COUNTEREXAMPLE_OR_REJECTED_TRIAL": {
+      "count": 2,
+      "example": {
+        "id": "olympiadbench-783",
+        "source_span": "\\[ 2 + 1 = 1 \\]"
+      }
+    },
+    "INTEGER_QUOTIENT_WITH_REMAINDER": {
+      "count": 1,
+      "example": {
+        "id": "olympiadbench-892",
+        "source_span": "\\(49 \\div 9 = 5\\)"
+      }
+    },
+    "PERCENT_DIMENSION_COLLAPSE": {
+      "count": 3,
+      "example": {
+        "id": "gsm8k-278",
+        "source_span": "\\[ \\left( \\frac{2}{4} \\right) \\times 100 = 50\\% \\]"
+      }
+    },
+    "SYMBOLIC_CHAIN_FRAGMENT": {
+      "count": 2,
+      "example": {
+        "id": "gsm8k-292",
+        "source_span": "\\[ \\text{Alyana's Age} = \\text{Chenny's Age} - 4 = 10 - 4 = 6 \\]"
+      }
+    },
+    "UNIT_CONVERSION_AS_EQUAL_MAGNITUDE": {
+      "count": 4,
+      "example": {
+        "id": "gsm8k-375",
+        "source_span": "\\[2 \\text{ dozen} = 2 \\times 12 = 24 \\text{ cups}\\]"
+      }
+    }
+  }
+}

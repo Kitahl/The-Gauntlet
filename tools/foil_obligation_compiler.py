@@ -75,6 +75,14 @@ _PREDICATES: Mapping[str, PredicateSpec] = {
     "NUMERIC_TOLERANCE": PredicateSpec(ClaimKind.NUMERIC_TOLERANCE, "builtin.numeric_tolerance"),
     "NUMERIC_PROVENANCE": PredicateSpec(ClaimKind.NUMERIC_PROVENANCE, "builtin.numeric_provenance"),
     "NUMERIC_PROVENANCE_V2": PredicateSpec(ClaimKind.NUMERIC_PROVENANCE, "builtin.numeric_provenance_v2"),
+    "CERTIFIED_ARITHMETIC_EQUALITY": PredicateSpec(
+        ClaimKind.EXACT_ARITHMETIC,
+        "builtin.certified_arithmetic_equality",
+    ),
+    "TRACE_CONSTRAINT_CONSISTENCY": PredicateSpec(
+        ClaimKind.EXACT_ARITHMETIC,
+        "builtin.trace_constraint_consistency",
+    ),
 }
 COMPILER_DIGEST = digest(
     {

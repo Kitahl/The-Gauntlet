@@ -9,6 +9,15 @@ The project follows semantic versioning for public releases.
 ### Added
 - A preregistered R1.5 natural-miss replay harness bound to the RC4 compiler,
   residual scanner, and closed deterministic verifier registry.
+- Default-off no-oracle arithmetic discovery experiments (R1.6/R1.7), with
+  generated origin, immutable A0, and zero provider/action authority preserved.
+- A production certified-arithmetic parser and the separately versioned
+  `math.certified-arithmetic-rule-bank.v1` route. Frozen `certified-v2`,
+  bounded powers, complete raw numeric-equality lines, and joint affine trace
+  consistency remain distinct rules.
+- A closed admission bridge for v1, v2, and rule-bank envelopes that binds the
+  exact route, generator configuration, complete input, task spec, and target
+  schema before compilation.
 
 ### Evidence
 - The historical positive control reproduced ARC 9/12 and GPQA 18/24, exactly
@@ -18,6 +27,15 @@ The project follows semantic versioning for public releases.
   **NOT_IDENTIFIABLE**: the legacy raw bank is absent, natural operator labels
   are absent, only two common operator classes exist, and both rate axes have
   zero variance. No gate or promotion state changed.
+- P0.5 scanned 3,400 ProcessBench rows while developing `certified-v2`.
+  Its zero observed false fires are development evidence, not a fresh
+  certificate; per-split detection remained 0.48%–2.90%.
+- R1.7 remained `FAIL_NOISY`: 7/20 control flags and 2/6 natural misses
+  detected. No generated route was admitted.
+- The content-bound arithmetic rule-bank pilot matched 12/12 synthetic cases:
+  four correct passes, four detected defects, and four unsupported stand-downs,
+  with zero calls, tokens, actions, mutations, or promotions. It is synthetic
+  integration evidence only.
 
 ### Planned
 - Prospective behavioral evaluation of FOIL against direct-assistance and static-scaffolding baselines.

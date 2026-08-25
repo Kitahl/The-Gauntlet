@@ -50,7 +50,7 @@ Hard invariants:
 | Adaptive compute | tools/foil_adaptive_route.py | Implemented; default-off, A0-preserving, shadow-only DIRECT/VERIFY/FULL recommendations |
 | RouteVector history | tools/foil_shadow_route_ledger.py | Implemented; default-off observational ledger; no selection, learning, component credit, or execution |
 | Integrated structured pipeline | tools/foil_v5_pipeline.py | Implemented compiler/scanner/controller/ledger/finalizer seam; host-safe and non-executing |
-| Generated-spec admission | tools/foil_formalization_admission.py; tools/foil_formalization_routing.py | Implemented fail-closed admission; external generator and calibrated routes absent |
+| Generated-spec discovery/admission | tools/foil_obligation_discovery.py; tools/foil_obligation_discovery_v2.py; tools/foil_arithmetic_rule_bank.py; tools/foil_obligation_discovery_admission.py; tools/foil_formalization_admission.py | Narrow default-off generators and fail-closed route-bound admission implemented; calibrated routes absent |
 | Promotion-gate evaluator | tools/foil_promotion_gates.py | Implemented exact candidate-bound matrix evaluation; external evidence unrun |
 | Later-study topology | tools/foil_later_studies.py | Implemented P0/RQ-26/ladder/history/human contracts; outcomes unrun |
 
@@ -58,7 +58,7 @@ Hard invariants:
 
     frozen task + frozen solver configuration
       -> external answer generator emits A0
-      -> host supplies a strict spec OR an external spec passes formalization admission
+      -> host supplies a strict spec OR a known generated envelope passes route-bound formalization admission
       -> immutable A0/task/spec/compiler/config/admission bindings
       -> any failed admission preserves A0 and stands down
       -> post-solve compiler emits typed obligations/claims
@@ -149,12 +149,16 @@ causal superiority and never feed the controller. Component effects require a
 separately frozen matched or randomized experiment.
 
 The current compiler never transforms prose. The core controller still rejects
-unadmitted generated obligations. A host may pass an externally generated,
-content-addressed spec only through `foil_formalization_admission.py`, whose
+unadmitted generated obligations. FOIL ships narrow execution-class generators
+for annotated arithmetic and a certified arithmetic rule bank; neither is a
+general natural-language formalizer. A host may pass a generated,
+content-addressed spec only through `foil_obligation_discovery_admission.py`
+and `foil_formalization_admission.py`, whose
 route-scoped calibration, extraction-recall, mutation, freshness, schema,
 mechanical-equivalence, and instance checks must all pass. The admitted wrapper
-keeps `ADMITTED_GENERATED` visible and remains shadow-only. No NL-to-obligation
-generator or production-calibrated generated route exists.
+also binds the exact known envelope route/config, keeps
+`ADMITTED_GENERATED` visible, and remains shadow-only. No general
+NL-to-obligation generator or production-calibrated generated route exists.
 
 ### 4.5 Integrated pipeline and empirical contracts
 

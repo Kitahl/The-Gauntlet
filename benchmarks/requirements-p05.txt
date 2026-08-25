@@ -1,0 +1,2 @@
+# Benchmark-only parquet reader. FOIL runtime remains dependency-free.
+pyarrow==21.0.0

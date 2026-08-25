@@ -107,8 +107,12 @@ class ProvenanceV2BoundaryTests(unittest.TestCase):
         self.assertIs(enabled.base_answer, answer)
         self.assertEqual(enabled.a0_digest, answer_digest(answer))
         self.assertEqual((enabled.provider_calls, enabled.profile_writes, enabled.action_count), (0, 0, 0))
-        with self.assertRaisesRegex(TypeError, "DiscoveryEnvelope"):
-            compile_admitted_discovery(enabled, admission=object())
+        with self.assertRaisesRegex(TypeError, "admission"):
+            compile_admitted_discovery(
+                enabled,
+                admission=object(),
+                binding=object(),
+            )
 
     def test_gold_and_labels_are_rejected_and_hidden_changes_cannot_affect_output(self) -> None:
         question, answer = CORRECT_CASES[0]

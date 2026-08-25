@@ -8,6 +8,7 @@ from __future__ import annotations
 import ast
 import hashlib
 import json
+import re
 from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
 from enum import Enum
@@ -191,6 +192,145 @@ def canonical_rational(value: object) -> str:
     return f"{parsed.numerator}/{parsed.denominator}"
 
 
+_CERTIFIED_EXPRESSION = re.compile(r"[\d.\s()+\-*/]+")
+_TRACE_VARIABLE = re.compile(r"[A-Z]")
+_MAX_CERTIFIED_EXPRESSION_CHARS = 2_000
+_MAX_CERTIFIED_AST_NODES = 128
+_MAX_CERTIFIED_POWER = 12
+_MAX_CERTIFIED_NUMERATOR = 10**18
+_MAX_CERTIFIED_DENOMINATOR = 10**12
+_TRACE_CONSTRAINT_FIELDS = frozenset({"coefficient", "constant"})
+
+
+def _bounded_certified(value: Fraction) -> Fraction:
+    if (
+        abs(value.numerator) > _MAX_CERTIFIED_NUMERATOR
+        or value.denominator > _MAX_CERTIFIED_DENOMINATOR
+    ):
+        raise ValueError("certified arithmetic numeric bound exceeded")
+    return value
+
+
+def _certified_fraction_value(node: ast.AST) -> Fraction:
+    if isinstance(node, ast.Constant):
+        if isinstance(node.value, bool) or not isinstance(node.value, (int, float)):
+            raise ValueError("certified arithmetic requires numeric literals")
+        value = Fraction(node.value) if isinstance(node.value, int) else Fraction(str(node.value))
+        return _bounded_certified(value)
+    if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.UAdd, ast.USub)):
+        value = _certified_fraction_value(node.operand)
+        return value if isinstance(node.op, ast.UAdd) else -value
+    if isinstance(node, ast.BinOp):
+        left = _certified_fraction_value(node.left)
+        right = _certified_fraction_value(node.right)
+        if isinstance(node.op, ast.Add):
+            return _bounded_certified(left + right)
+        if isinstance(node.op, ast.Sub):
+            return _bounded_certified(left - right)
+        if isinstance(node.op, ast.Mult):
+            return _bounded_certified(left * right)
+        if isinstance(node.op, ast.Div):
+            if right == 0:
+                raise ValueError("division by zero")
+            return _bounded_certified(left / right)
+        if isinstance(node.op, ast.Pow):
+            if (
+                right.denominator != 1
+                or not 0 <= right.numerator <= _MAX_CERTIFIED_POWER
+            ):
+                raise ValueError("power outside certified bound")
+            return _bounded_certified(left**right.numerator)
+    raise ValueError("certified arithmetic contains unsupported syntax")
+
+
+def _certified_expression_value(source: object) -> Fraction:
+    if (
+        not isinstance(source, str)
+        or not source
+        or len(source) > _MAX_CERTIFIED_EXPRESSION_CHARS
+        or _CERTIFIED_EXPRESSION.fullmatch(source) is None
+    ):
+        raise ValueError("expression is outside the certified grammar")
+    tree = ast.parse(source, mode="eval")
+    if sum(1 for _ in ast.walk(tree)) > _MAX_CERTIFIED_AST_NODES:
+        raise ValueError("certified arithmetic AST bound exceeded")
+    return _certified_fraction_value(tree.body)
+
+
+def _certified_arithmetic_equality(
+    data: Mapping[str, Any],
+) -> tuple[VerificationStatus, str, Any]:
+    if set(data) != {"left_expression", "right_expression"}:
+        return VerificationStatus.UNKNOWN, "certified equality input schema is closed", None
+    try:
+        left = _certified_expression_value(data["left_expression"])
+        right = _certified_expression_value(data["right_expression"])
+    except (SyntaxError, ValueError, ZeroDivisionError):
+        return VerificationStatus.UNKNOWN, "invalid certified arithmetic equality", None
+    matched = left == right
+    return (
+        VerificationStatus.PASS if matched else VerificationStatus.FAIL,
+        "certified arithmetic equality matched"
+        if matched
+        else "certified arithmetic equality differed",
+        {
+            "left": f"{left.numerator}/{left.denominator}",
+            "right": f"{right.numerator}/{right.denominator}",
+        },
+    )
+
+
+def _trace_constraint_consistency(
+    data: Mapping[str, Any],
+) -> tuple[VerificationStatus, str, Any]:
+    if set(data) != {"variable", "constraints"}:
+        return VerificationStatus.UNKNOWN, "trace constraint input schema is closed", None
+    variable, rows = data["variable"], data["constraints"]
+    if (
+        not isinstance(variable, str)
+        or _TRACE_VARIABLE.fullmatch(variable) is None
+        or not isinstance(rows, list)
+        or not 2 <= len(rows) <= 16
+    ):
+        return VerificationStatus.UNKNOWN, "trace constraints exceed the closed bounds", None
+    solutions: set[Fraction] = set()
+    try:
+        for row in rows:
+            if not isinstance(row, Mapping) or set(row) != _TRACE_CONSTRAINT_FIELDS:
+                raise ValueError("constraint record schema is closed")
+            raw_coefficient, raw_constant = row["coefficient"], row["constant"]
+            if (
+                not isinstance(raw_coefficient, str)
+                or not isinstance(raw_constant, str)
+                or len(raw_coefficient) > 128
+                or len(raw_constant) > 128
+            ):
+                raise ValueError("constraint rational text exceeds its bound")
+            coefficient = _bounded_certified(
+                _canonical_rational(raw_coefficient)
+            )
+            constant = _bounded_certified(_canonical_rational(raw_constant))
+            if coefficient == 0:
+                if constant != 0:
+                    return (
+                        VerificationStatus.FAIL,
+                        "trace constraints are jointly inconsistent",
+                        {"constraint_count": len(rows)},
+                    )
+                continue
+            solutions.add(-constant / coefficient)
+    except ValueError:
+        return VerificationStatus.UNKNOWN, "trace constraints require canonical rationals", None
+    matched = len(solutions) <= 1
+    return (
+        VerificationStatus.PASS if matched else VerificationStatus.FAIL,
+        "trace constraints are jointly consistent"
+        if matched
+        else "trace constraints are jointly inconsistent",
+        {"constraint_count": len(rows)},
+    )
+
+
 def _numeric_provenance(data: Mapping[str, Any]) -> tuple[VerificationStatus, str, Any]:
     operands, sources = data.get("operands"), data.get("sources")
     if not isinstance(operands, list) or not isinstance(sources, list):
@@ -289,6 +429,24 @@ _BUILTINS: dict[str, tuple[VerifierSpec, Adapter]] = {
     "builtin.numeric_tolerance": (VerifierSpec("builtin.numeric_tolerance", "1", "egrt.builtin", ("actual", "expected", "tolerance")), _numeric_tolerance),
     "builtin.numeric_provenance": (VerifierSpec("builtin.numeric_provenance", "1", "egrt.builtin", ("operands", "sources")), _numeric_provenance),
     "builtin.numeric_provenance_v2": (VerifierSpec("builtin.numeric_provenance_v2", "2", "egrt.builtin", ("operands", "sources")), _numeric_provenance_v2),
+    "builtin.certified_arithmetic_equality": (
+        VerifierSpec(
+            "builtin.certified_arithmetic_equality",
+            "1",
+            "egrt.builtin",
+            ("left_expression", "right_expression"),
+        ),
+        _certified_arithmetic_equality,
+    ),
+    "builtin.trace_constraint_consistency": (
+        VerifierSpec(
+            "builtin.trace_constraint_consistency",
+            "1",
+            "egrt.builtin",
+            ("variable", "constraints"),
+        ),
+        _trace_constraint_consistency,
+    ),
 }
 
 

@@ -34,3 +34,12 @@ R1.6 also preserves the central scope boundary: explicit annotated arithmetic is
 not free-form prose-to-obligation transformation. `PARTIAL`, `ABSTAIN`, and
 `UNSUPPORTED` are first-class outcomes, and omissions outside the supported
 annotation grammar are not counted as covered claims.
+
+The certified arithmetic rule bank does not change that boundary. P0.5's 3,400
+ProcessBench rows are development evidence used to select `certified-v2`;
+zero observed false fires on those rows is not a fresh per-split certificate.
+The rule-bank small pilot contains only 12 frozen synthetic integration cases.
+Its purpose is parser/verifier/admission plumbing, not a probability, recall, or
+coverage estimate. Every rule remains default-off and
+`GENERATED_UNADMITTED` until fresh route-specific evidence passes the existing
+admission contract.
