@@ -108,12 +108,14 @@ checks["professional_workflows"] = html.count("<article><div><span>") == 5
 checks["public_tool_catalog"] = parser.details == 10 and html.count("<h3>Professional use</h3>") == 10 and html.count("<h3>How it works</h3>") == 10
 checks["research_report_language_absent"] = all(token not in html.lower() for token in ("what remains unresolved", "current question", "next study", "success condition"))
 checks["legacy_name_not_public"] = "mastermind" not in html.lower() and ">FOIL<" not in html
+checks["rejected_brand_absent"] = all(token not in html for token in ("Rigilum", "Instrument 01"))
 checks["benchmark_results_not_front_page"] = all(token not in html for token in ("94 / 94", "18 / 18", "HLE public", "ARC-AGI", "GPQA-Diamond", "BrowseComp four-way"))
 checks["activation_surface"] = all(command in html for command in ("/soul", "/foil", "/mind", "/space", "/reality", "/power", "/time", "/gauntlet", "/council"))
-checks["instrument01_public_names"] = all(
+checks["strong_inference_public_names"] = all(
     token in html
     for token in (
-        "Rigilum", "Instrument 01", "Route · Orchestration", "Adapt · Adaptive Complement",
+        "Strong Inference Systems", "Strong Inference", "Open Research Suite",
+        "Route · Orchestration", "Adapt · Adaptive Complement",
         "Assure · Process Assurance", "Preflight · Decision Preflight", "Review · Evidence Review",
         ">Prove<", ">Discover<", ">Synthesize<", ">Verify<", ">Measure<",
     )
