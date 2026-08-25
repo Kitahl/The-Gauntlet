@@ -1,6 +1,6 @@
 ---
 name: codebot
-description: Verify — engineering verification module for Rigilum Instrument 01. Trigger: /power, /codebot, implement, debug, integrate, test, benchmark software behavior, review architecture, or verify an executable claim. Converts software claims into runnable checks and preservation obligations.
+description: Verify — engineering verification module for Strong Inference. Trigger: /power, /codebot, implement, debug, integrate, test, benchmark software behavior, review architecture, or verify an executable claim. Converts software claims into runnable checks and preservation obligations.
 ---
 
 # Verify
