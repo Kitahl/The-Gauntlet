@@ -1,6 +1,7 @@
 name: Build Session 2R Test 2R Mind package
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - benchmark/session2r-test2r-mind-package
