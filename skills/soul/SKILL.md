@@ -1,6 +1,6 @@
 ---
 name: soul
-description: Route — orchestration control plane for Rigilum Instrument 01. Trigger: /soul, "orchestrate", "route this", or equivalent. Frames the task, identifies evidence obligations, invokes the minimum sufficient research modules, integrates results, applies assurance, and releases only what the evidence supports.
+description: Route — orchestration control plane for Strong Inference. Trigger: /soul, "orchestrate", "route this", or equivalent. Frames the task, identifies evidence obligations, invokes the minimum sufficient research modules, integrates results, applies assurance, and releases only what the evidence supports.
 ---
 
 # Route
@@ -62,4 +62,4 @@ For substantial work report:
 
 ## Compatibility
 
-Public product name: **Route**. Stable technical identity: `soul` / `/soul`. The legacy public label **Research Orchestrator** and the phrase **Process Assurance** remain only as migration vocabulary in older documentation and receipts; Assure is the Instrument 01 public name for that control function.
+Public product name: **Route**. Stable technical identity: `soul` / `/soul`. The legacy public label **Research Orchestrator** and the phrase **Process Assurance** remain only as migration vocabulary in older documentation and receipts; Assure is the Strong Inference public name for that control function.
