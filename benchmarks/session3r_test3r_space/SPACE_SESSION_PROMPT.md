@@ -6,7 +6,7 @@ Run only the SPACE arm of the certified paired Space retest. This must be a fres
 
 Repository: `Kitahl/The-Gauntlet`
 
-Frozen package commit: `__PACKAGE_COMMIT__`
+Frozen package commit: `b7d949f711738cfd3485d45ae74c7df964c93245`
 
 Experiment: `SESSION3R_TEST3R_SPACE`
 
@@ -37,7 +37,7 @@ Before and during SPACE inference you may access from the frozen package only:
 - `benchmarks/session3r_test3r_space/CI_CERTIFICATION.json`
 - `benchmarks/session3r_test3r_space/space/questions.jsonl`
 
-Always fetch package files at exact commit `__PACKAGE_COMMIT__`.
+Always fetch package files at exact commit `b7d949f711738cfd3485d45ae74c7df964c93245`.
 
 You may additionally fetch the exact Space blob by SHA before opening any benchmark question.
 
@@ -120,7 +120,7 @@ Fetch only:
 
 `benchmarks/session3r_test3r_space/space/questions.jsonl`
 
-at exact commit `__PACKAGE_COMMIT__`.
+at exact commit `b7d949f711738cfd3485d45ae74c7df964c93245`.
 
 Read it in bounded line ranges, preferably 10 rows at a time. Do not fetch BASE questions.
 
