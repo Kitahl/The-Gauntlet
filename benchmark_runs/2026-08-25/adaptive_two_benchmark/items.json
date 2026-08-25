@@ -1,0 +1,47 @@
+{
+  "items": [
+    {
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "id": "processbench-gsm8k-330",
+      "item_sha256": "623e9709fe3a471675f20efd7b62fd30f6a3561dd78ebefc35e39ccaa606fa3b",
+      "problem": "Frederick is making popsicles to sell and to save money he is making his own popsicle sticks. He can get 200 sticks from a 2 x 4 piece of wood and 400 sticks from a 2 x 8 piece of wood. He has $24 to buy wood for sticks. A 2 x 4 costs $4. A 2 x 8 costs $6. What is the most popsicle sticks he can make if he buys the cheapest lumber?",
+      "route_positive_sentinel": false,
+      "selection_stratum": "clean",
+      "steps": [
+        "First, let's calculate how many sticks can be made from each piece of wood. From a 2 x 4 piece of wood, Frederick can make 200 sticks. From a 2 x 8 piece of wood, Frederick can make 400 sticks.",
+        "Next, let's calculate the cost per stick for each type of wood. The cost per stick for a 2 x 4 piece of wood is $4 / 200 = $0.02 per stick. The cost per stick for a 2 x 8 piece of wood is $6 / 400 = $0.015 per stick.",
+        "Since the 2 x 8 piece of wood costs less per stick, Frederick should buy as many of these as possible with his $24 budget. To find out how many 2 x 8 pieces of wood he can buy, we divide his budget by the cost of one piece of 2 x 8 wood: $24 / $6 = 4 pieces of 2 x 8 wood.",
+        "Now, let's calculate how many sticks he can make with these 4 pieces of 2 x 8 wood. He can make 4 * 400 = 1600 sticks.",
+        "Therefore, the most popsicle sticks Frederick can make with his $24 budget is 1600. The answer is: $\\boxed{1600}$."
+      ]
+    },
+    {
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "id": "processbench-gsm8k-36",
+      "item_sha256": "1cfa62b9babc97ec6edcacc81ce930d81640321aea1fad75da6e03ed56249d22",
+      "problem": "Conor lives near a beach and loves going there every day to have fun. On a particular week, he found 50 people at the beach on the first day. The next day, 20 more people were present at the beach than on the first day, and on the third day, the total number of people increased to twice the number that were there on the second day. If Conor saw an average of 60 people each day the rest of the week, calculate the total number of people Conor saw at the beach that week.",
+      "route_positive_sentinel": true,
+      "selection_stratum": "error",
+      "steps": [
+        "To determine the total number of people Conor saw at the beach over the week, we need to calculate the number of people present each day and then sum these amounts.",
+        "First, let's find the number of people at the beach each day:\n- On the first day, there were 50 people.\n- On the second day, there were 20 more people than on the first day, so: \\[ 50 + 20 = 70 \\]\n- On the third day, the total number of people increased to twice the number that were there on the second day, so: \\[ 2 \\times 70 = 140 \\]",
+        "For the remaining four days of the week, Conor saw an average of 60 people each day. Therefore, the total number of people he saw over these four days is: \\[ 4 \\times 60 = 240 \\]",
+        "Now, we sum the number of people seen each day to find the total number of people Conor saw at the beach that week: \\[ 50 + 70 + 140 + 240 = 400 \\]",
+        "Thus, the total number of people Conor saw at the beach that week is \\(\\boxed{400}\\)."
+      ]
+    },
+    {
+      "benchmark": "SIMPLEQA_NO_BROWSE",
+      "id": "simpleqa-1626",
+      "item_sha256": "b89e978841c5bdc6aa350d64decddfa0077fa5878d05d7fd20bf96fe746c4a37",
+      "problem": "Which high school did the former Archbishop of Cape Town, Njongonkulu Winston Hugh Ndungane, attend when he completed his schooling in December 1958?"
+    },
+    {
+      "benchmark": "SIMPLEQA_NO_BROWSE",
+      "id": "simpleqa-1983",
+      "item_sha256": "8cc7aee9a99c18c068340bb35c682d3d9ff731cad732c6ff2224f5167d595058",
+      "problem": "Which patch for the original Dark Souls reduced the effectiveness of the Hornet Ring?"
+    }
+  ],
+  "schema": "foil.adaptive-two-benchmark-items.v1"
+}

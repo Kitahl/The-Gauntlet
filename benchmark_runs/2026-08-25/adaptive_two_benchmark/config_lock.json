@@ -1,0 +1,11 @@
+{
+  "files": {
+    "benchmark_runs/2026-08-25/adaptive_two_benchmark/answer_schema.json": "5716acc8e7a3f3ee02cc09dd0ab7b35af6dc76f09c33460d7d8e116b964a85a4",
+    "benchmark_runs/2026-08-25/adaptive_two_benchmark/items.json": "d771177674bebc85ba3e47affb39b184d984590d267225443fd51317184cb61d",
+    "benchmark_runs/2026-08-25/adaptive_two_benchmark/manifest.json": "040a50c33e824c4b056b250f53b314441f17f9a5ed9b0dc2156880955bf98d0d",
+    "benchmarks/FOIL_ADAPTIVE_TWO_BENCHMARK_SMALL_PILOT.md": "d6e8d95dbbd57c316356999a827aa7179faf86c75f294361e5f7d186ef454eb1",
+    "benchmarks/harness/foil_adaptive_two_benchmark_pilot.py": "560e85b256fdda78207030384de73e618fc8eb092e6bc58b0e99612e8532dd03",
+    "skills/foil/SKILL.md": "57d4abc23fbf5b2f4d22d62ea73587797185acfb7f465b1e39686c1d64dbcff9"
+  },
+  "schema": "foil.adaptive-two-benchmark-lock.v1"
+}

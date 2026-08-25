@@ -1,0 +1,101 @@
+{
+  "base_calls": 12,
+  "base_units": [
+    {
+      "config_id": "TERRA_HIGH",
+      "item_id": "simpleqa-1983",
+      "unit_id": "simpleqa-1983-TERRA_HIGH"
+    },
+    {
+      "config_id": "TERRA_LOW",
+      "item_id": "simpleqa-1983",
+      "unit_id": "simpleqa-1983-TERRA_LOW"
+    },
+    {
+      "config_id": "TERRA_LOW",
+      "item_id": "processbench-gsm8k-36",
+      "unit_id": "processbench-gsm8k-36-TERRA_LOW"
+    },
+    {
+      "config_id": "SOL_LOW",
+      "item_id": "simpleqa-1983",
+      "unit_id": "simpleqa-1983-SOL_LOW"
+    },
+    {
+      "config_id": "SOL_LOW",
+      "item_id": "simpleqa-1626",
+      "unit_id": "simpleqa-1626-SOL_LOW"
+    },
+    {
+      "config_id": "TERRA_LOW",
+      "item_id": "processbench-gsm8k-330",
+      "unit_id": "processbench-gsm8k-330-TERRA_LOW"
+    },
+    {
+      "config_id": "TERRA_HIGH",
+      "item_id": "simpleqa-1626",
+      "unit_id": "simpleqa-1626-TERRA_HIGH"
+    },
+    {
+      "config_id": "TERRA_LOW",
+      "item_id": "simpleqa-1626",
+      "unit_id": "simpleqa-1626-TERRA_LOW"
+    },
+    {
+      "config_id": "SOL_LOW",
+      "item_id": "processbench-gsm8k-36",
+      "unit_id": "processbench-gsm8k-36-SOL_LOW"
+    },
+    {
+      "config_id": "SOL_LOW",
+      "item_id": "processbench-gsm8k-330",
+      "unit_id": "processbench-gsm8k-330-SOL_LOW"
+    },
+    {
+      "config_id": "TERRA_HIGH",
+      "item_id": "processbench-gsm8k-36",
+      "unit_id": "processbench-gsm8k-36-TERRA_HIGH"
+    },
+    {
+      "config_id": "TERRA_HIGH",
+      "item_id": "processbench-gsm8k-330",
+      "unit_id": "processbench-gsm8k-330-TERRA_HIGH"
+    }
+  ],
+  "classification": "TINY_EXECUTED_ADAPTIVE_SMOKE",
+  "configs": {
+    "SOL_LOW": {
+      "effort": "low",
+      "model": "gpt-5.6-sol"
+    },
+    "TERRA_HIGH": {
+      "effort": "high",
+      "model": "gpt-5.6-terra"
+    },
+    "TERRA_LOW": {
+      "effort": "low",
+      "model": "gpt-5.6-terra"
+    }
+  },
+  "control_calls": 3,
+  "created_at": "2026-08-25T08:27:18.240507+00:00",
+  "hard_call_cap": 21,
+  "items_sha256": "cb2fd94bd01bd18a24a0ca45558df1342184bc46e14758cac9da49d86fd0a9f3",
+  "maximum_full_calls": 6,
+  "non_claims": [
+    "calibration",
+    "promotion",
+    "10-percent production overhead",
+    "superiority",
+    "natural route frequency",
+    "scanner recall"
+  ],
+  "processbench_gsm8k_sha256": "9896315aff77fff8fe60361f05b612250598a4bd88a70ffba567b4d580d6d4a3",
+  "protocol_sha256": "d6e8d95dbbd57c316356999a827aa7179faf86c75f294361e5f7d186ef454eb1",
+  "runner_sha256": "560e85b256fdda78207030384de73e618fc8eb092e6bc58b0e99612e8532dd03",
+  "schema": "foil.adaptive-two-benchmark-manifest.v1",
+  "seed": 20260825,
+  "simpleqa_sha256": "feee3f7e7db3617e94e8fcf1977b756ec420ef8568f4e0fcbbe0e92e9d5fc032",
+  "simpleqa_url": "https://openaipublic.blob.core.windows.net/simple-evals/simple_qa_test_set.csv",
+  "skill_sha256": "57d4abc23fbf5b2f4d22d62ea73587797185acfb7f465b1e39686c1d64dbcff9"
+}
