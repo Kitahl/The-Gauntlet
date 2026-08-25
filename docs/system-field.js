@@ -15,16 +15,16 @@
   let pointerX = 0, pointerY = 0;
   let far = [], webNodes = [], webEdges = [];
   const sceneLabels = {
-    hero: ['LIVE SYSTEM VIEW','TASK → OBLIGATION → METHOD → RECEIPT'],
-    overview: ['SYSTEM MAP','FIVE SPECIALISTS · FIVE CONTROL / REVIEW TOOLS'],
+    hero: ['INSTRUMENT 01 LIVE','TASK → OBLIGATION → METHOD → RECEIPT'],
+    overview: ['INSTRUMENT MAP','FIVE SPECIALISTS · FIVE CONTROL / REVIEW TOOLS'],
     workflow: ['ROUTING TRACE','ONLY LOAD-BEARING METHODS ACTIVATE'],
-    gems: ['SPECIALIST LAYER','THE FIELD RECONFIGURES AROUND THE CLAIM'],
-    mind: ['MIND / FORMAL REASONING','CLAIM → OBLIGATION → PROOF / COUNTEREXAMPLE'],
-    space: ['SPACE / RESEARCH DISCOVERY','QUERY → SOURCES → SCOPED FINDING'],
-    reality: ['REALITY / METHOD SYNTHESIS','KNOWN METHODS → GAP → CANDIDATE → RECHECK'],
-    power: ['POWER / ENGINEERING VERIFICATION','SOURCE → BUILD → TEST → RUNTIME → RECEIPT'],
-    time: ['TIME / EVALUATION','CANDIDATE ∥ BASELINE → MATCHED CELLS → STOP / GO'],
-    system: ['CONTROL MODEL','TASK → OBLIGATIONS → METHODS → RECEIPTS → RESULT'],
+    gems: ['SPECIALIST CORE','THE FIELD RECONFIGURES AROUND THE CLAIM'],
+    mind: ['PROVE / FORMAL REASONING','CLAIM → OBLIGATION → PROOF / COUNTEREXAMPLE'],
+    space: ['DISCOVER / RESEARCH','QUERY → SOURCES → SCOPED FINDING'],
+    reality: ['SYNTHESIZE / METHODS','KNOWN METHODS → GAP → CANDIDATE → RECHECK'],
+    power: ['VERIFY / ENGINEERING','SOURCE → BUILD → TEST → RUNTIME → RECEIPT'],
+    time: ['MEASURE / EVALUATION','CANDIDATE ∥ BASELINE → MATCHED CELLS → STOP / GO'],
+    system: ['COORDINATION MODEL','TASK → OBLIGATIONS → METHODS → RECEIPTS → RESULT'],
     quiet: ['SOURCE / IMPLEMENTATION','DETAIL VIEW']
   };
 
@@ -43,12 +43,12 @@
     for(let i=0;i<count;i++){
       const mode = i % 3;
       let x,y,z;
-      if(mode===0){ // orbital tangle
+      if(mode===0){
         const a=rand(0,Math.PI*2), r=rand(.18,.55), squash=rand(.35,.8);
         x=.72+Math.cos(a)*r; y=.46+Math.sin(a)*r*squash; z=rand(.2,1);
-      } else if(mode===1){ // cosmic web
+      } else if(mode===1){
         x=rand(.18,1.25); y=rand(-.1,1.15); z=rand(.15,1);
-      } else { // scatter
+      } else {
         x=rand(0,1.3); y=rand(0,1); z=rand(.1,1);
       }
       far.push({x,y,z,s:rand(.45,1.7),phase:rand(0,Math.PI*2),speed:rand(.2,.8)});
@@ -137,13 +137,12 @@
 
   function drawHero(t,transition){
     const {cx,cy,s}=stagePos(); const reveal=clamp((t%10500)/6500,0,1); const r=ease(reveal);
-    // reveal front borrowed from Nexus Rift's progressive constellation reveal, now tied to a task graph.
     drawGem(cx,cy,s,COLORS.accent,t,.65*r);
     const task=[W*.48,cy], obligations=[[cx-s*.98,cy-s*.48],[cx-s*1.08,cy],[cx-s*.98,cy+s*.48]], receipts=[[cx+s*.9,cy-s*.48],[cx+s*1.04,cy],[cx+s*.9,cy+s*.48]];
     if(W>800){
       obligations.forEach((o,i)=>{line(task,o,COLORS.accent,.25*r,1);diamond(o[0],o[1],3,COLORS.base,.55*r);line(o,receipts[i],COLORS.accent,.22*r,1);diamond(receipts[i][0],receipts[i][1],3,COLORS.good,.65*r);});
       diamond(task[0],task[1],5,'#e8edf2',.85*r);label('TASK',task[0],task[1]-20,'#dfe5ec',.7*r);
-      label('SPACE',cx,cy-s*.45,COLORS.space,.75*r);label('POWER',cx,cy,COLORS.power,.75*r);label('COUNCIL',cx,cy+s*.45,COLORS.reality,.65*r);
+      label('DISCOVER',cx,cy-s*.45,COLORS.space,.75*r);label('VERIFY',cx,cy,COLORS.power,.75*r);label('REVIEW',cx,cy+s*.45,COLORS.reality,.65*r);
     }
     const front=lerp(W*.42,W*.97,r);ctx.fillStyle=rgba('#c7d7ea',.08*(1-r));ctx.fillRect(front,0,1,H);
   }
@@ -154,7 +153,7 @@
   }
 
   function drawWorkflow(t){
-    const y=H*.52, xs=W<800?[W*.17,W*.38,W*.59,W*.8]:[W*.47,W*.61,W*.75,W*.89];const names=['SPACE','REALITY','POWER','TIME'], cols=[COLORS.space,COLORS.reality,COLORS.power,COLORS.time];
+    const y=H*.52, xs=W<800?[W*.17,W*.38,W*.59,W*.8]:[W*.47,W*.61,W*.75,W*.89];const names=['DISCOVER','SYNTHESIZE','VERIFY','MEASURE'], cols=[COLORS.space,COLORS.reality,COLORS.power,COLORS.time];
     for(let i=0;i<xs.length;i++){if(i<xs.length-1)line([xs[i],y],[xs[i+1],y],COLORS.accent,.28,1);drawGem(xs[i],y,Math.min(W,H)*(W<800?.075:.095),cols[i],t,.58);if(W>800)label(names[i],xs[i],y,cols[i],.75);if(i<xs.length-1)travellingPulse([xs[i],y],[xs[i+1],y],t,i*.23,COLORS.accent,.8);}
   }
 
