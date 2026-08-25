@@ -30,6 +30,7 @@ MutationAttempt = r16.MutationAttempt
 SELECTION_SEED = 2026082402
 LABEL_SCHEMA = "foil.r17-natural-labels.v1"
 REPORT_SCHEMA = "foil.r17-provenance-repair-report.v1"
+FROZEN_PROTOCOL_COMMIT = "aa377ad7381e580e1be0e3bf55b465caf6f7c8ac"
 R16_LABEL_FILE_SHA256 = "60ed6f3ad4c3eefcd4b983b7d41d63c96a188cdad8d7a9a133ab520acae3dc6e"
 R16_REPORT_FILE_SHA256 = "42285c9e520b6c26d00e289b3e5f1033fed4e19585633f6a74dd473cfd197dde"
 

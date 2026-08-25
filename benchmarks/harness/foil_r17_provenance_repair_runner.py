@@ -155,6 +155,8 @@ def build_report(
     protocol_commit: str,
 ) -> dict[str, object]:
     protocol_commit = protocol.r16._require_commit(protocol_commit)
+    if protocol_commit != protocol.FROZEN_PROTOCOL_COMMIT:
+        raise RuntimeError("R1.7 protocol commit does not match the frozen implementation")
     bases, attempts, candidates = frozen_candidate_rows(records, r16_exclusions)
     natural = protocol.select_natural_misses(candidates, labels)
     excluded = set(r16_exclusions) | {row.question_sha256 for row in bases}

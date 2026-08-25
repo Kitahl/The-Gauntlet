@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import hashlib
 import sys
 import unittest
@@ -135,6 +136,27 @@ class ProvenanceV2BoundaryTests(unittest.TestCase):
         self.assertEqual(old.route, "gsm8k.annotated-arithmetic.v1")
         self.assertEqual(new.route, "gsm8k.annotated-arithmetic.v2")
         self.assertNotEqual(old.route_binding_digest, new.route_binding_digest)
+
+    def test_v2_module_has_no_io_network_or_dynamic_execution_surface(self) -> None:
+        source = (ROOT / "tools" / "foil_obligation_discovery_v2.py").read_text(encoding="utf-8")
+        tree = ast.parse(source)
+        forbidden_imports = {
+            "asyncio", "http", "importlib", "os", "requests", "socket",
+            "subprocess", "urllib",
+        }
+        imported = {
+            alias.name.split(".", 1)[0]
+            for node in ast.walk(tree)
+            if isinstance(node, (ast.Import, ast.ImportFrom))
+            for alias in node.names
+        }
+        called = {
+            node.func.id
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+        }
+        self.assertFalse(imported & forbidden_imports)
+        self.assertFalse(called & {"__import__", "compile", "eval", "exec", "open"})
 
 
 class StructuredProvenanceVerifierTests(unittest.TestCase):

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import hashlib
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -10,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 sys.path.insert(0, str(ROOT / "benchmarks" / "harness"))
 
+import foil_r17_independent_audit as independent_audit  # noqa: E402
 import foil_r17_provenance_repair_pilot as protocol  # noqa: E402
 import foil_r17_provenance_repair_runner as runner  # noqa: E402
 
@@ -80,7 +82,11 @@ class R17ProtocolTests(unittest.TestCase):
             row.identity: protocol.NATURAL_LABELS[index % len(protocol.NATURAL_LABELS)]
             for index, row in enumerate(candidates)
         }
-        report = runner.build_report(records, labels, exclusions, protocol_commit="1" * 40)
+        with self.assertRaisesRegex(RuntimeError, "frozen implementation"):
+            runner.build_report(records, labels, exclusions, protocol_commit="1" * 40)
+        report = runner.build_report(
+            records, labels, exclusions, protocol_commit=protocol.FROZEN_PROTOCOL_COMMIT
+        )
         runner.independently_verify_report(report)
         self.assertEqual(report["selection"]["correct_controls"], 20)
         self.assertEqual(report["mutation_conservation"]["attempted"], 28)
@@ -89,6 +95,14 @@ class R17ProtocolTests(unittest.TestCase):
         tampered["raw_rows"][0]["detected"] = not tampered["raw_rows"][0]["detected"]
         with self.assertRaisesRegex(RuntimeError, "digest mismatch"):
             runner.independently_verify_report(tampered)
+
+    def test_frozen_report_rederives_in_independent_implementation(self) -> None:
+        report = json.loads(
+            (ROOT / "benchmarks" / "results" / "foil_r17_provenance_repair_report.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertTrue(independent_audit.audit(report)["verified"])
 
 
 if __name__ == "__main__":
