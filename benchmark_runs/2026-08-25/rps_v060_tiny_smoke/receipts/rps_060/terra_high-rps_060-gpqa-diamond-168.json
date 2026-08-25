@@ -1,0 +1,49 @@
+{
+  "answer": {
+    "answer": "D",
+    "rps_trace": {
+      "answer_changed": false,
+      "conflict": false,
+      "p1_kind": "energy-conservation endpoint check",
+      "p1_outcome": "PASS",
+      "p2_kind": null,
+      "p2_outcome": "N/A",
+      "repair_triggered": false,
+      "rollback_hinge": null,
+      "rps_eligible": true,
+      "tiebreak_used": false
+    }
+  },
+  "call_id": "terra_high-rps_060-gpqa-diamond-168",
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "TERRA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-25T16:12:29.933912+00:00",
+  "invalid_reasons": [],
+  "kind": "rps_060",
+  "last_output_sha256": "6f8ad49aecfb28ecb50f7335b44ef123ebe16fb8ffd690478e2c71096012781b",
+  "model": "gpt-5.6-terra",
+  "pre_call_commit": "e73e733bb6cc75795aaac61336ea9ac389385eea",
+  "prompt_sha256": "cfb6f7f3cc4f38027684792501357f7a212a9ba7f096e9ba3b8a9456f808a769",
+  "returncode": 0,
+  "schema": "foil.adaptive-two-benchmark-receipt.v1",
+  "started_at": "2026-08-25T16:12:11.490665+00:00",
+  "stderr_sha256": "0adfc24e7b8dbd2e2c539446737016776ba7061cd077b0c0a0d817f6430a5187",
+  "stdout_sha256": "2c4944ce095b44fa20f08f47f33472942d285afad497dd1ac766a74ac59405c7",
+  "timed_out": false,
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 25955,
+    "output_tokens": 604,
+    "reasoning_output_tokens": 516
+  },
+  "valid": true,
+  "wall_seconds": 18.438000000000102
+}

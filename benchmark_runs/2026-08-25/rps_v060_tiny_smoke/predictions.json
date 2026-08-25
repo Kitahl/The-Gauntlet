@@ -1,0 +1,427 @@
+{
+  "codex_version": "codex-cli 0.147.0",
+  "host_answer_mutations": 0,
+  "pre_call_commit": "e73e733bb6cc75795aaac61336ea9ac389385eea",
+  "predictions": [
+    {
+      "arm": "BASE",
+      "benchmark": "GPQA_DIAMOND",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "gpqa-diamond-168",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "D",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": null,
+          "p1_outcome": "N/A",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": false,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "8d13a4bfc2b681e6e3febb47c095be0c71a2d9122081a5913563baa7fd59a4cb",
+      "receipt_sha256": "d1a05e851b07d3c4a9d5c1c0b43d72d22f57e6ac5a8a1536830dcf123f7fbf25",
+      "unit_id": "terra_high-base-gpqa-diamond-168"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "GPQA_DIAMOND",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "gpqa-diamond-180",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "A",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": null,
+          "p1_outcome": "N/A",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": false,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "85962c6476fb38193ea26877b0a12673c03c7ca391e931c728e2335e192d5955",
+      "receipt_sha256": "786bb4de0263b57307ad80aa2ecefb99fa2cfb74a5b9cf487b010287349e01d7",
+      "unit_id": "terra_high-base-gpqa-diamond-180"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "processbench-gsm8k-178",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "1",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": null,
+          "p1_outcome": "N/A",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": false,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "75584ec5860c4621de1cb2a0a3916ae011037a9a4ef5060e26127860517c495c",
+      "receipt_sha256": "bf53354ba98b72a6e7de8226fd218ab6d6b597afed4b32510c132685a9bffbca",
+      "unit_id": "terra_high-base-processbench-gsm8k-178"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "processbench-gsm8k-247",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "OK",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": null,
+          "p1_outcome": "N/A",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": false,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "6bbbb058c2f72fbc85bdbaf73009ee5410a24eb1dcb3a6b2557b0d493f848d11",
+      "receipt_sha256": "59ce6a4a1c8bd1776cdd0e9dabca4b4f0b729d852451f7919dab9bf76febd5b3",
+      "unit_id": "terra_high-base-processbench-gsm8k-247"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "GPQA_DIAMOND",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "gpqa-diamond-168",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "D",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": "energy-conservation endpoint check",
+          "p1_outcome": "PASS",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": true,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "cfb6f7f3cc4f38027684792501357f7a212a9ba7f096e9ba3b8a9456f808a769",
+      "receipt_sha256": "44e79e17d838c1330fa1ea08fb04b05aaaf654f90214700b8b6a40fa96756023",
+      "unit_id": "terra_high-rps_060-gpqa-diamond-168"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "GPQA_DIAMOND",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "gpqa-diamond-180",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "A",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": "band-source separation",
+          "p1_outcome": "PASS",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": true,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "cbec30b565a21a9d9eba867278e2cbf921c218ad29aef5440da045affd6362f2",
+      "receipt_sha256": "0e46765e4f9daaef9305fb69305ebc91e19ce19533a98a8925e97543d78db1f9",
+      "unit_id": "terra_high-rps_060-gpqa-diamond-180"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "processbench-gsm8k-178",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "1",
+        "rps_trace": {
+          "answer_changed": true,
+          "conflict": true,
+          "p1_kind": "inverse_reconstruction",
+          "p1_outcome": "FAIL",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": true,
+          "rollback_hinge": 1,
+          "rps_eligible": true,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "e905e978dc12a2b5d5581718deb156eaa2a94a69c02beab19514f6dd88d0c777",
+      "receipt_sha256": "96bf13c29e2b3b76707583bc90240862b6131108f1f0019b06ce8811501a4071",
+      "unit_id": "terra_high-rps_060-processbench-gsm8k-178"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "processbench-gsm8k-247",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "OK",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": "exact reconstruction",
+          "p1_outcome": "PASS",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": true,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "a935e40871731a1f061439c44df32a118b26344bedd2571d5ac26c375f2c5889",
+      "receipt_sha256": "255ccf5449a5aaecbb583d82cde6675dd6ddf4134821f992b2b7f3bbbf190cbf",
+      "unit_id": "terra_high-rps_060-processbench-gsm8k-247"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "GPQA_DIAMOND",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "gpqa-diamond-168",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "D",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": null,
+          "p1_outcome": "N/A",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": false,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "8d13a4bfc2b681e6e3febb47c095be0c71a2d9122081a5913563baa7fd59a4cb",
+      "receipt_sha256": "ba5d0a74dcb7240dd44a4ce97dc0a9bf762e8e0e81b27f60f1ef92418d22f1aa",
+      "unit_id": "terra_low-base-gpqa-diamond-168"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "GPQA_DIAMOND",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "gpqa-diamond-180",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "A",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": null,
+          "p1_outcome": "N/A",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": false,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "85962c6476fb38193ea26877b0a12673c03c7ca391e931c728e2335e192d5955",
+      "receipt_sha256": "284b781029d285c7f57f4fab08901dd78b825822ce91d7d69b1fbfaa0af29005",
+      "unit_id": "terra_low-base-gpqa-diamond-180"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "processbench-gsm8k-178",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "1",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": null,
+          "p1_outcome": "N/A",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": false,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "75584ec5860c4621de1cb2a0a3916ae011037a9a4ef5060e26127860517c495c",
+      "receipt_sha256": "3118b4cc2761e824988ebc0c0a329a60aac091881349b5a171c2194a17c389e7",
+      "unit_id": "terra_low-base-processbench-gsm8k-178"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "processbench-gsm8k-247",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "OK",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": null,
+          "p1_outcome": "N/A",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": false,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "6bbbb058c2f72fbc85bdbaf73009ee5410a24eb1dcb3a6b2557b0d493f848d11",
+      "receipt_sha256": "a2d91e655b45274e970ffef3235cb87538f7a6396c22780ef94cbcd41bb473fd",
+      "unit_id": "terra_low-base-processbench-gsm8k-247"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "GPQA_DIAMOND",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "gpqa-diamond-168",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "D",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": true,
+          "p1_kind": "kinematic endpoint boundary check",
+          "p1_outcome": "FAIL",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": true,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "cfb6f7f3cc4f38027684792501357f7a212a9ba7f096e9ba3b8a9456f808a769",
+      "receipt_sha256": "876036fe13ca86ea19ddf3d639c151b57e63c4ecfa1db7a225381a17fafecd1f",
+      "unit_id": "terra_low-rps_060-gpqa-diamond-168"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "GPQA_DIAMOND",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "gpqa-diamond-180",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "A",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": "necessary-consequence",
+          "p1_outcome": "PASS",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": true,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "cbec30b565a21a9d9eba867278e2cbf921c218ad29aef5440da045affd6362f2",
+      "receipt_sha256": "6d7ae1022be2a2d3a9dee191df39ec115f660bb275cc579724aea056eed2a390",
+      "unit_id": "terra_low-rps_060-gpqa-diamond-180"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "processbench-gsm8k-178",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "1",
+        "rps_trace": {
+          "answer_changed": true,
+          "conflict": true,
+          "p1_kind": "reconstruction",
+          "p1_outcome": "FAIL",
+          "p2_kind": "inventory balance",
+          "p2_outcome": "PASS",
+          "repair_triggered": true,
+          "rollback_hinge": 1,
+          "rps_eligible": true,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "e905e978dc12a2b5d5581718deb156eaa2a94a69c02beab19514f6dd88d0c777",
+      "receipt_sha256": "a8901c55fe8c5270986676f86d39e229b13f81ca2edc12be28ad157cb3ad6a68",
+      "unit_id": "terra_low-rps_060-processbench-gsm8k-178"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "processbench-gsm8k-247",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "OK",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": "reconstruction",
+          "p1_outcome": "PASS",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": true,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "a935e40871731a1f061439c44df32a118b26344bedd2571d5ac26c375f2c5889",
+      "receipt_sha256": "141eab8c2a6b47a142294033f078bb375c922bc122c99e178e5b444e1df27017",
+      "unit_id": "terra_low-rps_060-processbench-gsm8k-247"
+    }
+  ],
+  "profile_writes": 0,
+  "provider_calls": 18,
+  "schema": "foil.rps-v060-tiny-smoke-predictions.v1",
+  "tool_calls": 0
+}
