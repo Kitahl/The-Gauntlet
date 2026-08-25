@@ -7,6 +7,7 @@ on:
       - benchmark/session2r-test2r-mind-package
     paths:
       - benchmarks/session2r_test2r_mind/build_package.py
+      - benchmarks/session2r_test2r_mind/build_package_ci.py
       - benchmarks/session2r_test2r_mind/validate_package.py
       - benchmarks/session2r_test2r_mind/score.py
       - benchmarks/session2r_test2r_mind/requirements-score.txt
@@ -28,7 +29,7 @@ jobs:
       - name: Install frozen scoring dependencies
         run: python -m pip install -r benchmarks/session2r_test2r_mind/requirements-score.txt
       - name: Build frozen arm projections and sealed gold
-        run: python benchmarks/session2r_test2r_mind/build_package.py
+        run: python benchmarks/session2r_test2r_mind/build_package_ci.py
       - name: Independently certify final selected package
         run: python benchmarks/session2r_test2r_mind/validate_package.py
       - name: Compile scoring wrapper
