@@ -1,0 +1,43 @@
+{
+  "GOLD_VALIDATED": true,
+  "base_mind_id_sets_identical": true,
+  "base_mind_question_order_identical": true,
+  "bbeh_exact_duplicate_inputs_removed_before_sampling": true,
+  "canonical_gold_self_tests_passed": true,
+  "equivalent_answer_tests_passed_where_applicable": true,
+  "experiment_id": "SESSION2R_TEST2R_MIND",
+  "gold_validation_scope": "mechanical/structural certification plus reference-solution cross-check; not an independent re-solution of every Olympiad problem",
+  "high_risk_omni_forms_rejected_before_sampling": true,
+  "negative_controls_passed": true,
+  "omni_candidate_count": 2821,
+  "omni_certified_pool_count": 56,
+  "omni_rejection_counts": {
+    "answer_solution_mismatch": 3,
+    "difficulty_outside_6_10": 2444,
+    "endpoint_sensitive": 780,
+    "high_risk_request_form": 210,
+    "image_dependent": 3,
+    "negative_control_false_accept": 10,
+    "no_boxed_reference_in_solution": 55,
+    "non_scalar_or_noncanonical_answer": 174,
+    "prior_contamination": 20,
+    "request_answer_type_mismatch": 181
+  },
+  "omni_selected_count": 50,
+  "prior_test2_ids_excluded": true,
+  "question_projection_has_no_gold_fields": true,
+  "reference_solution_crosschecks_passed": true,
+  "request_answer_type_checks_passed": true,
+  "scorers_frozen_before_sampling": true,
+  "selected_difficulty_counts": {
+    "6.0": 13,
+    "6.25": 1,
+    "6.5": 6,
+    "7.0": 14,
+    "7.5": 2,
+    "8.0": 8,
+    "9.0": 6
+  },
+  "selected_domain_count": 32,
+  "selected_ids_unique": true
+}

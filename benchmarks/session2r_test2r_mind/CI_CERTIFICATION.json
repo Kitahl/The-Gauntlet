@@ -1,0 +1,34 @@
+{
+  "GOLD_VALIDATED": true,
+  "answer_type_checks": "PASS",
+  "base_mind_question_files_byte_identical": true,
+  "bbeh_records_revalidated": 40,
+  "canonical_self_tests": "PASS",
+  "certification_stage": "independent_post_generation_ci_validation",
+  "equivalent_variant_tests": "PASS",
+  "experiment_id": "SESSION2R_TEST2R_MIND",
+  "exploratory_bbeh_family_counts": {
+    "bbeh_object_counting": 3,
+    "bbeh_object_properties": 4,
+    "bbeh_shuffled_objects": 3
+  },
+  "formal_bbeh_family_counts": {
+    "bbeh_boardgame_qa": 3,
+    "bbeh_boolean_expressions": 3,
+    "bbeh_buggy_tables": 3,
+    "bbeh_causal_understanding": 3,
+    "bbeh_dyck_languages": 3,
+    "bbeh_multistep_arithmetic": 3,
+    "bbeh_spatial_reasoning": 3,
+    "bbeh_temporal_sequence": 3,
+    "bbeh_web_of_lies": 3,
+    "bbeh_zebra_puzzles": 3
+  },
+  "high_risk_omni_admission_checks": "PASS",
+  "negative_control_tests": "PASS",
+  "omni_records_revalidated": 50,
+  "prior_test2_ids_excluded": true,
+  "question_projection_gold_leak_check": "PASS",
+  "reference_solution_crosschecks": "PASS",
+  "selected_ids_unique": true
+}

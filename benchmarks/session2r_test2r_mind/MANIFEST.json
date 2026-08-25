@@ -1,0 +1,96 @@
+{
+  "GOLD_VALIDATED": true,
+  "counts": {
+    "base_predictions_required": 90,
+    "exploratory_bbeh_state_tracking": 10,
+    "mind_predictions_required": 90,
+    "primary_omni": 50,
+    "secondary_bbeh_formal": 30,
+    "unique_questions": 90
+  },
+  "experiment_id": "SESSION2R_TEST2R_MIND",
+  "files": {
+    "VALIDATION_REPORT.json": {
+      "bytes": 1494,
+      "sha256": "d330a5edb73c813cdd8c5be2541d8e35be7d3b8c2e701bc69ab67a3757a56bd6"
+    },
+    "assignment_manifest.json": {
+      "bytes": 3328,
+      "sha256": "2e0a97929e6f510f41026f7165b5bca2989a1873590d49db043ffb1120160d98"
+    },
+    "base/questions.jsonl": {
+      "bytes": 246103,
+      "sha256": "90ab585f4f1727d2f7eea9b817c95633f01ea7a48872756407434fc677a925be"
+    },
+    "gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/README.md": {
+      "bytes": 140,
+      "sha256": "67831ed1eb46229163d64b7aeb8ac708d4e28be3d8f3b9126f9cd6b4fbda69d8"
+    },
+    "gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/gold.jsonl": {
+      "bytes": 142485,
+      "sha256": "6b78e98c0e4b0de5595c4d1d9ce9b5c8d3c0276c1de25f3a5f310efd34f40830"
+    },
+    "mind/questions.jsonl": {
+      "bytes": 246103,
+      "sha256": "90ab585f4f1727d2f7eea9b817c95633f01ea7a48872756407434fc677a925be"
+    },
+    "scoring/bbeh_evaluate.py": {
+      "bytes": 3701,
+      "sha256": "4b4f06e5babb015de2ba639bae995a5526182ffb5b5890af54dfcf038580eb34"
+    },
+    "scoring/omni_grader.py": {
+      "bytes": 11912,
+      "sha256": "ed9494a388e7117735fccf2985de6c444d5bdba4d493b425e92a91e9ab97742a"
+    }
+  },
+  "generated_at_utc": "2026-08-25T21:11:06.294952+00:00",
+  "mind": {
+    "blob_sha": "8c27111809e390910a74b1380b9fbce12b016999",
+    "path": "skills/mathbot/SKILL.md",
+    "repository": "Kitahl/The-Gauntlet"
+  },
+  "schema": "gauntlet.session2r.test2r.mind-package.v1",
+  "seed": 2026082502,
+  "sources": {
+    "bbeh": {
+      "commit": "80d12ca916b7158f22293fcf3144f4d3d854d4be",
+      "exploratory_families": [
+        "bbeh_object_properties",
+        "bbeh_shuffled_objects",
+        "bbeh_object_counting"
+      ],
+      "formal_families": [
+        "bbeh_boolean_expressions",
+        "bbeh_boardgame_qa",
+        "bbeh_causal_understanding",
+        "bbeh_dyck_languages",
+        "bbeh_multistep_arithmetic",
+        "bbeh_temporal_sequence",
+        "bbeh_web_of_lies",
+        "bbeh_zebra_puzzles",
+        "bbeh_buggy_tables",
+        "bbeh_spatial_reasoning"
+      ],
+      "repository": "google-deepmind/bbeh"
+    },
+    "bbeh_scorer": {
+      "commit": "80d12ca916b7158f22293fcf3144f4d3d854d4be",
+      "path": "bbeh/evaluate.py",
+      "repository": "google-deepmind/bbeh",
+      "sha256": "4b4f06e5babb015de2ba639bae995a5526182ffb5b5890af54dfcf038580eb34"
+    },
+    "omni_math_rule": {
+      "commit": "4793415ef37d31c9cdb4e5b82dbe172f76f8cf08",
+      "download_sha256": "d566d5b5a9865a04b507fdc4c0669cf0ff391748e13f190ecc925e78b584b172",
+      "path": "omni_math_rule.jsonl",
+      "repository": "KbsdJames/omni-math-rule"
+    },
+    "omni_scorer": {
+      "commit": "4793415ef37d31c9cdb4e5b82dbe172f76f8cf08",
+      "path": "evaluation/grader.py",
+      "repository": "KbsdJames/omni-math-rule",
+      "sha256": "ed9494a388e7117735fccf2985de6c444d5bdba4d493b425e92a91e9ab97742a"
+    }
+  },
+  "visible_output_token_ceiling_per_item": 700
+}
