@@ -1,0 +1,116 @@
+{
+  "classification": "HLE_VERIFIED_GOLD_HARD_TWO_CHALLENGE",
+  "control_calls": 2,
+  "executor_sha256": "560e85b256fdda78207030384de73e618fc8eb092e6bc58b0e99612e8532dd03",
+  "foil_skill_sha256": "57d4abc23fbf5b2f4d22d62ea73587797185acfb7f465b1e39686c1d64dbcff9",
+  "hard_call_cap": 10,
+  "hle_dataset": "skylenage-ai/HLE-Verified",
+  "hle_gold_shards_sha256": {
+    "Gold_subset.part01.parquet": "0f9347730c0b9a7b690931bfe38f748d2b142be8b4b3318e16d23844b18af98b",
+    "Gold_subset.part02.parquet": "9661a90148056d7d39e0fef058159e72532119aa8ee30a26f06dfa27b61d015f",
+    "Gold_subset.part03.parquet": "ace18833057f09e9071be632239b255a1cd23a3a602dddd524b88e573bf427aa",
+    "Gold_subset.part04.parquet": "f09e14efe051a8a5af54e5f14f0bb2231ddb4b68cbba8886afb2f0a2995e3737",
+    "Gold_subset.part05.parquet": "23211a403e2c013b01dd8634ffa982b9f6dfcb6a4c126a3223c2a18913030ee2"
+  },
+  "hle_revision": "0bc83643672d4f68a5f89998617a639d85e7318b",
+  "items_sha256": "fe03f6d1ac0fe161c6397edba0ed3c0e185ae944c96ab2cebf02f41f798d6efa",
+  "model_calls": 8,
+  "non_claims": [
+    "calibration",
+    "promotion",
+    "superiority",
+    "safety bound",
+    "HLE population efficacy",
+    "frontier-model recall",
+    "production token target",
+    "per-item causal effect under a nondeterministic provider"
+  ],
+  "policy_sha256": "e1ae2b1758556ce08ca8fb3605fbf39e2f38caacdb6bc23c43cca54e6324fcf7",
+  "protocol_sha256": "e237e30ea58a8ba92b1106a8f329c72fc5c23b4a7d57f34ce3c5f2759e28cb22",
+  "runner_sha256": "6c07ac15a14572f78e963a11a0d7a01d11d81c06281c10a7cb28aa55d12bb1fc",
+  "schema": "foil.rps-v060-hle-hard-two-manifest.v1",
+  "seed": 20260825,
+  "selection_rule": "Gold subset; text-only; multipleChoice; unused IDs; <=12000 characters; descending question length with seeded SHA-256 tie-break; distinct categories",
+  "units": [
+    {
+      "arm": "BASE",
+      "benchmark": "HLE_VERIFIED_GOLD_TEXT",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "hle-verified-6725a933e10373a976b7e2a2",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "d63956c8237659741fdbbcde52370f70b7d37cc9c440438f49a8967e776b6974",
+      "unit_id": "terra_high-base-hle-verified-6725a933e10373a976b7e2a2"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "HLE_VERIFIED_GOLD_TEXT",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "hle-verified-673668e658bad7ba89d4ad54",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "e35b6dd28bdfa9827d2975f81dd1efdfa2ebc2773e81421d9e3b1bf1a1237312",
+      "unit_id": "terra_high-base-hle-verified-673668e658bad7ba89d4ad54"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "HLE_VERIFIED_GOLD_TEXT",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "hle-verified-6725a933e10373a976b7e2a2",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "a09687084eff53de9e24c1e68ba48979027950c268f02a14b5679635aa99c76a",
+      "unit_id": "terra_high-rps_060-hle-verified-6725a933e10373a976b7e2a2"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "HLE_VERIFIED_GOLD_TEXT",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "hle-verified-673668e658bad7ba89d4ad54",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "593992f0c57ae25163fb7f3b126677231651e3942476a64fcd7d657f4c64bdd7",
+      "unit_id": "terra_high-rps_060-hle-verified-673668e658bad7ba89d4ad54"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "HLE_VERIFIED_GOLD_TEXT",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "hle-verified-6725a933e10373a976b7e2a2",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "d63956c8237659741fdbbcde52370f70b7d37cc9c440438f49a8967e776b6974",
+      "unit_id": "terra_low-base-hle-verified-6725a933e10373a976b7e2a2"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "HLE_VERIFIED_GOLD_TEXT",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "hle-verified-673668e658bad7ba89d4ad54",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "e35b6dd28bdfa9827d2975f81dd1efdfa2ebc2773e81421d9e3b1bf1a1237312",
+      "unit_id": "terra_low-base-hle-verified-673668e658bad7ba89d4ad54"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "HLE_VERIFIED_GOLD_TEXT",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "hle-verified-6725a933e10373a976b7e2a2",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "a09687084eff53de9e24c1e68ba48979027950c268f02a14b5679635aa99c76a",
+      "unit_id": "terra_low-rps_060-hle-verified-6725a933e10373a976b7e2a2"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "HLE_VERIFIED_GOLD_TEXT",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "hle-verified-673668e658bad7ba89d4ad54",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "593992f0c57ae25163fb7f3b126677231651e3942476a64fcd7d657f4c64bdd7",
+      "unit_id": "terra_low-rps_060-hle-verified-673668e658bad7ba89d4ad54"
+    }
+  ]
+}
