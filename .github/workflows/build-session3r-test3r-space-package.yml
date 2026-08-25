@@ -1,0 +1,47 @@
+name: Build Session 3R Test 3R Space package
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - benchmark/session3r-test3r-space-package
+    paths:
+      - benchmarks/session3r_test3r_space/build_package.py
+      - benchmarks/session3r_test3r_space/validate_package.py
+      - benchmarks/session3r_test3r_space/score.py
+      - .github/workflows/build-session3r-test3r-space-package.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-certify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Build frozen paired question projections and sealed gold
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python benchmarks/session3r_test3r_space/build_package.py
+      - name: Independently requery first-party release histories and certify
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python benchmarks/session3r_test3r_space/validate_package.py
+      - name: Compile paired scoring wrapper
+        run: python -m py_compile benchmarks/session3r_test3r_space/score.py
+      - name: Commit certified generated package
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add benchmarks/session3r_test3r_space
+          if git diff --cached --quiet; then
+            echo "No generated changes"
+          else
+            git commit -m "Generate certified Session 3R Test 3R Space package [skip ci]"
+            git push
+          fi
