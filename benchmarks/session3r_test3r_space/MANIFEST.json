@@ -1,0 +1,58 @@
+{
+  "GOLD_SEMANTICALLY_HIDDEN_FROM_SEARCH": true,
+  "SOURCE_VALIDATED": true,
+  "counts": {
+    "base_predictions_required": 100,
+    "exploratory": 20,
+    "primary": 50,
+    "secondary": 30,
+    "space_predictions_required": 100,
+    "unique_questions": 100
+  },
+  "cutoff": "2026-08-24T23:59:59Z",
+  "experiment_id": "SESSION3R_TEST3R_SPACE",
+  "files": {
+    "VALIDATION_REPORT.json": {
+      "bytes": 789,
+      "sha256": "fa5424617e28fa0bb7fcbef984ca999be947879aa458c1729e78568388f92562"
+    },
+    "assignment_manifest.json": {
+      "bytes": 3677,
+      "sha256": "fdd6cf4285b47e2ad1df573b8586083f337c937511f57d9eaab46b5ceef3b207"
+    },
+    "base/questions.jsonl": {
+      "bytes": 50384,
+      "sha256": "0891904a840515ed771d487d67fde9c15d23779cdbc0dad8029080af5f59053c"
+    },
+    "gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/README.md": {
+      "bytes": 152,
+      "sha256": "4780fa1632f8889ce994dda2461b39ac85e215c572adcf9966d7afe02a879564"
+    },
+    "gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/gold.jsonl.gz.b64": {
+      "bytes": 15153,
+      "sha256": "f15cea499c96d69d52ba1540001569bd6f1e80b1c70855952476e261d4ebf0f6"
+    },
+    "space/questions.jsonl": {
+      "bytes": 50384,
+      "sha256": "0891904a840515ed771d487d67fde9c15d23779cdbc0dad8029080af5f59053c"
+    }
+  },
+  "generated_at_utc": "2026-08-25T21:42:30.959186+00:00",
+  "gold_storage": {
+    "encoding": "gzip+base64",
+    "path": "gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/gold.jsonl.gz.b64",
+    "plaintext_gold_committed": false
+  },
+  "resource_limits": {
+    "search_queries_per_task": 6,
+    "source_followups_per_task": 8,
+    "visible_output_tokens_per_item": 450
+  },
+  "schema": "gauntlet.session3r.test3r.space-package.v1",
+  "seed": 2026082503,
+  "space": {
+    "blob_sha": "a1d91b1d49ac6667f53ed7dfba14d8acb7fe849d",
+    "path": "skills/scoutbot/SKILL.md",
+    "repository": "Kitahl/The-Gauntlet"
+  }
+}

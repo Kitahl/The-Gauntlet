@@ -1,0 +1,18 @@
+{
+  "SOURCE_VALIDATED": true,
+  "base_space_question_files_byte_identical": true,
+  "benchmark_artifact_search_snippet_risk": "MITIGATED_BY_GZIP_BASE64_GOLD_AND_INFERENCE_FIREWALL",
+  "certification_stage": "independent_post_generation_first_party_requery",
+  "experiment_id": "SESSION3R_TEST3R_SPACE",
+  "exploratory_records_revalidated": 20,
+  "first_party_release_histories_requeried": 81,
+  "frozen_answers_recomputed_from_live_first_party_history_at_cutoff": "PASS",
+  "gold_plaintext_committed": false,
+  "primary_records_revalidated": 50,
+  "prior_invalid_test3_public_benchmark_items_reused": false,
+  "question_projection_gold_leak_check": "PASS",
+  "sealed_gold_decode_check": "PASS",
+  "secondary_records_revalidated": 30,
+  "selected_ids_unique": true,
+  "selected_repository_count": 81
+}

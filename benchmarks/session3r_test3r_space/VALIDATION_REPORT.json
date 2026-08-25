@@ -1,0 +1,20 @@
+{
+  "GOLD_SEMANTICALLY_HIDDEN_FROM_SEARCH": true,
+  "SOURCE_VALIDATED": true,
+  "all_gold_dates_at_or_before_cutoff": true,
+  "all_sources_first_party_github_release_pages": true,
+  "base_space_question_files_byte_identical": true,
+  "cutoff": "2026-08-24T23:59:59Z",
+  "eligible_repository_count": 109,
+  "experiment_id": "SESSION3R_TEST3R_SPACE",
+  "exploratory_count": 20,
+  "gold_payload_encoding": "gzip+base64; no plaintext gold JSON committed",
+  "primary_count": 50,
+  "prior_test3_public_benchmark_questions_reused": false,
+  "question_projection_has_no_gold_fields": true,
+  "recency_floor_for_latest_release": "2025-01-01T00:00:00Z",
+  "secondary_count": 30,
+  "selected_task_count": 100,
+  "source_type": "first-party GitHub Releases API snapshot",
+  "task_ids_unique": true
+}
