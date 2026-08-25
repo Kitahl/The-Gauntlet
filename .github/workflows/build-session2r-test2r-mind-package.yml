@@ -9,6 +9,7 @@ on:
       - benchmarks/session2r_test2r_mind/build_package.py
       - benchmarks/session2r_test2r_mind/build_package_ci.py
       - benchmarks/session2r_test2r_mind/validate_package.py
+      - benchmarks/session2r_test2r_mind/validate_package_ci.py
       - benchmarks/session2r_test2r_mind/score.py
       - benchmarks/session2r_test2r_mind/requirements-score.txt
       - .github/workflows/build-session2r-test2r-mind-package.yml
@@ -31,7 +32,7 @@ jobs:
       - name: Build frozen arm projections and sealed gold
         run: python benchmarks/session2r_test2r_mind/build_package_ci.py
       - name: Independently certify final selected package
-        run: python benchmarks/session2r_test2r_mind/validate_package.py
+        run: python benchmarks/session2r_test2r_mind/validate_package_ci.py
       - name: Compile scoring wrapper
         run: python -m py_compile benchmarks/session2r_test2r_mind/score.py
       - name: Commit certified generated package
