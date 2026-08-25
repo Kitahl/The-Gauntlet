@@ -1,9 +1,9 @@
 ---
 name: scoutbot
-description: Research Discovery module. Trigger: /space, /scoutbot, prior art, literature search, current facts, existing tools, repositories, standards, or "has this been done?". Finds and verifies reusable work before new design.
+description: Discover — research and prior-art discovery module for Rigilum Instrument 01. Trigger: /space, /scoutbot, prior art, literature search, current facts, existing tools, repositories, standards, or "has this been done?". Finds and verifies reusable work before new design.
 ---
 
-# Research Discovery
+# Discover
 
 Search before novelty and before absence claims.
 
@@ -45,3 +45,7 @@ The optional public helper `tools/scout.py` performs a keyless OpenAlex lookup. 
 ## Typed runtime contract
 
 `tools/space_runtime.py` adds a registered multi-index search plan, deduplication, round-by-round novel-yield state, explicit adapter failures and bounded saturation. `NOT_FOUND_WITHIN_SCOPE` remains `UNKNOWN` for nonexistence claims. OpenAlex/Crossref are initial adapters; citation-chasing/screening adapters can be added without changing verdict semantics. See `docs/specs/SPACE_ENGINEERING_SPEC.md`.
+
+## Compatibility
+
+Public product name: **Discover**. Stable technical identity: `scoutbot`; stable commands include `/space` and `/scoutbot`. **Research Discovery** is the legacy public label retained in historical documentation and receipts.
