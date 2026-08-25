@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this research software, please cite the repository and the specific release used."
-title: "Rigilum Instrument 01"
+title: "Strong Inference"
 type: software
 authors:
   - family-names: "Kitahl"
@@ -21,9 +21,10 @@ keywords:
   - process assurance
   - research infrastructure
 abstract: >-
-  Instrument 01 is a modular research-software suite for evidence-governed
+  Strong Inference is an open research-software suite for evidence-governed
   AI-assisted technical work, including orchestration, formal reasoning,
   research discovery, method synthesis, engineering verification, evaluation,
   process assurance, independent review, decision preflight, and adaptive
-  complementary assistance. Rigilum is a working pre-product identity and is
-  not represented by this metadata as a legally cleared corporate or trademark name.
+  complementary assistance. Strong Inference Systems is a working pre-product
+  company identity and is not represented by this metadata as a legally cleared
+  corporate or trademark name.
