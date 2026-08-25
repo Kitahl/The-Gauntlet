@@ -1,6 +1,6 @@
 ---
 name: scoutbot
-description: Discover — research and prior-art discovery module for Rigilum Instrument 01. Trigger: /space, /scoutbot, prior art, literature search, current facts, existing tools, repositories, standards, or "has this been done?". Finds and verifies reusable work before new design.
+description: Discover — research and prior-art discovery module for Strong Inference. Trigger: /space, /scoutbot, prior art, literature search, current facts, existing tools, repositories, standards, or "has this been done?". Finds and verifies reusable work before new design.
 ---
 
 # Discover
