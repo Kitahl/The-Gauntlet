@@ -1,0 +1,189 @@
+{
+  "classification": "TINY_RPS_PROMPT_POLICY_SMOKE",
+  "control_calls": 2,
+  "dose_source_sha256": "a57ff56dd33d1b137b0419a3cb5197dbe5ad13d18dc05bb650a4b8598cbbc97c",
+  "executor_sha256": "560e85b256fdda78207030384de73e618fc8eb092e6bc58b0e99612e8532dd03",
+  "foil_skill_sha256": "57d4abc23fbf5b2f4d22d62ea73587797185acfb7f465b1e39686c1d64dbcff9",
+  "gpqa_archive_sha256": "461ae7329f15a3e35f8184d2dac24b990f34fdf12f366ca4062d8e6638cd08dc",
+  "gpqa_revision": "56686c06f5e19865c153de0fdb11be3890014df7",
+  "hard_call_cap": 18,
+  "items_sha256": "60aad79b4ac738f2aed65ec2361f93d2fd574280442b141da7d11eb3ed0b741c",
+  "model_calls": 16,
+  "non_claims": [
+    "calibration",
+    "promotion",
+    "superiority",
+    "safety bound",
+    "HLE efficacy",
+    "frontier-model recall",
+    "production token target"
+  ],
+  "policy_sha256": "e1ae2b1758556ce08ca8fb3605fbf39e2f38caacdb6bc23c43cca54e6324fcf7",
+  "processbench_sha256": "9896315aff77fff8fe60361f05b612250598a4bd88a70ffba567b4d580d6d4a3",
+  "protocol_sha256": "b268534442b8ca728247d8bc2901ec4b6014435111640bbdc7b2e4878945c20c",
+  "runner_sha256": "f02b5e34fad519561a50365e8c1236d298c6ccf5835f91860bfc1f0c629d69c4",
+  "schema": "foil.rps-v060-tiny-smoke-manifest.v1",
+  "seed": 20260825,
+  "units": [
+    {
+      "arm": "BASE",
+      "benchmark": "GPQA_DIAMOND",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "gpqa-diamond-168",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "8d13a4bfc2b681e6e3febb47c095be0c71a2d9122081a5913563baa7fd59a4cb",
+      "unit_id": "terra_high-base-gpqa-diamond-168"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "GPQA_DIAMOND",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "gpqa-diamond-180",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "85962c6476fb38193ea26877b0a12673c03c7ca391e931c728e2335e192d5955",
+      "unit_id": "terra_high-base-gpqa-diamond-180"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "processbench-gsm8k-178",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "75584ec5860c4621de1cb2a0a3916ae011037a9a4ef5060e26127860517c495c",
+      "unit_id": "terra_high-base-processbench-gsm8k-178"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "processbench-gsm8k-247",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "6bbbb058c2f72fbc85bdbaf73009ee5410a24eb1dcb3a6b2557b0d493f848d11",
+      "unit_id": "terra_high-base-processbench-gsm8k-247"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "GPQA_DIAMOND",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "gpqa-diamond-168",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "cfb6f7f3cc4f38027684792501357f7a212a9ba7f096e9ba3b8a9456f808a769",
+      "unit_id": "terra_high-rps_060-gpqa-diamond-168"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "GPQA_DIAMOND",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "gpqa-diamond-180",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "cbec30b565a21a9d9eba867278e2cbf921c218ad29aef5440da045affd6362f2",
+      "unit_id": "terra_high-rps_060-gpqa-diamond-180"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "processbench-gsm8k-178",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "e905e978dc12a2b5d5581718deb156eaa2a94a69c02beab19514f6dd88d0c777",
+      "unit_id": "terra_high-rps_060-processbench-gsm8k-178"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "processbench-gsm8k-247",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "a935e40871731a1f061439c44df32a118b26344bedd2571d5ac26c375f2c5889",
+      "unit_id": "terra_high-rps_060-processbench-gsm8k-247"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "GPQA_DIAMOND",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "gpqa-diamond-168",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "8d13a4bfc2b681e6e3febb47c095be0c71a2d9122081a5913563baa7fd59a4cb",
+      "unit_id": "terra_low-base-gpqa-diamond-168"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "GPQA_DIAMOND",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "gpqa-diamond-180",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "85962c6476fb38193ea26877b0a12673c03c7ca391e931c728e2335e192d5955",
+      "unit_id": "terra_low-base-gpqa-diamond-180"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "processbench-gsm8k-178",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "75584ec5860c4621de1cb2a0a3916ae011037a9a4ef5060e26127860517c495c",
+      "unit_id": "terra_low-base-processbench-gsm8k-178"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "processbench-gsm8k-247",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "6bbbb058c2f72fbc85bdbaf73009ee5410a24eb1dcb3a6b2557b0d493f848d11",
+      "unit_id": "terra_low-base-processbench-gsm8k-247"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "GPQA_DIAMOND",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "gpqa-diamond-168",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "cfb6f7f3cc4f38027684792501357f7a212a9ba7f096e9ba3b8a9456f808a769",
+      "unit_id": "terra_low-rps_060-gpqa-diamond-168"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "GPQA_DIAMOND",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "gpqa-diamond-180",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "cbec30b565a21a9d9eba867278e2cbf921c218ad29aef5440da045affd6362f2",
+      "unit_id": "terra_low-rps_060-gpqa-diamond-180"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "processbench-gsm8k-178",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "e905e978dc12a2b5d5581718deb156eaa2a94a69c02beab19514f6dd88d0c777",
+      "unit_id": "terra_low-rps_060-processbench-gsm8k-178"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "processbench-gsm8k-247",
+      "model": "gpt-5.6-terra",
+      "prompt_sha256": "a935e40871731a1f061439c44df32a118b26344bedd2571d5ac26c375f2c5889",
+      "unit_id": "terra_low-rps_060-processbench-gsm8k-247"
+    }
+  ]
+}

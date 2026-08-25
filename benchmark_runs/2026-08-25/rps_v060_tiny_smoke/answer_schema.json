@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "answer": {
+      "maxLength": 200,
+      "minLength": 1,
+      "type": "string"
+    },
+    "rps_trace": {
+      "additionalProperties": false,
+      "properties": {
+        "answer_changed": {
+          "type": "boolean"
+        },
+        "conflict": {
+          "type": "boolean"
+        },
+        "p1_kind": {
+          "maxLength": 80,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "p1_outcome": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "UNCERTAIN",
+            "N/A"
+          ]
+        },
+        "p2_kind": {
+          "maxLength": 80,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "p2_outcome": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "UNCERTAIN",
+            "N/A"
+          ]
+        },
+        "repair_triggered": {
+          "type": "boolean"
+        },
+        "rollback_hinge": {
+          "maximum": 20,
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "rps_eligible": {
+          "type": "boolean"
+        },
+        "tiebreak_used": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "answer_changed",
+        "conflict",
+        "p1_kind",
+        "p1_outcome",
+        "p2_kind",
+        "p2_outcome",
+        "repair_triggered",
+        "rollback_hinge",
+        "rps_eligible",
+        "tiebreak_used"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "answer",
+    "rps_trace"
+  ],
+  "type": "object"
+}

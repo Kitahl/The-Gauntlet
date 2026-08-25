@@ -1,0 +1,15 @@
+{
+  "files": {
+    "benchmark_runs/2026-08-24/dose_items.json": "ea693c25d2e90017e02e634443703da2a9f9cb078970823b305e75a3508b8953",
+    "benchmark_runs/2026-08-25/rps_v060_tiny_smoke/answer_schema.json": "0321507d2f87bf2fb947103fb07ccbe045ca5e1d74c669b006bfaa4818fa4648",
+    "benchmark_runs/2026-08-25/rps_v060_tiny_smoke/items.json": "ea3119528efa66dc624a7d0f82bf46935f80c568bb6c3c12397d02b244678c69",
+    "benchmark_runs/2026-08-25/rps_v060_tiny_smoke/manifest.json": "0f394197acf835bbe87fb1da04cab7ec55f88eaaa1b8e639ad5e6cfc4204e80b",
+    "benchmarks/FOIL_RPS_V060_TINY_SMOKE.md": "b268534442b8ca728247d8bc2901ec4b6014435111640bbdc7b2e4878945c20c",
+    "benchmarks/fixtures/FOIL_RPS_V060_EXPERIMENT_POLICY.md": "e1ae2b1758556ce08ca8fb3605fbf39e2f38caacdb6bc23c43cca54e6324fcf7",
+    "benchmarks/harness/codex_dose_response_runner.py": "a57ff56dd33d1b137b0419a3cb5197dbe5ad13d18dc05bb650a4b8598cbbc97c",
+    "benchmarks/harness/foil_adaptive_two_benchmark_pilot.py": "560e85b256fdda78207030384de73e618fc8eb092e6bc58b0e99612e8532dd03",
+    "benchmarks/harness/foil_rps_v060_tiny_smoke.py": "f02b5e34fad519561a50365e8c1236d298c6ccf5835f91860bfc1f0c629d69c4",
+    "skills/foil/SKILL.md": "57d4abc23fbf5b2f4d22d62ea73587797185acfb7f465b1e39686c1d64dbcff9"
+  },
+  "schema": "foil.rps-v060-tiny-smoke-lock.v1"
+}

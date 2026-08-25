@@ -1,0 +1,60 @@
+{
+  "items": [
+    {
+      "benchmark": "GPQA_DIAMOND",
+      "choices": {
+        "A": "The spectrum becomes discrete, and the endpoint increases.",
+        "B": "The spectrum becomes discrete, and the endpoint decreases.",
+        "C": "The spectrum remains continuous with an adjusted shape, and the endpoint decreases.",
+        "D": "The spectrum remains continuous with an adjusted shape, and the endpoint increases."
+      },
+      "id": "gpqa-diamond-168",
+      "item_sha256": "05146a3b5aaee0453b08d160ec0ebe881ad3d9ff78966763f0e6ff5e9cf07f60",
+      "question": "You are studying a nuclear decay which converts two heavy nucleons of flavor A to another flavor B, while simultaneously emitting two much lighter particles E and V. In short, 2A -> 2B + 2E + 2V. It is known that the total energy spectrum of the outgoing E particles is continuous, with some endpoint value Q. A variant of this decay emits one exotic, massless particle M instead of the 2V. In this case, how does the total energy spectrum of the outgoing E particles compare to that of the original decay?",
+      "source_index": 168
+    },
+    {
+      "benchmark": "GPQA_DIAMOND",
+      "choices": {
+        "A": "0.01 (10^-2).",
+        "B": "0.1 (10^-1).",
+        "C": "10.",
+        "D": "1."
+      },
+      "id": "gpqa-diamond-180",
+      "item_sha256": "292ad49dc2f8e58c949dbb74eddc4e469ebdb6e85d5a9ad986ea5a062a9c3b5e",
+      "question": "Very large number of neutrinos produced by the Sun reach the Earth (very large flux of neutrinos, defined as the number of neutrinos per cm^2, per second). Let us assume that, hypothetically, the pp-III branch suddenly stopped in the core of the Sun about 8 and a half minutes ago, while all other reactions remained as they were. What would be the approximate ratio of the flux between two bands of neutrino energies of 700-800 KeV (band 1) and 800-900 keV (band 2). Flux (band 1) / flux (band 2) is: (Note: we are talking about stopping the pp-III branch, not pp-II, pp-I or any other. It’s not a typo or something like that.) (Note 2: solar neutrino flavor changes happen, but do not play a role here.)",
+      "source_index": 180
+    },
+    {
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "id": "processbench-gsm8k-247",
+      "item_sha256": "64d62c35ccd3b6438f83621c089e3b849602ba066018c62ec63a8cd5b86e35cc",
+      "problem": "Elise has been selling her Dad's collection of 250 books for three years. Each book sells at 20$, and she sold twice as many books in the first year as she has sold in the current year. There are currently 50 unsold books, and her sales number this year is 45. What's the total amount of money she earned in the second year?",
+      "selection_stratum": "clean",
+      "source_id": "gsm8k-247",
+      "steps": [
+        "To determine the total amount of money Elise earned in the second year, we need to follow these steps: First, calculate the number of books sold in the current year: Elise sold 45 books this year.",
+        "Second, calculate the number of books sold in the first year: She sold twice as many books in the first year as she has sold in the current year. \\[ \\text{Books sold in the first year} = 2 \\times 45 = 90 \\]",
+        "Third, calculate the total number of books sold so far: The total number of books sold so far is the sum of the books sold in the first, second, and current years. We know the total number of books initially was 250, and there are currently 50 unsold books. \\[ \\text{Total books sold so far} = 250 - 50 = 200 \\]",
+        "Fourth, calculate the number of books sold in the second year: Let the number of books sold in the second year be \\( x \\). \\[ \\text{Total books sold so far} = \\text{Books sold in the first year} + \\text{Books sold in the second year} + \\text{Books sold in the current year} \\] \\[ 200 = 90 + x + 45 \\] \\[ 200 = 135 + x \\] \\[ x = 200 - 135 = 65 \\] So, the number of books sold in the second year is 65.",
+        "Fifth, calculate the total amount of money earned in the second year: Each book sells for $20. \\[ \\text{Total amount earned in the second year} = 65 \\times 20 = 1300 \\] Therefore, the total amount of money Elise earned in the second year is \\(\\boxed{1300}\\)."
+      ]
+    },
+    {
+      "benchmark": "PROCESSBENCH_GSM8K",
+      "id": "processbench-gsm8k-178",
+      "item_sha256": "9a83134827072d9859a0c46c6059accb3d31ac8e42a65fac6716f57b1394af2e",
+      "problem": "The bakers at the Beverly Hills Bakery baked 200 loaves of bread on Monday morning. They sold 93 loaves in the morning and 39 loaves in the afternoon. A grocery store returned 6 unsold loaves. How many loaves of bread did they have left?",
+      "selection_stratum": "error",
+      "source_id": "gsm8k-178",
+      "steps": [
+        "To find out how many loaves of bread the bakery had left, we need to follow the steps below: First, let's find out how many loaves of bread were sold in total. Morning sales: 93 loaves, Afternoon sales: 39 loaves, Total sales: 93 + 39 = 132 loaves.",
+        "Now, let's add the number of loaves returned by the grocery store to the total sales. Total sales: 132 loaves, Loaves returned: 6 loaves, Total loaves after return: 132 + 6 = 138 loaves.",
+        "Since the bakery initially had 200 loaves of bread, we can now subtract the total loaves after return from the initial amount to find out how many loaves are left. Initial loaves: 200 loaves, Total loaves after return: 138 loaves, Loaves left: 200 - 138 = 62 loaves.",
+        "Therefore, the bakery had \\boxed{62} loaves of bread left."
+      ]
+    }
+  ],
+  "schema": "foil.rps-v060-tiny-smoke-items.v1"
+}
