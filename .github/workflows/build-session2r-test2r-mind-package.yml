@@ -1,0 +1,45 @@
+name: Build Session 2R Test 2R Mind package
+
+on:
+  push:
+    branches:
+      - benchmark/session2r-test2r-mind-package
+    paths:
+      - benchmarks/session2r_test2r_mind/build_package.py
+      - benchmarks/session2r_test2r_mind/validate_package.py
+      - benchmarks/session2r_test2r_mind/score.py
+      - benchmarks/session2r_test2r_mind/requirements-score.txt
+      - .github/workflows/build-session2r-test2r-mind-package.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-certify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install frozen scoring dependencies
+        run: python -m pip install -r benchmarks/session2r_test2r_mind/requirements-score.txt
+      - name: Build frozen arm projections and sealed gold
+        run: python benchmarks/session2r_test2r_mind/build_package.py
+      - name: Independently certify final selected package
+        run: python benchmarks/session2r_test2r_mind/validate_package.py
+      - name: Compile scoring wrapper
+        run: python -m py_compile benchmarks/session2r_test2r_mind/score.py
+      - name: Commit certified generated package
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add benchmarks/session2r_test2r_mind
+          if git diff --cached --quiet; then
+            echo "No generated changes"
+          else
+            git commit -m "Generate certified Session 2R Test 2R Mind package [skip ci]"
+            git push
+          fi
