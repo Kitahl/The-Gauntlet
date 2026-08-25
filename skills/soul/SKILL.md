@@ -1,11 +1,11 @@
 ---
 name: soul
-description: Research Orchestrator — control plane for the Evidence-Governed Research Toolkit. Trigger: /soul, "orchestrate", "route this", or equivalent. Frames the task, identifies evidence obligations, invokes the minimum sufficient research modules, integrates results, applies process assurance, and releases only what the evidence supports.
+description: Route — orchestration control plane for Rigilum Instrument 01. Trigger: /soul, "orchestrate", "route this", or equivalent. Frames the task, identifies evidence obligations, invokes the minimum sufficient research modules, integrates results, applies assurance, and releases only what the evidence supports.
 ---
 
-# Research Orchestrator
+# Route
 
-The Research Orchestrator owns **routing and synthesis**, not domain authority.
+Route owns **routing and synthesis**, not domain authority.
 
 ## Authority
 
@@ -19,20 +19,20 @@ The Research Orchestrator owns **routing and synthesis**, not domain authority.
 2. **Decompose** — identify load-bearing claims and obligations.
 3. **Route** — invoke only modules needed by those obligations.
 4. **Integrate** — compare outputs by evidence quality, independence, recency, and scope.
-5. **Assure** — use Process Assurance when its triggers are present.
+5. **Assure** — use Assure when its triggers are present.
 6. **Release** — state supported result, unresolved state, and next discriminator.
 
 ## Routing
 
-- proof / formal logic / probability derivation → Formal Reasoning (`/mind`)
-- literature / prior art / current external facts → Research Discovery (`/space`)
-- new mechanism after known routes fail → Method Synthesis (`/reality`)
-- code / execution / integration / software correctness → Engineering Verification (`/power`)
-- benchmark / baseline / ceiling / cost / stop-go → Evaluation & Benchmarking (`/time`)
-- process/frame/stale-state/false-green audit → Process Assurance (`/gauntlet`)
-- user-specific missing capability → FOIL (`/foil`)
-- selective independent review → Evidence Review Panel (`/council`)
-- grounding before consequential action or after drift → Decision Preflight
+- proof / formal logic / probability derivation → **Prove** (`/mind`)
+- literature / prior art / current external facts → **Discover** (`/space`)
+- new mechanism after known routes fail → **Synthesize** (`/reality`)
+- code / execution / integration / software correctness → **Verify** (`/power`)
+- benchmark / baseline / ceiling / cost / stop-go → **Measure** (`/time`)
+- process/frame/stale-state/false-green audit → **Assure** (`/gauntlet`)
+- task-specific complementary support → **Adapt** (`/foil`)
+- selective independent review → **Review** (`/council`)
+- grounding before consequential action or after drift → **Preflight**
 
 Mandatory claim-native checks may not be optimized away for speed.
 
@@ -58,4 +58,8 @@ For substantial work report:
 
 ## Typed runtime contract
 
-For registered substantial work, `tools/soul_runtime.py` represents the workflow as `TaskState` + load-bearing `Obligation` objects and enforces a receipt-based release gate. The generic typed runtime uses `egrt.runtime.v1`; it does not persist raw prompts. A missing load-bearing receipt is `UNKNOWN`, not success. See `docs/VNEXT_RUNTIME_PIPELINE.md` and `docs/specs/SOUL_ENGINEERING_SPEC.md`.
+`tools/soul_runtime.py` represents the workflow as `TaskState` + load-bearing `Obligation` objects and enforces a receipt-based release gate. The generic typed runtime uses `egrt.runtime.v1`; it does not persist raw prompts. A missing load-bearing receipt is `UNKNOWN`, not success. See `docs/VNEXT_RUNTIME_PIPELINE.md` and `docs/specs/SOUL_ENGINEERING_SPEC.md`.
+
+## Compatibility
+
+Public product name: **Route**. Stable technical identity: `soul` / `/soul`. The legacy public label **Research Orchestrator** and the phrase **Process Assurance** remain only as migration vocabulary in older documentation and receipts; Assure is the Instrument 01 public name for that control function.
