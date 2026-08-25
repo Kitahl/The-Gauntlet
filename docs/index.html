@@ -3,215 +3,154 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="The Gauntlet is a portfolio of ten integrated research and engineering tools for formal reasoning, discovery, method synthesis, software verification, evaluation, adaptive assistance, process assurance, decision preflight, and independent review." />
-  <meta name="theme-color" content="#050608" />
-  <meta name="color-scheme" content="dark" />
-  <meta name="robots" content="index,follow" />
-  <link rel="canonical" href="https://kitahl.github.io/The-Gauntlet/" />
-  <meta property="og:title" content="The Gauntlet — Research & Engineering Toolkit" />
-  <meta property="og:description" content="Ten integrated tools built for professional research, engineering, verification, evaluation, and review." />
-  <meta property="og:type" content="website" />
+  <meta name="description" content="Rigilum Instrument 01 is a free pre-product research-software preview for evidence-governed AI-assisted technical work, verification, evaluation, and reproducible research workflows." />
+  <meta property="og:title" content="Rigilum — Instrument 01" />
+  <meta property="og:description" content="A free pre-product research instrument for evidence-governed technical work." />
   <meta property="og:url" content="https://kitahl.github.io/The-Gauntlet/" />
-  <meta property="og:site_name" content="The Gauntlet" />
-  <title>The Gauntlet — Research & Engineering Toolkit</title>
+  <link rel="canonical" href="https://kitahl.github.io/The-Gauntlet/" />
   <link rel="stylesheet" href="styles.css" />
+  <title>Rigilum — Instrument 01</title>
+  <script src="system-field.js" defer></script>
 </head>
 <body data-scene="hero">
-  <a class="skip-link" href="#main">Skip to main content</a>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <canvas id="system-field-canvas" aria-hidden="true"></canvas>
 
-  <div class="system-field" aria-hidden="true">
-    <canvas id="system-field-canvas"></canvas>
-    <div class="system-field-vignette"></div>
-    <div class="system-scan"></div>
-    <div class="system-caption" id="system-caption"><strong>LIVE SYSTEM VIEW</strong><span>TASK → OBLIGATION → METHOD → RECEIPT</span></div>
-  </div>
-
-  <header class="topbar">
-    <a class="brand" href="#top" aria-label="The Gauntlet home">The Gauntlet</a>
-    <nav class="site-nav" aria-label="Primary">
-      <a href="#work">Work</a>
+  <header class="site-header">
+    <a class="wordmark" href="#main" aria-label="Rigilum Instrument 01 home">
+      <span class="mark" aria-hidden="true">R</span>
+      <span><strong>Rigilum</strong><small>Instrument 01</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="#overview">Overview</a>
       <a href="#workflows">Workflows</a>
-      <a href="#gems">Gems</a>
-      <a href="#tools">Toolkit</a>
-      <a href="#source">Source</a>
-      <a class="repo-link" href="https://github.com/Kitahl/The-Gauntlet">GitHub ↗</a>
+      <a href="#gems">Modules</a>
+      <a href="#system">System</a>
+      <a href="#tools">Get it</a>
     </nav>
   </header>
 
   <main id="main">
-    <div id="top" aria-hidden="true"></div>
-
-    <section class="hero shell scene-section" data-scene="hero" aria-labelledby="hero-title">
+    <section class="hero scene-section" data-scene="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <p class="eyebrow">RESEARCH &amp; ENGINEERING SYSTEMS</p>
-        <h1 id="hero-title">The<br>Gauntlet</h1>
-        <p class="hero-deck">10 tools I built for research, engineering, verification, and review.</p>
-        <p class="hero-summary">Give the system a professional task. It identifies what must actually be established, selects the method that owns each obligation, executes the check, and keeps the result scoped to the evidence.</p>
+        <p class="eyebrow">Pre-product preview · Showcase R20 · Free research software</p>
+        <h1 id="hero-title">Instrument 01</h1>
+        <p class="lede">One coordinated research instrument for technical work that must distinguish evidence, proof, implementation, measurement, review, and unresolved state.</p>
         <div class="hero-actions">
-          <a class="button primary" href="#work">See the work</a>
-          <a class="button secondary" href="#workflows">See it operate</a>
-          <a class="button tertiary" href="https://github.com/Kitahl/The-Gauntlet/archive/refs/heads/main.zip">Download</a>
+          <a class="button primary" href="https://github.com/Kitahl/The-Gauntlet">Inspect the source</a>
+          <a class="button" href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/EVALUATOR_QUICKSTART.md">5-minute evaluation</a>
         </div>
+        <p class="boundary-note"><strong>Working identity.</strong> Rigilum is the company-facing name selected by the repository's three-loop brand audit. Formal corporate-name, trademark, and domain clearance are separate gates.</p>
+      </div>
+      <div class="hero-spec" aria-label="Release summary">
+        <span>01</span>
+        <dl>
+          <div><dt>Status</dt><dd>Pre-product</dd></div>
+          <div><dt>Price</dt><dd>Free / MIT</dd></div>
+          <div><dt>Software</dt><dd>v0.5.1</dd></div>
+          <div><dt>Modules</dt><dd>10</dd></div>
+        </dl>
       </div>
     </section>
 
-    <section id="work" class="section shell scene-section" data-scene="overview" aria-labelledby="work-title">
-      <header class="section-heading">
-        <h2 id="work-title">What I built.</h2>
-        <p>Five specialist research methods. Five control and review systems. They can run independently or as one routed workflow.</p>
-      </header>
-      <div class="inventory">
-        <section>
-          <h3>Research Gems</h3>
-          <a class="inventory-row" href="#mind"><strong>Mind</strong><span>Formal reasoning, proof, probability, counterexamples.</span></a>
-          <a class="inventory-row" href="#space"><strong>Space</strong><span>Literature, prior art, repositories, standards.</span></a>
-          <a class="inventory-row" href="#reality"><strong>Reality</strong><span>Method synthesis after a verified constraint gap.</span></a>
-          <a class="inventory-row" href="#power"><strong>Power</strong><span>Implementation, execution, integration, verification.</span></a>
-          <a class="inventory-row" href="#time"><strong>Time</strong><span>Baselines, ablations, uncertainty, stop/go.</span></a>
-        </section>
-        <section>
-          <h3>Control &amp; review</h3>
-          <a class="inventory-row" href="#tool-soul"><strong>Soul</strong><span>Research orchestration and obligation routing.</span></a>
-          <a class="inventory-row" href="#tool-mirror"><strong>Mirror</strong><span>Adaptive reasoning complement for the current task.</span></a>
-          <a class="inventory-row" href="#tool-gauntlet"><strong>Gauntlet</strong><span>Process assurance and false-green detection.</span></a>
-          <a class="inventory-row" href="#tool-meditate"><strong>Meditate</strong><span>Decision preflight before consequential work.</span></a>
-          <a class="inventory-row" href="#tool-council"><strong>Council</strong><span>Structured independent review.</span></a>
-        </section>
+    <section id="overview" class="section scene-section" data-scene="overview">
+      <p class="section-index">01 / Purpose</p>
+      <div class="section-head">
+        <h2>A research instrument, not another chat wrapper.</h2>
+        <p>Instrument 01 coordinates specialist methods around the epistemic obligation of the task: what must be searched, proved, built, measured, challenged, or left explicitly unresolved.</p>
+      </div>
+      <div class="inventory-row">
+        <div><strong>Evidence-governed</strong><span>Claims stay attached to the kind of support they actually have.</span></div>
+        <div><strong>Mechanically inspectable</strong><span>Runtime checks, source, tests, and research receipts remain public.</span></div>
+        <div><strong>Compatibility-preserving</strong><span>The product names change; stable technical IDs and commands do not.</span></div>
       </div>
     </section>
 
-    <section id="workflows" class="section workflow-section scene-section" data-scene="workflow" aria-labelledby="workflow-title">
-      <div class="shell">
-        <header class="section-heading">
-          <h2 id="workflow-title">Professional workflows.</h2>
-          <p>The route changes with the job. The background is the same system view: task, active methods, evidence returning, release.</p>
-        </header>
-        <div class="workflow-list">
-          <article><div><span>Research method</span><h3>Is this actually new, buildable, and better?</h3></div><p class="route">Space <i>→</i> Reality <i>→</i> Power <i>→</i> Time</p></article>
-          <article><div><span>Formal claim</span><h3>Can this be proved or refuted?</h3></div><p class="route">Mind <i>→</i> Council</p></article>
-          <article><div><span>Software release</span><h3>The tests are green. What could still be wrong?</h3></div><p class="route">Power <i>→</i> Gauntlet <i>→</i> Council</p></article>
-          <article><div><span>Stalled project</span><h3>What is the next experiment worth running?</h3></div><p class="route">Meditate <i>→</i> Soul <i>→</i> Time</p></article>
-          <article><div><span>Adaptive work</span><h3>What part of this task is least covered?</h3></div><p class="route">Mirror <i>→</i> Relevant Gem</p></article>
-        </div>
+    <section id="workflows" class="section workflow-list scene-section" data-scene="workflow">
+      <p class="section-index">02 / Workflows</p>
+      <div class="section-head"><h2>Five recurring technical workflows.</h2><p>The suite routes work by obligation rather than by personality or a single universal prompt.</p></div>
+      <article><div><span>01</span><h3>Establish</h3></div><p>Frame the claim, identify the required warrant, and decide whether the task needs proof, current evidence, execution, or measurement.</p></article>
+      <article><div><span>02</span><h3>Discover</h3></div><p>Search literature, prior art, software, and current sources before novelty is asserted or a mechanism is reinvented.</p></article>
+      <article><div><span>03</span><h3>Construct</h3></div><p>Formalize, synthesize, implement, and test the smallest mechanism that can resolve the named constraint.</p></article>
+      <article><div><span>04</span><h3>Challenge</h3></div><p>Use independent review, counterexamples, controls, ablations, and process assurance against persuasive false greens.</p></article>
+      <article><div><span>05</span><h3>Release</h3></div><p>Separate supported conclusions from open state, preserve reproducibility, and expose the evidence boundary.</p></article>
+    </section>
+
+    <section id="gems" class="section scene-section" data-scene="gems">
+      <p class="section-index">03 / Specialist core</p>
+      <div class="section-head"><h2>Five specialist modules. Functional names.</h2><p>The earlier themed display names are retired from the product surface. Internal scene IDs and runtime identifiers remain stable for compatibility.</p></div>
+    </section>
+
+    <section id="mind" class="gem-scene scene-section" data-scene="mind">
+      <div class="gem-copy"><p class="module-no">I01.02</p><h2>Prove</h2><p>Formal reasoning, mathematics, probability, statistics, counterexamples, and explicit proof structure.</p><code>mathbot · /mind</code></div>
+    </section>
+
+    <section id="space" class="gem-scene scene-section" data-scene="space">
+      <div class="gem-copy"><p class="module-no">I01.03</p><h2>Discover</h2><p>Literature, prior art, existing software, current evidence, and terminology across disciplines.</p><code>scoutbot · /space</code></div>
+    </section>
+
+    <section id="reality" class="gem-scene scene-section" data-scene="reality">
+      <div class="gem-copy"><p class="module-no">I01.04</p><h2>Synthesize</h2><p>Mechanism construction after known methods fail a named requirement, with novelty kept subordinate to evidence.</p><code>novelbot · /reality</code></div>
+    </section>
+
+    <section id="power" class="gem-scene scene-section" data-scene="power">
+      <div class="gem-copy"><p class="module-no">I01.05</p><h2>Verify</h2><p>Architecture, implementation, integration, execution, and software verification.</p><code>codebot · /power</code></div>
+    </section>
+
+    <section id="time" class="gem-scene scene-section" data-scene="time">
+      <div class="gem-copy"><p class="module-no">I01.06</p><h2>Measure</h2><p>Baselines, benchmarks, ceilings, cost, controls, ablations, and evidence for stop/go decisions.</p><code>benchbot · /time</code></div>
+    </section>
+
+    <section id="system" class="section system-section scene-section" data-scene="system">
+      <p class="section-index">04 / Coordinated system</p>
+      <div class="section-head"><h2>Route at the center. Four control surfaces around it.</h2><p>The specialist modules do work. The control modules decide how that work is framed, checked, independently reviewed, and adapted to the task.</p></div>
+      <div class="system-grid">
+        <div class="system-line"><strong>Route · Orchestration</strong><span>`soul` / `/soul` — frame, decompose, route, integrate, release.</span></div>
+        <div class="system-line"><strong>Adapt · Adaptive Complement</strong><span>`foil` / `/foil` — task-specific complementary assistance and calibration.</span></div>
+        <div class="system-line"><strong>Assure · Process Assurance</strong><span>`infinity-gauntlet` / `/gauntlet` — stale-state, frame, boundary, and false-green checks.</span></div>
+        <div class="system-line"><strong>Preflight · Decision Preflight</strong><span>`meditate` — grounding before consequential decisions and after failures.</span></div>
+        <div class="system-line"><strong>Review · Evidence Review</strong><span>`council-of-elders` / `/council` — selective independent evidence and method review.</span></div>
       </div>
     </section>
 
-    <section id="gems" class="gems-intro section shell scene-section" data-scene="gems" aria-labelledby="gems-title">
-      <header class="section-heading">
-        <h2 id="gems-title">The five Gems.</h2>
-        <p>Each one is a different evidence-producing mechanism. As you move through them, the system field reconfigures into that Gem and runs its actual conceptual workflow.</p>
-      </header>
-    </section>
+    <section id="tools" class="section scene-section" data-scene="quiet">
+      <p class="section-index">05 / Instrument inventory</p>
+      <div class="section-head"><h2>Inspect or install every module.</h2><p>Public names are the product interface. Technical IDs and commands below are stable compatibility surfaces.</p></div>
 
-    <section id="mind" class="gem-scene scene-section" data-scene="mind" data-accent="#dec167" aria-labelledby="mind-title">
-      <div class="shell gem-copy">
-        <p class="gem-name">MIND</p>
-        <h2 id="mind-title">Formal Reasoning</h2>
-        <p class="gem-lede">Turn a claim into explicit objects, assumptions, a proof obligation, and a claim-native verifier.</p>
-        <dl><div><dt>Use</dt><dd>Theorems, derivations, formal specifications, probability, exact counterexamples.</dd></div><div><dt>Returns</dt><dd>Proof, measured result, cited theorem, counterexample, or unresolved state.</dd></div></dl>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/mathbot/SKILL.md">Inspect Mind ↗</a>
+      <details class="tool-entry"><summary><strong>Route</strong><span>soul · /soul</span></summary><h3>Professional use</h3><p>Frame, decompose, route, integrate, audit, and release technical work.</p><h3>How it works</h3><p>Maintains the control plane and assigns each obligation to the smallest appropriate specialist path.</p><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/soul/SKILL.md">Open module specification</a></details>
+      <details class="tool-entry"><summary><strong>Prove</strong><span>mathbot · /mind</span></summary><h3>Professional use</h3><p>Formal reasoning and mathematical analysis.</p><h3>How it works</h3><p>Separates derivation, assumptions, counterexamples, and formal proof obligations.</p><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/mathbot/SKILL.md">Open module specification</a></details>
+      <details class="tool-entry"><summary><strong>Discover</strong><span>scoutbot · /space</span></summary><h3>Professional use</h3><p>Literature, prior-art, software, and current-evidence discovery.</p><h3>How it works</h3><p>Searches before novelty claims and keeps sourced findings distinct from inference.</p><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/scoutbot/SKILL.md">Open module specification</a></details>
+      <details class="tool-entry"><summary><strong>Synthesize</strong><span>novelbot · /reality</span></summary><h3>Professional use</h3><p>Mechanism and method synthesis.</p><h3>How it works</h3><p>Constructs alternatives only after the known-method constraint is explicit.</p><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/novelbot/SKILL.md">Open module specification</a></details>
+      <details class="tool-entry"><summary><strong>Verify</strong><span>codebot · /power</span></summary><h3>Professional use</h3><p>Engineering verification and implementation.</p><h3>How it works</h3><p>Tests architecture, code, integration, execution, and software-level claims.</p><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/codebot/SKILL.md">Open module specification</a></details>
+      <details class="tool-entry"><summary><strong>Measure</strong><span>benchbot · /time</span></summary><h3>Professional use</h3><p>Evaluation, benchmarking, and cost-aware decision evidence.</p><h3>How it works</h3><p>Builds baselines, controls, ablations, ceilings, and stop/go comparisons.</p><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/benchbot/SKILL.md">Open module specification</a></details>
+      <details class="tool-entry"><summary><strong>Assure</strong><span>infinity-gauntlet · /gauntlet</span></summary><h3>Professional use</h3><p>Process assurance for long or consequential workflows.</p><h3>How it works</h3><p>Checks stale state, scope drift, frame boundaries, and false-green conditions.</p><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/infinity-gauntlet/SKILL.md">Open module specification</a></details>
+      <details class="tool-entry"><summary><strong>Preflight</strong><span>meditate</span></summary><h3>Professional use</h3><p>Grounding before consequential decisions or after a failed approach.</p><h3>How it works</h3><p>Re-establishes goals, constraints, evidence state, and decision authority.</p><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/meditate/SKILL.md">Open module specification</a></details>
+      <details class="tool-entry"><summary><strong>Review</strong><span>council-of-elders · /council</span></summary><h3>Professional use</h3><p>Selective independent evidence and method review.</p><h3>How it works</h3><p>Uses bounded independent review when another perspective can discriminate between live explanations.</p><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/council-of-elders/SKILL.md">Open module specification</a></details>
+      <details class="tool-entry"><summary><strong>Adapt</strong><span>foil · /foil</span></summary><h3>Professional use</h3><p>Task-specific complementary assistance and evidence-aware calibration.</p><h3>How it works</h3><p>Routes support toward uncovered load-bearing capabilities without turning one observation into a permanent user label.</p><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/foil/SKILL.md">Open module specification</a></details>
+
+      <div class="download-row">
+        <a class="button download-all" href="https://github.com/Kitahl/The-Gauntlet/archive/refs/heads/main.zip">Download Instrument 01</a>
+        <a class="button" href="https://github.com/Kitahl/The-Gauntlet/tree/main/tools">Implementation directory</a>
       </div>
     </section>
 
-    <section id="space" class="gem-scene scene-section" data-scene="space" data-accent="#80aef7" aria-labelledby="space-title">
-      <div class="shell gem-copy">
-        <p class="gem-name">SPACE</p>
-        <h2 id="space-title">Research Discovery</h2>
-        <p class="gem-lede">Search the evidence landscape before novelty, current-state, or reuse claims are made.</p>
-        <dl><div><dt>Use</dt><dd>Literature, prior art, current technical facts, standards, reusable software.</dd></div><div><dt>Returns</dt><dd>Verified source set, nearest established class, concrete differentiator, search limits.</dd></div></dl>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/scoutbot/SKILL.md">Inspect Space ↗</a>
-      </div>
-    </section>
-
-    <section id="reality" class="gem-scene scene-section" data-scene="reality" data-accent="#df86cf" aria-labelledby="reality-title">
-      <div class="shell gem-copy">
-        <p class="gem-name">REALITY</p>
-        <h2 id="reality-title">Method Synthesis</h2>
-        <p class="gem-lede">Only invent after the nearest known methods fail a specific, named constraint.</p>
-        <dl><div><dt>Use</dt><dd>New algorithms, mechanisms, or research methods after a verified gap.</dd></div><div><dt>Returns</dt><dd>Candidate mechanism, assumptions, invariants, failure modes, verifier plan.</dd></div></dl>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/novelbot/SKILL.md">Inspect Reality ↗</a>
-      </div>
-    </section>
-
-    <section id="power" class="gem-scene scene-section" data-scene="power" data-accent="#58cedc" aria-labelledby="power-title">
-      <div class="shell gem-copy">
-        <p class="gem-name">POWER</p>
-        <h2 id="power-title">Engineering Verification</h2>
-        <p class="gem-lede">Move software claims through the real implementation and the real entrypoint.</p>
-        <dl><div><dt>Use</dt><dd>Implementation, debugging, integration, regression, executable verification.</dd></div><div><dt>Returns</dt><dd>Executed checks, defect-class coverage, output hashes, untested limits.</dd></div></dl>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/codebot/SKILL.md">Inspect Power ↗</a>
-      </div>
-    </section>
-
-    <section id="time" class="gem-scene scene-section" data-scene="time" data-accent="#84cb96" aria-labelledby="time-title">
-      <div class="shell gem-copy">
-        <p class="gem-name">TIME</p>
-        <h2 id="time-title">Evaluation &amp; Benchmarking</h2>
-        <p class="gem-lede">Make candidate and baseline compete under the comparison that actually answers the decision.</p>
-        <dl><div><dt>Use</dt><dd>Experiment design, matched baselines, ablations, cost analysis, stop/go.</dd></div><div><dt>Returns</dt><dd>Matched comparison, uncertainty, failures, exclusions, decision consequence.</dd></div></dl>
-        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/benchbot/SKILL.md">Inspect Time ↗</a>
-      </div>
-    </section>
-
-    <section id="system" class="section shell scene-section" data-scene="system" aria-labelledby="system-title">
-      <header class="section-heading system-heading">
-        <h2 id="system-title">One control model.</h2>
-        <p>Frame the task. Create load-bearing obligations. Route each one to the method that owns it. Keep the receipt. Release only what the evidence supports.</p>
-      </header>
-      <p class="system-line" aria-label="Gauntlet control model"><span>Task</span><i>→</i><span>Obligations</span><i>→</i><span>Selected methods</span><i>→</i><span>Receipts</span><i>→</i><span>Scoped result</span></p>
-    </section>
-
-    <section id="tools" class="section toolkit-section scene-section" data-scene="quiet" aria-labelledby="tools-title">
-      <div class="shell">
-        <header class="section-heading tools-heading">
-          <h2 id="tools-title">Complete toolkit.</h2>
-          <p>The `SKILL.md` is the reasoning contract. The linked Python runtime supplies execution, state, receipts, hooks, or gates where that tool has mechanical work to do.</p>
-          <a class="download-all" href="https://github.com/Kitahl/The-Gauntlet/archive/refs/heads/main.zip">Download repository</a>
-        </header>
-
-        <div class="tool-directory">
-          <details class="tool-entry" id="tool-soul"><summary><strong>Soul · Research Orchestrator</strong><code>/soul</code><span>Route complex work across the toolkit.</span></summary><div class="tool-body"><section><h3>Professional use</h3><p>Complex research or engineering tasks that require several methods without manually coordinating each step.</p></section><section><h3>How it works</h3><p>Frames the goal, creates load-bearing obligations, selects the minimum specialist routes, integrates receipts, and governs release.</p></section><section class="tool-links"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/soul/SKILL.md">Skill</a><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/soul/SKILL.md">Download</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/soul_runtime.py">Runtime</a></section></div></details>
-
-          <details class="tool-entry" id="tool-mind"><summary><strong>Mind · Formal Reasoning</strong><code>/mind</code><span>Proof, logic, probability, formalization.</span></summary><div class="tool-body"><section><h3>Professional use</h3><p>Theorem checking, mathematical derivations, formal specifications, probabilistic reasoning, and counterexample search.</p></section><section><h3>How it works</h3><p>Defines objects and assumptions, states the exact claim and negation, chooses a claim-native verifier, searches edge cases, and reports scope.</p></section><section class="tool-links"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/mathbot/SKILL.md">Skill</a><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/mathbot/SKILL.md">Download</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/mind_runtime.py">Runtime</a></section></div></details>
-
-          <details class="tool-entry" id="tool-space"><summary><strong>Space · Research Discovery</strong><code>/space</code><span>Literature, prior art, repositories, standards.</span></summary><div class="tool-body"><section><h3>Professional use</h3><p>Literature reviews, prior-art checks, technical due diligence, current-source verification, and reusable implementation discovery.</p></section><section><h3>How it works</h3><p>Translates the mechanism into search terms, expands across neighboring fields, inspects primary sources and repositories, and records source limits.</p></section><section class="tool-links"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/scoutbot/SKILL.md">Skill</a><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/scoutbot/SKILL.md">Download</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/space_runtime.py">Runtime</a></section></div></details>
-
-          <details class="tool-entry" id="tool-reality"><summary><strong>Reality · Method Synthesis</strong><code>/reality</code><span>New mechanisms after a verified gap.</span></summary><div class="tool-body"><section><h3>Professional use</h3><p>Designing a new method when established approaches have been checked and fail a named requirement.</p></section><section><h3>How it works</h3><p>Turns the gap into constraints, generates candidates that alter different assumptions, states invariants and failure modes, then rechecks prior art.</p></section><section class="tool-links"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/novelbot/SKILL.md">Skill</a><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/novelbot/SKILL.md">Download</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/reality_runtime.py">Runtime</a></section></div></details>
-
-          <details class="tool-entry" id="tool-power"><summary><strong>Power · Engineering Verification</strong><code>/power</code><span>Implementation, debugging, integration, execution.</span></summary><div class="tool-body"><section><h3>Professional use</h3><p>Building or reviewing software, debugging failures, integration work, release checks, and verifying executable claims.</p></section><section><h3>How it works</h3><p>Inspects the real repository, maps edits to requirements, implements the smallest complete change, runs targeted and regression checks, and exercises the real entrypoint.</p></section><section class="tool-links"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/codebot/SKILL.md">Skill</a><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/codebot/SKILL.md">Download</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/power_runtime.py">Runtime</a></section></div></details>
-
-          <details class="tool-entry" id="tool-time"><summary><strong>Time · Evaluation &amp; Benchmarking</strong><code>/time</code><span>Baselines, ablations, uncertainty, stop/go.</span></summary><div class="tool-body"><section><h3>Professional use</h3><p>Experimental design, capability comparisons, matched baselines, ablations, cost analysis, and stop/go decisions.</p></section><section><h3>How it works</h3><p>Defines the construct and endpoint, selects a strong baseline, matches relevant budgets, preserves failures, reports uncertainty, and applies stop/go criteria.</p></section><section class="tool-links"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/benchbot/SKILL.md">Skill</a><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/benchbot/SKILL.md">Download</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/time_runtime.py">Runtime</a></section></div></details>
-
-          <details class="tool-entry" id="tool-gauntlet"><summary><strong>Gauntlet · Process Assurance</strong><code>/gauntlet</code><span>Audit the process behind a result.</span></summary><div class="tool-body"><section><h3>Professional use</h3><p>Repeated failures, stale assumptions, inherited numbers, false-green tests, or a result that appears cleared too easily.</p></section><section><h3>How it works</h3><p>Runs the smallest relevant assurance operation across framing, derivation, boundary, refresh, and out-of-band checks.</p></section><section class="tool-links"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/infinity-gauntlet/SKILL.md">Skill</a><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/infinity-gauntlet/SKILL.md">Download</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/gauntlet_runtime.py">Runtime</a></section></div></details>
-
-          <details class="tool-entry" id="tool-meditate"><summary><strong>Meditate · Decision Preflight</strong><code>orchestrator-invoked</code><span>Ground consequential work before acting.</span></summary><div class="tool-body"><section><h3>Professional use</h3><p>High-cost decisions, unstable task frames, repeated failure, or moments when execution is moving faster than the evidence state.</p></section><section><h3>How it works</h3><p>STILL → GROUND → ORIENT → WEIGH → RELEASE: identify authoritative state, separate facts from assumptions, choose one high-value next action.</p></section><section class="tool-links"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/meditate/SKILL.md">Skill</a><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/meditate/SKILL.md">Download</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/meditate_runtime.py">Runtime</a></section></div></details>
-
-          <details class="tool-entry" id="tool-council"><summary><strong>Council · Evidence Review Panel</strong><code>/council</code><span>Structured independent review.</span></summary><div class="tool-body"><section><h3>Professional use</h3><p>Important artifacts that benefit from independent correctness, measurement, implementation, novelty, or adversarial review.</p></section><section><h3>How it works</h3><p>Creates distinct review seats, freezes first-pass conclusions before reveal, cross-critiques them, normalizes scope, and compares against a direct control.</p></section><section class="tool-links"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/skills/council-of-elders/SKILL.md">Skill</a><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/council-of-elders/SKILL.md">Download</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/council_runtime.py">Runtime</a></section></div></details>
-
-          <details class="tool-entry" id="tool-mirror"><summary><strong>Mirror · Adaptive Reasoning Complement</strong><code>/foil</code><span>Find the smallest missing complement for the task.</span></summary><div class="tool-body"><section><h3>Professional use</h3><p>Work where the right next method depends on what the current task and available evidence already cover.</p></section><section><h3>How it works</h3><p>Classifies the task first, keeps competing gap hypotheses, uses a minimal discriminator when needed, supplies the smallest useful complement, then verifies transfer.</p></section><section class="tool-links"><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/MIRROR.md">Overview</a><a href="https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/foil/SKILL.md">Download</a><a href="https://github.com/Kitahl/The-Gauntlet/blob/main/tools/foil_profile.py">Runtime</a></section></div></details>
-        </div>
-        <p class="implementation-link"><a href="https://github.com/Kitahl/The-Gauntlet/tree/main/tools">Browse the complete implementation directory ↗</a></p>
-      </div>
-    </section>
-
-    <section id="source" class="section source-section scene-section" data-scene="quiet" aria-labelledby="source-title">
-      <div class="shell">
-        <header class="section-heading"><h2 id="source-title">Inspect the work.</h2><p>Source, runtime contracts, reproducibility, security, governance, and research notes remain directly accessible.</p></header>
-        <nav class="source-index" aria-label="Project documents">
-          <a href="https://github.com/Kitahl/The-Gauntlet"><b>Repository</b><span>Source tree · history</span></a>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/ARCHITECTURE.md"><b>Architecture</b><span>Runtime structure</span></a>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/RESEARCH.md"><b>Research</b><span>Statement · scope</span></a>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/REPRODUCIBILITY.md"><b>Reproducibility</b><span>Validation path</span></a>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/SECURITY.md"><b>Security</b><span>Reporting boundary</span></a>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/GOVERNANCE.md"><b>Governance</b><span>Decision rights</span></a>
-          <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/CITATION.cff"><b>Citation</b><span>Software metadata</span></a>
-          <a href="https://github.com/Kitahl/The-Gauntlet/archive/refs/heads/main.zip"><b>Download</b><span>Main branch ZIP</span></a>
-        </nav>
+    <section class="section release-section scene-section" data-scene="quiet">
+      <p class="section-index">06 / Evidence & release</p>
+      <div class="section-head"><h2>Free first. Claims stay scoped.</h2><p>Instrument 01 is an inspectable pre-product preview, not a commercial launch or a claim that the complete workflow has proven behavioral efficacy.</p></div>
+      <div class="source-index">
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/RESEARCH.md"><strong>RESEARCH.md</strong><span>Research question and evidence boundary</span></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/REPRODUCIBILITY.md"><strong>REPRODUCIBILITY.md</strong><span>Reproduction and interpretation rules</span></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/SECURITY.md"><strong>SECURITY.md</strong><span>Security policy</span></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/GOVERNANCE.md"><strong>GOVERNANCE.md</strong><span>Governance</span></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/CITATION.cff"><strong>CITATION.cff</strong><span>Citation metadata</span></a>
+        <a href="https://github.com/Kitahl/The-Gauntlet/blob/main/docs/ARCHITECTURE.md"><strong>docs/ARCHITECTURE.md</strong><span>Technical architecture</span></a>
       </div>
     </section>
   </main>
 
-  <footer class="footer shell"><strong>The Gauntlet</strong><span>Research &amp; engineering toolkit · MIT · Showcase R19</span><a href="https://github.com/Kitahl/The-Gauntlet">Source ↗</a></footer>
-  <script src="system-field.js" defer></script>
+  <footer>
+    <p><strong>Rigilum / Instrument 01</strong> — working pre-product identity, 2026.</p>
+    <p>MIT-licensed research software. Corporate name, trademark, domain, and repository migration remain separate release gates.</p>
+  </footer>
 </body>
 </html>
