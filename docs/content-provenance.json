@@ -2,9 +2,9 @@
   "schema": "egrt/showcase-provenance-1",
   "claims": [
     {
-      "id": "instrument01-modular-control",
+      "id": "strong-inference-modular-control",
       "page_section": "Purpose",
-      "claim": "Instrument 01 uses a portable orchestration control plane plus bounded specialist research modules rather than one undifferentiated prompt.",
+      "claim": "Strong Inference uses a portable orchestration control plane plus bounded specialist research modules rather than one undifferentiated prompt.",
       "sources": [
         "docs/ARCHITECTURE.md",
         "skills/soul/SKILL.md",
@@ -17,8 +17,8 @@
     },
     {
       "id": "public-naming-compatibility",
-      "page_section": "Instrument inventory",
-      "claim": "Instrument 01 uses functional public module names while technical IDs and slash-command aliases remain unchanged for compatibility.",
+      "page_section": "Suite inventory",
+      "claim": "Strong Inference uses functional public module names while technical IDs and slash-command aliases remain unchanged for compatibility.",
       "sources": [
         "README.md",
         "docs/ARCHITECTURE.md",
@@ -29,7 +29,16 @@
     {
       "id": "working-brand-boundary",
       "page_section": "Hero",
-      "claim": "Rigilum is presented as a working pre-product identity rather than as a legally cleared corporate, trademark, or domain name.",
+      "claim": "Strong Inference Systems is presented as a working pre-product identity rather than as a legally cleared corporate, trademark, or domain name.",
+      "sources": [
+        "README.md",
+        "validation/MASTERMIND_BRAND_PRODUCT_3_LOOP_REPORT_2026-08-25.md"
+      ]
+    },
+    {
+      "id": "scientific-method-name-boundary",
+      "page_section": "Purpose",
+      "claim": "The product name Strong Inference intentionally refers to the established scientific-method concept of competing hypotheses and discriminating experiments; the repository does not claim the phrase as a newly invented scientific concept.",
       "sources": [
         "README.md",
         "validation/MASTERMIND_BRAND_PRODUCT_3_LOOP_REPORT_2026-08-25.md"
@@ -37,7 +46,7 @@
     },
     {
       "id": "adapt-complement",
-      "page_section": "Instrument inventory",
+      "page_section": "Suite inventory",
       "claim": "Adapt uses the stable foil technical namespace to model competing explanations for observed performance and supply task-relevant complementary methods without treating a single error as a stable weakness.",
       "sources": [
         "skills/foil/SKILL.md",
@@ -58,7 +67,7 @@
     {
       "id": "module-count",
       "page_section": "Hero",
-      "claim": "Instrument 01 contains ten research-method modules.",
+      "claim": "Strong Inference contains ten public research-method modules.",
       "sources": [
         "skills/soul/SKILL.md",
         "skills/mathbot/SKILL.md",
@@ -84,7 +93,7 @@
     },
     {
       "id": "portable-assure",
-      "page_section": "Instrument inventory",
+      "page_section": "Suite inventory",
       "claim": "Assure uses the stable infinity-gauntlet technical namespace and does not require private project hooks or hard-coded local runtime paths; missing optional machinery is treated as unavailable.",
       "sources": [
         "skills/infinity-gauntlet/SKILL.md",
@@ -94,7 +103,7 @@
     {
       "id": "preproduct-license",
       "page_section": "Evidence & release",
-      "claim": "Instrument 01 is presented as a free MIT-licensed pre-product research-software preview rather than a hosted commercial service.",
+      "claim": "Strong Inference is presented as a free MIT-licensed pre-product research-software preview rather than a hosted commercial service.",
       "sources": [
         "README.md",
         "LICENSE",
