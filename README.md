@@ -1,10 +1,10 @@
-# Rigilum — Instrument 01
+# Strong Inference
 
-**Pre-product preview · free research software · version 0.5.1**
+**Open Research Suite · pre-product preview · free research software · version 0.5.1**
 
-Instrument 01 is a coordinated research-software suite for AI-assisted technical work where evidence, verification, reproducibility, and explicit unresolved state matter.
+**Strong Inference** is the first open product line from the working company identity **Strong Inference Systems**: a coordinated research-software suite for AI-assisted technical work where evidence, verification, reproducibility, competing explanations, and explicit unresolved state matter.
 
-> **Brand status:** `Rigilum` is the working company identity selected by the August 25, 2026 three-loop naming and product-architecture audit in this repository. It is **not** represented as trademark, corporate-name, or domain clearance. The repository slug, technical IDs, slash commands, runtime modules, benchmark condition names, and historical records remain unchanged until a separate clearance and migration decision is made.
+> **Brand status:** `Strong Inference Systems` is a working company identity selected by the August 25, 2026 redo of the repository's three-loop naming audit. It is **not** represented as trademark, corporate-name, or domain clearance. `Strong inference` is an established scientific-method term associated with John R. Platt's 1964 formulation of competing hypotheses and discriminating experiments; the brand uses that scientific meaning rather than claiming the phrase itself as a new concept. The repository slug, technical IDs, slash commands, runtime modules, benchmark condition names, and historical records remain unchanged until a separate clearance and migration decision is made.
 
 [![Research software validation](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml)
 [![CodeQL](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml)
@@ -20,13 +20,19 @@ Instrument 01 is a coordinated research-software suite for AI-assisted technical
 
 ---
 
-## The first instrument
+## Why Strong Inference
+
+The name is methodological, not decorative. Strong inference asks researchers to construct competing hypotheses, design observations or experiments that discriminate among them, eliminate what fails, and iterate on what survives. That is close to the operating philosophy of this suite: do not reward agreement; identify the obligation, choose the appropriate method, expose alternatives, seek decisive evidence, and preserve unresolved state when the evidence does not decide.
+
+The product does not claim to implement Platt's method literally in every workflow, nor does the name imply that every output is a scientific inference. It is the umbrella for a broader evidence-governed research system.
+
+## The open research suite
 
 Research workflows often fail at the handoffs: deciding what needs proof, what needs current evidence, what needs implementation, what needs measurement, what should be independently challenged, and what must remain unresolved.
 
-Instrument 01 puts those obligations behind one coordinated surface. Its public modules are named for the job they perform:
+Strong Inference puts those obligations behind one coordinated surface. Its public modules are named for the job they perform:
 
-| Instrument 01 module | Responsibility | Stable technical ID / command |
+| Strong Inference module | Responsibility | Stable technical ID / command |
 |---|---|---|
 | **Route** | Frame work, decompose it, route obligations, integrate evidence, and govern release | `soul` · `/soul` |
 | **Prove** | Formal reasoning, mathematics, probability, statistics, counterexamples, and proof structure | `mathbot` · `/mind` |
@@ -43,7 +49,7 @@ These are **public product names**, not runtime migrations. Existing integration
 
 ## Why a pre-product preview
 
-Instrument 01 is being published before a commercial product exists for three reasons:
+Strong Inference is being published before a commercial product exists for three reasons:
 
 1. **Inspectability.** The architecture, source, validation logic, benchmark receipts, and known limitations can be examined directly.
 2. **Falsifiability.** Positive, null, and mixed results remain visible rather than being reduced to a launch claim.
@@ -83,7 +89,7 @@ flowchart LR
     R --> O[Supported result + explicit unresolved state]
 ```
 
-The implementation retains the historical internal vocabulary used by the runtime and research record. In particular, the earlier public labels **Research Orchestrator**, **Formal Reasoning**, **Research Discovery**, **Method Synthesis**, **Engineering Verification**, **Evaluation & Benchmarking**, **Process Assurance Framework**, **Decision Preflight Protocol**, **Evidence Review Panel**, and **Mirror — Adaptive Reasoning Complement** are migration references rather than the new product-facing names. Mirror's technical skill name remains `foil`, its slash command remains `/foil`, its runtime modules remain `tools/foil_*`, and historical benchmark condition names remain unchanged.
+The implementation retains the historical internal vocabulary used by the runtime and research record. In particular, the earlier public labels **Research Orchestrator**, **Formal Reasoning**, **Research Discovery**, **Method Synthesis**, **Engineering Verification**, **Evaluation & Benchmarking**, **Process Assurance Framework**, **Decision Preflight Protocol**, **Evidence Review Panel**, and **Mirror — Adaptive Reasoning Complement** are migration references rather than the new product-facing names. Adapt's technical skill name remains `foil`, its slash command remains `/foil`, its runtime modules remain `tools/foil_*`, and historical benchmark condition names remain unchanged. Assure's stable technical command remains `/gauntlet` even though **The Gauntlet** is no longer used as the public product brand.
 
 ## Quick evaluation
 
@@ -113,11 +119,11 @@ See [`docs/RUNTIME_SETUP.md`](docs/RUNTIME_SETUP.md) for runtime configuration a
 
 ## Product and company decision record
 
-The working identity was selected through three non-duplicative Mastermind loops:
+The working identity was selected through a fresh three-loop Mastermind pass in which each loop did different work:
 
-- **Loop 1 — continuity:** tested **Sigma Scientific Systems** as the company umbrella and separated company identity from product identity.
-- **Loop 2 — clean slate:** generated and collision-screened new company/product architectures rather than refining Sigma repeatedly.
-- **Loop 3 — external comparison:** compared the survivors against the 2026 Nature Index top 100 corporate research institutions and selected the architecture that best balanced scientific credibility, distinctiveness, extensibility, and product/company separation.
+- **Loop 1 — meaning and architecture:** defined what the company must be able to become and generated names from real scientific ideas rather than startup-style invented words.
+- **Loop 2 — collision attack:** killed attractive candidates when current companies, trademarks, software projects, or adjacent research brands occupied the same territory. This also killed **The Gauntlet** as the preferred public product name after a directly adjacent 2026 LLM-evaluation Gauntlet was found.
+- **Loop 3 — external comparison:** compared the surviving architecture against the 2026 Nature Index corporate-research cohort and against the naming behavior of durable scientific/technical companies, then selected the strongest surviving company/product pair.
 
 The full decision record is [`validation/MASTERMIND_BRAND_PRODUCT_3_LOOP_REPORT_2026-08-25.md`](validation/MASTERMIND_BRAND_PRODUCT_3_LOOP_REPORT_2026-08-25.md).
 
@@ -131,4 +137,4 @@ The full decision record is [`validation/MASTERMIND_BRAND_PRODUCT_3_LOOP_REPORT_
 - [`ROADMAP.md`](ROADMAP.md) — research and engineering roadmap
 - [`docs/content-provenance.json`](docs/content-provenance.json) — public claim provenance
 
-**Rigilum / Instrument 01 is a working pre-product identity. Legal name availability, trademark clearance, domains, organization transfer, and final launch identity are separate gates.**
+**Strong Inference Systems / Strong Inference is a working pre-product identity. Formal legal-name availability, trademark clearance, domains, organization transfer, and final launch identity are separate gates.**
