@@ -1,8 +1,8 @@
-# Instrument 01 Architecture
+# Strong Inference Architecture
 
 ## Overview
 
-**Rigilum Instrument 01** separates orchestration, specialist reasoning, assurance, preflight, review, and adaptation. The public product vocabulary is intentionally separate from the stable technical/runtime vocabulary so a brand change does not become a breaking software migration.
+**Strong Inference** is the first open research-software product line under the working company identity **Strong Inference Systems**. It separates orchestration, specialist reasoning, assurance, preflight, review, and adaptation. The public product vocabulary is intentionally separate from the stable technical/runtime vocabulary so a brand change does not become a breaking software migration.
 
 The vNext typed runtime lets each module produce machine-readable state and receipts without collapsing distinct epistemic obligations into one generic agent interface.
 
@@ -35,7 +35,7 @@ flowchart TD
 
 ## Product layer vs. technical layer
 
-| Instrument 01 public name | Stable technical ID / command | Primary responsibility | Runtime |
+| Strong Inference public name | Stable technical ID / command | Primary responsibility | Runtime |
 |---|---|---|---|
 | **Route** | `soul`, `/soul` | frame, obligations, route, integrate, release | `tools/soul_runtime.py` |
 | **Prove** | `mathbot`, `/mind` | proof, logic, exact derivation, formalization | `tools/mind_runtime.py` |
@@ -64,6 +64,8 @@ The public names above are the product interface. The following do **not** chang
 The retired display labels — Research Orchestrator, Formal Reasoning, Research Discovery, Method Synthesis, Engineering Verification, Evaluation & Benchmarking, Process Assurance Framework, Decision Preflight Protocol, Evidence Review Panel, and Mirror — remain migration vocabulary only.
 
 For Adapt specifically, `foil`, `/foil`, `tools/foil_*`, `FOIL_TASK_RUN`, historical FOIL benchmark conditions, and FOIL-named research artifacts remain stable protocol/runtime identifiers. See [`MIRROR.md`](MIRROR.md), whose filename is likewise retained for link compatibility.
+
+For Assure, `infinity-gauntlet`, `/gauntlet`, `tools/gauntlet_*`, and the repository slug remain technical compatibility surfaces. **The Gauntlet** is no longer treated as the preferred public product brand because the naming redo found directly adjacent contemporary AI-evaluation use of Gauntlet terminology.
 
 ## Common typed runtime
 
@@ -101,7 +103,7 @@ Modules are grouped by what they are authoritative for. Where two files could de
 
 ### Internal adversarial review support — Black Gem
 
-Black Gem is an internal implementation component, not an eleventh Instrument 01 product module.
+Black Gem is an internal implementation component, not an eleventh Strong Inference product module.
 
 | Module | Authoritative for |
 |---|---|
@@ -229,4 +231,4 @@ State remains gitignored and owner-restricted where POSIX permissions are availa
 
 ## Branding boundary
 
-This architecture describes the working pre-product identity **Rigilum / Instrument 01**. It does not assert corporate-name or trademark clearance. Repository transfer, package namespace changes, URL changes, or runtime-ID migrations require separate change control.
+This architecture describes the working pre-product identity **Strong Inference Systems / Strong Inference**. `Strong inference` is an established scientific-method term, not a claimed novel concept. The working brand has passed only a scoped web collision screen; it does not assert corporate-name, trademark, or domain clearance. Repository transfer, package namespace changes, URL changes, or runtime-ID migrations require separate change control.
