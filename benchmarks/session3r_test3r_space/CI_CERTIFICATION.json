@@ -5,7 +5,7 @@
   "certification_stage": "independent_post_generation_first_party_requery",
   "experiment_id": "SESSION3R_TEST3R_SPACE",
   "exploratory_records_revalidated": 20,
-  "first_party_release_histories_requeried": 81,
+  "first_party_release_histories_requeried": 86,
   "frozen_answers_recomputed_from_live_first_party_history_at_cutoff": "PASS",
   "gold_plaintext_committed": false,
   "primary_records_revalidated": 50,
@@ -14,5 +14,5 @@
   "sealed_gold_decode_check": "PASS",
   "secondary_records_revalidated": 30,
   "selected_ids_unique": true,
-  "selected_repository_count": 81
+  "selected_repository_count": 86
 }

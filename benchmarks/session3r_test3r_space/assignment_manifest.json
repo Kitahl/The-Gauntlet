@@ -6,7 +6,7 @@
     "primary_verified_release_retrieval": 50,
     "secondary_multi_source_comparison": 30
   },
-  "seed": 2026082503,
+  "seed": 2026082504,
   "task_ids": [
     "space_release_lookup_001",
     "space_release_lookup_002",

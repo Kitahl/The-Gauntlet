@@ -10,34 +10,35 @@
     "unique_questions": 100
   },
   "cutoff": "2026-08-24T23:59:59Z",
+  "discarded_first_sample_exact_task_signatures_excluded": true,
   "experiment_id": "SESSION3R_TEST3R_SPACE",
   "files": {
     "VALIDATION_REPORT.json": {
-      "bytes": 789,
-      "sha256": "fa5424617e28fa0bb7fcbef984ca999be947879aa458c1729e78568388f92562"
+      "bytes": 1030,
+      "sha256": "c2b8bc7ec3bd64f4d97d3a81cf40c5b4c401aae2f5d8bc596ed5998d608bbf53"
     },
     "assignment_manifest.json": {
       "bytes": 3677,
-      "sha256": "fdd6cf4285b47e2ad1df573b8586083f337c937511f57d9eaab46b5ceef3b207"
+      "sha256": "12314cf7a020239cce39ff44f786a1c153668e4afaaf2304239a059d9bc3d319"
     },
     "base/questions.jsonl": {
-      "bytes": 50384,
-      "sha256": "0891904a840515ed771d487d67fde9c15d23779cdbc0dad8029080af5f59053c"
+      "bytes": 50429,
+      "sha256": "4817a237d8271097d39007663524f93a394458e653793385b085c5e136344d33"
     },
     "gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/README.md": {
       "bytes": 152,
       "sha256": "4780fa1632f8889ce994dda2461b39ac85e215c572adcf9966d7afe02a879564"
     },
     "gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/gold.jsonl.gz.b64": {
-      "bytes": 15153,
-      "sha256": "a1f95f8d08e47b3eae79e87e52f223d6fc70d3dac125348e40c214dc66dc2d53"
+      "bytes": 14689,
+      "sha256": "f18e6457749f942a2602d6950dea22d9e6f29dedf8b205d4d22de0ae56a22479"
     },
     "space/questions.jsonl": {
-      "bytes": 50384,
-      "sha256": "0891904a840515ed771d487d67fde9c15d23779cdbc0dad8029080af5f59053c"
+      "bytes": 50429,
+      "sha256": "4817a237d8271097d39007663524f93a394458e653793385b085c5e136344d33"
     }
   },
-  "generated_at_utc": "2026-08-25T21:43:00.121543+00:00",
+  "generated_at_utc": "2026-08-25T21:44:21.175020+00:00",
   "gold_storage": {
     "encoding": "gzip+base64",
     "path": "gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/gold.jsonl.gz.b64",
@@ -49,7 +50,7 @@
     "visible_output_tokens_per_item": 450
   },
   "schema": "gauntlet.session3r.test3r.space-package.v1",
-  "seed": 2026082503,
+  "seed": 2026082504,
   "space": {
     "blob_sha": "a1d91b1d49ac6667f53ed7dfba14d8acb7fe849d",
     "path": "skills/scoutbot/SKILL.md",
