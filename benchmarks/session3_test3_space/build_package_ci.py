@@ -23,14 +23,20 @@ def load_freshqa(rng: random.Random):
     header_idx = None
     fields = None
     for i, row in enumerate(matrix):
-        norms = {bp.norm_header(x) for x in row}
-        if {"id", "split", "question", "answer0"}.issubset(norms):
-            header_idx = i
-            fields = row
-            break
+        candidate = list(row)
+        norms = [bp.norm_header(x) for x in candidate]
+        # FreshQA currently prefixes a warning sentence onto the first header
+        # cell, yielding "... models. id" rather than a bare "id".
+        if "split" in norms and "question" in norms and "answer0" in norms:
+            id_positions = [j for j, value in enumerate(norms) if value == "id" or value.endswith("id")]
+            if id_positions:
+                candidate[id_positions[0]] = "id"
+                header_idx = i
+                fields = candidate
+                break
     if header_idx is None or not fields:
-        preview = matrix[:5]
-        raise RuntimeError(f"FreshQA header row not found; preview={preview!r}")
+        preview_headers = [row[:5] for row in matrix[:5]]
+        raise RuntimeError(f"FreshQA header row not found; preview={preview_headers!r}")
 
     dict_rows = []
     for row in matrix[header_idx + 1 :]:
