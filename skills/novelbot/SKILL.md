@@ -1,6 +1,6 @@
 ---
 name: novelbot
-description: Synthesize — method-construction module for Rigilum Instrument 01. Trigger: /reality, /novelbot, invent a method, find a new mechanism, or when verified prior art fails a named constraint. Produces novel candidates only after the existing-method boundary is explicit.
+description: Synthesize — method-construction module for Strong Inference. Trigger: /reality, /novelbot, invent a method, find a new mechanism, or when verified prior art fails a named constraint. Produces novel candidates only after the existing-method boundary is explicit.
 ---
 
 # Synthesize
