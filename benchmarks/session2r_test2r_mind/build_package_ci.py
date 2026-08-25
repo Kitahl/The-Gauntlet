@@ -6,6 +6,27 @@ from collections import defaultdict
 
 import build_package as bp
 
+# BBEH's canonical directory is singular: bbeh_temporal_sequence.
+bp.FORMAL_FAMILIES = [
+    "bbeh_boolean_expressions",
+    "bbeh_boardgame_qa",
+    "bbeh_causal_understanding",
+    "bbeh_dyck_languages",
+    "bbeh_multistep_arithmetic",
+    "bbeh_temporal_sequence",
+    "bbeh_web_of_lies",
+    "bbeh_zebra_puzzles",
+    "bbeh_buggy_tables",
+    "bbeh_spatial_reasoning",
+]
+
+COMPAT_REQUIREMENTS = (
+    "sympy==1.13.3\n"
+    "regex==2024.11.6\n"
+    "latex2sympy2==1.5.4\n"
+    "antlr4-python3-runtime==4.7.2\n"
+)
+
 
 def fast_validate_omni(row, grader):
     reasons = []
@@ -118,8 +139,8 @@ def adaptive_select_omni(certified, rng):
         raise RuntimeError(f"only {sum(len(b['pool']) for b in bands)} certified Omni records exist across target bands; need 50")
 
     remaining = 50 - sum(b["quota"] for b in bands)
-    # Preserve the requested distribution as far as feasible, then place any shortfall
-    # into harder certified bands first without changing the admission gate.
+    # Preserve the requested distribution where feasible, then put the shortfall
+    # into harder certified bands first. The admission gate itself is unchanged.
     priority = sorted(range(len(bands)), key=lambda i: (bands[i]["hi"], bands[i]["lo"]), reverse=True)
     while remaining > 0:
         progressed = False
@@ -146,3 +167,7 @@ bp.select_omni = adaptive_select_omni
 
 if __name__ == "__main__":
     bp.main()
+    # build_package.py originated before the compatible parser pin was known and
+    # writes a generic requirements file. Replace it deterministically so the
+    # frozen SCORE session recreates the exact CI-validated environment.
+    (bp.ROOT / "requirements-score.txt").write_text(COMPAT_REQUIREMENTS, encoding="utf-8")
