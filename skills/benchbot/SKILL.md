@@ -1,6 +1,6 @@
 ---
 name: benchbot
-description: Measure — evaluation and benchmarking module for Rigilum Instrument 01. Trigger: /time, /benchbot, benchmark, baseline, capability, ceiling, cost, effort/reward, stop-go, comparison, or ablation. Designs evaluations that distinguish real mechanism gain from stronger models, more tools, or more compute.
+description: Measure — evaluation and benchmarking module for Strong Inference. Trigger: /time, /benchbot, benchmark, baseline, capability, ceiling, cost, effort/reward, stop-go, comparison, or ablation. Designs evaluations that distinguish real mechanism gain from stronger models, more tools, or more compute.
 ---
 
 # Measure
