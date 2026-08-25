@@ -1,6 +1,6 @@
 ---
 name: infinity-gauntlet
-description: Assure — process-assurance control module for Rigilum Instrument 01. Trigger: /gauntlet, repeated failed attempts, ungated kill/finding, last-surviving option, inherited number, stale authority, cross-context handoff, unclear architecture, or an all-green verification claim. Audits the frame and process behind a result, not only the result.
+description: Assure — process-assurance control module for Strong Inference. Trigger: /gauntlet, repeated failed attempts, ungated kill/finding, last-surviving option, inherited number, stale authority, cross-context handoff, unclear architecture, or an all-green verification claim. Audits the frame and process behind a result, not only the result.
 ---
 
 # Assure
@@ -63,4 +63,4 @@ Use the smallest relevant set; do not ritualize all ten.
 
 ## Compatibility
 
-Public product name: **Assure**. Stable technical identity: `infinity-gauntlet`; stable command: `/gauntlet`. **Process Assurance Framework** and **Process Assurance** are legacy public labels retained in historical documentation, validator receipts, and runtime naming.
+Public product name: **Assure**. Stable technical identity: `infinity-gauntlet`; stable command: `/gauntlet`. **Process Assurance Framework** and **Process Assurance** are legacy public labels retained in historical documentation, validator receipts, and runtime naming. `Gauntlet` remains part of the technical compatibility namespace even though the overall Strong Inference product does not use The Gauntlet as its public brand.
