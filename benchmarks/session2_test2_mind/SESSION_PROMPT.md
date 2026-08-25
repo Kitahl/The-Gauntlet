@@ -1,10 +1,20 @@
 # SESSION #2 — TEST #2 — MIND VS BASE
 
-Run the frozen package in `Kitahl/The-Gauntlet/benchmarks/session2_test2_mind` as a fresh-session comparison of GPT-5.6 Sol BASE versus the frozen Mind skill.
+Run the frozen package as a fresh-session comparison of GPT-5.6 Sol BASE versus the frozen Mind skill.
+
+## Frozen package reference
+
+Repository: `Kitahl/The-Gauntlet`
+
+Package commit: `cc312f53cffffc0a2340b66cd5a59cbafa327c44`
+
+Development branch: `benchmark/session2-test2-mind-package`
+
+Every package file used for inference or scoring must be fetched at the exact package commit above. Do not use `main`, an unpinned branch head, or a later package revision.
 
 ## Absolute gold boundary
 
-Before both condition receipts are committed, you may fetch only these package files:
+Before both condition receipts are committed, you may fetch only these four files at package commit `cc312f53cffffc0a2340b66cd5a59cbafa327c44`:
 
 - `benchmarks/session2_test2_mind/MANIFEST.json`
 - `benchmarks/session2_test2_mind/assignments.json`
@@ -15,7 +25,7 @@ Do **not** list or recursively fetch the package directory. Do **not** open, sea
 
 `gold/SEALED_UNTIL_BOTH_ARMS_COMMIT`
 
-Do not inspect `build_package.py`, workflow logs, git history, commit diffs, or prior benchmark traces before inference. Those routes may expose gold or selection details. If any gold/reference answer enters model-visible output before both arms commit, stop and report `INVALID — RAW GOLD EXPOSURE`.
+Do not inspect `build_package.py`, `build_package_ci.py`, workflow logs, git history, commit diffs, scorer code, or prior benchmark traces before inference. Those routes may expose gold or selection details. If any gold/reference answer enters model-visible output before both arms commit, stop and report `INVALID — RAW GOLD EXPOSURE`.
 
 ## Model and exclusions
 
@@ -56,9 +66,12 @@ Do not revise either arm afterward.
 
 ## Scoring phase
 
-Only now may you access:
+Only now may you access these paths at package commit `cc312f53cffffc0a2340b66cd5a59cbafa327c44`:
 
-`benchmarks/session2_test2_mind/gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/`
+- `benchmarks/session2_test2_mind/gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/`
+- `benchmarks/session2_test2_mind/score.py`
+- `benchmarks/session2_test2_mind/grader.py`
+- `benchmarks/session2_test2_mind/requirements-score.txt`
 
 Combine all 40 committed predictions into JSONL and run `score.py`. Install `requirements-score.txt` only after both commitments. Preserve unresolved Omni mathematical-equivalence cases for reference-solution adjudication rather than silently marking them wrong.
 
