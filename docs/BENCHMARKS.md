@@ -6,6 +6,30 @@ The evaluated conditions use the same underlying model. Closed-book HLE, ARC-AGI
 
 ## Current results
 
+### R1.5 natural-miss pilot: association not identifiable
+
+The preregistered replay reproduced the historical ARC **9/12** and GPQA
+**18/24** positive control, giving exactly **nine** naturally wrong target
+outputs. RC4's gold-bound exact routes detected **9/9** misses and **36/36**
+deterministic mutants with **0/27** correct-output false fires, zero provider
+calls, and zero tokens.
+
+That is not evidence that mutation kill rate predicts natural-error detection.
+There are only two common operator classes and both synthetic and natural rates
+are constant at 1.00, so a correlation is mathematically unidentifiable. The
+legacy raw scanner/mutator rows and independently assigned natural-error
+operator labels are also absent. The typed primary outcome is therefore
+**`NOT_IDENTIFIABLE`**, and no gate or promotion state changed.
+
+The perfect replay rate is scoped to host-supplied benchmark gold. It tests the
+executable declared-universe path, not prose-to-obligation extraction or
+natural defect discovery.
+
+- Protocol and interpretation:
+  [`benchmarks/FOIL_R15_NATURAL_MISS_PILOT.md`](../benchmarks/FOIL_R15_NATURAL_MISS_PILOT.md)
+- Result:
+  [`benchmark_runs/2026-08-24/r15_natural_miss_pilot/report.json`](../benchmark_runs/2026-08-24/r15_natural_miss_pilot/report.json)
+
 ### RC4 integrated v5 contract pilot
 
 The preregistered RC4 pilot passed **6/6** synthetic integration cases: host

@@ -1,0 +1,684 @@
+{
+  "boundaries": {
+    "oracle_specs_used": true,
+    "promotion_authorized": false,
+    "raw_answers_stored": false,
+    "raw_gold_stored": false
+  },
+  "classification": "ORACLE_BOUND_NATURAL_MISS_SMOKE",
+  "costs": {
+    "answer_mutations": 0,
+    "candidate_generations": 0,
+    "external_bots": 0,
+    "provider_calls": 0,
+    "source_network_calls": 2,
+    "token_spend": 0
+  },
+  "elapsed_ms": 2032.274,
+  "historical_positive_control": {
+    "arc_correct": 9,
+    "arc_n": 12,
+    "gpqa_correct": 18,
+    "gpqa_n": 24,
+    "natural_misses": 9,
+    "pooled_correct": 27,
+    "pooled_n": 36
+  },
+  "non_claims": [
+    "This does not test natural-language obligation extraction or defect discovery.",
+    "This does not validate the unavailable legacy S1-S4 scanner bank or v4.1 aggregates.",
+    "Two oracle-bound operator classes with zero rate variance cannot estimate correlation.",
+    "Nine natural misses cannot calibrate or promote a production route."
+  ],
+  "prediction_sha256": {
+    "arc_hle": "745f05b5d7b077c5245dea1d3fa3965a1db7eeabe3145a935dc9c190ad26d3a8",
+    "gpqa": "f7fd58b0ab2cf5393940d8360e37418a47ce135093fc7d10396dbc7319d5cc3d"
+  },
+  "protocol_commit": "951e04b1ddba4eb9e2d3cd61a6c5dd6e519bf129",
+  "protocol_sha256": "9bfcb65b92ff42d515643ebafa16a2a26c5f07f7e278f53f398e4d908b026058",
+  "r15_primary": {
+    "association": {
+      "common_operator_classes": [
+        "ARC_CELL_SUBSTITUTION",
+        "GPQA_CHOICE_SUBSTITUTION"
+      ],
+      "pearson": null,
+      "reason_codes": [
+        "INSUFFICIENT_COMMON_OPERATOR_CLASSES",
+        "ZERO_VARIANCE_MUTATION_RATE",
+        "ZERO_VARIANCE_NATURAL_RATE"
+      ],
+      "spearman": null,
+      "status": "NOT_IDENTIFIABLE"
+    },
+    "reason_codes": [
+      "LEGACY_RAW_SCANNER_MUTATION_ROWS_ABSENT",
+      "INDEPENDENT_NATURAL_OPERATOR_LABELS_ABSENT",
+      "INSUFFICIENT_COMMON_OPERATOR_CLASSES",
+      "ZERO_VARIANCE_MUTATION_RATE",
+      "ZERO_VARIANCE_NATURAL_RATE"
+    ],
+    "status": "NOT_IDENTIFIABLE"
+  },
+  "rc4_oracle_bound_replay": {
+    "correct_output_false_fires": 0,
+    "correct_outputs": 27,
+    "mutation_by_operator": [
+      {
+        "detected": 12,
+        "n": 12,
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "rate": 1.0
+      },
+      {
+        "detected": 24,
+        "n": 24,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "rate": 1.0
+      }
+    ],
+    "mutation_items": [
+      {
+        "a0_preserved": true,
+        "item_id": "arc-94414823",
+        "killed": true,
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "arc-642248e4",
+        "killed": true,
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "arc-992798f6",
+        "killed": true,
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "arc-f45f5ca7",
+        "killed": true,
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "arc-dd2401ed",
+        "killed": true,
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "arc-e74e1818",
+        "killed": true,
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "arc-506d28a5",
+        "killed": true,
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "arc-21f83797",
+        "killed": true,
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "arc-bf89d739",
+        "killed": true,
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "arc-fafd9572",
+        "killed": true,
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "arc-20818e16",
+        "killed": true,
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "arc-99306f82",
+        "killed": true,
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-058",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-107",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-012",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-130",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-064",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-150",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-103",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-162",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-059",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-187",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-066",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-018",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-136",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-011",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-043",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-060",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-144",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-048",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-029",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-077",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-083",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-106",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-146",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      },
+      {
+        "a0_preserved": true,
+        "item_id": "gpqa-diamond-172",
+        "killed": true,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT",
+        "valid_non_equivalent": true
+      }
+    ],
+    "natural_by_operator": [
+      {
+        "detected": 3,
+        "n": 3,
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "rate": 1.0
+      },
+      {
+        "detected": 6,
+        "n": 6,
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "rate": 1.0
+      }
+    ],
+    "natural_items": [
+      {
+        "a0_preserved": true,
+        "domain": "ARC_AGI_1",
+        "historical_correct": true,
+        "item_id": "arc-94414823",
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "ARC_AGI_1",
+        "historical_correct": true,
+        "item_id": "arc-642248e4",
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "ARC_AGI_1",
+        "historical_correct": false,
+        "item_id": "arc-992798f6",
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "DEFECT"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "ARC_AGI_1",
+        "historical_correct": true,
+        "item_id": "arc-f45f5ca7",
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "ARC_AGI_1",
+        "historical_correct": false,
+        "item_id": "arc-dd2401ed",
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "DEFECT"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "ARC_AGI_1",
+        "historical_correct": false,
+        "item_id": "arc-e74e1818",
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "DEFECT"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "ARC_AGI_1",
+        "historical_correct": true,
+        "item_id": "arc-506d28a5",
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "ARC_AGI_1",
+        "historical_correct": true,
+        "item_id": "arc-21f83797",
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "ARC_AGI_1",
+        "historical_correct": true,
+        "item_id": "arc-bf89d739",
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "ARC_AGI_1",
+        "historical_correct": true,
+        "item_id": "arc-fafd9572",
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "ARC_AGI_1",
+        "historical_correct": true,
+        "item_id": "arc-20818e16",
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "ARC_AGI_1",
+        "historical_correct": true,
+        "item_id": "arc-99306f82",
+        "operator_id": "ARC_CELL_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-058",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-107",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": false,
+        "item_id": "gpqa-diamond-012",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-130",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": false,
+        "item_id": "gpqa-diamond-064",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-150",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-103",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": false,
+        "item_id": "gpqa-diamond-162",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-059",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-187",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-066",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": false,
+        "item_id": "gpqa-diamond-018",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-136",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-011",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-043",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-060",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-144",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-048",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": false,
+        "item_id": "gpqa-diamond-029",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-077",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-083",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": false,
+        "item_id": "gpqa-diamond-106",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "DEFECT"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-146",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      },
+      {
+        "a0_preserved": true,
+        "domain": "GPQA_DIAMOND",
+        "historical_correct": true,
+        "item_id": "gpqa-diamond-172",
+        "operator_id": "GPQA_CHOICE_SUBSTITUTION",
+        "pipeline_status": "CLEARED"
+      }
+    ],
+    "natural_misses": 9,
+    "natural_misses_detected": 9
+  },
+  "report_sha256": "f392ea7b69cd2b814d3e4c54c3b1d9619494d51b64ab16e826eca1b8f4f3f260",
+  "runtime_base_commit": "4ca0e72c5cdc5fd852fe680efeeeef561aea3e84",
+  "schema": "foil.r15-natural-miss-pilot.v1",
+  "source_sha256": {
+    "arc_archive": "c57507f289aa398fc22547901ee05af61c8e71e4fe6795b73ee4dd5795bd8950",
+    "gpqa_archive": "461ae7329f15a3e35f8184d2dac24b990f34fdf12f366ca4062d8e6638cd08dc"
+  }
+}

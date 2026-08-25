@@ -1,6 +1,6 @@
 # FOIL R1.5 Natural-Miss Pilot
 
-Status: **preregistered; outcome unopened**
+Status: **completed; primary association not identifiable**
 
 ## Question
 
@@ -77,6 +77,33 @@ Even an estimable result at nine misses would remain descriptive only.
 This pilot cannot validate the old S1-S4 bank, the v4.1 4,897-mutant aggregate,
 mutation realism, extraction recall, semantic discovery, repair success,
 repair damage, or product efficacy.
+
+## Result
+
+The protocol and harness were committed at
+`951e04b1ddba4eb9e2d3cd61a6c5dd6e519bf129` before either source archive was
+fetched or scored. Protocol SHA-256:
+`9bfcb65b92ff42d515643ebafa16a2a26c5f07f7e278f53f398e4d908b026058`.
+
+- Historical positive control: ARC **9/12**, GPQA **18/24**, pooled **27/36**;
+  exactly **9** natural misses.
+- Oracle-bound natural replay: **9/9** misses detected.
+- Correct-output negative control: **0/27** false fires.
+- Deterministic mutants: **36/36** killed across two operator classes.
+- Primary R1.5 status: **`NOT_IDENTIFIABLE`**.
+- Reasons: legacy raw scanner/mutation rows absent; independently adjudicated
+  natural operator labels absent; only two common operator classes; mutation
+  and natural detection rates both have zero variance (`1.00`, `1.00`).
+- Provider calls / external bots / tokens: **0 / 0 / 0**.
+- Candidate generations / answer mutations: **0 / 0**.
+- Fixed public source downloads: **2**.
+- Report SHA-256:
+  `f392ea7b69cd2b814d3e4c54c3b1d9619494d51b64ab16e826eca1b8f4f3f260`.
+
+The 9/9 result shows that the current exact executable routes work when the
+host supplies benchmark gold. It does not show that FOIL finds natural defects
+from prose, and the constant two-point data cannot test whether mutation kill
+rate predicts natural detection. No gate or promotion state changed.
 
 ## Command
 

@@ -6,6 +6,19 @@ The project follows semantic versioning for public releases.
 
 ## [Unreleased]
 
+### Added
+- A preregistered R1.5 natural-miss replay harness bound to the RC4 compiler,
+  residual scanner, and closed deterministic verifier registry.
+
+### Evidence
+- The historical positive control reproduced ARC 9/12 and GPQA 18/24, exactly
+  nine natural misses. The oracle-bound RC4 replay detected 9/9 misses and
+  36/36 deterministic mutants with 0/27 correct-output false fires, zero model
+  calls, and zero tokens. The primary mutation-to-natural association is
+  **NOT_IDENTIFIABLE**: the legacy raw bank is absent, natural operator labels
+  are absent, only two common operator classes exist, and both rate axes have
+  zero variance. No gate or promotion state changed.
+
 ### Planned
 - Prospective behavioral evaluation of FOIL against direct-assistance and static-scaffolding baselines.
 - Layer 1 vs Layer 1 + Layer 2A vs full Layer 2B personalization ablation.
