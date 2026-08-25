@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""CI adapter: reject structurally unsafe Omni records before invoking symbolic scoring."""
+"""CI adapter: reject unsafe Omni records before scoring and adapt only sampling quotas."""
 from __future__ import annotations
 
-import re
+from collections import defaultdict
 
 import build_package as bp
 
@@ -86,7 +86,63 @@ def fast_validate_omni(row, grader):
     }
 
 
+def diverse_take(pool, count, rng):
+    by_domain = defaultdict(list)
+    for row in pool:
+        by_domain[row["domain"]].append(row)
+    for rows in by_domain.values():
+        rng.shuffle(rows)
+    domains = list(by_domain)
+    rng.shuffle(domains)
+    chosen = []
+    while len(chosen) < count:
+        progressed = False
+        for domain in domains:
+            if by_domain[domain] and len(chosen) < count:
+                chosen.append(by_domain[domain].pop())
+                progressed = True
+        if not progressed:
+            break
+    if len(chosen) != count:
+        raise RuntimeError(f"diverse sampler requested {count}, obtained {len(chosen)}")
+    return chosen
+
+
+def adaptive_select_omni(certified, rng):
+    bands = []
+    for label, lo, hi, desired in bp.DIFFICULTY_BANDS:
+        pool = [r for r in certified if lo <= r["difficulty"] <= hi]
+        bands.append({"label": label, "lo": lo, "hi": hi, "desired": desired, "pool": pool, "quota": min(desired, len(pool))})
+
+    if sum(len(b["pool"]) for b in bands) < 50:
+        raise RuntimeError(f"only {sum(len(b['pool']) for b in bands)} certified Omni records exist across target bands; need 50")
+
+    remaining = 50 - sum(b["quota"] for b in bands)
+    # Preserve the requested distribution as far as feasible, then place any shortfall
+    # into harder certified bands first without changing the admission gate.
+    priority = sorted(range(len(bands)), key=lambda i: (bands[i]["hi"], bands[i]["lo"]), reverse=True)
+    while remaining > 0:
+        progressed = False
+        for i in priority:
+            b = bands[i]
+            if b["quota"] < len(b["pool"]) and remaining > 0:
+                b["quota"] += 1
+                remaining -= 1
+                progressed = True
+        if not progressed:
+            raise RuntimeError("unable to redistribute certified difficulty quota to reach 50")
+
+    selected = []
+    for b in bands:
+        selected.extend(diverse_take(b["pool"], b["quota"], rng))
+    if len({r["id"] for r in selected}) != 50:
+        raise RuntimeError("adaptive Omni selection did not produce 50 unique items")
+    rng.shuffle(selected)
+    return selected
+
+
 bp.validate_omni = fast_validate_omni
+bp.select_omni = adaptive_select_omni
 
 if __name__ == "__main__":
     bp.main()
