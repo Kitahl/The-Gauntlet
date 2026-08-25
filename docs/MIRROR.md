@@ -1,35 +1,33 @@
-# Mirror — Adaptive Reasoning Complement
+# Adapt — Adaptive Complement
 
-**Mirror** is the public name for the adaptive complement system historically named **FOIL**.
+**Adapt** is the Instrument 01 public name for the adaptive-complement system implemented under the stable **FOIL** protocol/runtime namespace.
 
-The rename changes the human-facing concept, not the compatibility contract.
+The product rename changes the human-facing concept, not the compatibility contract.
 
 ## Disambiguation
 
-This project's **Mirror — Adaptive Reasoning Complement** is not the 2025 research framework **MIRROR: Multi-agent Intra- and Inter-Reflection for Optimized Reasoning in Tool Learning**, and it is not a persona-cloning or self-reflection product. No novelty claim is made for the word "Mirror" itself.
+Adapt is a task/user complement module, not a persona-cloning system, a generic self-reflection product, or an additional source of factual authority. The technical identifier `foil` remains the stable implementation namespace.
 
-Here, **Mirror** specifically means the task/user complement mechanism described below. The technical identifier `foil` is retained as a stable disambiguating implementation name.
+The previous public label **Mirror — Adaptive Reasoning Complement** is retired from the Instrument 01 product surface. It remains here only as migration vocabulary because older documentation and validation receipts used it.
 
-## What Mirror does
+## What Adapt does
 
-Mirror exists to make a large toolset easier to use.
+Adapt exists to make a large toolset easier to use without turning personalization into a fixed trait model.
 
 For the current task it asks:
 
 1. What capabilities does this task actually require?
-2. Which of those capabilities are already well covered by the user/current context?
+2. Which capabilities are already well covered by the user/current context?
 3. Which load-bearing capability is missing, uncertain, or unsupported?
 4. What is the smallest useful complement that fills that gap?
-5. Which existing Gem, verifier, search tool, runtime, model, or external capability should provide it?
+5. Which existing Instrument 01 module, verifier, search tool, runtime, model, or external capability should provide it?
 6. Did that help, was it redundant, or did it take over work unnecessarily?
 
-Mirror is **complementary**, not automatically contrarian. It is not a sixth Gem and it does not manufacture evidence. The existing specialist modules still produce claim-native evidence and receipts.
+Adapt is **complementary**, not automatically contrarian. It does not manufacture evidence. The specialist modules still produce claim-native evidence and receipts.
 
 A complement may be missing knowledge, a procedure, prior art, evidence, a verifier, a representation change, a tool, execution support, a counterexample search, or a check against a plausible error.
 
-## Why the name fits
-
-The core mechanism is a dynamic comparison between:
+## Mechanism
 
 ```text
 CURRENT TASK REQUIREMENTS
@@ -41,7 +39,7 @@ MISSING LOAD-BEARING COMPLEMENT
 MINIMUM USEFUL ASSISTANCE
 ```
 
-It "mirrors" the task against what is already covered and supplies what is missing rather than applying the same fixed workflow to everyone.
+The FOIL protocol underneath Adapt maintains competing local gap hypotheses, routes the minimum useful complement, separates assisted success from independent performance, and updates persistent evidence only under its admissibility rules.
 
 ## Compatibility
 
@@ -56,11 +54,11 @@ The following identifiers remain unchanged so existing installations, profiles, 
 - historical benchmark condition names such as `FOIL`, `FOIL_PROFILE`, and `FOIL_MM`
 - existing FOIL-named research, validation, and onboarding files
 
-Those names are now **legacy technical identifiers**, not the public product/concept name.
+Those names are **technical/protocol identifiers**, not the Instrument 01 public module name.
 
 ## Evidence boundary
 
-Mirror may decide which complement to request. That routing decision is not factual warrant.
+Adapt may decide which complement to request. That routing decision is not factual warrant.
 
 A proof still requires proof/derivation or an appropriate prover. A software claim still requires execution. A current-fact claim still requires current sources. A benchmark claim still requires measurement. A novelty claim still requires scoped prior-art work.
 
@@ -68,4 +66,4 @@ Assisted success is also kept separate from later independent performance and tr
 
 ## Canonical technical specification
 
-The compatibility skill contract remains at [`skills/foil/SKILL.md`](../skills/foil/SKILL.md). Runtime ownership is documented in [`ARCHITECTURE.md`](ARCHITECTURE.md).
+The compatibility protocol contract remains at [`skills/foil/SKILL.md`](../skills/foil/SKILL.md). Runtime ownership is documented in [`ARCHITECTURE.md`](ARCHITECTURE.md).
