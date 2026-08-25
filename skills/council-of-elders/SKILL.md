@@ -1,6 +1,6 @@
 ---
 name: council-of-elders
-description: Review — selective independent evidence-review module for Rigilum Instrument 01. Trigger: /council, /forum, "independent review", or equivalent. Convene only around a concrete artifact after a strong direct pass exists. Uses commit-reveal, disjoint evidence where possible, a skeptic, and a matched direct control. Agreement is not truth.
+description: Review — selective independent evidence-review module for Strong Inference. Trigger: /council, /forum, "independent review", or equivalent. Convene only around a concrete artifact after a strong direct pass exists. Uses commit-reveal, disjoint evidence where possible, a skeptic, and a matched direct control. Agreement is not truth.
 ---
 
 # Review
