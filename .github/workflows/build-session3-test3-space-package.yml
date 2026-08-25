@@ -1,0 +1,39 @@
+name: Build Session 3 Test 3 Space package
+
+on:
+  push:
+    branches:
+      - benchmark/session3-test3-space-package
+    paths:
+      - benchmarks/session3_test3_space/build_package.py
+      - benchmarks/session3_test3_space/validate_package.py
+      - .github/workflows/build-session3-test3-space-package.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build-package:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Generate frozen question and gold packs
+        run: python benchmarks/session3_test3_space/build_package.py
+      - name: Validate package boundaries and counts
+        run: python benchmarks/session3_test3_space/validate_package.py
+      - name: Commit generated package
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add benchmarks/session3_test3_space
+          if git diff --cached --quiet; then
+            echo "No generated changes"
+          else
+            git commit -m "Generate sealed Session 3 Test 3 Space package [skip ci]"
+            git push
+          fi
