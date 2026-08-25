@@ -1,9 +1,9 @@
 ---
 name: benchbot
-description: Evaluation & Benchmarking module. Trigger: /time, /benchbot, benchmark, baseline, capability, ceiling, cost, effort/reward, stop-go, comparison, or ablation. Designs evaluations that distinguish real mechanism gain from stronger models, more tools, or more compute.
+description: Measure — evaluation and benchmarking module for Rigilum Instrument 01. Trigger: /time, /benchbot, benchmark, baseline, capability, ceiling, cost, effort/reward, stop-go, comparison, or ablation. Designs evaluations that distinguish real mechanism gain from stronger models, more tools, or more compute.
 ---
 
-# Evaluation & Benchmarking
+# Measure
 
 ## Evaluation design
 
@@ -40,3 +40,7 @@ A negative result is a valid output and should be recorded rather than optimized
 ## Typed runtime contract
 
 `tools/time_runtime.py` provides reusable paired-binary analysis with the discordance table, exact conditional McNemar p-value, Wilson intervals, Holm correction and first-class exclusion metadata. Fixed-n inference is not represented as anytime-valid; adaptive monitoring requires a separately validated sequential method. See `docs/specs/TIME_ENGINEERING_SPEC.md`.
+
+## Compatibility
+
+Public product name: **Measure**. Stable technical identity: `benchbot`; stable commands include `/time` and `/benchbot`. **Evaluation & Benchmarking** is the legacy public label retained in historical documentation and receipts.
