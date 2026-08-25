@@ -47,8 +47,9 @@ the non-executing fixed-point DIRECT/VERIFY/FULL recommendation layer,
 compiler-provenance revalidation, and sealed observational RouteVector ledger.
 It also wires the reusable compiler/scanner/controller pipeline, route-scoped
 generated-spec admission, candidate-bound external gate evaluation, and frozen
-later-study contracts. No natural-language obligation generator or calibrated
-generated route is included.
+later-study contracts. R1.6 adds one default-off annotated-arithmetic execution-
+class generator; it is not a general prose formalizer and has no calibrated or
+admitted production route.
 Admission now rejects structural and semantic certificates from the same
 provenance group, even under different verifier names. The new v5 post-solve
 monitor is disabled by default; the legacy pre-solve hook remains the

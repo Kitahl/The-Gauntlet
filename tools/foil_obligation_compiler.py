@@ -3,7 +3,7 @@
 This compiler accepts only a versioned declarative schema.  It never extracts
 checks from prose: every axis, verifier, exact verifier input, coverage range,
 and binding is supplied by the source spec.  Its only executable surface is the
-five in-process built-ins already exposed by ``DEFAULT_REGISTRY``.
+six in-process built-ins already exposed by ``DEFAULT_REGISTRY``.
 """
 
 from __future__ import annotations
@@ -73,6 +73,7 @@ _PREDICATES: Mapping[str, PredicateSpec] = {
     "DIGEST": PredicateSpec(ClaimKind.DIGEST, "builtin.digest_exact"),
     "EXACT_MATCH": PredicateSpec(ClaimKind.EXACT_MATCH, "builtin.exact_match"),
     "NUMERIC_TOLERANCE": PredicateSpec(ClaimKind.NUMERIC_TOLERANCE, "builtin.numeric_tolerance"),
+    "NUMERIC_PROVENANCE": PredicateSpec(ClaimKind.NUMERIC_PROVENANCE, "builtin.numeric_provenance"),
 }
 COMPILER_DIGEST = digest(
     {

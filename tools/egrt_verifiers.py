@@ -171,12 +171,49 @@ def _numeric_tolerance(data: Mapping[str, Any]) -> tuple[VerificationStatus, str
     return (VerificationStatus.PASS if matched else VerificationStatus.FAIL, "numeric tolerance matched" if matched else "numeric tolerance exceeded", str(delta))
 
 
+def _canonical_rational(value: object) -> Fraction:
+    if not isinstance(value, str) or not value:
+        raise ValueError("rational must be non-empty text")
+    numerator, separator, denominator = value.partition("/")
+    if separator != "/" or "/" in denominator or not numerator or not denominator:
+        raise ValueError("rational must be canonical numerator/denominator")
+    digits = numerator[1:] if numerator.startswith("-") else numerator
+    if not digits or not digits.isdigit() or not denominator.isdigit() or (len(digits) > 1 and digits.startswith("0")) or denominator.startswith("0"):
+        raise ValueError("rational must be canonical numerator/denominator")
+    parsed = Fraction(int(numerator), int(denominator))
+    if f"{parsed.numerator}/{parsed.denominator}" != value:
+        raise ValueError("rational must be reduced with a positive denominator")
+    return parsed
+
+
+def canonical_rational(value: object) -> str:
+    parsed = _canonical_rational(value)
+    return f"{parsed.numerator}/{parsed.denominator}"
+
+
+def _numeric_provenance(data: Mapping[str, Any]) -> tuple[VerificationStatus, str, Any]:
+    operands, sources = data.get("operands"), data.get("sources")
+    if not isinstance(operands, list) or not isinstance(sources, list):
+        return VerificationStatus.UNKNOWN, "operands and sources must be lists", None
+    if not operands or not sources or len(operands) > 8 or len(sources) > 64:
+        return VerificationStatus.UNKNOWN, "numeric provenance input exceeds bounded non-empty lists", None
+    try:
+        seen = frozenset(canonical_rational(item) for item in sources)
+        values = tuple(canonical_rational(item) for item in operands)
+    except ValueError:
+        return VerificationStatus.UNKNOWN, "numeric provenance requires canonical rationals", None
+    matched = all(item in seen for item in values)
+    return (VerificationStatus.PASS if matched else VerificationStatus.FAIL,
+            "all operands have prompt-or-prior-result provenance" if matched else "one or more operands lack prompt-or-prior-result provenance",
+            {"operands": values, "source_count": len(seen)})
+
 _BUILTINS: dict[str, tuple[VerifierSpec, Adapter]] = {
     "builtin.exact_arithmetic": (VerifierSpec("builtin.exact_arithmetic", "1", "egrt.builtin", ("expression", "expected")), _exact_arithmetic),
     "builtin.json_exact": (VerifierSpec("builtin.json_exact", "1", "egrt.builtin", ("actual", "expected")), _json_exact),
     "builtin.digest_exact": (VerifierSpec("builtin.digest_exact", "1", "egrt.builtin", ("value", "expected_digest")), _digest_exact),
     "builtin.exact_match": (VerifierSpec("builtin.exact_match", "1", "egrt.builtin", ("actual", "expected")), _exact_match),
     "builtin.numeric_tolerance": (VerifierSpec("builtin.numeric_tolerance", "1", "egrt.builtin", ("actual", "expected", "tolerance")), _numeric_tolerance),
+    "builtin.numeric_provenance": (VerifierSpec("builtin.numeric_provenance", "1", "egrt.builtin", ("operands", "sources")), _numeric_provenance),
 }
 
 

@@ -1,12 +1,14 @@
 # FOIL formalization fidelity and extraction recall
 
-Status: **admission seam implemented; external generator and calibrated routes absent**
+Status: **admission seam and one narrow execution-class generator implemented; calibrated routes absent**
 
 ## Current boundary
 
-FOIL v5 does not transform free-form prose into obligations. The host supplies a
-strict versioned declarative task spec; `foil_obligation_compiler.py` validates and
-binds it but never extracts checks from prose.
+FOIL does not transform general free-form prose into obligations. The host may
+supply a strict versioned declarative task spec; `foil_obligation_compiler.py`
+validates and binds it but never extracts checks from prose. R1.6 adds one narrow,
+default-off execution-class generator for explicit GSM8K-style annotated
+arithmetic. It is not a general prose formalizer.
 
 Consequently, current decidable coverage measures only a supplied obligation
 universe. It does not measure FOIL's ability to find decidable structure in prose,
@@ -32,8 +34,9 @@ formalization, mechanical equivalence, and a measured error-correlation ceiling.
 
 `foil_formalization_routing.py` preserves the core controller's closed verifier
 routes while keeping `ADMITTED_GENERATED` visible in the outer trace. Admission
-never grants execution or answer-mutation authority. No generator is shipped, no
-real route has earned calibration, and the host-supplied route remains distinct.
+never grants execution or answer-mutation authority. The R1.6 annotated-arithmetic
+generator emits only `GENERATED_UNADMITTED`; no generated route has earned
+calibration, and the host-supplied route remains distinct.
 
 ## The 21-point contract
 

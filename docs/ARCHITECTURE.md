@@ -130,7 +130,9 @@ documentation task: `tests/test_foil_assistance.py::ContractDriftTests` and
 | `tools/foil_adaptive_route.py` | **the default-off adaptive-compute shadow controller.** Retains frozen A0 as DIRECT and may recommend VERIFY/FULL only from positive frozen EV and compiler-created host-declared routes. It never executes or changes authority. |
 | `tools/foil_shadow_route_ledger.py` | **the default-off observational RouteVector ledger.** Exact task/model/contract/route history only; no selector, fitter, controller update, or component credit. |
 | `tools/foil_v5_pipeline.py` | **the integrated structured shadow seam.** Wires compiler, scanner, adaptive route, optional observational ledger, and the pure host finalizer without candidate generation or execution. |
-| `tools/foil_formalization_admission.py`; `tools/foil_formalization_routing.py` | **the external generated-spec admission boundary.** Requires route-scoped fidelity/extraction evidence and preserves generated origin; no generator is included. |
+| `tools/foil_obligation_discovery.py` | **the default-off annotated-arithmetic generator.** Accepts only task text, immutable A0, and their digests; emits a `GENERATED_UNADMITTED` envelope and never grants action authority. |
+| `tools/foil_obligation_discovery_admission.py` | **the sole production bridge for discovered specs.** Requires the existing independent formalization-admission receipt; R1.6 has no qualifying receipt. |
+| `tools/foil_formalization_admission.py`; `tools/foil_formalization_routing.py` | **the external generated-spec admission boundary.** Requires route-scoped fidelity/extraction evidence and preserves generated origin; no generated route is currently calibrated or admitted. |
 | `tools/foil_promotion_gates.py` | **the candidate-bound external gate evaluator.** Converts complete preregistered evidence matrices into fail-closed Gate 1/2/3 receipts; it collects no data. |
 | `tools/foil_later_studies.py` | **the later-study topology validator.** Freezes P0, RQ-26, model-ladder, history, and human-complement arms without claiming efficacy. |
 
