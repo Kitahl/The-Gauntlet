@@ -7,7 +7,9 @@ on:
       - benchmark/session3r-test3r-space-package
     paths:
       - benchmarks/session3r_test3r_space/build_package.py
+      - benchmarks/session3r_test3r_space/build_package_ci.py
       - benchmarks/session3r_test3r_space/validate_package.py
+      - benchmarks/session3r_test3r_space/validate_package_ci.py
       - benchmarks/session3r_test3r_space/score.py
       - .github/workflows/build-session3r-test3r-space-package.yml
 
@@ -27,11 +29,11 @@ jobs:
       - name: Build frozen paired question projections and sealed gold
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python benchmarks/session3r_test3r_space/build_package.py
+        run: python benchmarks/session3r_test3r_space/build_package_ci.py
       - name: Independently requery first-party release histories and certify
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python benchmarks/session3r_test3r_space/validate_package.py
+        run: python benchmarks/session3r_test3r_space/validate_package_ci.py
       - name: Compile paired scoring wrapper
         run: python -m py_compile benchmarks/session3r_test3r_space/score.py
       - name: Commit certified generated package
