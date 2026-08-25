@@ -2,9 +2,9 @@
   "schema": "egrt/showcase-provenance-1",
   "claims": [
     {
-      "id": "architecture-modular-control",
-      "page_section": "Architecture",
-      "claim": "The toolkit uses a portable Research Orchestrator control plane plus bounded specialist research modules rather than one undifferentiated prompt.",
+      "id": "instrument01-modular-control",
+      "page_section": "Purpose",
+      "claim": "Instrument 01 uses a portable orchestration control plane plus bounded specialist research modules rather than one undifferentiated prompt.",
       "sources": [
         "docs/ARCHITECTURE.md",
         "skills/soul/SKILL.md",
@@ -16,33 +16,49 @@
       ]
     },
     {
-      "id": "professional-naming-compatibility",
-      "page_section": "Modules",
-      "claim": "Professional display names are used for the research portfolio while technical IDs and slash-command aliases are retained for backwards compatibility.",
-      "sources": ["docs/ARCHITECTURE.md", "GOVERNANCE.md"]
+      "id": "public-naming-compatibility",
+      "page_section": "Instrument inventory",
+      "claim": "Instrument 01 uses functional public module names while technical IDs and slash-command aliases remain unchanged for compatibility.",
+      "sources": [
+        "README.md",
+        "docs/ARCHITECTURE.md",
+        "GOVERNANCE.md",
+        "validation/MASTERMIND_BRAND_PRODUCT_3_LOOP_REPORT_2026-08-25.md"
+      ]
     },
     {
-      "id": "foil-complement",
-      "page_section": "FOIL",
-      "claim": "FOIL models competing explanations for observed performance and supplies task-relevant complementary methods without treating a single error as a stable weakness.",
-      "sources": ["skills/foil/SKILL.md", "research/FOIL_RESEARCH_BASIS.md"]
+      "id": "working-brand-boundary",
+      "page_section": "Hero",
+      "claim": "Rigilum is presented as a working pre-product identity rather than as a legally cleared corporate, trademark, or domain name.",
+      "sources": [
+        "README.md",
+        "validation/MASTERMIND_BRAND_PRODUCT_3_LOOP_REPORT_2026-08-25.md"
+      ]
     },
     {
-      "id": "independent-transfer-target",
-      "page_section": "FOIL",
-      "claim": "FOIL separates immediate assisted task success from later independent competence and transfer.",
-      "sources": ["skills/foil/SKILL.md", "research/FOIL_RESEARCH_BASIS.md", "RESEARCH.md"]
+      "id": "adapt-complement",
+      "page_section": "Instrument inventory",
+      "claim": "Adapt uses the stable foil technical namespace to model competing explanations for observed performance and supply task-relevant complementary methods without treating a single error as a stable weakness.",
+      "sources": [
+        "skills/foil/SKILL.md",
+        "research/FOIL_RESEARCH_BASIS.md",
+        "docs/MIRROR.md"
+      ]
     },
     {
       "id": "authority-evidence-split",
-      "page_section": "Evidence",
-      "claim": "Human authority governs voluntary goals and actions while evidence/proof determine factual warrant.",
-      "sources": ["skills/foil/SKILL.md", "skills/soul/SKILL.md", "RESEARCH.md"]
+      "page_section": "Evidence & release",
+      "claim": "Human authority governs voluntary goals and actions while evidence and proof determine factual warrant.",
+      "sources": [
+        "skills/foil/SKILL.md",
+        "skills/soul/SKILL.md",
+        "RESEARCH.md"
+      ]
     },
     {
       "id": "module-count",
       "page_section": "Hero",
-      "claim": "This repository contains ten research-method modules.",
+      "claim": "Instrument 01 contains ten research-method modules.",
       "sources": [
         "skills/soul/SKILL.md",
         "skills/mathbot/SKILL.md",
@@ -57,72 +73,52 @@
       ]
     },
     {
-      "id": "foil-structural-validation",
-      "page_section": "Evidence",
-      "claim": "The recorded FOIL structural/source/regression validator reports 94 of 94 checks passed.",
-      "sources": ["validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json"]
-    },
-    {
-      "id": "foil-contract-coverage",
-      "page_section": "Evidence",
-      "claim": "The recorded FOIL behavioral-contract specification artifact reports 18 of 18 cases represented as PASS-SPEC.",
-      "sources": ["validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json"]
-    },
-    {
       "id": "validation-boundary",
-      "page_section": "Evidence",
+      "page_section": "Evidence & release",
       "claim": "Mechanical and specification validation do not establish behavioral efficacy of the complete system.",
-      "sources": ["RESEARCH.md", "REPRODUCIBILITY.md", "validation/FOIL_RESEARCH_INTEGRATION_3_LOOP_REPORT.md"]
-    },
-    {
-      "id": "portable-process-assurance",
-      "page_section": "Modules",
-      "claim": "The public Process Assurance Framework does not require private project hooks or hard-coded local runtime paths and treats missing optional machinery as unavailable.",
-      "sources": ["skills/infinity-gauntlet/SKILL.md", "validation/SOUL_GAUNTLET_PUBLIC_AUDIT.md"]
-    },
-    {
-      "id": "research-question-open",
-      "page_section": "Research Dossier",
-      "claim": "Prospective behavioral efficacy of the complete workflow remains an open research question with planned matched-baseline and ablation studies.",
-      "sources": ["RESEARCH.md", "ROADMAP.md"]
-    },
-    {
-      "id": "research-dossier-output-index",
-      "page_section": "Research Dossier",
-      "claim": "The homepage indexes the current research question, implemented architecture, FOIL basis, mechanical/specification receipts, exploratory benchmark pilots, prospective behavioral evaluation, and external reproduction as distinct research objects with explicit states.",
       "sources": [
         "RESEARCH.md",
-        "ROADMAP.md",
-        "docs/ARCHITECTURE.md",
-        "research/FOIL_RESEARCH_BASIS.md",
-        "validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json",
-        "validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json",
-        "docs/BENCHMARKS.md"
+        "REPRODUCIBILITY.md",
+        "validation/FOIL_RESEARCH_INTEGRATION_3_LOOP_REPORT.md"
       ]
     },
     {
-      "id": "research-site-benchmark",
-      "page_section": "Research Dossier",
-      "claim": "The research-site benchmark compares public research institutes, research indexes, open-science catalogs, and mature research-software repositories to identify transferable information-architecture mechanisms without treating the set as an objective global ranking.",
-      "sources": ["docs/RESEARCH_WEBSITE_BENCHMARK_2026-08-22.md"]
+      "id": "portable-assure",
+      "page_section": "Instrument inventory",
+      "claim": "Assure uses the stable infinity-gauntlet technical namespace and does not require private project hooks or hard-coded local runtime paths; missing optional machinery is treated as unavailable.",
+      "sources": [
+        "skills/infinity-gauntlet/SKILL.md",
+        "validation/SOUL_GAUNTLET_PUBLIC_AUDIT.md"
+      ]
+    },
+    {
+      "id": "preproduct-license",
+      "page_section": "Evidence & release",
+      "claim": "Instrument 01 is presented as a free MIT-licensed pre-product research-software preview rather than a hosted commercial service.",
+      "sources": [
+        "README.md",
+        "LICENSE",
+        "CITATION.cff"
+      ]
     },
     {
       "id": "citation-license",
-      "page_section": "Release",
+      "page_section": "Evidence & release",
       "claim": "The repository provides machine-readable citation metadata and an MIT open-source license.",
-      "sources": ["CITATION.cff", "LICENSE"]
+      "sources": [
+        "CITATION.cff",
+        "LICENSE"
+      ]
     },
     {
-      "id": "homepage-trust-center",
-      "page_section": "Research Software Trust Center",
-      "claim": "The public homepage exposes direct paths to security, governance, contribution, citation, changelog, and roadmap artifacts.",
-      "sources": ["SECURITY.md", "GOVERNANCE.md", "CONTRIBUTING.md", "CITATION.cff", "CHANGELOG.md", "ROADMAP.md"]
-    },
-    {
-      "id": "homepage-reproducibility-path",
-      "page_section": "Reproducibility",
-      "claim": "The public homepage exposes the documented mechanical validation commands and separates their interpretation from behavioral-efficacy claims.",
-      "sources": ["REPRODUCIBILITY.md", "validation/validate_soul_gauntlet_public.py", "validation/validate_showcase.py"]
+      "id": "reproducibility-path",
+      "page_section": "Evidence & release",
+      "claim": "The public surfaces expose documented mechanical validation commands and separate their interpretation from behavioral-efficacy claims.",
+      "sources": [
+        "REPRODUCIBILITY.md",
+        "validation/validate_soul_gauntlet_public.py",
+        "validation/validate_showcase.py"
+      ]
     }
   ]
 }
