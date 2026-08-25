@@ -328,6 +328,7 @@ def build_report(
                 "answer_sha256": attempt.mutant_answer_sha256,
                 "operator_id": attempt.operator_id,
                 "class": attempt.natural_label,
+                "attempt_status": attempt.status,
                 "detected": prediction.detected,
                 "discovery_status": prediction.discovery_status,
                 "envelope_sha256": prediction.envelope_sha256,
@@ -428,6 +429,54 @@ def independently_verify_report(report: Mapping[str, object]) -> None:
     mutation = [row for row in raw if row.get("kind") == "MUTANT"]
     natural = [row for row in raw if row.get("kind") == "NATURAL_MISS"]
     controls = [row for row in raw if row.get("kind") == "CORRECT_CONTROL"]
+    expected_keys = {
+        "MUTANT": {
+            "kind",
+            "question_sha256",
+            "answer_sha256",
+            "operator_id",
+            "class",
+            "attempt_status",
+            "detected",
+            "discovery_status",
+            "envelope_sha256",
+            "a0_preserved",
+        },
+        "NATURAL_MISS": {
+            "kind",
+            "question_sha256",
+            "answer_sha256",
+            "model_variant",
+            "class",
+            "detected",
+            "discovery_status",
+            "envelope_sha256",
+            "a0_preserved",
+        },
+        "CORRECT_CONTROL": {
+            "kind",
+            "question_sha256",
+            "answer_sha256",
+            "model_variant",
+            "detected",
+            "discovery_status",
+            "envelope_sha256",
+            "a0_preserved",
+        },
+    }
+    for row in raw:
+        kind = row.get("kind")
+        if kind not in expected_keys or set(row) != expected_keys[kind]:
+            raise RuntimeError("raw report row schema is not closed")
+    if any(row["attempt_status"] != "EXECUTED" for row in mutation):
+        raise RuntimeError("final mutation rows must record executed status")
+    operator_counts = Counter(str(row["operator_id"]) for row in mutation)
+    expected_per_operator = int(protocol.PROTOCOL["mutation_base_rows"])
+    expected_counts = Counter(
+        {item: expected_per_operator for item in protocol.OPERATORS}
+    )
+    if operator_counts != expected_counts:
+        raise RuntimeError("mutation operator denominators are incomplete")
     expected_mutation = _rate_rows(
         [(str(row["class"]), bool(row["detected"])) for row in mutation]
     )
@@ -447,6 +496,36 @@ def independently_verify_report(report: Mapping[str, object]) -> None:
         raise RuntimeError("association does not rederive")
     if not all(bool(row.get("a0_preserved")) for row in raw):
         raise RuntimeError("at least one evaluation failed A0 preservation")
+    selection = report.get("selection")
+    if not isinstance(selection, Mapping):
+        raise RuntimeError("selection summary is absent")
+    if selection.get("mapped_natural_misses") != len(natural):
+        raise RuntimeError("natural selection count does not rederive")
+    if selection.get("correct_controls") != len(controls):
+        raise RuntimeError("control selection count does not rederive")
+    conservation = report.get("mutation_conservation")
+    if (
+        not isinstance(conservation, Mapping)
+        or conservation.get("attempted") != len(mutation)
+    ):
+        raise RuntimeError("mutation conservation does not match raw rows")
+    if not conservation.get("conserved"):
+        raise RuntimeError("mutation conservation is false")
+    costs = report.get("cost_and_authority")
+    if not isinstance(costs, Mapping):
+        raise RuntimeError("cost and authority receipt is absent")
+    expected_zero = {
+        "provider_calls",
+        "external_bot_calls",
+        "runtime_model_calls",
+        "token_spend",
+        "answer_mutations_by_foil",
+        "profile_writes",
+        "execution_authorizations",
+        "promotion_changes",
+    }
+    if any(costs.get(key) != 0 for key in expected_zero):
+        raise RuntimeError("zero-cost or zero-authority invariant failed")
 
 
 def _source_bytes(cache: Path) -> bytes:

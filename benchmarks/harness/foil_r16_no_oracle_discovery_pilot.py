@@ -420,6 +420,7 @@ def load_label_manifest(
         raise RuntimeError("natural-label manifest selection mismatch")
     candidate_identities = {record.identity for record in candidates}
     labels: dict[tuple[str, str, str], str] = {}
+    manifest_identities: list[tuple[str, str, str]] = []
     allowed = {*NATURAL_LABELS, "UNMAPPED"}
     for row in raw["rows"]:
         if not isinstance(row, dict) or set(row) != {
@@ -439,10 +440,11 @@ def load_label_manifest(
         label = row["primary_label"]
         if label not in allowed:
             raise RuntimeError("unknown natural-miss label")
+        manifest_identities.append(identity)
         labels[identity] = label
     expected_prefix = [record.identity for record in candidates[: len(labels)]]
-    if set(labels) != set(expected_prefix):
-        raise RuntimeError("labelled rows must be an exact candidate-order prefix")
+    if manifest_identities != expected_prefix:
+        raise RuntimeError("labelled rows must be the exact candidate-order prefix")
     return labels
 
 
