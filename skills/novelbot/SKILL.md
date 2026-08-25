@@ -1,9 +1,9 @@
 ---
 name: novelbot
-description: Method Synthesis module. Trigger: /reality, /novelbot, invent a method, find a new mechanism, or when verified prior art fails a named constraint. Produces novel candidates only after the existing-method boundary is explicit.
+description: Synthesize — method-construction module for Rigilum Instrument 01. Trigger: /reality, /novelbot, invent a method, find a new mechanism, or when verified prior art fails a named constraint. Produces novel candidates only after the existing-method boundary is explicit.
 ---
 
-# Method Synthesis
+# Synthesize
 
 Novelty is a **last-mile obligation**, not the default mode.
 
@@ -11,7 +11,7 @@ Novelty is a **last-mile obligation**, not the default mode.
 
 Do not synthesize a new mechanism until:
 
-- Research Discovery has identified the nearest known approaches;
+- **Discover** has identified the nearest known approaches;
 - the relevant approaches fail a named constraint or leave a concrete gap;
 - the success criterion is explicit.
 
@@ -41,3 +41,7 @@ Unverified novelty remains `NOVELTY UNKNOWN`.
 ## Typed runtime contract
 
 `tools/reality_runtime.py` represents every candidate as a falsifiable machine-readable mechanism object with prior art, actual delta, negative control, transfer, ablation and verifier plan. A candidate can be admitted for testing only with a real stored cleared Space receipt; admission does not prove novelty or efficacy. See `docs/specs/REALITY_ENGINEERING_SPEC.md`.
+
+## Compatibility
+
+Public product name: **Synthesize**. Stable technical identity: `novelbot`; stable commands include `/reality` and `/novelbot`. **Method Synthesis** is the legacy public label retained in historical documentation and receipts.
