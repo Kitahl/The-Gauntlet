@@ -6,7 +6,7 @@ Run only the BASE arm of the certified paired Space retest. This must be a fresh
 
 Repository: `Kitahl/The-Gauntlet`
 
-Frozen package commit: `__PACKAGE_COMMIT__`
+Frozen package commit: `b7d949f711738cfd3485d45ae74c7df964c93245`
 
 Experiment: `SESSION3R_TEST3R_SPACE`
 
@@ -33,7 +33,7 @@ Before and during BASE inference you may access from the frozen package only:
 - `benchmarks/session3r_test3r_space/CI_CERTIFICATION.json`
 - `benchmarks/session3r_test3r_space/base/questions.jsonl`
 
-Always fetch them at exact commit `__PACKAGE_COMMIT__`.
+Always fetch them at exact commit `b7d949f711738cfd3485d45ae74c7df964c93245`.
 
 Do NOT list the package directory recursively.
 
@@ -91,7 +91,7 @@ Fetch only:
 
 `benchmarks/session3r_test3r_space/base/questions.jsonl`
 
-at exact commit `__PACKAGE_COMMIT__`.
+at exact commit `b7d949f711738cfd3485d45ae74c7df964c93245`.
 
 Read it in bounded line ranges, preferably 10 JSONL rows at a time. Do not fetch `space/questions.jsonl`.
 
