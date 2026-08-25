@@ -1,0 +1,287 @@
+{
+  "assignments": [
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "BASE",
+      "id": "omni_rule_0725",
+      "order_within_benchmark": 1,
+      "pair_id": "omni_6_6.49_1"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "BASE",
+      "id": "omni_rule_0907",
+      "order_within_benchmark": 2,
+      "pair_id": "omni_6_6.49_2"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "BASE",
+      "id": "omni_rule_2754",
+      "order_within_benchmark": 3,
+      "pair_id": "omni_6.5_6.99_1"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "BASE",
+      "id": "omni_rule_0439",
+      "order_within_benchmark": 4,
+      "pair_id": "omni_6.5_6.99_2"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "BASE",
+      "id": "omni_rule_2572",
+      "order_within_benchmark": 5,
+      "pair_id": "omni_7_7.49_1"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "BASE",
+      "id": "omni_rule_2583",
+      "order_within_benchmark": 6,
+      "pair_id": "omni_7_7.49_2"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "BASE",
+      "id": "omni_rule_2820",
+      "order_within_benchmark": 7,
+      "pair_id": "omni_7.5_7.99_1"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "BASE",
+      "id": "omni_rule_0286",
+      "order_within_benchmark": 8,
+      "pair_id": "omni_7.5_7.99_2"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "BASE",
+      "id": "omni_rule_1033",
+      "order_within_benchmark": 9,
+      "pair_id": "omni_8_8.5_1"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "BASE",
+      "id": "omni_rule_2727",
+      "order_within_benchmark": 10,
+      "pair_id": "omni_8_8.5_2"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "BASE",
+      "id": "bbeh_boolean_expressions_0187",
+      "order_within_benchmark": 1,
+      "pair_id": "bbeh_01_bbeh_boolean_expressions"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "BASE",
+      "id": "bbeh_causal_understanding_0029",
+      "order_within_benchmark": 2,
+      "pair_id": "bbeh_02_bbeh_causal_understanding"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "BASE",
+      "id": "bbeh_disambiguation_qa_0027",
+      "order_within_benchmark": 3,
+      "pair_id": "bbeh_03_bbeh_disambiguation_qa"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "BASE",
+      "id": "bbeh_dyck_languages_0127",
+      "order_within_benchmark": 4,
+      "pair_id": "bbeh_04_bbeh_dyck_languages"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "BASE",
+      "id": "bbeh_multistep_arithmetic_0056",
+      "order_within_benchmark": 5,
+      "pair_id": "bbeh_05_bbeh_multistep_arithmetic"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "BASE",
+      "id": "bbeh_object_properties_0073",
+      "order_within_benchmark": 6,
+      "pair_id": "bbeh_06_bbeh_object_properties"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "BASE",
+      "id": "bbeh_shuffled_objects_0131",
+      "order_within_benchmark": 7,
+      "pair_id": "bbeh_07_bbeh_shuffled_objects"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "BASE",
+      "id": "bbeh_movie_recommendation_0093",
+      "order_within_benchmark": 8,
+      "pair_id": "bbeh_08_bbeh_movie_recommendation"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "BASE",
+      "id": "bbeh_time_arithmetic_0105",
+      "order_within_benchmark": 9,
+      "pair_id": "bbeh_09_bbeh_time_arithmetic"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "BASE",
+      "id": "bbeh_web_of_lies_0164",
+      "order_within_benchmark": 10,
+      "pair_id": "bbeh_10_bbeh_web_of_lies"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "MIND",
+      "id": "omni_rule_0332",
+      "order_within_benchmark": 1,
+      "pair_id": "omni_6_6.49_1"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "MIND",
+      "id": "omni_rule_0930",
+      "order_within_benchmark": 2,
+      "pair_id": "omni_6_6.49_2"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "MIND",
+      "id": "omni_rule_2755",
+      "order_within_benchmark": 3,
+      "pair_id": "omni_6.5_6.99_1"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "MIND",
+      "id": "omni_rule_1036",
+      "order_within_benchmark": 4,
+      "pair_id": "omni_6.5_6.99_2"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "MIND",
+      "id": "omni_rule_2811",
+      "order_within_benchmark": 5,
+      "pair_id": "omni_7_7.49_1"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "MIND",
+      "id": "omni_rule_0882",
+      "order_within_benchmark": 6,
+      "pair_id": "omni_7_7.49_2"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "MIND",
+      "id": "omni_rule_2752",
+      "order_within_benchmark": 7,
+      "pair_id": "omni_7.5_7.99_1"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "MIND",
+      "id": "omni_rule_0014",
+      "order_within_benchmark": 8,
+      "pair_id": "omni_7.5_7.99_2"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "MIND",
+      "id": "omni_rule_0977",
+      "order_within_benchmark": 9,
+      "pair_id": "omni_8_8.5_1"
+    },
+    {
+      "benchmark": "omni_math_rule",
+      "condition": "MIND",
+      "id": "omni_rule_1057",
+      "order_within_benchmark": 10,
+      "pair_id": "omni_8_8.5_2"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "MIND",
+      "id": "bbeh_boolean_expressions_0152",
+      "order_within_benchmark": 1,
+      "pair_id": "bbeh_01_bbeh_boolean_expressions"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "MIND",
+      "id": "bbeh_causal_understanding_0132",
+      "order_within_benchmark": 2,
+      "pair_id": "bbeh_02_bbeh_causal_understanding"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "MIND",
+      "id": "bbeh_disambiguation_qa_0017",
+      "order_within_benchmark": 3,
+      "pair_id": "bbeh_03_bbeh_disambiguation_qa"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "MIND",
+      "id": "bbeh_dyck_languages_0142",
+      "order_within_benchmark": 4,
+      "pair_id": "bbeh_04_bbeh_dyck_languages"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "MIND",
+      "id": "bbeh_multistep_arithmetic_0084",
+      "order_within_benchmark": 5,
+      "pair_id": "bbeh_05_bbeh_multistep_arithmetic"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "MIND",
+      "id": "bbeh_object_properties_0005",
+      "order_within_benchmark": 6,
+      "pair_id": "bbeh_06_bbeh_object_properties"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "MIND",
+      "id": "bbeh_shuffled_objects_0182",
+      "order_within_benchmark": 7,
+      "pair_id": "bbeh_07_bbeh_shuffled_objects"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "MIND",
+      "id": "bbeh_movie_recommendation_0005",
+      "order_within_benchmark": 8,
+      "pair_id": "bbeh_08_bbeh_movie_recommendation"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "MIND",
+      "id": "bbeh_time_arithmetic_0091",
+      "order_within_benchmark": 9,
+      "pair_id": "bbeh_09_bbeh_time_arithmetic"
+    },
+    {
+      "benchmark": "bbeh",
+      "condition": "MIND",
+      "id": "bbeh_web_of_lies_0146",
+      "order_within_benchmark": 10,
+      "pair_id": "bbeh_10_bbeh_web_of_lies"
+    }
+  ],
+  "experiment_id": "SESSION2_TEST2_MIND",
+  "policy": "disjoint matched pairs; BASE completed before Mind exposure",
+  "seed": 2026082502
+}

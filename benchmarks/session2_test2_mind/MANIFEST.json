@@ -1,0 +1,71 @@
+{
+  "counts": {
+    "base_total": 20,
+    "bbeh_total": 20,
+    "mind_total": 20,
+    "omni_total": 20
+  },
+  "experiment_id": "SESSION2_TEST2_MIND",
+  "files": {
+    "assignments.json": {
+      "bytes": 7577,
+      "sha256": "e09faf9ff99b5e8d6e3c247ae325d7c9de3be70ad17e9acc872d73c823d16fb5"
+    },
+    "gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/README.md": {
+      "bytes": 157,
+      "sha256": "409b10b473f9182073195eb911b76f162051df68c370bd525dc1799b1106b793"
+    },
+    "gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/bbeh_gold.jsonl": {
+      "bytes": 2697,
+      "sha256": "079737b6da693c29b421875f1e38385f772438806d53a2d421614cdf3d5ea369"
+    },
+    "gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/omni_math_rule_gold.jsonl": {
+      "bytes": 41953,
+      "sha256": "926f3d8146a370fee677327f07130ac3364325c490472b6b8c7480b303630839"
+    },
+    "grader.py": {
+      "bytes": 11912,
+      "sha256": "ed9494a388e7117735fccf2985de6c444d5bdba4d493b425e92a91e9ab97742a"
+    },
+    "questions/bbeh_questions.jsonl": {
+      "bytes": 67278,
+      "sha256": "de87e15bad701aa90fe5cdcef9ea8aaae4ab933b0762b7424f31bee8bf039bea"
+    },
+    "questions/omni_math_rule_questions.jsonl": {
+      "bytes": 10747,
+      "sha256": "4a11287d1dfdc5ddeaebc0b723c5ea7605bc32d6e926a209573563139024eded"
+    }
+  },
+  "generated_at_utc": "2026-08-25T19:48:46.922817+00:00",
+  "mind": {
+    "blob_sha": "8c27111809e390910a74b1380b9fbce12b016999",
+    "path": "skills/mathbot/SKILL.md",
+    "repository": "Kitahl/The-Gauntlet"
+  },
+  "schema": "gauntlet.session2.test2.mind-package.v1",
+  "seed": 2026082502,
+  "sources": {
+    "bbeh": {
+      "commit": "80d12ca916b7158f22293fcf3144f4d3d854d4be",
+      "families": [
+        "bbeh_boolean_expressions",
+        "bbeh_causal_understanding",
+        "bbeh_disambiguation_qa",
+        "bbeh_dyck_languages",
+        "bbeh_multistep_arithmetic",
+        "bbeh_object_properties",
+        "bbeh_shuffled_objects",
+        "bbeh_movie_recommendation",
+        "bbeh_time_arithmetic",
+        "bbeh_web_of_lies"
+      ],
+      "repository": "google-deepmind/bbeh"
+    },
+    "omni_math_rule": {
+      "commit": "4793415ef37d31c9cdb4e5b82dbe172f76f8cf08",
+      "download_sha256": "d566d5b5a9865a04b507fdc4c0669cf0ff391748e13f190ecc925e78b584b172",
+      "path": "omni_math_rule.jsonl",
+      "repository": "KbsdJames/omni-math-rule"
+    }
+  }
+}
