@@ -1,0 +1,227 @@
+{
+  "codex_version": "codex-cli 0.147.0",
+  "host_answer_mutations": 0,
+  "pre_call_commit": "892acee4d5cfc834dd65dfce07f5d0efcd5be232",
+  "predictions": [
+    {
+      "arm": "BASE",
+      "benchmark": "HLE_VERIFIED_GOLD_TEXT",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "hle-verified-6725a933e10373a976b7e2a2",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "A",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": null,
+          "p1_outcome": "N/A",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": false,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "d63956c8237659741fdbbcde52370f70b7d37cc9c440438f49a8967e776b6974",
+      "receipt_sha256": "e597e99cfddfdc85c947d2476955937154c7dc99c9682be517227506a032352a",
+      "trace_integrity_errors": [],
+      "unit_id": "terra_high-base-hle-verified-6725a933e10373a976b7e2a2"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "HLE_VERIFIED_GOLD_TEXT",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "hle-verified-673668e658bad7ba89d4ad54",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "E",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": null,
+          "p1_outcome": "N/A",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": false,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "e35b6dd28bdfa9827d2975f81dd1efdfa2ebc2773e81421d9e3b1bf1a1237312",
+      "receipt_sha256": "327bd559ad1cc5ef5b606b988fe52a1b23bc7a111c5a8bceac3153703bb9bb83",
+      "trace_integrity_errors": [],
+      "unit_id": "terra_high-base-hle-verified-673668e658bad7ba89d4ad54"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "HLE_VERIFIED_GOLD_TEXT",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "hle-verified-6725a933e10373a976b7e2a2",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "B",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": "boundary-check",
+          "p1_outcome": "PASS",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": true,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "a09687084eff53de9e24c1e68ba48979027950c268f02a14b5679635aa99c76a",
+      "receipt_sha256": "4b037bde3e2fff8e9fe97e993fbb7a17c37c47bf9c27f3ee282d3c45ec647d8a",
+      "trace_integrity_errors": [],
+      "unit_id": "terra_high-rps_060-hle-verified-6725a933e10373a976b7e2a2"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "HLE_VERIFIED_GOLD_TEXT",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "item_id": "hle-verified-673668e658bad7ba89d4ad54",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "B",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": "invariant_dimension",
+          "p1_outcome": "PASS",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": true,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "593992f0c57ae25163fb7f3b126677231651e3942476a64fcd7d657f4c64bdd7",
+      "receipt_sha256": "dc52d484d40ee0743de82ed4115d68987aec3b6b154d82b2b044845552d0618b",
+      "trace_integrity_errors": [],
+      "unit_id": "terra_high-rps_060-hle-verified-673668e658bad7ba89d4ad54"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "HLE_VERIFIED_GOLD_TEXT",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "hle-verified-6725a933e10373a976b7e2a2",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "C",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": null,
+          "p1_outcome": "N/A",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": false,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "d63956c8237659741fdbbcde52370f70b7d37cc9c440438f49a8967e776b6974",
+      "receipt_sha256": "0a544c990d58adefec7f12700236b234928d33271473d5a8d63f168b26a86c4c",
+      "trace_integrity_errors": [],
+      "unit_id": "terra_low-base-hle-verified-6725a933e10373a976b7e2a2"
+    },
+    {
+      "arm": "BASE",
+      "benchmark": "HLE_VERIFIED_GOLD_TEXT",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "hle-verified-673668e658bad7ba89d4ad54",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "B",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": null,
+          "p1_outcome": "N/A",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": false,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "e35b6dd28bdfa9827d2975f81dd1efdfa2ebc2773e81421d9e3b1bf1a1237312",
+      "receipt_sha256": "748c70e7f127dba715df04ea066b10b41df9a56b5a84ac0867b17b60c3cc5fa2",
+      "trace_integrity_errors": [],
+      "unit_id": "terra_low-base-hle-verified-673668e658bad7ba89d4ad54"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "HLE_VERIFIED_GOLD_TEXT",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "hle-verified-6725a933e10373a976b7e2a2",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "E",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": "necessary consequence",
+          "p1_outcome": "PASS",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": true,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "a09687084eff53de9e24c1e68ba48979027950c268f02a14b5679635aa99c76a",
+      "receipt_sha256": "0115b6347487f36f32bc60d93054caa5f8b62b5952b7761d70d78992595202cb",
+      "trace_integrity_errors": [],
+      "unit_id": "terra_low-rps_060-hle-verified-6725a933e10373a976b7e2a2"
+    },
+    {
+      "arm": "RPS_060",
+      "benchmark": "HLE_VERIFIED_GOLD_TEXT",
+      "config_id": "TERRA_LOW",
+      "effort": "low",
+      "item_id": "hle-verified-673668e658bad7ba89d4ad54",
+      "model": "gpt-5.6-terra",
+      "prediction": {
+        "answer": "C",
+        "rps_trace": {
+          "answer_changed": false,
+          "conflict": false,
+          "p1_kind": "invariant",
+          "p1_outcome": "UNCERTAIN",
+          "p2_kind": null,
+          "p2_outcome": "N/A",
+          "repair_triggered": false,
+          "rollback_hinge": null,
+          "rps_eligible": true,
+          "tiebreak_used": false
+        }
+      },
+      "prompt_sha256": "593992f0c57ae25163fb7f3b126677231651e3942476a64fcd7d657f4c64bdd7",
+      "receipt_sha256": "fafbb05abbc600601e524baf80cb6f6d02966aac51b0ac8db657b789530e6039",
+      "trace_integrity_errors": [],
+      "unit_id": "terra_low-rps_060-hle-verified-673668e658bad7ba89d4ad54"
+    }
+  ],
+  "profile_writes": 0,
+  "provider_calls": 10,
+  "schema": "foil.rps-v060-hle-hard-two-predictions.v1",
+  "tool_calls": 0
+}
