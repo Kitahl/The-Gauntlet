@@ -207,6 +207,80 @@ def _numeric_provenance(data: Mapping[str, Any]) -> tuple[VerificationStatus, st
             "all operands have prompt-or-prior-result provenance" if matched else "one or more operands lack prompt-or-prior-result provenance",
             {"operands": values, "source_count": len(seen)})
 
+_PROVENANCE_V2_FIELDS = frozenset({"value", "kind", "parents", "operator"})
+_PROVENANCE_V2_SHAPES: dict[str, tuple[int, frozenset[str]]] = {
+    "ROOT": (0, frozenset({"NONE"})),
+    "PRIOR_RESULT": (0, frozenset({"NONE"})),
+    "IDENTITY": (0, frozenset({"NONE"})),
+    "LEXICAL_FACTOR": (0, frozenset({"NONE"})),
+    "LEXICAL_RATIO": (1, frozenset({"RECIPROCAL"})),
+    "PERCENT": (1, frozenset({"DIVIDE_100"})),
+    "FRACTION_COMPONENT": (1, frozenset({"NUMERATOR", "DENOMINATOR"})),
+    "ONE_STEP": (2, frozenset({"ADD", "SUB", "MUL", "DIV"})),
+}
+
+
+def _provenance_v2_expected(kind: str, parents: tuple[Fraction, ...], operator: str) -> Fraction | None:
+    if kind in {"ROOT", "PRIOR_RESULT", "LEXICAL_FACTOR"}:
+        return None
+    if kind == "IDENTITY":
+        return Fraction(1)
+    if kind == "LEXICAL_RATIO":
+        return Fraction(1, 1) / parents[0] if parents[0] else None
+    if kind == "PERCENT":
+        return parents[0] / 100
+    if kind == "FRACTION_COMPONENT":
+        return Fraction(parents[0].numerator if operator == "NUMERATOR" else parents[0].denominator)
+    left, right = parents
+    if operator == "ADD":
+        return left + right
+    if operator == "SUB":
+        return left - right
+    if operator == "MUL":
+        return left * right
+    if operator == "DIV":
+        return left / right if right else None
+    return None
+
+
+def _numeric_provenance_v2(data: Mapping[str, Any]) -> tuple[VerificationStatus, str, Any]:
+    operands, sources = data.get("operands"), data.get("sources")
+    if not isinstance(operands, list) or not isinstance(sources, list):
+        return VerificationStatus.UNKNOWN, "v2 operands and sources must be lists", None
+    if not operands or not sources or len(operands) > 8 or len(sources) > 128:
+        return VerificationStatus.UNKNOWN, "v2 numeric provenance exceeds bounded non-empty lists", None
+    try:
+        values = tuple(canonical_rational(item) for item in operands)
+    except ValueError:
+        return VerificationStatus.UNKNOWN, "v2 operands require canonical rationals", None
+    admitted: set[str] = set()
+    for row in sources:
+        if not isinstance(row, Mapping) or set(row) != _PROVENANCE_V2_FIELDS:
+            return VerificationStatus.UNKNOWN, "v2 source records use a closed schema", None
+        kind, operator, parents_raw = row["kind"], row["operator"], row["parents"]
+        if kind not in _PROVENANCE_V2_SHAPES or not isinstance(operator, str) or not isinstance(parents_raw, list):
+            return VerificationStatus.UNKNOWN, "v2 source kind/operator/parents are invalid", None
+        parent_count, allowed_operators = _PROVENANCE_V2_SHAPES[kind]
+        if len(parents_raw) != parent_count or operator not in allowed_operators:
+            return VerificationStatus.UNKNOWN, "v2 source derivation shape is invalid", None
+        try:
+            value = _canonical_rational(row["value"])
+            parents = tuple(_canonical_rational(item) for item in parents_raw)
+        except ValueError:
+            return VerificationStatus.UNKNOWN, "v2 sources require canonical rationals", None
+        expected = _provenance_v2_expected(kind, parents, operator)
+        if expected is not None and value != expected:
+            return VerificationStatus.FAIL, "v2 source derivation does not rederive mechanically", None
+        if kind == "LEXICAL_FACTOR" and (value.denominator != 1 or not 2 <= abs(value.numerator) <= 10):
+            return VerificationStatus.FAIL, "v2 lexical factor is outside the closed range", None
+        admitted.add(f"{value.numerator}/{value.denominator}")
+    matched = all(item in admitted for item in values)
+    return (
+        VerificationStatus.PASS if matched else VerificationStatus.FAIL,
+        "all operands have bounded structured provenance" if matched else "one or more operands lack bounded structured provenance",
+        {"operands": values, "source_count": len(admitted)},
+    )
+
 _BUILTINS: dict[str, tuple[VerifierSpec, Adapter]] = {
     "builtin.exact_arithmetic": (VerifierSpec("builtin.exact_arithmetic", "1", "egrt.builtin", ("expression", "expected")), _exact_arithmetic),
     "builtin.json_exact": (VerifierSpec("builtin.json_exact", "1", "egrt.builtin", ("actual", "expected")), _json_exact),
@@ -214,6 +288,7 @@ _BUILTINS: dict[str, tuple[VerifierSpec, Adapter]] = {
     "builtin.exact_match": (VerifierSpec("builtin.exact_match", "1", "egrt.builtin", ("actual", "expected")), _exact_match),
     "builtin.numeric_tolerance": (VerifierSpec("builtin.numeric_tolerance", "1", "egrt.builtin", ("actual", "expected", "tolerance")), _numeric_tolerance),
     "builtin.numeric_provenance": (VerifierSpec("builtin.numeric_provenance", "1", "egrt.builtin", ("operands", "sources")), _numeric_provenance),
+    "builtin.numeric_provenance_v2": (VerifierSpec("builtin.numeric_provenance_v2", "2", "egrt.builtin", ("operands", "sources")), _numeric_provenance_v2),
 }
 
 

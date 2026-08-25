@@ -23,6 +23,13 @@ future formalizers. It cannot open the admission gate. A future production route
 must still satisfy the existing route-scoped calibration, mutation completeness,
 extraction-recall, freshness, instance-check, and conservative-bound policies.
 
+
+R1.7 treats every R1.6 row as development evidence. It does not tune v2 and
+rescore the same rows as held out. The v2 grammar and decision thresholds are
+committed first; fresh hash-selected source rows exclude the complete R1.6
+curation/control/mutation question universe, and labels freeze before scanner
+execution. This is a dose-response smoke rerun, not calibration. A favorable
+result can justify a larger independent study but cannot admit or promote v2.
 R1.6 also preserves the central scope boundary: explicit annotated arithmetic is
 not free-form prose-to-obligation transformation. `PARTIAL`, `ABSTAIN`, and
 `UNSUPPORTED` are first-class outcomes, and omissions outside the supported

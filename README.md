@@ -48,8 +48,10 @@ compiler-provenance revalidation, and sealed observational RouteVector ledger.
 It also wires the reusable compiler/scanner/controller pipeline, route-scoped
 generated-spec admission, candidate-bound external gate evaluation, and frozen
 later-study contracts. R1.6 adds one default-off annotated-arithmetic execution-
-class generator; it is not a general prose formalizer and has no calibrated or
-admitted production route.
+class generator. R1.7 leaves v1 reproducible and adds a separately versioned v2
+provenance grammar for percentages, fractions, lexical ratios, identity/unit
+multipliers, and mechanically checked one-step derivations. Both remain
+unadmitted; neither is a general prose formalizer.
 Admission now rejects structural and semantic certificates from the same
 provenance group, even under different verifier names. The new v5 post-solve
 monitor is disabled by default; the legacy pre-solve hook remains the
