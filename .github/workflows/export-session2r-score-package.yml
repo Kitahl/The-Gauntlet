@@ -1,0 +1,45 @@
+name: Export Session 2R frozen score package
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - benchmark/session2r-score-export
+    paths:
+      - .github/workflows/export-session2r-score-package.yml
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ba72a15ac294d11c7c792363de1d52dc960b404a
+          fetch-depth: 1
+      - name: Verify frozen package files
+        run: |
+          test -f benchmarks/session2r_test2r_mind/gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/gold.jsonl
+          test -f benchmarks/session2r_test2r_mind/score.py
+          test -f benchmarks/session2r_test2r_mind/scoring/omni_grader.py
+          test -f benchmarks/session2r_test2r_mind/scoring/bbeh_evaluate.py
+          test -f benchmarks/session2r_test2r_mind/requirements-score.txt
+          test -f benchmarks/session2r_test2r_mind/assignment_manifest.json
+          test -f benchmarks/session2r_test2r_mind/MANIFEST.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: session2r-frozen-score-package
+          if-no-files-found: error
+          retention-days: 1
+          path: |
+            benchmarks/session2r_test2r_mind/gold/SEALED_UNTIL_BOTH_ARMS_COMMIT/gold.jsonl
+            benchmarks/session2r_test2r_mind/score.py
+            benchmarks/session2r_test2r_mind/scoring/omni_grader.py
+            benchmarks/session2r_test2r_mind/scoring/bbeh_evaluate.py
+            benchmarks/session2r_test2r_mind/requirements-score.txt
+            benchmarks/session2r_test2r_mind/assignment_manifest.json
+            benchmarks/session2r_test2r_mind/MANIFEST.json
+            benchmarks/session2r_test2r_mind/VALIDATION_REPORT.json
+            benchmarks/session2r_test2r_mind/CI_CERTIFICATION.json
