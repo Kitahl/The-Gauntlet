@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "challenger": {
+      "pattern": "^[A-Z]$",
+      "type": "string"
+    },
+    "fragile_hinge": {
+      "maximum": 2,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "hinges": {
+      "items": {
+        "maxLength": 80,
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 3,
+      "minItems": 1,
+      "type": "array"
+    },
+    "p1": {
+      "additionalProperties": false,
+      "properties": {
+        "applicable": {
+          "type": "boolean"
+        },
+        "candidate_prediction": {
+          "enum": [
+            "HOLDS",
+            "FAILS",
+            null
+          ]
+        },
+        "challenger_prediction": {
+          "enum": [
+            "HOLDS",
+            "FAILS",
+            null
+          ]
+        },
+        "hinge_index": {
+          "maximum": 2,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "kind": {
+          "enum": [
+            "EXACT_RELATION",
+            "INVARIANT",
+            "COUNTEREXAMPLE",
+            "NECESSARY_CONSEQUENCE",
+            "PAIRWISE_DISCRIMINATOR",
+            "REPRESENTATION_CONSISTENCY"
+          ]
+        },
+        "observed": {
+          "enum": [
+            "HOLDS",
+            "FAILS",
+            null
+          ]
+        }
+      },
+      "required": [
+        "applicable",
+        "candidate_prediction",
+        "challenger_prediction",
+        "hinge_index",
+        "kind",
+        "observed"
+      ],
+      "type": "object"
+    },
+    "p2": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "applicable": {
+              "type": "boolean"
+            },
+            "candidate_prediction": {
+              "enum": [
+                "HOLDS",
+                "FAILS",
+                null
+              ]
+            },
+            "challenger_prediction": {
+              "enum": [
+                "HOLDS",
+                "FAILS",
+                null
+              ]
+            },
+            "hinge_index": {
+              "maximum": 2,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "kind": {
+              "enum": [
+                "EXACT_RELATION",
+                "INVARIANT",
+                "COUNTEREXAMPLE",
+                "NECESSARY_CONSEQUENCE",
+                "PAIRWISE_DISCRIMINATOR",
+                "REPRESENTATION_CONSISTENCY"
+              ]
+            },
+            "observed": {
+              "enum": [
+                "HOLDS",
+                "FAILS",
+                null
+              ]
+            }
+          },
+          "required": [
+            "applicable",
+            "candidate_prediction",
+            "challenger_prediction",
+            "hinge_index",
+            "kind",
+            "observed"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "challenger",
+    "fragile_hinge",
+    "hinges",
+    "p1",
+    "p2"
+  ],
+  "type": "object"
+}

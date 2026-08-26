@@ -1,0 +1,21 @@
+{
+  "files": {
+    "benchmark_runs/2026-08-25/rps_v060_hle_hard_two/items.json": "c58c3e48685479d2eb02573c5069c19cda3ea4c7814e0b35fa49fbd15fbf6e07",
+    "benchmark_runs/2026-08-25/rps_v060_hle_hard_two/predictions.json": "40fcb503bb780fd6062f2d07001108bc1713676af435bd0130f581a0a398187f",
+    "benchmark_runs/2026-08-25/rps_v060_hle_hard_two/results.json": "8de490bcd399ba149204d40bf48981c256a19d44d51a38819c96be4906096b10",
+    "benchmark_runs/2026-08-25/rps_v061_hle_shadow_small/failure.md": "41f8eb40c09f000179e188be426b0d3bf985d5836f1c756a25f312d7623a114a",
+    "benchmark_runs/2026-08-25/rps_v061_hle_shadow_small/receipts/controls/control-TERRA_LOW.json": "f2e749cd13f47af5a195f0ebb2be274a332da79922cbc0ee1f51ad14962b61a8",
+    "benchmark_runs/2026-08-25/rps_v061_hle_shadow_small_schemafix/answer_schema.json": "6384a77b8a3461fa3ff150205e5e571fea2119628938be823b9d688c097e0311",
+    "benchmark_runs/2026-08-25/rps_v061_hle_shadow_small_schemafix/items.json": "42119b249a1c9abd43f86edef3a65ac0d74ef150e9868dac13b0396c2a00ab8d",
+    "benchmark_runs/2026-08-25/rps_v061_hle_shadow_small_schemafix/manifest.json": "14efe05e91dc75f54e100b0fc3742a93615587ba62976297055f82257344f6be",
+    "benchmarks/FOIL_RPS_V061_HLE_SHADOW_SMALL_SCHEMAFIX.md": "db16781692ba94f695b9bd866482025420a0cecfab5e242c59b02381b052da5b",
+    "benchmarks/fixtures/FOIL_RPS_V060_EXPERIMENT_POLICY.md": "e1ae2b1758556ce08ca8fb3605fbf39e2f38caacdb6bc23c43cca54e6324fcf7",
+    "benchmarks/fixtures/FOIL_RPS_V061_HINGE_COVERAGE_POLICY.md": "98b0a9da90d57c922066dc428028484440c97f06b3870f18a4fe252f21575e32",
+    "benchmarks/harness/foil_adaptive_two_benchmark_pilot.py": "560e85b256fdda78207030384de73e618fc8eb092e6bc58b0e99612e8532dd03",
+    "benchmarks/harness/foil_rps_v061_hle_shadow_small.py": "3500ee7ac57474cd1c2b67661ba6f969c6546b045161a0ccc29023504bb0bc1a",
+    "benchmarks/harness/foil_rps_v061_hle_shadow_small_schemafix.py": "2b3efca59a83072c0d9b515874468c97119375f1e35ec86739d2b5e2cd433003",
+    "tools/foil_policy.py": "76c3efdde5f38dfbdfb48a805509acff7f40358136b254c6c379e8e946a79d79",
+    "tools/foil_rps.py": "c46fb58ba371744cdc5b4f90c6e9e0bd382c5ecaa2efe434bfaf449db25256d4"
+  },
+  "schema": "foil.rps-v061-hle-shadow-small-schemafix-lock.v1"
+}

@@ -1,0 +1,33 @@
+{
+  "answer": null,
+  "call_id": "control-TERRA_LOW",
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "TERRA_LOW",
+  "effort": "low",
+  "event_types": [
+    "error",
+    "thread.started",
+    "turn.failed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-26T00:30:57.822083+00:00",
+  "invalid_reasons": [
+    "returncode=1",
+    "tool_events=['error:<none>', 'turn.failed:<none>']",
+    "last output is not JSON: Expecting value: line 1 column 1 (char 0)"
+  ],
+  "kind": "controls",
+  "last_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "model": "gpt-5.6-terra",
+  "pre_call_commit": "364445421066ad95d51d1bf9080811e79396c368",
+  "prompt_sha256": "34a22e3f1ae3d38a42a08a92bc1edd6c4b1b16875aa5757233a6d3eff0844522",
+  "returncode": 1,
+  "schema": "foil.adaptive-two-benchmark-receipt.v1",
+  "started_at": "2026-08-26T00:30:52.113128+00:00",
+  "stderr_sha256": "adc1610256464b277edfe62032c90a6ac085855cf7e2cc252dc54f6f34561af8",
+  "stdout_sha256": "2d66addf26aed717d49c93135aee0a858c6faf21367d4f15ecd3ca355ce3ed15",
+  "timed_out": false,
+  "usage": {},
+  "valid": false,
+  "wall_seconds": 5.71900000000096
+}
