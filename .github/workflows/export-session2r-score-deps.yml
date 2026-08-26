@@ -28,10 +28,17 @@ jobs:
             --target scoredeps \
             -r benchmarks/session2r_test2r_mind/requirements-score.txt
           python - <<'PY'
-          import sys
+          import sys, types, typing
+          typing_io = types.ModuleType('typing.io')
+          typing_io.TextIO = typing.TextIO
+          sys.modules['typing.io'] = typing_io
+          typing_re = types.ModuleType('typing.re')
+          typing_re.Pattern = typing.Pattern
+          typing_re.Match = typing.Match
+          sys.modules['typing.re'] = typing_re
           sys.path.insert(0, 'scoredeps')
           import sympy, regex, latex2sympy2, antlr4
-          print('dependency import check passed')
+          print('dependency import check passed with Python 3.13 compatibility shim')
           PY
       - uses: actions/upload-artifact@v4
         with:
