@@ -39,10 +39,7 @@ SCORER_ROWS = OUT / "rps_scorer_rows.jsonl"
 
 HLE_REVISION = "0bc83643672d4f68a5f89998617a639d85e7318b"
 HLE_DATA = Path(
-    os.environ.get(
-        "FOIL_HLE_VERIFIED_DATA",
-        r"C:\Users\tombl\Documents\Codex\benchmark-data\HLE-Verified_0bc8364",
-    )
+    os.environ.get("FOIL_HLE_VERIFIED_DATA", ROOT.parent / "benchmark-data" / "HLE-Verified_0bc8364")
 )
 HLE_SHARDS = {
     "Gold_subset.part01.parquet": "0f9347730c0b9a7b690931bfe38f748d2b142be8b4b3318e16d23844b18af98b",

@@ -151,6 +151,13 @@ class ProcessBenchScorerTests(unittest.TestCase):
         first = p05.build_report(rows, manifest)
         second = p05.build_report(rows, manifest)
         self.assertEqual(first["report_sha256"], second["report_sha256"])
+        self.assertTrue(
+            all(
+                set(source) == {"filename", "sha256", "rows"}
+                for source in first["source_manifest"].values()
+            )
+        )
+        self.assertNotIn(str(ROOT), json.dumps(first))
         self.assertEqual(len(first["raw_rows"]), 3400)
         self.assertTrue(
             all(first["subsets"][split]["alpha"]["successes"] == 0 for split in p05.SPLITS)
@@ -167,6 +174,16 @@ class ProcessBenchScorerTests(unittest.TestCase):
         result = independent_audit.verify(json.loads(path.read_text(encoding="utf-8")))
         self.assertEqual(result["verified_rows"], 3400)
         self.assertEqual(result["verified_generators"], 12)
+
+    def test_independent_audit_rejects_rehashed_source_manifest_tamper(self) -> None:
+        path = ROOT / "benchmark_runs" / "foil_p05_processbench" / "p05_report.json"
+        report = json.loads(path.read_text(encoding="utf-8"))
+        report["source_manifest"]["gsm8k"]["sha256"] = "0" * 64
+        unsigned = dict(report)
+        unsigned.pop("report_sha256")
+        report["report_sha256"] = independent_audit._canonical_digest(unsigned)
+        with self.assertRaisesRegex(AssertionError, "gsm8k.source_manifest"):
+            independent_audit.verify(report)
 
 
 if __name__ == "__main__":

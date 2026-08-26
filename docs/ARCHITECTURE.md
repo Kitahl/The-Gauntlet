@@ -122,6 +122,8 @@ documentation task: `tests/test_foil_assistance.py::ContractDriftTests` and
 | Module | Authoritative for |
 |---|---|
 | `tools/foil_profile.py` | persistent profile storage, migration receipts, sanitized `compact_context()` |
+| `tools/foil_assistance_policy.py` | **the deterministic assistance selector.** Starts teaching at A1, consumes only typed evidence and explicit task state, raises a persistent floor only after observed failure, preserves the floor across A0 ownership probes, and fades to A0 only after earned strength. It never reads an answer or writes a profile. |
+| `tools/foil_contract_audit.py` | **the executable 19-section SKILL contract audit.** Requires every `must`/`never` line to be mapped to existing tests, partial evidence, or `UNTESTABLE_AS_WRITTEN`; new unmapped modal lines fail closed. |
 | `tools/foil_hook.py` | prompt-time relevance injection within the host payload cap |
 | `tools/foil_assessment.py` | Layer 1 broad cold start |
 | `tools/foil_layer2.py` | Layer 2A structured cross-cutting screen |
@@ -145,6 +147,13 @@ evidence into a small deterministic policy. Two properties matter architecturall
 
 - **The routing regime is derived from task properties** — freshness sensitivity, closed context, multi-hop structure, abstract transformation, closed-book technical reasoning, external-retrieval need. **Benchmark identity is receipt metadata and never a policy selector**, so the same task properties yield the same policy inside and outside an evaluation.
 - **A profile can trigger help only** when it describes a verified gap matching a capability the current task actually requires. A wrong, irrelevant, or stale profile is a negative control that cannot route.
+
+The PERSON surface has two deterministic, zero-provider conformance harnesses:
+`benchmarks/harness/foil_assistance_replay.py` replays frozen ownership and ladder
+scenarios, while `benchmarks/harness/foil_persona_simulation.py` runs scripted
+personas with known skill and minimum-assistance vectors. These prove named state
+transitions and estimator invariants only; they are not evidence of human-learning
+efficacy, production personalization quality, or calibration on real people.
 
 ### Mirror (`foil`) — model layer
 

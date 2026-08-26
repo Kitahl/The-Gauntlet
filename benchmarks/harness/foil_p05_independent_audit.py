@@ -12,6 +12,24 @@ from typing import Mapping, Sequence
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 SPLITS = ("gsm8k", "math", "olympiadbench", "omnimath")
+EXPECTED_SOURCES = {
+    "gsm8k": {
+        "filename": "gsm8k.parquet", "rows": 400,
+        "sha256": "9896315aff77fff8fe60361f05b612250598a4bd88a70ffba567b4d580d6d4a3",
+    },
+    "math": {
+        "filename": "math.parquet", "rows": 1000,
+        "sha256": "1874b72fb3c63fb7ea603910195f7efe577895bf5da8ae550b7000fac6322bdd",
+    },
+    "olympiadbench": {
+        "filename": "olympiadbench.parquet", "rows": 1000,
+        "sha256": "7ce6eb318520c69e8f07ef3ceeaefd439dac7099a34fd72c8ab41dad0c03e830",
+    },
+    "omnimath": {
+        "filename": "omnimath.parquet", "rows": 1000,
+        "sha256": "4243eb284456cf1a5c3c1d9e562cbc16d1d7827f4c342852455db8cb86cdedf2",
+    },
+}
 
 
 def _canonical_digest(value: object) -> str:
@@ -144,10 +162,19 @@ def verify(report: Mapping[str, object]) -> dict[str, object]:
     )
 
     for split, source in report["source_manifest"].items():
-        path = Path(str(source["path"]))
-        if not path.is_file():
-            raise AssertionError(f"source parquet is missing: {path}")
-        _assert_equal(_file_sha256(path), source["sha256"], f"{split}.source_sha256")
+        _assert_equal(
+            set(source), {"filename", "sha256", "rows"}, f"{split}.source_manifest_fields"
+        )
+        _assert_equal(dict(source), EXPECTED_SOURCES[split], f"{split}.source_manifest")
+        _assert_equal(source["filename"], f"{split}.parquet", f"{split}.source_filename")
+        digest = str(source["sha256"])
+        if len(digest) != 64 or any(char not in "0123456789abcdef" for char in digest):
+            raise AssertionError(f"{split}.source_sha256 is not a lowercase SHA-256")
+        _assert_equal(
+            int(source["rows"]),
+            sum(str(row["split"]) == split for row in raw_rows),
+            f"{split}.source_rows",
+        )
 
     counters = report["cost_and_authority"]
     if any(int(value) != 0 for value in counters.values()):

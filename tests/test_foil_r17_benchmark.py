@@ -53,8 +53,12 @@ class R17ProtocolTests(unittest.TestCase):
         report = (ROOT / "benchmarks" / "results" / "foil_r16_no_oracle_discovery_report.json").read_bytes()
         excluded = protocol.load_r16_exclusions(labels, report)
         self.assertGreaterEqual(len(excluded), 60)
+        crlf_report = report.replace(b"\n", b"\r\n")
+        self.assertEqual(excluded, protocol.load_r16_exclusions(labels, crlf_report))
         with self.assertRaisesRegex(RuntimeError, "label exclusion digest"):
             protocol.load_r16_exclusions(labels + b" ", report)
+        with self.assertRaisesRegex(RuntimeError, "report exclusion digest"):
+            protocol.load_r16_exclusions(labels, report + b" ")
 
     def test_fresh_selection_is_deterministic_and_disjoint(self) -> None:
         records = _records()

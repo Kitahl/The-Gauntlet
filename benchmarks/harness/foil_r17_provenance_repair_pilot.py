@@ -77,6 +77,28 @@ def sha256_text(value: str) -> str:
     return sha256_bytes(value.encode("utf-8"))
 
 
+def _matches_frozen_text_digest(value: bytes, expected: str) -> bool:
+    """Match a frozen text artifact independent of Git checkout newlines.
+
+    The R1.6 report digest was frozen from a Windows CRLF checkout while the
+    repository now enforces LF. Accept only those two byte representations;
+    every other content change remains a hard failure.
+    """
+
+    if sha256_bytes(value) == expected:
+        return True
+    try:
+        text = value.decode("utf-8")
+    except UnicodeDecodeError:
+        return False
+    normalized = text.replace("\r\n", "\n").replace("\r", "\n")
+    variants = (
+        normalized.encode("utf-8"),
+        normalized.replace("\n", "\r\n").encode("utf-8"),
+    )
+    return any(sha256_bytes(candidate) == expected for candidate in variants)
+
+
 def _rank_key(*parts: str) -> str:
     return sha256_text("\0".join((str(SELECTION_SEED), *parts)))
 
@@ -86,9 +108,9 @@ def load_source(source: bytes) -> list[SourceResponse]:
 
 
 def load_r16_exclusions(label_bytes: bytes, report_bytes: bytes) -> set[str]:
-    if sha256_bytes(label_bytes) != R16_LABEL_FILE_SHA256:
+    if not _matches_frozen_text_digest(label_bytes, R16_LABEL_FILE_SHA256):
         raise RuntimeError("R1.6 label exclusion digest mismatch")
-    if sha256_bytes(report_bytes) != R16_REPORT_FILE_SHA256:
+    if not _matches_frozen_text_digest(report_bytes, R16_REPORT_FILE_SHA256):
         raise RuntimeError("R1.6 report exclusion digest mismatch")
     labels, report = json.loads(label_bytes), json.loads(report_bytes)
     if not isinstance(labels, dict) or not isinstance(labels.get("rows"), list):

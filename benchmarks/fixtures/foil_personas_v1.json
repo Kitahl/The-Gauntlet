@@ -1,0 +1,97 @@
+{
+  "schema": "foil.simulated-personas.v1",
+  "probe_every": 3,
+  "intent": "TEACH",
+  "demand": "HARD",
+  "personas": [
+    {
+      "id": "fast-learner",
+      "capability": "quantitative_reasoning",
+      "claimed_strength": false,
+      "adversarial_profile": false,
+      "true_skill_start": 0.35,
+      "true_skill_end": 0.90,
+      "execution_owner": "USER",
+      "verifier_available": true,
+      "expected_final_assistance": "A0_INDEPENDENT",
+      "initial_events": [],
+      "independent_outcomes": [false, false, true, false, true, true, true, true, true, true, true, true, true, true, true],
+      "minimum_effective_assistance": ["A2_SCAFFOLD", "A2_SCAFFOLD", "A0_INDEPENDENT", "A2_SCAFFOLD", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT"]
+    },
+    {
+      "id": "plateau",
+      "capability": "quantitative_reasoning",
+      "claimed_strength": false,
+      "adversarial_profile": false,
+      "true_skill_start": 0.20,
+      "true_skill_end": 0.20,
+      "execution_owner": "USER",
+      "verifier_available": true,
+      "expected_final_assistance": "A2_SCAFFOLD",
+      "initial_events": [],
+      "independent_outcomes": [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+      "minimum_effective_assistance": ["A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD"]
+    },
+    {
+      "id": "confident-wrong",
+      "capability": "causal_reasoning",
+      "claimed_strength": true,
+      "adversarial_profile": true,
+      "true_skill_start": 0.15,
+      "true_skill_end": 0.15,
+      "execution_owner": "USER",
+      "verifier_available": true,
+      "expected_final_assistance": "A2_SCAFFOLD",
+      "initial_events": [],
+      "independent_outcomes": [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+      "minimum_effective_assistance": ["A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD", "A2_SCAFFOLD"]
+    },
+    {
+      "id": "copy-paster",
+      "capability": "implementation_execution",
+      "claimed_strength": true,
+      "adversarial_profile": true,
+      "true_skill_start": 0.10,
+      "true_skill_end": 0.10,
+      "execution_owner": "TOOL",
+      "verifier_available": true,
+      "expected_final_assistance": "A4_DIRECT_SOLVE",
+      "initial_events": [],
+      "independent_outcomes": [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+      "minimum_effective_assistance": ["A4_DIRECT_SOLVE", "A4_DIRECT_SOLVE", "A4_DIRECT_SOLVE", "A4_DIRECT_SOLVE", "A4_DIRECT_SOLVE", "A4_DIRECT_SOLVE", "A4_DIRECT_SOLVE", "A4_DIRECT_SOLVE", "A4_DIRECT_SOLVE", "A4_DIRECT_SOLVE", "A4_DIRECT_SOLVE", "A4_DIRECT_SOLVE", "A4_DIRECT_SOLVE", "A4_DIRECT_SOLVE", "A4_DIRECT_SOLVE"]
+    },
+    {
+      "id": "lucky-unverified",
+      "capability": "evidence_discipline",
+      "claimed_strength": false,
+      "adversarial_profile": true,
+      "true_skill_start": 0.55,
+      "true_skill_end": 0.55,
+      "execution_owner": "USER",
+      "verifier_available": false,
+      "expected_final_assistance": "A1_MICRO_HINT",
+      "initial_events": [],
+      "independent_outcomes": [true, true, false, true, false, true, true, false, true, false, true, false, true, true, false],
+      "minimum_effective_assistance": ["A0_INDEPENDENT", "A0_INDEPENDENT", "A1_MICRO_HINT", "A0_INDEPENDENT", "A1_MICRO_HINT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A1_MICRO_HINT", "A0_INDEPENDENT", "A1_MICRO_HINT", "A0_INDEPENDENT", "A1_MICRO_HINT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A1_MICRO_HINT"]
+    },
+    {
+      "id": "strong-but-rusty",
+      "capability": "formalization_precision",
+      "claimed_strength": true,
+      "adversarial_profile": false,
+      "true_skill_start": 0.80,
+      "true_skill_end": 0.85,
+      "execution_owner": "USER",
+      "verifier_available": true,
+      "expected_final_assistance": "A0_INDEPENDENT",
+      "initial_events": [
+        {"correct": true, "tier": "REAL_WORK", "age_days": 720},
+        {"correct": true, "tier": "REAL_WORK", "age_days": 720},
+        {"correct": true, "tier": "REAL_WORK", "age_days": 720},
+        {"correct": true, "tier": "REAL_WORK", "age_days": 720}
+      ],
+      "independent_outcomes": [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true],
+      "minimum_effective_assistance": ["A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT", "A0_INDEPENDENT"]
+    }
+  ]
+}

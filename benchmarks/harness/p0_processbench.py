@@ -505,6 +505,22 @@ def _canonical_digest(value: object) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
+def _portable_source_manifest(manifest: Mapping[str, object]) -> dict[str, object]:
+    """Retain source identity without persisting machine-specific paths."""
+
+    portable: dict[str, object] = {}
+    for split in SPLITS:
+        source = manifest[split]
+        if not isinstance(source, Mapping):
+            raise TypeError("source manifest entry must be an object")
+        portable[split] = {
+            "filename": Path(str(source["path"])).name,
+            "sha256": source["sha256"],
+            "rows": source["rows"],
+        }
+    return portable
+
+
 def build_report(
     rows: Sequence[ProcessRow], source_manifest: Mapping[str, object]
 ) -> dict[str, object]:
@@ -548,7 +564,7 @@ def build_report(
     report: dict[str, object] = {
         "schema": REPORT_SCHEMA,
         "classification": "PROCESSBENCH_P05_DETERMINISTIC_ARITHMETIC_SMOKE",
-        "source_manifest": dict(source_manifest),
+        "source_manifest": _portable_source_manifest(source_manifest),
         "scoring_boundary": {
             "clean_definition": "label == -1",
             "final_answer_correct_used": False,

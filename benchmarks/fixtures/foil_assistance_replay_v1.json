@@ -1,0 +1,63 @@
+{
+  "schema": "foil.assistance-replay-fixture.v1",
+  "cases": [
+    {
+      "id": "novice-zero-evidence-hard",
+      "intent": "TEACH",
+      "demand": "HARD",
+      "deadline": false,
+      "deliverable": false,
+      "ownership_probe_due": false,
+      "events": [],
+      "expected_classification": "INSUFFICIENT_EVIDENCE",
+      "expected_assistance": "A1_MICRO_HINT",
+      "expected_load_bearing_n": 0.0
+    },
+    {
+      "id": "four-independent-successes-fade",
+      "intent": "TEACH",
+      "demand": "HARD",
+      "deadline": false,
+      "deliverable": false,
+      "ownership_probe_due": false,
+      "events": [
+        {"correct": true, "verified": true, "assistance": "A0_INDEPENDENT", "execution_owner": "USER", "source": "usage"},
+        {"correct": true, "verified": true, "assistance": "A0_INDEPENDENT", "execution_owner": "USER", "source": "usage"},
+        {"correct": true, "verified": true, "assistance": "A0_INDEPENDENT", "execution_owner": "USER", "source": "usage"},
+        {"correct": true, "verified": true, "assistance": "A0_INDEPENDENT", "execution_owner": "USER", "source": "usage"}
+      ],
+      "expected_classification": "PROMISING_STRENGTH",
+      "expected_assistance": "A0_INDEPENDENT",
+      "expected_load_bearing_n": 4.0
+    },
+    {
+      "id": "deadline-does-not-force-tutoring",
+      "intent": "TEACH",
+      "demand": "HARD",
+      "deadline": true,
+      "deliverable": false,
+      "ownership_probe_due": false,
+      "events": [],
+      "expected_classification": "INSUFFICIENT_EVIDENCE",
+      "expected_assistance": "A4_DIRECT_SOLVE",
+      "expected_load_bearing_n": 0.0
+    },
+    {
+      "id": "copy-pasted-tool-answer-never-becomes-user-skill",
+      "intent": "TEACH",
+      "demand": "HARD",
+      "deadline": false,
+      "deliverable": false,
+      "ownership_probe_due": false,
+      "events": [
+        {"correct": true, "verified": true, "assistance": "A0_INDEPENDENT", "execution_owner": "TOOL", "source": "usage"},
+        {"correct": true, "verified": true, "assistance": "A0_INDEPENDENT", "execution_owner": "TOOL", "source": "usage"},
+        {"correct": true, "verified": true, "assistance": "A0_INDEPENDENT", "execution_owner": "TOOL", "source": "usage"},
+        {"correct": true, "verified": true, "assistance": "A0_INDEPENDENT", "execution_owner": "TOOL", "source": "usage"}
+      ],
+      "expected_classification": "INSUFFICIENT_EVIDENCE",
+      "expected_assistance": "A1_MICRO_HINT",
+      "expected_load_bearing_n": 0.0
+    }
+  ]
+}

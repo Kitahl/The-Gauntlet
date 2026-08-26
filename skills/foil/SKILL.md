@@ -175,8 +175,11 @@ If the user wants a deliverable now, solve first and defer diagnosis.
 FOIL must choose assistance intensity rather than treating every interaction as a lesson.
 
 The ladder below is generated from `tools/foil_assistance.py`, which is the
-single source of truth. `tests/test_foil_assistance.py::ContractDriftTests`
-fails if this block and the runtime enums disagree.
+single source of truth for rung names. `tools/foil_assistance_policy.py` is the
+single source of truth for runtime rung selection. It starts teaching at A1,
+raises the persistent floor only after an observed failure, preserves that floor
+through temporary ownership probes, and lets earned strength fade to A0.
+`tests/test_foil_assistance.py::ContractDriftTests` fails if the generated block and runtime enums disagree.
 
 <!-- generated from tools/foil_assistance.py: do not edit by hand -->
 - `A0_INDEPENDENT` — independent (the only rung that can support ownership or transfer)
@@ -207,8 +210,9 @@ evidence.
 
 Rules:
 
-- `/foil teach` normally starts low and increases only as needed.
+- `/foil teach` starts at `A1_MICRO_HINT` and increases one rung only after an observed failure.
 - `/foil solve`, deadlines, and deliverable requests normally use `A4_DIRECT_SOLVE` first.
+- A failed ownership probe does not erase or silently increase the previously earned assistance floor.
 - Later ownership probes must reduce assistance.
 - Never count success at `A1_MICRO_HINT` or above as independent mastery unless the later target attempt itself is at `A0_INDEPENDENT` and owned by `USER`.
 - Prefer one decisive probe to repeated quizzing.

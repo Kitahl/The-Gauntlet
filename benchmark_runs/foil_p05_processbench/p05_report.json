@@ -3,22 +3,22 @@
   "classification": "PROCESSBENCH_P05_DETERMINISTIC_ARITHMETIC_SMOKE",
   "source_manifest": {
     "gsm8k": {
-      "path": "C:\\Users\\tombl\\Documents\\Codex\\2026-08-23\\thi\\work\\foil-v4-authority-final-repo\\benchmark_runs\\foil_p05_processbench\\data\\gsm8k.parquet",
+      "filename": "gsm8k.parquet",
       "sha256": "9896315aff77fff8fe60361f05b612250598a4bd88a70ffba567b4d580d6d4a3",
       "rows": 400
     },
     "math": {
-      "path": "C:\\Users\\tombl\\Documents\\Codex\\2026-08-23\\thi\\work\\foil-v4-authority-final-repo\\benchmark_runs\\foil_p05_processbench\\data\\math.parquet",
+      "filename": "math.parquet",
       "sha256": "1874b72fb3c63fb7ea603910195f7efe577895bf5da8ae550b7000fac6322bdd",
       "rows": 1000
     },
     "olympiadbench": {
-      "path": "C:\\Users\\tombl\\Documents\\Codex\\2026-08-23\\thi\\work\\foil-v4-authority-final-repo\\benchmark_runs\\foil_p05_processbench\\data\\olympiadbench.parquet",
+      "filename": "olympiadbench.parquet",
       "sha256": "7ce6eb318520c69e8f07ef3ceeaefd439dac7099a34fd72c8ab41dad0c03e830",
       "rows": 1000
     },
     "omnimath": {
-      "path": "C:\\Users\\tombl\\Documents\\Codex\\2026-08-23\\thi\\work\\foil-v4-authority-final-repo\\benchmark_runs\\foil_p05_processbench\\data\\omnimath.parquet",
+      "filename": "omnimath.parquet",
       "sha256": "4243eb284456cf1a5c3c1d9e562cbc16d1d7827f4c342852455db8cb86cdedf2",
       "rows": 1000
     }
@@ -43424,5 +43424,5 @@
     "not a promotion or production-authority receipt",
     "not a reproduction of the missing original 27-row extractor audit"
   ],
-  "report_sha256": "443006095044143a9028ceeb272cd1b5a37719167b6f9a2a47968c5af7b193f2"
+  "report_sha256": "26c42631024eff90908870f6a9591ba4712ccd8d6179af2826f5a97a34e11bd8"
 }
