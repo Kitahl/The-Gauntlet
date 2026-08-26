@@ -1,0 +1,747 @@
+{
+  "adjudications": [
+    {
+      "classification": "CORPUS_LABEL_FALSE_NEGATIVE_GENUINE_ERROR",
+      "first_error_step": "5",
+      "id": "omnimath-805",
+      "proof": "1404 != 2^2 * 3^2 * 13; right side equals 468",
+      "row_sha256": "6dbb51b67fc49f3b1a10a2b2163f18fb74afc1f02f103688e6c9990b7454f497",
+      "split": "omnimath"
+    }
+  ],
+  "classification": "DEVELOPMENT_SMOKE_ONLY",
+  "cost_and_authority": {
+    "answer_mutations": 0,
+    "execution_authorizations": 0,
+    "model_tokens": 0,
+    "promotion_authorizations": 0,
+    "provider_calls": 0
+  },
+  "gate": {
+    "answer_change_authority": "BENCHMARK_ONLY_IF_SEPARATELY_ENABLED",
+    "decision": "SMOKE_GATE_PASS",
+    "production_admission": false,
+    "rule": "zero audited false fires, >=20 audited controls, >=1 genuine detection"
+  },
+  "non_claims": [
+    "not fresh calibration because rules and adjudication were developed on ProcessBench",
+    "not production admission or promotion evidence",
+    "not frontier-model evidence",
+    "not permission to pool subsets for a confidence certificate"
+  ],
+  "report_sha256": "f30bc4810e22b4b185fce6f82c47bc972d1a9ba30159a064fb9b4e0fd9854e5f",
+  "rule_reports": {
+    "certified-v2": {
+      "all_splits_descriptive_only": {
+        "adjudicated_label_errors": 0,
+        "applicable_rows": 755,
+        "audited_alpha": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 1178,
+          "upper": 0.0032504011363142914
+        },
+        "audited_control_rows": 1178,
+        "audited_false_fires": 0,
+        "corpus_clean_rows": 1179,
+        "corpus_error_rows": 2221,
+        "genuine_error_detections": 56,
+        "genuine_error_rows": 2222,
+        "genuine_recall": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.019459103463585307,
+          "rate": 0.025202520252025202,
+          "successes": 56,
+          "total": 2222,
+          "upper": 0.03258479137970232
+        },
+        "labeled_false_fire_rows": [],
+        "labeled_false_fires": 0,
+        "rows": 3400
+      },
+      "gsm8k": {
+        "adjudicated_label_errors": 0,
+        "applicable_rows": 102,
+        "audited_alpha": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 1.734723475976807e-18,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 193,
+          "upper": 0.019515496601726398
+        },
+        "audited_control_rows": 193,
+        "audited_false_fires": 0,
+        "corpus_clean_rows": 193,
+        "corpus_error_rows": 207,
+        "genuine_error_detections": 1,
+        "genuine_error_rows": 207,
+        "genuine_recall": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0008532852477254518,
+          "rate": 0.004830917874396135,
+          "successes": 1,
+          "total": 207,
+          "upper": 0.026852171038563452
+        },
+        "labeled_false_fire_rows": [],
+        "labeled_false_fires": 0,
+        "rows": 400
+      },
+      "math": {
+        "adjudicated_label_errors": 0,
+        "applicable_rows": 233,
+        "audited_alpha": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 406,
+          "upper": 0.009373036177813245
+        },
+        "audited_control_rows": 406,
+        "audited_false_fires": 0,
+        "corpus_clean_rows": 406,
+        "corpus_error_rows": 594,
+        "genuine_error_detections": 14,
+        "genuine_error_rows": 594,
+        "genuine_recall": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.014090567169098591,
+          "rate": 0.02356902356902357,
+          "successes": 14,
+          "total": 594,
+          "upper": 0.0391701399145232
+        },
+        "labeled_false_fire_rows": [],
+        "labeled_false_fires": 0,
+        "rows": 1000
+      },
+      "olympiadbench": {
+        "adjudicated_label_errors": 0,
+        "applicable_rows": 199,
+        "audited_alpha": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 339,
+          "upper": 0.011204767456969678
+        },
+        "audited_control_rows": 339,
+        "audited_false_fires": 0,
+        "corpus_clean_rows": 339,
+        "corpus_error_rows": 661,
+        "genuine_error_detections": 19,
+        "genuine_error_rows": 661,
+        "genuine_recall": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.01847781836198623,
+          "rate": 0.028744326777609682,
+          "successes": 19,
+          "total": 661,
+          "upper": 0.04445667265924633
+        },
+        "labeled_false_fire_rows": [],
+        "labeled_false_fires": 0,
+        "rows": 1000
+      },
+      "omnimath": {
+        "adjudicated_label_errors": 0,
+        "applicable_rows": 221,
+        "audited_alpha": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 240,
+          "upper": 0.015753919941558808
+        },
+        "audited_control_rows": 240,
+        "audited_false_fires": 0,
+        "corpus_clean_rows": 241,
+        "corpus_error_rows": 759,
+        "genuine_error_detections": 22,
+        "genuine_error_rows": 760,
+        "genuine_recall": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.01919290380183738,
+          "rate": 0.02894736842105263,
+          "successes": 22,
+          "total": 760,
+          "upper": 0.043439803899780756
+        },
+        "labeled_false_fire_rows": [],
+        "labeled_false_fires": 0,
+        "rows": 1000
+      }
+    },
+    "numeric-power-equality-v1": {
+      "all_splits_descriptive_only": {
+        "adjudicated_label_errors": 1,
+        "applicable_rows": 293,
+        "audited_alpha": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 1178,
+          "upper": 0.0032504011363142914
+        },
+        "audited_control_rows": 1178,
+        "audited_false_fires": 0,
+        "corpus_clean_rows": 1179,
+        "corpus_error_rows": 2221,
+        "genuine_error_detections": 27,
+        "genuine_error_rows": 2222,
+        "genuine_recall": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.008364432667522967,
+          "rate": 0.012151215121512151,
+          "successes": 27,
+          "total": 2222,
+          "upper": 0.017621900991362134
+        },
+        "labeled_false_fire_rows": [
+          {
+            "adjudication": {
+              "classification": "CORPUS_LABEL_FALSE_NEGATIVE_GENUINE_ERROR",
+              "first_error_step": "5",
+              "proof": "1404 != 2^2 * 3^2 * 13; right side equals 468",
+              "row_sha256": "6dbb51b67fc49f3b1a10a2b2163f18fb74afc1f02f103688e6c9990b7454f497"
+            },
+            "findings": [
+              {
+                "language": "numeric-power-equality-v1",
+                "left_source": "1404",
+                "left_value": "1404",
+                "right_source": "2^2 \\times 3^2 \\times 13",
+                "right_value": "468",
+                "source_span": "\\[ 1404 = 2^2 \\times 3^2 \\times 13 \\]",
+                "step_index": 5,
+                "violating": true
+              }
+            ],
+            "id": "omnimath-805",
+            "row_sha256": "6dbb51b67fc49f3b1a10a2b2163f18fb74afc1f02f103688e6c9990b7454f497",
+            "split": "omnimath"
+          }
+        ],
+        "labeled_false_fires": 1,
+        "rows": 3400
+      },
+      "gsm8k": {
+        "adjudicated_label_errors": 0,
+        "applicable_rows": 1,
+        "audited_alpha": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 1.734723475976807e-18,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 193,
+          "upper": 0.019515496601726398
+        },
+        "audited_control_rows": 193,
+        "audited_false_fires": 0,
+        "corpus_clean_rows": 193,
+        "corpus_error_rows": 207,
+        "genuine_error_detections": 0,
+        "genuine_error_rows": 207,
+        "genuine_recall": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 207,
+          "upper": 0.018219655859813673
+        },
+        "labeled_false_fire_rows": [],
+        "labeled_false_fires": 0,
+        "rows": 400
+      },
+      "math": {
+        "adjudicated_label_errors": 0,
+        "applicable_rows": 86,
+        "audited_alpha": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 406,
+          "upper": 0.009373036177813245
+        },
+        "audited_control_rows": 406,
+        "audited_false_fires": 0,
+        "corpus_clean_rows": 406,
+        "corpus_error_rows": 594,
+        "genuine_error_detections": 13,
+        "genuine_error_rows": 594,
+        "genuine_recall": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.012833855060191433,
+          "rate": 0.021885521885521887,
+          "successes": 13,
+          "total": 594,
+          "upper": 0.03708148349722407
+        },
+        "labeled_false_fire_rows": [],
+        "labeled_false_fires": 0,
+        "rows": 1000
+      },
+      "olympiadbench": {
+        "adjudicated_label_errors": 0,
+        "applicable_rows": 114,
+        "audited_alpha": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 339,
+          "upper": 0.011204767456969678
+        },
+        "audited_control_rows": 339,
+        "audited_false_fires": 0,
+        "corpus_clean_rows": 339,
+        "corpus_error_rows": 661,
+        "genuine_error_detections": 5,
+        "genuine_error_rows": 661,
+        "genuine_recall": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0032352179055432683,
+          "rate": 0.007564296520423601,
+          "successes": 5,
+          "total": 661,
+          "upper": 0.017583969341362655
+        },
+        "labeled_false_fire_rows": [],
+        "labeled_false_fires": 0,
+        "rows": 1000
+      },
+      "omnimath": {
+        "adjudicated_label_errors": 1,
+        "applicable_rows": 92,
+        "audited_alpha": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 240,
+          "upper": 0.015753919941558808
+        },
+        "audited_control_rows": 240,
+        "audited_false_fires": 0,
+        "corpus_clean_rows": 241,
+        "corpus_error_rows": 759,
+        "genuine_error_detections": 9,
+        "genuine_error_rows": 760,
+        "genuine_recall": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.006242469970936287,
+          "rate": 0.011842105263157895,
+          "successes": 9,
+          "total": 760,
+          "upper": 0.022351760636047872
+        },
+        "labeled_false_fire_rows": [
+          {
+            "adjudication": {
+              "classification": "CORPUS_LABEL_FALSE_NEGATIVE_GENUINE_ERROR",
+              "first_error_step": "5",
+              "proof": "1404 != 2^2 * 3^2 * 13; right side equals 468",
+              "row_sha256": "6dbb51b67fc49f3b1a10a2b2163f18fb74afc1f02f103688e6c9990b7454f497"
+            },
+            "findings": [
+              {
+                "language": "numeric-power-equality-v1",
+                "left_source": "1404",
+                "left_value": "1404",
+                "right_source": "2^2 \\times 3^2 \\times 13",
+                "right_value": "468",
+                "source_span": "\\[ 1404 = 2^2 \\times 3^2 \\times 13 \\]",
+                "step_index": 5,
+                "violating": true
+              }
+            ],
+            "id": "omnimath-805",
+            "row_sha256": "6dbb51b67fc49f3b1a10a2b2163f18fb74afc1f02f103688e6c9990b7454f497",
+            "split": "omnimath"
+          }
+        ],
+        "labeled_false_fires": 1,
+        "rows": 1000
+      }
+    },
+    "raw-numeric-equality-v1": {
+      "all_splits_descriptive_only": {
+        "adjudicated_label_errors": 0,
+        "applicable_rows": 8,
+        "audited_alpha": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 1178,
+          "upper": 0.0032504011363142914
+        },
+        "audited_control_rows": 1178,
+        "audited_false_fires": 0,
+        "corpus_clean_rows": 1179,
+        "corpus_error_rows": 2221,
+        "genuine_error_detections": 1,
+        "genuine_error_rows": 2222,
+        "genuine_recall": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 7.944841207105629e-05,
+          "rate": 0.00045004500450045,
+          "successes": 1,
+          "total": 2222,
+          "upper": 0.002544933840108339
+        },
+        "labeled_false_fire_rows": [],
+        "labeled_false_fires": 0,
+        "rows": 3400
+      },
+      "gsm8k": {
+        "adjudicated_label_errors": 0,
+        "applicable_rows": 0,
+        "audited_alpha": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 1.734723475976807e-18,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 193,
+          "upper": 0.019515496601726398
+        },
+        "audited_control_rows": 193,
+        "audited_false_fires": 0,
+        "corpus_clean_rows": 193,
+        "corpus_error_rows": 207,
+        "genuine_error_detections": 0,
+        "genuine_error_rows": 207,
+        "genuine_recall": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 207,
+          "upper": 0.018219655859813673
+        },
+        "labeled_false_fire_rows": [],
+        "labeled_false_fires": 0,
+        "rows": 400
+      },
+      "math": {
+        "adjudicated_label_errors": 0,
+        "applicable_rows": 4,
+        "audited_alpha": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 406,
+          "upper": 0.009373036177813245
+        },
+        "audited_control_rows": 406,
+        "audited_false_fires": 0,
+        "corpus_clean_rows": 406,
+        "corpus_error_rows": 594,
+        "genuine_error_detections": 0,
+        "genuine_error_rows": 594,
+        "genuine_recall": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 594,
+          "upper": 0.006425547716733814
+        },
+        "labeled_false_fire_rows": [],
+        "labeled_false_fires": 0,
+        "rows": 1000
+      },
+      "olympiadbench": {
+        "adjudicated_label_errors": 0,
+        "applicable_rows": 1,
+        "audited_alpha": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 339,
+          "upper": 0.011204767456969678
+        },
+        "audited_control_rows": 339,
+        "audited_false_fires": 0,
+        "corpus_clean_rows": 339,
+        "corpus_error_rows": 661,
+        "genuine_error_detections": 1,
+        "genuine_error_rows": 661,
+        "genuine_recall": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0002671067522819282,
+          "rate": 0.0015128593040847202,
+          "successes": 1,
+          "total": 661,
+          "upper": 0.008519136559102098
+        },
+        "labeled_false_fire_rows": [],
+        "labeled_false_fires": 0,
+        "rows": 1000
+      },
+      "omnimath": {
+        "adjudicated_label_errors": 0,
+        "applicable_rows": 3,
+        "audited_alpha": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 240,
+          "upper": 0.015753919941558808
+        },
+        "audited_control_rows": 240,
+        "audited_false_fires": 0,
+        "corpus_clean_rows": 241,
+        "corpus_error_rows": 759,
+        "genuine_error_detections": 0,
+        "genuine_error_rows": 760,
+        "genuine_recall": {
+          "interval_name": "Wilson two-sided 95%",
+          "lower": 0.0,
+          "rate": 0.0,
+          "successes": 0,
+          "total": 760,
+          "upper": 0.005029131079929868
+        },
+        "labeled_false_fire_rows": [],
+        "labeled_false_fires": 0,
+        "rows": 1000
+      }
+    }
+  },
+  "rules": [
+    "certified-v2",
+    "numeric-power-equality-v1",
+    "raw-numeric-equality-v1"
+  ],
+  "schema": "foil.arithmetic-alarm-gate.v1",
+  "source_manifest": {
+    "gsm8k": {
+      "filename": "gsm8k.parquet",
+      "rows": 400,
+      "sha256": "9896315aff77fff8fe60361f05b612250598a4bd88a70ffba567b4d580d6d4a3"
+    },
+    "math": {
+      "filename": "math.parquet",
+      "rows": 1000,
+      "sha256": "1874b72fb3c63fb7ea603910195f7efe577895bf5da8ae550b7000fac6322bdd"
+    },
+    "olympiadbench": {
+      "filename": "olympiadbench.parquet",
+      "rows": 1000,
+      "sha256": "7ce6eb318520c69e8f07ef3ceeaefd439dac7099a34fd72c8ab41dad0c03e830"
+    },
+    "omnimath": {
+      "filename": "omnimath.parquet",
+      "rows": 1000,
+      "sha256": "4243eb284456cf1a5c3c1d9e562cbc16d1d7827f4c342852455db8cb86cdedf2"
+    }
+  },
+  "union_report": {
+    "all_splits_descriptive_only": {
+      "adjudicated_label_errors": 1,
+      "applicable_rows": 941,
+      "audited_alpha": {
+        "interval_name": "Wilson two-sided 95%",
+        "lower": 0.0,
+        "rate": 0.0,
+        "successes": 0,
+        "total": 1178,
+        "upper": 0.0032504011363142914
+      },
+      "audited_control_rows": 1178,
+      "audited_false_fires": 0,
+      "corpus_clean_rows": 1179,
+      "corpus_error_rows": 2221,
+      "genuine_error_detections": 82,
+      "genuine_error_rows": 2222,
+      "genuine_recall": {
+        "interval_name": "Wilson two-sided 95%",
+        "lower": 0.029830283918193336,
+        "rate": 0.0369036903690369,
+        "successes": 82,
+        "total": 2222,
+        "upper": 0.04557556233179999
+      },
+      "labeled_false_fire_rows": [
+        {
+          "adjudication": {
+            "classification": "CORPUS_LABEL_FALSE_NEGATIVE_GENUINE_ERROR",
+            "first_error_step": "5",
+            "proof": "1404 != 2^2 * 3^2 * 13; right side equals 468",
+            "row_sha256": "6dbb51b67fc49f3b1a10a2b2163f18fb74afc1f02f103688e6c9990b7454f497"
+          },
+          "findings": [
+            {
+              "language": "numeric-power-equality-v1",
+              "left_source": "1404",
+              "left_value": "1404",
+              "right_source": "2^2 \\times 3^2 \\times 13",
+              "right_value": "468",
+              "source_span": "\\[ 1404 = 2^2 \\times 3^2 \\times 13 \\]",
+              "step_index": 5,
+              "violating": true
+            }
+          ],
+          "id": "omnimath-805",
+          "row_sha256": "6dbb51b67fc49f3b1a10a2b2163f18fb74afc1f02f103688e6c9990b7454f497",
+          "split": "omnimath"
+        }
+      ],
+      "labeled_false_fires": 1,
+      "rows": 3400
+    },
+    "gsm8k": {
+      "adjudicated_label_errors": 0,
+      "applicable_rows": 103,
+      "audited_alpha": {
+        "interval_name": "Wilson two-sided 95%",
+        "lower": 1.734723475976807e-18,
+        "rate": 0.0,
+        "successes": 0,
+        "total": 193,
+        "upper": 0.019515496601726398
+      },
+      "audited_control_rows": 193,
+      "audited_false_fires": 0,
+      "corpus_clean_rows": 193,
+      "corpus_error_rows": 207,
+      "genuine_error_detections": 1,
+      "genuine_error_rows": 207,
+      "genuine_recall": {
+        "interval_name": "Wilson two-sided 95%",
+        "lower": 0.0008532852477254518,
+        "rate": 0.004830917874396135,
+        "successes": 1,
+        "total": 207,
+        "upper": 0.026852171038563452
+      },
+      "labeled_false_fire_rows": [],
+      "labeled_false_fires": 0,
+      "rows": 400
+    },
+    "math": {
+      "adjudicated_label_errors": 0,
+      "applicable_rows": 286,
+      "audited_alpha": {
+        "interval_name": "Wilson two-sided 95%",
+        "lower": 0.0,
+        "rate": 0.0,
+        "successes": 0,
+        "total": 406,
+        "upper": 0.009373036177813245
+      },
+      "audited_control_rows": 406,
+      "audited_false_fires": 0,
+      "corpus_clean_rows": 406,
+      "corpus_error_rows": 594,
+      "genuine_error_detections": 27,
+      "genuine_error_rows": 594,
+      "genuine_recall": {
+        "interval_name": "Wilson two-sided 95%",
+        "lower": 0.03142458718435091,
+        "rate": 0.045454545454545456,
+        "successes": 27,
+        "total": 594,
+        "upper": 0.06532591073995256
+      },
+      "labeled_false_fire_rows": [],
+      "labeled_false_fires": 0,
+      "rows": 1000
+    },
+    "olympiadbench": {
+      "adjudicated_label_errors": 0,
+      "applicable_rows": 277,
+      "audited_alpha": {
+        "interval_name": "Wilson two-sided 95%",
+        "lower": 0.0,
+        "rate": 0.0,
+        "successes": 0,
+        "total": 339,
+        "upper": 0.011204767456969678
+      },
+      "audited_control_rows": 339,
+      "audited_false_fires": 0,
+      "corpus_clean_rows": 339,
+      "corpus_error_rows": 661,
+      "genuine_error_detections": 24,
+      "genuine_error_rows": 661,
+      "genuine_recall": {
+        "interval_name": "Wilson two-sided 95%",
+        "lower": 0.024518819294471625,
+        "rate": 0.036308623298033284,
+        "successes": 24,
+        "total": 661,
+        "upper": 0.0534568516461633
+      },
+      "labeled_false_fire_rows": [],
+      "labeled_false_fires": 0,
+      "rows": 1000
+    },
+    "omnimath": {
+      "adjudicated_label_errors": 1,
+      "applicable_rows": 275,
+      "audited_alpha": {
+        "interval_name": "Wilson two-sided 95%",
+        "lower": 0.0,
+        "rate": 0.0,
+        "successes": 0,
+        "total": 240,
+        "upper": 0.015753919941558808
+      },
+      "audited_control_rows": 240,
+      "audited_false_fires": 0,
+      "corpus_clean_rows": 241,
+      "corpus_error_rows": 759,
+      "genuine_error_detections": 30,
+      "genuine_error_rows": 760,
+      "genuine_recall": {
+        "interval_name": "Wilson two-sided 95%",
+        "lower": 0.02778808305756609,
+        "rate": 0.039473684210526314,
+        "successes": 30,
+        "total": 760,
+        "upper": 0.05579137977921141
+      },
+      "labeled_false_fire_rows": [
+        {
+          "adjudication": {
+            "classification": "CORPUS_LABEL_FALSE_NEGATIVE_GENUINE_ERROR",
+            "first_error_step": "5",
+            "proof": "1404 != 2^2 * 3^2 * 13; right side equals 468",
+            "row_sha256": "6dbb51b67fc49f3b1a10a2b2163f18fb74afc1f02f103688e6c9990b7454f497"
+          },
+          "findings": [
+            {
+              "language": "numeric-power-equality-v1",
+              "left_source": "1404",
+              "left_value": "1404",
+              "right_source": "2^2 \\times 3^2 \\times 13",
+              "right_value": "468",
+              "source_span": "\\[ 1404 = 2^2 \\times 3^2 \\times 13 \\]",
+              "step_index": 5,
+              "violating": true
+            }
+          ],
+          "id": "omnimath-805",
+          "row_sha256": "6dbb51b67fc49f3b1a10a2b2163f18fb74afc1f02f103688e6c9990b7454f497",
+          "split": "omnimath"
+        }
+      ],
+      "labeled_false_fires": 1,
+      "rows": 1000
+    }
+  }
+}
