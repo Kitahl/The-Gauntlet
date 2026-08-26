@@ -1,0 +1,41 @@
+name: Export Session 2R pinned scorer dependencies
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - benchmark/session2r-score-export
+    paths:
+      - .github/workflows/export-session2r-score-deps.yml
+
+permissions:
+  contents: read
+
+jobs:
+  export-deps:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ba72a15ac294d11c7c792363de1d52dc960b404a
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact frozen scorer dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-input \
+            --target scoredeps \
+            -r benchmarks/session2r_test2r_mind/requirements-score.txt
+          python - <<'PY'
+          import sys
+          sys.path.insert(0, 'scoredeps')
+          import sympy, regex, latex2sympy2, antlr4
+          print('dependency import check passed')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: session2r-pinned-score-deps-py313
+          if-no-files-found: error
+          retention-days: 1
+          path: scoredeps
