@@ -29,9 +29,16 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Mapping
+from typing import TYPE_CHECKING, Mapping
 
 from foil_signal_boundary import SignalAuthority
+
+if TYPE_CHECKING:
+    from foil_rps import (
+        ParityObservation,
+        RPSShadowDecision,
+        ReasoningCapsule,
+    )
 
 
 class TaskRegime(str, Enum):
@@ -110,6 +117,7 @@ class PolicyAction(str, Enum):
     APPLY_TARGETED_COMPLEMENT = "apply_targeted_complement"
     CHECK_OUTPUT_CONTRACT = "check_output_contract"
     STOP = "stop"
+    OBSERVE_RESIDUAL_PARITY = "observe_residual_parity"
 
 
 CLAIM_VERIFIER: Mapping[ClaimKind, VerifierKind] = {
@@ -261,6 +269,36 @@ class RuntimePolicyV2:
     """Deterministic FOIL_vNEXT_CANDIDATE_V2 controller."""
 
     version = "FOIL_vNEXT_CANDIDATE_V2"
+
+    def __init__(self, *, rps_shadow_enabled: bool = False) -> None:
+        if not isinstance(rps_shadow_enabled, bool):
+            raise TypeError("rps_shadow_enabled must be bool")
+        self.rps_shadow_enabled = rps_shadow_enabled
+
+    def _rps_shadow_eligible(
+        self,
+        task: TaskContext,
+        regime: TaskRegime,
+        *,
+        base_should_stop: bool,
+    ) -> bool:
+        """Observe RPS only after the ordinary policy has independently stopped."""
+
+        stronger_verifiers = {
+            VerifierKind.SOURCE_EVIDENCE,
+            VerifierKind.CURRENT_SOURCE,
+            VerifierKind.EXACT_CALCULATION,
+            VerifierKind.SUPPLIED_EXAMPLE_CONSISTENCY,
+            VerifierKind.EXECUTION_TEST,
+            VerifierKind.CONTRADICTION_COUNTEREXAMPLE,
+        }
+        return (
+            self.rps_shadow_enabled
+            and base_should_stop
+            and task.has_viable_candidate
+            and regime is TaskRegime.CLOSED_BOOK_TECHNICAL_REASONING
+            and not (task.completed_verifiers & stronger_verifiers)
+        )
 
     def classify_regime(self, task: TaskContext) -> TaskRegime:
         # Benchmark names are intentionally ignored. The same task properties
@@ -491,6 +529,8 @@ class RuntimePolicyV2:
         effective_basis = route_basis if effective_route else "none"
         if effective_route:
             actions.append(PolicyAction.APPLY_TARGETED_COMPLEMENT)
+        if self._rps_shadow_eligible(task, regime, base_should_stop=should_stop):
+            actions.append(PolicyAction.OBSERVE_RESIDUAL_PARITY)
         if should_stop:
             actions.append(PolicyAction.STOP)
 
@@ -510,6 +550,32 @@ class RuntimePolicyV2:
             should_stop=should_stop,
             stop_reason=stop_reason,
             route_basis=effective_basis,
+        )
+
+    def observe_residual_parity(
+        self,
+        decision: PolicyDecision,
+        capsule: ReasoningCapsule,
+        primary: ParityObservation,
+        *,
+        secondary: ParityObservation | None = None,
+    ) -> RPSShadowDecision:
+        """Evaluate RPS only through an explicitly admitted shadow action."""
+
+        if not isinstance(decision, PolicyDecision):
+            raise TypeError("decision must be PolicyDecision")
+        if not self.rps_shadow_enabled:
+            raise PermissionError("this runtime policy has shadow RPS disabled")
+        if PolicyAction.OBSERVE_RESIDUAL_PARITY not in decision.actions:
+            raise PermissionError("runtime decision did not admit shadow RPS observation")
+
+        from foil_rps import RPSShadowPolicy, evaluate_rps_shadow
+
+        return evaluate_rps_shadow(
+            capsule,
+            primary,
+            policy=RPSShadowPolicy(enabled=True),
+            secondary=secondary,
         )
 
     def next_external_action(
