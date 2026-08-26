@@ -107,7 +107,10 @@ class Stage2PilotTests(unittest.TestCase):
         report = pilot.score_documents(predictions, results)
         self.assertEqual(report["summary"]["rescues"], 1)
         self.assertEqual(report["summary"]["stage2_abstentions"], 1)
+        self.assertEqual(report["summary"]["damages"], 0)
+        self.assertEqual(report["summary"]["accuracy_losses"], 1)
         self.assertEqual(report["summary"]["aggregate_total_token_multiplier"], 1.5)
+        self.assertFalse(report["kill_conditions"]["damage"])
         self.assertTrue(report["kill_conditions"]["triggered_abstention"])
         self.assertTrue(report["kill_conditions"]["total_token_cost"])
 

@@ -658,6 +658,10 @@ def score_documents(predictions: object, results: object) -> dict[str, object]:
             raise ProtocolError("gold must be text")
         base_ok = _correct(row.get("base"), gold)
         final_ok = _correct(row.get("final"), gold)
+        final_abstained = bool(
+            isinstance(row.get("final"), dict)
+            and row["final"].get("abstain") is True
+        )
         base_total = int(row["base_input_tokens"]) + int(row["base_output_tokens"])
         added_total = int(row["added_input_tokens"]) + int(row["added_output_tokens"])
         if base_total <= 0 or added_total < 0:
@@ -679,13 +683,11 @@ def score_documents(predictions: object, results: object) -> dict[str, object]:
                 "final": row["final"],
                 "final_correct": final_ok,
                 "rescued": (not base_ok and final_ok),
-                "damaged": (base_ok and not final_ok),
+                "damaged": (base_ok and not final_ok and not final_abstained),
+                "accuracy_loss": (base_ok and not final_ok),
                 "stage2_outcome": outcome,
                 "stage2_triggered": stage2 is not None,
-                "final_abstained": bool(
-                    isinstance(row.get("final"), dict)
-                    and row["final"].get("abstain") is True
-                ),
+                "final_abstained": final_abstained,
                 "total_token_multiplier": multiplier,
             }
         )
@@ -695,6 +697,7 @@ def score_documents(predictions: object, results: object) -> dict[str, object]:
     abstention_rate = triggered_abstentions / len(triggers) if triggers else 0.0
     aggregate_multiplier = stage_total_sum / base_total_sum
     damages = sum(bool(row["damaged"]) for row in scored)
+    accuracy_losses = sum(bool(row["accuracy_loss"]) for row in scored)
     summary = {
         "rows": len(scored),
         "questions": len({row["item_id"] for row in scored}),
@@ -703,6 +706,7 @@ def score_documents(predictions: object, results: object) -> dict[str, object]:
         "final_correct": sum(bool(row["final_correct"]) for row in scored),
         "rescues": sum(bool(row["rescued"]) for row in scored),
         "damages": damages,
+        "accuracy_losses": accuracy_losses,
         "stage2_triggers": len(triggers),
         "stage2_agreements": len(agreements),
         "stage2_abstentions": triggered_abstentions,
