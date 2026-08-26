@@ -39,6 +39,12 @@ if TYPE_CHECKING:
         RPSShadowDecision,
         ReasoningCapsule,
     )
+    from foil_rps_v062 import (
+        BlindRivalReceipt,
+        HostVerifierReceipt,
+        PrecommittedHostCheck,
+        RPSV062Decision,
+    )
 
 
 class TaskRegime(str, Enum):
@@ -118,6 +124,7 @@ class PolicyAction(str, Enum):
     CHECK_OUTPUT_CONTRACT = "check_output_contract"
     STOP = "stop"
     OBSERVE_RESIDUAL_PARITY = "observe_residual_parity"
+    OBSERVE_RPS_V062 = "observe_rps_v062"
 
 
 CLAIM_VERIFIER: Mapping[ClaimKind, VerifierKind] = {
@@ -270,10 +277,20 @@ class RuntimePolicyV2:
 
     version = "FOIL_vNEXT_CANDIDATE_V2"
 
-    def __init__(self, *, rps_shadow_enabled: bool = False) -> None:
+    def __init__(
+        self,
+        *,
+        rps_shadow_enabled: bool = False,
+        rps_v062_shadow_enabled: bool = False,
+    ) -> None:
         if not isinstance(rps_shadow_enabled, bool):
             raise TypeError("rps_shadow_enabled must be bool")
+        if not isinstance(rps_v062_shadow_enabled, bool):
+            raise TypeError("rps_v062_shadow_enabled must be bool")
+        if rps_shadow_enabled and rps_v062_shadow_enabled:
+            raise ValueError("RPS v0.6.1 and v0.6.2 shadow routes are mutually exclusive")
         self.rps_shadow_enabled = rps_shadow_enabled
+        self.rps_v062_shadow_enabled = rps_v062_shadow_enabled
 
     def _rps_shadow_eligible(
         self,
@@ -298,6 +315,22 @@ class RuntimePolicyV2:
             and task.has_viable_candidate
             and regime is TaskRegime.CLOSED_BOOK_TECHNICAL_REASONING
             and not (task.completed_verifiers & stronger_verifiers)
+        )
+
+    def _rps_v062_shadow_eligible(
+        self,
+        task: TaskContext,
+        regime: TaskRegime,
+        *,
+        base_should_stop: bool,
+    ) -> bool:
+        """Admit the host verifier; its typed outcome alone gates rival work."""
+
+        return (
+            self.rps_v062_shadow_enabled
+            and base_should_stop
+            and task.has_viable_candidate
+            and regime is TaskRegime.CLOSED_BOOK_TECHNICAL_REASONING
         )
 
     def classify_regime(self, task: TaskContext) -> TaskRegime:
@@ -531,6 +564,8 @@ class RuntimePolicyV2:
             actions.append(PolicyAction.APPLY_TARGETED_COMPLEMENT)
         if self._rps_shadow_eligible(task, regime, base_should_stop=should_stop):
             actions.append(PolicyAction.OBSERVE_RESIDUAL_PARITY)
+        if self._rps_v062_shadow_eligible(task, regime, base_should_stop=should_stop):
+            actions.append(PolicyAction.OBSERVE_RPS_V062)
         if should_stop:
             actions.append(PolicyAction.STOP)
 
@@ -576,6 +611,32 @@ class RuntimePolicyV2:
             primary,
             policy=RPSShadowPolicy(enabled=True),
             secondary=secondary,
+        )
+
+    def observe_rps_v062(
+        self,
+        decision: PolicyDecision,
+        check: PrecommittedHostCheck,
+        host: HostVerifierReceipt,
+        *,
+        rival: BlindRivalReceipt | None = None,
+    ) -> RPSV062Decision:
+        """Evaluate host-verifier-first RPS through its admitted shadow action."""
+
+        if not isinstance(decision, PolicyDecision):
+            raise TypeError("decision must be PolicyDecision")
+        if not self.rps_v062_shadow_enabled:
+            raise PermissionError("this runtime policy has RPS v0.6.2 disabled")
+        if PolicyAction.OBSERVE_RPS_V062 not in decision.actions:
+            raise PermissionError("runtime decision did not admit RPS v0.6.2")
+
+        from foil_rps_v062 import RPSV062Policy, evaluate_rps_v062_shadow
+
+        return evaluate_rps_v062_shadow(
+            check,
+            host,
+            policy=RPSV062Policy(enabled=True),
+            rival=rival,
         )
 
     def next_external_action(

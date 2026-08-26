@@ -1,0 +1,143 @@
+{
+  "classification": "DETERMINISTIC_STRUCTURAL_ONLY",
+  "content_sha256": "0513c84c319fa05cc9df42d87cf90185481c92e43027493d0443440fe8d84733",
+  "non_claims": [
+    "not behavioral efficacy evidence",
+    "not calibration or promotion evidence",
+    "not a measurement of model independence or answer quality"
+  ],
+  "rows": [
+    {
+      "case_id": "disabled",
+      "expected": "STAND_DOWN",
+      "observed": "STAND_DOWN",
+      "passed": true,
+      "trace": {
+        "abstained": false,
+        "answer_mutated": false,
+        "base_answer_preserved": true,
+        "candidate_digest": "c24e6a4636f633942a26972a7d0b87c5e0bae3b60bbc9a4cdecff618f80ce3eb",
+        "execution_authorized": false,
+        "host_outcome": null,
+        "promotion_authorized": false,
+        "reason": "rps_v062_shadow_disabled",
+        "recommendation": "STAND_DOWN",
+        "rival_requested": false,
+        "rival_used": false,
+        "schema": "foil.rps-v062-shadow-decision.v1"
+      }
+    },
+    {
+      "case_id": "host-confirmed",
+      "expected": "STAND_DOWN",
+      "observed": "STAND_DOWN",
+      "passed": true,
+      "trace": {
+        "abstained": false,
+        "answer_mutated": false,
+        "base_answer_preserved": true,
+        "candidate_digest": "c24e6a4636f633942a26972a7d0b87c5e0bae3b60bbc9a4cdecff618f80ce3eb",
+        "execution_authorized": false,
+        "host_outcome": "CONFIRMED",
+        "promotion_authorized": false,
+        "reason": "host_verifier_confirmed_candidate",
+        "recommendation": "STAND_DOWN",
+        "rival_requested": false,
+        "rival_used": false,
+        "schema": "foil.rps-v062-shadow-decision.v1"
+      }
+    },
+    {
+      "case_id": "host-contradicted",
+      "expected": "ABSTAIN",
+      "observed": "ABSTAIN",
+      "passed": true,
+      "trace": {
+        "abstained": true,
+        "answer_mutated": false,
+        "base_answer_preserved": true,
+        "candidate_digest": "c24e6a4636f633942a26972a7d0b87c5e0bae3b60bbc9a4cdecff618f80ce3eb",
+        "execution_authorized": false,
+        "host_outcome": "CONTRADICTED",
+        "promotion_authorized": false,
+        "reason": "host_verifier_contradicted_candidate",
+        "recommendation": "ABSTAIN",
+        "rival_requested": false,
+        "rival_used": false,
+        "schema": "foil.rps-v062-shadow-decision.v1"
+      }
+    },
+    {
+      "case_id": "not-applicable-needs-rival",
+      "expected": "REQUEST_BLIND_RIVAL",
+      "observed": "REQUEST_BLIND_RIVAL",
+      "passed": true,
+      "trace": {
+        "abstained": false,
+        "answer_mutated": false,
+        "base_answer_preserved": true,
+        "candidate_digest": "c24e6a4636f633942a26972a7d0b87c5e0bae3b60bbc9a4cdecff618f80ce3eb",
+        "execution_authorized": false,
+        "host_outcome": "NOT_APPLICABLE",
+        "promotion_authorized": false,
+        "reason": "host_verifier_unresolved",
+        "recommendation": "REQUEST_BLIND_RIVAL",
+        "rival_requested": true,
+        "rival_used": false,
+        "schema": "foil.rps-v062-shadow-decision.v1"
+      }
+    },
+    {
+      "case_id": "blind-agreement",
+      "expected": "CORRELATED_AGREEMENT",
+      "observed": "CORRELATED_AGREEMENT",
+      "passed": true,
+      "trace": {
+        "abstained": false,
+        "answer_mutated": false,
+        "base_answer_preserved": true,
+        "candidate_digest": "c24e6a4636f633942a26972a7d0b87c5e0bae3b60bbc9a4cdecff618f80ce3eb",
+        "execution_authorized": false,
+        "host_outcome": "UNCERTAIN",
+        "promotion_authorized": false,
+        "reason": "blind_rival_matches_incumbent_without_proving_correctness",
+        "recommendation": "CORRELATED_AGREEMENT",
+        "rival_requested": true,
+        "rival_used": true,
+        "schema": "foil.rps-v062-shadow-decision.v1"
+      }
+    },
+    {
+      "case_id": "blind-disagreement",
+      "expected": "ABSTAIN",
+      "observed": "ABSTAIN",
+      "passed": true,
+      "trace": {
+        "abstained": true,
+        "answer_mutated": false,
+        "base_answer_preserved": true,
+        "candidate_digest": "c24e6a4636f633942a26972a7d0b87c5e0bae3b60bbc9a4cdecff618f80ce3eb",
+        "execution_authorized": false,
+        "host_outcome": "UNCERTAIN",
+        "promotion_authorized": false,
+        "reason": "blind_rival_disagrees_with_incumbent",
+        "recommendation": "ABSTAIN",
+        "rival_requested": true,
+        "rival_used": true,
+        "schema": "foil.rps-v062-shadow-decision.v1"
+      }
+    }
+  ],
+  "schema": "foil.rps-v062-structural-pilot.v1",
+  "summary": {
+    "abstentions": 2,
+    "answer_mutations": 0,
+    "execution_authorizations": 0,
+    "model_tokens": 0,
+    "passed": 6,
+    "promotion_authorizations": 0,
+    "provider_calls": 0,
+    "rival_requests": 3,
+    "total": 6
+  }
+}
