@@ -1,0 +1,52 @@
+{
+  "answer": {
+    "challenger": "F",
+    "fragile_hinge": 0,
+    "hinges": [
+      "masked-cell-backmap-(3,4)",
+      "row-update-schedule",
+      "suffix-coordinate-inverses"
+    ],
+    "p1": {
+      "applicable": true,
+      "candidate_prediction": "FAILS",
+      "challenger_prediction": "HOLDS",
+      "hinge_index": 0,
+      "kind": "EXACT_RELATION",
+      "observed": "FAILS"
+    },
+    "p2": null
+  },
+  "call_id": "terra_high-hle-verified-673668e658bad7ba89d4ad54",
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "TERRA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-26T00:35:33.366949+00:00",
+  "invalid_reasons": [],
+  "kind": "observer",
+  "last_output_sha256": "160fc00f581bcd2fa0afe343417784ac1e20bb378e4a1dc0d757702972a09121",
+  "model": "gpt-5.6-terra",
+  "pre_call_commit": "d0048e0b7f1a2d5c5eeccca55c23278cf8e76045",
+  "prompt_sha256": "c05cccf27d0c6e277bc9a622e51dd0f3024bc231d61718ac416da1888238e027",
+  "returncode": 0,
+  "schema": "foil.adaptive-two-benchmark-receipt.v1",
+  "started_at": "2026-08-26T00:34:35.347819+00:00",
+  "stderr_sha256": "c034019e688680b6e369a3843a22663a40368be2f49703b8d0228416044cede5",
+  "stdout_sha256": "9eaef604ac1aa06460faed7d4e83eb70a006d953ebe64ea5c7243a449e671b99",
+  "timed_out": false,
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 22082,
+    "output_tokens": 2993,
+    "reasoning_output_tokens": 2897
+  },
+  "valid": true,
+  "wall_seconds": 58.03099999999904
+}

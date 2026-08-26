@@ -1,0 +1,50 @@
+{
+  "answer": {
+    "challenger": "B",
+    "fragile_hinge": 0,
+    "hinges": [
+      "control"
+    ],
+    "p1": {
+      "applicable": true,
+      "candidate_prediction": "HOLDS",
+      "challenger_prediction": "FAILS",
+      "hinge_index": 0,
+      "kind": "EXACT_RELATION",
+      "observed": "HOLDS"
+    },
+    "p2": null
+  },
+  "call_id": "control-TERRA_LOW",
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "TERRA_LOW",
+  "effort": "low",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-26T00:34:09.373259+00:00",
+  "invalid_reasons": [],
+  "kind": "controls",
+  "last_output_sha256": "fe7500cd2b2196e1958ffac8ace24821dccc2333c99336d7b4b573770554d813",
+  "model": "gpt-5.6-terra",
+  "pre_call_commit": "d0048e0b7f1a2d5c5eeccca55c23278cf8e76045",
+  "prompt_sha256": "34a22e3f1ae3d38a42a08a92bc1edd6c4b1b16875aa5757233a6d3eff0844522",
+  "returncode": 0,
+  "schema": "foil.adaptive-two-benchmark-receipt.v1",
+  "started_at": "2026-08-26T00:34:03.638019+00:00",
+  "stderr_sha256": "c64effcdaf90a3c35525c2bdc47b58ad79ea88b19b9d25a06594116a7b3a25f5",
+  "stdout_sha256": "17843330e58fa288d622008f8eeef2f60d03a142dbae7d49cfd70b0747db3de8",
+  "timed_out": false,
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 18870,
+    "output_tokens": 75,
+    "reasoning_output_tokens": 0
+  },
+  "valid": true,
+  "wall_seconds": 5.73399999999674
+}
