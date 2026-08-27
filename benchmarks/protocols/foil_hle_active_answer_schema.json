@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "answer": {"type": "string", "minLength": 1, "maxLength": 400},
+    "route": {"enum": ["DIRECT", "VERIFY", "FULL"]},
+    "gap_kind": {
+      "enum": [
+        "EVIDENCE_GAP",
+        "EXECUTION_SLIP",
+        "INCORRECT_KNOWLEDGE",
+        "MISSING_KNOWLEDGE",
+        "MISSING_PROCEDURE",
+        "REPRESENTATION_MISMATCH",
+        "RETRIEVAL_FAILURE",
+        "TOOL_OR_ARTIFACT_GAP",
+        "VERIFICATION_GAP",
+        "UNKNOWN"
+      ]
+    },
+    "tool_decision": {
+      "enum": [
+        "NOT_AVAILABLE",
+        "NOT_NEEDED",
+        "USED_WEB_SEARCH",
+        "USED_COMPUTATION",
+        "USED_BOTH",
+        "ATTEMPTED_FAILED"
+      ]
+    },
+    "tool_use_rationale": {"type": "string", "maxLength": 300},
+    "evidence_urls": {
+      "type": "array",
+      "items": {"type": "string", "maxLength": 500},
+      "maxItems": 5
+    },
+    "confidence": {"type": "integer", "minimum": 0, "maximum": 100}
+  },
+  "required": [
+    "answer",
+    "route",
+    "gap_kind",
+    "tool_decision",
+    "tool_use_rationale",
+    "evidence_urls",
+    "confidence"
+  ],
+  "additionalProperties": false
+}

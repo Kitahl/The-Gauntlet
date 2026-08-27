@@ -1,0 +1,2518 @@
+{
+  "active_executor_sha256": "8aec2b9ae040bab21e4c37bfde357f0527137bca1de428c4ed5f0523268e43ab",
+  "adaptive_source_sha256": "30d8034167a704e007373eeec833228f6941b687350af5abd10f84f5f4a0a8e3",
+  "allowed_tool_types": [
+    "command_execution",
+    "web_search"
+  ],
+  "arms": [
+    "FOIL",
+    "FOIL_TOOLS"
+  ],
+  "artificial_token_cap": null,
+  "base_schema_sha256": "d751a9732727794c9a244dca113a90bc64c71da418978a0717fd874f91b047b3",
+  "calls_per_unit": 2,
+  "classification": "SMALL_ACTIVE_HLE_TOOL_USE_PILOT",
+  "configs": {
+    "LUNA_HIGH": {
+      "effort": "high",
+      "model": "gpt-5.6-luna"
+    },
+    "LUNA_LOW": {
+      "effort": "low",
+      "model": "gpt-5.6-luna"
+    },
+    "TERRA_HIGH": {
+      "effort": "high",
+      "model": "gpt-5.6-terra"
+    }
+  },
+  "foil_skill_sha256": "70490285f8ed7f932677a675f3c90749ee7c34d26bc5503681ccb82946ebc834",
+  "items_sha256": "a33d6d5eead1b6be7b71e31b6ca2d0982010e959c981fae90d4dcd93e93c0e49",
+  "maximum_parallel_calls": 3,
+  "non_claims": [
+    "HLE population accuracy",
+    "same-item causal tool benefit",
+    "production activation",
+    "calibration",
+    "promotion",
+    "frontier-model recall",
+    "production token target"
+  ],
+  "planned_provider_calls": 120,
+  "policy_source_sha256": "9a455afed0079141224f8d5f02471d6fcaa98efd47d4f55ff807b14d0a25d1c0",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "protocol_sha256": "9166a2509384bcb01a15ce339b8763452df26e4f2ba7f067e2e4807cb7dd5606",
+  "result_units": 60,
+  "runner_sha256": "7d7bf8a60588a9211397b5bc909a458fd161c398a6003aeac392bd0dfed1cfd5",
+  "schema": "foil.hle-active-20-manifest.v1",
+  "schema_sha256": "5d62796e2513b7abd772982d5163c639b8300caf1810b40c631c2d74ad04be7e",
+  "seed": 20260826,
+  "selection_rule": "unseen text-only rows; descending question length; seeded digest tie-break; alternating disjoint arms",
+  "source_sha256": "7e6deb84eafffaea128823ae53f9d7ee9ebfa7aaf77ff465f5d7df595606a361",
+  "source_url": "https://raw.githubusercontent.com/ustc-ai4science/Science-Star/4abe1db2d6d0920aa0a6236ee2f81de872adafa5/data/HLE/subset/hle_subset_50.jsonl",
+  "timeout_seconds": 1200,
+  "units": [
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "d4b5c6cce3d31bef6253fb357e948e8bb05ea09d41448979c4cf69f87cac8dc0",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-66b827b9b64deaedfbb997a2",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "454f144141f8e60228fd09c1353fda5cd1ef404c4496c66db2c78cc081414236",
+      "unit_id": "luna_high-foil-hle-66b827b9b64deaedfbb997a2"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "97d8937b0ab977f47000fbea8259dcc3fe7ce09b6eaa7241d913f9508952168e",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-66e9580bc845662f61f3664b",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "962ec41263f74ae3188be4fbcc030e80960214d1d05bc5c00a09f67e6a50938b",
+      "unit_id": "luna_high-foil-hle-66e9580bc845662f61f3664b"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "d8142edf31002366cd7c329e7df5db055f66379b1a9025aaca2be5bb4d84ec43",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-66f319f205629941be821347",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "d87f3cc1ca9cf47ab2fb5d1d99479a143f194bfd296bc2d8134b35c56a3d36e9",
+      "unit_id": "luna_high-foil-hle-66f319f205629941be821347"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "258df95eb1f7e088291a4b635b03d7ca4d7aece0b67b905e0627a936251be9b9",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-66f57e187a2ac7b4fffe174e",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "6cd95ac482db800d917262fad44343ad7fc31ecedec8921dd061e3ed39b4c34d",
+      "unit_id": "luna_high-foil-hle-66f57e187a2ac7b4fffe174e"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "f513e04a6e90d2b28aba4f59b38129b32f9d010838f3062ae4d58e5e0133b5fa",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-671f1702e4e6b61540b0bdb4",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "bbfc0e40a03d0288dd2de9ef3c34d63d5d9248ad9a27e435ac614ed509e18e19",
+      "unit_id": "luna_high-foil-hle-671f1702e4e6b61540b0bdb4"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "6a487872c55a1975a59781683a57038b208758fd8d58ca4aa2215885dad1cb1b",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-672067805681ce2b6f5a08a7",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "e146832f265cb976c2b41b2aae5fb48d77d0ef75519bdc55006249e87e3395d7",
+      "unit_id": "luna_high-foil-hle-672067805681ce2b6f5a08a7"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "94c8cf1cd493cf0e5eedb22f135e591b3556d7c0325577ff3de397694edf8c53",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-672521a56cd1b99dae47a110",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "3511ebe959acd2f78dfac2716aa6bc2492babeb6cb15da96559c7c435fcf5bdf",
+      "unit_id": "luna_high-foil-hle-672521a56cd1b99dae47a110"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "11ce1e195d5e0b0763ade6a7253281e8baa9c089648448ec5699f1ec1065ddd5",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-6736e54a4c96e49df1036fc6",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "4e51da9a6e26f7ef118a4086ee8b4bd63a4ba015c857a1e33ec94629e8fd6971",
+      "unit_id": "luna_high-foil-hle-6736e54a4c96e49df1036fc6"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "31a76d4aed9db9f33447a88a52a7f72e22f45e123daee3645226e086e7d8f335",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-67371c15d09c0e422ae36585",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "9a57f6922492ed6fc94649446d4d14a28f3ec48f48bc043b1f89346f9af08654",
+      "unit_id": "luna_high-foil-hle-67371c15d09c0e422ae36585"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "675ba80a33c84e89d696527da1eef62f1495441ede86a662e266ad3fa5b4ee06",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-67ae17cf1509e1d55b4a0eec",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "b2914ace35855fd1266a001f71779f9cebc2492856de9318b22624af52b4bc0d",
+      "unit_id": "luna_high-foil-hle-67ae17cf1509e1d55b4a0eec"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "b9ef189544140abccd8c5c8c6d6832ba517554a1064e0ee4ea64ef5bef4716e8",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-66ea7d2cc321286a5288ef06",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "6b8950ebb1e309820fa1418015380c8050bbd673b56c0f6534a78f31bfa671b5",
+      "unit_id": "luna_high-foil_tools-hle-66ea7d2cc321286a5288ef06"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "1e146b1fd5b032cb682210946f4be2b9bbe7bf8decf1c30b7648910e1d25050a",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-66eaf9bbb082c5e6a76a49b5",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "aafd0006f9338296fbfa7a7ed8d8713c6b8f97a529aa9bb942e000cdd5deb96c",
+      "unit_id": "luna_high-foil_tools-hle-66eaf9bbb082c5e6a76a49b5"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "6923439760555bd186bc8df286535545ee6af9972322f5d60718c5f54cebb601",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-66f3fa084a937a16c867c042",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "1ee686bd291611d6cee27a4b2c6cfacf2854b4567b4fb8a22f99885a17357e08",
+      "unit_id": "luna_high-foil_tools-hle-66f3fa084a937a16c867c042"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "e352f009d2a05b0c0594b04a18b7c69e20beea451b478caa211812058725dcbc",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-66f57e3ddc7259d8b5bb0b46",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "b6c422ed8ffd66882c5952f139afde314e77c47145127cf36453c683ecfac4d5",
+      "unit_id": "luna_high-foil_tools-hle-66f57e3ddc7259d8b5bb0b46"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "8b9b3984ff2cff6a4859cd8dee57068da898ff8baff8bbb7f9167de4681a16a6",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-672059fc2ea5966e3eddd835",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "7e9614d1d2d22b085d23945352c8348e5f0d7b799d60b4d2b88c89d6cc09c7bd",
+      "unit_id": "luna_high-foil_tools-hle-672059fc2ea5966e3eddd835"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "c5760eaedd0f9a280dbad88f753f8cfbe285d4060961b73742a61a15673a16b7",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-672a80a432cd57d8762583e9",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "a03fe4632508f97ac851b7f26f3c79f339b59a81e037d6ba08565fa88f1240ba",
+      "unit_id": "luna_high-foil_tools-hle-672a80a432cd57d8762583e9"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "052ad25a3a0986a820b63a2bdc61f4869f5f893dd19e24e1ad06af040c3ba5cb",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-672d8366f97c3b404d90f3d3",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "0a47dfecb73636c5a090d2985b8b6bcd9c45506424fb2c030f440cb4cc631a30",
+      "unit_id": "luna_high-foil_tools-hle-672d8366f97c3b404d90f3d3"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "d60d60764f1493d8738c2dba9f6a58ca20a4eb9c7a5b9eb45504bdbecc2e38cf",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-67332b7198af9f49ad5d743a",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "18ca6bd66322b796d064645426a48434cbc60e1b23e4153f0fd1b561972ec8bc",
+      "unit_id": "luna_high-foil_tools-hle-67332b7198af9f49ad5d743a"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "09a55a3e23673b944e6227ca978969c93fb868f704a15b9a88f7f1952cf172af",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-6733e070361b540695504b86",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "83679778b97e063087bc28bcb5694479a7f1b91b430e7385c39f70bafc7183d6",
+      "unit_id": "luna_high-foil_tools-hle-6733e070361b540695504b86"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "5eb424b193728b377ac25ea8d84777acbe5ba1ffabdc2f43f93d9917638b7d46",
+      "config_id": "LUNA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-67380ecdb808e1bf292d214e",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "288e08f272281e6be1f7056904994939d516c36bd3a938511b49b41f2c21ecd1",
+      "unit_id": "luna_high-foil_tools-hle-67380ecdb808e1bf292d214e"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "d4b5c6cce3d31bef6253fb357e948e8bb05ea09d41448979c4cf69f87cac8dc0",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-66b827b9b64deaedfbb997a2",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "454f144141f8e60228fd09c1353fda5cd1ef404c4496c66db2c78cc081414236",
+      "unit_id": "luna_low-foil-hle-66b827b9b64deaedfbb997a2"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "97d8937b0ab977f47000fbea8259dcc3fe7ce09b6eaa7241d913f9508952168e",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-66e9580bc845662f61f3664b",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "962ec41263f74ae3188be4fbcc030e80960214d1d05bc5c00a09f67e6a50938b",
+      "unit_id": "luna_low-foil-hle-66e9580bc845662f61f3664b"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "d8142edf31002366cd7c329e7df5db055f66379b1a9025aaca2be5bb4d84ec43",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-66f319f205629941be821347",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "d87f3cc1ca9cf47ab2fb5d1d99479a143f194bfd296bc2d8134b35c56a3d36e9",
+      "unit_id": "luna_low-foil-hle-66f319f205629941be821347"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "258df95eb1f7e088291a4b635b03d7ca4d7aece0b67b905e0627a936251be9b9",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-66f57e187a2ac7b4fffe174e",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "6cd95ac482db800d917262fad44343ad7fc31ecedec8921dd061e3ed39b4c34d",
+      "unit_id": "luna_low-foil-hle-66f57e187a2ac7b4fffe174e"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "f513e04a6e90d2b28aba4f59b38129b32f9d010838f3062ae4d58e5e0133b5fa",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-671f1702e4e6b61540b0bdb4",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "bbfc0e40a03d0288dd2de9ef3c34d63d5d9248ad9a27e435ac614ed509e18e19",
+      "unit_id": "luna_low-foil-hle-671f1702e4e6b61540b0bdb4"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "6a487872c55a1975a59781683a57038b208758fd8d58ca4aa2215885dad1cb1b",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-672067805681ce2b6f5a08a7",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "e146832f265cb976c2b41b2aae5fb48d77d0ef75519bdc55006249e87e3395d7",
+      "unit_id": "luna_low-foil-hle-672067805681ce2b6f5a08a7"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "94c8cf1cd493cf0e5eedb22f135e591b3556d7c0325577ff3de397694edf8c53",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-672521a56cd1b99dae47a110",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "3511ebe959acd2f78dfac2716aa6bc2492babeb6cb15da96559c7c435fcf5bdf",
+      "unit_id": "luna_low-foil-hle-672521a56cd1b99dae47a110"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "11ce1e195d5e0b0763ade6a7253281e8baa9c089648448ec5699f1ec1065ddd5",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-6736e54a4c96e49df1036fc6",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "4e51da9a6e26f7ef118a4086ee8b4bd63a4ba015c857a1e33ec94629e8fd6971",
+      "unit_id": "luna_low-foil-hle-6736e54a4c96e49df1036fc6"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "31a76d4aed9db9f33447a88a52a7f72e22f45e123daee3645226e086e7d8f335",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-67371c15d09c0e422ae36585",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "9a57f6922492ed6fc94649446d4d14a28f3ec48f48bc043b1f89346f9af08654",
+      "unit_id": "luna_low-foil-hle-67371c15d09c0e422ae36585"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "675ba80a33c84e89d696527da1eef62f1495441ede86a662e266ad3fa5b4ee06",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-67ae17cf1509e1d55b4a0eec",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "b2914ace35855fd1266a001f71779f9cebc2492856de9318b22624af52b4bc0d",
+      "unit_id": "luna_low-foil-hle-67ae17cf1509e1d55b4a0eec"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "b9ef189544140abccd8c5c8c6d6832ba517554a1064e0ee4ea64ef5bef4716e8",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-66ea7d2cc321286a5288ef06",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "6b8950ebb1e309820fa1418015380c8050bbd673b56c0f6534a78f31bfa671b5",
+      "unit_id": "luna_low-foil_tools-hle-66ea7d2cc321286a5288ef06"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "1e146b1fd5b032cb682210946f4be2b9bbe7bf8decf1c30b7648910e1d25050a",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-66eaf9bbb082c5e6a76a49b5",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "aafd0006f9338296fbfa7a7ed8d8713c6b8f97a529aa9bb942e000cdd5deb96c",
+      "unit_id": "luna_low-foil_tools-hle-66eaf9bbb082c5e6a76a49b5"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "6923439760555bd186bc8df286535545ee6af9972322f5d60718c5f54cebb601",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-66f3fa084a937a16c867c042",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "1ee686bd291611d6cee27a4b2c6cfacf2854b4567b4fb8a22f99885a17357e08",
+      "unit_id": "luna_low-foil_tools-hle-66f3fa084a937a16c867c042"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "e352f009d2a05b0c0594b04a18b7c69e20beea451b478caa211812058725dcbc",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-66f57e3ddc7259d8b5bb0b46",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "b6c422ed8ffd66882c5952f139afde314e77c47145127cf36453c683ecfac4d5",
+      "unit_id": "luna_low-foil_tools-hle-66f57e3ddc7259d8b5bb0b46"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "8b9b3984ff2cff6a4859cd8dee57068da898ff8baff8bbb7f9167de4681a16a6",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-672059fc2ea5966e3eddd835",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "7e9614d1d2d22b085d23945352c8348e5f0d7b799d60b4d2b88c89d6cc09c7bd",
+      "unit_id": "luna_low-foil_tools-hle-672059fc2ea5966e3eddd835"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "c5760eaedd0f9a280dbad88f753f8cfbe285d4060961b73742a61a15673a16b7",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-672a80a432cd57d8762583e9",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "a03fe4632508f97ac851b7f26f3c79f339b59a81e037d6ba08565fa88f1240ba",
+      "unit_id": "luna_low-foil_tools-hle-672a80a432cd57d8762583e9"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "052ad25a3a0986a820b63a2bdc61f4869f5f893dd19e24e1ad06af040c3ba5cb",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-672d8366f97c3b404d90f3d3",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "0a47dfecb73636c5a090d2985b8b6bcd9c45506424fb2c030f440cb4cc631a30",
+      "unit_id": "luna_low-foil_tools-hle-672d8366f97c3b404d90f3d3"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "d60d60764f1493d8738c2dba9f6a58ca20a4eb9c7a5b9eb45504bdbecc2e38cf",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-67332b7198af9f49ad5d743a",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "18ca6bd66322b796d064645426a48434cbc60e1b23e4153f0fd1b561972ec8bc",
+      "unit_id": "luna_low-foil_tools-hle-67332b7198af9f49ad5d743a"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "09a55a3e23673b944e6227ca978969c93fb868f704a15b9a88f7f1952cf172af",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-6733e070361b540695504b86",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "83679778b97e063087bc28bcb5694479a7f1b91b430e7385c39f70bafc7183d6",
+      "unit_id": "luna_low-foil_tools-hle-6733e070361b540695504b86"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "5eb424b193728b377ac25ea8d84777acbe5ba1ffabdc2f43f93d9917638b7d46",
+      "config_id": "LUNA_LOW",
+      "effort": "low",
+      "host_route": "FULL",
+      "item_id": "hle-67380ecdb808e1bf292d214e",
+      "model": "gpt-5.6-luna",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "288e08f272281e6be1f7056904994939d516c36bd3a938511b49b41f2c21ecd1",
+      "unit_id": "luna_low-foil_tools-hle-67380ecdb808e1bf292d214e"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "d4b5c6cce3d31bef6253fb357e948e8bb05ea09d41448979c4cf69f87cac8dc0",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-66b827b9b64deaedfbb997a2",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "454f144141f8e60228fd09c1353fda5cd1ef404c4496c66db2c78cc081414236",
+      "unit_id": "terra_high-foil-hle-66b827b9b64deaedfbb997a2"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "97d8937b0ab977f47000fbea8259dcc3fe7ce09b6eaa7241d913f9508952168e",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-66e9580bc845662f61f3664b",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "962ec41263f74ae3188be4fbcc030e80960214d1d05bc5c00a09f67e6a50938b",
+      "unit_id": "terra_high-foil-hle-66e9580bc845662f61f3664b"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "d8142edf31002366cd7c329e7df5db055f66379b1a9025aaca2be5bb4d84ec43",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-66f319f205629941be821347",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "d87f3cc1ca9cf47ab2fb5d1d99479a143f194bfd296bc2d8134b35c56a3d36e9",
+      "unit_id": "terra_high-foil-hle-66f319f205629941be821347"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "258df95eb1f7e088291a4b635b03d7ca4d7aece0b67b905e0627a936251be9b9",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-66f57e187a2ac7b4fffe174e",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "6cd95ac482db800d917262fad44343ad7fc31ecedec8921dd061e3ed39b4c34d",
+      "unit_id": "terra_high-foil-hle-66f57e187a2ac7b4fffe174e"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "f513e04a6e90d2b28aba4f59b38129b32f9d010838f3062ae4d58e5e0133b5fa",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-671f1702e4e6b61540b0bdb4",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "bbfc0e40a03d0288dd2de9ef3c34d63d5d9248ad9a27e435ac614ed509e18e19",
+      "unit_id": "terra_high-foil-hle-671f1702e4e6b61540b0bdb4"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "6a487872c55a1975a59781683a57038b208758fd8d58ca4aa2215885dad1cb1b",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-672067805681ce2b6f5a08a7",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "e146832f265cb976c2b41b2aae5fb48d77d0ef75519bdc55006249e87e3395d7",
+      "unit_id": "terra_high-foil-hle-672067805681ce2b6f5a08a7"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "94c8cf1cd493cf0e5eedb22f135e591b3556d7c0325577ff3de397694edf8c53",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-672521a56cd1b99dae47a110",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "3511ebe959acd2f78dfac2716aa6bc2492babeb6cb15da96559c7c435fcf5bdf",
+      "unit_id": "terra_high-foil-hle-672521a56cd1b99dae47a110"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "11ce1e195d5e0b0763ade6a7253281e8baa9c089648448ec5699f1ec1065ddd5",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-6736e54a4c96e49df1036fc6",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "4e51da9a6e26f7ef118a4086ee8b4bd63a4ba015c857a1e33ec94629e8fd6971",
+      "unit_id": "terra_high-foil-hle-6736e54a4c96e49df1036fc6"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "31a76d4aed9db9f33447a88a52a7f72e22f45e123daee3645226e086e7d8f335",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-67371c15d09c0e422ae36585",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "9a57f6922492ed6fc94649446d4d14a28f3ec48f48bc043b1f89346f9af08654",
+      "unit_id": "terra_high-foil-hle-67371c15d09c0e422ae36585"
+    },
+    {
+      "arm": "FOIL",
+      "base_prompt_sha256": "675ba80a33c84e89d696527da1eef62f1495441ede86a662e266ad3fa5b4ee06",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-67ae17cf1509e1d55b4a0eec",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "reason_closed_book",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "primary_effort_mode": "reasoning",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "contradiction_counterexample",
+          "output_contract"
+        ],
+        "resource_rationale": "task-evidence-only",
+        "retrieval_allowed": false,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 0,
+        "source_followup_priority": 0,
+        "stop_reason": "continue_reasoning",
+        "targeted_complement": null,
+        "task_regime": "closed_book_technical_reasoning"
+      },
+      "prompt_sha256": "b2914ace35855fd1266a001f71779f9cebc2492856de9318b22624af52b4bc0d",
+      "unit_id": "terra_high-foil-hle-67ae17cf1509e1d55b4a0eec"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "b9ef189544140abccd8c5c8c6d6832ba517554a1064e0ee4ea64ef5bef4716e8",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-66ea7d2cc321286a5288ef06",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "6b8950ebb1e309820fa1418015380c8050bbd673b56c0f6534a78f31bfa671b5",
+      "unit_id": "terra_high-foil_tools-hle-66ea7d2cc321286a5288ef06"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "1e146b1fd5b032cb682210946f4be2b9bbe7bf8decf1c30b7648910e1d25050a",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-66eaf9bbb082c5e6a76a49b5",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "aafd0006f9338296fbfa7a7ed8d8713c6b8f97a529aa9bb942e000cdd5deb96c",
+      "unit_id": "terra_high-foil_tools-hle-66eaf9bbb082c5e6a76a49b5"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "6923439760555bd186bc8df286535545ee6af9972322f5d60718c5f54cebb601",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-66f3fa084a937a16c867c042",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "1ee686bd291611d6cee27a4b2c6cfacf2854b4567b4fb8a22f99885a17357e08",
+      "unit_id": "terra_high-foil_tools-hle-66f3fa084a937a16c867c042"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "e352f009d2a05b0c0594b04a18b7c69e20beea451b478caa211812058725dcbc",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-66f57e3ddc7259d8b5bb0b46",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "b6c422ed8ffd66882c5952f139afde314e77c47145127cf36453c683ecfac4d5",
+      "unit_id": "terra_high-foil_tools-hle-66f57e3ddc7259d8b5bb0b46"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "8b9b3984ff2cff6a4859cd8dee57068da898ff8baff8bbb7f9167de4681a16a6",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-672059fc2ea5966e3eddd835",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "7e9614d1d2d22b085d23945352c8348e5f0d7b799d60b4d2b88c89d6cc09c7bd",
+      "unit_id": "terra_high-foil_tools-hle-672059fc2ea5966e3eddd835"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "c5760eaedd0f9a280dbad88f753f8cfbe285d4060961b73742a61a15673a16b7",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-672a80a432cd57d8762583e9",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "a03fe4632508f97ac851b7f26f3c79f339b59a81e037d6ba08565fa88f1240ba",
+      "unit_id": "terra_high-foil_tools-hle-672a80a432cd57d8762583e9"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "052ad25a3a0986a820b63a2bdc61f4869f5f893dd19e24e1ad06af040c3ba5cb",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-672d8366f97c3b404d90f3d3",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "0a47dfecb73636c5a090d2985b8b6bcd9c45506424fb2c030f440cb4cc631a30",
+      "unit_id": "terra_high-foil_tools-hle-672d8366f97c3b404d90f3d3"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "d60d60764f1493d8738c2dba9f6a58ca20a4eb9c7a5b9eb45504bdbecc2e38cf",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-67332b7198af9f49ad5d743a",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "18ca6bd66322b796d064645426a48434cbc60e1b23e4153f0fd1b561972ec8bc",
+      "unit_id": "terra_high-foil_tools-hle-67332b7198af9f49ad5d743a"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "09a55a3e23673b944e6227ca978969c93fb868f704a15b9a88f7f1952cf172af",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-6733e070361b540695504b86",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "83679778b97e063087bc28bcb5694479a7f1b91b430e7385c39f70bafc7183d6",
+      "unit_id": "terra_high-foil_tools-hle-6733e070361b540695504b86"
+    },
+    {
+      "arm": "FOIL_TOOLS",
+      "base_prompt_sha256": "5eb424b193728b377ac25ea8d84777acbe5ba1ffabdc2f43f93d9917638b7d46",
+      "config_id": "TERRA_HIGH",
+      "effort": "high",
+      "host_route": "FULL",
+      "item_id": "hle-67380ecdb808e1bf292d214e",
+      "model": "gpt-5.6-terra",
+      "policy": {
+        "actions": [
+          "discover_candidates",
+          "check_output_contract"
+        ],
+        "active_in_benchmark": true,
+        "host_route": "FULL",
+        "load_bearing_uncertainty_count": 1,
+        "pending_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "primary_effort_mode": "discovery",
+        "production_authorized": false,
+        "profile_influence": "none",
+        "profile_route_allowed": false,
+        "required_verifiers": [
+          "output_contract",
+          "source_evidence"
+        ],
+        "resource_rationale": "candidate-discovery-first",
+        "retrieval_allowed": true,
+        "route_basis": "none",
+        "routing_signal_authority": "CONTROL_ONLY",
+        "search_query_priority": 3,
+        "source_followup_priority": 1,
+        "stop_reason": "continue_discovery",
+        "targeted_complement": null,
+        "task_regime": "external_retrieval"
+      },
+      "prompt_sha256": "288e08f272281e6be1f7056904994939d516c36bd3a938511b49b41f2c21ecd1",
+      "unit_id": "terra_high-foil_tools-hle-67380ecdb808e1bf292d214e"
+    }
+  ]
+}

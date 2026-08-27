@@ -1,0 +1,15 @@
+{
+  "files": {
+    "benchmark_runs/2026-08-26/hle_active_20/items.json": "533c5e065cdf73e027045f0db84fbfffe9114222547ad6222cf045100dcfa8f1",
+    "benchmark_runs/2026-08-26/hle_active_20/manifest.json": "b12cbbdb311a24427d3c4dcc0c91a1335d5ffbbb5ae2ba5b0c58dde1ea73d90d",
+    "benchmarks/FOIL_HLE_ACTIVE_20_PROTOCOL.md": "9166a2509384bcb01a15ce339b8763452df26e4f2ba7f067e2e4807cb7dd5606",
+    "benchmarks/harness/foil_hle_active_20.py": "7d7bf8a60588a9211397b5bc909a458fd161c398a6003aeac392bd0dfed1cfd5",
+    "benchmarks/protocols/foil_hle_active_answer_schema.json": "5d62796e2513b7abd772982d5163c639b8300caf1810b40c631c2d74ad04be7e",
+    "benchmarks/protocols/foil_hle_base_answer_schema.json": "d751a9732727794c9a244dca113a90bc64c71da418978a0717fd874f91b047b3",
+    "skills/foil/SKILL.md": "70490285f8ed7f932677a675f3c90749ee7c34d26bc5503681ccb82946ebc834",
+    "tools/foil_adaptive_executor.py": "8aec2b9ae040bab21e4c37bfde357f0527137bca1de428c4ed5f0523268e43ab",
+    "tools/foil_adaptive_route.py": "30d8034167a704e007373eeec833228f6941b687350af5abd10f84f5f4a0a8e3",
+    "tools/foil_policy.py": "9a455afed0079141224f8d5f02471d6fcaa98efd47d4f55ff807b14d0a25d1c0"
+  },
+  "schema": "foil.hle-active-20-lock.v1"
+}
