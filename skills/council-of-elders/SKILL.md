@@ -1,11 +1,11 @@
 ---
 name: council-of-elders
-description: Evidence Review Panel. Trigger: /council, /forum, "independent review", or equivalent. Selectively convenes independent, evidence-grounded review roles around a concrete artifact after a strong direct pass exists. Uses commit-reveal, disjoint evidence where possible, a skeptic, and a matched direct control. Agreement is not truth.
+description: Evidence Review Panel. Trigger: /council, /forum, "independent review", or equivalent. Selectively convenes challenge-derived, evidence-grounded review seats around a concrete artifact after a strong direct pass exists. Uses commit-reveal, distinct discriminators or evidence partitions, a concrete skeptic refuter, cross-critique, overlap diagnostics, and a matched direct control. Agreement is not truth.
 ---
 
 # Evidence Review Panel
 
-The public panel uses **artifact-derived review roles**, not simulated authority from named personalities.
+Use artifact-derived review seats, not named personalities or simulated authority.
 
 ## When to convene
 
@@ -13,41 +13,72 @@ Default: **off**.
 
 Convene only when:
 
-- there is a concrete artifact/claim/design to review;
+- there is a concrete artifact, claim, design, or candidate to review;
 - a strong direct analysis already exists;
-- independent evidence/methods are plausibly available;
-- the marginal value can be compared against a direct control.
+- at least three genuinely different challenge questions, discriminators, or evidence partitions are available;
+- the total artifact and review budget can be frozen;
+- marginal value can be compared against a same-artifact, same-budget direct control.
 
-Do not convene merely because the problem is hard or more opinions sound reassuring.
+Do not convene merely because a problem is difficult or additional opinions sound reassuring.
 
-## Seat construction
+## Construct challenge-derived seats
 
-Prefer 3–6 roles derived from the artifact, for example:
+Prefer 3–6 seats derived from unresolved load-bearing gaps:
 
 - formal correctness;
-- empirical/measurement validity;
-- implementation/integration;
-- adversarial failure modes;
-- prior art/novelty;
-- cost/operational feasibility.
+- evidence and provenance;
+- executable behavior or integration;
+- measurement validity;
+- novelty or strongest costume;
+- operational feasibility.
 
-Include a skeptic role. Add a role only when it has a distinct question, evidence pack, verifier, or method.
+Every seat must own:
 
-## Commit-reveal
+- one distinct challenge question;
+- one concrete discriminator or refuter;
+- one required capability when applicable;
+- one target obligation;
+- one method or explicit evidence partition.
 
-1. Each role independently freezes its first-pass conclusion before seeing other roles.
-2. Use disjoint searches/evidence where feasible.
-3. Reveal and cross-critique after independent commits.
-4. Normalize claims to the same scope.
-5. Rank by evidence, not identity or vote count.
-6. Preserve unresolved disagreement.
+Duplicate challenge kinds or discriminators are allowed only when the evidence partitions are explicitly different. Include a skeptic/adversarial seat with a concrete refuter; “be critical” is not a discriminator.
 
-## Control
+## Commit–reveal and cross-critique
 
-Run one strong direct analysis with access to the same combined evidence budget when feasible. Attribute panel value only to findings the control did not produce or to stronger verification/coverage.
+1. Freeze the artifact hash, total-budget hash, seats, methods, challenge bindings, evidence partitions, and reviewer provenance.
+2. Each seat independently commits its first-pass structured submission before seeing another seat’s result.
+3. Reveal only after all commitments are frozen.
+4. Reject altered submissions or wrong nonces.
+5. Compute method, evidence, provenance, reviewer-provenance, and finding overlap.
+6. Require every seat to cross-critique another revealed seat.
+7. Synthesize by claim and evidence, preserving disagreement.
 
-Panel output remains a claim until independently checked when the conclusion is load-bearing.
+Do not call seats independent because there are several of them or because they produced separate messages. Same-model and shared-evidence common causes remain explicit.
+
+## Supported findings
+
+A load-bearing supported finding remains a review finding until the target module checks it.
+
+The Council runtime may convert a supported structured finding into an additive neutral challenge with `origin=COUNCIL`. That challenge is proposal-only. It cannot resolve itself, replace a domain receipt, clear the target obligation, apply a repair, or authorize a write.
+
+## Control and authority
+
+Run a strong direct analysis against the same frozen artifact and matching total budget. Without that `DIRECT` control, Council’s review verdict remains `UNKNOWN`.
+
+A Council receipt may clear only a `REVIEW` obligation. It never clears proof, discovery, synthesis, engineering, evaluation, assurance, preflight, adaptation, or adversary obligations. User or host authority remains required for adoption or writes.
 
 ## Typed runtime contract
 
-`tools/council_runtime.py` enforces 3–6 distinct seat questions, a skeptic/adversarial seat, frozen commitment hashes before reveal, reveal integrity, and evidence/provenance overlap diagnostics. Council's REVIEW verdict remains `UNKNOWN` until commit/reveal is complete, every seat contributes cross-critique, and a real DIRECT control matches the same frozen artifact and total-budget hashes. Confidence is recorded as uncalibrated unless later scored prospectively. See `docs/specs/COUNCIL_ENGINEERING_SPEC.md`.
+`tools/council_runtime.py` enforces:
+
+- 3–6 seats and a skeptic/adversarial seat;
+- challenge kind, discriminator, capability, target obligation, refuter, and evidence partition for vNext seats;
+- rejection of duplicate challenge/discriminator seats without distinct partitions;
+- commitment hiding and reveal integrity;
+- complete cross-critique participation;
+- overlap diagnostics with `NOT_ESTABLISHED_BY_SEAT_COUNT`;
+- structured `CouncilFinding` binding;
+- proposal-only `COUNCIL` challenge emission;
+- `REVIEW_ONLY` receipt authority;
+- a same-artifact, same-total-budget `DIRECT` control.
+
+Confidence remains uncalibrated unless scored prospectively. See `docs/specs/COUNCIL_ENGINEERING_SPEC.md`.
