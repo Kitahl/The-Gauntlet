@@ -43,7 +43,7 @@
   "policy_source_sha256": "9a455afed0079141224f8d5f02471d6fcaa98efd47d4f55ff807b14d0a25d1c0",
   "production_authorized": false,
   "promotion_authorized": false,
-  "protocol_sha256": "9166a2509384bcb01a15ce339b8763452df26e4f2ba7f067e2e4807cb7dd5606",
+  "protocol_sha256": "8d1481a99d29ae098e44e1a6f0ee571eb485d4e608f5f256eced1989906bec7b",
   "result_units": 60,
   "runner_sha256": "7d7bf8a60588a9211397b5bc909a458fd161c398a6003aeac392bd0dfed1cfd5",
   "schema": "foil.hle-active-20-manifest.v1",

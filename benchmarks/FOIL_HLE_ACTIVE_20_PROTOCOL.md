@@ -1,6 +1,6 @@
 # FOIL HLE active-route 20-item pilot
 
-Status: **PREREGISTERED SMALL HISTORICAL-CORPUS PILOT**  
+Status: **PREREGISTERED SMALL HISTORICAL-CORPUS PILOT**
 Date: 2026-08-26
 
 ## Question

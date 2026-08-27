@@ -1,8 +1,8 @@
 {
   "files": {
     "benchmark_runs/2026-08-26/hle_active_20/items.json": "533c5e065cdf73e027045f0db84fbfffe9114222547ad6222cf045100dcfa8f1",
-    "benchmark_runs/2026-08-26/hle_active_20/manifest.json": "b12cbbdb311a24427d3c4dcc0c91a1335d5ffbbb5ae2ba5b0c58dde1ea73d90d",
-    "benchmarks/FOIL_HLE_ACTIVE_20_PROTOCOL.md": "9166a2509384bcb01a15ce339b8763452df26e4f2ba7f067e2e4807cb7dd5606",
+    "benchmark_runs/2026-08-26/hle_active_20/manifest.json": "c36035019fe5e33b59e7f485219210a8476058af3c2d140f2f5ebfe04b4d32eb",
+    "benchmarks/FOIL_HLE_ACTIVE_20_PROTOCOL.md": "8d1481a99d29ae098e44e1a6f0ee571eb485d4e608f5f256eced1989906bec7b",
     "benchmarks/harness/foil_hle_active_20.py": "7d7bf8a60588a9211397b5bc909a458fd161c398a6003aeac392bd0dfed1cfd5",
     "benchmarks/protocols/foil_hle_active_answer_schema.json": "5d62796e2513b7abd772982d5163c639b8300caf1810b40c631c2d74ad04be7e",
     "benchmarks/protocols/foil_hle_base_answer_schema.json": "d751a9732727794c9a244dca113a90bc64c71da418978a0717fd874f91b047b3",
