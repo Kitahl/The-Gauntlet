@@ -1,0 +1,142 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "76134d43dd9dab07d613c25109d69dfbfffcce5c50b4c3a1b7b2dd02dc39a313",
+    "action": "SELECT_FULL",
+    "answer_changed": false,
+    "benchmark_only": true,
+    "cached_input_tokens": 11008,
+    "input_tokens": 26415,
+    "output_tokens": 288,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "76134d43dd9dab07d613c25109d69dfbfffcce5c50b4c3a1b7b2dd02dc39a313",
+    "tool_event_types": []
+  },
+  "actual_tool_calls": 0,
+  "answer": {
+    "answer": "43FA(3)(c),236(3)",
+    "confidence": 96,
+    "evidence_urls": [],
+    "gap_kind": "MISSING_KNOWLEDGE",
+    "route": "FULL",
+    "tool_decision": "NOT_AVAILABLE",
+    "tool_use_rationale": "No external tool capability was available; the frozen authority supplied the necessary provisions."
+  },
+  "arm": "FOIL",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "43FA(3)(c),236(3)"
+  },
+  "base_call": {
+    "last_output_sha256": "4dcbd35da01e2c2ebeb453f5b63e6baf28f148572285aef46bac6d0f728842e2",
+    "prompt_characters": 593,
+    "prompt_sha256": "97d8937b0ab977f47000fbea8259dcc3fe7ce09b6eaa7241d913f9508952168e",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "578334c4081f5e50e8d4630ad8ccc3f6790910ce5b0908e25eb2077ce4d6517b",
+    "stdout_sha256": "4a1a332b374b85329a5fe1cd42d82ef5c5a0680a35acafb7cddd373577f3a9dc",
+    "timed_out": false,
+    "wall_seconds": 36.219000000011874
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "97d8937b0ab977f47000fbea8259dcc3fe7ce09b6eaa7241d913f9508952168e",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 11008,
+    "input_tokens": 17516,
+    "output_tokens": 1724,
+    "reasoning_output_tokens": 1697
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "TERRA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:52:21.667281+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-66e9580bc845662f61f3664b",
+  "model": "gpt-5.6-terra",
+  "policy": {
+    "actions": [
+      "reason_closed_book",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "primary_effort_mode": "reasoning",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "resource_rationale": "task-evidence-only",
+    "retrieval_allowed": false,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 0,
+    "source_followup_priority": 0,
+    "stop_reason": "continue_reasoning",
+    "targeted_complement": null,
+    "task_regime": "closed_book_technical_reasoning"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "8a106788b10db41ea593a58a2fb832e76b36ab126bc557c2357e00d5a637fdd3",
+    "prompt_characters": 35784,
+    "prompt_sha256": "92365534bf82aacf28e66a7899f0ebb53423a53058cfcdb3e79f8a65a1aa6e9f",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "6f5233b1e9f83bfbd583ea72752fcfc20ea27f5e3d0e457574d4c4f4678a04fa",
+    "stdout_sha256": "9b8b38e4fc620322640b81ac8244060a367a45ea26844edfd84c19c511e6367b",
+    "timed_out": false,
+    "wall_seconds": 10.780999999988126
+  },
+  "route_prompt_sha256": "92365534bf82aacf28e66a7899f0ebb53423a53058cfcdb3e79f8a65a1aa6e9f",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 11008,
+    "input_tokens": 26415,
+    "output_tokens": 288,
+    "reasoning_output_tokens": 211
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:51:34.663985+00:00",
+  "tool_sequence": [],
+  "tools": [],
+  "unit_id": "terra_high-foil-hle-66e9580bc845662f61f3664b",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 22016,
+    "input_tokens": 43931,
+    "output_tokens": 2012,
+    "reasoning_output_tokens": 1908
+  },
+  "valid": true,
+  "wall_seconds": 47.0
+}

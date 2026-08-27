@@ -1,0 +1,393 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "3694aa9dad749dd7536ee07e15bd77e6410943dcb94cc8071551b5c1a5cc61ff",
+    "action": "SELECT_FULL",
+    "answer_changed": false,
+    "benchmark_only": true,
+    "cached_input_tokens": 323328,
+    "input_tokens": 388247,
+    "output_tokens": 4616,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "3694aa9dad749dd7536ee07e15bd77e6410943dcb94cc8071551b5c1a5cc61ff",
+    "tool_event_types": [
+      "command_execution",
+      "web_search",
+      "command_execution",
+      "command_execution",
+      "command_execution",
+      "command_execution",
+      "web_search",
+      "web_search",
+      "web_search"
+    ]
+  },
+  "actual_tool_calls": 9,
+  "answer": {
+    "answer": "(4000, 4000)",
+    "confidence": 99,
+    "evidence_urls": [
+      "https://codegolf.stackexchange.com/questions/108632/counting-unit-squares-circle-passes-through",
+      "https://huggingface.co/datasets/TheFactoryX/edition_3117_jxcai-scale-hle-public-questions-readymade/viewer/default/train?p=4"
+    ],
+    "gap_kind": "EVIDENCE_GAP",
+    "route": "FULL",
+    "tool_decision": "USED_WEB_SEARCH",
+    "tool_use_rationale": "Verified the 8r grid-crossing rule for a non-vertex-crossing circle and applied it with r=500."
+  },
+  "arm": "FOIL_TOOLS",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "(4000, 4000)"
+  },
+  "base_call": {
+    "last_output_sha256": "973b066b4c7cb84be82c86ecd5475eff1d31c222c66c71d0baa58bc74add90c6",
+    "prompt_characters": 661,
+    "prompt_sha256": "6923439760555bd186bc8df286535545ee6af9972322f5d60718c5f54cebb601",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "766e3e530eb8eb598a34f9d93301ab6ae9942365998b1a164dfa4112d2e7c970",
+    "stdout_sha256": "1f3dc334f4362e92f4e9a366d4f4d48615be4d171b69617fd30e21d8c203f582",
+    "timed_out": false,
+    "wall_seconds": 36.04700000000594
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "6923439760555bd186bc8df286535545ee6af9972322f5d60718c5f54cebb601",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 16615,
+    "output_tokens": 1576,
+    "reasoning_output_tokens": 1552
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "LUNA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "item.completed:command_execution",
+    "item.completed:web_search",
+    "item.started:command_execution",
+    "item.started:web_search",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:34:49.642562+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-66f3fa084a937a16c867c042",
+  "model": "gpt-5.6-luna",
+  "policy": {
+    "actions": [
+      "discover_candidates",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "primary_effort_mode": "discovery",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "resource_rationale": "candidate-discovery-first",
+    "retrieval_allowed": true,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 3,
+    "source_followup_priority": 1,
+    "stop_reason": "continue_discovery",
+    "targeted_complement": null,
+    "task_regime": "external_retrieval"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "0c035a324411ec49483710a92f4ae153354b173fe9b9ba386335ba602de24011",
+    "prompt_characters": 35952,
+    "prompt_sha256": "2dbdfb56fe6e3a8b4e640947178e5e7e2e23cf4280c3de3b2a19076a89dd1fbf",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "9266669f46c508054cab8344291ee70ced8947291a9d0465c762b99e580d3be6",
+    "stdout_sha256": "7ba364482f76dcc66d44d593fc55bf8d308a17819144d4472fa19b73311f461a",
+    "timed_out": false,
+    "wall_seconds": 108.39100000000326
+  },
+  "route_prompt_sha256": "2dbdfb56fe6e3a8b4e640947178e5e7e2e23cf4280c3de3b2a19076a89dd1fbf",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 323328,
+    "input_tokens": 388247,
+    "output_tokens": 4616,
+    "reasoning_output_tokens": 3677
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:32:25.193243+00:00",
+  "tool_sequence": [
+    {
+      "event_index": 3,
+      "event_type": "item.started",
+      "tool_id": "item_1",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 4,
+      "event_type": "item.completed",
+      "tool_id": "item_1",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 5,
+      "event_type": "item.started",
+      "tool_id": "exec-020d05ac-5b6d-45d0-befd-bd294c6039c8",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 6,
+      "event_type": "item.completed",
+      "tool_id": "exec-020d05ac-5b6d-45d0-befd-bd294c6039c8",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 7,
+      "event_type": "item.started",
+      "tool_id": "item_3",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 8,
+      "event_type": "item.completed",
+      "tool_id": "item_3",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 9,
+      "event_type": "item.started",
+      "tool_id": "item_4",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 10,
+      "event_type": "item.completed",
+      "tool_id": "item_4",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 11,
+      "event_type": "item.started",
+      "tool_id": "item_5",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 12,
+      "event_type": "item.completed",
+      "tool_id": "item_5",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 13,
+      "event_type": "item.started",
+      "tool_id": "item_6",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 14,
+      "event_type": "item.completed",
+      "tool_id": "item_6",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 15,
+      "event_type": "item.started",
+      "tool_id": "exec-d5a78a81-ca3b-4c13-bdd4-b7d758576658",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 16,
+      "event_type": "item.completed",
+      "tool_id": "exec-d5a78a81-ca3b-4c13-bdd4-b7d758576658",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 17,
+      "event_type": "item.started",
+      "tool_id": "exec-ac6e4991-4e83-49ac-8e53-351a4f71ae9a",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 18,
+      "event_type": "item.completed",
+      "tool_id": "exec-ac6e4991-4e83-49ac-8e53-351a4f71ae9a",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 19,
+      "event_type": "item.started",
+      "tool_id": "exec-608a9d8d-5c0c-4e41-b887-d49531635cc1",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 20,
+      "event_type": "item.completed",
+      "tool_id": "exec-608a9d8d-5c0c-4e41-b887-d49531635cc1",
+      "tool_type": "web_search"
+    }
+  ],
+  "tools": [
+    {
+      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -Raw 'C:\\\\Users\\\\tombl\\\\.agents\\\\skills\\\\mathbot\\\\SKILL.md'\"",
+      "completed": true,
+      "exit_code": 0,
+      "first_event_index": 3,
+      "last_event_index": 4,
+      "output_characters": 19851,
+      "output_sha256": "9863454b3dd40767fe954a5a8f3e29d4a174075c62881f1675dcd1817f61071f",
+      "started": true,
+      "status": "completed",
+      "tool_id": "item_1",
+      "tool_type": "command_execution"
+    },
+    {
+      "action": {
+        "query": "\"On plane with a square grid\" \"circumference of radius 500\"",
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 5,
+      "last_event_index": 6,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"On plane with a square grid\" \"circumference of radius 500\"",
+      "started": true,
+      "tool_id": "exec-020d05ac-5b6d-45d0-befd-bd294c6039c8",
+      "tool_type": "web_search"
+    },
+    {
+      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"@'\nfrom fractions import Fraction\nfor a in [Fraction(1,10), Fraction(499,1000), Fraction(999,1000), Fraction(12345,10000)]:\n    lo, hi = a - 500, a + 500\n    n = sum(lo < k < hi for k in range(-501, 502))\n    print(a, n, 2*(n+n))\n'@ | python -\"",
+      "completed": true,
+      "exit_code": -1,
+      "first_event_index": 7,
+      "last_event_index": 8,
+      "output_characters": 394,
+      "output_sha256": "aeb0acf7a89a3867be93a54cb3ec0f311d449ab6c7e5c400f9c9fbbb8208f525",
+      "started": true,
+      "status": "declined",
+      "tool_id": "item_3",
+      "tool_type": "command_execution"
+    },
+    {
+      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command '$centers = @(0.1,0.499,0.999,1.2345); foreach ($a in $centers) { $count = 0; foreach ($k in -501..501) { if (($a - 500) -lt $k -and $k -lt ($a + 500)) { $count++ } }; \"a=$a vertical_lines=$count total_crossings=$((2*($count+$count)))\" }'",
+      "completed": true,
+      "exit_code": -1,
+      "first_event_index": 9,
+      "last_event_index": 10,
+      "output_characters": 387,
+      "output_sha256": "0756e32ad65955bf26b366820f1149af8ac9a9a51e161f92a0d6eeaa4b5a12de",
+      "started": true,
+      "status": "declined",
+      "tool_id": "item_4",
+      "tool_type": "command_execution"
+    },
+    {
+      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command Get-Location",
+      "completed": true,
+      "exit_code": 0,
+      "first_event_index": 11,
+      "last_event_index": 12,
+      "output_characters": 75,
+      "output_sha256": "f83cc62faa4a1dc0b93df7eb4ba7d291c8996e68fedb411cb30d3171c12835aa",
+      "started": true,
+      "status": "completed",
+      "tool_id": "item_5",
+      "tool_type": "command_execution"
+    },
+    {
+      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'python --version'",
+      "completed": true,
+      "exit_code": -1,
+      "first_event_index": 13,
+      "last_event_index": 14,
+      "output_characters": 167,
+      "output_sha256": "25c357d5b1e35eadb49c2bf4741fc2ebd62fcf0fcf544861cadfd29d954b7bd0",
+      "started": true,
+      "status": "declined",
+      "tool_id": "item_6",
+      "tool_type": "command_execution"
+    },
+    {
+      "action": {
+        "type": "other"
+      },
+      "completed": true,
+      "first_event_index": 15,
+      "last_event_index": 16,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started": true,
+      "tool_id": "exec-d5a78a81-ca3b-4c13-bdd4-b7d758576658",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "queries": [
+          "circle radius 500 square grid minimum maximum cells crossed 4000",
+          "circle on square grid number of squares crossed 4r"
+        ],
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 17,
+      "last_event_index": 18,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "circle radius 500 square grid minimum maximum cells crossed 4000 ...",
+      "started": true,
+      "tool_id": "exec-ac6e4991-4e83-49ac-8e53-351a4f71ae9a",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "type": "other"
+      },
+      "completed": true,
+      "first_event_index": 19,
+      "last_event_index": 20,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started": true,
+      "tool_id": "exec-608a9d8d-5c0c-4e41-b887-d49531635cc1",
+      "tool_type": "web_search"
+    }
+  ],
+  "unit_id": "luna_high-foil_tools-hle-66f3fa084a937a16c867c042",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 323328,
+    "input_tokens": 404862,
+    "output_tokens": 6192,
+    "reasoning_output_tokens": 5229
+  },
+  "valid": true,
+  "wall_seconds": 144.45300000000861
+}

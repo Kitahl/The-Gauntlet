@@ -1,0 +1,142 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "c393fd8dc1b914b0a6d7b77ccfc8a0bb30d22645052bd70b87c7afebf6c2a317",
+    "action": "SELECT_FULL",
+    "answer_changed": false,
+    "benchmark_only": true,
+    "cached_input_tokens": 0,
+    "input_tokens": 23290,
+    "output_tokens": 10836,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "c393fd8dc1b914b0a6d7b77ccfc8a0bb30d22645052bd70b87c7afebf6c2a317",
+    "tool_event_types": []
+  },
+  "actual_tool_calls": 0,
+  "answer": {
+    "answer": "43",
+    "confidence": 98,
+    "evidence_urls": [],
+    "gap_kind": "VERIFICATION_GAP",
+    "route": "FULL",
+    "tool_decision": "NOT_AVAILABLE",
+    "tool_use_rationale": "Closed-book native verification: use power of a point and the condition H lies on segment AC to select the valid intersection order."
+  },
+  "arm": "FOIL",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "43"
+  },
+  "base_call": {
+    "last_output_sha256": "11700ca41c3b96f40128925a076e8fc61aa58bfb36a7ba621ee251da38b2e49f",
+    "prompt_characters": 855,
+    "prompt_sha256": "675ba80a33c84e89d696527da1eef62f1495441ede86a662e266ad3fa5b4ee06",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "3fa02c718fad7ef2d664b1c50195f95bbe68176c17589861022a64ba027533b0",
+    "stdout_sha256": "3483f969a85c3b0bf3a3a327d359624753433ba26fbdfb5ed269f92e926e603c",
+    "timed_out": false,
+    "wall_seconds": 191.32799999999406
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "675ba80a33c84e89d696527da1eef62f1495441ede86a662e266ad3fa5b4ee06",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 8960,
+    "input_tokens": 15561,
+    "output_tokens": 10375,
+    "reasoning_output_tokens": 10358
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "LUNA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:30:57.317912+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-67ae17cf1509e1d55b4a0eec",
+  "model": "gpt-5.6-luna",
+  "policy": {
+    "actions": [
+      "reason_closed_book",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "primary_effort_mode": "reasoning",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "resource_rationale": "task-evidence-only",
+    "retrieval_allowed": false,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 0,
+    "source_followup_priority": 0,
+    "stop_reason": "continue_reasoning",
+    "targeted_complement": null,
+    "task_regime": "closed_book_technical_reasoning"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "6f9dc4e2016ea5d43b64e5283b7d6b179fec5b9f647da563863bcac2317363bc",
+    "prompt_characters": 36031,
+    "prompt_sha256": "7b03f88fe6fa528f692ad27077f30aa91100dd6bf4286a8b5408aaca1e1412cb",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "10850dd694ebc750238aafa1825c2b6acf8c93ede34d67f452e3187e8ccc8cbd",
+    "stdout_sha256": "972fb0a0e41188184f4a3333d19694095de1dce07014d20d9102639dd707130f",
+    "timed_out": false,
+    "wall_seconds": 200.53100000000268
+  },
+  "route_prompt_sha256": "7b03f88fe6fa528f692ad27077f30aa91100dd6bf4286a8b5408aaca1e1412cb",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 23290,
+    "output_tokens": 10836,
+    "reasoning_output_tokens": 10761
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:24:25.448812+00:00",
+  "tool_sequence": [],
+  "tools": [],
+  "unit_id": "luna_high-foil-hle-67ae17cf1509e1d55b4a0eec",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 8960,
+    "input_tokens": 38851,
+    "output_tokens": 21211,
+    "reasoning_output_tokens": 21119
+  },
+  "valid": true,
+  "wall_seconds": 391.85899999999674
+}

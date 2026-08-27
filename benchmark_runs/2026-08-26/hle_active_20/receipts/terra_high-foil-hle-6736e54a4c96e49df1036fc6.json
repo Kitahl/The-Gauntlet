@@ -1,0 +1,142 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "98089e6d36f78e9766c9ea34d5acb3611f3a92cd81c5eb102095d924ffc7d08b",
+    "action": "SELECT_FULL",
+    "answer_changed": false,
+    "benchmark_only": true,
+    "cached_input_tokens": 15104,
+    "input_tokens": 25313,
+    "output_tokens": 480,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "98089e6d36f78e9766c9ea34d5acb3611f3a92cd81c5eb102095d924ffc7d08b",
+    "tool_event_types": []
+  },
+  "actual_tool_calls": 0,
+  "answer": {
+    "answer": "0",
+    "confidence": 100,
+    "evidence_urls": [],
+    "gap_kind": "VERIFICATION_GAP",
+    "route": "FULL",
+    "tool_decision": "NOT_AVAILABLE",
+    "tool_use_rationale": "Closed-book reasoning: a contradiction check rules out any positive-measure family, since each relevant iterate-equality is a nonzero analytic equation."
+  },
+  "arm": "FOIL",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "0"
+  },
+  "base_call": {
+    "last_output_sha256": "1fa8e6aa233b2dfaec40a42e4f980bf8e9d0787c1a7d11082ad0511db49c22ee",
+    "prompt_characters": 645,
+    "prompt_sha256": "11ce1e195d5e0b0763ade6a7253281e8baa9c089648448ec5699f1ec1065ddd5",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "9142ad3ca8314338396c85ecce17bcb8b20c887952d1785fdfdb6659614bfaeb",
+    "stdout_sha256": "539d2e635d9fc58ca101dcd87744109372dbbe5651cbc7d1d89a0ae847f37eea",
+    "timed_out": false,
+    "wall_seconds": 8.702999999994063
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "11ce1e195d5e0b0763ade6a7253281e8baa9c089648448ec5699f1ec1065ddd5",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 17584,
+    "output_tokens": 184,
+    "reasoning_output_tokens": 167
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "TERRA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:55:39.426951+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-6736e54a4c96e49df1036fc6",
+  "model": "gpt-5.6-terra",
+  "policy": {
+    "actions": [
+      "reason_closed_book",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "primary_effort_mode": "reasoning",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "resource_rationale": "task-evidence-only",
+    "retrieval_allowed": false,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 0,
+    "source_followup_priority": 0,
+    "stop_reason": "continue_reasoning",
+    "targeted_complement": null,
+    "task_regime": "closed_book_technical_reasoning"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "704b4b24726478a03957710ffae99e2af9e878cdfafe7a7ee690af507f0718f0",
+    "prompt_characters": 35820,
+    "prompt_sha256": "92ca2058ea37ec198f5f3354bb56bc270d04850ccf7ccee19478763cc44932ca",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "69367cee6dbbf17f3bd925340a97a4f9a5fe1943bfb9a7f0eec61be212ddb679",
+    "stdout_sha256": "4987e8ec858d48f1c9ea7b554006a4fd64b16bbbd0689d278e7313b2217bd684",
+    "timed_out": false,
+    "wall_seconds": 12.98399999999674
+  },
+  "route_prompt_sha256": "92ca2058ea37ec198f5f3354bb56bc270d04850ccf7ccee19478763cc44932ca",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 15104,
+    "input_tokens": 25313,
+    "output_tokens": 480,
+    "reasoning_output_tokens": 402
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:55:17.712325+00:00",
+  "tool_sequence": [],
+  "tools": [],
+  "unit_id": "terra_high-foil-hle-6736e54a4c96e49df1036fc6",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 15104,
+    "input_tokens": 42897,
+    "output_tokens": 664,
+    "reasoning_output_tokens": 569
+  },
+  "valid": true,
+  "wall_seconds": 21.702999999994063
+}

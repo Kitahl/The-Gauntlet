@@ -1,0 +1,177 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "c7334ce89bdcba6f924366e5ddf1e12454dec302306dfdbb4d96b7f7f97bd71e",
+    "action": "SELECT_FULL",
+    "answer_changed": true,
+    "benchmark_only": true,
+    "cached_input_tokens": 32256,
+    "input_tokens": 53138,
+    "output_tokens": 873,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "28d413079ee96a0146e970587257f5f23c7cb87acada7c40a2063966dd0f522e",
+    "tool_event_types": [
+      "web_search"
+    ]
+  },
+  "actual_tool_calls": 1,
+  "answer": {
+    "answer": "(2000, 2002)",
+    "confidence": 95,
+    "evidence_urls": [
+      "https://www.cut-the-knot.org/Curriculum/Geometry/LineThroughGrid.shtml"
+    ],
+    "gap_kind": "EVIDENCE_GAP",
+    "route": "FULL",
+    "tool_decision": "USED_WEB_SEARCH",
+    "tool_use_rationale": "Verified the grid-crossing counting principle via a source stating that, when no grid vertices are crossed, each line crossing enters a new cell."
+  },
+  "arm": "FOIL_TOOLS",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "(2000, 2000)"
+  },
+  "base_call": {
+    "last_output_sha256": "bf8bb35160eb4823414885a60935429968f7f07227cd33f6c2738f47e45c5cf3",
+    "prompt_characters": 661,
+    "prompt_sha256": "6923439760555bd186bc8df286535545ee6af9972322f5d60718c5f54cebb601",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "e75ba1cfc122a060851fac9b37a18ae49ff75e386495009b6a280d5ac848db1b",
+    "stdout_sha256": "a8e7bb458277563d42da052d19a3478c0096d421937b8840d8ad38eaad0d9cdf",
+    "timed_out": false,
+    "wall_seconds": 22.812000000005355
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "6923439760555bd186bc8df286535545ee6af9972322f5d60718c5f54cebb601",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 15455,
+    "output_tokens": 988,
+    "reasoning_output_tokens": 964
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "LUNA_LOW",
+  "effort": "low",
+  "event_types": [
+    "item.completed:agent_message",
+    "item.completed:web_search",
+    "item.started:web_search",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:47:44.841540+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-66f3fa084a937a16c867c042",
+  "model": "gpt-5.6-luna",
+  "policy": {
+    "actions": [
+      "discover_candidates",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "primary_effort_mode": "discovery",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "resource_rationale": "candidate-discovery-first",
+    "retrieval_allowed": true,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 3,
+    "source_followup_priority": 1,
+    "stop_reason": "continue_discovery",
+    "targeted_complement": null,
+    "task_regime": "external_retrieval"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "f1eeab8ed965d2cf1aad1b8263ab2bf70b2e8a2b0bb2bdbd23819461c5438cb3",
+    "prompt_characters": 35952,
+    "prompt_sha256": "91f088f5245123e795d3a3b44fdf4402774ec3441de7893d1f7d0f5f5428c7ed",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "fb64650d3f4585d8d75df2ebf19c8bad8656263b0b17a49d0c6e405d0b3693fc",
+    "stdout_sha256": "c3f30b03303df31d059d3034c348a9c58b96bf1757a95acf78bb71d770befba3",
+    "timed_out": false,
+    "wall_seconds": 35.812000000005355
+  },
+  "route_prompt_sha256": "91f088f5245123e795d3a3b44fdf4402774ec3441de7893d1f7d0f5f5428c7ed",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 32256,
+    "input_tokens": 53138,
+    "output_tokens": 873,
+    "reasoning_output_tokens": 631
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:46:46.202807+00:00",
+  "tool_sequence": [
+    {
+      "event_index": 3,
+      "event_type": "item.started",
+      "tool_id": "exec-2e063489-b18e-4706-b61e-1d796279b6ec",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 4,
+      "event_type": "item.completed",
+      "tool_id": "exec-2e063489-b18e-4706-b61e-1d796279b6ec",
+      "tool_type": "web_search"
+    }
+  ],
+  "tools": [
+    {
+      "action": {
+        "query": "circle grid number of squares crossed vertical horizontal grid lines formula",
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 3,
+      "last_event_index": 4,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "circle grid number of squares crossed vertical horizontal grid lines formula",
+      "started": true,
+      "tool_id": "exec-2e063489-b18e-4706-b61e-1d796279b6ec",
+      "tool_type": "web_search"
+    }
+  ],
+  "unit_id": "luna_low-foil_tools-hle-66f3fa084a937a16c867c042",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 32256,
+    "input_tokens": 68593,
+    "output_tokens": 1861,
+    "reasoning_output_tokens": 1595
+  },
+  "valid": true,
+  "wall_seconds": 58.63999999999942
+}

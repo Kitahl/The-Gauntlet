@@ -1,0 +1,142 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "a4aab3f1f08004e907d2357fafe74cab56359bcb32e23f52e7eb1d3a9c0a2ad3",
+    "action": "SELECT_FULL",
+    "answer_changed": true,
+    "benchmark_only": true,
+    "cached_input_tokens": 0,
+    "input_tokens": 24483,
+    "output_tokens": 8358,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "cc11310c456c3690d5a74c23aa31cc25b4e74cdae146c71e54ad9dbc1d109fde",
+    "tool_event_types": []
+  },
+  "actual_tool_calls": 0,
+  "answer": {
+    "answer": "2",
+    "confidence": 82,
+    "evidence_urls": [],
+    "gap_kind": "VERIFICATION_GAP",
+    "route": "FULL",
+    "tool_decision": "NOT_AVAILABLE",
+    "tool_use_rationale": "No external tool capability was available; the result was obtained by closed-book spectral reasoning with an internal contradiction check and output-contract check."
+  },
+  "arm": "FOIL",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "3"
+  },
+  "base_call": {
+    "last_output_sha256": "f9fc47cf82a23151d769fa729c43e3833319f7081abcbdf3830ce62d4983f3c0",
+    "prompt_characters": 1078,
+    "prompt_sha256": "d4b5c6cce3d31bef6253fb357e948e8bb05ea09d41448979c4cf69f87cac8dc0",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "33db17754822eb0754f52d2ca6778237140e571e526a340226b28531ac16aceb",
+    "stdout_sha256": "1286312e7d65990e7cd0f92a91823f1686e97d40fb727ec527ca899483f737f9",
+    "timed_out": false,
+    "wall_seconds": 59.71899999999732
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "d4b5c6cce3d31bef6253fb357e948e8bb05ea09d41448979c4cf69f87cac8dc0",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 16128,
+    "input_tokens": 16756,
+    "output_tokens": 2878,
+    "reasoning_output_tokens": 2861
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "LUNA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:16:00.661134+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-66b827b9b64deaedfbb997a2",
+  "model": "gpt-5.6-luna",
+  "policy": {
+    "actions": [
+      "reason_closed_book",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "primary_effort_mode": "reasoning",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "resource_rationale": "task-evidence-only",
+    "retrieval_allowed": false,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 0,
+    "source_followup_priority": 0,
+    "stop_reason": "continue_reasoning",
+    "targeted_complement": null,
+    "task_regime": "closed_book_technical_reasoning"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "49ff75f45231b6822f6f440904048107356d25a8514ac76d8982d5ead5108d9a",
+    "prompt_characters": 36253,
+    "prompt_sha256": "f5cebda2c0566cc0e9049240ba08052661f41eb3f10330d728b208aa81759847",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "b1878413e0fad447e02837212a06ab72532b9a591d1a48e5192e16ca117990ce",
+    "stdout_sha256": "a2eca322718990987bfbc1aa493156cc6975d749bc381219c19875001e445853",
+    "timed_out": false,
+    "wall_seconds": 155.82799999999406
+  },
+  "route_prompt_sha256": "f5cebda2c0566cc0e9049240ba08052661f41eb3f10330d728b208aa81759847",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 24483,
+    "output_tokens": 8358,
+    "reasoning_output_tokens": 8282
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:12:25.094114+00:00",
+  "tool_sequence": [],
+  "tools": [],
+  "unit_id": "luna_high-foil-hle-66b827b9b64deaedfbb997a2",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 16128,
+    "input_tokens": 41239,
+    "output_tokens": 11236,
+    "reasoning_output_tokens": 11143
+  },
+  "valid": true,
+  "wall_seconds": 215.56299999999464
+}

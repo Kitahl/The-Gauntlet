@@ -1,0 +1,142 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "a2e49e21fb8b6f11b2a8bb407d554c4e49d6aaddc877e228f5cc37d89ff56fb2",
+    "action": "SELECT_FULL",
+    "answer_changed": true,
+    "benchmark_only": true,
+    "cached_input_tokens": 0,
+    "input_tokens": 24323,
+    "output_tokens": 11026,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "adcc6d39951eac031c8e6851d8a50f075e8163d54f419a4bd56c13b0e50f5933",
+    "tool_event_types": []
+  },
+  "actual_tool_calls": 0,
+  "answer": {
+    "answer": "0.02781",
+    "confidence": 97,
+    "evidence_urls": [],
+    "gap_kind": "REPRESENTATION_MISMATCH",
+    "route": "FULL",
+    "tool_decision": "NOT_AVAILABLE",
+    "tool_use_rationale": "Closed-book derivation; distinguished grid-line crossings from distinct cells and checked the naive 48-cell counterexample."
+  },
+  "arm": "FOIL",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "0.0000"
+  },
+  "base_call": {
+    "last_output_sha256": "33869a1aff339c510e9ce63107430a7e5fe50e8392988183dec61b67ccaf1dd3",
+    "prompt_characters": 578,
+    "prompt_sha256": "258df95eb1f7e088291a4b635b03d7ca4d7aece0b67b905e0627a936251be9b9",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "7162de0abb1bdb7ea7be76ead29e34fd8321f3ca48364ff014c6977b403cf36b",
+    "stdout_sha256": "3c5bb13cba7eeaa32435d2173e3fa44cb1925ff398bc547fa20eaafa84232d8a",
+    "timed_out": false,
+    "wall_seconds": 141.98399999999674
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "258df95eb1f7e088291a4b635b03d7ca4d7aece0b67b905e0627a936251be9b9",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 16593,
+    "output_tokens": 7588,
+    "reasoning_output_tokens": 7568
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "LUNA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:21:31.249802+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-66f57e187a2ac7b4fffe174e",
+  "model": "gpt-5.6-luna",
+  "policy": {
+    "actions": [
+      "reason_closed_book",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "primary_effort_mode": "reasoning",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "resource_rationale": "task-evidence-only",
+    "retrieval_allowed": false,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 0,
+    "source_followup_priority": 0,
+    "stop_reason": "continue_reasoning",
+    "targeted_complement": null,
+    "task_regime": "closed_book_technical_reasoning"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "a7e406690806aa0ff2b3f42bf3737391530c00f10475cef4aea88d9821722575",
+    "prompt_characters": 35758,
+    "prompt_sha256": "57a8e632caa325cf954b8a05248ecf021a06b21703768c4581be0c0a35f9feb1",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "f7afa20fd05fe8f6d8b10ccffe85f31d2719b391781939d9f4a7141bfa11a45a",
+    "stdout_sha256": "9f2d89d2b32c79e622bbd63f6a64e54f7eaba243559f400a1bb0c212eada1077",
+    "timed_out": false,
+    "wall_seconds": 202.6710000000021
+  },
+  "route_prompt_sha256": "57a8e632caa325cf954b8a05248ecf021a06b21703768c4581be0c0a35f9feb1",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 24323,
+    "output_tokens": 11026,
+    "reasoning_output_tokens": 10949
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:15:46.573928+00:00",
+  "tool_sequence": [],
+  "tools": [],
+  "unit_id": "luna_high-foil-hle-66f57e187a2ac7b4fffe174e",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 40916,
+    "output_tokens": 18614,
+    "reasoning_output_tokens": 18517
+  },
+  "valid": true,
+  "wall_seconds": 344.6710000000021
+}

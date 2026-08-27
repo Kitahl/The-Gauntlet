@@ -1,0 +1,233 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "b6d83b958118c8070a22c1a4c5b2f1adbf0a68ed618c5eba8a300162e51bb87c",
+    "action": "SELECT_FULL",
+    "answer_changed": true,
+    "benchmark_only": true,
+    "cached_input_tokens": 96256,
+    "input_tokens": 115956,
+    "output_tokens": 1350,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "509fb4c1adc6e3039d4d8bb62f6ee6e954e4a2753d578cabb6bc9a062703e0e5",
+    "tool_event_types": [
+      "web_search",
+      "web_search",
+      "command_execution"
+    ]
+  },
+  "actual_tool_calls": 3,
+  "answer": {
+    "answer": "Overlap-add: 31 (DFT+IDFT) pairs.\n\nOverlap-save: 34 (DFT+IDFT) pairs.",
+    "confidence": 99,
+    "evidence_urls": [
+      "https://en.wikipedia.org/wiki/Overlap%E2%80%93save_method"
+    ],
+    "gap_kind": "VERIFICATION_GAP",
+    "route": "FULL",
+    "tool_decision": "USED_WEB_SEARCH",
+    "tool_use_rationale": "Verified the overlap-save valid-output rule from a DSP reference; block-count arithmetic was derived directly. Sandboxed computation was unavailable."
+  },
+  "arm": "FOIL_TOOLS",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "Overlap-add: 31 DFTs + 31 IDFTs = 31 (DFT+IDFT) pairs.\n\nOverlap-save: 34 DFTs + 34 IDFTs = 34 (DFT+IDFT) pairs."
+  },
+  "base_call": {
+    "last_output_sha256": "d802a403c8c1792887dbe8790f6d75b2528b4d181d46ba6e458e89881d3dd946",
+    "prompt_characters": 549,
+    "prompt_sha256": "d60d60764f1493d8738c2dba9f6a58ca20a4eb9c7a5b9eb45504bdbecc2e38cf",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "3e159d53f414cc41b806ffc9c2909c3b1443b2176ffcb896606d6e476cab0098",
+    "stdout_sha256": "dcda1d0da24c5b68eecfcd2a447f41999a4b3b76a3ad639e85dd2f83f2cf97ae",
+    "timed_out": false,
+    "wall_seconds": 12.10899999999674
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "d60d60764f1493d8738c2dba9f6a58ca20a4eb9c7a5b9eb45504bdbecc2e38cf",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 14080,
+    "input_tokens": 17503,
+    "output_tokens": 416,
+    "reasoning_output_tokens": 346
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "TERRA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "item.completed:command_execution",
+    "item.completed:web_search",
+    "item.started:command_execution",
+    "item.started:web_search",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T01:02:42.709940+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-67332b7198af9f49ad5d743a",
+  "model": "gpt-5.6-terra",
+  "policy": {
+    "actions": [
+      "discover_candidates",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "primary_effort_mode": "discovery",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "resource_rationale": "candidate-discovery-first",
+    "retrieval_allowed": true,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 3,
+    "source_followup_priority": 1,
+    "stop_reason": "continue_discovery",
+    "targeted_complement": null,
+    "task_regime": "external_retrieval"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "6d8288076dcc385b6897adbcfeb7676d1ed4045b4a2c2f4ccb4175d2ef5825ec",
+    "prompt_characters": 35941,
+    "prompt_sha256": "6626f48eda599260c0f747c2116bad33230dc7e49ad97e3066fc568203cee5a3",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "4cf09ed5a3bd66cdeb2f46a01bb4042e0c4e883d36b3934ff65d5c69e2881243",
+    "stdout_sha256": "4e7f88cd33dcb9355dca4fc595f964eec700827af1cf2807188f724510420e8d",
+    "timed_out": false,
+    "wall_seconds": 43.625
+  },
+  "route_prompt_sha256": "6626f48eda599260c0f747c2116bad33230dc7e49ad97e3066fc568203cee5a3",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 96256,
+    "input_tokens": 115956,
+    "output_tokens": 1350,
+    "reasoning_output_tokens": 887
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T01:01:46.954721+00:00",
+  "tool_sequence": [
+    {
+      "event_index": 3,
+      "event_type": "item.started",
+      "tool_id": "exec-23a1e7ea-b649-446a-9df0-2e8161116d1e",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 4,
+      "event_type": "item.completed",
+      "tool_id": "exec-23a1e7ea-b649-446a-9df0-2e8161116d1e",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 5,
+      "event_type": "item.started",
+      "tool_id": "exec-7723f615-df59-4fa3-949a-7604aa1bea8c",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 6,
+      "event_type": "item.completed",
+      "tool_id": "exec-7723f615-df59-4fa3-949a-7604aa1bea8c",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 7,
+      "event_type": "item.started",
+      "tool_id": "item_3",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 8,
+      "event_type": "item.completed",
+      "tool_id": "item_3",
+      "tool_type": "command_execution"
+    }
+  ],
+  "tools": [
+    {
+      "action": {
+        "query": "overlap save method number of valid output samples N M-1 block length DFT",
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 3,
+      "last_event_index": 4,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "overlap save method number of valid output samples N M-1 block length DFT",
+      "started": true,
+      "tool_id": "exec-23a1e7ea-b649-446a-9df0-2e8161116d1e",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "query": "overlap save method number of valid output samples N M-1 block length DFT",
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 5,
+      "last_event_index": 6,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "overlap save method number of valid output samples N M-1 block length DFT",
+      "started": true,
+      "tool_id": "exec-7723f615-df59-4fa3-949a-7604aa1bea8c",
+      "tool_type": "web_search"
+    },
+    {
+      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command '$N=128; $M=90; $input=1200; $L=$N-$M+1; [pscustomobject]@{usableSamplesPerBlock=$L; overlapAddBlocks=[math]::Ceiling($input/$L); overlapSaveOutputLength=$input+$M-1; overlapSaveBlocks=[math]::Ceiling(($input+$M-1)/$L)} | ConvertTo-Json -Compress'",
+      "completed": true,
+      "exit_code": -1,
+      "first_event_index": 7,
+      "last_event_index": 8,
+      "output_characters": 396,
+      "output_sha256": "2372dedebc99c5123216880e6f8ce50592bcd147ce1081ac65382b10e34dd6ee",
+      "started": true,
+      "status": "declined",
+      "tool_id": "item_3",
+      "tool_type": "command_execution"
+    }
+  ],
+  "unit_id": "terra_high-foil_tools-hle-67332b7198af9f49ad5d743a",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 110336,
+    "input_tokens": 133459,
+    "output_tokens": 1766,
+    "reasoning_output_tokens": 1233
+  },
+  "valid": true,
+  "wall_seconds": 55.75
+}

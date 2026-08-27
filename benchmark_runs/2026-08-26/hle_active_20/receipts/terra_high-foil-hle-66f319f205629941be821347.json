@@ -1,0 +1,142 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "57f2ec0c4c891f41292494c76438527f37f8b2d83cd1b1a5e0f45fb7db82bd62",
+    "action": "SELECT_FULL",
+    "answer_changed": true,
+    "benchmark_only": true,
+    "cached_input_tokens": 0,
+    "input_tokens": 25290,
+    "output_tokens": 877,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "1b629613a0b51d519acd229cf672162ece47305ef202d9ef55762c8a71262c47",
+    "tool_event_types": []
+  },
+  "actual_tool_calls": 0,
+  "answer": {
+    "answer": "\\(\\displaystyle \\min\\left\\{2\\left\\lceil\\frac{n+1}{m}\\right\\rceil,\\;2\\left\\lceil\\frac{n}{m}\\right\\rceil+1\\right\\}.\\)",
+    "confidence": 97,
+    "evidence_urls": [],
+    "gap_kind": "VERIFICATION_GAP",
+    "route": "FULL",
+    "tool_decision": "NOT_AVAILABLE",
+    "tool_use_rationale": "No external tool capability was available; the closed-book derivation was checked against the even- and odd-diameter extremal constructions."
+  },
+  "arm": "FOIL",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "\\(\\displaystyle \\min\\left\\{2\\left\\lceil\\frac{n+1}{m}\\right\\rceil,\\;2\\left\\lceil\\frac{n}{m}\\right\\rceil+1\\right\\}\\)."
+  },
+  "base_call": {
+    "last_output_sha256": "51fafc607195b2426f2b49d6b584863d94c8a6931fec9e303f1beb7edb3a501a",
+    "prompt_characters": 500,
+    "prompt_sha256": "d8142edf31002366cd7c329e7df5db055f66379b1a9025aaca2be5bb4d84ec43",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "ae256e79763561a924332f381eb9ff92b47b7e4c85f11d2c8a855da3c335fd89",
+    "stdout_sha256": "d470806ff88ff78b5d20ee2cd516ccf8fac93969b8b87a171cf4ff24a3e24947",
+    "timed_out": false,
+    "wall_seconds": 38.5630000000092
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "d8142edf31002366cd7c329e7df5db055f66379b1a9025aaca2be5bb4d84ec43",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 18666,
+    "output_tokens": 1521,
+    "reasoning_output_tokens": 1449
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "TERRA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:52:53.223428+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-66f319f205629941be821347",
+  "model": "gpt-5.6-terra",
+  "policy": {
+    "actions": [
+      "reason_closed_book",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "primary_effort_mode": "reasoning",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "resource_rationale": "task-evidence-only",
+    "retrieval_allowed": false,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 0,
+    "source_followup_priority": 0,
+    "stop_reason": "continue_reasoning",
+    "targeted_complement": null,
+    "task_regime": "closed_book_technical_reasoning"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "ca454a260592cf27139ea88d21588d960b75f6594abdf26de0b57d36094fc532",
+    "prompt_characters": 35808,
+    "prompt_sha256": "71e96ff36dc1dcbb9ea9e458c73c055a8af4e262f55aa1086158ea95244e49c3",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "2d9fcd4fa281ebf469fc9474e42fde60a85caad0d76daa7aa07286852bd053da",
+    "stdout_sha256": "9ed049d74ff4aecb3362636c0872b7d9fbbb9502a797e955d0e66b4e35be6b14",
+    "timed_out": false,
+    "wall_seconds": 21.73399999999674
+  },
+  "route_prompt_sha256": "71e96ff36dc1dcbb9ea9e458c73c055a8af4e262f55aa1086158ea95244e49c3",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 25290,
+    "output_tokens": 877,
+    "reasoning_output_tokens": 745
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:51:52.920673+00:00",
+  "tool_sequence": [],
+  "tools": [],
+  "unit_id": "terra_high-foil-hle-66f319f205629941be821347",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 43956,
+    "output_tokens": 2398,
+    "reasoning_output_tokens": 2194
+  },
+  "valid": true,
+  "wall_seconds": 60.29700000000594
+}

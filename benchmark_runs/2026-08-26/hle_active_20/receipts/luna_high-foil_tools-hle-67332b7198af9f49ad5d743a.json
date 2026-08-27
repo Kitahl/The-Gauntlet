@@ -1,0 +1,207 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "5b093c9efd81b63902d3142e0d842ce7d7620476282fdd17e27e2041c3d76915",
+    "action": "SELECT_FULL",
+    "answer_changed": true,
+    "benchmark_only": true,
+    "cached_input_tokens": 65792,
+    "input_tokens": 90156,
+    "output_tokens": 1127,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "ebb352ee6d2735e75a19c44eaa3cf9b42ffca83424db86e28b05ab055a937cfe",
+    "tool_event_types": [
+      "web_search",
+      "web_search"
+    ]
+  },
+  "actual_tool_calls": 2,
+  "answer": {
+    "answer": "Overlap-add: 31; overlap-save: 34.",
+    "confidence": 99,
+    "evidence_urls": [
+      "https://www.mathworks.com/help/dsp/ug/overlap-add-save.html",
+      "https://www.comm.utoronto.ca/~dkundur/course_info/real-time-DSP/notes/8_Kundur_Overlap_Save_Add.pdf"
+    ],
+    "gap_kind": "EVIDENCE_GAP",
+    "route": "FULL",
+    "tool_decision": "USED_WEB_SEARCH",
+    "tool_use_rationale": "Verified the block-processing conventions and DFT/IDFT steps against authoritative DSP references, then checked the exact output contract."
+  },
+  "arm": "FOIL_TOOLS",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "Overlap-add: 31 (DFT+IDFT) operations; overlap-save: 34 (DFT+IDFT) operations."
+  },
+  "base_call": {
+    "last_output_sha256": "e046177ca5100864c2f9439c31227f8eb7cb90c0ae516d66ad329fa3b832a6bd",
+    "prompt_characters": 549,
+    "prompt_sha256": "d60d60764f1493d8738c2dba9f6a58ca20a4eb9c7a5b9eb45504bdbecc2e38cf",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "54fa6e58755b419b7a39f60fb052680546abe8fa0874a0a5beb3fa68e6d52452",
+    "stdout_sha256": "6ca99ad06dbc7a122ce05d9acaec1a171afdb6cabc053231e945fbf7e5db61e0",
+    "timed_out": false,
+    "wall_seconds": 79.09399999999732
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "d60d60764f1493d8738c2dba9f6a58ca20a4eb9c7a5b9eb45504bdbecc2e38cf",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 16591,
+    "output_tokens": 3503,
+    "reasoning_output_tokens": 3459
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "LUNA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "item.completed:web_search",
+    "item.started:web_search",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:40:38.054173+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-67332b7198af9f49ad5d743a",
+  "model": "gpt-5.6-luna",
+  "policy": {
+    "actions": [
+      "discover_candidates",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "primary_effort_mode": "discovery",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "resource_rationale": "candidate-discovery-first",
+    "retrieval_allowed": true,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 3,
+    "source_followup_priority": 1,
+    "stop_reason": "continue_discovery",
+    "targeted_complement": null,
+    "task_regime": "external_retrieval"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "2c08b04b079e33d87d4929678c0c33c26da12f54e5b2e05d600e466de3909c43",
+    "prompt_characters": 35906,
+    "prompt_sha256": "081a5cf2a8b73e2281a6475de261704a4e56811e0abeae59178e9df11bfbc896",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "66de7039719c4911ee5f25121e816d086cc3f1a2d404f4e2ee22735c9b48fd45",
+    "stdout_sha256": "2fb24ca0f308c8976c8b8868da31fc6b07e1c478b75b3b2d997d330da8ad0fe3",
+    "timed_out": false,
+    "wall_seconds": 49.405999999988126
+  },
+  "route_prompt_sha256": "081a5cf2a8b73e2281a6475de261704a4e56811e0abeae59178e9df11bfbc896",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 65792,
+    "input_tokens": 90156,
+    "output_tokens": 1127,
+    "reasoning_output_tokens": 762
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:38:29.496670+00:00",
+  "tool_sequence": [
+    {
+      "event_index": 3,
+      "event_type": "item.started",
+      "tool_id": "exec-041bb848-1ba0-4de2-a177-143972bdf31a",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 4,
+      "event_type": "item.completed",
+      "tool_id": "exec-041bb848-1ba0-4de2-a177-143972bdf31a",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 5,
+      "event_type": "item.started",
+      "tool_id": "exec-67cf36ce-889e-4b97-9f10-636fbb332ffa",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 6,
+      "event_type": "item.completed",
+      "tool_id": "exec-67cf36ce-889e-4b97-9f10-636fbb332ffa",
+      "tool_type": "web_search"
+    }
+  ],
+  "tools": [
+    {
+      "action": {
+        "queries": [
+          "\"length-90\" \"length-1200\" overlap add overlap save 128-point DFT",
+          "overlap add overlap save number of DFT IDFT operations block length 90 1200 128"
+        ],
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 3,
+      "last_event_index": 4,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"length-90\" \"length-1200\" overlap add overlap save 128-point DFT ...",
+      "started": true,
+      "tool_id": "exec-041bb848-1ba0-4de2-a177-143972bdf31a",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "type": "other"
+      },
+      "completed": true,
+      "first_event_index": 5,
+      "last_event_index": 6,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started": true,
+      "tool_id": "exec-67cf36ce-889e-4b97-9f10-636fbb332ffa",
+      "tool_type": "web_search"
+    }
+  ],
+  "unit_id": "luna_high-foil_tools-hle-67332b7198af9f49ad5d743a",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 65792,
+    "input_tokens": 106747,
+    "output_tokens": 4630,
+    "reasoning_output_tokens": 4221
+  },
+  "valid": true,
+  "wall_seconds": 128.53099999998813
+}

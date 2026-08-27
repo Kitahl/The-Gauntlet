@@ -1,0 +1,84 @@
+{
+  "active_route_receipt": null,
+  "actual_tool_calls": 0,
+  "answer": null,
+  "arm": "FOIL",
+  "artificial_token_cap": null,
+  "base_answer": null,
+  "base_call": {
+    "last_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "prompt_characters": 593,
+    "prompt_sha256": "97d8937b0ab977f47000fbea8259dcc3fe7ce09b6eaa7241d913f9508952168e",
+    "returncode": null,
+    "stage": "base",
+    "stderr_sha256": "9f7c5cf06c74082383dd73848f7c35dd51aee395627e85d6f5cca30e4ff50f88",
+    "stdout_sha256": "3800e12eaa3758b35940483fcfdca290e42c4041c8db3ddc169b21f040557ed0",
+    "timed_out": true,
+    "wall_seconds": 1200.0939999999973
+  },
+  "base_event_types": [
+    "thread.started",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "97d8937b0ab977f47000fbea8259dcc3fe7ce09b6eaa7241d913f9508952168e",
+  "base_usage": {},
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "LUNA_HIGH",
+  "effort": "high",
+  "event_types": [],
+  "finished_at": "2026-08-27T00:32:25.189071+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [
+    "base last output is not JSON: Expecting value: line 1 column 1 (char 0)",
+    "base_returncode=None",
+    "base_timeout"
+  ],
+  "item_id": "hle-66e9580bc845662f61f3664b",
+  "model": "gpt-5.6-luna",
+  "policy": {
+    "actions": [
+      "reason_closed_book",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "primary_effort_mode": "reasoning",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "resource_rationale": "task-evidence-only",
+    "retrieval_allowed": false,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 0,
+    "source_followup_priority": 0,
+    "stop_reason": "continue_reasoning",
+    "targeted_complement": null,
+    "task_regime": "closed_book_technical_reasoning"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 1,
+  "route_call": null,
+  "route_prompt_sha256": null,
+  "route_usage": {},
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:12:25.093122+00:00",
+  "tool_sequence": [],
+  "tools": [],
+  "unit_id": "luna_high-foil-hle-66e9580bc845662f61f3664b",
+  "usage": {},
+  "valid": false,
+  "wall_seconds": 1200.0939999999973
+}

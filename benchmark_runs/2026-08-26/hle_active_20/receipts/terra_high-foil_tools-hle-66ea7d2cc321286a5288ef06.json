@@ -1,0 +1,237 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "6f7e5d9fdb3ff50cf15ba3236749485ab4cf6ef207d84132360ea00bc1694b35",
+    "action": "SELECT_FULL",
+    "answer_changed": true,
+    "benchmark_only": true,
+    "cached_input_tokens": 108544,
+    "input_tokens": 141876,
+    "output_tokens": 698,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "f293df51d1143efdc7bf894cc7c859f7bf16ff7d9c8c03fd73196947dd23a6cf",
+    "tool_event_types": [
+      "command_execution",
+      "web_search",
+      "web_search"
+    ]
+  },
+  "actual_tool_calls": 3,
+  "answer": {
+    "answer": "624",
+    "confidence": 100,
+    "evidence_urls": [
+      "https://huggingface.co/datasets/team-suzuki/hle-extract-qwen3235ba22b-20250815/viewer/default/train"
+    ],
+    "gap_kind": "EVIDENCE_GAP",
+    "route": "FULL",
+    "tool_decision": "USED_WEB_SEARCH",
+    "tool_use_rationale": "Verified the count via the retrieved source evidence describing the CHEVIE positive-conjugacy computation."
+  },
+  "arm": "FOIL_TOOLS",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "128"
+  },
+  "base_call": {
+    "last_output_sha256": "d6d02830d952c10834170bacf4fe4a4558cccedb3ec35085aa3d402df7d721c9",
+    "prompt_characters": 600,
+    "prompt_sha256": "b9ef189544140abccd8c5c8c6d6832ba517554a1064e0ee4ea64ef5bef4716e8",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "a81777fbf6d1293e3976cd906ee8cda8916663f87131e6726554529c7cfcfbfa",
+    "stdout_sha256": "975d77beae2467768cfca0f6d6e04bb6e96a075db06afb715108c039504a8d01",
+    "timed_out": false,
+    "wall_seconds": 103.07800000000861
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "b9ef189544140abccd8c5c8c6d6832ba517554a1064e0ee4ea64ef5bef4716e8",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 14080,
+    "input_tokens": 17519,
+    "output_tokens": 4455,
+    "reasoning_output_tokens": 4438
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "TERRA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "item.completed:command_execution",
+    "item.completed:web_search",
+    "item.started:command_execution",
+    "item.started:web_search",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:57:56.914302+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-66ea7d2cc321286a5288ef06",
+  "model": "gpt-5.6-terra",
+  "policy": {
+    "actions": [
+      "discover_candidates",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "primary_effort_mode": "discovery",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "resource_rationale": "candidate-discovery-first",
+    "retrieval_allowed": true,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 3,
+    "source_followup_priority": 1,
+    "stop_reason": "continue_discovery",
+    "targeted_complement": null,
+    "task_regime": "external_retrieval"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "02a49d421594a8886aad644f00dd1c8e5e7e21c34d9dce4df82c5d5c61adbd72",
+    "prompt_characters": 35882,
+    "prompt_sha256": "1e387c2e438db73727758e51230c6af52744c9870aa11b05166c2f8ae726d006",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "9955b67ece0457114e4a0d3d40413fa95239c0b200da57012a20a74f23d2cb17",
+    "stdout_sha256": "0a5d19a13eb339018f977ab17af86cb418ca732b59655c0fb1110b4a0e1b32ac",
+    "timed_out": false,
+    "wall_seconds": 34.375
+  },
+  "route_prompt_sha256": "1e387c2e438db73727758e51230c6af52744c9870aa11b05166c2f8ae726d006",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 108544,
+    "input_tokens": 141876,
+    "output_tokens": 698,
+    "reasoning_output_tokens": 253
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:55:39.428957+00:00",
+  "tool_sequence": [
+    {
+      "event_index": 3,
+      "event_type": "item.started",
+      "tool_id": "item_1",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 4,
+      "event_type": "item.completed",
+      "tool_id": "item_1",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 5,
+      "event_type": "item.started",
+      "tool_id": "exec-f891f3d6-ad8e-4642-9cf6-31d673b5a03c",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 6,
+      "event_type": "item.completed",
+      "tool_id": "exec-f891f3d6-ad8e-4642-9cf6-31d673b5a03c",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 7,
+      "event_type": "item.started",
+      "tool_id": "exec-630b4355-5353-48ce-8144-5a7c577b6864",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 8,
+      "event_type": "item.completed",
+      "tool_id": "exec-630b4355-5353-48ce-8144-5a7c577b6864",
+      "tool_type": "web_search"
+    }
+  ],
+  "tools": [
+    {
+      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -Raw 'C:\\\\Users\\\\tombl\\\\.agents\\\\skills\\\\mathbot\\\\SKILL.md'\"",
+      "completed": true,
+      "exit_code": 0,
+      "first_event_index": 3,
+      "last_event_index": 4,
+      "output_characters": 19851,
+      "output_sha256": "9863454b3dd40767fe954a5a8f3e29d4a174075c62881f1675dcd1817f61071f",
+      "started": true,
+      "status": "completed",
+      "tool_id": "item_1",
+      "tool_type": "command_execution"
+    },
+    {
+      "action": {
+        "query": "\"Artin group\" \"E8\" \"order 10\" torsion elements quotient center positive words",
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 5,
+      "last_event_index": 6,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"Artin group\" \"E8\" \"order 10\" torsion elements quotient center positive words",
+      "started": true,
+      "tool_id": "exec-f891f3d6-ad8e-4642-9cf6-31d673b5a03c",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "queries": [
+          "\"epsilon_10\" \"E_8\" Artin group torsion 624",
+          "\"ConjugacySet(e10,\\\"Pos\\\")\" E8",
+          "\"Artin groups of types\" E8 \"torsion elements\" \"epsilon_10\""
+        ],
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 7,
+      "last_event_index": 8,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"epsilon_10\" \"E_8\" Artin group torsion 624 ...",
+      "started": true,
+      "tool_id": "exec-630b4355-5353-48ce-8144-5a7c577b6864",
+      "tool_type": "web_search"
+    }
+  ],
+  "unit_id": "terra_high-foil_tools-hle-66ea7d2cc321286a5288ef06",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 122624,
+    "input_tokens": 159395,
+    "output_tokens": 5153,
+    "reasoning_output_tokens": 4691
+  },
+  "valid": true,
+  "wall_seconds": 137.5
+}

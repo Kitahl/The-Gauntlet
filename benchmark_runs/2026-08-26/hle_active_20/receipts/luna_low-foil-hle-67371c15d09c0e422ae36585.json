@@ -1,0 +1,142 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "f65eb21051e7b03c0629f8e0f61e3bc5a2386afb4d4237774bf057089f02f4c0",
+    "action": "SELECT_FULL",
+    "answer_changed": true,
+    "benchmark_only": true,
+    "cached_input_tokens": 0,
+    "input_tokens": 24635,
+    "output_tokens": 499,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "158c934449ac19c161b7f9e9024d0b8134a5fb57716bc60c30a16e07806d4f72",
+    "tool_event_types": []
+  },
+  "actual_tool_calls": 0,
+  "answer": {
+    "answer": "CDEFI",
+    "confidence": 99,
+    "evidence_urls": [],
+    "gap_kind": "VERIFICATION_GAP",
+    "route": "FULL",
+    "tool_decision": "NOT_AVAILABLE",
+    "tool_use_rationale": "Closed-book reasoning only; no external tools were available."
+  },
+  "arm": "FOIL",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "CDEI"
+  },
+  "base_call": {
+    "last_output_sha256": "cc61c10a56452afb26cf32fc3baaa5a84750b676492ff7a428fb24e6ad4f11c1",
+    "prompt_characters": 1454,
+    "prompt_sha256": "31a76d4aed9db9f33447a88a52a7f72e22f45e123daee3645226e086e7d8f335",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "69a6699d92efed3396b63b136842c5bb47993e44e256a81a854d02935b551616",
+    "stdout_sha256": "e03e42e590b69b6f8b62eba3e9ca4e08b5e3f1d061c55dbdae66f60f89fcdd00",
+    "timed_out": false,
+    "wall_seconds": 11.14100000000326
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "31a76d4aed9db9f33447a88a52a7f72e22f45e123daee3645226e086e7d8f335",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 16906,
+    "output_tokens": 314,
+    "reasoning_output_tokens": 295
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "LUNA_LOW",
+  "effort": "low",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:45:32.094498+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-67371c15d09c0e422ae36585",
+  "model": "gpt-5.6-luna",
+  "policy": {
+    "actions": [
+      "reason_closed_book",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "primary_effort_mode": "reasoning",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "resource_rationale": "task-evidence-only",
+    "retrieval_allowed": false,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 0,
+    "source_followup_priority": 0,
+    "stop_reason": "continue_reasoning",
+    "targeted_complement": null,
+    "task_regime": "closed_book_technical_reasoning"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "c4b49c0b4c67437840c191effbf77c80d19cebfe0cef6ab94685d9375123bf7e",
+    "prompt_characters": 36632,
+    "prompt_sha256": "84808dcb67021bd7999dea06d3df9e695f0ea84bbab9038c9ddd066bc999193e",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "7bf42e63dd768f12973c26b30da52d371a3cbb116d79c0fcc3eb34701ebaae27",
+    "stdout_sha256": "3495da8711f9d325cb397642dec642363c982265f38170773282220c9c2f0c50",
+    "timed_out": false,
+    "wall_seconds": 20.952999999994063
+  },
+  "route_prompt_sha256": "84808dcb67021bd7999dea06d3df9e695f0ea84bbab9038c9ddd066bc999193e",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 24635,
+    "output_tokens": 499,
+    "reasoning_output_tokens": 436
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:44:59.992941+00:00",
+  "tool_sequence": [],
+  "tools": [],
+  "unit_id": "luna_low-foil-hle-67371c15d09c0e422ae36585",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 41541,
+    "output_tokens": 813,
+    "reasoning_output_tokens": 731
+  },
+  "valid": true,
+  "wall_seconds": 32.09399999999732
+}

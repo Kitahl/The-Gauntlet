@@ -1,0 +1,320 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "a4aab3f1f08004e907d2357fafe74cab56359bcb32e23f52e7eb1d3a9c0a2ad3",
+    "action": "SELECT_FULL",
+    "answer_changed": false,
+    "benchmark_only": true,
+    "cached_input_tokens": 321536,
+    "input_tokens": 377420,
+    "output_tokens": 4514,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "a4aab3f1f08004e907d2357fafe74cab56359bcb32e23f52e7eb1d3a9c0a2ad3",
+    "tool_event_types": [
+      "command_execution",
+      "web_search",
+      "web_search",
+      "command_execution",
+      "command_execution",
+      "web_search"
+    ]
+  },
+  "actual_tool_calls": 6,
+  "answer": {
+    "answer": "3",
+    "confidence": 99,
+    "evidence_urls": [
+      "https://mathworld.wolfram.com/LawofCosines.html"
+    ],
+    "gap_kind": "MISSING_PROCEDURE",
+    "route": "FULL",
+    "tool_decision": "USED_BOTH",
+    "tool_use_rationale": "Used the law of cosines for the distance comparison and numerical evaluation of the derived unique minimizer."
+  },
+  "arm": "FOIL_TOOLS",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "3"
+  },
+  "base_call": {
+    "last_output_sha256": "f9fc47cf82a23151d769fa729c43e3833319f7081abcbdf3830ce62d4983f3c0",
+    "prompt_characters": 1513,
+    "prompt_sha256": "8b9b3984ff2cff6a4859cd8dee57068da898ff8baff8bbb7f9167de4681a16a6",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "5012cbe94fd58260c66ed788c50fca93e3abf9155f26f654cd51a7972ca4825a",
+    "stdout_sha256": "25ed0f2e663963d604a962683dc269362b1ad5b1fe4d1bec3ce313285c7b67ff",
+    "timed_out": false,
+    "wall_seconds": 37.0
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "8b9b3984ff2cff6a4859cd8dee57068da898ff8baff8bbb7f9167de4681a16a6",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 11008,
+    "input_tokens": 17770,
+    "output_tokens": 1743,
+    "reasoning_output_tokens": 1726
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "TERRA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "item.completed:command_execution",
+    "item.completed:web_search",
+    "item.started:command_execution",
+    "item.started:web_search",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T01:00:21.521579+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-672059fc2ea5966e3eddd835",
+  "model": "gpt-5.6-terra",
+  "policy": {
+    "actions": [
+      "discover_candidates",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "primary_effort_mode": "discovery",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "resource_rationale": "candidate-discovery-first",
+    "retrieval_allowed": true,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 3,
+    "source_followup_priority": 1,
+    "stop_reason": "continue_discovery",
+    "targeted_complement": null,
+    "task_regime": "external_retrieval"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "b24dd6d7372b81f4a758361a4d6640e00c3cf0412c763cc150f74e3d8b0538ef",
+    "prompt_characters": 36793,
+    "prompt_sha256": "8a38d2b7822616e7b99dab4486b612ed77c49053675b771c967f66a13a13c4ed",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "8970dde2dd78ce49d8e90db04445549d8477688588c95b1c59c56a7a96bfefef",
+    "stdout_sha256": "a977c51ce2b6f84939cf06c58a53766cbb021ab05421412285d65e922fcc68d2",
+    "timed_out": false,
+    "wall_seconds": 107.59400000001187
+  },
+  "route_prompt_sha256": "8a38d2b7822616e7b99dab4486b612ed77c49053675b771c967f66a13a13c4ed",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 321536,
+    "input_tokens": 377420,
+    "output_tokens": 4514,
+    "reasoning_output_tokens": 3356
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:57:56.916324+00:00",
+  "tool_sequence": [
+    {
+      "event_index": 3,
+      "event_type": "item.started",
+      "tool_id": "item_1",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 4,
+      "event_type": "item.completed",
+      "tool_id": "item_1",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 5,
+      "event_type": "item.started",
+      "tool_id": "exec-4be5e7e0-ac95-4344-9998-c207738502df",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 6,
+      "event_type": "item.completed",
+      "tool_id": "exec-4be5e7e0-ac95-4344-9998-c207738502df",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 7,
+      "event_type": "item.started",
+      "tool_id": "exec-678cd59e-f04f-44ab-9847-a31627ad9c76",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 8,
+      "event_type": "item.completed",
+      "tool_id": "exec-678cd59e-f04f-44ab-9847-a31627ad9c76",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 9,
+      "event_type": "item.started",
+      "tool_id": "item_4",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 10,
+      "event_type": "item.completed",
+      "tool_id": "item_4",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 11,
+      "event_type": "item.started",
+      "tool_id": "item_5",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 12,
+      "event_type": "item.completed",
+      "tool_id": "item_5",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 13,
+      "event_type": "item.started",
+      "tool_id": "exec-08e381ea-bebf-43f6-8150-93c86bcfbb2b",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 14,
+      "event_type": "item.completed",
+      "tool_id": "exec-08e381ea-bebf-43f6-8150-93c86bcfbb2b",
+      "tool_type": "web_search"
+    }
+  ],
+  "tools": [
+    {
+      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -Raw 'C:\\\\Users\\\\tombl\\\\.agents\\\\skills\\\\mathbot\\\\SKILL.md'\"",
+      "completed": true,
+      "exit_code": 0,
+      "first_event_index": 3,
+      "last_event_index": 4,
+      "output_characters": 19851,
+      "output_sha256": "9863454b3dd40767fe954a5a8f3e29d4a174075c62881f1675dcd1817f61071f",
+      "started": true,
+      "status": "completed",
+      "tool_id": "item_1",
+      "tool_type": "command_execution"
+    },
+    {
+      "action": {
+        "queries": [
+          "\"Two agents\" \"unit circle\" target \"radial distance\" uniformly distributed F",
+          "\"Agent A\" \"Agent B\" \"unit circle\" \"fixed distance\" target"
+        ],
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 5,
+      "last_event_index": 6,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"Two agents\" \"unit circle\" target \"radial distance\" uniformly distributed F ...",
+      "started": true,
+      "tool_id": "exec-4be5e7e0-ac95-4344-9998-c207738502df",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "queries": [
+          "\"Agent B always moves a fixed distance\" circle target",
+          "\"knows the radial distance\" \"knows the angular direction\" target",
+          "\"floor\" \"P(A wins)\" circle agents target"
+        ],
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 7,
+      "last_event_index": 8,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"Agent B always moves a fixed distance\" circle target ...",
+      "started": true,
+      "tool_id": "exec-678cd59e-f04f-44ab-9847-a31627ad9c76",
+      "tool_type": "web_search"
+    },
+    {
+      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"@'\nimport mpmath as mp\nmp.mp.dps=50\n\ndef P(F):\n    if F == 0: return mp.mpf('.5')\n    q=lambda r: mp.asin(abs(1-F/r))/mp.pi\n    return F/2 + mp.quad(q,[F/2,F,1])\n\n# scan\nfor x in [0,.1,.2,.3,.4,.5,.6,.7,.8,.9,1]: print(x, P(mp.mpf(x)))\nroot=mp.findroot(lambda f: mp.diff(P,f), (.2,.8))\nprint('root', root, 'P',P(root),'recip',1/P(root), 'floor',mp.floor(1/P(root)), 'deriv',mp.diff(P,root),'second',mp.diff(P,root,2))\n'@ | python -\"",
+      "completed": true,
+      "exit_code": -1,
+      "first_event_index": 9,
+      "last_event_index": 10,
+      "output_characters": 582,
+      "output_sha256": "eb7b7559e5b4c27bd85310fc6dc48d5ea39886c6611f9ed338d1afec0b13a04d",
+      "started": true,
+      "status": "declined",
+      "tool_id": "item_4",
+      "tool_type": "command_execution"
+    },
+    {
+      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'python -c \"import mpmath as mp; print(mp.mp.dps)\"'",
+      "completed": true,
+      "exit_code": -1,
+      "first_event_index": 11,
+      "last_event_index": 12,
+      "output_characters": 200,
+      "output_sha256": "8dc6fa46b18ec948e79eea04c0a2a0ac19dfd43b2907c1cadfbb9a5497764ffb",
+      "started": true,
+      "status": "declined",
+      "tool_id": "item_5",
+      "tool_type": "command_execution"
+    },
+    {
+      "action": {
+        "query": "site:mathworld.wolfram.com Law of Cosines",
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 13,
+      "last_event_index": 14,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "site:mathworld.wolfram.com Law of Cosines",
+      "started": true,
+      "tool_id": "exec-08e381ea-bebf-43f6-8150-93c86bcfbb2b",
+      "tool_type": "web_search"
+    }
+  ],
+  "unit_id": "terra_high-foil_tools-hle-672059fc2ea5966e3eddd835",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 332544,
+    "input_tokens": 395190,
+    "output_tokens": 6257,
+    "reasoning_output_tokens": 5082
+  },
+  "valid": true,
+  "wall_seconds": 144.59400000001187
+}

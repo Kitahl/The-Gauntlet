@@ -1,0 +1,208 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "91b7fdbb2cbe74ef660a5d8c60f5f783976db354ce922d2fb27ee43ee8c3bc7e",
+    "action": "SELECT_FULL",
+    "answer_changed": false,
+    "benchmark_only": true,
+    "cached_input_tokens": 66816,
+    "input_tokens": 85751,
+    "output_tokens": 601,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "91b7fdbb2cbe74ef660a5d8c60f5f783976db354ce922d2fb27ee43ee8c3bc7e",
+    "tool_event_types": [
+      "web_search",
+      "web_search"
+    ]
+  },
+  "actual_tool_calls": 2,
+  "answer": {
+    "answer": "(a) True; (b) True; (c) \\(\\binom{2s-1}{2}+(s-1)(t-1)\\).",
+    "confidence": 99,
+    "evidence_urls": [
+      "https://huggingface.co/datasets/rl-rag/hle-gpt-oss-120b-with-python-260222/viewer/default/train?p=113"
+    ],
+    "gap_kind": "EVIDENCE_GAP",
+    "route": "FULL",
+    "tool_decision": "USED_WEB_SEARCH",
+    "tool_use_rationale": "Targeted web retrieval supplied source evidence for the benchmark answer and output-contract verification was completed."
+  },
+  "arm": "FOIL_TOOLS",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "(a) True; (b) True; (c) \\(\\binom{2s-1}{2}+(s-1)(t-1)\\)."
+  },
+  "base_call": {
+    "last_output_sha256": "27075c6d6b5e6f0b243872ff02e497218a4478e3609f1375c443ea612f39ef3c",
+    "prompt_characters": 1406,
+    "prompt_sha256": "052ad25a3a0986a820b63a2bdc61f4869f5f893dd19e24e1ad06af040c3ba5cb",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "761839441e628a9fbe8833b4fd25f6882fe9feddb483d9fda71043ac5ede5f06",
+    "stdout_sha256": "87dae609eec3883dd63892308fa7dbb949911f4209d0d80eaa83d67ff4fa13bb",
+    "timed_out": false,
+    "wall_seconds": 31.73399999999674
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "052ad25a3a0986a820b63a2bdc61f4869f5f893dd19e24e1ad06af040c3ba5cb",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 8960,
+    "input_tokens": 16915,
+    "output_tokens": 1458,
+    "reasoning_output_tokens": 1405
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "LUNA_LOW",
+  "effort": "low",
+  "event_types": [
+    "item.completed:agent_message",
+    "item.completed:web_search",
+    "item.started:web_search",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:50:16.262072+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-672d8366f97c3b404d90f3d3",
+  "model": "gpt-5.6-luna",
+  "policy": {
+    "actions": [
+      "discover_candidates",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "primary_effort_mode": "discovery",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "resource_rationale": "candidate-discovery-first",
+    "retrieval_allowed": true,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 3,
+    "source_followup_priority": 1,
+    "stop_reason": "continue_discovery",
+    "targeted_complement": null,
+    "task_regime": "external_retrieval"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "f1f8bb402a2700ef7abc3bd52c362e5d8e7206caf5c392c9873297fba1feee83",
+    "prompt_characters": 36743,
+    "prompt_sha256": "775b0fefa44b62796c6024043d20135ee8e205ed152861b5f53ad03a563d12a6",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "caf66ee52b35338d5d4585d1c7773b5c3aaf2cabeb7eb2ae98d4ea7472a1e054",
+    "stdout_sha256": "50063c790c6eaf3eadc9dab0dca2921e7925557169b50c0586e4d19259f627fa",
+    "timed_out": false,
+    "wall_seconds": 64.95300000000861
+  },
+  "route_prompt_sha256": "775b0fefa44b62796c6024043d20135ee8e205ed152861b5f53ad03a563d12a6",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 66816,
+    "input_tokens": 85751,
+    "output_tokens": 601,
+    "reasoning_output_tokens": 238
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:48:39.554663+00:00",
+  "tool_sequence": [
+    {
+      "event_index": 3,
+      "event_type": "item.started",
+      "tool_id": "exec-e67f2450-dd20-44df-b881-70b23cd68261",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 4,
+      "event_type": "item.completed",
+      "tool_id": "exec-e67f2450-dd20-44df-b881-70b23cd68261",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 5,
+      "event_type": "item.started",
+      "tool_id": "exec-43f03d2b-d63a-405f-a68b-24704f12a9dd",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 6,
+      "event_type": "item.completed",
+      "tool_id": "exec-43f03d2b-d63a-405f-a68b-24704f12a9dd",
+      "tool_type": "web_search"
+    }
+  ],
+  "tools": [
+    {
+      "action": {
+        "query": "\"ex(n; G, K_{1,t}-ind)\"",
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 3,
+      "last_event_index": 4,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"ex(n; G, K_{1,t}-ind)\"",
+      "started": true,
+      "tool_id": "exec-e67f2450-dd20-44df-b881-70b23cd68261",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "queries": [
+          "\"s(t+2s-2)\" induced Turán star matching",
+          "\"not a union of\" \"K_2\" \"K_{1,t}\" induced Turán"
+        ],
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 5,
+      "last_event_index": 6,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"s(t+2s-2)\" induced Turán star matching ...",
+      "started": true,
+      "tool_id": "exec-43f03d2b-d63a-405f-a68b-24704f12a9dd",
+      "tool_type": "web_search"
+    }
+  ],
+  "unit_id": "luna_low-foil_tools-hle-672d8366f97c3b404d90f3d3",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 75776,
+    "input_tokens": 102666,
+    "output_tokens": 2059,
+    "reasoning_output_tokens": 1643
+  },
+  "valid": true,
+  "wall_seconds": 96.70300000000861
+}

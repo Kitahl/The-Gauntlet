@@ -1,0 +1,231 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "92e9e7e5922d26e17e48f0869ab25cc99499fdab722c065de8e0965c96c68e86",
+    "action": "SELECT_FULL",
+    "answer_changed": true,
+    "benchmark_only": true,
+    "cached_input_tokens": 85248,
+    "input_tokens": 122106,
+    "output_tokens": 2295,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "f9cacf3cb91a12e03bc4546834f95a50a4c5fe02276ac260148ea9296c442d39",
+    "tool_event_types": [
+      "command_execution",
+      "command_execution",
+      "web_search"
+    ]
+  },
+  "actual_tool_calls": 3,
+  "answer": {
+    "answer": "12",
+    "confidence": 75,
+    "evidence_urls": [],
+    "gap_kind": "MISSING_KNOWLEDGE",
+    "route": "FULL",
+    "tool_decision": "USED_BOTH",
+    "tool_use_rationale": "The extremal bound is obtained by assigning distinct blockers in A–D to E and F, giving at most 4×3 ordered pairs; a generic configuration attains all 12."
+  },
+  "arm": "FOIL_TOOLS",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "6"
+  },
+  "base_call": {
+    "last_output_sha256": "65f84d2451a291d8fc4dc6b10f412ef2aa948205e6be6e2d1dba8769dcd35ccc",
+    "prompt_characters": 1081,
+    "prompt_sha256": "09a55a3e23673b944e6227ca978969c93fb868f704a15b9a88f7f1952cf172af",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "6c4d9b13805bb756165a8800c8ddecd7a746f182901f96ff564123dad0046d33",
+    "stdout_sha256": "bff7c4e9cf3c918a900920e0129429e500d7396d977838acf3e5283c92c2d902",
+    "timed_out": false,
+    "wall_seconds": 40.25
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "09a55a3e23673b944e6227ca978969c93fb868f704a15b9a88f7f1952cf172af",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 16736,
+    "output_tokens": 1958,
+    "reasoning_output_tokens": 1941
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "LUNA_LOW",
+  "effort": "low",
+  "event_types": [
+    "item.completed:agent_message",
+    "item.completed:command_execution",
+    "item.completed:web_search",
+    "item.started:command_execution",
+    "item.started:web_search",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:51:52.916663+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [
+    "web_search_without_evidence_url"
+  ],
+  "item_id": "hle-6733e070361b540695504b86",
+  "model": "gpt-5.6-luna",
+  "policy": {
+    "actions": [
+      "discover_candidates",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "primary_effort_mode": "discovery",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "resource_rationale": "candidate-discovery-first",
+    "retrieval_allowed": true,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 3,
+    "source_followup_priority": 1,
+    "stop_reason": "continue_discovery",
+    "targeted_complement": null,
+    "task_regime": "external_retrieval"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "49c0e34518a9d802eae00b8decd035b02f33182d3c05ed2060063997a3959fee",
+    "prompt_characters": 36361,
+    "prompt_sha256": "4ab533383f0b0c0756e4d116c7c80cf15fa14e6c4135c10e2cd0c8746615e95b",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "db964ab6ea8e4c08a19c001d82b8996623ba86023d9a0d11445026a4e93d5de0",
+    "stdout_sha256": "60d0c9e0a4ddcf1e6549dc58d9cd405d37299027e3d74f44c5029a7082f0e214",
+    "timed_out": false,
+    "wall_seconds": 56.296999999991385
+  },
+  "route_prompt_sha256": "4ab533383f0b0c0756e4d116c7c80cf15fa14e6c4135c10e2cd0c8746615e95b",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 85248,
+    "input_tokens": 122106,
+    "output_tokens": 2295,
+    "reasoning_output_tokens": 1439
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:50:16.366517+00:00",
+  "tool_sequence": [
+    {
+      "event_index": 3,
+      "event_type": "item.started",
+      "tool_id": "item_1",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 4,
+      "event_type": "item.completed",
+      "tool_id": "item_1",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 5,
+      "event_type": "item.started",
+      "tool_id": "item_2",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 6,
+      "event_type": "item.completed",
+      "tool_id": "item_2",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 7,
+      "event_type": "item.started",
+      "tool_id": "exec-21056709-0b62-49e2-9621-1d0e5d45a3fe",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 8,
+      "event_type": "item.completed",
+      "tool_id": "exec-21056709-0b62-49e2-9621-1d0e5d45a3fe",
+      "tool_type": "web_search"
+    }
+  ],
+  "tools": [
+    {
+      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -Raw 'C:\\\\Users\\\\tombl\\\\.agents\\\\skills\\\\mathbot\\\\SKILL.md'\"",
+      "completed": true,
+      "exit_code": 0,
+      "first_event_index": 3,
+      "last_event_index": 4,
+      "output_characters": 19851,
+      "output_sha256": "9863454b3dd40767fe954a5a8f3e29d4a174075c62881f1675dcd1817f61071f",
+      "started": true,
+      "status": "completed",
+      "tool_id": "item_1",
+      "tool_type": "command_execution"
+    },
+    {
+      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"@'\nimport random, math\n\ndef cross(a,b,c): return (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0])\ndef inter(a,b,c,d):\n x1,y1=a;x2,y2=b;x3,y3=c;x4,y4=d\n den=(x1-x2)*(y3-y4)-(y1-y2)*(x3-x4)\n if abs(den)<1e-9:return None\n t=((x1-x3)*(y3-y4)-(y1-y3)*(x3-x4))/den\n return (x1+t*(x2-x1),y1+t*(y2-y1))\ndef between(p,x,y):\n return abs(cross(p,x,y))<1e-7 and (x[0]-p[0])*(x[0]-y[0])+(x[1]-p[1])*(x[1]-y[1])<=0\n\ndef count(q):\n A=q[:4];E,F=q[4:]\n n=0; ps=[]\n for i,x in enumerate(A):\n  for j,y in enumerate(A):\n   if i==j:continue\n   p=inter(x,E,y,F)\n   if p is None:continue\n   if not between(p,x,E) or not between(p,y,F):continue\n   # A-D visible: no tree lies between P and each target\n   ok=True\n   for u in A:\n    for v in q:\n     if u is v:continue\n     if between(p,u,v): ok=False\n   if ok:n+=1;ps.append((i,j,p))\n return n,ps\nbest=(0,None)\nfor _ in range(200000):\n q=[(random.random()*10,random.random()*10) for _ in range(6)]\n c,_=count(q)\n if c>best[0]:best=(c,q);print(best[0],best[1])\nprint('best',best[0])\n'@ | python -\"",
+      "completed": true,
+      "exit_code": -1,
+      "first_event_index": 5,
+      "last_event_index": 6,
+      "output_characters": 1171,
+      "output_sha256": "8f462662aff07772b4eac9d14093984545db203b9712ac100cab9f078f51f5d1",
+      "started": true,
+      "status": "declined",
+      "tool_id": "item_2",
+      "tool_type": "command_execution"
+    },
+    {
+      "action": {
+        "query": "\"A group of children were playing in a field\" trees A B C D E F",
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 7,
+      "last_event_index": 8,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"A group of children were playing in a field\" trees A B C D E F",
+      "started": true,
+      "tool_id": "exec-21056709-0b62-49e2-9621-1d0e5d45a3fe",
+      "tool_type": "web_search"
+    }
+  ],
+  "unit_id": "luna_low-foil_tools-hle-6733e070361b540695504b86",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 85248,
+    "input_tokens": 138842,
+    "output_tokens": 4253,
+    "reasoning_output_tokens": 3380
+  },
+  "valid": false,
+  "wall_seconds": 96.5619999999908
+}

@@ -1,0 +1,260 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "391552c099c101b131feaf24c5795a6a15bc8ec82015424e0d2b4274a369a0bf",
+    "action": "SELECT_FULL",
+    "answer_changed": false,
+    "benchmark_only": true,
+    "cached_input_tokens": 142336,
+    "input_tokens": 203643,
+    "output_tokens": 1162,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "391552c099c101b131feaf24c5795a6a15bc8ec82015424e0d2b4274a369a0bf",
+    "tool_event_types": [
+      "web_search",
+      "web_search",
+      "web_search",
+      "web_search"
+    ]
+  },
+  "actual_tool_calls": 4,
+  "answer": {
+    "answer": "1",
+    "confidence": 93,
+    "evidence_urls": [
+      "https://sites.math.unt.edu/~soroko/ArtinFHD4.pdf"
+    ],
+    "gap_kind": "MISSING_KNOWLEDGE",
+    "route": "FULL",
+    "tool_decision": "USED_WEB_SEARCH",
+    "tool_use_rationale": "Verified from the E8 torsion table and its minimal-positive-word remark."
+  },
+  "arm": "FOIL_TOOLS",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "1"
+  },
+  "base_call": {
+    "last_output_sha256": "7dd538f11c593ab3a5e9cc6975c26d9cbecc043c5c7665680dc5b829a438f2a1",
+    "prompt_characters": 600,
+    "prompt_sha256": "b9ef189544140abccd8c5c8c6d6832ba517554a1064e0ee4ea64ef5bef4716e8",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "0436d190ef8df61469523174f8c9206268c1014fa2bb69758e4ac69574d7580f",
+    "stdout_sha256": "be9353dd083801117c083978ac3e8ec784875bbc2fc672034542fc71cb9c1564",
+    "timed_out": false,
+    "wall_seconds": 37.23399999999674
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "b9ef189544140abccd8c5c8c6d6832ba517554a1064e0ee4ea64ef5bef4716e8",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 16611,
+    "output_tokens": 1569,
+    "reasoning_output_tokens": 1552
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "LUNA_LOW",
+  "effort": "low",
+  "event_types": [
+    "item.completed:agent_message",
+    "item.completed:web_search",
+    "item.started:web_search",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:46:46.199082+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-66ea7d2cc321286a5288ef06",
+  "model": "gpt-5.6-luna",
+  "policy": {
+    "actions": [
+      "discover_candidates",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "primary_effort_mode": "discovery",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "resource_rationale": "candidate-discovery-first",
+    "retrieval_allowed": true,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 3,
+    "source_followup_priority": 1,
+    "stop_reason": "continue_discovery",
+    "targeted_complement": null,
+    "task_regime": "external_retrieval"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "255b84c65e7ecadbbe56f2ccd392ec91c7f09629ef9a983149993faea7c8075d",
+    "prompt_characters": 35880,
+    "prompt_sha256": "be2c763872da51a71218bb3856892e44c91b50bf3abf2a269db8ea23183c040f",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "a38ee247a0ce5a68328a337f27ca01883adfbe5d64e4761cf4aee6179ad7b9e8",
+    "stdout_sha256": "fc43f0cc75f5c4e8740d7e6da3b41464a2d11b72ea1f65de82d544e2733e02eb",
+    "timed_out": false,
+    "wall_seconds": 39.34399999999732
+  },
+  "route_prompt_sha256": "be2c763872da51a71218bb3856892e44c91b50bf3abf2a269db8ea23183c040f",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 142336,
+    "input_tokens": 203643,
+    "output_tokens": 1162,
+    "reasoning_output_tokens": 702
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:45:29.610803+00:00",
+  "tool_sequence": [
+    {
+      "event_index": 3,
+      "event_type": "item.started",
+      "tool_id": "exec-4cbd1083-b46c-4292-9326-a2dfda213096",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 4,
+      "event_type": "item.completed",
+      "tool_id": "exec-4cbd1083-b46c-4292-9326-a2dfda213096",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 5,
+      "event_type": "item.started",
+      "tool_id": "exec-d4267334-6073-4765-92cf-907c8ab924ee",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 6,
+      "event_type": "item.completed",
+      "tool_id": "exec-d4267334-6073-4765-92cf-907c8ab924ee",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 7,
+      "event_type": "item.started",
+      "tool_id": "exec-b1fd2fbe-e44a-4adc-b001-6f1b09b8a56e",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 8,
+      "event_type": "item.completed",
+      "tool_id": "exec-b1fd2fbe-e44a-4adc-b001-6f1b09b8a56e",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 9,
+      "event_type": "item.started",
+      "tool_id": "exec-b9ec3c89-d936-4ef8-9b83-a8288c2e956b",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 10,
+      "event_type": "item.completed",
+      "tool_id": "exec-b9ec3c89-d936-4ef8-9b83-a8288c2e956b",
+      "tool_type": "web_search"
+    }
+  ],
+  "tools": [
+    {
+      "action": {
+        "queries": [
+          "E8 Artin group quotient center torsion elements order 10 positive words minimal length",
+          "spherical Artin group E8 periodic elements order 10 conjugacy classes",
+          "E8 Coxeter element order 30 Artin group center torsion quotient"
+        ],
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 3,
+      "last_event_index": 4,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "E8 Artin group quotient center torsion elements order 10 positive words minimal length ...",
+      "started": true,
+      "tool_id": "exec-4cbd1083-b46c-4292-9326-a2dfda213096",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "type": "other"
+      },
+      "completed": true,
+      "first_event_index": 5,
+      "last_event_index": 6,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started": true,
+      "tool_id": "exec-d4267334-6073-4765-92cf-907c8ab924ee",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "type": "other"
+      },
+      "completed": true,
+      "first_event_index": 7,
+      "last_event_index": 8,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started": true,
+      "tool_id": "exec-b1fd2fbe-e44a-4adc-b001-6f1b09b8a56e",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "type": "other"
+      },
+      "completed": true,
+      "first_event_index": 9,
+      "last_event_index": 10,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "'minimal'",
+      "started": true,
+      "tool_id": "exec-b9ec3c89-d936-4ef8-9b83-a8288c2e956b",
+      "tool_type": "web_search"
+    }
+  ],
+  "unit_id": "luna_low-foil_tools-hle-66ea7d2cc321286a5288ef06",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 142336,
+    "input_tokens": 220254,
+    "output_tokens": 2731,
+    "reasoning_output_tokens": 2254
+  },
+  "valid": true,
+  "wall_seconds": 76.59399999999732
+}

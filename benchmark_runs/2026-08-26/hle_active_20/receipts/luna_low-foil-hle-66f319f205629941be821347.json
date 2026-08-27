@@ -1,0 +1,142 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "7be9ae5a27d6b8598a75d7cfdb8581621c2489c60ccf45bc833abc594341b4be",
+    "action": "SELECT_FULL",
+    "answer_changed": false,
+    "benchmark_only": true,
+    "cached_input_tokens": 0,
+    "input_tokens": 24380,
+    "output_tokens": 421,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "7be9ae5a27d6b8598a75d7cfdb8581621c2489c60ccf45bc833abc594341b4be",
+    "tool_event_types": []
+  },
+  "actual_tool_calls": 0,
+  "answer": {
+    "answer": "\\(\\displaystyle \\min\\left\\{2\\left\\lceil\\frac{n+1}{m}\\right\\rceil,\\;2\\left\\lceil\\frac{n}{m}\\right\\rceil+1\\right\\}\\)",
+    "confidence": 96,
+    "evidence_urls": [],
+    "gap_kind": "VERIFICATION_GAP",
+    "route": "FULL",
+    "tool_decision": "NOT_AVAILABLE",
+    "tool_use_rationale": "No external tools were available; verified closed-book against boundary cases."
+  },
+  "arm": "FOIL",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "\\(\\displaystyle \\min\\left\\{2\\left\\lceil\\frac{n+1}{m}\\right\\rceil,\\;2\\left\\lceil\\frac{n}{m}\\right\\rceil+1\\right\\}\\)"
+  },
+  "base_call": {
+    "last_output_sha256": "9c1367c634a3d62147d4e911452a42095d27c7d4cc4272b71fcc4492250feabf",
+    "prompt_characters": 500,
+    "prompt_sha256": "d8142edf31002366cd7c329e7df5db055f66379b1a9025aaca2be5bb4d84ec43",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "b342e696f75bfb34a91b0f16f751477b4d0249f1092f3aa32f15aa994d312770",
+    "stdout_sha256": "1974debd04b981f03fd72167f20d5956ba7ac8bc6fd68f32c6ec7ae57632fefd",
+    "timed_out": false,
+    "wall_seconds": 31.0
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "d8142edf31002366cd7c329e7df5db055f66379b1a9025aaca2be5bb4d84ec43",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 15436,
+    "output_tokens": 1353,
+    "reasoning_output_tokens": 1281
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "LUNA_LOW",
+  "effort": "low",
+  "event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T00:43:17.564832+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-66f319f205629941be821347",
+  "model": "gpt-5.6-luna",
+  "policy": {
+    "actions": [
+      "reason_closed_book",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "primary_effort_mode": "reasoning",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "contradiction_counterexample",
+      "output_contract"
+    ],
+    "resource_rationale": "task-evidence-only",
+    "retrieval_allowed": false,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 0,
+    "source_followup_priority": 0,
+    "stop_reason": "continue_reasoning",
+    "targeted_complement": null,
+    "task_regime": "closed_book_technical_reasoning"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "c23e2dd2ae8564fcb66a9a03ec017346dcbdf123d023374e4241015508769ec9",
+    "prompt_characters": 35807,
+    "prompt_sha256": "60e902dd4393040b07e49149894af722a9557e449b2d9ee51820e4fbcb9169b8",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "9e56889a32d4dfe15a3d11ddbd5a06aa5cf4fbedd4e5211ae139f68f7bda4910",
+    "stdout_sha256": "7679f389f8eca289e08d5fdbae1f12c4e42f0b35bc87100a0a12396b1452be53",
+    "timed_out": false,
+    "wall_seconds": 12.702999999994063
+  },
+  "route_prompt_sha256": "60e902dd4393040b07e49149894af722a9557e449b2d9ee51820e4fbcb9169b8",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 24380,
+    "output_tokens": 421,
+    "reasoning_output_tokens": 303
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T00:42:33.850732+00:00",
+  "tool_sequence": [],
+  "tools": [],
+  "unit_id": "luna_low-foil-hle-66f319f205629941be821347",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 39816,
+    "output_tokens": 1774,
+    "reasoning_output_tokens": 1584
+  },
+  "valid": true,
+  "wall_seconds": 43.71899999999732
+}

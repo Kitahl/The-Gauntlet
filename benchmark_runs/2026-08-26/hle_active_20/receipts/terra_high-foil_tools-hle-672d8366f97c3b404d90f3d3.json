@@ -1,0 +1,237 @@
+{
+  "active_route_receipt": {
+    "a0_digest": "dd1b46f78b88b986f7f4c0bb67d75031dbbac3ef54adfd9ed6f9d3368b38700c",
+    "action": "SELECT_FULL",
+    "answer_changed": false,
+    "benchmark_only": true,
+    "cached_input_tokens": 87296,
+    "input_tokens": 136763,
+    "output_tokens": 942,
+    "production_authorized": false,
+    "promotion_authorized": false,
+    "raw_answer_stored": false,
+    "reason": "full_candidate_selected_in_benchmark",
+    "route": "FULL",
+    "route_calls": 1,
+    "schema": "foil.adaptive-active-benchmark-receipt.v1",
+    "selected_digest": "dd1b46f78b88b986f7f4c0bb67d75031dbbac3ef54adfd9ed6f9d3368b38700c",
+    "tool_event_types": [
+      "web_search",
+      "web_search",
+      "web_search"
+    ]
+  },
+  "actual_tool_calls": 3,
+  "answer": {
+    "answer": "(a) True; (b) True; (c) \\(\\binom{2s-2}{2}+(2s-2)(t-1)\\).",
+    "confidence": 99,
+    "evidence_urls": [
+      "https://huggingface.co/datasets/rl-rag/hle-gpt-oss-120b-with-python-260222/viewer/default/train?p=113"
+    ],
+    "gap_kind": "INCORRECT_KNOWLEDGE",
+    "route": "FULL",
+    "tool_decision": "USED_WEB_SEARCH",
+    "tool_use_rationale": "Verified the task statement via retrieval and used a matching-based derivation for the stated bound."
+  },
+  "arm": "FOIL_TOOLS",
+  "artificial_token_cap": null,
+  "base_answer": {
+    "answer": "(a) True; (b) True; (c) \\(\\binom{2s-2}{2}+(2s-2)(t-1)\\)."
+  },
+  "base_call": {
+    "last_output_sha256": "18f3dec8ac3d21fa463f58d1b55a42a39b7133f8c1599ac5fb278b133e62a18d",
+    "prompt_characters": 1406,
+    "prompt_sha256": "052ad25a3a0986a820b63a2bdc61f4869f5f893dd19e24e1ad06af040c3ba5cb",
+    "returncode": 0,
+    "stage": "base",
+    "stderr_sha256": "60ebba0154d044d8d2afdf3cc48c65689b45a8ec450208291d2e1fcbf27aa1fc",
+    "stdout_sha256": "3795da8a4a6c85cf8da2e16bdbb1bf2b2d9c7ff570bde43b5293fa0c37159458",
+    "timed_out": false,
+    "wall_seconds": 15.843999999997322
+  },
+  "base_event_types": [
+    "item.completed:agent_message",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "base_prompt_sha256": "052ad25a3a0986a820b63a2bdc61f4869f5f893dd19e24e1ad06af040c3ba5cb",
+  "base_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "input_tokens": 17825,
+    "output_tokens": 570,
+    "reasoning_output_tokens": 516
+  },
+  "benchmark_answer_active": true,
+  "codex_version": "codex-cli 0.147.0",
+  "config_id": "TERRA_HIGH",
+  "effort": "high",
+  "event_types": [
+    "item.completed:agent_message",
+    "item.completed:web_search",
+    "item.started:web_search",
+    "thread.started",
+    "turn.completed",
+    "turn.started"
+  ],
+  "finished_at": "2026-08-27T01:02:17.390046+00:00",
+  "host_route": "FULL",
+  "invalid_reasons": [],
+  "item_id": "hle-672d8366f97c3b404d90f3d3",
+  "model": "gpt-5.6-terra",
+  "policy": {
+    "actions": [
+      "discover_candidates",
+      "check_output_contract"
+    ],
+    "active_in_benchmark": true,
+    "host_route": "FULL",
+    "load_bearing_uncertainty_count": 1,
+    "pending_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "primary_effort_mode": "discovery",
+    "production_authorized": false,
+    "profile_influence": "none",
+    "profile_route_allowed": false,
+    "required_verifiers": [
+      "output_contract",
+      "source_evidence"
+    ],
+    "resource_rationale": "candidate-discovery-first",
+    "retrieval_allowed": true,
+    "route_basis": "none",
+    "routing_signal_authority": "CONTROL_ONLY",
+    "search_query_priority": 3,
+    "source_followup_priority": 1,
+    "stop_reason": "continue_discovery",
+    "targeted_complement": null,
+    "task_regime": "external_retrieval"
+  },
+  "pre_call_commit": "7cec5f3240d8bf2b0cd1c250d95011fad0a4596d",
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "provider_calls": 2,
+  "route_call": {
+    "last_output_sha256": "3710df7a9b5cb691c03f6cba9c863be29baece33c9cec1114dbee9b5d26e59e2",
+    "prompt_characters": 36744,
+    "prompt_sha256": "a37b7da4a093a940221c1ee6967848460c762bedae81fff160811b873ae28cd1",
+    "returncode": 0,
+    "stage": "route",
+    "stderr_sha256": "6d3f20a52ea91b4bfe8d0a36511e6c0402c597ffc1e954f14d7c69ede678cda9",
+    "stdout_sha256": "31490e6340d1a77234390533e814761165e4180d76b87f20019cbce81af61630",
+    "timed_out": false,
+    "wall_seconds": 35.54700000000594
+  },
+  "route_prompt_sha256": "a37b7da4a093a940221c1ee6967848460c762bedae81fff160811b873ae28cd1",
+  "route_usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 87296,
+    "input_tokens": 136763,
+    "output_tokens": 942,
+    "reasoning_output_tokens": 562
+  },
+  "schema": "foil.hle-active-20-receipt.v2",
+  "started_at": "2026-08-27T01:01:25.974327+00:00",
+  "tool_sequence": [
+    {
+      "event_index": 2,
+      "event_type": "item.started",
+      "tool_id": "exec-a16a0586-a78a-4189-be2b-ee4bbd4c86a3",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 3,
+      "event_type": "item.completed",
+      "tool_id": "exec-a16a0586-a78a-4189-be2b-ee4bbd4c86a3",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 4,
+      "event_type": "item.started",
+      "tool_id": "exec-61affd56-afd3-49fb-b6d1-4217b7c13994",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 5,
+      "event_type": "item.completed",
+      "tool_id": "exec-61affd56-afd3-49fb-b6d1-4217b7c13994",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 6,
+      "event_type": "item.started",
+      "tool_id": "exec-7811d805-d99a-412d-bea3-5b1c452e52a9",
+      "tool_type": "web_search"
+    },
+    {
+      "event_index": 7,
+      "event_type": "item.completed",
+      "tool_id": "exec-7811d805-d99a-412d-bea3-5b1c452e52a9",
+      "tool_type": "web_search"
+    }
+  ],
+  "tools": [
+    {
+      "action": {
+        "query": "\"ex(n; G, K_{1,t}-ind)\" \"sK_2\"",
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 2,
+      "last_event_index": 3,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"ex(n; G, K_{1,t}-ind)\" \"sK_2\"",
+      "started": true,
+      "tool_id": "exec-a16a0586-a78a-4189-be2b-ee4bbd4c86a3",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "query": "\"ex(n; G, K_{1,t}-ind)\" \"sK_2\"",
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 4,
+      "last_event_index": 5,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"ex(n; G, K_{1,t}-ind)\" \"sK_2\"",
+      "started": true,
+      "tool_id": "exec-61affd56-afd3-49fb-b6d1-4217b7c13994",
+      "tool_type": "web_search"
+    },
+    {
+      "action": {
+        "queries": [
+          "\"(2s-2)(t-1)\" \"K_{1,t}\" \"sK_2\"",
+          "\"binom{2s-2}{2}\" \"K_{1,t}\" \"sK_2\"",
+          "\"Turán-type extremal function\" \"K_{1,t}-ind\""
+        ],
+        "type": "search"
+      },
+      "completed": true,
+      "first_event_index": 6,
+      "last_event_index": 7,
+      "output_characters": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "query": "\"(2s-2)(t-1)\" \"K_{1,t}\" \"sK_2\" ...",
+      "started": true,
+      "tool_id": "exec-7811d805-d99a-412d-bea3-5b1c452e52a9",
+      "tool_type": "web_search"
+    }
+  ],
+  "unit_id": "terra_high-foil_tools-hle-672d8366f97c3b404d90f3d3",
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 87296,
+    "input_tokens": 154588,
+    "output_tokens": 1512,
+    "reasoning_output_tokens": 1078
+  },
+  "valid": true,
+  "wall_seconds": 51.42200000000594
+}
