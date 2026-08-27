@@ -21,7 +21,6 @@ DEFAULT_CONFIG: dict[str, Any] = {
         "skills/infinity-gauntlet/SKILL.md", "skills/meditate/SKILL.md",
         "skills/council-of-elders/SKILL.md", "skills/foil/SKILL.md",
     ],
-
     "runtime": {
         "enabled": True,
         "schema": "egrt.runtime.v1",
@@ -29,6 +28,16 @@ DEFAULT_CONFIG: dict[str, Any] = {
         "persist_raw_tool_output": False,
         "release_gate": True,
         "active_task_required_for_gate": True,
+    },
+    "challenge": {
+        "mode": "shadow",
+        "max_total_per_obligation": 4,
+        "max_load_bearing_per_obligation": 2,
+        "max_selected_discriminators": 2,
+        "allow_foil_proposals": True,
+        "require_claim_native_receipt": True,
+        "block_on_unavailable_load_bearing": True,
+        "persist_raw_text": False,
     },
     "boundary": {
         "enabled": True,
@@ -73,6 +82,18 @@ def load_config(root: Path | None = None) -> dict[str, Any]:
     if not isinstance(raw, dict):
         raise RuntimeError(f"invalid {CONFIG_NAME}: top level must be an object")
     return _merge(DEFAULT_CONFIG, raw)
+
+
+def challenge_config(root: Path | None = None) -> dict[str, Any]:
+    config = load_config(root)
+    challenge = dict(config.get("challenge") or {})
+    override = os.environ.get("EGR_CHALLENGE_MODE")
+    if override:
+        override = override.strip().lower()
+        if override not in {"off", "shadow", "enforced"}:
+            raise RuntimeError("EGR_CHALLENGE_MODE must be off, shadow, or enforced")
+        challenge["mode"] = override
+    return challenge
 
 
 def state_dir(root: Path | None = None, config: dict[str, Any] | None = None) -> Path:
