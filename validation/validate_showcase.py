@@ -111,7 +111,7 @@ checks["legacy_name_not_public"] = "mastermind" not in html.lower() and ">FOIL<"
 checks["benchmark_results_not_front_page"] = all(token not in html for token in ("94 / 94", "18 / 18", "HLE public", "ARC-AGI", "GPQA-Diamond", "BrowseComp four-way"))
 checks["activation_surface"] = all(command in html for command in ("/soul", "/foil", "/mind", "/space", "/reality", "/power", "/time", "/gauntlet", "/council"))
 checks["control_tools_visible"] = all(token in html for token in ("Soul · Research Orchestrator", "Mirror · Adaptive Reasoning Complement", "Gauntlet · Process Assurance", "Meditate · Decision Preflight", "Council · Evidence Review Panel"))
-checks["implementation_directory_exposed"] = len([p for p in (ROOT / "tools").glob("*.py") if p.name != "__init__.py"]) == 41 and "https://github.com/Kitahl/The-Gauntlet/tree/main/tools" in html
+checks["implementation_directory_exposed"] = len([p for p in (ROOT / "tools").glob("*.py") if p.name != "__init__.py"]) == 44 and "https://github.com/Kitahl/The-Gauntlet/tree/main/tools" in html
 
 skill_dirs = ["soul", "mathbot", "scoutbot", "novelbot", "codebot", "benchbot", "infinity-gauntlet", "meditate", "council-of-elders", "foil"]
 checks["skill_downloads"] = all(f"https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/{directory}/SKILL.md" in html for directory in skill_dirs)
