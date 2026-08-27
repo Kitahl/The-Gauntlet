@@ -117,6 +117,13 @@
   "production_authorized": false,
   "promotion_authorized": false,
   "provider_calls": 2,
+  "public_sanitization": {
+    "original_receipt_sha256": "6214ffb31f66c3c559b0319fd493e792e62c569210d63ce938a2b6003372e3b9",
+    "performed_post_score": true,
+    "raw_command_retained_publicly": false,
+    "raw_private_events_retained_locally": true,
+    "schema": "foil.public-tool-sanitization.v1"
+  },
   "route_call": {
     "last_output_sha256": "8a49aff617c201fcf18ad584e8916be30d9d60d96f95dfc2d566decfa2985186",
     "prompt_characters": 35865,
@@ -194,6 +201,9 @@
         "query": "ideal Fermi gas number density fugacity Fermi-Dirac integral f 3/2 equation",
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 3,
       "last_event_index": 4,
@@ -209,6 +219,9 @@
         "query": "ideal Fermi gas number density fugacity Fermi-Dirac integral f 3/2 equation",
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 5,
       "last_event_index": 6,
@@ -220,7 +233,10 @@
       "tool_type": "web_search"
     },
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"@'\nimport scipy.integrate as si\nimport scipy.optimize as so\nimport math\n\ndef f(nu, eta):\n    # f_nu(exp(eta)) = 1/Gamma(nu) int_0 infinity t\"'^(nu-1)/(exp(t-eta)+1) dt\n    def integrand(t):\n        x=t-eta\n        if x>700: return 0.0\n        if x<-700: return t**(nu-1)\n        return t**(nu-1)/(math.exp(x)+1)\n    return si.quad(integrand,0,max(100,eta+100),epsabs=1e-12,epsrel=1e-12,limit=300)[0]/math.gamma(nu)\n\ndef residual(eta): return f(1.5,eta)/f(2.5,eta)-0.75\neta=so.brentq(residual,-10,20,xtol=1e-12)\nprint(eta)\nprint(math.exp(eta))\nprint(f(1.5,eta), f(2.5,eta), f(1.5,eta)/f(2.5,eta))\n'\"'@ | python -\"",
+      "action": {},
+      "command_characters": 732,
+      "command_kind": "PYTHON_COMPUTE",
+      "command_sha256": "6c60472112d129c191321fca0853a1d903ca6b706fbb91e2fc340154e64e0cc0",
       "completed": true,
       "exit_code": -1,
       "first_event_index": 7,
@@ -240,6 +256,9 @@
         ],
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 9,
       "last_event_index": 10,

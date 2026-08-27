@@ -125,6 +125,13 @@
   "production_authorized": false,
   "promotion_authorized": false,
   "provider_calls": 2,
+  "public_sanitization": {
+    "original_receipt_sha256": "4045bd224e24b03ba94ac9ae31a41dd0475b23d2ec0dd25438becf636aeca659",
+    "performed_post_score": true,
+    "raw_command_retained_publicly": false,
+    "raw_private_events_retained_locally": true,
+    "schema": "foil.public-tool-sanitization.v1"
+  },
   "route_call": {
     "last_output_sha256": "564735d2faf082aedb1430efdbc733b040a6ea8086db5a734c8780416440312b",
     "prompt_characters": 36361,
@@ -294,7 +301,10 @@
   ],
   "tools": [
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -Raw 'C:\\\\Users\\\\tombl\\\\.agents\\\\skills\\\\mathbot\\\\SKILL.md'\"",
+      "action": {},
+      "command_characters": 192,
+      "command_kind": "LOCAL_SKILL_READ",
+      "command_sha256": "d5aba76c3609859516c042a302bed84d0011814ad6ac10143d50c671dfa79f4e",
       "completed": true,
       "exit_code": 0,
       "first_event_index": 3,
@@ -311,6 +321,9 @@
         "query": "\"A, B, C, D\" \"trees\" \"E and F\" children field maximum possible number",
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 6,
       "last_event_index": 7,
@@ -330,6 +343,9 @@
         ],
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 8,
       "last_event_index": 9,
@@ -341,7 +357,10 @@
       "tool_type": "web_search"
     },
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"@'\nimport random, math\n\ndef cross(a,b,c): return (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0])\ndef line_inter(a,b,c,d):\n    den=cross(a,b,d)-cross(a,b,c)\n    if abs(den)<1e-9:return None\n    t=-cross(a,b,c)/den\n    return (a[0]+t*(b[0]-a[0]), a[1]+t*(b[1]-a[1]))\ndef between(p,x,e):\n    # x between p and e, collinear, parameter x=p+t(e-p), 0<t<1\n    dx=e[0]-p[0];dy=e[1]-p[1]\n    if abs(cross(p,x,e))>1e-7:return False\n    den=dx*dx+dy*dy\n    t=((x[0]-p[0])*dx+(x[1]-p[1])*dy)/den\n    return t>1e-7 and t<1-1e-7\ndef valid(P, pts, E, F):\n    # exactly E,F invisible due to some other tree; A-D visible\n    for i,z in enumerate(pts):\n        visible=True\n        for j,w in enumerate(pts):\n            if i==j:continue\n            if between(P,w,z): visible=False;break\n        if (i<4) \"'!= visible:return False\n    return True\n\ndef count(pts):\n    A=pts[:4]; E,F=pts[4:]\n    cs=[]\n    for i,x in enumerate(A):\n      for j,y in enumerate(A):\n        if i==j:continue\n        p=line_inter(x,E,y,F)\n        if p and between(p,x,E) and between(p,y,F) and valid(p,pts,E,F):\n          if all(math.dist(p,q)>1e-6 for q in cs):cs.append(p)\n    return len(cs)\n\nbest=(0,None)\nfor k in range(200000):\n    pts=[(random.uniform(-10,10),random.uniform(-10,10)) for _ in range(6)]\n    c=count(pts)\n    if c>best[0]:\n      best=(c,pts);print('\"'best',best)\nprint(best)\n'@ | python -\"",
+      "action": {},
+      "command_characters": 1490,
+      "command_kind": "PYTHON_COMPUTE",
+      "command_sha256": "f5f015341fe47cbb8d45a7419fb02b0bf1b94572496f6a09b62843acde0014a1",
       "completed": true,
       "exit_code": -1,
       "first_event_index": 10,
@@ -362,6 +381,9 @@
         ],
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 12,
       "last_event_index": 13,
@@ -373,7 +395,10 @@
       "tool_type": "web_search"
     },
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'node -e \"const P=[[0,0],[1,1],[3,0.5],[8/3,1/3],[13/4,1/4],[1,0]]; function cr(a,b,c){return (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0])}; function inter(a,b,c,d){let z=cr(a,b,d)-cr(a,b,c); if(Math.abs(z)<1e-10)return null; let t=-cr(a,b,c)/z; return [a[0]+t*(b[0]-a[0]),a[1]+t*(b[1]-a[1])]} function bet(p,x,z){let dx=z[0]-p[0],dy=z[1]-p[1],q=((x[0]-p[0])*dx+(x[1]-p[1])*dy)/(dx*dx+dy*dy); return Math.abs(cr(p,x,z))<1e-8&&q>1e-8&&q<1-1e-8}; for(let i=1;i<=4;i++)for(let j=i+1;j<=4;j++){let p=inter(P[0],P[i],P[5],P[j]); let ok=!!p&&bet(p,P[i],P[0])&&bet(p,P[j],P[5]); let vis=[]; for(let k=1;k<=4;k++){let v=true; for(let w=0;w<6;w++)if(w!==k&&bet(p,P[w],P[k]))v=false; vis.push(v)} console.log(i,j,p,ok,vis)}\"'",
+      "action": {},
+      "command_characters": 837,
+      "command_kind": "SHELL_COMPUTE",
+      "command_sha256": "60d4ee7f74a11e00435744177faaf987f3b4e6e1af85bebb3ac0cf7d29efa2ee",
       "completed": true,
       "exit_code": -1,
       "first_event_index": 14,
@@ -386,7 +411,10 @@
       "tool_type": "command_execution"
     },
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'python -c \"print(2+2)\"'",
+      "action": {},
+      "command_characters": 143,
+      "command_kind": "PYTHON_COMPUTE",
+      "command_sha256": "26b8c80380a82602e36f4dcc5ad8a4afa0aa214e893654cb9a748a004d78ef26",
       "completed": true,
       "exit_code": -1,
       "first_event_index": 16,
@@ -399,7 +427,10 @@
       "tool_type": "command_execution"
     },
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command Get-ChildItem",
+      "action": {},
+      "command_characters": 132,
+      "command_kind": "SHELL_COMPUTE",
+      "command_sha256": "0ae6128b9bd6069ef269125f4f1f7c5b6776fed9f078a00821468a33dac47dd3",
       "completed": true,
       "exit_code": 0,
       "first_event_index": 18,
@@ -412,7 +443,10 @@
       "tool_type": "command_execution"
     },
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command '$x=2+2; Write-Output $x'",
+      "action": {},
+      "command_characters": 144,
+      "command_kind": "SHELL_COMPUTE",
+      "command_sha256": "abea0354780cacdaa1b6178bb587ae53f1ae1c911e0e557820f8b212e97d9d85",
       "completed": true,
       "exit_code": -1,
       "first_event_index": 20,
@@ -425,7 +459,10 @@
       "tool_type": "command_execution"
     },
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Write-Output 4'",
+      "action": {},
+      "command_characters": 135,
+      "command_kind": "SHELL_COMPUTE",
+      "command_sha256": "282e4fc290bc4bbadfa9b04bf25e39b018b13c12c4f0f793a266fe424966ed04",
       "completed": true,
       "exit_code": 0,
       "first_event_index": 22,
@@ -438,7 +475,10 @@
       "tool_type": "command_execution"
     },
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Write-Output (2+2)'",
+      "action": {},
+      "command_characters": 139,
+      "command_kind": "SHELL_COMPUTE",
+      "command_sha256": "5fe269ee6341908d4231705914364e04a7b08e52a2f1608a07e084365bf3a54e",
       "completed": true,
       "exit_code": -1,
       "first_event_index": 24,
@@ -458,6 +498,9 @@
         ],
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 26,
       "last_event_index": 27,

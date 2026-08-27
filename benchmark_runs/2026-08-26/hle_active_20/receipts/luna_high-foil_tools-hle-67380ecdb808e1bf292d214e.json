@@ -118,6 +118,13 @@
   "production_authorized": false,
   "promotion_authorized": false,
   "provider_calls": 2,
+  "public_sanitization": {
+    "original_receipt_sha256": "50b6515c09905ff1bc98f45f488a76f0a9525b30aa7cecca4fbafd400b875432",
+    "performed_post_score": true,
+    "raw_command_retained_publicly": false,
+    "raw_private_events_retained_locally": true,
+    "schema": "foil.public-tool-sanitization.v1"
+  },
   "route_call": {
     "last_output_sha256": "8eb7bec7901f5f9c6dc29683681a4f6a8994d6815f06c672bc8e0cd2837d509b",
     "prompt_characters": 36398,
@@ -203,7 +210,10 @@
   ],
   "tools": [
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -Raw 'C:\\\\Users\\\\tombl\\\\.codex\\\\skills\\\\.system\\\\foil\\\\SKILL.md'; Get-Content -Raw 'C:\\\\Users\\\\tombl\\\\.agents\\\\skills\\\\mathbot\\\\SKILL.md'\"",
+      "action": {},
+      "command_characters": 270,
+      "command_kind": "LOCAL_SKILL_READ",
+      "command_sha256": "37d451189ad899711671d6cc7755b706357d978edf7c0b8512b70d704f6237f5",
       "completed": true,
       "exit_code": 0,
       "first_event_index": 3,
@@ -216,7 +226,10 @@
       "tool_type": "command_execution"
     },
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -Raw 'C:\\\\Users\\\\tombl\\\\.codex\\\\skills\\\\foil\\\\SKILL.md'\"",
+      "action": {},
+      "command_characters": 188,
+      "command_kind": "LOCAL_SKILL_READ",
+      "command_sha256": "db17eec9815ca81903e0ad7c811563f0e16d49be0e7cddf5699f86c0b7b00a08",
       "completed": true,
       "exit_code": 0,
       "first_event_index": 5,
@@ -233,6 +246,9 @@
         "query": "site:edu electron phonon path integral integrate out phonons effective interaction Gaussian action",
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 7,
       "last_event_index": 8,
@@ -247,6 +263,9 @@
       "action": {
         "type": "other"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 9,
       "last_event_index": 10,
@@ -261,6 +280,9 @@
         "query": "electron phonon Gaussian integration effective action -g^2 q^2 Matsubara frequency lecture notes",
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 11,
       "last_event_index": 12,

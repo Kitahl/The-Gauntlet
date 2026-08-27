@@ -112,6 +112,13 @@
   "production_authorized": false,
   "promotion_authorized": false,
   "provider_calls": 2,
+  "public_sanitization": {
+    "original_receipt_sha256": "f0f20b1f946d93cbcd20dbbd1e66cfc3902ace94eb9773ceef1ebc0312f725fa",
+    "performed_post_score": true,
+    "raw_command_retained_publicly": false,
+    "raw_private_events_retained_locally": true,
+    "schema": "foil.public-tool-sanitization.v1"
+  },
   "route_call": {
     "last_output_sha256": "765d81ad7987d8027e6e4a1e274bc43ed975be2289f8bd839ca347625f60763f",
     "prompt_characters": 36558,
@@ -153,6 +160,9 @@
         "query": "electron phonon path integral integrate Gaussian phonon fields effective interaction Matsubara frequency",
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 3,
       "last_event_index": 4,

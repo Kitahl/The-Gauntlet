@@ -119,6 +119,13 @@
   "production_authorized": false,
   "promotion_authorized": false,
   "provider_calls": 2,
+  "public_sanitization": {
+    "original_receipt_sha256": "777d74b07f560a5a5e651d286036b1d45e369fbeebf2ce27dcf90b36337cde63",
+    "performed_post_score": true,
+    "raw_command_retained_publicly": false,
+    "raw_private_events_retained_locally": true,
+    "schema": "foil.public-tool-sanitization.v1"
+  },
   "route_call": {
     "last_output_sha256": "b24dd6d7372b81f4a758361a4d6640e00c3cf0412c763cc150f74e3d8b0538ef",
     "prompt_characters": 36793,
@@ -216,7 +223,10 @@
   ],
   "tools": [
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -Raw 'C:\\\\Users\\\\tombl\\\\.agents\\\\skills\\\\mathbot\\\\SKILL.md'\"",
+      "action": {},
+      "command_characters": 192,
+      "command_kind": "LOCAL_SKILL_READ",
+      "command_sha256": "d5aba76c3609859516c042a302bed84d0011814ad6ac10143d50c671dfa79f4e",
       "completed": true,
       "exit_code": 0,
       "first_event_index": 3,
@@ -236,6 +246,9 @@
         ],
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 5,
       "last_event_index": 6,
@@ -255,6 +268,9 @@
         ],
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 7,
       "last_event_index": 8,
@@ -266,7 +282,10 @@
       "tool_type": "web_search"
     },
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"@'\nimport mpmath as mp\nmp.mp.dps=50\n\ndef P(F):\n    if F == 0: return mp.mpf('.5')\n    q=lambda r: mp.asin(abs(1-F/r))/mp.pi\n    return F/2 + mp.quad(q,[F/2,F,1])\n\n# scan\nfor x in [0,.1,.2,.3,.4,.5,.6,.7,.8,.9,1]: print(x, P(mp.mpf(x)))\nroot=mp.findroot(lambda f: mp.diff(P,f), (.2,.8))\nprint('root', root, 'P',P(root),'recip',1/P(root), 'floor',mp.floor(1/P(root)), 'deriv',mp.diff(P,root),'second',mp.diff(P,root,2))\n'@ | python -\"",
+      "action": {},
+      "command_characters": 552,
+      "command_kind": "PYTHON_COMPUTE",
+      "command_sha256": "ba5f2a277d36eb1d935a8471d77005a13094d44ea651e0219044be28440467d9",
       "completed": true,
       "exit_code": -1,
       "first_event_index": 9,
@@ -279,7 +298,10 @@
       "tool_type": "command_execution"
     },
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'python -c \"import mpmath as mp; print(mp.mp.dps)\"'",
+      "action": {},
+      "command_characters": 170,
+      "command_kind": "PYTHON_COMPUTE",
+      "command_sha256": "eb50d8442071a7426d2dd391d6d23836f3fde24c9953ed2d6af2dbbec04cabc2",
       "completed": true,
       "exit_code": -1,
       "first_event_index": 11,
@@ -296,6 +318,9 @@
         "query": "site:mathworld.wolfram.com Law of Cosines",
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 13,
       "last_event_index": 14,

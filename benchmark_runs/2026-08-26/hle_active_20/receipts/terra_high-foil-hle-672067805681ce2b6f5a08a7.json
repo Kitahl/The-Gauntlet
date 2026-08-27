@@ -106,6 +106,13 @@
   "production_authorized": false,
   "promotion_authorized": false,
   "provider_calls": 2,
+  "public_sanitization": {
+    "original_receipt_sha256": "d50115cd1a920d915bc028dd080dc4ab65c1aecf2c06c14f17e9b1756bc92bb3",
+    "performed_post_score": true,
+    "raw_command_retained_publicly": false,
+    "raw_private_events_retained_locally": true,
+    "schema": "foil.public-tool-sanitization.v1"
+  },
   "route_call": {
     "last_output_sha256": "8b2bb45005cdb6ef79bd3a2cacd5dd37c4aad230afc25ffcead8ec91e66a5f10",
     "prompt_characters": 35888,

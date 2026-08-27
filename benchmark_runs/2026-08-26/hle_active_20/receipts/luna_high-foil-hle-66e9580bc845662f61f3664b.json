@@ -70,6 +70,13 @@
   "production_authorized": false,
   "promotion_authorized": false,
   "provider_calls": 1,
+  "public_sanitization": {
+    "original_receipt_sha256": "ec927a42f29a78db949a30b8e62b25994925855ceffc83988a3abe231c008ee9",
+    "performed_post_score": true,
+    "raw_command_retained_publicly": false,
+    "raw_private_events_retained_locally": true,
+    "schema": "foil.public-tool-sanitization.v1"
+  },
   "route_call": null,
   "route_prompt_sha256": null,
   "route_usage": {},

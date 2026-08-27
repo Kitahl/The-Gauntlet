@@ -115,6 +115,13 @@
   "production_authorized": false,
   "promotion_authorized": false,
   "provider_calls": 2,
+  "public_sanitization": {
+    "original_receipt_sha256": "efbd576128fa96e88d2a1602ac7e33c3f2e5d18f55e33495f06c56f038fce402",
+    "performed_post_score": true,
+    "raw_command_retained_publicly": false,
+    "raw_private_events_retained_locally": true,
+    "schema": "foil.public-tool-sanitization.v1"
+  },
   "route_call": {
     "last_output_sha256": "50d1d71c450b27ef5a8054c04eee9894cc6226aeb828e3415cd646737f4742ec",
     "prompt_characters": 36797,
@@ -168,6 +175,9 @@
         "query": "\"A group of children were playing in a field\" \"6 trees\"",
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 3,
       "last_event_index": 4,
@@ -179,7 +189,10 @@
       "tool_type": "web_search"
     },
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"@'\nimport random, math\nfor trial in range(2000000):\n    pts=[(random.uniform(-4,5), random.uniform(0.05,4)) for _ in range(4)]\n    good=[]\n    for i in range(4):\n      for j in range(i+1,4):\n        x,u=pts[i]; y,v=pts[j]\n        d=x*v-u*(y-1)\n        def ok(a,b):\n          x,u=a; y,v=b; D=x*v-u*(y-1)\n          return D>1e-8 and D<min(u,v)-1e-8\n        a=ok(pts[i],pts[j]); b=ok(pts[j],pts[i])\n        if a==b: break\n        good.append((i,j,'ij' if a else 'ji'))\n      else: continue\n      break\n    else:\n      print(pts,good);break\nelse: print('not found')\n'@ | python -\"",
+      "action": {},
+      "command_characters": 696,
+      "command_kind": "PYTHON_COMPUTE",
+      "command_sha256": "d5f83d3d54a97c4d30a3e01610e97010ca0b39f76fd1cdbf3ccc559ed5563551",
       "completed": true,
       "exit_code": -1,
       "first_event_index": 5,

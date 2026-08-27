@@ -644,23 +644,37 @@ def _tool_metadata(item: Mapping[str, object], index: int) -> dict[str, object]:
         query = action.get("query") if isinstance(action.get("query"), str) else ""
     command_value = item.get("command")
     if isinstance(command_value, str):
-        command: object = command_value
+        command_text = command_value
     elif isinstance(command_value, list) and all(isinstance(v, str) for v in command_value):
-        command = command_value
+        command_text = canonical(command_value)
     else:
-        command = ""
+        command_text = ""
+    lowered = command_text.casefold()
+    if not command_text:
+        command_kind = "NONE"
+    elif "skill.md" in lowered:
+        command_kind = "LOCAL_SKILL_READ"
+    elif "python" in lowered:
+        command_kind = "PYTHON_COMPUTE"
+    elif "rg " in lowered or "get-content" in lowered:
+        command_kind = "LOCAL_READ"
+    else:
+        command_kind = "SHELL_COMPUTE"
+    public_action = action if str(item.get("type") or "") == "web_search" else {}
     return {
         "first_event_index": index,
         "last_event_index": index,
         "tool_id": str(item.get("id") or ""),
         "tool_type": str(item.get("type") or ""),
         "query": query,
-        "command": command,
+        "command_kind": command_kind,
+        "command_characters": len(command_text),
+        "command_sha256": sha256_text(command_text),
         "status": str(item.get("status") or ""),
         "exit_code": item.get("exit_code"),
         "output_characters": len(output),
         "output_sha256": sha256_text(output),
-        "action": action,
+        "action": public_action,
     }
 
 

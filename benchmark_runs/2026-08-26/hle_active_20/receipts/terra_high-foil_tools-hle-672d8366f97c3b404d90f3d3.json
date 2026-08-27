@@ -114,6 +114,13 @@
   "production_authorized": false,
   "promotion_authorized": false,
   "provider_calls": 2,
+  "public_sanitization": {
+    "original_receipt_sha256": "d43e9580b429f02f106f0e4ae8f76229e7fb0d40f586733f44ef2198d6d9e409",
+    "performed_post_score": true,
+    "raw_command_retained_publicly": false,
+    "raw_private_events_retained_locally": true,
+    "schema": "foil.public-tool-sanitization.v1"
+  },
   "route_call": {
     "last_output_sha256": "3710df7a9b5cb691c03f6cba9c863be29baece33c9cec1114dbee9b5d26e59e2",
     "prompt_characters": 36744,
@@ -179,6 +186,9 @@
         "query": "\"ex(n; G, K_{1,t}-ind)\" \"sK_2\"",
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 2,
       "last_event_index": 3,
@@ -194,6 +204,9 @@
         "query": "\"ex(n; G, K_{1,t}-ind)\" \"sK_2\"",
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 4,
       "last_event_index": 5,
@@ -213,6 +226,9 @@
         ],
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 6,
       "last_event_index": 7,

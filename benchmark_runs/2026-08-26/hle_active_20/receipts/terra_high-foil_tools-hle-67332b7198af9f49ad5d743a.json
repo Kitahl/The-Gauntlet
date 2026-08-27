@@ -116,6 +116,13 @@
   "production_authorized": false,
   "promotion_authorized": false,
   "provider_calls": 2,
+  "public_sanitization": {
+    "original_receipt_sha256": "c1ad5c26e8704543bf3393cce79e9de303c7200efee1cef55ad26ecd3afffdf5",
+    "performed_post_score": true,
+    "raw_command_retained_publicly": false,
+    "raw_private_events_retained_locally": true,
+    "schema": "foil.public-tool-sanitization.v1"
+  },
   "route_call": {
     "last_output_sha256": "6d8288076dcc385b6897adbcfeb7676d1ed4045b4a2c2f4ccb4175d2ef5825ec",
     "prompt_characters": 35941,
@@ -181,6 +188,9 @@
         "query": "overlap save method number of valid output samples N M-1 block length DFT",
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 3,
       "last_event_index": 4,
@@ -196,6 +206,9 @@
         "query": "overlap save method number of valid output samples N M-1 block length DFT",
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 5,
       "last_event_index": 6,
@@ -207,7 +220,10 @@
       "tool_type": "web_search"
     },
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command '$N=128; $M=90; $input=1200; $L=$N-$M+1; [pscustomobject]@{usableSamplesPerBlock=$L; overlapAddBlocks=[math]::Ceiling($input/$L); overlapSaveOutputLength=$input+$M-1; overlapSaveBlocks=[math]::Ceiling(($input+$M-1)/$L)} | ConvertTo-Json -Compress'",
+      "action": {},
+      "command_characters": 366,
+      "command_kind": "SHELL_COMPUTE",
+      "command_sha256": "680e5441a4caa5148456a3cb84587d98d661d6a9721c8cfc50fceb3c516450a5",
       "completed": true,
       "exit_code": -1,
       "first_event_index": 7,

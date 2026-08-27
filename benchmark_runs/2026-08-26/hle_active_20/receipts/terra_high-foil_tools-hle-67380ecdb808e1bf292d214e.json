@@ -113,6 +113,13 @@
   "production_authorized": false,
   "promotion_authorized": false,
   "provider_calls": 2,
+  "public_sanitization": {
+    "original_receipt_sha256": "24717aacb90f33558abc6e263d528956c9d7efe66a5ee5a257e52f4c7b1e51ad",
+    "performed_post_score": true,
+    "raw_command_retained_publicly": false,
+    "raw_private_events_retained_locally": true,
+    "schema": "foil.public-tool-sanitization.v1"
+  },
   "route_call": {
     "last_output_sha256": "f0751f5e4c45fa8500af2ea1586d759e86613709438e0bba8b47c99604cc3cff",
     "prompt_characters": 36400,
@@ -166,6 +173,9 @@
         "query": "electron phonon path integral integrate out phonons effective electron electron interaction Matsubara propagator",
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 2,
       "last_event_index": 3,
@@ -180,6 +190,9 @@
       "action": {
         "type": "other"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 4,
       "last_event_index": 5,

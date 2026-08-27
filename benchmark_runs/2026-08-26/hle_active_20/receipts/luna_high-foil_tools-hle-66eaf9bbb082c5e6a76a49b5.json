@@ -128,6 +128,13 @@
   "production_authorized": false,
   "promotion_authorized": false,
   "provider_calls": 2,
+  "public_sanitization": {
+    "original_receipt_sha256": "8e59948c95074715e88c7e0d6968f8e45a20da3993604a6a33cfdd768ef77868",
+    "performed_post_score": true,
+    "raw_command_retained_publicly": false,
+    "raw_private_events_retained_locally": true,
+    "schema": "foil.public-tool-sanitization.v1"
+  },
   "route_call": {
     "last_output_sha256": "e4ed2150db49e99fc34b67c71cdc096a26e414eb12633b56248b48ea158cc8c7",
     "prompt_characters": 35775,
@@ -321,7 +328,10 @@
   ],
   "tools": [
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -Raw 'C:\\\\Users\\\\tombl\\\\.agents\\\\skills\\\\mathbot\\\\SKILL.md'\"",
+      "action": {},
+      "command_characters": 192,
+      "command_kind": "LOCAL_SKILL_READ",
+      "command_sha256": "d5aba76c3609859516c042a302bed84d0011814ad6ac10143d50c671dfa79f4e",
       "completed": true,
       "exit_code": 0,
       "first_event_index": 3,
@@ -342,6 +352,9 @@
         ],
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 5,
       "last_event_index": 6,
@@ -356,6 +369,9 @@
       "action": {
         "type": "other"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 7,
       "last_event_index": 8,
@@ -374,6 +390,9 @@
         ],
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 9,
       "last_event_index": 10,
@@ -389,6 +408,9 @@
         "query": "\"Boundary complexes of moduli spaces of curves\" Payne Chan Galatius",
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 11,
       "last_event_index": 12,
@@ -403,6 +425,9 @@
       "action": {
         "type": "other"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 13,
       "last_event_index": 14,
@@ -413,7 +438,10 @@
       "tool_type": "web_search"
     },
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"@'\nfrom itertools import product, permutations\n\n\ndef edge_patterns(v):\n    slots=[(i,i) for i in range(v)] + [(i,j) for i in range(v) for j in range(i+1,v)]\n    for vals in product(range(3), repeat=len(slots)):\n        if sum(vals)==2:\n            A=[[0]*v for _ in range(v)]\n            for (i,j),m in zip(slots,vals):\n                if i==j: A[i][i]=m\n                else: A[i][j]=A[j][i]=m\n            yield A\n\ndef connected(A):\n    v=len(A); seen={0}; stack=[0]\n    while stack:\n        i=stack.pop()\n        for j in range(v):\n            if i\"'!=j and A[i][j] and j not in seen:\n                seen.add(j); stack.append(j)\n    return len(seen)==v\n\ndef canon(A,g,leg):\n    v=len(A); forms=[]\n    for p in permutations(range(v)):\n        # new position k contains old p[k]\n        B=tuple(tuple(A[p[i]][p[j]] for j in range(v)) for i in range(v))\n        forms.append((tuple(g[p[i]] for i in range(v)), p.index(leg), B))\n    return min(forms)\n\nall_graphs={}\nfor v in (1,2,3):\n  for A in edge_patterns(v):\n    if not connected(A): continue\n    for leg in range(v):\n      for g in product(range(4), repeat=v):\n        if sum(g) + 2-v+1 != 3: continue\n        val=[]; ok=True\n        for i in range(v):\n          d=2*A[i][i]+sum(A[i][j] for j in range(v) if j!=i)+(i==leg)\n          val.append(d)\n          if 2*g[i]-2+d <= 0: ok=False\n        if ok:\n          all_graphs[canon(A,g,leg)] = (v,A,g,leg,val)\nprint('\"'total',len(all_graphs))\nfrom collections import Counter\nprint('by vertices',Counter(x[0] for x in all_graphs.values()))\nprint('details')\nfor x in sorted(all_graphs.values(), key=lambda y:(y[0], y[2], y[3], y[1])):\n  print(x)\n'@ | python -\"",
+      "action": {},
+      "command_characters": 1778,
+      "command_kind": "PYTHON_COMPUTE",
+      "command_sha256": "59c24ef44ab4881583a1e5388de32b4352765f19d59228d7737aa6ef6c3a5d23",
       "completed": true,
       "exit_code": -1,
       "first_event_index": 15,
@@ -426,7 +454,10 @@
       "tool_type": "command_execution"
     },
     {
-      "command": "\"C:\\\\Users\\\\tombl\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'python -c \"from itertools import product,permutations; from collections import Counter\n\ndef ep(v):\n s=[(i,i) for i in range(v)]+[(i,j) for i in range(v) for j in range(i+1,v)]\n for z in product(range(3),repeat=len(s)):\n  if sum(z)==2:\n   A=[[0]*v for _ in range(v)]\n   for (i,j),m in zip(s,z): A[i][j]=m; A[j][i]=m\n   yield A\n\ndef con(A):\n n=len(A); q=[0]; seen={0}\n while q:\n  i=q.pop()\n  for j in range(n):\n   if i!=j and A[i][j] and j not in seen: seen.add(j); q.append(j)\n return len(seen)==n\n\ndef ca(A,g,l):\n n=len(A); return min((tuple(g[p[i]] for i in range(n)),p.index(l),tuple(tuple(A[p[i]][p[j]] for j in range(n)) for i in range(n))) for p in permutations(range(n)))\nD={}\nfor n in (1,2,3):\n for A in ep(n):\n  if con(A):\n   for l in range(n):\n    for g in product(range(4),repeat=n):\n     if sum(g)+3-n!=3: continue\n     if all(2*g[i]-2+2*A[i][i]+sum(A[i][j] for j in range(n) if j!=i)+(i==l)>0 for i in range(n)): D[ca(A,g,l)]=(n,A,g,l)\nprint(len(D),Counter(x[0] for x in D.values()))\"'",
+      "action": {},
+      "command_characters": 1117,
+      "command_kind": "PYTHON_COMPUTE",
+      "command_sha256": "7af480a845a9e9ebba5ade721bcdb9e57f41dc9e8006213d4430f4cc93e8b63e",
       "completed": true,
       "exit_code": -1,
       "first_event_index": 17,
@@ -443,6 +474,9 @@
         "query": "\"codimension 2 boundary strata\" \"3,1\" moduli",
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 19,
       "last_event_index": 20,
@@ -462,6 +496,9 @@
         ],
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 21,
       "last_event_index": 22,
@@ -480,6 +517,9 @@
         ],
         "type": "search"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 23,
       "last_event_index": 24,
@@ -494,6 +534,9 @@
       "action": {
         "type": "other"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 25,
       "last_event_index": 26,
@@ -507,6 +550,9 @@
       "action": {
         "type": "other"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 27,
       "last_event_index": 28,
@@ -520,6 +566,9 @@
       "action": {
         "type": "other"
       },
+      "command_characters": 0,
+      "command_kind": "NONE",
+      "command_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "completed": true,
       "first_event_index": 29,
       "last_event_index": 30,

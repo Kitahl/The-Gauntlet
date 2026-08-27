@@ -68,6 +68,26 @@ class HLEActiveHarnessTests(unittest.TestCase):
         self.assertTrue(stream["tools"][0]["completed"])
         self.assertEqual(stream["usage"]["reasoning_output_tokens"], 2)
 
+    def test_public_command_metadata_is_hashed_not_copied(self) -> None:
+        stream = HARNESS.parse_stream(
+            json.dumps(
+                {
+                    "type": "item.completed",
+                    "item": {
+                        "id": "c",
+                        "type": "command_execution",
+                        "command": "python -c 'print(2 + 2)'",
+                        "status": "completed",
+                    },
+                }
+            )
+        )
+        tool = stream["tools"][0]
+        self.assertNotIn("command", tool)
+        self.assertEqual(tool["command_kind"], "PYTHON_COMPUTE")
+        self.assertEqual(tool["command_characters"], len("python -c 'print(2 + 2)'"))
+        self.assertEqual(len(tool["command_sha256"]), 64)
+
     def test_oracle_and_tool_claim_boundaries_fail_closed(self) -> None:
         self.assertIsNotNone(HARNESS.parse_base_answer('{"answer":"A","gold":"B"}')[1])
         answer = {
