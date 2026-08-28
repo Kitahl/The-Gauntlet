@@ -1,0 +1,21 @@
+{
+  "a0": "\\(V_{\\mathrm{eff}}(\\mathbf q,i\\omega_n)=-\\dfrac{g^2\\,q^2}{m\\left(\\omega_n^2+w_q^2\\right)}\\), equivalently \\(S_{\\mathrm{eff}}^{(\\mathbf q)}=-\\dfrac12\\sum_{\\omega_n}\\rho(-\\mathbf q,-i\\omega_n)\\dfrac{g^2q^2}{m(\\omega_n^2+w_q^2)}\\rho(\\mathbf q,i\\omega_n)\\).",
+  "a0_assessment": null,
+  "a0_sha256": "44bb15f998211d154f9273a250a2109be7e3ce0293222a74b1351604d4da2310",
+  "answer_changed": false,
+  "benchmark_only": true,
+  "candidate": null,
+  "candidate_assessment": null,
+  "candidate_sha256": null,
+  "evidence_quote_sha256": null,
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "question_sha256": "89815785dcafb4ce7016aa0853165debd28f926e60ab96f65be0cedd47c1dc10",
+  "quote_bound": false,
+  "schema": "foil.evidence-hle10-receipt.v1",
+  "selected_answer": "\\(V_{\\mathrm{eff}}(\\mathbf q,i\\omega_n)=-\\dfrac{g^2\\,q^2}{m\\left(\\omega_n^2+w_q^2\\right)}\\), equivalently \\(S_{\\mathrm{eff}}^{(\\mathbf q)}=-\\dfrac12\\sum_{\\omega_n}\\rho(-\\mathbf q,-i\\omega_n)\\dfrac{g^2q^2}{m(\\omega_n^2+w_q^2)}\\rho(\\mathbf q,i\\omega_n)\\).",
+  "selected_answer_sha256": "44bb15f998211d154f9273a250a2109be7e3ce0293222a74b1351604d4da2310",
+  "selection": null,
+  "source_url": null,
+  "task_id": "hle-67380ecdb808e1bf292d214e"
+}

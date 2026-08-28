@@ -1,0 +1,21 @@
+{
+  "a0": "128",
+  "a0_assessment": null,
+  "a0_sha256": "6f7e5d9fdb3ff50cf15ba3236749485ab4cf6ef207d84132360ea00bc1694b35",
+  "answer_changed": false,
+  "benchmark_only": true,
+  "candidate": null,
+  "candidate_assessment": null,
+  "candidate_sha256": null,
+  "evidence_quote_sha256": null,
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "question_sha256": "2f7a2865c9e8555f61c1ec9cf76a0e9fca930e010e5da52f939e5164cb9b14ed",
+  "quote_bound": false,
+  "schema": "foil.evidence-hle10-receipt.v1",
+  "selected_answer": "128",
+  "selected_answer_sha256": "6f7e5d9fdb3ff50cf15ba3236749485ab4cf6ef207d84132360ea00bc1694b35",
+  "selection": null,
+  "source_url": null,
+  "task_id": "hle-66ea7d2cc321286a5288ef06"
+}

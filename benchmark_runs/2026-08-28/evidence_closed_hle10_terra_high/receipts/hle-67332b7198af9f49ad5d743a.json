@@ -1,0 +1,21 @@
+{
+  "a0": "Overlap-add: 31 DFTs + 31 IDFTs = 31 (DFT+IDFT) pairs.\n\nOverlap-save: 34 DFTs + 34 IDFTs = 34 (DFT+IDFT) pairs.",
+  "a0_assessment": null,
+  "a0_sha256": "b6d83b958118c8070a22c1a4c5b2f1adbf0a68ed618c5eba8a300162e51bb87c",
+  "answer_changed": false,
+  "benchmark_only": true,
+  "candidate": null,
+  "candidate_assessment": null,
+  "candidate_sha256": null,
+  "evidence_quote_sha256": null,
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "question_sha256": "60a1b57feb151deb851a03e5395d8ebbd1837afd99a0a6ddad152ac18825816d",
+  "quote_bound": false,
+  "schema": "foil.evidence-hle10-receipt.v1",
+  "selected_answer": "Overlap-add: 31 DFTs + 31 IDFTs = 31 (DFT+IDFT) pairs.\n\nOverlap-save: 34 DFTs + 34 IDFTs = 34 (DFT+IDFT) pairs.",
+  "selected_answer_sha256": "b6d83b958118c8070a22c1a4c5b2f1adbf0a68ed618c5eba8a300162e51bb87c",
+  "selection": null,
+  "source_url": null,
+  "task_id": "hle-67332b7198af9f49ad5d743a"
+}
