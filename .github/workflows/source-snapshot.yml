@@ -1,0 +1,25 @@
+name: Temporary source snapshot
+
+on:
+  push:
+    branches: [upgrade/challenge-vnext-completion]
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Upload exact source tree
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: source-${{ github.sha }}
+          path: |
+            .
+            !.git/**
+            !.egrt/**
+          include-hidden-files: true
+          if-no-files-found: error
+          compression-level: 9
