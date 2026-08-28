@@ -19,7 +19,15 @@ from typing import Any, Mapping, Sequence
 import soul_vnext as core
 from egrt_challenge import ChallengePolicy
 from egrt_store import RuntimeStore, new_id, utcnow
-from egrt_types import Obligation, ObligationKind, RuntimeEvent, TaskState, Verdict, digest, text_digest
+from egrt_types import (
+    Obligation,
+    ObligationKind,
+    RuntimeEvent,
+    TaskState,
+    Verdict,
+    digest,
+    text_digest,
+)
 from gauntlet_config import load_config
 from private_io import write_private_text
 
