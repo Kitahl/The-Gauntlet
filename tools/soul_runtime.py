@@ -19,7 +19,6 @@ from soul_automatic import (
     SoulError,
     SoulGraphError,
     add_obligation,
-    automatic_release as _automatic_release,
     freeze_task,
     plan_routes,
     release_gate,
@@ -27,6 +26,7 @@ from soul_automatic import (
     resolve_current_task_id,
     start_task,
 )
+from soul_automatic import automatic_release as _automatic_release
 
 _PUBLIC_ROUTE_INVARIANTS = {
     ObligationKind.ADVERSARY: "blackgem",
@@ -40,9 +40,9 @@ def automatic_release(root: Path, task_id: str) -> tuple[Verdict, dict]:
     """Run the automatic route/assure/release cycle on current authority state.
 
     A clean authority check is followed by a task-bound snapshot so Gauntlet's
-    ``refresh`` monitor sees the current governing state.  Detected drift remains an
+    ``refresh`` monitor sees the current governing state. Detected drift remains an
     ``authority.changed`` event and is intentionally not papered over by a new
-    snapshot.  Monitor failure is fail-closed downstream: ``refresh`` remains UNKNOWN
+    snapshot. Monitor failure is fail-closed downstream: ``refresh`` remains UNKNOWN
     rather than being fabricated as clear.
     """
 
@@ -55,7 +55,7 @@ def automatic_release(root: Path, task_id: str) -> tuple[Verdict, dict]:
         if drift_code == 0:
             authority_snapshot(root, task_id=current_id)
     except Exception:
-        # The automatic release path will still run.  Without a valid snapshot the
+        # The automatic release path will still run. Without a valid snapshot the
         # Gauntlet refresh monitor cannot clear, which is the safe represented state.
         pass
     return _automatic_release(root, task_id)
