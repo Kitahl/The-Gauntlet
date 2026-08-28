@@ -62,27 +62,36 @@ class SoulControlPlaneTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             init_root(root)
+            with self.assertRaises(ValueError):
+                soul.start_task(
+                    root,
+                    "sanitize metadata",
+                    metadata={
+                        "label": "would-be-user-data",
+                        "soul_superseded_by": "attacker-task",
+                        "soul_frozen": True,
+                        "soul_release_token": "attacker-token",
+                        "active": False,
+                        "released": True,
+                        "content_hash": "forged",
+                    },
+                )
+            store = RuntimeStore(root)
+            self.assertEqual(list(store.tasks.glob("*.json")), [])
+
+    def test_noncontrol_metadata_is_preserved(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            init_root(root)
             task = soul.start_task(
                 root,
-                "sanitize metadata",
-                metadata={
-                    "label": "preserved",
-                    "soul_superseded_by": "attacker-task",
-                    "soul_frozen": True,
-                    "soul_release_token": "attacker-token",
-                    "active": False,
-                    "released": True,
-                    "content_hash": "forged",
-                },
+                "preserve ordinary metadata",
+                metadata={"label": "preserved", "experiment_group": "A"},
             )
             stored = RuntimeStore(root).read_task(task.task_id)
             self.assertEqual(stored["metadata"]["label"], "preserved")
+            self.assertEqual(stored["metadata"]["experiment_group"], "A")
             self.assertEqual(stored["metadata"]["soul_status"], "ACTIVE")
-            self.assertNotIn("soul_superseded_by", stored["metadata"])
-            self.assertNotIn("soul_frozen", stored["metadata"])
-            self.assertNotIn("soul_release_token", stored["metadata"])
-            self.assertTrue(stored["active"])
-            self.assertFalse(stored["released"])
 
     def test_contradictory_supersession_metadata_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
