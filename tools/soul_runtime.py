@@ -94,7 +94,7 @@ def release_gate(root: Path, task_id: str) -> tuple[Verdict, dict]:
             task_id,
             current_id,
             lineage,
-            "task-not-found-or-integrity-invalid",
+            "task-not-found",
         )
     load_bearing = [
         row
@@ -138,7 +138,7 @@ def release_task(root: Path, task_id: str) -> tuple[Verdict, dict]:
             task_id,
             current_id,
             lineage,
-            "task-not-found-or-integrity-invalid",
+            "task-not-found",
         )
     if task.get("released"):
         verdict, detail = _core.release_task(root, current_id)
@@ -192,7 +192,7 @@ def automatic_release(root: Path, task_id: str) -> tuple[Verdict, dict]:
             task_id,
             current_id,
             lineage,
-            "task-not-found-or-integrity-invalid",
+            "task-not-found",
         )
     load_bearing = [
         row
