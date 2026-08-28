@@ -6,6 +6,7 @@ Process Assurance to that kernel without exposing speculative state as persisted
 """
 from __future__ import annotations
 
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
@@ -28,10 +29,55 @@ from soul_vnext.controller_impl import (
     release_gate,
     release_task,
     resolve_current_task_id,
-    start_task,
 )
 
+SOUL_CONTROL_SCHEMA = SOUL_AUTOMATIC_SCHEMA
 core = _impl.core
+
+_RESERVED_TASK_METADATA = {
+    "active",
+    "released",
+    "task_id",
+    "goal_hash",
+    "content_hash",
+    "supersession_reason",
+    "raw_goal",
+    "raw_prompt",
+    "raw_supersession_reason",
+}
+
+
+def _sanitize_task_metadata(metadata: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Preserve user metadata while removing all Soul control-plane fields."""
+
+    if metadata is None:
+        return {}
+    if not isinstance(metadata, Mapping):
+        raise TypeError("metadata must be a mapping or None")
+    return {
+        key: value
+        for key, value in metadata.items()
+        if isinstance(key, str)
+        and key not in _RESERVED_TASK_METADATA
+        and not key.startswith("soul_")
+    }
+
+
+def start_task(
+    root: Path,
+    goal: str,
+    *,
+    metadata: dict[str, Any] | None = None,
+    supersession_reason: str | None = None,
+):
+    """Start a task without allowing caller metadata to predeclare control state."""
+
+    return _impl.start_task(
+        root,
+        goal,
+        metadata=_sanitize_task_metadata(metadata),
+        supersession_reason=supersession_reason,
+    )
 
 
 def add_obligation(
@@ -173,6 +219,7 @@ __all__ = [
     "RoutingPlan",
     "RoutingPolicy",
     "SOUL_AUTOMATIC_SCHEMA",
+    "SOUL_CONTROL_SCHEMA",
     "SOUL_SCHEMA",
     "SoulError",
     "SoulGraphError",
