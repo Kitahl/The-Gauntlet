@@ -557,7 +557,7 @@ def cmd_run() -> int:
                 selected,
                 stage1,
                 host_candidate,
-                policy=RPSV063Policy(enabled=True),
+                policy=RPSV063Policy(enabled=True, max_blind_rivals=1),
             )
             if active.action is RPSV063Action.SELECT_HOST_RESULT:
                 if host_candidate is None:

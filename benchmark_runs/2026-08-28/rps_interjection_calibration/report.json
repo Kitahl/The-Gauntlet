@@ -1,0 +1,96 @@
+{
+  "classification": "HISTORICAL_DEVELOPMENT_CALIBRATION",
+  "hle_ability": {
+    "blind_no_tools_rival": "DISABLED_BY_CALIBRATION",
+    "host_declines_factual_or_semantic_question": "PRESERVE_A0",
+    "mechanically_checkable_failure": "HOST_CAN_CORRECT_IN_BENCHMARK",
+    "production_answer_change": "UNAUTHORIZED",
+    "retrieve_fact_absent_from_context": "REQUIRES_RETRIEVAL_TOOL"
+  },
+  "interjection": {
+    "blind_rival_enabled": false,
+    "blind_rival_evidence": {
+      "attempts": 3,
+      "damage_ucb_ppm": null,
+      "invalid_ucb_ppm": null,
+      "observed_mean_extra_tokens": 18469,
+      "reason": "insufficient_auditable_observations",
+      "rescue_lcb_ppm": null,
+      "route_id": "RPS_BLIND_RIVAL_STAGE2",
+      "status": "UNCALIBRATED",
+      "utility_lower_bound_microunits": null
+    },
+    "host_contradiction_without_unique_result": "ABSTAIN",
+    "host_decline_action": "KEEP_BASE",
+    "host_verified_selection_enabled": true,
+    "runtime_policy": {
+      "benchmark_only": true,
+      "enabled": true,
+      "max_answer_changes": 1,
+      "max_blind_rivals": 0,
+      "production_authorized": false
+    },
+    "same_context_review_enabled": false,
+    "same_context_review_evidence": {
+      "attempts": 30,
+      "damage_ucb_ppm": 197094,
+      "invalid_ucb_ppm": 145417,
+      "observed_mean_extra_tokens": 26436,
+      "reason": "conservative_historical_utility_not_above_target_margin",
+      "rescue_lcb_ppm": 14112,
+      "route_id": "RPS_NO_TOOLS_SAME_CONTEXT_REVIEW",
+      "status": "STAND_DOWN",
+      "utility_lower_bound_microunits": -36727
+    },
+    "schema": "foil.rps-interjection-calibration.v1",
+    "stage1_diagnostic": {
+      "added_total_tokens": 0,
+      "damages": 0,
+      "promotion_evidence": false,
+      "rescues": 2,
+      "rows": 6,
+      "source_classification": "FROZEN_OUTPUT_DIAGNOSTIC_REPLAY_ONLY"
+    }
+  },
+  "measured_stage2": {
+    "accuracy_losses": 1,
+    "added_input_tokens": 54854,
+    "added_output_tokens": 553,
+    "added_total_tokens": 55407,
+    "distinct_questions": 1,
+    "mean_added_tokens_per_trigger": 18469,
+    "rescues": 0,
+    "triggers": 3
+  },
+  "model_calls": 0,
+  "network_calls": 0,
+  "new_token_spend": 0,
+  "non_claims": [
+    "not a new HLE score",
+    "not a production policy promotion",
+    "not evidence that latent model knowledge can be reliably recovered",
+    "not evidence that Stage 1 generalizes beyond its certified language"
+  ],
+  "promotion_authorized": false,
+  "provider_calls": 0,
+  "report_sha256": "747ca0c6a39224efbc54d47373229985c4ee8a6a8d45695a5bdc16cb7e160f87",
+  "schema": "foil.rps-interjection-calibration-report.v1",
+  "target": {
+    "baseline_correct": 11,
+    "benchmark_rows": 60,
+    "caller_maximum_total_tokens": 250000,
+    "cost_varies_by_tool_contract": true,
+    "damage_loss_microunits": 45454,
+    "hard_limit_embedded_in_foil": false,
+    "interval_mass_ppm": 950000,
+    "invalid_loss_microunits": 11364,
+    "minimum_observations": 20,
+    "minimum_utility_microunits": 1137,
+    "required_net_rescues": 11,
+    "rescue_value_microunits": 22727,
+    "schema": "foil.smart-tool-target-calibration.v1",
+    "target_correct": 22,
+    "target_tokens_per_net_rescue": 22727,
+    "token_price_microunits": 1
+  }
+}

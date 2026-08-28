@@ -126,7 +126,9 @@ class RPSV063Tests(unittest.TestCase):
         vacuous = self.processbench_check(r"\[2+2=4\]")
         declined = verify_answer(vacuous, {"answer": "OK", "abstain": False})
         request = evaluate_unique_host_result(
-            vacuous, declined, policy=RPSV063Policy(enabled=True)
+            vacuous,
+            declined,
+            policy=RPSV063Policy(enabled=True, max_blind_rivals=1),
         )
         self.assertEqual(request.action, RPSV063Action.REQUEST_BLIND_RIVAL)
 
@@ -160,7 +162,7 @@ class RPSV063Tests(unittest.TestCase):
         decision = evaluate_verified_correction(
             check(),
             host("A", HostVerifierOutcome.CONTRADICTED),
-            policy=RPSV063Policy(enabled=True),
+            policy=RPSV063Policy(enabled=True, max_blind_rivals=1),
             rival=rival("B"),
             rival_host=host("B", HostVerifierOutcome.CONFIRMED),
         )
@@ -172,13 +174,13 @@ class RPSV063Tests(unittest.TestCase):
         request = evaluate_verified_correction(
             check(),
             host("A", HostVerifierOutcome.NOT_APPLICABLE),
-            policy=RPSV063Policy(enabled=True),
+            policy=RPSV063Policy(enabled=True, max_blind_rivals=1),
         )
         self.assertEqual(request.action, RPSV063Action.REQUEST_BLIND_RIVAL)
         unresolved = evaluate_verified_correction(
             check(),
             host("A", HostVerifierOutcome.NOT_APPLICABLE),
-            policy=RPSV063Policy(enabled=True),
+            policy=RPSV063Policy(enabled=True, max_blind_rivals=1),
             rival=rival("B"),
             rival_host=host("B", HostVerifierOutcome.NOT_APPLICABLE),
         )
@@ -188,7 +190,7 @@ class RPSV063Tests(unittest.TestCase):
         decision = evaluate_verified_correction(
             check(),
             host("A", HostVerifierOutcome.CONTRADICTED),
-            policy=RPSV063Policy(enabled=True),
+            policy=RPSV063Policy(enabled=True, max_blind_rivals=1),
             rival=rival("B"),
             rival_host=host("B", HostVerifierOutcome.UNCERTAIN),
         )
@@ -208,7 +210,7 @@ class RPSV063Tests(unittest.TestCase):
             evaluate_verified_correction(
                 check(),
                 host("A", HostVerifierOutcome.CONTRADICTED),
-                policy=RPSV063Policy(enabled=True),
+                policy=RPSV063Policy(enabled=True, max_blind_rivals=1),
                 rival=rival("B"),
                 rival_host=mismatched,
             )

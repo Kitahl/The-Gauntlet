@@ -147,7 +147,7 @@ def build_report(
             selected,
             base_result,
             host_candidate,
-            policy=RPSV063Policy(enabled=True),
+            policy=RPSV063Policy(enabled=True, max_blind_rivals=1),
         )
         if decision.action is RPSV063Action.SELECT_HOST_RESULT:
             assert host_candidate is not None

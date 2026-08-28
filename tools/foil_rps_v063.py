@@ -47,7 +47,7 @@ def _digest(name: str, value: object) -> str:
 class RPSV063Policy:
     enabled: bool = False
     benchmark_only: bool = True
-    max_blind_rivals: int = 1
+    max_blind_rivals: int = 0
     max_answer_changes: int = 1
 
     def __post_init__(self) -> None:
@@ -61,8 +61,10 @@ class RPSV063Policy:
             value = getattr(self, name)
             if isinstance(value, bool) or not isinstance(value, int):
                 raise TypeError(f"{name} must be int")
-        if self.max_blind_rivals != 1 or self.max_answer_changes != 1:
-            raise ValueError("RPS v0.6.3 ceilings are frozen at one")
+        if self.max_blind_rivals not in {0, 1}:
+            raise ValueError("RPS v0.6.3 allows zero or one blind rival")
+        if self.max_answer_changes != 1:
+            raise ValueError("RPS v0.6.3 answer-change ceiling is frozen at one")
 
 
 @dataclass(frozen=True)
@@ -199,6 +201,17 @@ def evaluate_unique_host_result(
         Stage1Outcome.NOT_APPLICABLE,
         Stage1Outcome.UNCERTAIN,
     }:
+        if policy.max_blind_rivals == 0:
+            return RPSV063Decision(
+                RPSV063Action.KEEP_BASE,
+                "blind_rival_disabled_after_host_decline",
+                base_digest,
+                base_digest,
+                None,
+                base_result.receipt.outcome,
+                None,
+                False,
+            )
         return RPSV063Decision(
             RPSV063Action.REQUEST_BLIND_RIVAL,
             "host_declined_requires_blind_rival",
@@ -294,6 +307,8 @@ def evaluate_verified_correction(
             None,
             False,
         )
+    if policy.max_blind_rivals == 0 and rival is not None:
+        raise ValueError("zero-rival policy cannot consume a rival")
     if base_host.outcome is HostVerifierOutcome.CONFIRMED:
         if rival is not None:
             raise ValueError("confirmed base must not consume a rival")
@@ -309,6 +324,17 @@ def evaluate_verified_correction(
         )
     if base_host.outcome is not HostVerifierOutcome.CONTRADICTED:
         if rival is None:
+            if policy.max_blind_rivals == 0:
+                return RPSV063Decision(
+                    RPSV063Action.KEEP_BASE,
+                    "blind_rival_disabled_after_host_decline",
+                    base_host.candidate_digest,
+                    base_host.candidate_digest,
+                    None,
+                    base_host.outcome,
+                    None,
+                    False,
+                )
             return RPSV063Decision(
                 RPSV063Action.REQUEST_BLIND_RIVAL,
                 "host_declined_requires_blind_rival",
@@ -331,6 +357,17 @@ def evaluate_verified_correction(
             False,
         )
     if rival is None:
+        if policy.max_blind_rivals == 0:
+            return RPSV063Decision(
+                RPSV063Action.ABSTAIN,
+                "blind_rival_disabled_after_host_contradiction",
+                base_host.candidate_digest,
+                None,
+                None,
+                base_host.outcome,
+                None,
+                False,
+            )
         return RPSV063Decision(
             RPSV063Action.REQUEST_BLIND_RIVAL,
             "contradicted_base_requires_blind_rival",
