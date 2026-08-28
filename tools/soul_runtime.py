@@ -3,9 +3,11 @@ from __future__ import annotations
 
 import argparse
 import json
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from pathlib import Path
 
+import soul_vnext as _core
+from egrt_store import RuntimeStore
 from egrt_types import ObligationKind, Verdict
 from soul_automatic import (
     MODULE_FOR_KIND,
@@ -20,13 +22,13 @@ from soul_automatic import (
     SoulGraphError,
     add_obligation,
     freeze_task,
-    plan_routes,
-    release_gate,
-    release_task,
     resolve_current_task_id,
     start_task,
 )
 from soul_automatic import automatic_release as _automatic_release
+from soul_automatic import plan_routes as _plan_routes
+from soul_automatic import release_gate as _release_gate
+from soul_automatic import release_task as _release_task
 
 _PUBLIC_ROUTE_INVARIANTS = {
     ObligationKind.ADVERSARY: "blackgem",
@@ -34,6 +36,144 @@ _PUBLIC_ROUTE_INVARIANTS = {
 for _kind, _module in _PUBLIC_ROUTE_INVARIANTS.items():
     if MODULE_FOR_KIND.get(_kind) != _module:
         raise RuntimeError(f"Soul route registration drift: {_kind.value} -> {_module}")
+
+
+def _current_task(
+    root: Path,
+    task_id: str,
+) -> tuple[str, tuple[str, ...], dict | None]:
+    current_id, lineage = resolve_current_task_id(root, task_id)
+    return current_id, lineage, RuntimeStore(root).read_task(current_id)
+
+
+def _unknown_task_detail(
+    requested_task_id: str,
+    current_task_id: str,
+    lineage: tuple[str, ...],
+    reason: str,
+    detail: str | None = None,
+) -> tuple[Verdict, dict]:
+    payload: dict = {
+        "reason": reason,
+        "requested_task_id": requested_task_id,
+        "resolved_task_id": current_task_id,
+        "supersession_chain": lineage,
+        "authority": "CONTROL_ONLY",
+        "target_domain_clearance_authorized": False,
+    }
+    if detail:
+        payload["detail"] = detail
+    return Verdict.UNKNOWN, payload
+
+
+def plan_routes(
+    root: Path,
+    task_id: str,
+    *,
+    policy: RoutingPolicy | None = None,
+) -> RoutingPlan:
+    """Plan the current task while retaining the complete requested-ID lineage."""
+
+    plan = _plan_routes(root, task_id, policy=policy)
+    _, lineage = resolve_current_task_id(root, task_id)
+    if plan.requested_task_id == task_id and plan.supersession_chain == lineage:
+        return plan
+    return replace(
+        plan,
+        requested_task_id=task_id,
+        supersession_chain=lineage,
+    )
+
+
+def release_gate(root: Path, task_id: str) -> tuple[Verdict, dict]:
+    """Evaluate the current task revision and map empty/corrupt state to UNKNOWN."""
+
+    current_id, lineage, task = _current_task(root, task_id)
+    if task is None:
+        return _unknown_task_detail(
+            task_id,
+            current_id,
+            lineage,
+            "task-not-found-or-integrity-invalid",
+        )
+    load_bearing = [
+        row
+        for row in task.get("obligations", [])
+        if isinstance(row, dict) and row.get("load_bearing", True)
+    ]
+    if not load_bearing:
+        return _unknown_task_detail(
+            task_id,
+            current_id,
+            lineage,
+            "no-load-bearing-obligations",
+        )
+    try:
+        verdict, detail = _release_gate(root, current_id)
+    except (KeyError, SoulGraphError) as exc:
+        return _unknown_task_detail(
+            task_id,
+            current_id,
+            lineage,
+            "obligation-graph-invalid",
+            str(exc),
+        )
+    result = dict(detail)
+    result.update(
+        {
+            "requested_task_id": task_id,
+            "resolved_task_id": current_id,
+            "supersession_chain": lineage,
+        }
+    )
+    return verdict, result
+
+
+def release_task(root: Path, task_id: str) -> tuple[Verdict, dict]:
+    """Release the current revision, including idempotent already-released calls."""
+
+    current_id, lineage, task = _current_task(root, task_id)
+    if task is None:
+        return _unknown_task_detail(
+            task_id,
+            current_id,
+            lineage,
+            "task-not-found-or-integrity-invalid",
+        )
+    if task.get("released"):
+        verdict, detail = _core.release_task(root, current_id)
+    else:
+        load_bearing = [
+            row
+            for row in task.get("obligations", [])
+            if isinstance(row, dict) and row.get("load_bearing", True)
+        ]
+        if not load_bearing:
+            return _unknown_task_detail(
+                task_id,
+                current_id,
+                lineage,
+                "no-load-bearing-obligations",
+            )
+        try:
+            verdict, detail = _release_task(root, current_id)
+        except (KeyError, SoulGraphError) as exc:
+            return _unknown_task_detail(
+                task_id,
+                current_id,
+                lineage,
+                "obligation-graph-invalid",
+                str(exc),
+            )
+    result = dict(detail)
+    result.update(
+        {
+            "requested_task_id": task_id,
+            "resolved_task_id": current_id,
+            "supersession_chain": lineage,
+        }
+    )
+    return verdict, result
 
 
 def automatic_release(root: Path, task_id: str) -> tuple[Verdict, dict]:
@@ -46,8 +186,38 @@ def automatic_release(root: Path, task_id: str) -> tuple[Verdict, dict]:
     rather than being fabricated as clear.
     """
 
-    frozen = freeze_task(root, task_id)
+    current_id, lineage, task = _current_task(root, task_id)
+    if task is None:
+        return _unknown_task_detail(
+            task_id,
+            current_id,
+            lineage,
+            "task-not-found-or-integrity-invalid",
+        )
+    load_bearing = [
+        row
+        for row in task.get("obligations", [])
+        if isinstance(row, dict) and row.get("load_bearing", True)
+    ]
+    if not load_bearing:
+        return _unknown_task_detail(
+            task_id,
+            current_id,
+            lineage,
+            "no-load-bearing-obligations",
+        )
+    try:
+        frozen = freeze_task(root, current_id)
+    except (KeyError, SoulGraphError) as exc:
+        return _unknown_task_detail(
+            task_id,
+            current_id,
+            lineage,
+            "obligation-graph-invalid",
+            str(exc),
+        )
     current_id = str(frozen["task_id"])
+    _, lineage = resolve_current_task_id(root, task_id)
     try:
         from gauntlet_monitor import check as authority_check
         from gauntlet_monitor import snapshot as authority_snapshot
@@ -60,10 +230,15 @@ def automatic_release(root: Path, task_id: str) -> tuple[Verdict, dict]:
         # Gauntlet refresh monitor cannot clear, which is the safe represented state.
         pass
     verdict, detail = _automatic_release(root, current_id)
-    detail = dict(detail)
-    detail["requested_task_id"] = task_id
-    detail["resolved_task_id"] = current_id
-    return verdict, detail
+    result = dict(detail)
+    result.update(
+        {
+            "requested_task_id": task_id,
+            "resolved_task_id": current_id,
+            "supersession_chain": lineage,
+        }
+    )
+    return verdict, result
 
 
 def main(argv: list[str] | None = None) -> int:
