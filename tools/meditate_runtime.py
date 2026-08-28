@@ -439,30 +439,43 @@ def _task_metadata_flags(task: Mapping[str, Any]) -> PreflightTriggers:
 
 
 def _event_flags(events: Sequence[Mapping[str, Any]]) -> PreflightTriggers:
-    last_snapshot = -1
-    last_changed = -1
+    latest_snapshot: str | None = None
+    latest_changed: str | None = None
     failure_signatures: list[str] = []
     major_disagreement = False
-    for index, event in enumerate(events):
+    for event in events:
         event_type = event.get("event_type")
         metadata = event.get("metadata")
         event_metadata = metadata if isinstance(metadata, Mapping) else {}
+        stamp = str(event.get("timestamp") or "")
         if event_type == "authority.snapshot":
-            last_snapshot = index
+            latest_snapshot = max(latest_snapshot or "", stamp)
         elif event_type == "authority.changed":
-            last_changed = index
+            latest_changed = max(latest_changed or "", stamp)
         elif event_type == "action.failed":
             signature = event_metadata.get("failure_signature")
-            failure_signatures.append(str(signature or event.get("payload_hash") or index))
+            failure_signatures.append(
+                str(
+                    signature
+                    or event.get("payload_hash")
+                    or event.get("event_id")
+                    or "unidentified-failure"
+                )
+            )
         elif event_type in {"review.disagreement", "council.disagreement"}:
-            major_disagreement = major_disagreement or event_metadata.get("major") is True
+            major_disagreement = (
+                major_disagreement or event_metadata.get("major") is True
+            )
 
     counts = Counter(failure_signatures)
     repeated_failure = len(failure_signatures) >= 3 or any(
         count >= 2 for count in counts.values()
     )
+    stale_authority = bool(latest_changed) and (
+        not latest_snapshot or latest_changed >= latest_snapshot
+    )
     return PreflightTriggers(
-        stale_authority=last_changed > last_snapshot,
+        stale_authority=stale_authority,
         repeated_failure=repeated_failure,
         major_disagreement=major_disagreement,
     )
