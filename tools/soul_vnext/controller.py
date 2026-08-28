@@ -26,10 +26,10 @@ from soul_vnext.controller_impl import (
     SoulGraphError,
     freeze_task,
     plan_routes,
-    release_gate,
-    release_task,
     resolve_current_task_id,
 )
+from soul_vnext.controller_impl import release_gate as _release_gate
+from soul_vnext.controller_impl import release_task as _release_task
 
 SOUL_CONTROL_SCHEMA = SOUL_AUTOMATIC_SCHEMA
 core = _impl.core
@@ -60,6 +60,38 @@ def _sanitize_task_metadata(metadata: Mapping[str, Any] | None) -> dict[str, Any
         if isinstance(key, str)
         and key not in _RESERVED_TASK_METADATA
         and not key.startswith("soul_")
+    }
+
+
+def _has_load_bearing(task: Mapping[str, Any]) -> bool:
+    return any(
+        isinstance(row, Mapping) and bool(row.get("load_bearing", True))
+        for row in task.get("obligations", [])
+    )
+
+
+def _empty_task_detail(
+    *,
+    requested_task_id: str,
+    resolved_task_id: str,
+    automatic: bool,
+) -> dict[str, Any]:
+    """Represent absence of domain work without inventing an assurance obligation."""
+
+    return {
+        "reason": "no-load-bearing-obligations",
+        "task_id": resolved_task_id,
+        "requested_task_id": requested_task_id,
+        "resolved_task_id": resolved_task_id,
+        "obligations": [],
+        "automatic": automatic,
+        "routing_plan_id": None,
+        "routing_liveness_status": "STALLED_NO_EXECUTABLE_ROUTE",
+        "routing_batches": [],
+        "selected_obligations": [],
+        "assurance_receipt_id": None,
+        "authority": "CONTROL_ONLY",
+        "target_domain_clearance_authorized": False,
     }
 
 
@@ -141,13 +173,51 @@ def add_obligation(
     return result
 
 
+def release_gate(root: Path, task_id: str) -> tuple[Verdict, dict[str, Any]]:
+    """Evaluate release while keeping an empty task explicitly UNKNOWN."""
+
+    current_id, _ = resolve_current_task_id(root, task_id)
+    task = RuntimeStore(root).read_task(current_id)
+    if task is not None and not _has_load_bearing(task):
+        return Verdict.UNKNOWN, _empty_task_detail(
+            requested_task_id=task_id,
+            resolved_task_id=current_id,
+            automatic=False,
+        )
+    return _release_gate(root, task_id)
+
+
+def release_task(root: Path, task_id: str) -> tuple[Verdict, dict[str, Any]]:
+    """Commit release only when represented load-bearing work exists."""
+
+    current_id, _ = resolve_current_task_id(root, task_id)
+    task = RuntimeStore(root).read_task(current_id)
+    if task is not None and not _has_load_bearing(task):
+        return Verdict.UNKNOWN, _empty_task_detail(
+            requested_task_id=task_id,
+            resolved_task_id=current_id,
+            automatic=False,
+        )
+    return _release_task(root, task_id)
+
+
 def automatic_release(root: Path, task_id: str) -> tuple[Verdict, dict[str, Any]]:
     """Run the automatic cycle and keep Process Assurance active while work is pending.
 
     Pending domain routes cannot release. They still receive an ``ASSURANCE_ONLY``
     diagnostic receipt for the represented state, so the watchdog remains automatic
-    without substituting for missing claim-native receipts.
+    without substituting for missing claim-native receipts. A task with no load-bearing
+    domain work remains UNKNOWN and does not receive fabricated assurance work.
     """
+
+    current_id, _ = resolve_current_task_id(root, task_id)
+    task = RuntimeStore(root).read_task(current_id)
+    if task is not None and not _has_load_bearing(task):
+        return Verdict.UNKNOWN, _empty_task_detail(
+            requested_task_id=task_id,
+            resolved_task_id=current_id,
+            automatic=True,
+        )
 
     verdict, raw_detail = _impl.automatic_release(root, task_id)
     detail = dict(raw_detail)
