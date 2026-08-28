@@ -112,6 +112,7 @@ referenced by `ArtifactRef`, never in generic state or the receipt.
 | `tools/foil_capabilities.py` | capability semantics and claim→capability routing |
 | `tools/foil_tool_policy.py` | write-capability admission; raises `CapabilityWriteError` rather than failing silently |
 | `tools/foil_domains.py` | non-diagnostic domain-relevance recognition |
+| `tools/foil_route_opportunity.py` | question-only, zero-provider development hypotheses about which registered evidence capability may apply; never verifier applicability, execution, or promotion authority |
 
 Drift between a contract block and its runtime enum is a **test failure**, not a
 documentation task: `tests/test_foil_assistance.py::ContractDriftTests` and
@@ -130,7 +131,8 @@ documentation task: `tests/test_foil_assistance.py::ContractDriftTests` and
 | `tools/foil_calibration.py` | Layer 2B adaptive real-work calibration |
 | `tools/foil_policy.py` | **the experimental routing kernel.** Deterministic V2 policy, ported from `origin/experiment/foil-vnext5-vnext@9540860`. Its mechanisms are implemented hypotheses whose efficacy is `NOT_MEASURED`. |
 | `tools/foil_adaptive_route.py` | **the default-off adaptive-compute shadow controller.** Retains frozen A0 as DIRECT and may recommend VERIFY/FULL only from positive frozen EV and compiler-created host-declared routes. It never executes or changes authority. |
-| `tools/foil_adaptive_executor.py` | **the benchmark-only active execution bridge.** Consumes an immutable shadow decision, binds frozen A0, and executes at most one named route when an explicit benchmark policy enables it. It grants no production or promotion authority. |
+| `tools/foil_adaptive_executor.py` | **the benchmark-only active execution bridge.** Consumes an immutable shadow decision and binds frozen A0. FULL stands down before calling a runner unless an independent verifier is declared available; after execution, unverified, contract-invalid, abstaining, or over-budget candidates cannot replace A0. It grants no production or promotion authority. |
+| `tools/foil_benchmark_budget.py` | **the paid-benchmark token envelope.** Requires a caller/session-supplied total provider-token cap, counts cached input, and reserves spend before launch. It rejects harnesses that cannot enforce their per-call reservation; post-hoc token counting is not treated as a budget. |
 | `tools/foil_shadow_route_ledger.py` | **the default-off observational RouteVector ledger.** Exact task/model/contract/route history only; no selector, fitter, controller update, or component credit. |
 | `tools/foil_v5_pipeline.py` | **the integrated structured shadow seam.** Wires compiler, scanner, adaptive route, optional observational ledger, and the pure host finalizer without candidate generation or execution. |
 | `tools/foil_obligation_discovery.py` | **the default-off annotated-arithmetic generator.** Accepts only task text, immutable A0, and their digests; emits a `GENERATED_UNADMITTED` envelope and never grants action authority. |

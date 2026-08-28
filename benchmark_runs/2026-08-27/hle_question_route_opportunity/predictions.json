@@ -1,0 +1,676 @@
+{
+  "classification": "FROZEN_QUESTION_ONLY_DEVELOPMENT_PREDICTIONS",
+  "cost_and_authority": {
+    "answer_mutations": 0,
+    "execution_authorizations": 0,
+    "model_calls": 0,
+    "promotion_changes": 0,
+    "provider_calls": 0,
+    "token_spend": 0,
+    "tool_calls": 0
+  },
+  "frozen": true,
+  "input_fields_used": [
+    "id",
+    "question"
+  ],
+  "non_claims": [
+    "not verifier applicability",
+    "not defect detection",
+    "not a rescue estimate",
+    "not a deployable router",
+    "not promotion evidence"
+  ],
+  "prediction_sha256": "bfcea1456ce893fa25618af90232116c3d661849b805b7cb3b84741699f06168",
+  "predictions": [
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "executable evidence for the executed environment",
+          "capability": "CODE_EXECUTION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "EXECUTABLE_PROGRAM_SEMANTICS",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "source discovery/evidence; authority depends on retrieved source",
+          "capability": "WEB_SEARCH",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "RETRIEVAL",
+          "reason_code": "VERSIONED_OR_LEGAL_FACT_LOOKUP",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "05b17dfe79df107e934eb2080b95bdc7a0ef1526571f67376fe10562be18a61a",
+      "promotion_authorized": false,
+      "question_digest": "78d1f0551df2f6a041bcff5f32ea614d69aedd66d052a1251511bb8646139b22",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-671f1702e4e6b61540b0bdb4"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "computational evidence within tool assumptions",
+          "capability": "SYMBOLIC_COMPUTATION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "EXPLICIT_MATHEMATICAL_COMPUTATION",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "executable evidence for the executed environment",
+          "capability": "CODE_EXECUTION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "NUMERIC_EXECUTION_FALLBACK",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "9a50405af44193ecfc83edfe50f0da1e50d27aa49d97e86d7b22e0330f71dd6f",
+      "promotion_authorized": false,
+      "question_digest": "4daac81a883f67f133647a96c6d1c927b5a30d6c25b31c163e8f33db7b646b11",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-672059fc2ea5966e3eddd835"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "executable evidence for the executed environment",
+          "capability": "CODE_EXECUTION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "EXECUTABLE_PROGRAM_SEMANTICS",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "source discovery/evidence; authority depends on retrieved source",
+          "capability": "WEB_SEARCH",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "RETRIEVAL",
+          "reason_code": "VERSIONED_OR_LEGAL_FACT_LOOKUP",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "cbb8db9a9d1c138a2bd1fd84d3ca1e2a44b368c818b22f82f4b62e8ccb01f55c",
+      "promotion_authorized": false,
+      "question_digest": "3a12cf546e1ecb2e71ab6635cac8fe8ae212c974d31ebc488e772f30f18a116e",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-67371c15d09c0e422ae36585"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "computational evidence within tool assumptions",
+          "capability": "SYMBOLIC_COMPUTATION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "EXPLICIT_MATHEMATICAL_COMPUTATION",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "executable evidence for the executed environment",
+          "capability": "CODE_EXECUTION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "NUMERIC_EXECUTION_FALLBACK",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "literature discovery/evidence; paper scope controls claim",
+          "capability": "SCHOLARLY_SEARCH",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "RETRIEVAL",
+          "reason_code": "SPECIALIZED_NAMED_RESULT_LOOKUP",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "formal evidence within checker/axiom/version boundary",
+          "capability": "FORMAL_PROOF",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "FORMAL",
+          "reason_code": "PROOF_OR_UNIVERSAL_CONSTRAINT",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "89f30af6f31285673d135853e3e6e647016ea3eb6f851043fe8a875492ae2173",
+      "promotion_authorized": false,
+      "question_digest": "a092c19f92123ee1e00d35cc96b422a9f33e6c0d4fab654e8795e9724113788c",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-672d8366f97c3b404d90f3d3"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "formal evidence within checker/axiom/version boundary",
+          "capability": "FORMAL_PROOF",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "FORMAL",
+          "reason_code": "PROOF_OR_UNIVERSAL_CONSTRAINT",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "3b32f5da3fa56c41147f54bbbda593b1a40a1621880cb30a1b731439c37a641b",
+      "promotion_authorized": false,
+      "question_digest": "718be8a69fe5035578aa40a75ab5b3604bada24913ce857d4b108322008b7e9a",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-672521a56cd1b99dae47a110"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "computational evidence within tool assumptions",
+          "capability": "SYMBOLIC_COMPUTATION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "EXPLICIT_MATHEMATICAL_COMPUTATION",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "executable evidence for the executed environment",
+          "capability": "CODE_EXECUTION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "NUMERIC_EXECUTION_FALLBACK",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "fd448079e08cdbc810478827093e352243de40d320bcedd40369d6a1230f36e7",
+      "promotion_authorized": false,
+      "question_digest": "e9201caf2fe7d270a85b2ef2941a3c24c91c5af91b27cd09095c281f4275c065",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-6733e070361b540695504b86"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "computational evidence within tool assumptions",
+          "capability": "SYMBOLIC_COMPUTATION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "EXPLICIT_MATHEMATICAL_COMPUTATION",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "executable evidence for the executed environment",
+          "capability": "CODE_EXECUTION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "NUMERIC_EXECUTION_FALLBACK",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "literature discovery/evidence; paper scope controls claim",
+          "capability": "SCHOLARLY_SEARCH",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "RETRIEVAL",
+          "reason_code": "SPECIALIZED_NAMED_RESULT_LOOKUP",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "f239313e6919d7247a5adbd4e87712b8dd81c8fd727af969c9660d0df03b6c4d",
+      "promotion_authorized": false,
+      "question_digest": "638375c097e49d6d3ec2dad3238c1c1f7b3c7a2459c8814bf0625fe783e88829",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-66b827b9b64deaedfbb997a2"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "a9848e059aa50a418714ac129e216d03fa97fbd788caac83f037f4492249b5bb",
+      "promotion_authorized": false,
+      "question_digest": "a415d73f318e2a4797ff740e0ef9c2c4d666356d364bf172264e033c9de541a6",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "UNSUPPORTED",
+      "task_id": "hle-66f57e3ddc7259d8b5bb0b46"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "formal evidence within checker/axiom/version boundary",
+          "capability": "FORMAL_PROOF",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "FORMAL",
+          "reason_code": "PROOF_OR_UNIVERSAL_CONSTRAINT",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "e5139912784f597bd2e564e4a1945eafb1b86094446d2a629eaa3bc37c0a75d4",
+      "promotion_authorized": false,
+      "question_digest": "a023299efa7531810f6db24fcb63d9a2361f63b17f3c9b98dc5dbdd280e1934b",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-67ae17cf1509e1d55b4a0eec"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "literature discovery/evidence; paper scope controls claim",
+          "capability": "SCHOLARLY_SEARCH",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "RETRIEVAL",
+          "reason_code": "SPECIALIZED_NAMED_RESULT_LOOKUP",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "52ad1e5bdbf8d18315602fef26e4ca61b44be62402e0574e7d6988b7642738be",
+      "promotion_authorized": false,
+      "question_digest": "89815785dcafb4ce7016aa0853165debd28f926e60ab96f65be0cedd47c1dc10",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-67380ecdb808e1bf292d214e"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "computational evidence within tool assumptions",
+          "capability": "SYMBOLIC_COMPUTATION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "EXPLICIT_MATHEMATICAL_COMPUTATION",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "executable evidence for the executed environment",
+          "capability": "CODE_EXECUTION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "NUMERIC_EXECUTION_FALLBACK",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "formal evidence within checker/axiom/version boundary",
+          "capability": "FORMAL_PROOF",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "FORMAL",
+          "reason_code": "PROOF_OR_UNIVERSAL_CONSTRAINT",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "161c920aa2c051c66464124686da7b3bd421e9dd3cf487658e3727ec343626a8",
+      "promotion_authorized": false,
+      "question_digest": "fe254cfcbe8e8d8ab625bbefa55b77495c9d90bab2b4f6b3afc90e996307101e",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-672067805681ce2b6f5a08a7"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "computational evidence within tool assumptions",
+          "capability": "SYMBOLIC_COMPUTATION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "EXPLICIT_MATHEMATICAL_COMPUTATION",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "executable evidence for the executed environment",
+          "capability": "CODE_EXECUTION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "NUMERIC_EXECUTION_FALLBACK",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "b76bdcb7fb0792aad4b2cbaf0f991cfc9b5e601ce4a10ec69fef83c311cb465e",
+      "promotion_authorized": false,
+      "question_digest": "d69257a938c018a9993f933e3701b2661690795c58093a70e6d6b64d29b6ca04",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-66f3fa084a937a16c867c042"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "bcc5fd2fa98ab8e2342ca595093a3541f923793d397cb113187a7cea53ea854c",
+      "promotion_authorized": false,
+      "question_digest": "4a5364e2e23cb643309eecd5671c502a7a953e9ec1cbdd14bd10580fcd1b9404",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "UNSUPPORTED",
+      "task_id": "hle-6736e54a4c96e49df1036fc6"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "computational evidence within tool assumptions",
+          "capability": "SYMBOLIC_COMPUTATION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "EXPLICIT_MATHEMATICAL_COMPUTATION",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "executable evidence for the executed environment",
+          "capability": "CODE_EXECUTION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "NUMERIC_EXECUTION_FALLBACK",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "literature discovery/evidence; paper scope controls claim",
+          "capability": "SCHOLARLY_SEARCH",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "RETRIEVAL",
+          "reason_code": "SPECIALIZED_NAMED_RESULT_LOOKUP",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "formal evidence within checker/axiom/version boundary",
+          "capability": "FORMAL_PROOF",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "FORMAL",
+          "reason_code": "PROOF_OR_UNIVERSAL_CONSTRAINT",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "532fb9ab2f37dae76a174b7c974e793a525c3a7f1bcf77ceff6c0c43f6e05fb4",
+      "promotion_authorized": false,
+      "question_digest": "2f7a2865c9e8555f61c1ec9cf76a0e9fca930e010e5da52f939e5164cb9b14ed",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-66ea7d2cc321286a5288ef06"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "source discovery/evidence; authority depends on retrieved source",
+          "capability": "WEB_SEARCH",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "RETRIEVAL",
+          "reason_code": "VERSIONED_OR_LEGAL_FACT_LOOKUP",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "literature discovery/evidence; paper scope controls claim",
+          "capability": "SCHOLARLY_SEARCH",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "RETRIEVAL",
+          "reason_code": "SPECIALIZED_NAMED_RESULT_LOOKUP",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "a785caad5cdf94c011fc834fd1a1a0c39c7e6c9d9dda0ef7da1c4fd6b37d5209",
+      "promotion_authorized": false,
+      "question_digest": "943be121374916ae907b09375cc8850d64b0fc0885c6608b61e90ca23a0f121a",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-66e9580bc845662f61f3664b"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "computational evidence within tool assumptions",
+          "capability": "SYMBOLIC_COMPUTATION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "EXPLICIT_MATHEMATICAL_COMPUTATION",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "executable evidence for the executed environment",
+          "capability": "CODE_EXECUTION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "NUMERIC_EXECUTION_FALLBACK",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "literature discovery/evidence; paper scope controls claim",
+          "capability": "SCHOLARLY_SEARCH",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "RETRIEVAL",
+          "reason_code": "SPECIALIZED_NAMED_RESULT_LOOKUP",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "604f7f835316641c57634d771fef7a1c038864db9a9cb9fdc0e89f82f6dd6bd2",
+      "promotion_authorized": false,
+      "question_digest": "d5a3de0a75eb897c57a293edeae23c6dc2dc26a4a01cbccdd97afbc03ee4beca",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-672a80a432cd57d8762583e9"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "computational evidence within tool assumptions",
+          "capability": "SYMBOLIC_COMPUTATION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "EXPLICIT_MATHEMATICAL_COMPUTATION",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "executable evidence for the executed environment",
+          "capability": "CODE_EXECUTION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "NUMERIC_EXECUTION_FALLBACK",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "edb6a558faba1b3142a9c04e3066c6f0ffb4843ffe38270482738bd1efad7e52",
+      "promotion_authorized": false,
+      "question_digest": "51fec608c054ab4306183f87d9c4aaa9b37b15f97cfaed627ddaf63823387a9e",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-66f57e187a2ac7b4fffe174e"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "2de2e7a853a86be611697167d488bfba39e9f4e86503501a8bef2e94bb069658",
+      "promotion_authorized": false,
+      "question_digest": "60a1b57feb151deb851a03e5395d8ebbd1837afd99a0a6ddad152ac18825816d",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "UNSUPPORTED",
+      "task_id": "hle-67332b7198af9f49ad5d743a"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "computational evidence within tool assumptions",
+          "capability": "SYMBOLIC_COMPUTATION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "EXPLICIT_MATHEMATICAL_COMPUTATION",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "executable evidence for the executed environment",
+          "capability": "CODE_EXECUTION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "NUMERIC_EXECUTION_FALLBACK",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "formal evidence within checker/axiom/version boundary",
+          "capability": "FORMAL_PROOF",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "FORMAL",
+          "reason_code": "PROOF_OR_UNIVERSAL_CONSTRAINT",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "ae7b5a8e537c26caef58706483efcb79cb78f0b0c792abde6b3ced0ba16b17be",
+      "promotion_authorized": false,
+      "question_digest": "8069b77649ed38c3568413515193b6d14bcc85da33353bb6bec2cf7735df8183",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-66f319f205629941be821347"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "authority_ceiling": "computational evidence within tool assumptions",
+          "capability": "SYMBOLIC_COMPUTATION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "EXPLICIT_MATHEMATICAL_COMPUTATION",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "executable evidence for the executed environment",
+          "capability": "CODE_EXECUTION",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "EXECUTION",
+          "reason_code": "NUMERIC_EXECUTION_FALLBACK",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "literature discovery/evidence; paper scope controls claim",
+          "capability": "SCHOLARLY_SEARCH",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "RETRIEVAL",
+          "reason_code": "SPECIALIZED_NAMED_RESULT_LOOKUP",
+          "requires_runtime_probe": true
+        },
+        {
+          "authority_ceiling": "formal evidence within checker/axiom/version boundary",
+          "capability": "FORMAL_PROOF",
+          "evidence_class": "QUESTION_STRUCTURE_ONLY",
+          "execution_authorized": false,
+          "opportunity_class": "FORMAL",
+          "reason_code": "PROOF_OR_UNIVERSAL_CONSTRAINT",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "2089bf6b20e376035ea40c7ad988f585365f1f6990f3fe9d09d0c9b82c5831f3",
+      "promotion_authorized": false,
+      "question_digest": "4b9f8db5a540e0c9d63b367563742d22ac277a5dac76498627f5cd13b687265b",
+      "question_only": true,
+      "raw_question_stored": false,
+      "status": "FOUND",
+      "task_id": "hle-66eaf9bbb082c5e6a76a49b5"
+    }
+  ],
+  "question_universe_sha256": "9612e6cabe6e8a8470a6adc28dd5a21389a87a3e02ded4bd4e3a9e86638084b6",
+  "schema": "foil.question-only-route-predictions.v1",
+  "source_schema": "foil.hle-active-20-items.v1"
+}

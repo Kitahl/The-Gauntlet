@@ -1,0 +1,171 @@
+{
+  "audited_facts": {
+    "base_correct": 11,
+    "command_calls": 54,
+    "historical_correct_a0_withheld": 1,
+    "historical_final_correct": 14,
+    "historical_invalid_rows": 3,
+    "historical_published_damages": 2,
+    "historical_rescues": 6,
+    "no_tools": {
+      "accuracy": 0.23333333333333334,
+      "aggregate_token_multiplier_vs_a0": 2.3665706886123847,
+      "base_provider_tokens": 580341,
+      "classification": "SEALED_OBSERVATION",
+      "correct": 7,
+      "correct_a0_withheld": 0,
+      "n": 30,
+      "published_damages": 2,
+      "rescues": 2,
+      "total_provider_tokens": 1373418,
+      "valid": 29
+    },
+    "rows": 60,
+    "tool_calls": 151,
+    "tools": {
+      "accuracy": 0.23333333333333334,
+      "aggregate_token_multiplier_vs_a0": 15.977540640705516,
+      "base_provider_tokens": 597123,
+      "classification": "SEALED_OBSERVATION",
+      "correct": 7,
+      "correct_a0_withheld": 1,
+      "n": 30,
+      "published_damages": 0,
+      "rescues": 4,
+      "total_provider_tokens": 9540557,
+      "valid": 28
+    },
+    "web_search_calls": 97
+  },
+  "classification": "POSTHOC_DETERMINISTIC_REPLAY_NOT_EFFICACY_EVIDENCE",
+  "non_claims": [
+    "deployable task router",
+    "same-item tool effect",
+    "HLE population accuracy",
+    "10-percent tool-route feasibility",
+    "production promotion"
+  ],
+  "scenarios": {
+    "contract_fallback_only": {
+      "accuracy": 0.25,
+      "aggregate_token_multiplier_vs_a0": 9.269051962522846,
+      "base_provider_tokens": 1177464,
+      "classification": "VALID_A0_FALLBACK_REPLAY",
+      "correct": 15,
+      "correct_a0_withheld": 0,
+      "n": 60,
+      "published_damages": 2,
+      "rescues": 6,
+      "total_provider_tokens": 10913975,
+      "valid": 59
+    },
+    "direct_preflight": {
+      "accuracy": 0.18333333333333332,
+      "aggregate_token_multiplier_vs_a0": 1.0,
+      "base_provider_tokens": 1177464,
+      "classification": "NO_ADMITTED_ROUTE_CALL_LAUNCHED",
+      "correct": 11,
+      "correct_a0_withheld": 0,
+      "n": 60,
+      "published_damages": 0,
+      "rescues": 0,
+      "total_provider_tokens": 1177464,
+      "valid": 59
+    },
+    "historical": {
+      "accuracy": 0.23333333333333334,
+      "aggregate_token_multiplier_vs_a0": 9.269051962522846,
+      "base_provider_tokens": 1177464,
+      "classification": "SEALED_OBSERVATION",
+      "correct": 14,
+      "correct_a0_withheld": 1,
+      "n": 60,
+      "published_damages": 2,
+      "rescues": 6,
+      "total_provider_tokens": 10913975,
+      "valid": 57
+    },
+    "observed_arm_hybrid": {
+      "accuracy": 0.25,
+      "aggregate_token_multiplier_vs_a0": 8.595505255362372,
+      "base_provider_tokens": 1177464,
+      "classification": "POSTHOC_ARM_POLICY_NOT_CAUSAL",
+      "correct": 15,
+      "correct_a0_withheld": 0,
+      "n": 60,
+      "published_damages": 0,
+      "rescues": 4,
+      "total_provider_tokens": 10120898,
+      "valid": 59
+    },
+    "oracle_all_tool_rescues": {
+      "accuracy": 0.25,
+      "aggregate_token_multiplier_vs_a0": 2.5785476243859686,
+      "base_provider_tokens": 1177464,
+      "classification": "IMPOSSIBLE_POSTHOC_ORACLE_LOWER_BOUND",
+      "correct": 15,
+      "correct_a0_withheld": 0,
+      "n": 60,
+      "published_damages": 0,
+      "rescues": 4,
+      "total_provider_tokens": 3036147,
+      "valid": 59
+    },
+    "oracle_terra_tool_rescues": {
+      "accuracy": 0.21666666666666667,
+      "aggregate_token_multiplier_vs_a0": 1.2927877200491904,
+      "base_provider_tokens": 1177464,
+      "classification": "IMPOSSIBLE_POSTHOC_CONFIG_AND_GOLD_ORACLE",
+      "correct": 13,
+      "correct_a0_withheld": 0,
+      "n": 60,
+      "published_damages": 0,
+      "rescues": 2,
+      "total_provider_tokens": 1522211,
+      "valid": 59
+    },
+    "safe_admission_after_route": {
+      "accuracy": 0.18333333333333332,
+      "aggregate_token_multiplier_vs_a0": 9.269051962522846,
+      "base_provider_tokens": 1177464,
+      "classification": "UNVERIFIED_CANDIDATES_REJECTED_POST_ROUTE",
+      "correct": 11,
+      "correct_a0_withheld": 0,
+      "cost_note": "Safety changes publication, not tokens already spent.",
+      "n": 60,
+      "published_damages": 0,
+      "rescues": 0,
+      "total_provider_tokens": 10913975,
+      "valid": 59
+    }
+  },
+  "schema": "foil.hle-active-cost-damage-replay.v1",
+  "source_audit_sha256": "8484ff96b72a442bbfad0924cc9774bdc77cf1ff5dfb42cf173b60812cf8944f",
+  "source_results_sha256": "fbd16c344127a9fa218782aaf49cd9c6b21e98ab6b2583dcfa84e667e037760b",
+  "tool_rescue_rows": [
+    {
+      "config_id": "LUNA_HIGH",
+      "route_tokens": 1150586,
+      "tool_calls": 15,
+      "unit_id": "luna_high-foil_tools-hle-66ea7d2cc321286a5288ef06"
+    },
+    {
+      "config_id": "LUNA_HIGH",
+      "route_tokens": 363350,
+      "tool_calls": 7,
+      "unit_id": "luna_high-foil_tools-hle-672a80a432cd57d8762583e9"
+    },
+    {
+      "config_id": "TERRA_HIGH",
+      "route_tokens": 142574,
+      "tool_calls": 3,
+      "unit_id": "terra_high-foil_tools-hle-66ea7d2cc321286a5288ef06"
+    },
+    {
+      "config_id": "TERRA_HIGH",
+      "route_tokens": 202173,
+      "tool_calls": 4,
+      "unit_id": "terra_high-foil_tools-hle-672a80a432cd57d8762583e9"
+    }
+  ]
+}
