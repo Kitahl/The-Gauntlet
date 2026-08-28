@@ -1,0 +1,84 @@
+{
+  "ability_boundary": {
+    "deterministic_interjection_can_reject_contradiction": true,
+    "factual_retrieval_without_tools": false,
+    "no_tools_can_generate_blind_rival": true,
+    "no_tools_can_select_rival_without_discriminator": false,
+    "rps_v062_rival_can_replace_a0": false
+  },
+  "classification": "HISTORICAL_DEVELOPMENT_CALIBRATION",
+  "model_calls": 0,
+  "network_calls": 0,
+  "new_token_spend": 0,
+  "non_claims": [
+    "not a new HLE score",
+    "not a forecast of 22 correct",
+    "not retrieval calibration",
+    "not evidence that textual entailment is mechanically solved"
+  ],
+  "promotion_authorized": false,
+  "provider_calls": 0,
+  "report_sha256": "3c70383ae4fc50d27d47c06f75d5de40567ce95d0c1f1b13ae6b53739e88abb4",
+  "route_decisions": [
+    {
+      "attempts": 30,
+      "damage_ucb_ppm": 197094,
+      "invalid_ucb_ppm": 145417,
+      "observed_mean_extra_tokens": 26436,
+      "reason": "conservative_historical_utility_not_above_target_margin",
+      "rescue_lcb_ppm": 14112,
+      "route_id": "RPS_NO_TOOLS_SECOND_PASS",
+      "status": "STAND_DOWN",
+      "utility_lower_bound_microunits": -36727
+    },
+    {
+      "attempts": 30,
+      "damage_ucb_ppm": null,
+      "invalid_ucb_ppm": null,
+      "observed_mean_extra_tokens": 298115,
+      "reason": "rescues_not_attributable_to_clean_saved_tool_evidence",
+      "rescue_lcb_ppm": null,
+      "route_id": "UNRESTRICTED_RETRIEVAL_SECOND_PASS",
+      "status": "UNCALIBRATED",
+      "utility_lower_bound_microunits": null
+    },
+    {
+      "attempts": 3,
+      "damage_ucb_ppm": null,
+      "invalid_ucb_ppm": null,
+      "observed_mean_extra_tokens": 0,
+      "reason": "insufficient_auditable_observations",
+      "rescue_lcb_ppm": null,
+      "route_id": "DETERMINISTIC_HLE_ACTIVE_VERIFY",
+      "status": "UNCALIBRATED",
+      "utility_lower_bound_microunits": null
+    }
+  ],
+  "runtime_policy": {
+    "a0_fallback_on_decline_or_failure": true,
+    "deterministic_active_verify_benchmark": "ENABLED",
+    "deterministic_active_verify_production": "UNADMITTED",
+    "no_tools_interjection_answer_change": "DISABLED",
+    "retrieval_answer_change": "DISABLED",
+    "retrieval_supporting_only": true
+  },
+  "schema": "foil.smart-tool-target-calibration-report.v1",
+  "target": {
+    "baseline_correct": 11,
+    "benchmark_rows": 60,
+    "caller_maximum_total_tokens": 250000,
+    "cost_varies_by_tool_contract": true,
+    "damage_loss_microunits": 45454,
+    "hard_limit_embedded_in_foil": false,
+    "interval_mass_ppm": 950000,
+    "invalid_loss_microunits": 11364,
+    "minimum_observations": 20,
+    "minimum_utility_microunits": 1137,
+    "required_net_rescues": 11,
+    "rescue_value_microunits": 22727,
+    "schema": "foil.smart-tool-target-calibration.v1",
+    "target_correct": 22,
+    "target_tokens_per_net_rescue": 22727,
+    "token_price_microunits": 1
+  }
+}

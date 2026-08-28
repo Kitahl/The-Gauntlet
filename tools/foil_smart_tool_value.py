@@ -190,6 +190,19 @@ def _bound_ppm(successes: int, attempts: int, probability: float) -> int:
     return max(0, min(PPM, int(math.floor(value * PPM))))
 
 
+def jeffreys_bound_ppm(
+    *, successes: int, attempts: int, quantile_ppm: int
+) -> int:
+    """Return a closed, integer Jeffreys-Beta quantile for shared calibrators."""
+
+    _count("successes", successes)
+    _count("attempts", attempts)
+    if successes > attempts:
+        raise ValueError("successes cannot exceed attempts")
+    quantile = _ppm("quantile_ppm", quantile_ppm)
+    return _bound_ppm(successes, attempts, quantile / PPM)
+
+
 def decide_prelaunch(
     *,
     family: ToolFamily,
