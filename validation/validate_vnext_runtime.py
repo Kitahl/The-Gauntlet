@@ -25,12 +25,13 @@ RUNTIME_FILES = [
 ]
 SPEC_FILES = [
     "docs/specs/COMMON_RUNTIME_CONTRACT.md", "docs/specs/CHALLENGE_ENGINEERING_SPEC.md",
-    "docs/specs/SOUL_ENGINEERING_SPEC.md", "docs/specs/GAUNTLET_ENGINEERING_SPEC.md",
-    "docs/specs/GAUNTLET_AUTOMATIC_SPEC.md", "docs/specs/MEDITATE_ENGINEERING_SPEC.md",
-    "docs/specs/COUNCIL_ENGINEERING_SPEC.md", "docs/specs/MIND_ENGINEERING_SPEC.md",
-    "docs/specs/SPACE_ENGINEERING_SPEC.md", "docs/specs/REALITY_ENGINEERING_SPEC.md",
-    "docs/specs/POWER_ENGINEERING_SPEC.md", "docs/specs/TIME_ENGINEERING_SPEC.md",
-    "docs/specs/FOIL_INTEGRATION_SPEC.md", "docs/specs/BLACKGEM_ENGINEERING_SPEC.md",
+    "docs/specs/EXTERNAL_REVIEW_AUTHORITY.md", "docs/specs/SOUL_ENGINEERING_SPEC.md",
+    "docs/specs/GAUNTLET_ENGINEERING_SPEC.md", "docs/specs/GAUNTLET_AUTOMATIC_SPEC.md",
+    "docs/specs/MEDITATE_ENGINEERING_SPEC.md", "docs/specs/COUNCIL_ENGINEERING_SPEC.md",
+    "docs/specs/MIND_ENGINEERING_SPEC.md", "docs/specs/SPACE_ENGINEERING_SPEC.md",
+    "docs/specs/REALITY_ENGINEERING_SPEC.md", "docs/specs/POWER_ENGINEERING_SPEC.md",
+    "docs/specs/TIME_ENGINEERING_SPEC.md", "docs/specs/FOIL_INTEGRATION_SPEC.md",
+    "docs/specs/BLACKGEM_ENGINEERING_SPEC.md",
 ]
 SKILLS = [
     "soul", "mathbot", "scoutbot", "novelbot", "codebot", "benchbot",
@@ -44,10 +45,23 @@ checks["pipeline_present"] = (ROOT / "docs/VNEXT_RUNTIME_PIPELINE.md").is_file()
 config = json.loads((ROOT / ".gauntlet.json").read_text(encoding="utf-8"))
 runtime = config.get("runtime", {})
 challenge = config.get("challenge", {})
+external_review = config.get("external_review", {})
 checks["runtime_schema"] = runtime.get("schema") == "egrt.runtime.v1"
 checks["raw_prompt_persistence_disabled"] = runtime.get("persist_raw_prompts") is False
 checks["raw_tool_output_persistence_disabled"] = runtime.get("persist_raw_tool_output") is False
 checks["release_gate_enabled"] = runtime.get("release_gate") is True
+checks["automatic_task_supersession_enabled"] = runtime.get("automatic_task_supersession") is True
+checks["automatic_graph_revision_enabled"] = runtime.get("automatic_graph_revision") is True
+checks["automatic_all_ready_enabled"] = runtime.get("automatic_route_all_ready") is True
+checks["automatic_assurance_enabled"] = runtime.get("automatic_assurance") is True
+checks["external_review_advisory_only"] = (
+    external_review.get("authority") == "ADVISORY_ONLY"
+    and external_review.get("control_plane_mutation_authorized") is False
+    and external_review.get("runtime_policy_mutation_authorized") is False
+    and external_review.get("task_state_mutation_authorized") is False
+    and external_review.get("release_authority") is False
+    and external_review.get("host_commit_required") is True
+)
 checks["challenge_shadow_default"] = challenge.get("mode") == "shadow"
 checks["challenge_raw_text_disabled"] = challenge.get("persist_raw_text") is False
 checks["challenge_budgets_bounded"] = (
@@ -57,6 +71,17 @@ checks["challenge_budgets_bounded"] = (
 )
 checks["incident_refractory_configured"] = int(config.get("boundary", {}).get("incident_refractory_turns", 0)) >= 1
 checks["legacy_lifetime_budgets_removed"] = not any(key in config.get("boundary", {}) for key in ("frame_budget", "costume_budget"))
+
+review_spec = (ROOT / "docs/specs/EXTERNAL_REVIEW_AUTHORITY.md").read_text(encoding="utf-8")
+checks["external_review_neutral_boundary"] = all(
+    token in review_spec
+    for token in (
+        "ADVISORY_ONLY",
+        "host_commit_required = true",
+        "No reviewer identity or vendor is singled out",
+        "may not directly",
+    )
+)
 
 settings = json.loads((ROOT / ".claude/settings.json").read_text(encoding="utf-8"))
 raw_settings = json.dumps(settings)
@@ -78,6 +103,9 @@ checks["skill_runtime_trace"] = all(
 forbidden = re.compile(r"(?:^|[\\/])mastermind(?:[\\/]|\.|$)|\b(?:from|import)\s+mastermind\b", re.I)
 runtime_text = "\n".join((ROOT / path).read_text(encoding="utf-8") for path in RUNTIME_FILES)
 checks["no_mastermind_runtime_control"] = forbidden.search(runtime_text) is None
+
+reviewer_specific = re.compile(r"\b(?:claude|anthropic|openai|gemini|google)\b", re.I)
+checks["no_vendor_specific_reviewer_control"] = reviewer_specific.search(runtime_text) is None
 
 violations: list[str] = []
 for path in (ROOT / "tools").glob("*.py"):
