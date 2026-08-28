@@ -9,6 +9,7 @@ import html
 import ipaddress
 import json
 import re
+import shutil
 import socket
 import subprocess
 import sys
@@ -132,11 +133,29 @@ def _git(*args: str) -> subprocess.CompletedProcess[str]:
 
 
 def codex_executable() -> str:
-    local = Path.home() / "AppData" / "Local" / "OpenAI" / "Codex" / "bin"
-    matches = sorted(local.glob("*/codex.exe"), key=lambda path: path.stat().st_mtime, reverse=True)
-    if matches:
-        return str(matches[0])
-    return "codex"
+    if sys.platform == "win32":
+        shim = shutil.which("codex.cmd")
+        if shim:
+            package_root = (
+                Path(shim).resolve().parent
+                / "node_modules"
+                / "@openai"
+                / "codex"
+                / "node_modules"
+                / "@openai"
+            )
+            packaged = sorted(
+                package_root.glob("codex-win32-*/vendor/*/bin/codex.exe")
+            )
+            if len(packaged) == 1:
+                return str(packaged[0])
+        native = shutil.which("codex.exe")
+        if native:
+            return native
+    executable = shutil.which("codex")
+    if not executable:
+        raise ProtocolError("native Codex executable is unavailable")
+    return executable
 
 
 NON_TOOLS = {"reasoning", "agent_message"}

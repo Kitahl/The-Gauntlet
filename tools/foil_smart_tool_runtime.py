@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import ast
 import re
-import time
 from dataclasses import dataclass
 from enum import Enum
 from fractions import Fraction
@@ -293,14 +292,13 @@ class ExactArithmeticAdapter:
         )
 
     def execute(self, contract: ToolContract, task: QuestionOnlyTask) -> ToolReceipt:
-        started = time.perf_counter()
         expression = _exact_expression(task.question)
         if expression is None or digest(expression) != contract.operation_input_digest:
             return ToolReceipt(
                 call_id=f"call-{contract.contract_digest[:16]}",
                 contract_digest=contract.contract_digest,
                 outcome=ToolOutcome.NOT_APPLICABLE,
-                latency_ms=int((time.perf_counter() - started) * 1000),
+                latency_ms=0,
             )
         value = _fraction_text(evaluate_exact(expression))
         return ToolReceipt(
@@ -310,7 +308,7 @@ class ExactArithmeticAdapter:
             candidate_answer=value,
             evidence_digest=digest({"expression": expression, "value": value}),
             mechanically_verified=True,
-            latency_ms=int((time.perf_counter() - started) * 1000),
+            latency_ms=0,
         )
 
 
@@ -337,14 +335,13 @@ class RestrictedPythonOutputAdapter:
         )
 
     def execute(self, contract: ToolContract, task: QuestionOnlyTask) -> ToolReceipt:
-        started = time.perf_counter()
         extracted = _restricted_python_expression(task.question)
         if extracted is None or digest(extracted[0]) != contract.operation_input_digest:
             return ToolReceipt(
                 call_id=f"call-{contract.contract_digest[:16]}",
                 contract_digest=contract.contract_digest,
                 outcome=ToolOutcome.NOT_APPLICABLE,
-                latency_ms=int((time.perf_counter() - started) * 1000),
+                latency_ms=0,
             )
         source, expression = extracted
         value = _fraction_text(evaluate_exact(expression))
@@ -355,7 +352,7 @@ class RestrictedPythonOutputAdapter:
             candidate_answer=value,
             evidence_digest=digest({"source": source, "value": value}),
             mechanically_verified=True,
-            latency_ms=int((time.perf_counter() - started) * 1000),
+            latency_ms=0,
         )
 
 

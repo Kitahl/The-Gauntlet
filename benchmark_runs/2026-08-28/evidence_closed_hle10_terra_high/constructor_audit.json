@@ -1,0 +1,18 @@
+{
+  "classification": "POST_RUN_GOLD_INDEPENDENT_CONSTRUCTOR_AUDIT",
+  "constructor_output_sha256": "4a9095216e08a30b5b9d1d8d4825c32d315e606b2170e5d9b0ca39702f96742b",
+  "constructor_status_counts": {
+    "ABSTAIN": 10,
+    "CANDIDATE": 0
+  },
+  "new_token_accounting": {
+    "cached_input_tokens_reported_separately": 124928,
+    "input_tokens": 180798,
+    "input_plus_output_tokens": 184099,
+    "output_tokens": 3301
+  },
+  "provider_calls": 1,
+  "quote_binding_attempts": 0,
+  "search_queries": 10,
+  "web_search_events": 4
+}
