@@ -1,0 +1,68 @@
+{
+  "actual_model_calls": 0,
+  "actual_network_calls": 0,
+  "actual_provider_calls": 0,
+  "actual_provider_tokens": 0,
+  "baseline_correct": 1,
+  "classification": "SYNTHETIC_INTEGRATION_ONLY",
+  "damages": 0,
+  "final_correct": 4,
+  "gold_sha256": "7c227b3808b9dde82c240303d63b6fec635858089bb17f81cde099cc872e01a6",
+  "items": 4,
+  "logical_model_passes_simulated": 7,
+  "non_claims": [
+    "not a natural-language efficacy benchmark",
+    "not HLE performance",
+    "not production calibration",
+    "fixture retrieval is not factual-retrieval validation",
+    "deterministic callbacks simulate logical model-pass boundaries"
+  ],
+  "prediction_sha256": "396bfa453d1ea6691c2aadd73edefbe9ef635a097eaf0f4893553e62dac813ea",
+  "promotion_authorized": false,
+  "report_sha256": "9dc827f6a18e015c3f7621aab0dc96b69a75192a5ee9520d575f527831c7c04b",
+  "rescues": 3,
+  "rows": [
+    {
+      "base_correct": false,
+      "cost_accounting_complete": true,
+      "damaged": false,
+      "final_correct": true,
+      "rescued": true,
+      "selection_outcome": "SELECT_B_BENCHMARK_UNADMITTED",
+      "task_id": "retrieval-1"
+    },
+    {
+      "base_correct": true,
+      "cost_accounting_complete": true,
+      "damaged": false,
+      "final_correct": true,
+      "rescued": false,
+      "selection_outcome": "KEEP_A0_NO_CANDIDATE",
+      "task_id": "retrieval-2"
+    },
+    {
+      "base_correct": false,
+      "cost_accounting_complete": true,
+      "damaged": false,
+      "final_correct": true,
+      "rescued": true,
+      "selection_outcome": "SELECT_B_BENCHMARK_UNADMITTED",
+      "task_id": "retrieval-3"
+    },
+    {
+      "base_correct": false,
+      "cost_accounting_complete": true,
+      "damaged": false,
+      "final_correct": true,
+      "rescued": true,
+      "selection_outcome": "SELECT_B_BENCHMARK_UNADMITTED",
+      "task_id": "retrieval-4"
+    }
+  ],
+  "schema": "foil.evidence-closed-pilot-report.v1",
+  "selection_counts": {
+    "KEEP_A0_NO_CANDIDATE": 1,
+    "SELECT_B_BENCHMARK_UNADMITTED": 3
+  },
+  "tool_calls": 8
+}

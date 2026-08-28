@@ -1,0 +1,1341 @@
+{
+  "actual_model_calls": 0,
+  "actual_network_calls": 0,
+  "actual_provider_calls": 0,
+  "classification": "SYNTHETIC_INTEGRATION_ONLY",
+  "frozen_before_gold": true,
+  "items_digest": "8869022ea3dc2eeffdff2b6f1b2980355052b5ce852a76f8e9bd391826018c23",
+  "ledger": {
+    "active_call_ids": [],
+    "counts_cached_input": true,
+    "maximum_total_tokens": 1,
+    "remaining_unreserved_tokens": 1,
+    "requires_provider_enforced_reservations": true,
+    "reserved_total_tokens": 0,
+    "schema": "foil.benchmark-token-ledger.v1",
+    "spent_total_tokens": 0
+  },
+  "non_claims": [
+    "not a natural-language efficacy benchmark",
+    "not HLE performance",
+    "not production calibration",
+    "fixture retrieval is not factual-retrieval validation",
+    "deterministic callbacks simulate logical model-pass boundaries"
+  ],
+  "prediction_sha256": "396bfa453d1ea6691c2aadd73edefbe9ef635a097eaf0f4893553e62dac813ea",
+  "predictions": [
+    {
+      "a0": "section 3",
+      "final": "section 7",
+      "question_digest": "9ee48fc68acd63ddcdf484d8c2cb661341d6c52be73f4411ca1311aacfe77676",
+      "run": {
+        "a0_assessment": {
+          "actual_total_tokens": 0,
+          "answer_identity_exposed_to_semantic_comparator": false,
+          "candidate": {
+            "answer_id": "answer-5d4970ccfe27b78f",
+            "answer_kind": "EXACT_TEXT",
+            "answer_sha256": "1c9f28db639defad086f2e6dadd6e2d23f7f187f49caf4facd1b9b6538ec22ae",
+            "claims": [
+              {
+                "claim_id": "claim-5d4970ccfe27b78f",
+                "computation_receipt_ids": [],
+                "critical": true,
+                "evidence_span_ids": [],
+                "jurisdiction": null,
+                "kind": "ANSWER",
+                "normalized_value": "section 3",
+                "raw_text_stored": false,
+                "temporal_scope": null,
+                "text_sha256": "1c9f28db639defad086f2e6dadd6e2d23f7f187f49caf4facd1b9b6538ec22ae",
+                "unit": null
+              }
+            ],
+            "origin": "BASE",
+            "raw_answer_stored": false
+          },
+          "claim_conservation": true,
+          "claim_count": 1,
+          "contradicted": 1,
+          "fully_supported": false,
+          "has_critical_contradiction": true,
+          "latency_ms": 0,
+          "model_passes": 1,
+          "monetary_microunits": 0,
+          "omitted": 0,
+          "selection_eligible": false,
+          "supported": 0,
+          "unresolved": 0,
+          "verdicts": [
+            {
+              "authority": "SEMANTIC_UNCALIBRATED",
+              "cached_input_tokens": 0,
+              "claim_id": "claim-5d4970ccfe27b78f",
+              "computation_receipt_ids": [],
+              "confidence_ppm": 1000000,
+              "evidence_span_ids": [
+                "span-retrieval-1"
+              ],
+              "input_tokens": 0,
+              "latency_ms": 0,
+              "method": "SEMANTIC_CALLBACK",
+              "model_passes": 1,
+              "monetary_microunits": 0,
+              "output_tokens": 0,
+              "reason": "synthetic_exact_value_comparison",
+              "status": "CONTRADICTED"
+            }
+          ]
+        },
+        "a0_digest": "1c9f28db639defad086f2e6dadd6e2d23f7f187f49caf4facd1b9b6538ec22ae",
+        "a0_fallback": true,
+        "active_route": {
+          "a0_digest": "1c9f28db639defad086f2e6dadd6e2d23f7f187f49caf4facd1b9b6538ec22ae",
+          "action": "SELECT_VERIFIED",
+          "answer_changed": true,
+          "benchmark_only": true,
+          "cached_input_tokens": 0,
+          "candidate_digest": "52133a2c11243350a879639f29f7eef344616928ed973540ced6adfdec6dfc4b",
+          "candidate_verified": true,
+          "contract_valid": true,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "production_authorized": false,
+          "promotion_authorized": false,
+          "raw_answer_stored": false,
+          "reason": "verified_candidate_selected",
+          "rejection_reasons": [],
+          "route": "VERIFY",
+          "route_budget_exceeded": false,
+          "route_calls": 1,
+          "schema": "foil.adaptive-active-benchmark-receipt.v2",
+          "selected_digest": "52133a2c11243350a879639f29f7eef344616928ed973540ced6adfdec6dfc4b",
+          "tool_event_types": [
+            "search",
+            "fetch"
+          ]
+        },
+        "answer_changed": true,
+        "b_assessment": {
+          "actual_total_tokens": 0,
+          "answer_identity_exposed_to_semantic_comparator": false,
+          "candidate": {
+            "answer_id": "constructed-c7ca0d107adbe828",
+            "answer_kind": "EXACT_TEXT",
+            "answer_sha256": "52133a2c11243350a879639f29f7eef344616928ed973540ced6adfdec6dfc4b",
+            "claims": [
+              {
+                "claim_id": "claim-retrieval-1",
+                "computation_receipt_ids": [],
+                "critical": true,
+                "evidence_span_ids": [
+                  "span-retrieval-1"
+                ],
+                "jurisdiction": null,
+                "kind": "ANSWER",
+                "normalized_value": "section 7",
+                "raw_text_stored": false,
+                "temporal_scope": null,
+                "text_sha256": "52133a2c11243350a879639f29f7eef344616928ed973540ced6adfdec6dfc4b",
+                "unit": null
+              }
+            ],
+            "origin": "EVIDENCE_CONSTRUCTED",
+            "raw_answer_stored": false
+          },
+          "claim_conservation": true,
+          "claim_count": 1,
+          "contradicted": 0,
+          "fully_supported": true,
+          "has_critical_contradiction": false,
+          "latency_ms": 0,
+          "model_passes": 0,
+          "monetary_microunits": 0,
+          "omitted": 0,
+          "selection_eligible": true,
+          "supported": 1,
+          "unresolved": 0,
+          "verdicts": [
+            {
+              "authority": "MECHANICAL",
+              "cached_input_tokens": 0,
+              "claim_id": "claim-retrieval-1",
+              "computation_receipt_ids": [],
+              "confidence_ppm": 1000000,
+              "evidence_span_ids": [
+                "span-retrieval-1"
+              ],
+              "input_tokens": 0,
+              "latency_ms": 0,
+              "method": "EXACT_BOUND_SPAN",
+              "model_passes": 0,
+              "monetary_microunits": 0,
+              "output_tokens": 0,
+              "reason": "claim_is_exact_normalized_bound_span",
+              "status": "SUPPORTED"
+            }
+          ]
+        },
+        "benchmark_only": true,
+        "comparator_answer_identity_exposed": false,
+        "constructor": {
+          "a0_exposed": false,
+          "actual_total_tokens": 0,
+          "cached_input_tokens": 0,
+          "candidate": {
+            "answer_id": "constructed-c7ca0d107adbe828",
+            "answer_kind": "EXACT_TEXT",
+            "answer_sha256": "52133a2c11243350a879639f29f7eef344616928ed973540ced6adfdec6dfc4b",
+            "claims": [
+              {
+                "claim_id": "claim-retrieval-1",
+                "computation_receipt_ids": [],
+                "critical": true,
+                "evidence_span_ids": [
+                  "span-retrieval-1"
+                ],
+                "jurisdiction": null,
+                "kind": "ANSWER",
+                "normalized_value": "section 7",
+                "raw_text_stored": false,
+                "temporal_scope": null,
+                "text_sha256": "52133a2c11243350a879639f29f7eef344616928ed973540ced6adfdec6dfc4b",
+                "unit": null
+              }
+            ],
+            "origin": "EVIDENCE_CONSTRUCTED",
+            "raw_answer_stored": false
+          },
+          "evidence_packet_sha256": "336822754c7c9efc33b977591223044599b34b48350da8203126a36fcfbdd831",
+          "input_tokens": 0,
+          "latency_ms": 0,
+          "model_passes": 1,
+          "monetary_microunits": 0,
+          "outcome": "CANDIDATE",
+          "output_tokens": 0,
+          "question_digest": "9ee48fc68acd63ddcdf484d8c2cb661341d6c52be73f4411ca1311aacfe77676",
+          "raw_candidate_stored": false,
+          "reason": "deterministic_single_span_constructor",
+          "receipt_sha256": "2a260c11c863824efe5bd72088476e16dcd9d6954b6f390d9ce4e7f967bd234a",
+          "retry_count": 0,
+          "schema": "foil.bounded-constructor-receipt.v1",
+          "tools_available": false
+        },
+        "constructor_a0_exposed": false,
+        "cost_accounting_complete": true,
+        "evidence_packet": {
+          "actual_total_tokens": 0,
+          "cached_input_tokens": 0,
+          "computations": [],
+          "documents": [
+            {
+              "content_safety": "SANITIZED_DATA_ONLY",
+              "content_sha256": "0ec2000dde73d800672c28655e1fa3788cec8fc6742aa0fa4d8a691d50b9b45f",
+              "document_id": "doc-retrieval-1",
+              "independent_group": "synthetic-retrieval-1",
+              "jurisdiction": null,
+              "raw_content_stored": false,
+              "retrieved_at": "2026-08-28T00:00:00Z",
+              "source_class": "PRIMARY",
+              "source_url": "https://example.com/example-act",
+              "temporal_scope": null,
+              "title_digest": "80f0934d309d721d408297337b7daeee87ed71d673d1fcc717f66202e412d0c0"
+            }
+          ],
+          "fetch_calls": 1,
+          "input_tokens": 0,
+          "latency_ms": 1,
+          "monetary_microunits": 0,
+          "output_tokens": 0,
+          "packet_sha256": "336822754c7c9efc33b977591223044599b34b48350da8203126a36fcfbdd831",
+          "question_digest": "9ee48fc68acd63ddcdf484d8c2cb661341d6c52be73f4411ca1311aacfe77676",
+          "raw_evidence_stored": false,
+          "schema": "foil.evidence-packet.v1",
+          "search_calls": 1,
+          "spans": [
+            {
+              "document_id": "doc-retrieval-1",
+              "end_offset": 50,
+              "raw_text_stored": false,
+              "span_id": "span-retrieval-1",
+              "start_offset": 41,
+              "text_sha256": "52133a2c11243350a879639f29f7eef344616928ed973540ced6adfdec6dfc4b"
+            }
+          ],
+          "tool_calls": 2
+        },
+        "final_digest": "52133a2c11243350a879639f29f7eef344616928ed973540ced6adfdec6dfc4b",
+        "ledger_after": {
+          "active_call_ids": [],
+          "counts_cached_input": true,
+          "maximum_total_tokens": 1,
+          "remaining_unreserved_tokens": 1,
+          "requires_provider_enforced_reservations": true,
+          "reserved_total_tokens": 0,
+          "schema": "foil.benchmark-token-ledger.v1",
+          "spent_total_tokens": 0
+        },
+        "ledger_before": {
+          "active_call_ids": [],
+          "counts_cached_input": true,
+          "maximum_total_tokens": 1,
+          "remaining_unreserved_tokens": 1,
+          "requires_provider_enforced_reservations": true,
+          "reserved_total_tokens": 0,
+          "schema": "foil.benchmark-token-ledger.v1",
+          "spent_total_tokens": 0
+        },
+        "opportunity_status": "FOUND",
+        "plan_decisions": [
+          {
+            "damage_ucb_ppm": null,
+            "invalid_ucb_ppm": null,
+            "maximum_total_tokens": 1,
+            "observations": 0,
+            "plan_id": "plan-retrieval-1",
+            "probabilities_from_model_self_report": false,
+            "reason": "explicit_bounded_plan_exploration",
+            "rescue_lcb_ppm": null,
+            "route_key": "WEB_RETRIEVAL",
+            "status": "EXECUTE_EXPLORATION",
+            "utility_lower_bound_microunits": null
+          }
+        ],
+        "production_authorized": false,
+        "promotion_authorized": false,
+        "question_digest": "9ee48fc68acd63ddcdf484d8c2cb661341d6c52be73f4411ca1311aacfe77676",
+        "question_only_plan_selection": true,
+        "raw_a0_stored": false,
+        "raw_candidate_stored": false,
+        "raw_evidence_stored": false,
+        "raw_question_stored": false,
+        "reason": "strict_evidence_preference_selected_b_in_benchmark",
+        "run_sha256": "f7598cc03fefe5e7df30b8685b88e6f3a375eecb8fd08b2a75eb61fb3e50c0cc",
+        "schema": "foil.evidence-closed-benchmark-run.v1",
+        "selected_plan": {
+          "a0_digest": "1c9f28db639defad086f2e6dadd6e2d23f7f187f49caf4facd1b9b6538ec22ae",
+          "answer_change_authority": false,
+          "benchmark_only": true,
+          "contract_sha256": "091d7b9f2a28edcae7f3bf9aad3d4af7b6a5587c0b218e32fa386e9ebbb1a5b7",
+          "cost": {
+            "maximum_cached_input_tokens": 0,
+            "maximum_evidence_characters": 128,
+            "maximum_fetch_calls": 1,
+            "maximum_input_tokens": 0,
+            "maximum_latency_ms": 100,
+            "maximum_model_passes": 2,
+            "maximum_monetary_microunits": 0,
+            "maximum_output_tokens": 1,
+            "maximum_search_calls": 1,
+            "maximum_sources": 1,
+            "maximum_tool_calls": 2,
+            "maximum_total_tokens": 1,
+            "privacy_cost_microunits": 0,
+            "retry_count": 0
+          },
+          "plan_id": "plan-retrieval-1",
+          "plan_version": "pilot-1",
+          "provider_cap_enforced": true,
+          "question_digest": "9ee48fc68acd63ddcdf484d8c2cb661341d6c52be73f4411ca1311aacfe77676",
+          "raw_a0_stored": false,
+          "raw_question_stored": false,
+          "read_only": true,
+          "route_key": "WEB_RETRIEVAL",
+          "schema": "foil.tool-plan-contract.v2",
+          "steps": [
+            {
+              "depends_on": [],
+              "family": "RETRIEVAL",
+              "operation": "WEB_RETRIEVAL",
+              "operation_input_digest": "9ee48fc68acd63ddcdf484d8c2cb661341d6c52be73f4411ca1311aacfe77676",
+              "step_id": "retrieve"
+            }
+          ],
+          "task_id": "retrieval-1"
+        },
+        "selection": {
+          "a0_digest": "1c9f28db639defad086f2e6dadd6e2d23f7f187f49caf4facd1b9b6538ec22ae",
+          "a0_fallback": true,
+          "answer_changed": true,
+          "benchmark_only": true,
+          "candidate_digest": "52133a2c11243350a879639f29f7eef344616928ed973540ced6adfdec6dfc4b",
+          "outcome": "SELECT_B_BENCHMARK_UNADMITTED",
+          "production_authorized": false,
+          "promotion_authorized": false,
+          "raw_answer_stored": false,
+          "reason": "strict_evidence_preference_selected_b_in_benchmark",
+          "schema": "foil.evidence-closed-selection.v1",
+          "selected_digest": "52133a2c11243350a879639f29f7eef344616928ed973540ced6adfdec6dfc4b",
+          "selection_sha256": "9e38147487c23249a47ac0f4f6feb1b997769f147cd698be81f74c49baceb960"
+        },
+        "task_id": "retrieval-1"
+      },
+      "task_id": "retrieval-1"
+    },
+    {
+      "a0": "section 12",
+      "final": "section 12",
+      "question_digest": "1bb2bbfc62894b721baaa05536a1d9329bfafb1f5173390f996c511c0897d4da",
+      "run": {
+        "a0_assessment": {
+          "actual_total_tokens": 0,
+          "answer_identity_exposed_to_semantic_comparator": false,
+          "candidate": {
+            "answer_id": "answer-60de3ca2246c8eeb",
+            "answer_kind": "EXACT_TEXT",
+            "answer_sha256": "fc66bf59f2e89c419a41616b70ba867b85b104bd7f3791c74c47e2a2ffc17710",
+            "claims": [
+              {
+                "claim_id": "claim-60de3ca2246c8eeb",
+                "computation_receipt_ids": [],
+                "critical": true,
+                "evidence_span_ids": [],
+                "jurisdiction": null,
+                "kind": "ANSWER",
+                "normalized_value": "section 12",
+                "raw_text_stored": false,
+                "temporal_scope": null,
+                "text_sha256": "fc66bf59f2e89c419a41616b70ba867b85b104bd7f3791c74c47e2a2ffc17710",
+                "unit": null
+              }
+            ],
+            "origin": "BASE",
+            "raw_answer_stored": false
+          },
+          "claim_conservation": true,
+          "claim_count": 1,
+          "contradicted": 0,
+          "fully_supported": true,
+          "has_critical_contradiction": false,
+          "latency_ms": 0,
+          "model_passes": 1,
+          "monetary_microunits": 0,
+          "omitted": 0,
+          "selection_eligible": true,
+          "supported": 1,
+          "unresolved": 0,
+          "verdicts": [
+            {
+              "authority": "SEMANTIC_UNCALIBRATED",
+              "cached_input_tokens": 0,
+              "claim_id": "claim-60de3ca2246c8eeb",
+              "computation_receipt_ids": [],
+              "confidence_ppm": 1000000,
+              "evidence_span_ids": [
+                "span-retrieval-2"
+              ],
+              "input_tokens": 0,
+              "latency_ms": 0,
+              "method": "SEMANTIC_CALLBACK",
+              "model_passes": 1,
+              "monetary_microunits": 0,
+              "output_tokens": 0,
+              "reason": "synthetic_exact_value_comparison",
+              "status": "SUPPORTED"
+            }
+          ]
+        },
+        "a0_digest": "fc66bf59f2e89c419a41616b70ba867b85b104bd7f3791c74c47e2a2ffc17710",
+        "a0_fallback": true,
+        "active_route": {
+          "a0_digest": "fc66bf59f2e89c419a41616b70ba867b85b104bd7f3791c74c47e2a2ffc17710",
+          "action": "VERIFY_STAND_DOWN",
+          "answer_changed": false,
+          "benchmark_only": true,
+          "cached_input_tokens": 0,
+          "candidate_digest": "fc66bf59f2e89c419a41616b70ba867b85b104bd7f3791c74c47e2a2ffc17710",
+          "candidate_verified": false,
+          "contract_valid": true,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "production_authorized": false,
+          "promotion_authorized": false,
+          "raw_answer_stored": false,
+          "reason": "verify_not_confirmed",
+          "rejection_reasons": [],
+          "route": "VERIFY",
+          "route_budget_exceeded": false,
+          "route_calls": 1,
+          "schema": "foil.adaptive-active-benchmark-receipt.v2",
+          "selected_digest": "fc66bf59f2e89c419a41616b70ba867b85b104bd7f3791c74c47e2a2ffc17710",
+          "tool_event_types": [
+            "search",
+            "fetch"
+          ]
+        },
+        "answer_changed": false,
+        "b_assessment": null,
+        "benchmark_only": true,
+        "comparator_answer_identity_exposed": false,
+        "constructor": {
+          "a0_exposed": false,
+          "actual_total_tokens": 0,
+          "cached_input_tokens": 0,
+          "candidate": null,
+          "evidence_packet_sha256": "0c951dab83976a4ed6abf2a561e8412b822c9927237962e2741d9be48d756658",
+          "input_tokens": 0,
+          "latency_ms": 0,
+          "model_passes": 0,
+          "monetary_microunits": 0,
+          "outcome": "NO_CANDIDATE",
+          "output_tokens": 0,
+          "question_digest": "1bb2bbfc62894b721baaa05536a1d9329bfafb1f5173390f996c511c0897d4da",
+          "raw_candidate_stored": false,
+          "reason": "a0_supported_skip_constructor",
+          "receipt_sha256": "1fc49205f652a6a543b207a5afc29bc173df2c92f434384f3076a418947b9a94",
+          "retry_count": 0,
+          "schema": "foil.bounded-constructor-receipt.v1",
+          "tools_available": false
+        },
+        "constructor_a0_exposed": false,
+        "cost_accounting_complete": true,
+        "evidence_packet": {
+          "actual_total_tokens": 0,
+          "cached_input_tokens": 0,
+          "computations": [],
+          "documents": [
+            {
+              "content_safety": "SANITIZED_DATA_ONLY",
+              "content_sha256": "47afc8306a23e4ec57dc7f08c84e2f4c3dfb8ae3d4ddada659ca8a78c564681d",
+              "document_id": "doc-retrieval-2",
+              "independent_group": "synthetic-retrieval-2",
+              "jurisdiction": null,
+              "raw_content_stored": false,
+              "retrieved_at": "2026-08-28T00:00:00Z",
+              "source_class": "PRIMARY",
+              "source_url": "https://example.com/demo-regulation",
+              "temporal_scope": null,
+              "title_digest": "c5b32c0d25b277061be7a62dc0f6670eb2ba85c73beb482af1784c41244078a5"
+            }
+          ],
+          "fetch_calls": 1,
+          "input_tokens": 0,
+          "latency_ms": 1,
+          "monetary_microunits": 0,
+          "output_tokens": 0,
+          "packet_sha256": "0c951dab83976a4ed6abf2a561e8412b822c9927237962e2741d9be48d756658",
+          "question_digest": "1bb2bbfc62894b721baaa05536a1d9329bfafb1f5173390f996c511c0897d4da",
+          "raw_evidence_stored": false,
+          "schema": "foil.evidence-packet.v1",
+          "search_calls": 1,
+          "spans": [
+            {
+              "document_id": "doc-retrieval-2",
+              "end_offset": 52,
+              "raw_text_stored": false,
+              "span_id": "span-retrieval-2",
+              "start_offset": 42,
+              "text_sha256": "fc66bf59f2e89c419a41616b70ba867b85b104bd7f3791c74c47e2a2ffc17710"
+            }
+          ],
+          "tool_calls": 2
+        },
+        "final_digest": "fc66bf59f2e89c419a41616b70ba867b85b104bd7f3791c74c47e2a2ffc17710",
+        "ledger_after": {
+          "active_call_ids": [],
+          "counts_cached_input": true,
+          "maximum_total_tokens": 1,
+          "remaining_unreserved_tokens": 1,
+          "requires_provider_enforced_reservations": true,
+          "reserved_total_tokens": 0,
+          "schema": "foil.benchmark-token-ledger.v1",
+          "spent_total_tokens": 0
+        },
+        "ledger_before": {
+          "active_call_ids": [],
+          "counts_cached_input": true,
+          "maximum_total_tokens": 1,
+          "remaining_unreserved_tokens": 1,
+          "requires_provider_enforced_reservations": true,
+          "reserved_total_tokens": 0,
+          "schema": "foil.benchmark-token-ledger.v1",
+          "spent_total_tokens": 0
+        },
+        "opportunity_status": "FOUND",
+        "plan_decisions": [
+          {
+            "damage_ucb_ppm": null,
+            "invalid_ucb_ppm": null,
+            "maximum_total_tokens": 1,
+            "observations": 0,
+            "plan_id": "plan-retrieval-2",
+            "probabilities_from_model_self_report": false,
+            "reason": "explicit_bounded_plan_exploration",
+            "rescue_lcb_ppm": null,
+            "route_key": "WEB_RETRIEVAL",
+            "status": "EXECUTE_EXPLORATION",
+            "utility_lower_bound_microunits": null
+          }
+        ],
+        "production_authorized": false,
+        "promotion_authorized": false,
+        "question_digest": "1bb2bbfc62894b721baaa05536a1d9329bfafb1f5173390f996c511c0897d4da",
+        "question_only_plan_selection": true,
+        "raw_a0_stored": false,
+        "raw_candidate_stored": false,
+        "raw_evidence_stored": false,
+        "raw_question_stored": false,
+        "reason": "constructor_produced_no_candidate",
+        "run_sha256": "5601b499b5121b53cd9722659ec87af4f281b778f08b8708e97c62e520c3257c",
+        "schema": "foil.evidence-closed-benchmark-run.v1",
+        "selected_plan": {
+          "a0_digest": "fc66bf59f2e89c419a41616b70ba867b85b104bd7f3791c74c47e2a2ffc17710",
+          "answer_change_authority": false,
+          "benchmark_only": true,
+          "contract_sha256": "e2621c673f1cf8930f8cf4ac3e3dd106d17c750b53c40743882fa90b69bb3a99",
+          "cost": {
+            "maximum_cached_input_tokens": 0,
+            "maximum_evidence_characters": 128,
+            "maximum_fetch_calls": 1,
+            "maximum_input_tokens": 0,
+            "maximum_latency_ms": 100,
+            "maximum_model_passes": 2,
+            "maximum_monetary_microunits": 0,
+            "maximum_output_tokens": 1,
+            "maximum_search_calls": 1,
+            "maximum_sources": 1,
+            "maximum_tool_calls": 2,
+            "maximum_total_tokens": 1,
+            "privacy_cost_microunits": 0,
+            "retry_count": 0
+          },
+          "plan_id": "plan-retrieval-2",
+          "plan_version": "pilot-1",
+          "provider_cap_enforced": true,
+          "question_digest": "1bb2bbfc62894b721baaa05536a1d9329bfafb1f5173390f996c511c0897d4da",
+          "raw_a0_stored": false,
+          "raw_question_stored": false,
+          "read_only": true,
+          "route_key": "WEB_RETRIEVAL",
+          "schema": "foil.tool-plan-contract.v2",
+          "steps": [
+            {
+              "depends_on": [],
+              "family": "RETRIEVAL",
+              "operation": "WEB_RETRIEVAL",
+              "operation_input_digest": "1bb2bbfc62894b721baaa05536a1d9329bfafb1f5173390f996c511c0897d4da",
+              "step_id": "retrieve"
+            }
+          ],
+          "task_id": "retrieval-2"
+        },
+        "selection": {
+          "a0_digest": "fc66bf59f2e89c419a41616b70ba867b85b104bd7f3791c74c47e2a2ffc17710",
+          "a0_fallback": true,
+          "answer_changed": false,
+          "benchmark_only": true,
+          "candidate_digest": null,
+          "outcome": "KEEP_A0_NO_CANDIDATE",
+          "production_authorized": false,
+          "promotion_authorized": false,
+          "raw_answer_stored": false,
+          "reason": "constructor_produced_no_candidate",
+          "schema": "foil.evidence-closed-selection.v1",
+          "selected_digest": "fc66bf59f2e89c419a41616b70ba867b85b104bd7f3791c74c47e2a2ffc17710",
+          "selection_sha256": "05b5c7dfafbb31fd47a53aea662bfccdaf9fbcce7319e52f8d1f660c7d1a5fd0"
+        },
+        "task_id": "retrieval-2"
+      },
+      "task_id": "retrieval-2"
+    },
+    {
+      "a0": "41",
+      "final": "73",
+      "question_digest": "59aa69793eea2d4b08818b9bf0aaa47a20bba65722c75f77313a508178fc93b5",
+      "run": {
+        "a0_assessment": {
+          "actual_total_tokens": 0,
+          "answer_identity_exposed_to_semantic_comparator": false,
+          "candidate": {
+            "answer_id": "answer-577f214d31f5171b",
+            "answer_kind": "EXACT_TEXT",
+            "answer_sha256": "d41be9ad11f483bd49cf05e5624e93b769de2b603a77185630c6427f8cc5cb3c",
+            "claims": [
+              {
+                "claim_id": "claim-577f214d31f5171b",
+                "computation_receipt_ids": [],
+                "critical": true,
+                "evidence_span_ids": [],
+                "jurisdiction": null,
+                "kind": "ANSWER",
+                "normalized_value": "41",
+                "raw_text_stored": false,
+                "temporal_scope": null,
+                "text_sha256": "d41be9ad11f483bd49cf05e5624e93b769de2b603a77185630c6427f8cc5cb3c",
+                "unit": null
+              }
+            ],
+            "origin": "BASE",
+            "raw_answer_stored": false
+          },
+          "claim_conservation": true,
+          "claim_count": 1,
+          "contradicted": 1,
+          "fully_supported": false,
+          "has_critical_contradiction": true,
+          "latency_ms": 0,
+          "model_passes": 1,
+          "monetary_microunits": 0,
+          "omitted": 0,
+          "selection_eligible": false,
+          "supported": 0,
+          "unresolved": 0,
+          "verdicts": [
+            {
+              "authority": "SEMANTIC_UNCALIBRATED",
+              "cached_input_tokens": 0,
+              "claim_id": "claim-577f214d31f5171b",
+              "computation_receipt_ids": [],
+              "confidence_ppm": 1000000,
+              "evidence_span_ids": [
+                "span-retrieval-3"
+              ],
+              "input_tokens": 0,
+              "latency_ms": 0,
+              "method": "SEMANTIC_CALLBACK",
+              "model_passes": 1,
+              "monetary_microunits": 0,
+              "output_tokens": 0,
+              "reason": "synthetic_exact_value_comparison",
+              "status": "CONTRADICTED"
+            }
+          ]
+        },
+        "a0_digest": "d41be9ad11f483bd49cf05e5624e93b769de2b603a77185630c6427f8cc5cb3c",
+        "a0_fallback": true,
+        "active_route": {
+          "a0_digest": "d41be9ad11f483bd49cf05e5624e93b769de2b603a77185630c6427f8cc5cb3c",
+          "action": "SELECT_VERIFIED",
+          "answer_changed": true,
+          "benchmark_only": true,
+          "cached_input_tokens": 0,
+          "candidate_digest": "200baec47c61ff565118fa2ec9074b63a4ff98bce0c2dbb911ee69397b4745de",
+          "candidate_verified": true,
+          "contract_valid": true,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "production_authorized": false,
+          "promotion_authorized": false,
+          "raw_answer_stored": false,
+          "reason": "verified_candidate_selected",
+          "rejection_reasons": [],
+          "route": "VERIFY",
+          "route_budget_exceeded": false,
+          "route_calls": 1,
+          "schema": "foil.adaptive-active-benchmark-receipt.v2",
+          "selected_digest": "200baec47c61ff565118fa2ec9074b63a4ff98bce0c2dbb911ee69397b4745de",
+          "tool_event_types": [
+            "search",
+            "fetch"
+          ]
+        },
+        "answer_changed": true,
+        "b_assessment": {
+          "actual_total_tokens": 0,
+          "answer_identity_exposed_to_semantic_comparator": false,
+          "candidate": {
+            "answer_id": "constructed-9c88c3f1ec7184f4",
+            "answer_kind": "EXACT_TEXT",
+            "answer_sha256": "200baec47c61ff565118fa2ec9074b63a4ff98bce0c2dbb911ee69397b4745de",
+            "claims": [
+              {
+                "claim_id": "claim-retrieval-3",
+                "computation_receipt_ids": [],
+                "critical": true,
+                "evidence_span_ids": [
+                  "span-retrieval-3"
+                ],
+                "jurisdiction": null,
+                "kind": "ANSWER",
+                "normalized_value": "73",
+                "raw_text_stored": false,
+                "temporal_scope": null,
+                "text_sha256": "200baec47c61ff565118fa2ec9074b63a4ff98bce0c2dbb911ee69397b4745de",
+                "unit": null
+              }
+            ],
+            "origin": "EVIDENCE_CONSTRUCTED",
+            "raw_answer_stored": false
+          },
+          "claim_conservation": true,
+          "claim_count": 1,
+          "contradicted": 0,
+          "fully_supported": true,
+          "has_critical_contradiction": false,
+          "latency_ms": 0,
+          "model_passes": 0,
+          "monetary_microunits": 0,
+          "omitted": 0,
+          "selection_eligible": true,
+          "supported": 1,
+          "unresolved": 0,
+          "verdicts": [
+            {
+              "authority": "MECHANICAL",
+              "cached_input_tokens": 0,
+              "claim_id": "claim-retrieval-3",
+              "computation_receipt_ids": [],
+              "confidence_ppm": 1000000,
+              "evidence_span_ids": [
+                "span-retrieval-3"
+              ],
+              "input_tokens": 0,
+              "latency_ms": 0,
+              "method": "EXACT_BOUND_SPAN",
+              "model_passes": 0,
+              "monetary_microunits": 0,
+              "output_tokens": 0,
+              "reason": "claim_is_exact_normalized_bound_span",
+              "status": "SUPPORTED"
+            }
+          ]
+        },
+        "benchmark_only": true,
+        "comparator_answer_identity_exposed": false,
+        "constructor": {
+          "a0_exposed": false,
+          "actual_total_tokens": 0,
+          "cached_input_tokens": 0,
+          "candidate": {
+            "answer_id": "constructed-9c88c3f1ec7184f4",
+            "answer_kind": "EXACT_TEXT",
+            "answer_sha256": "200baec47c61ff565118fa2ec9074b63a4ff98bce0c2dbb911ee69397b4745de",
+            "claims": [
+              {
+                "claim_id": "claim-retrieval-3",
+                "computation_receipt_ids": [],
+                "critical": true,
+                "evidence_span_ids": [
+                  "span-retrieval-3"
+                ],
+                "jurisdiction": null,
+                "kind": "ANSWER",
+                "normalized_value": "73",
+                "raw_text_stored": false,
+                "temporal_scope": null,
+                "text_sha256": "200baec47c61ff565118fa2ec9074b63a4ff98bce0c2dbb911ee69397b4745de",
+                "unit": null
+              }
+            ],
+            "origin": "EVIDENCE_CONSTRUCTED",
+            "raw_answer_stored": false
+          },
+          "evidence_packet_sha256": "36f8d0b04e0ab273aa7c0c3648829766ce99877e6f28acfa1b3574be6c3459b7",
+          "input_tokens": 0,
+          "latency_ms": 0,
+          "model_passes": 1,
+          "monetary_microunits": 0,
+          "outcome": "CANDIDATE",
+          "output_tokens": 0,
+          "question_digest": "59aa69793eea2d4b08818b9bf0aaa47a20bba65722c75f77313a508178fc93b5",
+          "raw_candidate_stored": false,
+          "reason": "deterministic_single_span_constructor",
+          "receipt_sha256": "c963dcb4dca177ec36ddc17f6c69ed5f6d0e9adbfbab08bf2e6ec3ce29707722",
+          "retry_count": 0,
+          "schema": "foil.bounded-constructor-receipt.v1",
+          "tools_available": false
+        },
+        "constructor_a0_exposed": false,
+        "cost_accounting_complete": true,
+        "evidence_packet": {
+          "actual_total_tokens": 0,
+          "cached_input_tokens": 0,
+          "computations": [],
+          "documents": [
+            {
+              "content_safety": "SANITIZED_DATA_ONLY",
+              "content_sha256": "e75d29377572e56a63d50ffbb2317a91f4fecad7963850d0eabc4da5c60eb153",
+              "document_id": "doc-retrieval-3",
+              "independent_group": "synthetic-retrieval-3",
+              "jurisdiction": null,
+              "raw_content_stored": false,
+              "retrieved_at": "2026-08-28T00:00:00Z",
+              "source_class": "SCHOLARLY",
+              "source_url": "https://example.com/artin-catalogue",
+              "temporal_scope": null,
+              "title_digest": "b36f222c46513b4c28fa67cd69ded74421ac7b5909f1bf299a459d36a920abd6"
+            }
+          ],
+          "fetch_calls": 1,
+          "input_tokens": 0,
+          "latency_ms": 1,
+          "monetary_microunits": 0,
+          "output_tokens": 0,
+          "packet_sha256": "36f8d0b04e0ab273aa7c0c3648829766ce99877e6f28acfa1b3574be6c3459b7",
+          "question_digest": "59aa69793eea2d4b08818b9bf0aaa47a20bba65722c75f77313a508178fc93b5",
+          "raw_evidence_stored": false,
+          "schema": "foil.evidence-packet.v1",
+          "search_calls": 1,
+          "spans": [
+            {
+              "document_id": "doc-retrieval-3",
+              "end_offset": 55,
+              "raw_text_stored": false,
+              "span_id": "span-retrieval-3",
+              "start_offset": 53,
+              "text_sha256": "200baec47c61ff565118fa2ec9074b63a4ff98bce0c2dbb911ee69397b4745de"
+            }
+          ],
+          "tool_calls": 2
+        },
+        "final_digest": "200baec47c61ff565118fa2ec9074b63a4ff98bce0c2dbb911ee69397b4745de",
+        "ledger_after": {
+          "active_call_ids": [],
+          "counts_cached_input": true,
+          "maximum_total_tokens": 1,
+          "remaining_unreserved_tokens": 1,
+          "requires_provider_enforced_reservations": true,
+          "reserved_total_tokens": 0,
+          "schema": "foil.benchmark-token-ledger.v1",
+          "spent_total_tokens": 0
+        },
+        "ledger_before": {
+          "active_call_ids": [],
+          "counts_cached_input": true,
+          "maximum_total_tokens": 1,
+          "remaining_unreserved_tokens": 1,
+          "requires_provider_enforced_reservations": true,
+          "reserved_total_tokens": 0,
+          "schema": "foil.benchmark-token-ledger.v1",
+          "spent_total_tokens": 0
+        },
+        "opportunity_status": "FOUND",
+        "plan_decisions": [
+          {
+            "damage_ucb_ppm": null,
+            "invalid_ucb_ppm": null,
+            "maximum_total_tokens": 1,
+            "observations": 0,
+            "plan_id": "plan-retrieval-3",
+            "probabilities_from_model_self_report": false,
+            "reason": "explicit_bounded_plan_exploration",
+            "rescue_lcb_ppm": null,
+            "route_key": "SCHOLARLY_RETRIEVAL",
+            "status": "EXECUTE_EXPLORATION",
+            "utility_lower_bound_microunits": null
+          }
+        ],
+        "production_authorized": false,
+        "promotion_authorized": false,
+        "question_digest": "59aa69793eea2d4b08818b9bf0aaa47a20bba65722c75f77313a508178fc93b5",
+        "question_only_plan_selection": true,
+        "raw_a0_stored": false,
+        "raw_candidate_stored": false,
+        "raw_evidence_stored": false,
+        "raw_question_stored": false,
+        "reason": "strict_evidence_preference_selected_b_in_benchmark",
+        "run_sha256": "82b5db23bbaa9b82d7e2edb3a9d4ba1cabbf639c9e44c5f70b492cefead5dbae",
+        "schema": "foil.evidence-closed-benchmark-run.v1",
+        "selected_plan": {
+          "a0_digest": "d41be9ad11f483bd49cf05e5624e93b769de2b603a77185630c6427f8cc5cb3c",
+          "answer_change_authority": false,
+          "benchmark_only": true,
+          "contract_sha256": "572a58867ea3ae1e2419cde4a4eb212f84bd2d1fb3dec8e7f6530347cc46d25c",
+          "cost": {
+            "maximum_cached_input_tokens": 0,
+            "maximum_evidence_characters": 128,
+            "maximum_fetch_calls": 1,
+            "maximum_input_tokens": 0,
+            "maximum_latency_ms": 100,
+            "maximum_model_passes": 2,
+            "maximum_monetary_microunits": 0,
+            "maximum_output_tokens": 1,
+            "maximum_search_calls": 1,
+            "maximum_sources": 1,
+            "maximum_tool_calls": 2,
+            "maximum_total_tokens": 1,
+            "privacy_cost_microunits": 0,
+            "retry_count": 0
+          },
+          "plan_id": "plan-retrieval-3",
+          "plan_version": "pilot-1",
+          "provider_cap_enforced": true,
+          "question_digest": "59aa69793eea2d4b08818b9bf0aaa47a20bba65722c75f77313a508178fc93b5",
+          "raw_a0_stored": false,
+          "raw_question_stored": false,
+          "read_only": true,
+          "route_key": "SCHOLARLY_RETRIEVAL",
+          "schema": "foil.tool-plan-contract.v2",
+          "steps": [
+            {
+              "depends_on": [],
+              "family": "RETRIEVAL",
+              "operation": "SCHOLARLY_RETRIEVAL",
+              "operation_input_digest": "59aa69793eea2d4b08818b9bf0aaa47a20bba65722c75f77313a508178fc93b5",
+              "step_id": "retrieve"
+            }
+          ],
+          "task_id": "retrieval-3"
+        },
+        "selection": {
+          "a0_digest": "d41be9ad11f483bd49cf05e5624e93b769de2b603a77185630c6427f8cc5cb3c",
+          "a0_fallback": true,
+          "answer_changed": true,
+          "benchmark_only": true,
+          "candidate_digest": "200baec47c61ff565118fa2ec9074b63a4ff98bce0c2dbb911ee69397b4745de",
+          "outcome": "SELECT_B_BENCHMARK_UNADMITTED",
+          "production_authorized": false,
+          "promotion_authorized": false,
+          "raw_answer_stored": false,
+          "reason": "strict_evidence_preference_selected_b_in_benchmark",
+          "schema": "foil.evidence-closed-selection.v1",
+          "selected_digest": "200baec47c61ff565118fa2ec9074b63a4ff98bce0c2dbb911ee69397b4745de",
+          "selection_sha256": "ed694b81eca08c3aea690b345d90bbe34c833587213a02837c3fa6194e2d6978"
+        },
+        "task_id": "retrieval-3"
+      },
+      "task_id": "retrieval-3"
+    },
+    {
+      "a0": "section 9",
+      "final": "section 14",
+      "question_digest": "d0c0d7ad73adcaeaa2cc5361f63c7946f45eaa0d454fbf877c1467a9640a7381",
+      "run": {
+        "a0_assessment": {
+          "actual_total_tokens": 0,
+          "answer_identity_exposed_to_semantic_comparator": false,
+          "candidate": {
+            "answer_id": "answer-767faaeebee194b3",
+            "answer_kind": "EXACT_TEXT",
+            "answer_sha256": "c401fcc32ee5154262574b846a719065bab095014f74dd1e77925975a1dd37ff",
+            "claims": [
+              {
+                "claim_id": "claim-767faaeebee194b3",
+                "computation_receipt_ids": [],
+                "critical": true,
+                "evidence_span_ids": [],
+                "jurisdiction": null,
+                "kind": "ANSWER",
+                "normalized_value": "section 9",
+                "raw_text_stored": false,
+                "temporal_scope": null,
+                "text_sha256": "c401fcc32ee5154262574b846a719065bab095014f74dd1e77925975a1dd37ff",
+                "unit": null
+              }
+            ],
+            "origin": "BASE",
+            "raw_answer_stored": false
+          },
+          "claim_conservation": true,
+          "claim_count": 1,
+          "contradicted": 1,
+          "fully_supported": false,
+          "has_critical_contradiction": true,
+          "latency_ms": 0,
+          "model_passes": 1,
+          "monetary_microunits": 0,
+          "omitted": 0,
+          "selection_eligible": false,
+          "supported": 0,
+          "unresolved": 0,
+          "verdicts": [
+            {
+              "authority": "SEMANTIC_UNCALIBRATED",
+              "cached_input_tokens": 0,
+              "claim_id": "claim-767faaeebee194b3",
+              "computation_receipt_ids": [],
+              "confidence_ppm": 1000000,
+              "evidence_span_ids": [
+                "span-retrieval-4"
+              ],
+              "input_tokens": 0,
+              "latency_ms": 0,
+              "method": "SEMANTIC_CALLBACK",
+              "model_passes": 1,
+              "monetary_microunits": 0,
+              "output_tokens": 0,
+              "reason": "synthetic_exact_value_comparison",
+              "status": "CONTRADICTED"
+            }
+          ]
+        },
+        "a0_digest": "c401fcc32ee5154262574b846a719065bab095014f74dd1e77925975a1dd37ff",
+        "a0_fallback": true,
+        "active_route": {
+          "a0_digest": "c401fcc32ee5154262574b846a719065bab095014f74dd1e77925975a1dd37ff",
+          "action": "SELECT_VERIFIED",
+          "answer_changed": true,
+          "benchmark_only": true,
+          "cached_input_tokens": 0,
+          "candidate_digest": "b206fe8007497fd6ceadb3fc59e2e729cf3daaaf659f37e6ee996accd9cb7589",
+          "candidate_verified": true,
+          "contract_valid": true,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "production_authorized": false,
+          "promotion_authorized": false,
+          "raw_answer_stored": false,
+          "reason": "verified_candidate_selected",
+          "rejection_reasons": [],
+          "route": "VERIFY",
+          "route_budget_exceeded": false,
+          "route_calls": 1,
+          "schema": "foil.adaptive-active-benchmark-receipt.v2",
+          "selected_digest": "b206fe8007497fd6ceadb3fc59e2e729cf3daaaf659f37e6ee996accd9cb7589",
+          "tool_event_types": [
+            "search",
+            "fetch"
+          ]
+        },
+        "answer_changed": true,
+        "b_assessment": {
+          "actual_total_tokens": 0,
+          "answer_identity_exposed_to_semantic_comparator": false,
+          "candidate": {
+            "answer_id": "constructed-77f5f23ff7d2ac94",
+            "answer_kind": "EXACT_TEXT",
+            "answer_sha256": "b206fe8007497fd6ceadb3fc59e2e729cf3daaaf659f37e6ee996accd9cb7589",
+            "claims": [
+              {
+                "claim_id": "claim-retrieval-4",
+                "computation_receipt_ids": [],
+                "critical": true,
+                "evidence_span_ids": [
+                  "span-retrieval-4"
+                ],
+                "jurisdiction": null,
+                "kind": "ANSWER",
+                "normalized_value": "section 14",
+                "raw_text_stored": false,
+                "temporal_scope": null,
+                "text_sha256": "b206fe8007497fd6ceadb3fc59e2e729cf3daaaf659f37e6ee996accd9cb7589",
+                "unit": null
+              }
+            ],
+            "origin": "EVIDENCE_CONSTRUCTED",
+            "raw_answer_stored": false
+          },
+          "claim_conservation": true,
+          "claim_count": 1,
+          "contradicted": 0,
+          "fully_supported": true,
+          "has_critical_contradiction": false,
+          "latency_ms": 0,
+          "model_passes": 0,
+          "monetary_microunits": 0,
+          "omitted": 0,
+          "selection_eligible": true,
+          "supported": 1,
+          "unresolved": 0,
+          "verdicts": [
+            {
+              "authority": "MECHANICAL",
+              "cached_input_tokens": 0,
+              "claim_id": "claim-retrieval-4",
+              "computation_receipt_ids": [],
+              "confidence_ppm": 1000000,
+              "evidence_span_ids": [
+                "span-retrieval-4"
+              ],
+              "input_tokens": 0,
+              "latency_ms": 0,
+              "method": "EXACT_BOUND_SPAN",
+              "model_passes": 0,
+              "monetary_microunits": 0,
+              "output_tokens": 0,
+              "reason": "claim_is_exact_normalized_bound_span",
+              "status": "SUPPORTED"
+            }
+          ]
+        },
+        "benchmark_only": true,
+        "comparator_answer_identity_exposed": false,
+        "constructor": {
+          "a0_exposed": false,
+          "actual_total_tokens": 0,
+          "cached_input_tokens": 0,
+          "candidate": {
+            "answer_id": "constructed-77f5f23ff7d2ac94",
+            "answer_kind": "EXACT_TEXT",
+            "answer_sha256": "b206fe8007497fd6ceadb3fc59e2e729cf3daaaf659f37e6ee996accd9cb7589",
+            "claims": [
+              {
+                "claim_id": "claim-retrieval-4",
+                "computation_receipt_ids": [],
+                "critical": true,
+                "evidence_span_ids": [
+                  "span-retrieval-4"
+                ],
+                "jurisdiction": null,
+                "kind": "ANSWER",
+                "normalized_value": "section 14",
+                "raw_text_stored": false,
+                "temporal_scope": null,
+                "text_sha256": "b206fe8007497fd6ceadb3fc59e2e729cf3daaaf659f37e6ee996accd9cb7589",
+                "unit": null
+              }
+            ],
+            "origin": "EVIDENCE_CONSTRUCTED",
+            "raw_answer_stored": false
+          },
+          "evidence_packet_sha256": "50f3ad6fc03929586ba69b4990fa3909ad3f054713af144535ca74ea983676ed",
+          "input_tokens": 0,
+          "latency_ms": 0,
+          "model_passes": 1,
+          "monetary_microunits": 0,
+          "outcome": "CANDIDATE",
+          "output_tokens": 0,
+          "question_digest": "d0c0d7ad73adcaeaa2cc5361f63c7946f45eaa0d454fbf877c1467a9640a7381",
+          "raw_candidate_stored": false,
+          "reason": "deterministic_single_span_constructor",
+          "receipt_sha256": "8e4b14c9170143f68cd3f10845567e7ddad4897939f7b0ac22ab86f5fcc32560",
+          "retry_count": 0,
+          "schema": "foil.bounded-constructor-receipt.v1",
+          "tools_available": false
+        },
+        "constructor_a0_exposed": false,
+        "cost_accounting_complete": true,
+        "evidence_packet": {
+          "actual_total_tokens": 0,
+          "cached_input_tokens": 0,
+          "computations": [],
+          "documents": [
+            {
+              "content_safety": "SANITIZED_DATA_ONLY",
+              "content_sha256": "22a6d1494446c80ff0611e07e35ed6ae1e601466bea622cd2ffdd219729c3088",
+              "document_id": "doc-retrieval-4",
+              "independent_group": "synthetic-retrieval-4",
+              "jurisdiction": null,
+              "raw_content_stored": false,
+              "retrieved_at": "2026-08-28T00:00:00Z",
+              "source_class": "PRIMARY",
+              "source_url": "https://example.com/sample-legislation",
+              "temporal_scope": null,
+              "title_digest": "bcd305dd736241b49c63a9b937b02af56b47e535b9aa8e92b2c09abb978a30e1"
+            }
+          ],
+          "fetch_calls": 1,
+          "input_tokens": 0,
+          "latency_ms": 1,
+          "monetary_microunits": 0,
+          "output_tokens": 0,
+          "packet_sha256": "50f3ad6fc03929586ba69b4990fa3909ad3f054713af144535ca74ea983676ed",
+          "question_digest": "d0c0d7ad73adcaeaa2cc5361f63c7946f45eaa0d454fbf877c1467a9640a7381",
+          "raw_evidence_stored": false,
+          "schema": "foil.evidence-packet.v1",
+          "search_calls": 1,
+          "spans": [
+            {
+              "document_id": "doc-retrieval-4",
+              "end_offset": 51,
+              "raw_text_stored": false,
+              "span_id": "span-retrieval-4",
+              "start_offset": 41,
+              "text_sha256": "b206fe8007497fd6ceadb3fc59e2e729cf3daaaf659f37e6ee996accd9cb7589"
+            }
+          ],
+          "tool_calls": 2
+        },
+        "final_digest": "b206fe8007497fd6ceadb3fc59e2e729cf3daaaf659f37e6ee996accd9cb7589",
+        "ledger_after": {
+          "active_call_ids": [],
+          "counts_cached_input": true,
+          "maximum_total_tokens": 1,
+          "remaining_unreserved_tokens": 1,
+          "requires_provider_enforced_reservations": true,
+          "reserved_total_tokens": 0,
+          "schema": "foil.benchmark-token-ledger.v1",
+          "spent_total_tokens": 0
+        },
+        "ledger_before": {
+          "active_call_ids": [],
+          "counts_cached_input": true,
+          "maximum_total_tokens": 1,
+          "remaining_unreserved_tokens": 1,
+          "requires_provider_enforced_reservations": true,
+          "reserved_total_tokens": 0,
+          "schema": "foil.benchmark-token-ledger.v1",
+          "spent_total_tokens": 0
+        },
+        "opportunity_status": "FOUND",
+        "plan_decisions": [
+          {
+            "damage_ucb_ppm": null,
+            "invalid_ucb_ppm": null,
+            "maximum_total_tokens": 1,
+            "observations": 0,
+            "plan_id": "plan-retrieval-4",
+            "probabilities_from_model_self_report": false,
+            "reason": "explicit_bounded_plan_exploration",
+            "rescue_lcb_ppm": null,
+            "route_key": "WEB_RETRIEVAL",
+            "status": "EXECUTE_EXPLORATION",
+            "utility_lower_bound_microunits": null
+          }
+        ],
+        "production_authorized": false,
+        "promotion_authorized": false,
+        "question_digest": "d0c0d7ad73adcaeaa2cc5361f63c7946f45eaa0d454fbf877c1467a9640a7381",
+        "question_only_plan_selection": true,
+        "raw_a0_stored": false,
+        "raw_candidate_stored": false,
+        "raw_evidence_stored": false,
+        "raw_question_stored": false,
+        "reason": "strict_evidence_preference_selected_b_in_benchmark",
+        "run_sha256": "732da702bb7ef2f6d88a3cfa8ef786bccf4ed16c711a3d3a2890f873f49f13cf",
+        "schema": "foil.evidence-closed-benchmark-run.v1",
+        "selected_plan": {
+          "a0_digest": "c401fcc32ee5154262574b846a719065bab095014f74dd1e77925975a1dd37ff",
+          "answer_change_authority": false,
+          "benchmark_only": true,
+          "contract_sha256": "23e5f19f86147418721ef0606e13a6e5e4b14deef5e0710559ae371a1d20af98",
+          "cost": {
+            "maximum_cached_input_tokens": 0,
+            "maximum_evidence_characters": 128,
+            "maximum_fetch_calls": 1,
+            "maximum_input_tokens": 0,
+            "maximum_latency_ms": 100,
+            "maximum_model_passes": 2,
+            "maximum_monetary_microunits": 0,
+            "maximum_output_tokens": 1,
+            "maximum_search_calls": 1,
+            "maximum_sources": 1,
+            "maximum_tool_calls": 2,
+            "maximum_total_tokens": 1,
+            "privacy_cost_microunits": 0,
+            "retry_count": 0
+          },
+          "plan_id": "plan-retrieval-4",
+          "plan_version": "pilot-1",
+          "provider_cap_enforced": true,
+          "question_digest": "d0c0d7ad73adcaeaa2cc5361f63c7946f45eaa0d454fbf877c1467a9640a7381",
+          "raw_a0_stored": false,
+          "raw_question_stored": false,
+          "read_only": true,
+          "route_key": "WEB_RETRIEVAL",
+          "schema": "foil.tool-plan-contract.v2",
+          "steps": [
+            {
+              "depends_on": [],
+              "family": "RETRIEVAL",
+              "operation": "WEB_RETRIEVAL",
+              "operation_input_digest": "d0c0d7ad73adcaeaa2cc5361f63c7946f45eaa0d454fbf877c1467a9640a7381",
+              "step_id": "retrieve"
+            }
+          ],
+          "task_id": "retrieval-4"
+        },
+        "selection": {
+          "a0_digest": "c401fcc32ee5154262574b846a719065bab095014f74dd1e77925975a1dd37ff",
+          "a0_fallback": true,
+          "answer_changed": true,
+          "benchmark_only": true,
+          "candidate_digest": "b206fe8007497fd6ceadb3fc59e2e729cf3daaaf659f37e6ee996accd9cb7589",
+          "outcome": "SELECT_B_BENCHMARK_UNADMITTED",
+          "production_authorized": false,
+          "promotion_authorized": false,
+          "raw_answer_stored": false,
+          "reason": "strict_evidence_preference_selected_b_in_benchmark",
+          "schema": "foil.evidence-closed-selection.v1",
+          "selected_digest": "b206fe8007497fd6ceadb3fc59e2e729cf3daaaf659f37e6ee996accd9cb7589",
+          "selection_sha256": "b97c8851c0ca72695c9bcb8309fc1b87748a247176b246c076cb474aaa5d34bb"
+        },
+        "task_id": "retrieval-4"
+      },
+      "task_id": "retrieval-4"
+    }
+  ],
+  "promotion_authorized": false,
+  "retrieval_corpus_digest": "3eb47d2392a6b1c516393f39944992e920bd706478c59c833df3a2b65c0cb360",
+  "schema": "foil.evidence-closed-pilot-predictions.v1"
+}
