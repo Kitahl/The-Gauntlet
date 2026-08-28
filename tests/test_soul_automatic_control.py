@@ -206,7 +206,7 @@ class SoulHookFailClosedTests(unittest.TestCase):
             self.assertEqual(payload["decision"], "block")
             self.assertIn("failed closed", payload["reason"])
             self.assertNotIn("must not be persisted", payload["reason"])
-            events = RuntimeStore(root).events_for(task.task_id)
+            events = RuntimeStore(root).iter_events(task.task_id)
             self.assertTrue(
                 any(
                     row.get("event_type") == "orchestrator.unavailable"
