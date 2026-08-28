@@ -29,6 +29,7 @@
     "release_gate": true,
     "active_task_required_for_gate": true,
     "strict_active_task": false,
+    "automatic_prompt_bootstrap": true,
     "automatic_task_supersession": true,
     "automatic_graph_revision": true,
     "automatic_route_all_ready": true,
