@@ -1,11 +1,11 @@
 ---
 name: infinity-gauntlet
-description: Process Assurance Framework. Trigger: /gauntlet, repeated failed attempts, ungated kill/finding, last-surviving option, inherited number, stale authority, cross-context handoff, unclear architecture, or an all-green verification claim. Audits the frame and process behind a result, not only the result.
+description: Process Assurance Framework. Trigger: /gauntlet, release attempts, repeated failures, ungated findings, last-surviving options, inherited values, stale authority, handoffs, unclear architecture, or all-green claims. Runs automatically and preserves full applicable release assurance; selective reduction is experimental only.
 ---
 
 # Process Assurance Framework
 
-The framework is a self-audit layer worn by the Research Orchestrator.
+Gauntlet is the automatic process-assurance layer worn by the Research Orchestrator. It examines represented process hazards that ordinary candidate verification may miss. It never substitutes for proof, source assessment, execution, evaluation, or host adoption.
 
 Runtime automation is external to this skill:
 
@@ -14,49 +14,99 @@ Runtime automation is external to this skill:
 - `tools/gauntlet_boundary.py`
 - `tools/gauntlet_monitor.py`
 - `tools/gauntlet_hook.py`
+- `tools/gauntlet_runtime.py`
+- `tools/gauntlet_automatic.py`
 - `tools/verify_ledger.py`
 - optional `tools/scout.py`, `tools/blackgem_runtime.py`, `tools/snap.py`
 
-See `docs/RUNTIME_SETUP.md`.
+See `docs/RUNTIME_SETUP.md`, `docs/specs/GAUNTLET_ENGINEERING_SPEC.md`, and `docs/specs/GAUNTLET_AUTOMATIC_SPEC.md`.
 
 ## Ten operations
 
-| operation | trigger | action |
+| operation | trigger | discriminator |
 |---|---|---|
-| `frame` | repeated attempts share a failure shape | identify the shared invariant and change representation/assumption/method |
-| `audit` | a kill/finding is about to be accepted | reconstruct criterion, evidence, and decision path |
-| `costume` | last survivor or novelty framing | classify nearest prior art and actual delta |
-| `derive` | inherited number/label becomes a premise | recompute from the nearest raw artifact |
-| `self` | relying on your own load-bearing read | preregister expectation/refuter and declare authorship/selection contamination |
-| `redirect` | much work, core claim still unknown | identify the load-bearing unknown and whether current work is upstream |
-| `refresh` | governing state may be stale | reread current authoritative source/state |
-| `boundary` | handoff/concurrent mutation | pin assumptions/interfaces/ownership in artifacts |
-| `explain` | understanding/docs uncertain | explain plainly and diff against artifacts |
-| `oob` | everything is green | enumerate relevant failure classes no current gate observes |
+| `frame` | repeated failures share a signature | determine whether the same representation or assumption is failing |
+| `audit` | release is attempted | inspect current task-scoped load-bearing receipts, excluding Gauntlet's own circular obligation |
+| `costume` | novelty or last-survivor claim | require a current source-assessed prior-art receipt |
+| `derive` | inherited number or label becomes a premise | require a task-scoped cleared Mind derivation |
+| `self` | load-bearing evidence is attached | compare producer, verifier, and provenance; missing provenance is unresolved |
+| `redirect` | repeated work may be stagnant | compare frozen blocker and progress hashes |
+| `refresh` | governing state may be stale | require a current registered authority state and content-bound reconciliation where applicable |
+| `boundary` | handoff or concurrent ownership transfer | require a non-empty handoff ID and content-bound contract |
+| `explain` | explanation and artifact may diverge | compare fully bound claim IDs and hashes; free-text entailment remains assisted |
+| `oob` | release is attempted after ordinary checks pass | require a valid, verifier-identified, artifact/scope-bound probe for a named failure class |
 
-Use the smallest relevant set; do not ritualize all ten.
+## Typed runtime contract — automatic default
 
-## Runtime contract
+`tools/gauntlet_runtime.py` remains the low-level registry and monitor implementation. `tools/gauntlet_automatic.py` is the default controller.
 
-- optional integrations are feature-detected;
-- missing integrations are `UNAVAILABLE`, not fabricated pass/fail;
-- no machine-specific path is assumed;
-- state lives under the configured project runtime directory, not `.git/`;
-- OpenRouter credentials are environment-only;
-- the Stop hook honors `stop_hook_active` to avoid recursive continuation;
-- deterministic strong tool-loop evidence can trigger `frame` without an LLM judge; semantic precision checks may use an independently configured model when available.
+At release, `AUTOMATIC_FULL`:
+
+1. freezes one task-scoped event/receipt snapshot;
+2. determines which canonical operations are currently applicable;
+3. executes **every applicable operation**, not a budget-reduced prefix;
+4. ignores structural budgets as advisory rather than silently omitting release checks;
+5. runs the complete applicable sweep even after the first issue so one repair cycle can expose all represented blockers;
+6. verifies the internal RuntimeStore receipt→event chain used by the monitors;
+7. emits one compact `ASSURANCE_ONLY` receipt.
+
+Selective, budget-constrained, or early-stop execution remains available only through explicitly named `*_EXPERIMENTAL` policies. Those modes cannot be confused with the production automatic path.
+
+The existing Stop-hook recursion guard remains active through `stop_hook_active`; this upgrade does not weaken or replace the hook boundary.
+
+## Automaticity without silent capability loss
+
+Gauntlet remains automatic. No human must choose individual checks at release. The controller uses triggers to determine applicability and ordering, but the production release mode does not use those triggers to discard applicable checks.
+
+If the persisted receipt/event chain is incomplete, the result is `UNKNOWN`; a broken event chain cannot manufacture a green assurance receipt. This check is scoped to `RUNTIME_STORE_REPRESENTED_HAZARDS`. It does not claim that every possible real-world hazard was represented.
+
+The controller borrows only general mechanics:
+
+- FOIL-style task-local discriminators and explicit uncertainty;
+- Foundry-style route availability and cost accounting;
+- Mastermind-style frozen state, negative controls, and no self-promotion.
+
+Gauntlet imports none of those control planes. It does not import `foil_*`, execute Foundry, or advance Mastermind state.
+
+## Tools and token discipline
+
+Typed checks run before semantic tools. The automatic controller scans the task ledger once, reuses that frozen snapshot, and emits one aggregate receipt. It does not call a model merely to restate a deterministic issue.
+
+An assisted semantic capability may be routed automatically when typed evidence cannot decide the relevant operation, but tool output remains an observation and cannot clear a target-domain obligation.
+
+Reported `cost_units` are an `UNCALIBRATED_ORDERING_PROXY`, not measured model tokens, money, CPU, latency, or scientific performance. Token-efficiency and benchmark-score gains require prospective matched evaluation.
+
+## Result semantics
+
+- `ISSUE`: a represented process hazard is established.
+- `UNAVAILABLE`: a required method or capability cannot run.
+- `UNKNOWN`: evidence is absent, incomplete, unbound, provenance-ambiguous, or the RuntimeStore event chain is incomplete.
+- `CLEARED`: every applicable operation cleared and the represented runtime event chain is internally complete.
+
+`CLEARED` applies only to an `ASSURANCE` obligation. It cannot clear proof, discovery, synthesis, engineering, evaluation, review, adaptation, or adversary obligations.
 
 ## Output
 
 **PROCESS ASSURANCE**
-- Fired: `<operations>`
+- Plan: `<plan hash and automatic mode>`
+- Applicable: `<all applicable canonical operations>`
+- Executed: `<all applicable operations in production full mode>`
+- Deferred: `<experimental modes only>`
 - Claim/frame: `<target>`
-- Evidence inspected: `<actual artifacts/runs>`
+- Evidence inspected: `<task-scoped artifact/receipt/event hashes>`
 - Counterevidence: `<strongest live challenger>`
+- Runtime event coverage: `ESTABLISHED_RUNTIME_EVENT_CHAIN | UNKNOWN_RUNTIME_EVENT_CHAIN`
 - Result: `CLEARED | ISSUE | UNKNOWN | UNAVAILABLE`
-- Consequence: `<what can proceed>`
-- Next discriminator: `<only if unresolved>`
+- Consequence: `<what may or may not proceed>`
+- Next discriminator: `<only when unresolved>`
+- Cost status: `UNCALIBRATED_ORDERING_PROXY`
+- Efficacy status: `NOT_ESTABLISHED` unless prospectively measured
 
-## Typed runtime contract
+## Portable runtime
 
-`tools/gauntlet_runtime.py` now declares the implementation/support mode and required typed state for all ten operations. Automatic monitors may return `UNKNOWN` when their required state is absent and `UNAVAILABLE` when a required semantic method/tool cannot run; silence is not equivalent to a negative finding. Existing boundary/monitor hooks remain compatibility detectors during migration. See `docs/specs/GAUNTLET_ENGINEERING_SPEC.md`.
+Before using a named tool, path, solver, API, or profile:
+
+1. verify it exists in the active environment;
+2. use it if present;
+3. otherwise route to an explicitly available equivalent or report `UNAVAILABLE`;
+4. never invent tool output or background execution.
