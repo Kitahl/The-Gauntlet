@@ -17,10 +17,11 @@ checks: dict[str, bool] = {}
 RUNTIME_FILES = [
     "tools/egrt_types.py", "tools/egrt_store.py", "tools/egrt_hook.py", "tools/egrt_runtime.py",
     "tools/egrt_challenge_types.py", "tools/egrt_challenge.py", "tools/egrt_candidate_gate.py",
-    "tools/soul_runtime.py", "tools/gauntlet_runtime.py", "tools/gauntlet_automatic.py",
-    "tools/meditate_runtime.py", "tools/council_runtime.py", "tools/mind_runtime.py",
-    "tools/space_runtime.py", "tools/reality_runtime.py", "tools/power_runtime.py",
-    "tools/time_runtime.py", "tools/foil_runtime_bridge.py", "tools/blackgem_runtime.py",
+    "tools/soul_runtime.py", "tools/soul_automatic.py", "tools/gauntlet_runtime.py",
+    "tools/gauntlet_automatic.py", "tools/meditate_runtime.py", "tools/council_runtime.py",
+    "tools/mind_runtime.py", "tools/space_runtime.py", "tools/reality_runtime.py",
+    "tools/power_runtime.py", "tools/time_runtime.py", "tools/foil_runtime_bridge.py",
+    "tools/blackgem_runtime.py",
 ]
 SPEC_FILES = [
     "docs/specs/COMMON_RUNTIME_CONTRACT.md", "docs/specs/CHALLENGE_ENGINEERING_SPEC.md",

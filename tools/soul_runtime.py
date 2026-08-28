@@ -1,198 +1,209 @@
-"""Typed Research Orchestrator runtime: obligations, routing and release gate."""
+"""Public compatibility surface for the automatic Research Orchestrator."""
 from __future__ import annotations
 
 import argparse
 import json
+from dataclasses import asdict
 from pathlib import Path
 
-from egrt_store import RuntimeStore, new_id, utcnow
-from egrt_types import (
-    Obligation,
-    ObligationKind,
-    RuntimeEvent,
-    TaskState,
-    Verdict,
-    digest,
-    text_digest,
+from egrt_types import ObligationKind, Verdict
+from soul_automatic import (
+    MODULE_FOR_KIND,
+    SOUL_AUTOMATIC_SCHEMA,
+    SOUL_SCHEMA,
+    ActiveTaskError,
+    RouteBatch,
+    RouteCandidate,
+    RoutingPlan,
+    RoutingPolicy,
+    SoulError,
+    SoulGraphError,
+    add_obligation,
+    automatic_release as _automatic_release,
+    freeze_task,
+    plan_routes,
+    release_gate,
+    release_task,
+    resolve_current_task_id,
+    start_task,
 )
-from private_io import write_private_text
 
-MODULE_FOR_KIND = {
-    ObligationKind.PROOF: "mind",
-    ObligationKind.DISCOVERY: "space",
-    ObligationKind.SYNTHESIS: "reality",
-    ObligationKind.ENGINEERING: "power",
-    ObligationKind.EVALUATION: "time",
-    ObligationKind.ASSURANCE: "gauntlet",
-    ObligationKind.PREFLIGHT: "meditate",
-    ObligationKind.REVIEW: "council",
-    ObligationKind.ADAPTATION: "foil",
+_PUBLIC_ROUTE_INVARIANTS = {
     ObligationKind.ADVERSARY: "blackgem",
 }
+for _kind, _module in _PUBLIC_ROUTE_INVARIANTS.items():
+    if MODULE_FOR_KIND.get(_kind) != _module:
+        raise RuntimeError(f"Soul route registration drift: {_kind.value} -> {_module}")
 
 
-# Release severity, worst first. UNAVAILABLE must outrank CLEARED: a module that
-# could not run has not cleared anything.
-_SEVERITY = {
-    Verdict.CLEARED: 0,
-    Verdict.UNKNOWN: 1,
-    Verdict.UNAVAILABLE: 2,
-    Verdict.ISSUE: 3,
-}
+def automatic_release(root: Path, task_id: str) -> tuple[Verdict, dict]:
+    """Run the automatic route/assure/release cycle on current authority state.
 
+    A clean authority check is followed by a task-bound snapshot so Gauntlet's
+    ``refresh`` monitor sees the current governing state.  Detected drift remains an
+    ``authority.changed`` event and is intentionally not papered over by a new
+    snapshot.  Monitor failure is fail-closed downstream: ``refresh`` remains UNKNOWN
+    rather than being fabricated as clear.
+    """
 
-def _worse(left: Verdict, right: Verdict) -> Verdict:
-    return right if _SEVERITY[right] > _SEVERITY[left] else left
-
-
-def _module_for(obligation: dict) -> str | None:
+    current_id, _ = resolve_current_task_id(root, task_id)
     try:
-        return MODULE_FOR_KIND[ObligationKind(obligation["kind"])]
-    except (KeyError, ValueError):
-        return None
-
-
-def start_task(root: Path, goal: str, *, metadata: dict | None = None) -> TaskState:
-    store = RuntimeStore(root)
-    task = TaskState(task_id=new_id("task"), goal_hash=text_digest(goal), metadata=metadata or {})
-    store.write_task(task)
-    write_private_text(store.base / "active_task", task.task_id + "\n")
-    store.append_event(RuntimeEvent(
-        event_id=new_id("evt"), event_type="task.started", component="soul",
-        task_id=task.task_id, payload_hash=digest({"goal_hash": task.goal_hash}),
-        timestamp=utcnow(), metadata={"active": True},
-    ))
-    # A task gets its own registered-authority baseline so refresh monitoring is
-    # meaningful even when SessionStart happened before the typed task began.
-    try:
+        from gauntlet_monitor import check as authority_check
         from gauntlet_monitor import snapshot as authority_snapshot
-        authority_snapshot(root, task_id=task.task_id)
+
+        drift_code, _ = authority_check(root, emit_event=True)
+        if drift_code == 0:
+            authority_snapshot(root, task_id=current_id)
     except Exception:
-        # Failure to snapshot cannot be silently converted into CLEARED later:
-        # gauntlet.refresh will return UNKNOWN when no authority.snapshot exists.
+        # The automatic release path will still run.  Without a valid snapshot the
+        # Gauntlet refresh monitor cannot clear, which is the safe represented state.
         pass
-    return task
+    return _automatic_release(root, task_id)
 
-
-def add_obligation(root: Path, task_id: str, kind: ObligationKind, claim: str, *, load_bearing: bool = True, metadata: dict | None = None) -> Obligation:
-    store = RuntimeStore(root)
-    obligation = Obligation(
-        obligation_id=new_id("obl"),
-        kind=kind,
-        claim=claim,
-        load_bearing=load_bearing,
-        required_module=MODULE_FOR_KIND[kind],
-        metadata=metadata or {},
-    )
-    # Read-modify-write under an advisory lock: concurrent hook processes otherwise
-    # each append to a stale copy and all but the last obligation is lost.
-    with store.lock(f"task-{task_id}"):
-        raw = store.read_task(task_id)
-        if raw is None:
-            raise KeyError(f"unknown task {task_id}")
-        raw.setdefault("obligations", []).append(json.loads(json.dumps(obligation, default=lambda o: getattr(o, "value", o.__dict__))))
-        store.write_task(raw)
-    store.append_event(RuntimeEvent(
-        event_id=new_id("evt"), event_type="obligation.created", component="soul",
-        task_id=task_id, payload_hash=digest(obligation), timestamp=utcnow(),
-        metadata={"obligation_id": obligation.obligation_id, "kind": kind.value, "required_module": obligation.required_module, "load_bearing": load_bearing},
-    ))
-    return obligation
-
-
-def release_gate(root: Path, task_id: str) -> tuple[Verdict, dict]:
-    store = RuntimeStore(root)
-    task = store.read_task(task_id)
-    if task is None:
-        return Verdict.UNKNOWN, {"reason": "task-not-found"}
-    details = []
-    overall = Verdict.CLEARED
-    for obligation in task.get("obligations", []):
-        if not obligation.get("load_bearing", True):
-            continue
-        receipts = store.receipts_for(obligation["obligation_id"])
-        # An obligation with no explicit required_module still has one implied by its
-        # kind; falling back to "accept any module" would let an unrelated module
-        # clear it.
-        expected = obligation.get("required_module") or _module_for(obligation)
-        receipts = [
-            r for r in receipts
-            if r.get("module") == expected and r.get("task_id") == task_id
-        ]
-        if not receipts:
-            details.append({"obligation_id": obligation["obligation_id"], "verdict": Verdict.UNKNOWN.value, "reason": "missing-receipt"})
-            overall = _worse(overall, Verdict.UNKNOWN)
-            continue
-        # Each module owns the aggregate current state of its obligation. Historical
-        # receipts remain auditable, but the most recently stored valid receipt is
-        # authoritative for release; an old green result cannot mask a newer issue.
-        current = receipts[-1]
-        try:
-            verdict = Verdict(current.get("verdict", Verdict.UNKNOWN.value))
-        except ValueError:
-            verdict = Verdict.UNKNOWN
-        details.append({
-            "obligation_id": obligation["obligation_id"],
-            "verdict": verdict.value,
-            "receipt_id": current.get("receipt_id"),
-            "historical_receipt_ids": [r.get("receipt_id") for r in receipts[:-1]],
-        })
-        overall = _worse(overall, verdict)
-    return overall, {"task_id": task_id, "obligations": details}
-
-
-
-def release_task(root: Path, task_id: str) -> tuple[Verdict, dict]:
-    verdict, detail = release_gate(root, task_id)
-    if verdict != Verdict.CLEARED:
-        return verdict, detail
-    store = RuntimeStore(root)
-    task = store.read_task(task_id)
-    if task is None:
-        return Verdict.UNKNOWN, {"reason": "task-not-found", "task_id": task_id}
-    task["active"] = False
-    task["released"] = True
-    store.write_task(task)
-    active = store.base / "active_task"
-    if active.exists() and active.read_text(encoding="utf-8").strip() == task_id:
-        active.unlink()
-    store.append_event(RuntimeEvent(
-        event_id=new_id("evt"), event_type="release.completed", component="soul",
-        task_id=task_id, payload_hash=digest(detail), timestamp=utcnow(),
-        metadata={"verdict": verdict.value},
-    ))
-    return verdict, detail
 
 def main(argv: list[str] | None = None) -> int:
-    p = argparse.ArgumentParser()
-    p.add_argument("--root", default=".")
-    sub = p.add_subparsers(dest="cmd", required=True)
-    s = sub.add_parser("start")
-    s.add_argument("--goal", required=True)
-    a = sub.add_parser("add")
-    a.add_argument("task_id")
-    a.add_argument("kind", choices=[k.value for k in ObligationKind])
-    a.add_argument("--claim", required=True)
-    g = sub.add_parser("gate")
-    g.add_argument("task_id")
-    r = sub.add_parser("release")
-    r.add_argument("task_id")
-    args = p.parse_args(argv)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--root", default=".")
+    sub = parser.add_subparsers(dest="cmd", required=True)
+
+    start = sub.add_parser("start")
+    start.add_argument("--goal", required=True)
+    start.add_argument("--supersession-reason")
+
+    add = sub.add_parser("add")
+    add.add_argument("task_id")
+    add.add_argument("kind", choices=[kind.value for kind in ObligationKind])
+    add.add_argument("--claim", required=True)
+
+    freeze = sub.add_parser("freeze")
+    freeze.add_argument("task_id")
+
+    plan = sub.add_parser("plan")
+    plan.add_argument("task_id")
+    plan.add_argument(
+        "--mode",
+        choices=["AUTOMATIC_ALL_READY", "BUDGETED_EXPERIMENTAL"],
+        default="AUTOMATIC_ALL_READY",
+    )
+    plan.add_argument("--max-cost-units", type=int)
+    plan.add_argument("--max-obligations", type=int)
+    plan.add_argument("--no-batch", action="store_true")
+
+    gate = sub.add_parser("gate")
+    gate.add_argument("task_id")
+
+    release = sub.add_parser("release")
+    release.add_argument("task_id")
+
+    auto_release = sub.add_parser("automatic-release")
+    auto_release.add_argument("task_id")
+
+    current = sub.add_parser("current")
+    current.add_argument("task_id")
+
+    args = parser.parse_args(argv)
     root = Path(args.root).resolve()
     if args.cmd == "start":
-        task = start_task(root, args.goal)
-        print(json.dumps({"task_id": task.task_id, "goal_hash": task.goal_hash}, indent=2))
+        task = start_task(
+            root,
+            args.goal,
+            supersession_reason=args.supersession_reason,
+        )
+        print(
+            json.dumps(
+                {"task_id": task.task_id, "goal_hash": task.goal_hash},
+                indent=2,
+            )
+        )
         return 0
     if args.cmd == "add":
-        obligation = add_obligation(root, args.task_id, ObligationKind(args.kind), args.claim)
-        print(json.dumps({"obligation_id": obligation.obligation_id, "module": obligation.required_module}, indent=2))
+        obligation = add_obligation(
+            root,
+            args.task_id,
+            ObligationKind(args.kind),
+            args.claim,
+        )
+        current_id, lineage = resolve_current_task_id(root, args.task_id)
+        print(
+            json.dumps(
+                {
+                    "obligation_id": obligation.obligation_id,
+                    "module": obligation.required_module,
+                    "current_task_id": current_id,
+                    "supersession_chain": lineage,
+                },
+                indent=2,
+            )
+        )
         return 0
-    if args.cmd == "release":
+    if args.cmd == "freeze":
+        task = freeze_task(root, args.task_id)
+        print(
+            json.dumps(
+                {
+                    "requested_task_id": args.task_id,
+                    "task_id": task.get("task_id"),
+                    "obligation_set_hash": task.get("metadata", {}).get(
+                        "soul_obligation_set_hash"
+                    ),
+                },
+                indent=2,
+            )
+        )
+        return 0
+    if args.cmd == "plan":
+        route = plan_routes(
+            root,
+            args.task_id,
+            policy=RoutingPolicy(
+                mode=args.mode,
+                max_cost_units=args.max_cost_units,
+                max_obligations=args.max_obligations,
+                batch_same_module=not args.no_batch,
+            ),
+        )
+        print(json.dumps(asdict(route), indent=2))
+        return 0
+    if args.cmd == "current":
+        current_id, lineage = resolve_current_task_id(root, args.task_id)
+        print(
+            json.dumps(
+                {"task_id": current_id, "supersession_chain": lineage},
+                indent=2,
+            )
+        )
+        return 0
+    if args.cmd == "automatic-release":
+        verdict, detail = automatic_release(root, args.task_id)
+    elif args.cmd == "release":
         verdict, detail = release_task(root, args.task_id)
     else:
         verdict, detail = release_gate(root, args.task_id)
     print(json.dumps({"verdict": verdict.value, **detail}, indent=2))
     return 0 if verdict == Verdict.CLEARED else 2
+
+
+__all__ = [
+    "ActiveTaskError",
+    "MODULE_FOR_KIND",
+    "RouteBatch",
+    "RouteCandidate",
+    "RoutingPlan",
+    "RoutingPolicy",
+    "SOUL_AUTOMATIC_SCHEMA",
+    "SOUL_SCHEMA",
+    "SoulError",
+    "SoulGraphError",
+    "add_obligation",
+    "automatic_release",
+    "freeze_task",
+    "main",
+    "plan_routes",
+    "release_gate",
+    "release_task",
+    "resolve_current_task_id",
+    "start_task",
+]
 
 
 if __name__ == "__main__":

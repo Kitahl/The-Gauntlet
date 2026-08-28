@@ -111,7 +111,7 @@ checks["legacy_name_not_public"] = "mastermind" not in html.lower() and ">FOIL<"
 checks["benchmark_results_not_front_page"] = all(token not in html for token in ("94 / 94", "18 / 18", "HLE public", "ARC-AGI", "GPQA-Diamond", "BrowseComp four-way"))
 checks["activation_surface"] = all(command in html for command in ("/soul", "/foil", "/mind", "/space", "/reality", "/power", "/time", "/gauntlet", "/council"))
 checks["control_tools_visible"] = all(token in html for token in ("Soul · Research Orchestrator", "Mirror · Adaptive Reasoning Complement", "Gauntlet · Process Assurance", "Meditate · Decision Preflight", "Council · Evidence Review Panel"))
-expected_tool_files = 45  # 44 established public modules + gauntlet_automatic.py
+expected_tool_files = 46  # 44 established public modules + automatic Gauntlet and Soul
 checks["implementation_directory_exposed"] = len([p for p in (ROOT / "tools").glob("*.py") if p.name != "__init__.py"]) == expected_tool_files and "https://github.com/Kitahl/The-Gauntlet/tree/main/tools" in html
 
 skill_dirs = ["soul", "mathbot", "scoutbot", "novelbot", "codebot", "benchbot", "infinity-gauntlet", "meditate", "council-of-elders", "foil"]

@@ -8,11 +8,18 @@ import sys
 from egrt_store import RuntimeStore, new_id, utcnow
 from egrt_types import RuntimeEvent, Verdict, digest, text_digest
 from gauntlet_config import load_config, project_root
-from soul_runtime import release_task
+from soul_runtime import automatic_release
 
 ALIASES = {
-    "/soul": "soul", "/gauntlet": "gauntlet", "/foil": "foil", "/council": "council",
-    "/mind": "mind", "/space": "space", "/reality": "reality", "/power": "power", "/time": "time",
+    "/soul": "soul",
+    "/gauntlet": "gauntlet",
+    "/foil": "foil",
+    "/council": "council",
+    "/mind": "mind",
+    "/space": "space",
+    "/reality": "reality",
+    "/power": "power",
+    "/time": "time",
 }
 
 
@@ -21,8 +28,6 @@ def _payload() -> dict:
         data = json.load(sys.stdin)
     except (json.JSONDecodeError, UnicodeDecodeError, ValueError):
         return {}
-    # Valid JSON that is not an object (list/null/number/string) would crash every
-    # downstream `.get(...)`; treat it as an empty payload rather than raising.
     return data if isinstance(data, dict) else {}
 
 
@@ -38,20 +43,39 @@ def _active_task(store: RuntimeStore) -> str | None:
     return value or None
 
 
-def _event(store: RuntimeStore, event_type: str, component: str, payload_hash: str, metadata: dict | None = None, task_id: str | None = None) -> None:
-    store.append_event(RuntimeEvent(
-        event_id=new_id("evt"), event_type=event_type, component=component,
-        task_id=task_id if task_id is not None else _active_task(store), payload_hash=payload_hash,
-        timestamp=utcnow(), metadata=metadata or {},
-    ))
+def _event(
+    store: RuntimeStore,
+    event_type: str,
+    component: str,
+    payload_hash: str,
+    metadata: dict | None = None,
+    task_id: str | None = None,
+) -> None:
+    store.append_event(
+        RuntimeEvent(
+            event_id=new_id("evt"),
+            event_type=event_type,
+            component=component,
+            task_id=task_id if task_id is not None else _active_task(store),
+            payload_hash=payload_hash,
+            timestamp=utcnow(),
+            metadata=metadata or {},
+        )
+    )
 
 
 def session() -> int:
     store = _store()
-    _event(store, "session.started", "soul", digest({"schema": "egrt.runtime.v1"}), {
-        "raw_prompt_persisted": False,
-        "raw_tool_output_persisted": False,
-    })
+    _event(
+        store,
+        "session.started",
+        "soul",
+        digest({"schema": "egrt.runtime.v1"}),
+        {
+            "raw_prompt_persisted": False,
+            "raw_tool_output_persisted": False,
+        },
+    )
     return 0
 
 
@@ -67,11 +91,16 @@ def _explicit_aliases(raw: str) -> list[str]:
 def prompt() -> int:
     data = _payload()
     raw = str(data.get("prompt") or "")
-    # Persist a one-way digest plus explicit slash-command aliases only. No raw prompt.
-    _event(_store(), "prompt.received", "soul", text_digest(raw), {
-        "explicit_modules": _explicit_aliases(raw),
-        "length_bucket": min(len(raw) // 256, 20),
-    })
+    _event(
+        _store(),
+        "prompt.received",
+        "soul",
+        text_digest(raw),
+        {
+            "explicit_modules": _explicit_aliases(raw),
+            "length_bucket": min(len(raw) // 256, 20),
+        },
+    )
     return 0
 
 
@@ -87,12 +116,18 @@ def pre_tool() -> int:
     store = _store()
     tool_name, _, input_hash = _tool_fields(data)
     _event(store, "tool.pre", "soul", input_hash, {"tool_name": tool_name})
-    _event(store, "action.attempted", "soul", input_hash, {
-        "tool_name": tool_name,
-        "action_signature": digest({"tool_name": tool_name, "input_hash": input_hash}),
-        # blocker_hash/progress_hash are intentionally absent unless a component
-        # explicitly supplies them; Redirect will then return UNKNOWN, not guess.
-    })
+    _event(
+        store,
+        "action.attempted",
+        "soul",
+        input_hash,
+        {
+            "tool_name": tool_name,
+            "action_signature": digest(
+                {"tool_name": tool_name, "input_hash": input_hash}
+            ),
+        },
+    )
     return 0
 
 
@@ -107,16 +142,27 @@ def post_tool(*, force_error: bool = False) -> int:
     data = _payload()
     store = _store()
     tool_name, _, input_hash = _tool_fields(data)
-    # PostToolUse fires only on success; the separate PostToolUseFailure event carries
-    # the failure and routes here with force_error set, so a failed Bash call still
-    # produces the action.failed signal Frame relies on.
     is_error = force_error or _is_error(data)
-    _event(store, "tool.post", "soul", input_hash, {"tool_name": tool_name, "is_error": is_error})
+    _event(
+        store,
+        "tool.post",
+        "soul",
+        input_hash,
+        {"tool_name": tool_name, "is_error": is_error},
+    )
     if is_error:
-        _event(store, "action.failed", "soul", input_hash, {
-            "tool_name": tool_name,
-            "failure_signature": digest({"tool_name": tool_name, "input_hash": input_hash}),
-        })
+        _event(
+            store,
+            "action.failed",
+            "soul",
+            input_hash,
+            {
+                "tool_name": tool_name,
+                "failure_signature": digest(
+                    {"tool_name": tool_name, "input_hash": input_hash}
+                ),
+            },
+        )
     return 0
 
 
@@ -135,25 +181,34 @@ def stop() -> int:
     root = project_root()
     cfg = load_config(root)
     runtime_cfg = cfg.get("runtime", {})
-    if not runtime_cfg.get("enabled", True) or not runtime_cfg.get("release_gate", True):
+    if not runtime_cfg.get("enabled", True) or not runtime_cfg.get(
+        "release_gate",
+        True,
+    ):
         return 0
     store = RuntimeStore(root)
     task_id = _active_task(store)
     if not task_id:
-        # Typed tasks are opt-in. Ordinary small interactions are not forced into
-        # ceremony simply because hooks are installed.
         return 0
-    _event(store, "release.attempted", "soul", digest({"task_id": task_id}), task_id=task_id)
-    verdict, detail = release_task(root, task_id)
+    verdict, detail = automatic_release(root, task_id)
     if verdict == Verdict.CLEARED:
         return 0
-    print(json.dumps({
-        "decision": "block",
-        "reason": (
-            f"EGR release gate: {verdict.value}. Load-bearing obligations remain unresolved; "
-            f"inspect typed receipts before claiming completion. task={task_id}; detail_hash={digest(detail)[:16]}"
-        ),
-    }))
+    print(
+        json.dumps(
+            {
+                "decision": "block",
+                "reason": (
+                    f"Automatic EGR release gate: {verdict.value}. "
+                    "Soul automatically routed the current task and Gauntlet ran "
+                    "automatic applicable assurance; unresolved work remains. "
+                    f"requested_task={task_id}; "
+                    f"resolved_task={detail.get('resolved_task_id', task_id)}; "
+                    f"liveness={detail.get('routing_liveness_status', 'UNKNOWN')}; "
+                    f"detail_hash={digest(detail)[:16]}"
+                ),
+            }
+        )
+    )
     return 0
 
 
