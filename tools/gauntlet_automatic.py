@@ -1,19 +1,20 @@
 """Automatic-first Process Assurance controller.
 
 The low-level :mod:`gauntlet_runtime` registry and typed monitors remain the factual
-mechanism.  This controller restores the intended automatic behavior around them:
+mechanism. This controller restores the intended automatic behavior around them:
 release assurance evaluates every currently applicable canonical operation by default,
 does not silently drop checks because a structural budget is small, and does not stop
-automatically after the first issue.  Selective/budgeted execution remains available
+automatically after the first issue. Selective/budgeted execution remains available
 only as an explicitly experimental policy.
 
 The controller also checks the integrity-valid runtime event chain needed by the
-monitors.  That check is deliberately scoped to RuntimeStore records; it does not claim
+monitors. That check is deliberately scoped to RuntimeStore records; it does not claim
 that every real-world hazard was represented as an event.
 """
 from __future__ import annotations
 
 import json
+from collections import Counter
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Mapping, Sequence
@@ -29,14 +30,20 @@ _POLICY_MODES = {
     "SELECTIVE_EXPERIMENTAL",
     "FAST_BLOCK_EXPERIMENTAL",
 }
+_SEVERITY = {
+    Verdict.CLEARED: 0,
+    Verdict.UNKNOWN: 1,
+    Verdict.UNAVAILABLE: 2,
+    Verdict.ISSUE: 3,
+}
 
 
 @dataclass(frozen=True)
 class AutomaticAssurancePolicy:
     """Frozen automatic-assurance policy.
 
-    ``AUTOMATIC_FULL`` is the production default.  Structural budgets are advisory in
-    full modes so they cannot reduce release coverage.  They become hard limits only in
+    ``AUTOMATIC_FULL`` is the production default. Structural budgets are advisory in
+    full modes so they cannot reduce release coverage. They become hard limits only in
     explicitly experimental selective modes.
     """
 
@@ -85,6 +92,29 @@ def _event_types(events: Sequence[Mapping[str, Any]]) -> list[str]:
     return [str(event.get("event_type") or "") for event in events]
 
 
+def _receipt_order(row: Mapping[str, Any]) -> tuple[int, int, str]:
+    """Prefer the monotonic store sequence over caller-controlled wall-clock text."""
+
+    sequence = row.get("seq")
+    stamp = str(
+        row.get("stored_at")
+        or row.get("finished_at")
+        or row.get("started_at")
+        or ""
+    )
+    if isinstance(sequence, int) and not isinstance(sequence, bool):
+        return 1, sequence, stamp
+    return 0, 0, stamp
+
+
+def _ordered_receipts(
+    receipts: Sequence[Mapping[str, Any]],
+) -> list[dict[str, Any]]:
+    rows = [dict(receipt) for receipt in receipts]
+    rows.sort(key=_receipt_order)
+    return rows
+
+
 def _is_applicable(
     operation: str,
     events: Sequence[Mapping[str, Any]],
@@ -104,8 +134,10 @@ def _is_applicable(
             for event in events
         )
     if operation == "self":
-        return "evidence.attached" in types or any(
-            bool(receipt.get("evidence")) for receipt in receipts
+        return (
+            "release.attempted" in types
+            or "evidence.attached" in types
+            or any(bool(receipt.get("evidence")) for receipt in receipts)
         )
     if operation == "redirect":
         return types.count("action.attempted") >= 3
@@ -135,8 +167,9 @@ def _runtime_event_coverage(
     """Check the RuntimeStore event chain used by the typed monitors.
 
     This is not a proof that the external world emitted every event it should have.
-    It detects internal omissions between persisted receipts and their corresponding
-    typed events so selective logic cannot silently treat a broken event chain as green.
+    It detects internal omissions or content-binding substitutions between persisted
+    receipts and their corresponding typed events, so a damaged event chain cannot be
+    treated as green.
     """
 
     gaps: list[str] = []
@@ -156,48 +189,175 @@ def _runtime_event_coverage(
         if not isinstance(content_hash, str) or not content_hash:
             gaps.append(f"event-missing-content-hash:{event_id or 'unknown'}")
 
-    receipt_events = {
-        (
-            str(event.get("metadata", {}).get("receipt_id") or ""),
-            str(event.get("payload_hash") or ""),
-        )
-        for event in events
-        if event.get("event_type") == "receipt.written"
-    }
-    state_events = {
-        (
-            str(event.get("metadata", {}).get("obligation_id") or ""),
-            str(event.get("metadata", {}).get("state") or ""),
-        )
-        for event in events
-        if event.get("event_type") == "obligation.state"
-    }
-    evidence_counts: dict[str, int] = {}
+    actual_receipt_events: Counter[tuple[str, str]] = Counter()
+    actual_state_events: Counter[tuple[str, str, str]] = Counter()
+    actual_evidence_events: Counter[tuple[str, str]] = Counter()
     for event in events:
-        if event.get("event_type") != "evidence.attached":
-            continue
-        obligation_id = str(event.get("metadata", {}).get("obligation_id") or "")
-        evidence_counts[obligation_id] = evidence_counts.get(obligation_id, 0) + 1
+        metadata = event.get("metadata", {})
+        metadata = metadata if isinstance(metadata, Mapping) else {}
+        event_type = event.get("event_type")
+        payload_hash = str(event.get("payload_hash") or "")
+        if event_type == "receipt.written":
+            actual_receipt_events[
+                (str(metadata.get("receipt_id") or ""), payload_hash)
+            ] += 1
+        elif event_type == "obligation.state":
+            actual_state_events[
+                (
+                    str(metadata.get("obligation_id") or ""),
+                    str(metadata.get("state") or ""),
+                    payload_hash,
+                )
+            ] += 1
+        elif event_type == "evidence.attached":
+            actual_evidence_events[
+                (str(metadata.get("obligation_id") or ""), payload_hash)
+            ] += 1
 
+    required_receipt_events: Counter[tuple[str, str]] = Counter()
+    required_state_events: Counter[tuple[str, str, str]] = Counter()
+    required_evidence_events: Counter[tuple[str, str]] = Counter()
     for receipt in receipts:
         receipt_id = str(receipt.get("receipt_id") or "")
         receipt_hash = str(receipt.get("content_hash") or "")
         obligation_id = str(receipt.get("obligation_id") or "")
         verdict = str(receipt.get("verdict") or "")
-        if (receipt_id, receipt_hash) not in receipt_events:
-            gaps.append(f"receipt-event-missing:{receipt_id or 'unknown'}")
-        if (obligation_id, verdict) not in state_events:
-            gaps.append(f"obligation-state-event-missing:{obligation_id or 'unknown'}")
-        expected_evidence = sum(
-            1 for row in receipt.get("evidence", []) if isinstance(row, Mapping)
-        )
-        if evidence_counts.get(obligation_id, 0) < expected_evidence:
-            gaps.append(f"evidence-event-missing:{obligation_id or 'unknown'}")
+        required_receipt_events[(receipt_id, receipt_hash)] += 1
+        required_state_events[(obligation_id, verdict, receipt_hash)] += 1
+        for evidence in receipt.get("evidence", []):
+            if isinstance(evidence, Mapping):
+                required_evidence_events[(obligation_id, digest(evidence))] += 1
+
+    for key, required in required_receipt_events.items():
+        if actual_receipt_events[key] < required:
+            gaps.append(f"receipt-event-missing-or-unbound:{key[0] or 'unknown'}")
+    for key, required in required_state_events.items():
+        if actual_state_events[key] < required:
+            gaps.append(f"obligation-state-event-missing-or-unbound:{key[0] or 'unknown'}")
+    for key, required in required_evidence_events.items():
+        if actual_evidence_events[key] < required:
+            gaps.append(f"evidence-event-missing-or-unbound:{key[0] or 'unknown'}")
 
     unique = tuple(sorted(set(gaps)))
     if unique:
         return "UNKNOWN_RUNTIME_EVENT_CHAIN", unique
     return "ESTABLISHED_RUNTIME_EVENT_CHAIN", ()
+
+
+def _latest_receipt(
+    receipts: Sequence[Mapping[str, Any]],
+    obligation_id: str,
+    *,
+    module: str | None,
+    task_id: str | None,
+) -> Mapping[str, Any] | None:
+    rows = [
+        receipt
+        for receipt in receipts
+        if receipt.get("obligation_id") == obligation_id
+        and (module is None or receipt.get("module") == module)
+        and (task_id is None or receipt.get("task_id") == task_id)
+    ]
+    return rows[-1] if rows else None
+
+
+def _current_receipt_self_check(
+    task: Mapping[str, Any] | None,
+    receipts: Sequence[Mapping[str, Any]],
+    *,
+    task_id: str | None,
+    assurance_obligation_id: str,
+) -> tuple[Verdict, str]:
+    """Bind independence checks to every current load-bearing domain receipt."""
+
+    if task is None:
+        return Verdict.UNKNOWN, "bound task is unavailable for current-receipt provenance"
+    observed = 0
+    for obligation in task.get("obligations", []):
+        if not isinstance(obligation, Mapping) or not obligation.get("load_bearing", True):
+            continue
+        obligation_id = str(obligation.get("obligation_id") or "")
+        if not obligation_id or obligation_id == assurance_obligation_id:
+            continue
+        receipt = _latest_receipt(
+            receipts,
+            obligation_id,
+            module=(
+                str(obligation.get("required_module"))
+                if obligation.get("required_module")
+                else None
+            ),
+            task_id=task_id,
+        )
+        if receipt is None:
+            continue
+        observed += 1
+        evidence_rows = [
+            evidence
+            for evidence in receipt.get("evidence", [])
+            if isinstance(evidence, Mapping)
+        ]
+        if not evidence_rows:
+            return (
+                Verdict.UNKNOWN,
+                f"current load-bearing receipt {receipt.get('receipt_id')} lacks an evidence envelope",
+            )
+        producer = str(receipt.get("module") or "")
+        for evidence in evidence_rows:
+            metadata = evidence.get("metadata", {})
+            metadata = metadata if isinstance(metadata, Mapping) else {}
+            verifier = str(evidence.get("verifier") or receipt.get("verifier") or "")
+            if not producer or not verifier:
+                return Verdict.UNKNOWN, "current receipt evidence lacks producer or verifier identity"
+            if producer == verifier:
+                return Verdict.ISSUE, "current receipt producer and verifier are identical"
+            producer_provenance = metadata.get("producer_provenance")
+            verifier_provenance = (
+                evidence.get("provenance_group")
+                or metadata.get("verifier_provenance")
+            )
+            if not producer_provenance or not verifier_provenance:
+                return Verdict.UNKNOWN, "current receipt evidence lacks independence provenance"
+            if producer_provenance == verifier_provenance:
+                return Verdict.UNKNOWN, "current receipt producer and verifier share provenance"
+    if observed == 0:
+        return Verdict.UNKNOWN, "no current load-bearing domain receipt is observable"
+    return Verdict.CLEARED, "current load-bearing receipts have distinct bound evidence provenance"
+
+
+def _worse(
+    left: tuple[Verdict, str],
+    right: tuple[Verdict, str],
+) -> tuple[Verdict, str]:
+    return right if _SEVERITY[right[0]] > _SEVERITY[left[0]] else left
+
+
+def _monitor_operation(
+    operation: str,
+    events: list[dict[str, Any]],
+    receipts: list[dict[str, Any]],
+    *,
+    task: Mapping[str, Any] | None,
+    task_id: str | None,
+    assurance_obligation_id: str,
+) -> tuple[Verdict, str]:
+    low_level_result = low_level.monitor_structured(
+        operation,
+        events,
+        receipts,
+        task=task,
+        task_id=task_id,
+        assurance_obligation_id=assurance_obligation_id,
+    )
+    if operation != "self":
+        return low_level_result
+    current_result = _current_receipt_self_check(
+        task,
+        receipts,
+        task_id=task_id,
+        assurance_obligation_id=assurance_obligation_id,
+    )
+    return _worse(low_level_result, current_result)
 
 
 def _hard_selective_schedule(
@@ -350,6 +510,7 @@ def plan_automatic_assurance(
     _, resolved, task, events, receipts = low_level._snapshot(
         root, obligation_id, task_id
     )
+    receipts = _ordered_receipts(receipts)
     return _plan_from_snapshot(
         task_id=resolved,
         obligation_id=obligation_id,
@@ -392,6 +553,7 @@ def run_automatic_assurance(
     store, resolved, task, events, receipts = low_level._snapshot(
         root, obligation_id, task_id
     )
+    receipts = _ordered_receipts(receipts)
     plan = _plan_from_snapshot(
         task_id=resolved,
         obligation_id=obligation_id,
@@ -402,7 +564,7 @@ def run_automatic_assurance(
     )
     results: list[tuple[str, Verdict, str]] = []
     for operation in plan.selected_operations:
-        verdict, reason = low_level.monitor_structured(
+        verdict, reason = _monitor_operation(
             operation,
             events,
             receipts,
@@ -460,7 +622,11 @@ def run_automatic_assurance(
         module="gauntlet",
         obligation_id=obligation_id,
         verdict=verdict,
-        action="assure:automatic-full" if "FULL" in policy.mode else "assure:experimental-selective",
+        action=(
+            "assure:automatic-full"
+            if "FULL" in policy.mode
+            else "assure:experimental-selective"
+        ),
         input_hash=plan.input_hash,
         output_hash=digest(output),
         evidence=(
