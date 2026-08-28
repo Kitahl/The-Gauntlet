@@ -1,0 +1,28 @@
+name: Soul focused diagnostics
+
+on:
+  push:
+    branches:
+      - upgrade/challenge-vnext-soul
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-lock.txt
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --require-hashes -r requirements-lock.txt
+      - name: Ruff automatic Soul files
+        run: ruff check tools/soul_runtime.py tools/soul_automatic.py tests/test_soul_planner.py
+      - name: Focused automatic Soul tests
+        run: python -m unittest tests/test_soul_planner.py -v
