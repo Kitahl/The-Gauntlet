@@ -268,7 +268,34 @@ def stop() -> int:
     task_id = _active_task(store)
     if not task_id:
         return 0
-    verdict, detail = automatic_release(root, task_id)
+    try:
+        verdict, detail = automatic_release(root, task_id)
+    except Exception as exc:
+        error_type = type(exc).__name__
+        _event(
+            store,
+            "orchestrator.unavailable",
+            "soul",
+            digest({"task_id": task_id, "error_type": error_type}),
+            {
+                "error_type": error_type,
+                "automatic": True,
+                "raw_exception_persisted": False,
+            },
+            task_id=task_id,
+        )
+        print(
+            json.dumps(
+                {
+                    "decision": "block",
+                    "reason": (
+                        "Automatic EGR release gate failed closed: orchestrator "
+                        f"unavailable; error_type={error_type}; requested_task={task_id}"
+                    ),
+                }
+            )
+        )
+        return 0
     if verdict == Verdict.CLEARED:
         return 0
     print(
