@@ -39,14 +39,15 @@ for _kind, _module in _PUBLIC_ROUTE_INVARIANTS.items():
 def automatic_release(root: Path, task_id: str) -> tuple[Verdict, dict]:
     """Run the automatic route/assure/release cycle on current authority state.
 
-    A clean authority check is followed by a task-bound snapshot so Gauntlet's
-    ``refresh`` monitor sees the current governing state. Detected drift remains an
-    ``authority.changed`` event and is intentionally not papered over by a new
+    Freeze first so any automatic graph revision—particularly the assurance
+    obligation—exists before the authority snapshot is bound. Detected drift remains
+    an ``authority.changed`` event and is intentionally not papered over by a new
     snapshot. Monitor failure is fail-closed downstream: ``refresh`` remains UNKNOWN
     rather than being fabricated as clear.
     """
 
-    current_id, _ = resolve_current_task_id(root, task_id)
+    frozen = freeze_task(root, task_id)
+    current_id = str(frozen["task_id"])
     try:
         from gauntlet_monitor import check as authority_check
         from gauntlet_monitor import snapshot as authority_snapshot
@@ -58,7 +59,11 @@ def automatic_release(root: Path, task_id: str) -> tuple[Verdict, dict]:
         # The automatic release path will still run. Without a valid snapshot the
         # Gauntlet refresh monitor cannot clear, which is the safe represented state.
         pass
-    return _automatic_release(root, task_id)
+    verdict, detail = _automatic_release(root, current_id)
+    detail = dict(detail)
+    detail["requested_task_id"] = task_id
+    detail["resolved_task_id"] = current_id
+    return verdict, detail
 
 
 def main(argv: list[str] | None = None) -> int:
