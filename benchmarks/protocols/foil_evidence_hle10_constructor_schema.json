@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "properties": {
+          "task_id": {"type": "string", "minLength": 1, "maxLength": 80},
+          "status": {"enum": ["CANDIDATE", "ABSTAIN"]},
+          "answer": {"type": "string", "maxLength": 400},
+          "evidence_url": {"type": "string", "maxLength": 1000},
+          "evidence_quote": {"type": "string", "maxLength": 2000}
+        },
+        "required": ["task_id", "status", "answer", "evidence_url", "evidence_quote"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["items"],
+  "additionalProperties": false
+}

@@ -1,0 +1,19 @@
+{
+  "caller_supplied_session_ceiling": null,
+  "classification": "HISTORICAL_FROZEN_A0_LIVE_ROUTE_DIAGNOSTIC",
+  "effort": "high",
+  "files": {
+    "benchmark_runs/2026-08-28/evidence_closed_hle10_terra_high/items.json": "bd3a4c33cf6074f4ac54b298fc612e96e02d67380071fcd18cf8ab4a2dd7da11",
+    "benchmarks/FOIL_EVIDENCE_CLOSED_HLE10_PROTOCOL.md": "a712e1e4c460e719bc4eb633f1de9d4ce18e8fd2c2f46c5ec4997d347fe6ebb5",
+    "benchmarks/harness/foil_evidence_closed_hle10.py": "ead3793f460b68541692ed0a2b791234489506a3037fdb755c754237ce7bb947",
+    "benchmarks/protocols/foil_evidence_hle10_compare_schema.json": "fd15371df94c59b61a15f72a49b8f386248fb9bc427ea8380ea015ac8774470b",
+    "benchmarks/protocols/foil_evidence_hle10_constructor_schema.json": "b5fd3ce93c26d7d2e85e019cb77cb5590c06321af9a2b870bfccc69cfce3a247"
+  },
+  "gold_opened_by_prepare": false,
+  "item_count": 10,
+  "model": "gpt-5.6-terra",
+  "new_provider_calls_planned": 3,
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "schema": "foil.evidence-hle10-manifest.v1"
+}
