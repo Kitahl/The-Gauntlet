@@ -87,12 +87,52 @@ def _empty_task_detail(
         "automatic": automatic,
         "routing_plan_id": None,
         "routing_liveness_status": "STALLED_NO_EXECUTABLE_ROUTE",
+        "route_manifest": [],
         "routing_batches": [],
         "selected_obligations": [],
         "assurance_receipt_id": None,
         "authority": "CONTROL_ONLY",
         "target_domain_clearance_authorized": False,
     }
+
+
+def _bounded_route_detail(raw_detail: Mapping[str, Any]) -> dict[str, Any]:
+    """Normalize kernel route manifests into bounded host-loop instructions."""
+
+    detail = dict(raw_detail)
+    raw_manifest = detail.get("route_manifest")
+    manifest = raw_manifest if isinstance(raw_manifest, list) else []
+    batches: list[dict[str, Any]] = []
+    selected: list[str] = []
+    seen: set[str] = set()
+    for raw_row in manifest[:16]:
+        if not isinstance(raw_row, Mapping):
+            continue
+        raw_ids = raw_row.get("obligation_ids")
+        obligation_ids = [
+            str(value)
+            for value in (raw_ids if isinstance(raw_ids, list) else [])[:16]
+            if isinstance(value, str) and value
+        ]
+        for obligation_id in obligation_ids:
+            if obligation_id not in seen:
+                seen.add(obligation_id)
+                selected.append(obligation_id)
+        batches.append(
+            {
+                "batch_id": raw_row.get("batch_id"),
+                "module": str(raw_row.get("module") or "unknown"),
+                "obligation_ids": obligation_ids,
+                "context_sharing_status": raw_row.get("context_sharing_status"),
+                "equivalence_status": raw_row.get("equivalence_status"),
+                "execution_authorized": False,
+            }
+        )
+    detail.setdefault("routing_batches", batches)
+    detail.setdefault("selected_obligations", selected)
+    detail.setdefault("target_domain_clearance_authorized", False)
+    detail.setdefault("authority", "CONTROL_ONLY")
+    return detail
 
 
 def start_task(
@@ -220,7 +260,7 @@ def automatic_release(root: Path, task_id: str) -> tuple[Verdict, dict[str, Any]
         )
 
     verdict, raw_detail = _impl.automatic_release(root, task_id)
-    detail = dict(raw_detail)
+    detail = _bounded_route_detail(raw_detail)
     if (
         detail.get("reason") != "automatic-routes-pending"
         or not _impl._automatic_assurance_enabled(root)
