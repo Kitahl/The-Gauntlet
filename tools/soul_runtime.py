@@ -11,6 +11,7 @@ from egrt_types import ObligationKind, Verdict, digest
 from soul_automatic import (
     MODULE_FOR_KIND,
     SOUL_AUTOMATIC_SCHEMA,
+    SOUL_CONTROL_SCHEMA,
     SOUL_SCHEMA,
     ActiveTaskError,
     RouteBatch,
@@ -294,6 +295,7 @@ __all__ = [
     "RoutingPlan",
     "RoutingPolicy",
     "SOUL_AUTOMATIC_SCHEMA",
+    "SOUL_CONTROL_SCHEMA",
     "SOUL_SCHEMA",
     "SoulError",
     "SoulGraphError",
