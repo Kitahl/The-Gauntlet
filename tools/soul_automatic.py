@@ -1,7 +1,7 @@
 """Compatibility surface for the authoritative automatic Soul controller."""
 from __future__ import annotations
 
-from soul_controller import (
+from soul_vnext.controller import (
     MODULE_FOR_KIND,
     SOUL_AUTOMATIC_SCHEMA,
     SOUL_SCHEMA,
