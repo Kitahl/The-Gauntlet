@@ -40,8 +40,9 @@ def add_obligation(
 
     The lower-level constructor allocates its own identifier for an unfrozen task.
     Automatic Soul therefore returns that persisted object directly instead of a
-    speculative pre-allocation. A frozen task still receives one content-bound
-    successor revision containing the pre-allocated obligation.
+    speculative pre-allocation. A frozen task receives one content-bound successor
+    revision, and that successor is frozen before another automatic writer may extend
+    the lineage.
     """
 
     if not isinstance(kind, ObligationKind):
@@ -50,7 +51,6 @@ def add_obligation(
         raise ValueError("claim must be non-empty")
 
     store = RuntimeStore(root)
-    successor_id: str | None = None
     result: Obligation
     with store.lock("active-task"):
         current_id, _ = _controller._resolve_lineage_unlocked(store, task_id)
@@ -76,6 +76,7 @@ def add_obligation(
                 result,
                 reason="new-obligation-after-freeze",
             )
+            _controller.core.freeze_task(root, successor_id)
         else:
             result = _controller.core.add_obligation(
                 root,
@@ -85,8 +86,6 @@ def add_obligation(
                 load_bearing=load_bearing,
                 metadata=metadata,
             )
-    if successor_id is not None:
-        _controller.core.freeze_task(root, successor_id)
     return result
 
 
