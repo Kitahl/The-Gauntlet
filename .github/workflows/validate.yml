@@ -30,6 +30,8 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Lint public Python
         run: ruff check validation tools tests benchmarks/harness
+      - name: Run focused automatic Soul tests
+        run: python -m unittest tests/test_soul_planner.py -v
       - name: Run runtime and layout tests
         run: python -m unittest discover -s tests -v
       - name: Validate Research Orchestrator and Process Assurance
