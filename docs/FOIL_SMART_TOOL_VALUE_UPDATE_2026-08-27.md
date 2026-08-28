@@ -1,10 +1,28 @@
 # FOIL Smart-Tool Value Update
 
 **Date:** 2026-08-27
-**Status:** PROPOSED / IMPLEMENTATION-READY / UNVALIDATED
+**Status:** PARTIAL V1 IMPLEMENTATION / BENCHMARK-ONLY / UNPROMOTED
 **Scope:** FOIL only. No Gauntlet or Mastermind code or control-plane merge.
 **Supersedes:** the binary `TOOLS_OFF` versus unrestricted `TOOLS_ON` benchmark design.
 **Does not supersede:** FOIL's authority boundaries, A0 preservation law, generated-evidence admission rules, or caller-supplied benchmark budgets.
+
+## 0. Implementation boundary (2026-08-28)
+
+The one-tool vertical slice is implemented: strict contracts and receipts,
+question-only opportunity discovery, three bounded families, an evidence- and
+cost-aware prelaunch gate, caller-supplied token reservations, and active
+benchmark `VERIFY` execution through the shared A0-preserving finalizer.
+Mechanical extraction remains generated and unadmitted; changing a benchmark
+prediction requires an explicit harness opt-in. Retrieval is support-only.
+
+Not implemented in this slice: dependency-complete bundles, tool combinations,
+parallel DAG execution, marginal multi-call stopping, learned interaction terms,
+production routing, or promotion. The 12-row synthetic integration diagnostic
+proves wiring only. The historical HLE replay preserved the 11/59 baseline with
+zero rescues and zero damages while executing three zero-token exact checks; it
+does not establish HLE efficacy. See
+`benchmarks/protocols/FOIL_SMART_TOOL_ACTIVE_VERIFY_V1.md` for the frozen
+contract and non-claims.
 
 ## 1. Executive decision
 

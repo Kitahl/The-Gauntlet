@@ -1,0 +1,18 @@
+{
+  "schema": "foil.smart-tool-integration-items.v1",
+  "classification": "SYNTHETIC_INTEGRATION_ONLY",
+  "items": [
+    {"id": "arith-1", "question": "Compute \\(37 * 19\\)?", "a0": "704"},
+    {"id": "arith-2", "question": "Compute \\(\\frac{5}{6} - \\frac{1}{4}\\)?", "a0": "7/12"},
+    {"id": "arith-3", "question": "Evaluate \\(2^10 + 3\\)?", "a0": "1024"},
+    {"id": "arith-4", "question": "Calculate \\(0.125 * 64\\)?", "a0": "7"},
+    {"id": "python-1", "question": "What exact output does this Python program return?\n```python\nprint((17 - 5) * 3)\n```", "a0": "35"},
+    {"id": "python-2", "question": "What exact output does this Python program return?\n```python\nprint(2 ** 8)\n```", "a0": "256"},
+    {"id": "python-3", "question": "What exact output does this Python program return?\n```python\nprint(7 * 8 + 1)\n```", "a0": "56"},
+    {"id": "python-4", "question": "What exact output does this Python program return?\n```python\nprint(100 - 3 * 17)\n```", "a0": "48"},
+    {"id": "retrieval-1", "question": "Which section of the Example Act governs the synthetic filing rule?", "a0": "section 3"},
+    {"id": "retrieval-2", "question": "Which section of the Demo Regulation defines the synthetic safety notice?", "a0": "section 12"},
+    {"id": "retrieval-3", "question": "For the synthetic Artin group record, what catalogue number is reported?", "a0": "41"},
+    {"id": "retrieval-4", "question": "Which section of the Sample Legislation contains the synthetic appeal deadline?", "a0": "section 9"}
+  ]
+}

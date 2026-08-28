@@ -1,0 +1,164 @@
+{
+  "active_verify_calls": 12,
+  "baseline_correct": 3,
+  "classification": "SYNTHETIC_INTEGRATION_ONLY",
+  "damages": 0,
+  "family_counts": {
+    "COMPUTATION": 4,
+    "EXECUTION": 4,
+    "RETRIEVAL": 4
+  },
+  "final_correct": 9,
+  "gold_sha256": "7c227b3808b9dde82c240303d63b6fec635858089bb17f81cde099cc872e01a6",
+  "items": 12,
+  "model_calls": 0,
+  "network_calls": 0,
+  "non_claims": [
+    "not a natural-language efficacy benchmark",
+    "not HLE performance",
+    "not production calibration",
+    "fixture retrieval is not factual-retrieval validation"
+  ],
+  "prediction_sha256": "bcc7dda6e31a7f37f87c509d18df6bdc379d2a72117a5e297b8cbad53923f356",
+  "promotion_authorized": false,
+  "provider_calls": 0,
+  "report_sha256": "ec8949242cd1c22b58a3ad8a435cde02d69637a0a7ce0d4c0ebc3c2a46bef8c3",
+  "rescues": 6,
+  "rows": [
+    {
+      "active_verify_executed": true,
+      "base_correct": false,
+      "damaged": false,
+      "evidence_admission": "BENCHMARK_CORRECTIVE_UNADMITTED",
+      "family": "COMPUTATION",
+      "final_correct": true,
+      "rescued": true,
+      "selected_capability": "SYMBOLIC_COMPUTATION",
+      "task_id": "arith-1"
+    },
+    {
+      "active_verify_executed": true,
+      "base_correct": true,
+      "damaged": false,
+      "evidence_admission": "BENCHMARK_CORRECTIVE_UNADMITTED",
+      "family": "COMPUTATION",
+      "final_correct": true,
+      "rescued": false,
+      "selected_capability": "SYMBOLIC_COMPUTATION",
+      "task_id": "arith-2"
+    },
+    {
+      "active_verify_executed": true,
+      "base_correct": false,
+      "damaged": false,
+      "evidence_admission": "BENCHMARK_CORRECTIVE_UNADMITTED",
+      "family": "COMPUTATION",
+      "final_correct": true,
+      "rescued": true,
+      "selected_capability": "SYMBOLIC_COMPUTATION",
+      "task_id": "arith-3"
+    },
+    {
+      "active_verify_executed": true,
+      "base_correct": false,
+      "damaged": false,
+      "evidence_admission": "BENCHMARK_CORRECTIVE_UNADMITTED",
+      "family": "COMPUTATION",
+      "final_correct": true,
+      "rescued": true,
+      "selected_capability": "SYMBOLIC_COMPUTATION",
+      "task_id": "arith-4"
+    },
+    {
+      "active_verify_executed": true,
+      "base_correct": false,
+      "damaged": false,
+      "evidence_admission": "BENCHMARK_CORRECTIVE_UNADMITTED",
+      "family": "EXECUTION",
+      "final_correct": true,
+      "rescued": true,
+      "selected_capability": "CODE_EXECUTION",
+      "task_id": "python-1"
+    },
+    {
+      "active_verify_executed": true,
+      "base_correct": true,
+      "damaged": false,
+      "evidence_admission": "BENCHMARK_CORRECTIVE_UNADMITTED",
+      "family": "EXECUTION",
+      "final_correct": true,
+      "rescued": false,
+      "selected_capability": "CODE_EXECUTION",
+      "task_id": "python-2"
+    },
+    {
+      "active_verify_executed": true,
+      "base_correct": false,
+      "damaged": false,
+      "evidence_admission": "BENCHMARK_CORRECTIVE_UNADMITTED",
+      "family": "EXECUTION",
+      "final_correct": true,
+      "rescued": true,
+      "selected_capability": "CODE_EXECUTION",
+      "task_id": "python-3"
+    },
+    {
+      "active_verify_executed": true,
+      "base_correct": false,
+      "damaged": false,
+      "evidence_admission": "BENCHMARK_CORRECTIVE_UNADMITTED",
+      "family": "EXECUTION",
+      "final_correct": true,
+      "rescued": true,
+      "selected_capability": "CODE_EXECUTION",
+      "task_id": "python-4"
+    },
+    {
+      "active_verify_executed": true,
+      "base_correct": false,
+      "damaged": false,
+      "evidence_admission": "SUPPORT_ONLY",
+      "family": "RETRIEVAL",
+      "final_correct": false,
+      "rescued": false,
+      "selected_capability": "WEB_SEARCH",
+      "task_id": "retrieval-1"
+    },
+    {
+      "active_verify_executed": true,
+      "base_correct": true,
+      "damaged": false,
+      "evidence_admission": "SUPPORT_ONLY",
+      "family": "RETRIEVAL",
+      "final_correct": true,
+      "rescued": false,
+      "selected_capability": "WEB_SEARCH",
+      "task_id": "retrieval-2"
+    },
+    {
+      "active_verify_executed": true,
+      "base_correct": false,
+      "damaged": false,
+      "evidence_admission": "SUPPORT_ONLY",
+      "family": "RETRIEVAL",
+      "final_correct": false,
+      "rescued": false,
+      "selected_capability": "SCHOLARLY_SEARCH",
+      "task_id": "retrieval-3"
+    },
+    {
+      "active_verify_executed": true,
+      "base_correct": false,
+      "damaged": false,
+      "evidence_admission": "SUPPORT_ONLY",
+      "family": "RETRIEVAL",
+      "final_correct": false,
+      "rescued": false,
+      "selected_capability": "WEB_SEARCH",
+      "task_id": "retrieval-4"
+    }
+  ],
+  "schema": "foil.smart-tool-integration-report.v1",
+  "tool_calls": 12,
+  "total_tool_provider_tokens": 60
+}

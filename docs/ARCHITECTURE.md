@@ -113,6 +113,9 @@ referenced by `ArtifactRef`, never in generic state or the receipt.
 | `tools/foil_tool_policy.py` | write-capability admission; raises `CapabilityWriteError` rather than failing silently |
 | `tools/foil_domains.py` | non-diagnostic domain-relevance recognition |
 | `tools/foil_route_opportunity.py` | question-only, zero-provider development hypotheses about which registered evidence capability may apply; never verifier applicability, execution, or promotion authority |
+| `tools/foil_tool_contract.py` | **the bounded smart-tool contract.** Closed one-tool cost, operation, receipt, and evidence schemas; read-only, zero retry, retrieval support-only, and mechanical output explicitly generated/unadmitted. |
+| `tools/foil_smart_tool_value.py` | **the smart-tool prelaunch value gate.** Jeffreys-Beta rescue lower bound plus damage/invalid upper bounds, complete cost, evidence freshness and minimum support, keyed by tool family and difficulty. |
+| `tools/foil_smart_tool_runtime.py` | **the benchmark-only active smart-tool VERIFY slice.** Probes applicability, executes at most one pre-priced computation/execution/retrieval adapter, reserves caller budget before launch, and finalizes through the A0-preserving active executor. It is not production or promotion authority. |
 
 Drift between a contract block and its runtime enum is a **test failure**, not a
 documentation task: `tests/test_foil_assistance.py::ContractDriftTests` and

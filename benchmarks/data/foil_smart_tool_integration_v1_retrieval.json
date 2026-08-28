@@ -1,0 +1,9 @@
+{
+  "schema": "foil.smart-tool-integration-retrieval-corpus.v1",
+  "items": [
+    {"id": "retrieval-1", "candidate": "section 7", "evidence": "The synthetic filing rule is assigned to section 7.", "source_url": "https://example.com/example-act"},
+    {"id": "retrieval-2", "candidate": "section 12", "evidence": "The synthetic safety notice is defined in section 12.", "source_url": "https://example.com/demo-regulation"},
+    {"id": "retrieval-3", "candidate": "73", "evidence": "The synthetic Artin group catalogue record is number 73.", "source_url": "https://example.com/artin-catalogue"},
+    {"id": "retrieval-4", "candidate": "section 14", "evidence": "The synthetic appeal deadline appears in section 14.", "source_url": "https://example.com/sample-legislation"}
+  ]
+}

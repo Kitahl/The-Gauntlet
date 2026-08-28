@@ -1,0 +1,17 @@
+{
+  "schema": "foil.smart-tool-integration-gold.v1",
+  "items": [
+    {"id": "arith-1", "gold": "703"},
+    {"id": "arith-2", "gold": "7/12"},
+    {"id": "arith-3", "gold": "1027"},
+    {"id": "arith-4", "gold": "8"},
+    {"id": "python-1", "gold": "36"},
+    {"id": "python-2", "gold": "256"},
+    {"id": "python-3", "gold": "57"},
+    {"id": "python-4", "gold": "49"},
+    {"id": "retrieval-1", "gold": "section 7"},
+    {"id": "retrieval-2", "gold": "section 12"},
+    {"id": "retrieval-3", "gold": "73"},
+    {"id": "retrieval-4", "gold": "section 14"}
+  ]
+}

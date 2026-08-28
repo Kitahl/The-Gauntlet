@@ -178,6 +178,86 @@ def _route_budget_failures(
     return tuple(failures)
 
 
+def finalize_benchmark_work(
+    route: Route,
+    a0: str,
+    work: RouteWorkResult,
+    *,
+    policy: BenchmarkExecutionPolicy,
+) -> tuple[str, ActiveRouteReceipt]:
+    """Apply the shared benchmark admission boundary to completed route work.
+
+    This function does not launch work or authorize a route. It lets the legacy
+    shadow bridge and smart-tool controller share identical A0-preservation,
+    verification, contract, and route-budget rules.
+    """
+
+    route = Route(route)
+    if route is Route.DIRECT:
+        raise ValueError("DIRECT has no completed route work to finalize")
+    if not isinstance(a0, str) or not a0.strip():
+        raise ValueError("a0 must be non-empty text")
+    if not isinstance(work, RouteWorkResult):
+        raise TypeError("work must be RouteWorkResult")
+    if not isinstance(policy, BenchmarkExecutionPolicy):
+        raise TypeError("policy must be BenchmarkExecutionPolicy")
+    if not policy.enabled:
+        raise ValueError("completed work cannot be finalized by a disabled executor")
+    if route is Route.FULL and not policy.independent_verification_available:
+        raise ValueError("FULL work requires independent verification availability")
+
+    budget_failures = _route_budget_failures(work, policy)
+    if budget_failures:
+        action = ExecutionAction.ROUTE_BUDGET_REJECTED
+        selected = a0
+        reason = f"{route.value.lower()}_route_budget_exceeded"
+    elif not work.contract_valid:
+        action = ExecutionAction.CANDIDATE_REJECTED
+        selected = a0
+        reason = f"{route.value.lower()}_candidate_contract_invalid"
+    elif work.abstained:
+        action = ExecutionAction.CANDIDATE_REJECTED
+        selected = a0
+        reason = f"{route.value.lower()}_candidate_abstained_preserve_a0"
+    elif route is Route.VERIFY and not work.verified:
+        action = ExecutionAction.VERIFY_STAND_DOWN
+        selected = a0
+        reason = "verify_not_confirmed"
+    elif route is Route.FULL and not work.verified:
+        action = ExecutionAction.FULL_STAND_DOWN
+        selected = a0
+        reason = "full_candidate_not_independently_verified"
+    elif route is Route.VERIFY:
+        action = ExecutionAction.SELECT_VERIFIED
+        selected = work.answer
+        reason = "verified_candidate_selected"
+    else:
+        action = ExecutionAction.SELECT_FULL
+        selected = work.answer
+        reason = "verified_full_candidate_selected_in_benchmark"
+
+    a0_digest = digest(a0)
+    receipt = ActiveRouteReceipt(
+        route=route,
+        action=action,
+        reason=reason,
+        a0_digest=a0_digest,
+        selected_digest=digest(selected),
+        candidate_digest=digest(work.answer),
+        route_calls=1,
+        input_tokens=work.input_tokens,
+        cached_input_tokens=work.cached_input_tokens,
+        output_tokens=work.output_tokens,
+        tool_event_types=work.tool_event_types,
+        answer_changed=selected != a0,
+        candidate_verified=work.verified,
+        contract_valid=work.contract_valid,
+        rejection_reasons=work.failure_reasons + budget_failures,
+        route_budget_exceeded=bool(budget_failures),
+    )
+    return selected, receipt
+
+
 def execute_benchmark_route(
     decision: ShadowRouteDecision,
     a0: str,
@@ -256,75 +336,12 @@ def execute_benchmark_route(
         work = verify_runner()
         if not isinstance(work, RouteWorkResult):
             raise TypeError("verify runner must return RouteWorkResult")
-        budget_failures = _route_budget_failures(work, policy)
-        if budget_failures:
-            action = ExecutionAction.ROUTE_BUDGET_REJECTED
-            selected = a0
-            reason = "verify_route_budget_exceeded"
-        elif not work.contract_valid:
-            action = ExecutionAction.CANDIDATE_REJECTED
-            selected = a0
-            reason = "verify_candidate_contract_invalid"
-        elif work.abstained:
-            action = ExecutionAction.CANDIDATE_REJECTED
-            selected = a0
-            reason = "verify_candidate_abstained_preserve_a0"
-        elif not work.verified:
-            action = ExecutionAction.VERIFY_STAND_DOWN
-            selected = a0
-            reason = "verify_not_confirmed"
-        else:
-            action = ExecutionAction.SELECT_VERIFIED
-            selected = work.answer
-            reason = "verified_candidate_selected"
     elif decision.route is Route.FULL:
         if full_runner is None or verify_runner is not None:
             raise ValueError("FULL requires exactly one full runner")
         work = full_runner()
         if not isinstance(work, RouteWorkResult):
             raise TypeError("full runner must return RouteWorkResult")
-        budget_failures = _route_budget_failures(work, policy)
-        if budget_failures:
-            action = ExecutionAction.ROUTE_BUDGET_REJECTED
-            selected = a0
-            reason = "full_route_budget_exceeded"
-        elif not work.contract_valid:
-            action = ExecutionAction.CANDIDATE_REJECTED
-            selected = a0
-            reason = "full_candidate_contract_invalid"
-        elif work.abstained:
-            action = ExecutionAction.CANDIDATE_REJECTED
-            selected = a0
-            reason = "full_candidate_abstained_preserve_a0"
-        elif work.verified:
-            action = ExecutionAction.SELECT_FULL
-            selected = work.answer
-            reason = "verified_full_candidate_selected_in_benchmark"
-        else:
-            action = ExecutionAction.FULL_STAND_DOWN
-            selected = a0
-            reason = "full_candidate_not_independently_verified"
     else:  # pragma: no cover - enum exhaustiveness
         raise ValueError("unsupported adaptive route")
-
-    final = "ABSTAIN" if selected is None else selected
-    selected_digest = None if selected is None else digest(selected)
-    receipt = ActiveRouteReceipt(
-        route=decision.route,
-        action=action,
-        reason=reason,
-        a0_digest=a0_digest,
-        selected_digest=selected_digest,
-        candidate_digest=digest(work.answer),
-        route_calls=1,
-        input_tokens=work.input_tokens,
-        cached_input_tokens=work.cached_input_tokens,
-        output_tokens=work.output_tokens,
-        tool_event_types=work.tool_event_types,
-        answer_changed=selected is not None and selected != a0,
-        candidate_verified=work.verified,
-        contract_valid=work.contract_valid,
-        rejection_reasons=work.failure_reasons + budget_failures,
-        route_budget_exceeded=bool(budget_failures),
-    )
-    return final, receipt
+    return finalize_benchmark_work(decision.route, a0, work, policy=policy)

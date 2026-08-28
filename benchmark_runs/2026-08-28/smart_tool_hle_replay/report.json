@@ -1,0 +1,626 @@
+{
+  "active_verify_calls": 3,
+  "baseline_correct": 11,
+  "capability_counts": {
+    "NONE": 56,
+    "SYMBOLIC_COMPUTATION": 3
+  },
+  "classification": "HISTORICAL_DEVELOPMENT_REPLAY",
+  "damages": 0,
+  "distinct_questions": 20,
+  "final_correct": 11,
+  "model_calls": 0,
+  "network_calls": 0,
+  "non_claims": [
+    "not a new holdout",
+    "not a retrieval test",
+    "not an HLE score forecast",
+    "repeated configurations are not independent questions"
+  ],
+  "omitted_rows": [
+    {
+      "reason": "base_answer_unavailable",
+      "unit_id": "luna_high-foil-hle-66e9580bc845662f61f3664b"
+    }
+  ],
+  "prediction_sha256": "930bcb091f505e88d4221ca585d1af8fd4792044c37c893db3d6e17102e236ea",
+  "provider_calls": 0,
+  "report_sha256": "37fb8c8833ba31155cd1d9380ba19c7b8c4ef85a6754a1d8bba9d748051c5aee",
+  "rescues": 0,
+  "rows": 59,
+  "schema": "foil.smart-tool-hle-replay-report.v1",
+  "scored_rows": [
+    {
+      "active_verify_executed": false,
+      "base_correct": true,
+      "damaged": false,
+      "final_correct": true,
+      "item_id": "hle-66b827b9b64deaedfbb997a2",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil-hle-66b827b9b64deaedfbb997a2"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66f319f205629941be821347",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil-hle-66f319f205629941be821347"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66f57e187a2ac7b4fffe174e",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil-hle-66f57e187a2ac7b4fffe174e"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-671f1702e4e6b61540b0bdb4",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil-hle-671f1702e4e6b61540b0bdb4"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-672067805681ce2b6f5a08a7",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil-hle-672067805681ce2b6f5a08a7"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-672521a56cd1b99dae47a110",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil-hle-672521a56cd1b99dae47a110"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-6736e54a4c96e49df1036fc6",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil-hle-6736e54a4c96e49df1036fc6"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-67371c15d09c0e422ae36585",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil-hle-67371c15d09c0e422ae36585"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": true,
+      "damaged": false,
+      "final_correct": true,
+      "item_id": "hle-67ae17cf1509e1d55b4a0eec",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil-hle-67ae17cf1509e1d55b4a0eec"
+    },
+    {
+      "active_verify_executed": true,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66ea7d2cc321286a5288ef06",
+      "rescued": false,
+      "selected_capability": "SYMBOLIC_COMPUTATION",
+      "unit_id": "luna_high-foil_tools-hle-66ea7d2cc321286a5288ef06"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": true,
+      "damaged": false,
+      "final_correct": true,
+      "item_id": "hle-66eaf9bbb082c5e6a76a49b5",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil_tools-hle-66eaf9bbb082c5e6a76a49b5"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66f3fa084a937a16c867c042",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil_tools-hle-66f3fa084a937a16c867c042"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66f57e3ddc7259d8b5bb0b46",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil_tools-hle-66f57e3ddc7259d8b5bb0b46"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-672059fc2ea5966e3eddd835",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil_tools-hle-672059fc2ea5966e3eddd835"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-672a80a432cd57d8762583e9",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil_tools-hle-672a80a432cd57d8762583e9"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-672d8366f97c3b404d90f3d3",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil_tools-hle-672d8366f97c3b404d90f3d3"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-67332b7198af9f49ad5d743a",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil_tools-hle-67332b7198af9f49ad5d743a"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": true,
+      "damaged": false,
+      "final_correct": true,
+      "item_id": "hle-6733e070361b540695504b86",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil_tools-hle-6733e070361b540695504b86"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-67380ecdb808e1bf292d214e",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_high-foil_tools-hle-67380ecdb808e1bf292d214e"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66b827b9b64deaedfbb997a2",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil-hle-66b827b9b64deaedfbb997a2"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66e9580bc845662f61f3664b",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil-hle-66e9580bc845662f61f3664b"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66f319f205629941be821347",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil-hle-66f319f205629941be821347"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66f57e187a2ac7b4fffe174e",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil-hle-66f57e187a2ac7b4fffe174e"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": true,
+      "damaged": false,
+      "final_correct": true,
+      "item_id": "hle-671f1702e4e6b61540b0bdb4",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil-hle-671f1702e4e6b61540b0bdb4"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-672067805681ce2b6f5a08a7",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil-hle-672067805681ce2b6f5a08a7"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-672521a56cd1b99dae47a110",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil-hle-672521a56cd1b99dae47a110"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-6736e54a4c96e49df1036fc6",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil-hle-6736e54a4c96e49df1036fc6"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-67371c15d09c0e422ae36585",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil-hle-67371c15d09c0e422ae36585"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-67ae17cf1509e1d55b4a0eec",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil-hle-67ae17cf1509e1d55b4a0eec"
+    },
+    {
+      "active_verify_executed": true,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66ea7d2cc321286a5288ef06",
+      "rescued": false,
+      "selected_capability": "SYMBOLIC_COMPUTATION",
+      "unit_id": "luna_low-foil_tools-hle-66ea7d2cc321286a5288ef06"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66eaf9bbb082c5e6a76a49b5",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil_tools-hle-66eaf9bbb082c5e6a76a49b5"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66f3fa084a937a16c867c042",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil_tools-hle-66f3fa084a937a16c867c042"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66f57e3ddc7259d8b5bb0b46",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil_tools-hle-66f57e3ddc7259d8b5bb0b46"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-672059fc2ea5966e3eddd835",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil_tools-hle-672059fc2ea5966e3eddd835"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-672a80a432cd57d8762583e9",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil_tools-hle-672a80a432cd57d8762583e9"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-672d8366f97c3b404d90f3d3",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil_tools-hle-672d8366f97c3b404d90f3d3"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-67332b7198af9f49ad5d743a",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil_tools-hle-67332b7198af9f49ad5d743a"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": true,
+      "damaged": false,
+      "final_correct": true,
+      "item_id": "hle-6733e070361b540695504b86",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil_tools-hle-6733e070361b540695504b86"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-67380ecdb808e1bf292d214e",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "luna_low-foil_tools-hle-67380ecdb808e1bf292d214e"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": true,
+      "damaged": false,
+      "final_correct": true,
+      "item_id": "hle-66b827b9b64deaedfbb997a2",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil-hle-66b827b9b64deaedfbb997a2"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66e9580bc845662f61f3664b",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil-hle-66e9580bc845662f61f3664b"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66f319f205629941be821347",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil-hle-66f319f205629941be821347"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66f57e187a2ac7b4fffe174e",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil-hle-66f57e187a2ac7b4fffe174e"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": true,
+      "damaged": false,
+      "final_correct": true,
+      "item_id": "hle-671f1702e4e6b61540b0bdb4",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil-hle-671f1702e4e6b61540b0bdb4"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": true,
+      "damaged": false,
+      "final_correct": true,
+      "item_id": "hle-672067805681ce2b6f5a08a7",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil-hle-672067805681ce2b6f5a08a7"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-672521a56cd1b99dae47a110",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil-hle-672521a56cd1b99dae47a110"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-6736e54a4c96e49df1036fc6",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil-hle-6736e54a4c96e49df1036fc6"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-67371c15d09c0e422ae36585",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil-hle-67371c15d09c0e422ae36585"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": true,
+      "damaged": false,
+      "final_correct": true,
+      "item_id": "hle-67ae17cf1509e1d55b4a0eec",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil-hle-67ae17cf1509e1d55b4a0eec"
+    },
+    {
+      "active_verify_executed": true,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66ea7d2cc321286a5288ef06",
+      "rescued": false,
+      "selected_capability": "SYMBOLIC_COMPUTATION",
+      "unit_id": "terra_high-foil_tools-hle-66ea7d2cc321286a5288ef06"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": true,
+      "damaged": false,
+      "final_correct": true,
+      "item_id": "hle-66eaf9bbb082c5e6a76a49b5",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil_tools-hle-66eaf9bbb082c5e6a76a49b5"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66f3fa084a937a16c867c042",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil_tools-hle-66f3fa084a937a16c867c042"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-66f57e3ddc7259d8b5bb0b46",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil_tools-hle-66f57e3ddc7259d8b5bb0b46"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-672059fc2ea5966e3eddd835",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil_tools-hle-672059fc2ea5966e3eddd835"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-672a80a432cd57d8762583e9",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil_tools-hle-672a80a432cd57d8762583e9"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-672d8366f97c3b404d90f3d3",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil_tools-hle-672d8366f97c3b404d90f3d3"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-67332b7198af9f49ad5d743a",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil_tools-hle-67332b7198af9f49ad5d743a"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-6733e070361b540695504b86",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil_tools-hle-6733e070361b540695504b86"
+    },
+    {
+      "active_verify_executed": false,
+      "base_correct": false,
+      "damaged": false,
+      "final_correct": false,
+      "item_id": "hle-67380ecdb808e1bf292d214e",
+      "rescued": false,
+      "selected_capability": null,
+      "unit_id": "terra_high-foil_tools-hle-67380ecdb808e1bf292d214e"
+    }
+  ],
+  "source_rows": 60,
+  "token_spend": 0
+}
