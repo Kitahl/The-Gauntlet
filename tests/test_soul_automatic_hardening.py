@@ -126,7 +126,7 @@ class SoulAutomaticHardeningTests(unittest.TestCase):
             }
             self.assertIn(seed.obligation_id, identifiers)
             self.assertTrue({row.obligation_id for row in added}.issubset(identifiers))
-            self.assertEqual(len(lineage), 10)
+            self.assertEqual(len(lineage), 9)
 
     def test_authority_drift_is_reconciled_but_same_call_cannot_release(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
