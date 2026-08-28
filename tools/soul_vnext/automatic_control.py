@@ -512,8 +512,7 @@ def automatic_release(
 
     assurance_receipt_id: str | None = None
     if _runtime_flag(root, "automatic_assurance", False):
-        from gauntlet_automatic import assurance_obligation_id
-        from gauntlet_automatic import run_automatic_assurance
+        from gauntlet_automatic import assurance_obligation_id, run_automatic_assurance
 
         assurance_id = assurance_obligation_id(root, current_id)
         if assurance_id:
