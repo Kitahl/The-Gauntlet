@@ -48,18 +48,24 @@ _RESERVED_TASK_METADATA = {
 
 
 def _sanitize_task_metadata(metadata: Mapping[str, Any] | None) -> dict[str, Any]:
-    """Preserve user metadata while removing all Soul control-plane fields."""
+    """Accept user metadata but reject every attempted Soul control-plane field."""
 
     if metadata is None:
         return {}
     if not isinstance(metadata, Mapping):
         raise TypeError("metadata must be a mapping or None")
+    forbidden = sorted(
+        key
+        for key in metadata
+        if isinstance(key, str)
+        and (key in _RESERVED_TASK_METADATA or key.startswith("soul_"))
+    )
+    if forbidden:
+        raise ValueError(f"caller metadata uses reserved Soul control keys: {forbidden}")
     return {
         key: value
         for key, value in metadata.items()
         if isinstance(key, str)
-        and key not in _RESERVED_TASK_METADATA
-        and not key.startswith("soul_")
     }
 
 
