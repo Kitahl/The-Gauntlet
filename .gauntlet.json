@@ -9,6 +9,7 @@
     "docs/VNEXT_RUNTIME_PIPELINE.md",
     "docs/specs/COMMON_RUNTIME_CONTRACT.md",
     "docs/specs/CHALLENGE_ENGINEERING_SPEC.md",
+    "docs/specs/EXTERNAL_REVIEW_AUTHORITY.md",
     "skills/soul/SKILL.md",
     "skills/mathbot/SKILL.md",
     "skills/scoutbot/SKILL.md",
@@ -33,6 +34,14 @@
     "automatic_route_all_ready": true,
     "automatic_assurance": true,
     "automatic_assurance_mode": "AUTOMATIC_FULL"
+  },
+  "external_review": {
+    "authority": "ADVISORY_ONLY",
+    "control_plane_mutation_authorized": false,
+    "runtime_policy_mutation_authorized": false,
+    "task_state_mutation_authorized": false,
+    "release_authority": false,
+    "host_commit_required": true
   },
   "challenge": {
     "mode": "shadow",
