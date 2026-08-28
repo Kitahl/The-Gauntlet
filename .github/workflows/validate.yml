@@ -31,6 +31,31 @@ jobs:
       - name: Lint public Python
         run: ruff check validation tools tests benchmarks/harness
       - name: Run focused automatic Soul tests
-        run: python -m unittest tests/test_soul_planner.py -v
-      - name: Run full suite fail-fast diagnostics
-        run: python -m unittest discover -s tests -v -f
+        run: python -m unittest tests/test_soul_planner.py tests/test_soul_automatic_control.py -v
+      - name: Run runtime and layout tests
+        run: python -m unittest discover -s tests -v
+      - name: Validate Research Orchestrator and Process Assurance
+        run: python validation/validate_soul_gauntlet_public.py
+      - name: Validate vNext typed runtime
+        run: python validation/validate_vnext_runtime.py
+      - name: Validate public showcase
+        run: python validation/validate_showcase.py
+      - name: Check Python syntax
+        run: python -m compileall -q validation tools tests benchmarks/harness
+      - name: Check repository research metadata
+        run: |
+          test -f LICENSE
+          test -f CITATION.cff
+          test -f RESEARCH.md
+          test -f REPRODUCIBILITY.md
+          test -f CHANGELOG.md
+          test -f SECURITY.md
+          test -f docs/RUNTIME_SETUP.md
+          test -f docs/BENCHMARKS.md
+          test -f benchmarks/FRONTIER_EXAM_FOIL.md
+          test -f benchmarks/results/2026-08-22-blinded-pilot.json
+          test -f research/FOIL_PERSONALIZATION_BASIS.md
+          test -f requirements-lock.in
+          test -f requirements-lock.txt
+          test -f .claude/settings.json
+          test -f .gauntlet.json
