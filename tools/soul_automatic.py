@@ -4,6 +4,7 @@ from __future__ import annotations
 from soul_vnext.controller import (
     MODULE_FOR_KIND,
     SOUL_AUTOMATIC_SCHEMA,
+    SOUL_CONTROL_SCHEMA,
     SOUL_SCHEMA,
     ActiveTaskError,
     RouteBatch,
@@ -30,6 +31,7 @@ __all__ = [
     "RoutingPlan",
     "RoutingPolicy",
     "SOUL_AUTOMATIC_SCHEMA",
+    "SOUL_CONTROL_SCHEMA",
     "SOUL_SCHEMA",
     "SoulError",
     "SoulGraphError",
