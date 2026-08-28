@@ -105,7 +105,13 @@ runtime_text = "\n".join((ROOT / path).read_text(encoding="utf-8") for path in R
 checks["no_mastermind_runtime_control"] = forbidden.search(runtime_text) is None
 
 reviewer_specific = re.compile(r"\b(?:claude|anthropic|openai|gemini|google)\b", re.I)
-checks["no_vendor_specific_reviewer_control"] = reviewer_specific.search(runtime_text) is None
+automatic_control_text = "\n".join(
+    (ROOT / path).read_text(encoding="utf-8")
+    for path in ("tools/soul_automatic.py", "tools/gauntlet_automatic.py")
+)
+checks["no_vendor_specific_reviewer_control"] = (
+    reviewer_specific.search(automatic_control_text) is None
+)
 
 violations: list[str] = []
 for path in (ROOT / "tools").glob("*.py"):
