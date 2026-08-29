@@ -4,10 +4,16 @@ The vNext implementation lives in ``reality_runtime_vnext``. This front-end pres
 one pre-vNext API contract: unbound direct ``record_candidate`` calls may still consume
 an integrity-valid stored Space source-assessment receipt. That compatibility receipt
 has no live task binding and cannot satisfy the strict Soul-routed vNext admission gate.
+
+The front-end also owns compatibility hardening that must be applied without widening
+Reality authority: current Space assessment state outranks stale caller-selected state,
+Space refutation cannot be interpreted as a novelty-costume pass, and documented
+candidate fields remain mechanically required.
 """
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
@@ -28,8 +34,191 @@ mechanism_signature = _core.mechanism_signature
 
 # Preserve the private helper used by the adversarial binding regression.
 _make_bundle = _core._make_bundle
+_original_basic_candidate_errors = _core._basic_candidate_errors
+_original_space_prior_art_state = _core._space_prior_art_state
 _original_evaluate_admission = _core.evaluate_admission
 _original_record_candidate = _core.record_candidate
+
+_SUPPORTED_OUTCOMES = {
+    "SUPPORTED",
+    "SUPPORTED_WITH_DERIVATIVE_COLLISION",
+}
+_REFUTED_OUTCOMES = {
+    "REFUTED",
+    "REFUTED_WITH_DERIVATIVE_COLLISION",
+}
+
+
+def _claim_outcome(receipt: Mapping[str, Any]) -> str | None:
+    notes = receipt.get("notes")
+    if not isinstance(notes, str):
+        return None
+    try:
+        parsed = json.loads(notes)
+    except json.JSONDecodeError:
+        return None
+    if not isinstance(parsed, Mapping):
+        return None
+    value = parsed.get("claim_outcome")
+    if not isinstance(value, str) or not value.strip():
+        return None
+    return value.strip().upper()
+
+
+def _hardened_basic_candidate_errors(candidate: MethodCandidate) -> list[str]:
+    errors = list(_original_basic_candidate_errors(candidate))
+    if isinstance(candidate, _core.MethodCandidate):
+        if not candidate.invariants:
+            errors.append("invariants are required")
+        if not candidate.dependencies:
+            errors.append("dependencies are required")
+    return list(dict.fromkeys(errors))
+
+
+def _assessment_matches_candidate(
+    store: Any,
+    receipt: Mapping[str, Any],
+    candidate: MethodCandidate,
+    context: Any,
+) -> bool:
+    if receipt.get("module") != "space" or receipt.get("action") != "source-assessment":
+        return False
+    if context is not None and receipt.get("task_id") not in (None, context.task_id):
+        return False
+    search, unresolved, issues = _core._search_receipt_state(
+        store,
+        receipt,
+        expected_candidate_hash=_core.candidate_hash(candidate),
+        expected_task_id=context.task_id if context is not None else None,
+    )
+    if search is None or unresolved or issues:
+        return False
+    explicit_scope = candidate.metadata.get("scope_hash")
+    scope_hash = _core._space_scope_hash(search)
+    if isinstance(explicit_scope, str) and explicit_scope:
+        if scope_hash != explicit_scope:
+            return False
+    expected_claim_scope = candidate.metadata.get("prior_art_claim_scope")
+    if isinstance(expected_claim_scope, str) and expected_claim_scope.strip():
+        scopes = _core._assessed_claim_scopes(receipt)
+        if _core._normalize_text(expected_claim_scope) not in scopes:
+            return False
+    return True
+
+
+def _current_candidate_bound_assessment_ids(
+    store: Any,
+    candidate: MethodCandidate,
+    context: Any,
+) -> tuple[str, ...]:
+    if context is None:
+        return ()
+    current: list[str] = []
+    for discovery_id in context.discovery_dependency_ids:
+        for receipt in reversed(store.receipts_for(discovery_id)):
+            if not _assessment_matches_candidate(store, receipt, candidate, context):
+                continue
+            receipt_id = receipt.get("receipt_id")
+            if isinstance(receipt_id, str) and receipt_id:
+                current.append(receipt_id)
+            break
+    return tuple(current)
+
+
+def _directional_prior_art_reasons(
+    store: Any,
+    receipt_ids: Sequence[str],
+) -> tuple[list[str], list[str]]:
+    issues: list[str] = []
+    unresolved: list[str] = []
+    for receipt_id in receipt_ids:
+        receipt = store.read_receipt(receipt_id)
+        if receipt is None:
+            continue
+        outcome = _claim_outcome(receipt)
+        if outcome in _REFUTED_OUTCOMES:
+            issues.append(
+                "current Space assessment refutes the candidate prior-art non-match claim"
+            )
+            continue
+        if outcome in _SUPPORTED_OUTCOMES:
+            continue
+        tool_version = str(receipt.get("tool_version") or "")
+        verifier = str(receipt.get("verifier") or "")
+        if tool_version.startswith("egrt.space.v2") or verifier.endswith(":v2"):
+            if receipt.get("verdict") == _core.Verdict.CLEARED.value:
+                unresolved.append(
+                    "current Space assessment is CLEARED but lacks a recognized directional claim_outcome"
+                )
+    return issues, unresolved
+
+
+def _hardened_space_prior_art_state(
+    store: Any,
+    candidate: MethodCandidate,
+    receipt_ids: Sequence[str],
+    context: Any,
+) -> Any:
+    """Make current candidate-bound Space assessment authoritative over stale IDs."""
+    current_ids = _current_candidate_bound_assessment_ids(store, candidate, context)
+    if current_ids:
+        current_state = _original_space_prior_art_state(
+            store,
+            candidate,
+            current_ids,
+            context,
+        )
+        historical_state = _original_space_prior_art_state(
+            store,
+            candidate,
+            receipt_ids,
+            context,
+        )
+        # Historical valid ids remain visible only so an already-resolved costume
+        # challenge can keep its immutable verifier-receipt binding. Their verdict or
+        # unresolved state does not override the newest candidate-bound assessment.
+        compatible_ids = tuple(
+            dict.fromkeys((*current_state.receipt_ids, *historical_state.receipt_ids))
+        )
+        state = replace(current_state, receipt_ids=compatible_ids)
+        directional_ids = current_ids
+    else:
+        state = _original_space_prior_art_state(
+            store,
+            candidate,
+            receipt_ids,
+            context,
+        )
+        directional_ids = state.receipt_ids
+
+    directional_issues, directional_unresolved = _directional_prior_art_reasons(
+        store,
+        directional_ids,
+    )
+    return replace(
+        state,
+        issues=tuple(dict.fromkeys((*state.issues, *directional_issues))),
+        unresolved=tuple(
+            dict.fromkeys((*state.unresolved, *directional_unresolved))
+        ),
+    )
+
+
+def _competing_discriminator_reasons(candidate: MethodCandidate) -> list[str]:
+    competing = candidate.metadata.get("competing_mechanism")
+    if not isinstance(competing, str) or not competing.strip():
+        return []
+    discriminator = candidate.metadata.get("competing_discriminator")
+    if not isinstance(discriminator, str) or not discriminator.strip():
+        return [
+            "named competing mechanism requires an explicit A-vs-B discriminator specification"
+        ]
+    return []
+
+
+# Core functions resolve these helpers from their module globals at call time.
+_core._basic_candidate_errors = _hardened_basic_candidate_errors
+_core._space_prior_art_state = _hardened_space_prior_art_state
 
 
 def evaluate_admission(
@@ -52,6 +241,10 @@ def evaluate_admission(
             return _core.Verdict.UNAVAILABLE, list(actual_bundle.unresolved) or [
                 "required prior-art evidence is unavailable"
             ]
+    if verdict is _core.Verdict.CLEARED:
+        competing_reasons = _competing_discriminator_reasons(candidate)
+        if competing_reasons:
+            return _core.Verdict.UNKNOWN, competing_reasons
     return verdict, reasons
 
 
@@ -67,6 +260,7 @@ def _legacy_unbound_prior_art(
     reasons: list[str] = []
     valid_ids: list[str] = []
     scopes: set[str] = set()
+    explicit_refutation = False
     if not receipt_ids:
         return (
             _core.Verdict.UNKNOWN,
@@ -87,6 +281,12 @@ def _legacy_unbound_prior_art(
             continue
         if receipt.get("verdict") != _core.Verdict.CLEARED.value:
             reasons.append(f"{receipt_id} Space source-assessment is not CLEARED")
+            continue
+        if _claim_outcome(receipt) in _REFUTED_OUTCOMES:
+            explicit_refutation = True
+            reasons.append(
+                "Space assessment explicitly refutes the candidate prior-art non-match claim"
+            )
             continue
         cited = [
             evidence
@@ -126,6 +326,8 @@ def _legacy_unbound_prior_art(
         if scope_hash is not None:
             scopes.add(scope_hash)
         valid_ids.append(receipt_id)
+    if explicit_refutation and not valid_ids:
+        return _core.Verdict.ISSUE, list(dict.fromkeys(reasons)), (), None
     if not valid_ids:
         return _core.Verdict.UNKNOWN, list(dict.fromkeys(reasons)), (), None
     if len(scopes) > 1:
