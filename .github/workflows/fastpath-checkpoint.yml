@@ -9,19 +9,14 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: fastpath-checkpoint-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  fast-p6:
+  fast-p7:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           submodules: true
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: '3.12'
       - name: Verify pinned Hermes gitlink
@@ -33,7 +28,7 @@ jobs:
           set -euo pipefail
           python -m pip install --upgrade pip
           python -m pip install -e vendor/hermes-agent
-      - name: Verify observation firewall and Soul finalizer
+      - name: Verify FAST-P7 advisory FOIL routing
         run: |
           set -euo pipefail
-          python .github/phase6_verify.py
+          python .github/phase7_verify.py
