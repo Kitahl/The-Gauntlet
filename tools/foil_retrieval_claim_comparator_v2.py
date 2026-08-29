@@ -58,6 +58,8 @@ def compare_candidate_v2(
         policy=policy,
         semantic_comparator=semantic_comparator,
     )
+    if candidate.answer_kind is not AnswerKind.NUMBER:
+        return base
     outputs = {_normalize(item.output, candidate.answer_kind) for item in packet.computations}
     if len(outputs) != 1:
         return base

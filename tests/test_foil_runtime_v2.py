@@ -98,6 +98,17 @@ class RouteOpportunityV2Tests(unittest.TestCase):
         symbolic = discover_route_opportunity_v2(task("Solve 2*x + 3 = 11 for x."))
         self.assertEqual(symbolic.candidates[0].family, RuntimeToolFamily.SYMBOLIC_COMPUTATION)
 
+    def test_incidental_math_span_is_not_an_answer_obligation(self) -> None:
+        result = discover_route_opportunity_v2(
+            task("Can two graphs have different numbers of $5$-cycles?")
+        )
+        self.assertEqual(result.status, OpportunityStatusV2.COVERAGE_GAP)
+        self.assertEqual(result.candidates, ())
+
+    def test_what_is_delimited_math_remains_supported(self) -> None:
+        result = discover_route_opportunity_v2(task(r"What is \(2 + 3\)?"))
+        self.assertEqual(result.candidates[0].family, RuntimeToolFamily.EXACT_ARITHMETIC)
+
     def test_coverage_gap_is_typed(self) -> None:
         result = discover_route_opportunity_v2(task("Tell me something interesting."))
         self.assertEqual(result.status, OpportunityStatusV2.COVERAGE_GAP)
@@ -252,6 +263,25 @@ class FoilRuntimeV2Tests(unittest.TestCase):
         self.assertEqual(receipt.outcome, RuntimeOutcomeV2.VERIFY_RESOLVED)
         self.assertTrue(receipt.answer_changed)
         self.assertFalse(receipt.trace()["shadow_only"])
+
+    def test_numeric_result_cannot_replace_a_proposition(self) -> None:
+        question = r"Compute \(2 + 3\), then answer whether the result is prime."
+        with tempfile.TemporaryDirectory() as directory:
+            ledger = RuntimeTokenLedger()
+            final, receipt = run_foil(
+                task(question),
+                "Yes",
+                obligation(question, AnswerKind.PROPOSITION),
+                adapters={RuntimeToolFamily.EXACT_ARITHMETIC: ExactArithmeticAdapterV2()},
+                ledger=ledger,
+                policy=policy(),
+                archive=RawEvidenceArchive(Path(directory)),
+            )
+        self.assertEqual(final, "Yes")
+        self.assertEqual(receipt.outcome, RuntimeOutcomeV2.PRESERVED_A0)
+        self.assertIn("answer_kind_mismatch=EXACT_ARITHMETIC", receipt.reason)
+        self.assertIsNone(receipt.selected_family)
+        self.assertEqual(ledger.spent_usage.total_tokens, 0)
 
     def test_correct_a0_is_preserved_and_resolved(self) -> None:
         final, receipt = self.run_mechanical(

@@ -82,6 +82,15 @@ class RuntimeOutcomeV2(str, Enum):
     PERSISTENCE_ERROR = "PERSISTENCE_ERROR"
 
 
+_NUMERIC_RESULT_FAMILIES = frozenset(
+    {
+        RuntimeToolFamily.EXACT_ARITHMETIC,
+        RuntimeToolFamily.RESTRICTED_PYTHON,
+        RuntimeToolFamily.SYMBOLIC_COMPUTATION,
+    }
+)
+
+
 @dataclass(frozen=True)
 class FoilRuntimePolicyV2:
     enabled: bool
@@ -353,7 +362,14 @@ def run_foil_v2(
 
     considered: list[tuple[int, RuntimeToolAdapterV2, ToolProbeV2]] = []
     probe_traces: list[dict[str, object]] = []
+    incompatible_families: list[str] = []
     for candidate in opportunity.candidates:
+        if (
+            candidate.family in _NUMERIC_RESULT_FAMILIES
+            and obligation.answer_kind is not AnswerKind.NUMBER
+        ):
+            incompatible_families.append(candidate.family.value)
+            continue
         adapter = adapters.get(candidate.family)
         if adapter is None:
             continue
@@ -364,10 +380,13 @@ def run_foil_v2(
         if probe.status == ProbeStatusV2.APPLICABLE and probe.value.executes:
             considered.append((candidate.cost_rank, adapter, probe))
     if not considered:
+        reason = "no_applicable_positive_value_route"
+        if incompatible_families:
+            reason += ":answer_kind_mismatch=" + ",".join(incompatible_families)
         return a0, _receipt(
             task, a0, opportunity, before, ledger,
             outcome=RuntimeOutcomeV2.PRESERVED_A0,
-            reason="no_applicable_positive_value_route",
+            reason=reason,
             probes=tuple(probe_traces),
         )
     _, adapter, probe = min(

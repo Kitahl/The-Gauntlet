@@ -160,14 +160,21 @@ class RouteOpportunityV2:
 
 
 _MATH_SPAN = re.compile(r"\\\((.*?)\\\)|\$(.*?)\$", re.DOTALL)
+_EXPLICIT_ARITHMETIC_REQUEST = re.compile(
+    r"\b(?:compute|calculate|evaluate)\b",
+    re.IGNORECASE,
+)
+_WHAT_IS_MATH = re.compile(
+    r"\bwhat\s+is\s+(?:the\s+(?:exact\s+)?(?:value|result)\s+of\s+)?\s*(?:\\\(|\$)",
+    re.IGNORECASE,
+)
 _PLAIN_COMPUTE = re.compile(
     r"\b(?:compute|calculate|evaluate)\s+(?:the\s+value\s+of\s+)?(.+?)(?:\?|\.$|$)",
     re.IGNORECASE | re.DOTALL,
 )
 _PYTHON_BLOCK = re.compile(r"```python\s*(.*?)```", re.IGNORECASE | re.DOTALL)
 _SYMBOLIC = re.compile(
-    r"\b(?:solve|simplify|factor|expand|differentiate|integrate)\b|"
-    r"(?:[A-Za-z]\w*\s*[+\-*/]?\s*)?=\s*[^=]",
+    r"\b(?:solve|simplify|factor|expand|differentiate|integrate)\b",
     re.IGNORECASE,
 )
 _RETRIEVAL = re.compile(
@@ -177,15 +184,25 @@ _RETRIEVAL = re.compile(
 )
 
 
-def _closed_expression(question: str) -> str | None:
+def closed_answer_expression_v2(question: str) -> str | None:
+    """Return one exact expression only when the question asks for its value.
+
+    Mathematical notation inside a question is not automatically the answer
+    obligation. In particular, a categorical question may mention a number
+    such as ``$5$`` without asking the respondent to compute five. This parser
+    therefore requires an explicit arithmetic request before a delimited math
+    span can become an answer-producing route.
+    """
+
     values: list[str] = []
-    for match in _MATH_SPAN.finditer(question):
-        source = next(value for value in match.groups() if value is not None)
-        try:
-            evaluate_exact(source)
-        except UnsupportedExpression:
-            continue
-        values.append(normalize_expression(source))
+    if _EXPLICIT_ARITHMETIC_REQUEST.search(question) or _WHAT_IS_MATH.search(question):
+        for match in _MATH_SPAN.finditer(question):
+            source = next(value for value in match.groups() if value is not None)
+            try:
+                evaluate_exact(source)
+            except UnsupportedExpression:
+                continue
+            values.append(normalize_expression(source))
     plain = _PLAIN_COMPUTE.search(question)
     if plain is not None:
         source = plain.group(1).strip()
@@ -233,7 +250,7 @@ def discover_route_opportunity_v2(raw: Mapping[str, object]) -> RouteOpportunity
 
     task = QuestionOnlyTaskV2.from_mapping(raw)
     found: dict[RuntimeToolFamily, str] = {}
-    if _closed_expression(task.question) is not None:
+    if closed_answer_expression_v2(task.question) is not None:
         found[RuntimeToolFamily.EXACT_ARITHMETIC] = "UNIQUE_CLOSED_ARITHMETIC_EXPRESSION"
     if _restricted_python(task.question):
         found[RuntimeToolFamily.RESTRICTED_PYTHON] = "SINGLE_RESTRICTED_PYTHON_PRINT"

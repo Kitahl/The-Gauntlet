@@ -1,0 +1,28 @@
+{
+  "schema": "foil.retrieval-provider-schema-smoke.v1",
+  "classification": "CONNECTIVITY_AND_BINDING_ONLY",
+  "model": "gpt-5.6-terra",
+  "reasoning_effort": "low",
+  "provider_schema_accepted": true,
+  "provider_exit_code": 0,
+  "output_sha256": "cb47f97da03e144fefa2363a536fd9d38c8407b0ec922a983411316eccc247ab",
+  "retrieval_status": "FOUND",
+  "source_count": 1,
+  "host_url_validation_passed": true,
+  "host_fetch_passed": true,
+  "exact_quote_bound": true,
+  "source_content_sha256": "0c91bd40c2eddf0a4ec2ca77e2bbc3276c05372e44dbd02ed62ec66787a90962",
+  "passage_sha256": "78c82806d8542a46ecdb1244c4e91d2c81dc7405280b0c7321db67f2732c2004",
+  "provider_usage": {
+    "input_tokens": 133393,
+    "cached_input_tokens": 93184,
+    "output_tokens": 758,
+    "total_tokens": 134151,
+    "cached_input_tokens_are_a_subset_of_input_tokens": true
+  },
+  "non_claims": [
+    "This is not a benchmark score.",
+    "This does not prove that retrieved evidence entails an arbitrary candidate answer.",
+    "This does not calibrate or promote the retrieval route."
+  ]
+}

@@ -14,6 +14,7 @@ from foil_route_opportunity_v2 import (
     ComplexityBand,
     QuestionOnlyTaskV2,
     RuntimeToolFamily,
+    closed_answer_expression_v2,
 )
 from foil_tool_contract_v2 import (
     BoundaryFailureCode,
@@ -125,38 +126,11 @@ def _answer(value: Fraction) -> str:
     return str(value.numerator) if value.denominator == 1 else f"{value.numerator}/{value.denominator}"
 
 
-_MATH_SPAN = re.compile(r"\\\((.*?)\\\)|\$(.*?)\$", re.DOTALL)
-_PLAIN_COMPUTE = re.compile(
-    r"\b(?:compute|calculate|evaluate)\s+(?:the\s+value\s+of\s+)?(.+?)(?:\?|\.$|$)",
-    re.IGNORECASE | re.DOTALL,
-)
 _PYTHON_BLOCK = re.compile(r"```python\s*(.*?)```", re.IGNORECASE | re.DOTALL)
 _SOLVE = re.compile(
     r"\bsolve\s+(?P<equation>.+?)\s+for\s+(?P<variable>[A-Za-z]\w*)\s*[?.]?$",
     re.IGNORECASE | re.DOTALL,
 )
-
-
-def _closed_expression(question: str) -> str | None:
-    candidates: list[str] = []
-    for match in _MATH_SPAN.finditer(question):
-        source = next(group for group in match.groups() if group is not None)
-        try:
-            evaluate_exact(source)
-        except UnsupportedExpression:
-            continue
-        candidates.append(normalize_expression(source))
-    plain = _PLAIN_COMPUTE.search(question)
-    if plain is not None:
-        source = plain.group(1).strip()
-        try:
-            evaluate_exact(source)
-        except UnsupportedExpression:
-            pass
-        else:
-            candidates.append(normalize_expression(source))
-    unique = set(candidates)
-    return next(iter(unique)) if len(unique) == 1 else None
 
 
 def _python_expression(question: str) -> tuple[str, str] | None:
@@ -264,7 +238,7 @@ class ExactArithmeticAdapterV2:
     tool_version = "2"
 
     def probe(self, task: QuestionOnlyTaskV2) -> ToolProbeV2:
-        expression = _closed_expression(task.question)
+        expression = closed_answer_expression_v2(task.question)
         return ToolProbeV2(
             self.family,
             ProbeStatusV2.APPLICABLE if expression is not None else ProbeStatusV2.DECLINE,

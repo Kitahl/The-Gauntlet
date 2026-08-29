@@ -247,7 +247,7 @@ class AnswerAssessment:
 
 
 def _computation_verdict(claim: AtomicClaim, packet: EvidencePacket, answer_kind: AnswerKind) -> ClaimVerdict | None:
-    if not claim.computation_receipt_ids:
+    if answer_kind is not AnswerKind.NUMBER or not claim.computation_receipt_ids:
         return None
     receipts = [packet.computation(receipt_id) for receipt_id in claim.computation_receipt_ids]
     outputs = {_normalized_value(item.output, answer_kind) for item in receipts}
