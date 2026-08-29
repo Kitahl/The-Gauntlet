@@ -107,6 +107,6 @@ Power implements/verifies engineering. Time executes/evaluates experiments. Mind
 formal claims when needed. Space supplies additional evidence. Gauntlet assures process.
 Soul routes and releases.
 
-Runtime: `tools/reality_runtime.py`
+Typed runtime contract: `tools/reality_runtime.py`
 
 Engineering contract: `docs/specs/REALITY_ENGINEERING_SPEC.md`
