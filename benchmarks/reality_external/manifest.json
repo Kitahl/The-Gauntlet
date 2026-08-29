@@ -22,10 +22,14 @@
       "redistribution_status": "UPSTREAM_TERMS_PROHIBIT_RAW_DATA_REDISTRIBUTION_OUTSIDE_RESEARCH_GROUP"
     },
     "liveideabench_v2": {
-      "materialized_count": 0,
+      "materialized_count": 1180,
+      "pilot_count": 44,
       "pilot_target": 44,
       "target_domains": 22,
-      "status": "READY_TO_MATERIALIZE",
+      "pilot_per_domain": 2,
+      "full_blind_sha256": "4c96e5fe7355a9075a3ab0c885925f80a68914440de315aaa380e07616652b34",
+      "pilot_blind_sha256": "a07d8718b6e3b65be654a517fa5ebf0449f2b99b96a172c12e70e9a536184254",
+      "status": "MATERIALIZED",
       "redistribution_status": "APACHE_2_0_DATASET"
     },
     "axiomatic": {
