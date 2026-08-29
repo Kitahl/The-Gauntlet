@@ -53,6 +53,10 @@ def _run(
     )
 
 
+def _normalized_whitespace(value: str) -> str:
+    return " ".join(value.split())
+
+
 def _first_prompt_request(
     requests: list[dict[str, Any]],
     phase5: Any,
@@ -89,11 +93,13 @@ def main() -> None:
     base_environment = dict(os.environ)
     help_run = _run([command, "--help"], environment=base_environment)
     assert help_run.returncode == 0
-    assert "Soul's canonical release gate" in help_run.stdout
+    assert "Soul's canonical release gate" in _normalized_whitespace(help_run.stdout)
 
     chat_help = _run([command, "chat", "--help"], environment=base_environment)
     assert chat_help.returncode == 0
-    assert "one explicitly bound canonical task" in chat_help.stdout
+    assert "one explicitly bound canonical task" in _normalized_whitespace(
+        chat_help.stdout
+    )
 
     chat_exit = _run(
         [command, "chat", "--root", str(REPO)],
