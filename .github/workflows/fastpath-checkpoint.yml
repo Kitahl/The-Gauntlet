@@ -31,4 +31,4 @@ jobs:
       - name: Verify FAST-P7 advisory FOIL routing
         run: |
           set -euo pipefail
-          python .github/phase7_verify.py
+          PYTHONPATH=. python .github/phase7_verify.py
