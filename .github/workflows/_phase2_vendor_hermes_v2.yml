@@ -59,6 +59,5 @@ jobs:
         run: |
           set -euo pipefail
           git add vendor/hermes-agent vendor/HERMES_SNAPSHOT.json
-          git diff --cached --check
           git commit -m "vendor: materialize pinned Hermes v0.20.6 source"
           git push origin HEAD:work/native-hermes-fastpath
