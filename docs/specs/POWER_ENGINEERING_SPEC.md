@@ -144,8 +144,10 @@ Power preserves the existing execution boundary:
 - SHA-256 stdout/stderr hashes instead of trusting prose output.
 
 `python-script` is a constrained family for a real `.py` entrypoint. It requires the
-active interpreter and an existing script path; arbitrary module names and shell
-interpretation remain unavailable.
+active interpreter, and the script must resolve to a real file inside the supplied
+repository root; absolute or symlinked paths that escape that root are refused. Extra
+arguments remain subject to the constrained path/flag checks. Arbitrary module names
+and shell interpretation remain unavailable.
 
 ## 11. Verdict and receipt semantics
 
