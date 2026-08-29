@@ -1,4 +1,4 @@
-name: Phase 5 status plugin verification v3
+name: Fastpath checkpoint qualification
 
 on:
   push:
@@ -10,11 +10,11 @@ permissions:
   contents: read
 
 concurrency:
-  group: phase5-status-v3-${{ github.ref }}
+  group: fastpath-checkpoint-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  verify:
+  fast-p6:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -33,7 +33,7 @@ jobs:
           set -euo pipefail
           python -m pip install --upgrade pip
           python -m pip install -e vendor/hermes-agent
-      - name: Verify one agent-visible read-only status call
+      - name: Verify observation firewall and Soul finalizer
         run: |
           set -euo pipefail
-          python .github/phase5_verify.py
+          python .github/phase6_verify.py

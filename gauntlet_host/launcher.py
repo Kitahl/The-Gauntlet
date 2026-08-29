@@ -1,4 +1,4 @@
-"""Parent-side launcher for one isolated vendored runtime turn."""
+"""Parent-side launcher and Soul-gated finalizer for one runtime turn."""
 
 from __future__ import annotations
 
@@ -18,9 +18,17 @@ from gauntlet_host.constants import (
     MAX_AGENT_RUN_BUDGET_SECONDS,
     MAX_LAUNCH_TIMEOUT_SECONDS,
     MODULE_CLI,
+    OBSERVATION_BRIDGE,
     REPO_ROOT,
     VENDOR_ROOT,
     WORKER_MAIN,
+)
+from gauntlet_host.finalizer import (
+    FinalizationResult,
+    encode_finalization,
+    finalization_exit_code,
+    finalize_worker_result,
+    print_human_finalization,
 )
 from gauntlet_host.ipc import (
     IPCContractError,
@@ -31,7 +39,6 @@ from gauntlet_host.ipc import (
     WorkerStatus,
     decode_result,
     encode_request,
-    encode_result,
 )
 from gauntlet_host.runtime_profile import (
     RuntimeProfile,
@@ -76,6 +83,7 @@ def _worker_environment(profile: RuntimeProfile, request: RuntimeRequest) -> dic
     environment["GAUNTLET_TASK_ID"] = request.task_id
     environment["GAUNTLET_REPO_ROOT"] = str(REPO_ROOT)
     environment["GAUNTLET_MODULE_CLI"] = str(MODULE_CLI)
+    environment["GAUNTLET_OBSERVATION_BRIDGE"] = str(OBSERVATION_BRIDGE)
 
     for inherited_bypass in (
         "HERMES_YOLO_MODE",
@@ -212,17 +220,19 @@ def run_worker_turn(
         )
 
     required_files = (
-        VENDOR_ROOT,
         WORKER_MAIN,
         MODULE_CLI,
+        OBSERVATION_BRIDGE,
     )
-    if not VENDOR_ROOT.is_dir() or not all(path.is_file() for path in required_files[1:]):
+    if not VENDOR_ROOT.is_dir() or not all(path.is_file() for path in required_files):
         return _failure(
             request,
             status=WorkerStatus.ERROR,
             event="launcher.start_failed",
             code="WORKER_FILES_MISSING",
-            message="vendored runtime, worker entry point, or module adapter is missing",
+            message=(
+                "vendored runtime, worker, module adapter, or observation bridge is missing"
+            ),
         )
 
     environment = _worker_environment(profile, request)
@@ -274,28 +284,35 @@ def run_worker_turn(
     )
 
 
-def _error_document(result: RuntimeResult) -> str:
-    assert result.error is not None
-    return json.dumps(
-        {
-            "status": result.status.value,
-            "event": result.event,
-            "task_id": result.task_id,
-            "error": {
-                "code": result.error.code,
-                "message": result.error.message,
-            },
-        },
-        ensure_ascii=False,
-        indent=2,
-        sort_keys=True,
+def run_gauntlet_turn(
+    prompt: str,
+    *,
+    task_id: str,
+    root: Path | str,
+    model: str | None = None,
+    provider: str | None = None,
+    toolsets: Sequence[str] = (),
+    timeout_seconds: float = DEFAULT_LAUNCH_TIMEOUT_SECONDS,
+) -> FinalizationResult:
+    """Run one worker turn and apply the existing Soul release gate."""
+
+    resolved_root = Path(root).expanduser().resolve(strict=False)
+    worker_result = run_worker_turn(
+        prompt,
+        task_id=task_id,
+        cwd=resolved_root,
+        model=model,
+        provider=provider,
+        toolsets=toolsets,
+        timeout_seconds=timeout_seconds,
     )
+    return finalize_worker_result(resolved_root, task_id, worker_result)
 
 
 def _argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m gauntlet_host.launcher",
-        description="Run one isolated Gauntlet-bundled agent turn.",
+        description="Run one isolated Gauntlet-bundled agent turn and apply Soul's gate.",
     )
     parser.add_argument("prompt")
     parser.add_argument("--task-id")
@@ -312,7 +329,7 @@ def _argument_parser() -> argparse.ArgumentParser:
         "--json",
         action="store_true",
         dest="json_output",
-        help="print the complete transport result instead of only the answer",
+        help="print the complete Soul-gated finalization result",
     )
     return parser
 
@@ -320,10 +337,10 @@ def _argument_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     args = _argument_parser().parse_args(argv)
     task_id = args.task_id or f"task-runtime-{uuid.uuid4().hex[:16]}"
-    result = run_worker_turn(
+    result = run_gauntlet_turn(
         args.prompt,
         task_id=task_id,
-        cwd=args.cwd,
+        root=args.cwd,
         model=args.model,
         provider=args.provider,
         toolsets=args.toolset,
@@ -331,17 +348,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
 
     if args.json_output:
-        print(encode_result(result))
-    elif result.status is WorkerStatus.OK:
-        print(result.payload["final_response"])
+        print(encode_finalization(result))
     else:
-        print(_error_document(result), file=sys.stderr)
-
-    return {
-        WorkerStatus.OK: 0,
-        WorkerStatus.ERROR: 2,
-        WorkerStatus.UNAVAILABLE: 3,
-    }[result.status]
+        print_human_finalization(result)
+    return finalization_exit_code(result)
 
 
 if __name__ == "__main__":
