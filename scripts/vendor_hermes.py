@@ -62,7 +62,8 @@ def manifest(root: Path) -> dict:
         raise VendorError(f"cannot read Hermes source manifest: {path}") from exc
     expected = {
         "schema": "gauntlet.vendor_gitlink.v1",
-        "state": "gitlink",
+        "state": "materialized",
+        "storage": "gitlink",
         "upstream_repository": REPO,
         "upstream_tag": TAG,
         "upstream_commit": COMMIT,
