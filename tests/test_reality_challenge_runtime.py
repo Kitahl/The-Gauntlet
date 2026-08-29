@@ -12,6 +12,9 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
+import reality_runtime as reality  # noqa: E402
+import soul_runtime as soul  # noqa: E402
+import space_runtime as space  # noqa: E402
 from egrt_challenge import record_resolution, resolution_for_receipt  # noqa: E402
 from egrt_challenge_types import ChallengeKind, ResolutionOutcome  # noqa: E402
 from egrt_store import RuntimeStore, new_id, utcnow  # noqa: E402
@@ -22,10 +25,6 @@ from egrt_types import (  # noqa: E402
     Verdict,
     digest,
 )
-import reality_runtime as reality  # noqa: E402
-import soul_runtime as soul  # noqa: E402
-import space_runtime as space  # noqa: E402
-
 
 CLAIM_SCOPE = (
     "Within the registered assessed scope, the nearest prior art does not match "
