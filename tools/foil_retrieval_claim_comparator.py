@@ -48,6 +48,8 @@ class ComparisonAuthority(str, Enum):
 class ComparisonMethod(str, Enum):
     EXACT_BOUND_SPAN = "EXACT_BOUND_SPAN"
     EXACT_COMPUTATION = "EXACT_COMPUTATION"
+    EXACT_VERIFICATION = "EXACT_VERIFICATION"
+    TYPED_FORMULA_STRUCTURE = "TYPED_FORMULA_STRUCTURE"
     SEMANTIC_CALLBACK = "SEMANTIC_CALLBACK"
     NO_APPLICABLE_COMPARATOR = "NO_APPLICABLE_COMPARATOR"
 
@@ -151,12 +153,17 @@ class ClaimVerdict:
     model_passes: int = 0
     latency_ms: int = 0
     monetary_microunits: int = 0
+    verification_receipt_ids: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "status", ClaimStatus(self.status))
         object.__setattr__(self, "authority", ComparisonAuthority(self.authority))
         object.__setattr__(self, "method", ComparisonMethod(self.method))
         _ppm("confidence_ppm", self.confidence_ppm)
+        if not isinstance(self.verification_receipt_ids, tuple) or not all(
+            isinstance(item, str) and item for item in self.verification_receipt_ids
+        ):
+            raise TypeError("verification_receipt_ids must be a string tuple")
         for name in (
             "input_tokens", "cached_input_tokens", "output_tokens", "model_passes",
             "latency_ms", "monetary_microunits",
@@ -166,7 +173,7 @@ class ClaimVerdict:
                 raise ValueError(f"{name} must be a non-negative integer")
 
     def trace(self) -> dict[str, object]:
-        return {
+        body: dict[str, object] = {
             "claim_id": self.claim_id,
             "status": self.status.value,
             "authority": self.authority.value,
@@ -182,6 +189,9 @@ class ClaimVerdict:
             "latency_ms": self.latency_ms,
             "monetary_microunits": self.monetary_microunits,
         }
+        if self.verification_receipt_ids:
+            body["verification_receipt_ids"] = list(self.verification_receipt_ids)
+        return body
 
 
 @dataclass(frozen=True)
@@ -295,6 +305,30 @@ def _exact_span_verdict(claim: AtomicClaim, packet: EvidencePacket, answer_kind:
     )
 
 
+def _verification_verdict(
+    claim: AtomicClaim,
+    packet: EvidencePacket,
+    answer_kind: AnswerKind,
+) -> ClaimVerdict | None:
+    if not claim.verification_receipt_ids:
+        return None
+    receipts = [packet.verification(receipt_id) for receipt_id in claim.verification_receipt_ids]
+    outputs = {_normalized_value(item.candidate_answer, answer_kind) for item in receipts}
+    expected = _normalized_value(claim.normalized_value, answer_kind)
+    supported = outputs == {expected}
+    return ClaimVerdict(
+        claim.claim_id,
+        ClaimStatus.SUPPORTED if supported else ClaimStatus.CONTRADICTED,
+        ComparisonAuthority.MECHANICAL,
+        ComparisonMethod.EXACT_VERIFICATION,
+        PPM,
+        (),
+        (),
+        "closed_host_verification_matches_claim" if supported else "closed_host_verification_contradicts_claim",
+        verification_receipt_ids=claim.verification_receipt_ids,
+    )
+
+
 def compare_candidate(
     candidate: CandidateAnswer,
     packet: EvidencePacket,
@@ -370,7 +404,7 @@ def compare_candidate(
             )
             continue
         if candidate.origin is CandidateOrigin.EVIDENCE_CONSTRUCTED and not (
-            claim.evidence_span_ids or claim.computation_receipt_ids
+            claim.evidence_span_ids or claim.computation_receipt_ids or claim.verification_receipt_ids
         ):
             verdicts.append(
                 ClaimVerdict(
@@ -382,6 +416,8 @@ def compare_candidate(
             )
             continue
         mechanical = _computation_verdict(claim, packet, candidate.answer_kind)
+        if mechanical is None:
+            mechanical = _verification_verdict(claim, packet, candidate.answer_kind)
         if mechanical is None:
             mechanical = _exact_span_verdict(claim, packet, candidate.answer_kind)
         if mechanical is not None:

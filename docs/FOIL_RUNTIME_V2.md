@@ -13,8 +13,9 @@ CLI in `tools/foil_runtime_cli.py`.
 The runtime flow is:
 
 1. Freeze a closed question-only opportunity (`foil_route_opportunity_v2.py`).
-2. Probe exactly four families, cheapest first: exact arithmetic, restricted
-   Python, bounded symbolic computation, and passage retrieval.
+2. Probe exactly five families, cheapest first: a closed formal-decidability
+   theorem, exact arithmetic, restricted Python, bounded symbolic computation,
+   and passage retrieval.
 3. Apply a prelaunch expected-value decision and reserve a finite per-call
    resource envelope (`foil_runtime_token_ledger.py`). There is no aggregate
    token ceiling or benchmark cancellation.
@@ -22,8 +23,11 @@ The runtime flow is:
 5. Persist the raw content-addressed receipt before reporting success
    (`foil_evidence_archive.py`). Search snippets are not evidence; retrieval must
    provide fetched content and exact passage offsets.
-6. Build an evidence packet. A candidate constructor, when enabled, receives
-   the question and admitted evidence but never A0 or tools.
+6. Build an evidence packet. Arithmetic and non-arithmetic host proofs remain
+   distinct receipt types. For a named-formula question, a unique parseable
+   source equation can construct a source-bound candidate without a model;
+   otherwise a candidate constructor, when enabled, receives the question and
+   admitted evidence but never A0 or tools.
 7. Compare A0 and B independently against the same packet. Mechanical evidence
    may adjudicate; uncalibrated semantic comparison is supporting only.
 8. Preserve A0 unless B is fully eligible and A0 has an admissible critical
@@ -46,7 +50,7 @@ The runtime flow is:
 
 ## Verification
 
-Focused tests cover closed schemas, unknown-field rejection, all four adapter
+Focused tests cover closed schemas, unknown-field rejection, all five adapter
 families, exact active repairs, correct-answer preservation, raw passage
 archiving, constructor blindness, selector authority, per-call accounting,
 aggregate-unbounded operation, timeout/malformed/overrun/persistence faults, and
@@ -62,3 +66,8 @@ behavior; they do not prove generalized score improvement.
 - No semantic entailment model is calibrated by this build.
 - No benchmark efficacy, score gain, or token multiplier is claimed here.
 - Passage retrieval requires a host-supplied provider adapter.
+- `FORMAL_DECIDABILITY` recognizes only the versioned total-language minimum-
+  program theorem. It is not a general theorem prover or prose formalizer.
+- Typed formula comparison proves structural agreement with one retrieved
+  equation. It does not prove that the source is globally correct, and
+  conflicting or unsupported notation fails closed.

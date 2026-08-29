@@ -36,16 +36,22 @@ from foil_evidence_contract import (
     EvidenceDocument,
     EvidencePacket,
     EvidenceSpan,
+    MechanicalVerificationReceipt,
+    PACKET_SCHEMA,
+    PACKET_SCHEMA_V2,
     QuestionObligation,
     SourceClass,
+    VerificationKind,
     single_answer_candidate,
 )
+from foil_formal_decidability import validate_formal_decidability_payload
 from foil_retrieval_claim_comparator import (
     AnswerAssessment,
     ComparatorPolicy,
     SemanticComparator,
 )
 from foil_retrieval_claim_comparator_v2 import compare_candidate_v2
+from foil_typed_formula import discover_formula_task, extract_target_formulas, unique_reference_formula
 from foil_route_opportunity_v2 import (
     OpportunityStatusV2,
     QuestionOnlyTaskV2,
@@ -238,6 +244,7 @@ def _packet_from_receipt(
     documents: list[EvidenceDocument] = []
     spans: list[EvidenceSpan] = []
     computations: list[ComputationReceipt] = []
+    verifications: list[MechanicalVerificationReceipt] = []
     for index, passage in enumerate(receipt.passages):
         document_id = passage.document_id
         documents.append(
@@ -264,14 +271,30 @@ def _packet_from_receipt(
     if receipt.outcome is ToolOutcomeV2.RESOLVED:
         if receipt.verification_expression is None or receipt.candidate_answer is None:
             raise ValueError("resolved receipt lacks mechanical verification material")
-        computations.append(
-            ComputationReceipt(
-                f"computation-{receipt.contract_digest[:16]}",
-                receipt.verification_expression,
-                (),
+        if receipt.family is RuntimeToolFamily.FORMAL_DECIDABILITY:
+            validate_formal_decidability_payload(
+                task.question,
                 receipt.candidate_answer,
+                receipt.verification_expression,
             )
-        )
+            verifications.append(
+                MechanicalVerificationReceipt(
+                    f"verification-{receipt.contract_digest[:16]}",
+                    VerificationKind.FORMAL_DECIDABILITY_V1,
+                    task.question,
+                    receipt.candidate_answer,
+                    receipt.verification_expression,
+                )
+            )
+        else:
+            computations.append(
+                ComputationReceipt(
+                    f"computation-{receipt.contract_digest[:16]}",
+                    receipt.verification_expression,
+                    (),
+                    receipt.candidate_answer,
+                )
+            )
     return EvidencePacket(
         task.question_digest,
         tuple(documents),
@@ -285,6 +308,47 @@ def _packet_from_receipt(
         int(receipt.family is RuntimeToolFamily.PASSAGE_RETRIEVAL),
         receipt.latency_ms,
         receipt.monetary_microunits,
+        schema=PACKET_SCHEMA_V2 if verifications else PACKET_SCHEMA,
+        verifications=tuple(verifications),
+    )
+
+
+def _host_formula_candidate(
+    task: QuestionOnlyTaskV2,
+    obligation: QuestionObligation,
+    packet: EvidencePacket,
+    policy: ComparatorPolicy,
+) -> CandidateAnswer | None:
+    formula_task = discover_formula_task(task.question)
+    if formula_task is None:
+        return None
+    document_map = {item.document_id: item for item in packet.documents}
+    eligible = tuple(
+        span for span in packet.spans
+        if document_map[span.document_id].source_class in policy.allowed_source_classes
+        and (obligation.temporal_scope is None or document_map[span.document_id].temporal_scope == obligation.temporal_scope)
+        and (obligation.jurisdiction is None or document_map[span.document_id].jurisdiction == obligation.jurisdiction)
+    )
+    formula = unique_reference_formula(tuple(span.text for span in eligible), formula_task.target)
+    if formula is None:
+        return None
+    bound = tuple(
+        span.span_id for span in eligible
+        if any(
+            item.canonical == formula.canonical
+            for item in extract_target_formulas(span.text, formula_task.target)
+        )
+    )
+    if not bound:
+        return None
+    return single_answer_candidate(
+        formula.raw,
+        answer_kind=obligation.answer_kind,
+        origin=CandidateOrigin.EVIDENCE_CONSTRUCTED,
+        evidence_span_ids=bound,
+        unit=obligation.requested_unit,
+        temporal_scope=obligation.temporal_scope,
+        jurisdiction=obligation.jurisdiction,
     )
 
 
@@ -491,31 +555,44 @@ def run_foil_v2(
         obligation=obligation,
         policy=policy.comparator,
         semantic_comparator=semantic_comparator,
+        question=task.question,
     )
     constructor: ConstructorReceiptV2 | None = None
     b_candidate: CandidateAnswer | None = None
     if tool_receipt.outcome is ToolOutcomeV2.RESOLVED:
         assert tool_receipt.candidate_answer is not None
-        b_candidate = single_answer_candidate(
-            tool_receipt.candidate_answer,
-            answer_kind=obligation.answer_kind,
-            origin=CandidateOrigin.EVIDENCE_CONSTRUCTED,
-            computation_receipt_ids=(packet.computations[0].receipt_id,),
-            unit=obligation.requested_unit,
-            temporal_scope=obligation.temporal_scope,
-            jurisdiction=obligation.jurisdiction,
-        )
+        if packet.verifications:
+            b_candidate = single_answer_candidate(
+                tool_receipt.candidate_answer,
+                answer_kind=obligation.answer_kind,
+                origin=CandidateOrigin.EVIDENCE_CONSTRUCTED,
+                verification_receipt_ids=(packet.verifications[0].receipt_id,),
+                unit=obligation.requested_unit,
+                temporal_scope=obligation.temporal_scope,
+                jurisdiction=obligation.jurisdiction,
+            )
+        else:
+            b_candidate = single_answer_candidate(
+                tool_receipt.candidate_answer,
+                answer_kind=obligation.answer_kind,
+                origin=CandidateOrigin.EVIDENCE_CONSTRUCTED,
+                computation_receipt_ids=(packet.computations[0].receipt_id,),
+                unit=obligation.requested_unit,
+                temporal_scope=obligation.temporal_scope,
+                jurisdiction=obligation.jurisdiction,
+            )
     else:
+        b_candidate = _host_formula_candidate(task, obligation, packet, policy.comparator)
         request = ConstructorRequestV2(
-            task.question,
-            obligation,
-            packet,
-            policy.constructor.maximum_output_tokens,
+            task.question, obligation, packet, policy.constructor.maximum_output_tokens
         )
-        constructor = run_bounded_constructor_v2(
-            request, policy=policy.constructor, runner=constructor_runner
-        )
-        if constructor.outcome in {ConstructorOutcomeV2.PROVIDER_ERROR, ConstructorOutcomeV2.TIMEOUT}:
+        if b_candidate is None:
+            constructor = run_bounded_constructor_v2(
+                request, policy=policy.constructor, runner=constructor_runner
+            )
+        else:
+            constructor = None
+        if constructor is not None and constructor.outcome in {ConstructorOutcomeV2.PROVIDER_ERROR, ConstructorOutcomeV2.TIMEOUT}:
             total = _total_usage(tool_receipt, constructor, a0_assessment, None)
             try:
                 ledger.settle(
@@ -537,7 +614,8 @@ def run_foil_v2(
                 a0_assessment=a0_assessment, constructor=constructor,
                 cost_accounting_complete=complete,
             )
-        b_candidate = constructor.candidate
+        if constructor is not None:
+            b_candidate = constructor.candidate
 
     b_assessment = None
     if b_candidate is not None:
@@ -547,6 +625,7 @@ def run_foil_v2(
             obligation=obligation,
             policy=policy.comparator,
             semantic_comparator=semantic_comparator,
+            question=task.question,
         )
     final, selection = select_answer_v2(
         a0,

@@ -43,6 +43,7 @@ from foil_runtime_benchmark_integration import run_benchmark_row  # noqa: E402
 from foil_runtime_token_ledger import RuntimeTokenLedger  # noqa: E402
 from foil_runtime_tools_v2 import (  # noqa: E402
     ExactArithmeticAdapterV2,
+    FormalDecidabilityAdapterV2,
     PassageRetrievalAdapterV2,
     RestrictedPythonAdapterV2,
     RetrievedPassageBatch,
@@ -467,6 +468,7 @@ def run() -> None:
                         RuntimeToolFamily.EXACT_ARITHMETIC: ExactArithmeticAdapterV2(),
                         RuntimeToolFamily.RESTRICTED_PYTHON: RestrictedPythonAdapterV2(),
                         RuntimeToolFamily.SYMBOLIC_COMPUTATION: SymbolicLinearAdapterV2(),
+                        RuntimeToolFamily.FORMAL_DECIDABILITY: FormalDecidabilityAdapterV2(),
                         RuntimeToolFamily.PASSAGE_RETRIEVAL: _retrieval_adapter(retrieval),
                     },
                     ledger=RuntimeTokenLedger(), policy=_route_policy(),

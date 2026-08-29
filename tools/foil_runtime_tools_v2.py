@@ -10,6 +10,10 @@ from typing import Callable, Protocol
 
 from egrt_types import digest
 from foil_certified_arithmetic import UnsupportedExpression, evaluate_exact, normalize_expression
+from foil_formal_decidability import (
+    derive_formal_decidability_proof,
+    validate_formal_decidability_payload,
+)
 from foil_route_opportunity_v2 import (
     ComplexityBand,
     QuestionOnlyTaskV2,
@@ -334,6 +338,52 @@ class SymbolicLinearAdapterV2:
             f"call-{contract.contract_digest[:16]}", contract.contract_digest,
             self.family, ToolOutcomeV2.RESOLVED, TokenUsageV2(), 1, 0, 0,
             candidate_answer=answer, verification_expression=verification,
+        )
+
+
+class FormalDecidabilityAdapterV2:
+    """Zero-token host proof for the closed total-language theorem schema."""
+
+    family = RuntimeToolFamily.FORMAL_DECIDABILITY
+    tool_id = "foil.formal-decidability"
+    tool_version = "1"
+
+    def probe(self, task: QuestionOnlyTaskV2) -> ToolProbeV2:
+        proof = derive_formal_decidability_proof(task.question)
+        return ToolProbeV2(
+            self.family,
+            ProbeStatusV2.APPLICABLE if proof is not None else ProbeStatusV2.DECLINE,
+            "closed_total_language_proof" if proof is not None else "outside_formal_decidability_language",
+            proof.payload if proof is not None else task.question_digest,
+            ComplexityBand.LOW,
+            ResourceEnvelopeV2(maximum_latency_ms=500),
+            _default_value(probability_resolution_ppm=999_000),
+            500,
+            True,
+        )
+
+    def execute(
+        self,
+        contract: ToolContractV2,
+        task: QuestionOnlyTaskV2,
+        probe: ToolProbeV2,
+    ) -> ToolReceiptV2:
+        proof = derive_formal_decidability_proof(task.question)
+        if (
+            proof is None
+            or probe.status != ProbeStatusV2.APPLICABLE
+            or digest(proof.payload) != contract.operation_input_digest
+        ):
+            return ToolReceiptV2(
+                f"call-{contract.contract_digest[:16]}", contract.contract_digest,
+                self.family, ToolOutcomeV2.NOT_APPLICABLE, TokenUsageV2(), 0, 0, 0,
+            )
+        validate_formal_decidability_payload(task.question, proof.conclusion, proof.payload)
+        return ToolReceiptV2(
+            f"call-{contract.contract_digest[:16]}", contract.contract_digest,
+            self.family, ToolOutcomeV2.RESOLVED, TokenUsageV2(), 1, 0, 0,
+            candidate_answer=proof.conclusion,
+            verification_expression=proof.payload,
         )
 
 

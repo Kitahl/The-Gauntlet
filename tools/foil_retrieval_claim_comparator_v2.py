@@ -5,6 +5,7 @@ from __future__ import annotations
 from foil_evidence_contract import (
     AnswerKind,
     CandidateAnswer,
+    CandidateOrigin,
     ClaimKind,
     EvidencePacket,
     QuestionObligation,
@@ -20,6 +21,7 @@ from foil_retrieval_claim_comparator import (
     SemanticComparator,
     compare_candidate,
 )
+from foil_typed_formula import FormulaStatus, compare_formula, discover_formula_task, extract_target_formulas
 
 
 def _normalize(value: str, kind: AnswerKind) -> str:
@@ -43,6 +45,7 @@ def compare_candidate_v2(
     obligation: QuestionObligation,
     policy: ComparatorPolicy,
     semantic_comparator: SemanticComparator | None = None,
+    question: str | None = None,
 ) -> AnswerAssessment:
     """Apply the same independent mechanical packet check to A0 and B.
 
@@ -58,15 +61,96 @@ def compare_candidate_v2(
         policy=policy,
         semantic_comparator=semantic_comparator,
     )
+    replacements: list[ClaimVerdict] = []
+    changed = False
+    claims = {item.claim_id: item for item in candidate.claims}
+
+    verification_outputs = {
+        _normalize(item.candidate_answer, candidate.answer_kind)
+        for item in packet.verifications
+    }
+    if len(verification_outputs) == 1:
+        expected = next(iter(verification_outputs))
+        for verdict in base.verdicts:
+            claim = claims[verdict.claim_id]
+            if claim.kind is ClaimKind.ANSWER and verdict.method is ComparisonMethod.NO_APPLICABLE_COMPARATOR:
+                matches = _normalize(claim.normalized_value, candidate.answer_kind) == expected
+                replacements.append(
+                    ClaimVerdict(
+                        claim.claim_id,
+                        ClaimStatus.SUPPORTED if matches else ClaimStatus.CONTRADICTED,
+                        ComparisonAuthority.MECHANICAL,
+                        ComparisonMethod.EXACT_VERIFICATION,
+                        PPM,
+                        (),
+                        (),
+                        "unique_packet_verification_matches_answer" if matches else "unique_packet_verification_contradicts_answer",
+                        verification_receipt_ids=tuple(item.receipt_id for item in packet.verifications),
+                    )
+                )
+                changed = True
+            else:
+                replacements.append(verdict)
+        if changed:
+            base = _assessment(candidate, replacements, policy)
+
+    formula_task = None if question is None else discover_formula_task(question)
+    if formula_task is not None and packet.spans:
+        document_map = {item.document_id: item for item in packet.documents}
+        eligible_spans = tuple(
+            span for span in packet.spans
+            if document_map[span.document_id].source_class in policy.allowed_source_classes
+            and (obligation.temporal_scope is None or document_map[span.document_id].temporal_scope == obligation.temporal_scope)
+            and (obligation.jurisdiction is None or document_map[span.document_id].jurisdiction == obligation.jurisdiction)
+        )
+        formula_replacements: list[ClaimVerdict] = []
+        formula_changed = False
+        for verdict in base.verdicts:
+            claim = claims[verdict.claim_id]
+            if verdict.status is ClaimStatus.OUT_OF_SCOPE:
+                formula_replacements.append(verdict)
+                continue
+            claim_reference_spans = (
+                tuple(span for span in eligible_spans if span.span_id in claim.evidence_span_ids)
+                if candidate.origin is CandidateOrigin.EVIDENCE_CONSTRUCTED
+                else eligible_spans
+            )
+            comparison = compare_formula(
+                claim.normalized_value,
+                tuple(span.text for span in claim_reference_spans),
+                formula_task.target,
+            )
+            if comparison.status in {FormulaStatus.EQUIVALENT, FormulaStatus.DIFFERENT}:
+                cited = tuple(
+                    span.span_id for span in claim_reference_spans
+                    if extract_target_formulas(span.text, formula_task.target)
+                )
+                formula_replacements.append(
+                    ClaimVerdict(
+                        claim.claim_id,
+                        ClaimStatus.SUPPORTED if comparison.status is FormulaStatus.EQUIVALENT else ClaimStatus.CONTRADICTED,
+                        ComparisonAuthority.MECHANICAL,
+                        ComparisonMethod.TYPED_FORMULA_STRUCTURE,
+                        PPM,
+                        cited,
+                        (),
+                        comparison.reason,
+                    )
+                )
+                formula_changed = True
+            else:
+                formula_replacements.append(verdict)
+        if formula_changed:
+            base = _assessment(candidate, formula_replacements, policy)
+
     if candidate.answer_kind is not AnswerKind.NUMBER:
         return base
     outputs = {_normalize(item.output, candidate.answer_kind) for item in packet.computations}
     if len(outputs) != 1:
         return base
     expected = next(iter(outputs))
-    replacements: list[ClaimVerdict] = []
+    replacements = []
     changed = False
-    claims = {item.claim_id: item for item in candidate.claims}
     for verdict in base.verdicts:
         claim = claims[verdict.claim_id]
         if (
@@ -95,6 +179,14 @@ def compare_candidate_v2(
             replacements.append(verdict)
     if not changed:
         return base
+    return _assessment(candidate, replacements, policy)
+
+
+def _assessment(
+    candidate: CandidateAnswer,
+    replacements: list[ClaimVerdict],
+    policy: ComparatorPolicy,
+) -> AnswerAssessment:
     supported = sum(item.status is ClaimStatus.SUPPORTED for item in replacements)
     contradicted = sum(item.status is ClaimStatus.CONTRADICTED for item in replacements)
     omitted = sum(item.reason == "constructed_claim_omits_evidence_binding" for item in replacements)

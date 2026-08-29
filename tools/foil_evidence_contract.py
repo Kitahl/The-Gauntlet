@@ -21,6 +21,7 @@ from egrt_types import digest
 
 OBLIGATION_SCHEMA = "foil.question-obligation.v1"
 PACKET_SCHEMA = "foil.evidence-packet.v1"
+PACKET_SCHEMA_V2 = "foil.evidence-packet.v2"
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _NAME = re.compile(r"^[A-Za-z][A-Za-z0-9_]{0,63}$")
 
@@ -36,11 +37,16 @@ class ClaimKind(str, Enum):
     ANSWER = "ANSWER"
     FACT = "FACT"
     COMPUTATION_RESULT = "COMPUTATION_RESULT"
+    VERIFIED_RESULT = "VERIFIED_RESULT"
 
 
 class CandidateOrigin(str, Enum):
     BASE = "BASE"
     EVIDENCE_CONSTRUCTED = "EVIDENCE_CONSTRUCTED"
+
+
+class VerificationKind(str, Enum):
+    FORMAL_DECIDABILITY_V1 = "FORMAL_DECIDABILITY_V1"
 
 
 class SourceClass(str, Enum):
@@ -341,6 +347,56 @@ class ComputationReceipt:
 
 
 @dataclass(frozen=True)
+class MechanicalVerificationReceipt:
+    """A non-arithmetic result checked by one closed host verifier."""
+
+    receipt_id: str
+    verification_kind: VerificationKind
+    question: str
+    candidate_answer: str
+    verification_payload: str
+    mechanically_verified: bool = True
+
+    def __post_init__(self) -> None:
+        _text("receipt_id", self.receipt_id)
+        object.__setattr__(self, "verification_kind", VerificationKind(self.verification_kind))
+        _text("question", self.question)
+        _text("candidate_answer", self.candidate_answer)
+        _text("verification_payload", self.verification_payload)
+        if self.mechanically_verified is not True:
+            raise ValueError("verification receipts must be mechanically verified")
+        if self.verification_kind is VerificationKind.FORMAL_DECIDABILITY_V1:
+            from foil_formal_decidability import validate_formal_decidability_payload
+
+            validate_formal_decidability_payload(
+                self.question,
+                self.candidate_answer,
+                self.verification_payload,
+            )
+
+    @property
+    def question_digest(self) -> str:
+        return digest(self.question)
+
+    @property
+    def receipt_digest(self) -> str:
+        return digest(self.trace())
+
+    def trace(self) -> dict[str, object]:
+        return {
+            "receipt_id": self.receipt_id,
+            "verification_kind": self.verification_kind.value,
+            "question_digest": self.question_digest,
+            "candidate_sha256": digest(self.candidate_answer),
+            "verification_payload_sha256": digest(self.verification_payload),
+            "mechanically_verified": True,
+            "raw_candidate_stored": False,
+            "raw_question_stored": False,
+            "raw_verification_payload_stored": False,
+        }
+
+
+@dataclass(frozen=True)
 class EvidencePacket:
     question_digest: str
     documents: tuple[EvidenceDocument, ...]
@@ -355,15 +411,19 @@ class EvidencePacket:
     latency_ms: int = 0
     monetary_microunits: int = 0
     schema: str = PACKET_SCHEMA
+    verifications: tuple[MechanicalVerificationReceipt, ...] = ()
 
     def __post_init__(self) -> None:
-        if self.schema != PACKET_SCHEMA:
+        if self.schema not in {PACKET_SCHEMA, PACKET_SCHEMA_V2}:
             raise ValueError("unsupported evidence-packet schema")
+        if self.schema == PACKET_SCHEMA and self.verifications:
+            raise ValueError("v1 evidence packets cannot carry verification receipts")
         _sha256("question_digest", self.question_digest)
         for name, value, expected in (
             ("documents", self.documents, EvidenceDocument),
             ("spans", self.spans, EvidenceSpan),
             ("computations", self.computations, ComputationReceipt),
+            ("verifications", self.verifications, MechanicalVerificationReceipt),
         ):
             if not isinstance(value, tuple) or not all(isinstance(item, expected) for item in value):
                 raise TypeError(f"{name} must be a tuple of {expected.__name__}")
@@ -392,6 +452,13 @@ class EvidencePacket:
             for binding in receipt.bindings:
                 if binding.evidence_span_id is not None and binding.evidence_span_id not in span_map:
                     raise ValueError("computation binding references unknown span")
+        verification_ids = {item.receipt_id for item in self.verifications}
+        if len(verification_ids) != len(self.verifications):
+            raise ValueError("verification receipt ids must be unique")
+        if receipt_ids & verification_ids:
+            raise ValueError("evidence receipt ids must be globally unique")
+        if any(item.question_digest != self.question_digest for item in self.verifications):
+            raise ValueError("verification receipt does not bind packet question")
 
     @property
     def actual_total_tokens(self) -> int:
@@ -409,6 +476,12 @@ class EvidencePacket:
 
     def computation(self, receipt_id: str) -> ComputationReceipt:
         for receipt in self.computations:
+            if receipt.receipt_id == receipt_id:
+                return receipt
+        raise KeyError(receipt_id)
+
+    def verification(self, receipt_id: str) -> MechanicalVerificationReceipt:
+        for receipt in self.verifications:
             if receipt.receipt_id == receipt_id:
                 return receipt
         raise KeyError(receipt_id)
@@ -431,6 +504,8 @@ class EvidencePacket:
             "monetary_microunits": self.monetary_microunits,
             "raw_evidence_stored": False,
         }
+        if self.schema == PACKET_SCHEMA_V2:
+            body["verifications"] = [item.trace() for item in self.verifications]
         body["packet_sha256"] = digest(body)
         return body
 
@@ -447,6 +522,7 @@ class AtomicClaim:
     unit: str | None = None
     temporal_scope: str | None = None
     jurisdiction: str | None = None
+    verification_receipt_ids: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         for name in ("claim_id", "text", "normalized_value"):
@@ -456,13 +532,13 @@ class AtomicClaim:
             raise TypeError("critical must be bool")
         for name in ("unit", "temporal_scope", "jurisdiction"):
             _optional_text(name, getattr(self, name))
-        for name in ("evidence_span_ids", "computation_receipt_ids"):
+        for name in ("evidence_span_ids", "computation_receipt_ids", "verification_receipt_ids"):
             value = getattr(self, name)
             if not isinstance(value, tuple) or not all(isinstance(item, str) and item for item in value):
                 raise TypeError(f"{name} must be a tuple of non-empty strings")
 
     def trace(self) -> dict[str, object]:
-        return {
+        body: dict[str, object] = {
             "claim_id": self.claim_id,
             "text_sha256": digest(self.text),
             "kind": self.kind.value,
@@ -475,6 +551,9 @@ class AtomicClaim:
             "jurisdiction": self.jurisdiction,
             "raw_text_stored": False,
         }
+        if self.verification_receipt_ids:
+            body["verification_receipt_ids"] = list(self.verification_receipt_ids)
+        return body
 
 
 @dataclass(frozen=True)
@@ -520,6 +599,7 @@ def single_answer_candidate(
     origin: CandidateOrigin,
     evidence_span_ids: tuple[str, ...] = (),
     computation_receipt_ids: tuple[str, ...] = (),
+    verification_receipt_ids: tuple[str, ...] = (),
     unit: str | None = None,
     temporal_scope: str | None = None,
     jurisdiction: str | None = None,
@@ -532,6 +612,9 @@ def single_answer_candidate(
         claim_id=f"claim-{identifier}",
         text=answer,
         kind=(
+            ClaimKind.VERIFIED_RESULT
+            if verification_receipt_ids
+            else
             ClaimKind.COMPUTATION_RESULT
             if computation_receipt_ids
             else ClaimKind.ANSWER
@@ -539,6 +622,7 @@ def single_answer_candidate(
         normalized_value=answer.strip(),
         evidence_span_ids=evidence_span_ids,
         computation_receipt_ids=computation_receipt_ids,
+        verification_receipt_ids=verification_receipt_ids,
         unit=unit,
         temporal_scope=temporal_scope,
         jurisdiction=jurisdiction,

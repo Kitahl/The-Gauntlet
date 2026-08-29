@@ -265,7 +265,10 @@ def retrieval_prompt(question: str) -> str:
         "code, files, skills, or other tools. Return up to two authoritative public HTTPS source URLs "
         "and a verbatim quote from each source that directly bears on the answer. A search snippet is "
         "not evidence: quote text you believe is present on the fetched page. If you cannot identify a "
-        "fetchable direct passage, return UNRESOLVED with an empty sources array. Do not mention any "
+        "fetchable direct passage, return UNRESOLVED with an empty sources array. For a formula question, "
+        "the quote must contain the complete equation, including averaging, grouping, inverse, and order "
+        "symbols; do not reconstruct omitted notation. "
+        "Do not mention any "
         "incumbent answer; none is available.\n\nQUESTION:\n" + question
     )
 

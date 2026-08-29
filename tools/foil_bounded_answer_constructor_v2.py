@@ -270,13 +270,20 @@ def run_bounded_constructor_v2(
         )
     spans = {item.span_id for item in request.evidence_packet.spans}
     computations = {item.receipt_id for item in request.evidence_packet.computations}
+    verifications = {item.receipt_id for item in request.evidence_packet.verifications}
     for claim in draft.claims:
-        if not (claim.evidence_span_ids or claim.computation_receipt_ids):
+        if not (
+            claim.evidence_span_ids
+            or claim.computation_receipt_ids
+            or claim.verification_receipt_ids
+        ):
             reason = "constructed_claim_missing_binding"
         elif set(claim.evidence_span_ids) - spans:
             reason = "constructed_claim_unknown_span"
         elif set(claim.computation_receipt_ids) - computations:
             reason = "constructed_claim_unknown_computation"
+        elif set(claim.verification_receipt_ids) - verifications:
+            reason = "constructed_claim_unknown_verification"
         else:
             continue
         return _receipt(

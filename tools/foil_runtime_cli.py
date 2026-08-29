@@ -23,6 +23,7 @@ from foil_runtime_active import run_foil
 from foil_runtime_token_ledger import RuntimeTokenLedger
 from foil_runtime_tools_v2 import (
     ExactArithmeticAdapterV2,
+    FormalDecidabilityAdapterV2,
     RestrictedPythonAdapterV2,
     SymbolicLinearAdapterV2,
 )
@@ -89,6 +90,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         RuntimeToolFamily.EXACT_ARITHMETIC: ExactArithmeticAdapterV2(),
         RuntimeToolFamily.RESTRICTED_PYTHON: RestrictedPythonAdapterV2(),
         RuntimeToolFamily.SYMBOLIC_COMPUTATION: SymbolicLinearAdapterV2(),
+        RuntimeToolFamily.FORMAL_DECIDABILITY: FormalDecidabilityAdapterV2(),
     }
     final, receipt = run_foil(
         raw,

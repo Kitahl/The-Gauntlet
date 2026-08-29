@@ -8,10 +8,20 @@ FOIL does not transform general free-form prose into obligations. The host may
 supply a strict versioned declarative task spec; `foil_obligation_compiler.py`
 validates and binds it but never extracts checks from prose. FOIL also has
 default-off execution-class generators for explicit GSM8K-style annotations and
-for a closed certified arithmetic rule bank. The rule bank recognizes only
+for a closed certified arithmetic rule bank. The active runtime additionally
+recognizes one host-coded theorem schema: minimum program length in an
+effectively enumerable total language. That route re-derives a canonical proof
+payload from explicit question markers and declines every other theorem shape;
+it is not model-generated formalization. The rule bank recognizes only
 delimited numeric equalities, a separate bounded power rule, complete
 undelimited numeric-equality lines, and same-line joint affine constraint
 consistency. These are not general prose formalizers.
+
+The retrieval path also has a typed formula-structure comparator. It parses a
+unique source-bound equation in a deliberately small algebra where addition is
+commutative but multiplication order, inverse scope, and `AVG` remain distinct.
+This closes one execution-class comparison gap; it does not infer an equation
+from prose or certify the truth of the retrieved source.
 
 Consequently, current decidable coverage measures only a supplied obligation
 universe. It does not measure FOIL's ability to find decidable structure in prose,

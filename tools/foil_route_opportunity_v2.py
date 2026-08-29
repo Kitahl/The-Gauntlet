@@ -16,6 +16,8 @@ from typing import Mapping
 
 from egrt_types import digest
 from foil_certified_arithmetic import UnsupportedExpression, evaluate_exact, normalize_expression
+from foil_formal_decidability import derive_formal_decidability_proof
+from foil_typed_formula import discover_formula_task
 
 
 QUESTION_SCHEMA_V2 = "foil.question-only-route-input.v2"
@@ -29,6 +31,7 @@ class RuntimeToolFamily(str, Enum):
     RESTRICTED_PYTHON = "RESTRICTED_PYTHON"
     SYMBOLIC_COMPUTATION = "SYMBOLIC_COMPUTATION"
     PASSAGE_RETRIEVAL = "PASSAGE_RETRIEVAL"
+    FORMAL_DECIDABILITY = "FORMAL_DECIDABILITY"
 
 
 class OpportunityStatusV2(str, Enum):
@@ -47,6 +50,7 @@ _COST_ORDER = {
     RuntimeToolFamily.RESTRICTED_PYTHON: 1,
     RuntimeToolFamily.SYMBOLIC_COMPUTATION: 2,
     RuntimeToolFamily.PASSAGE_RETRIEVAL: 3,
+    RuntimeToolFamily.FORMAL_DECIDABILITY: -1,
 }
 
 
@@ -250,13 +254,18 @@ def discover_route_opportunity_v2(raw: Mapping[str, object]) -> RouteOpportunity
 
     task = QuestionOnlyTaskV2.from_mapping(raw)
     found: dict[RuntimeToolFamily, str] = {}
+    if derive_formal_decidability_proof(task.question) is not None:
+        found[RuntimeToolFamily.FORMAL_DECIDABILITY] = "CLOSED_TOTAL_LANGUAGE_DECIDABILITY_PROOF"
     if closed_answer_expression_v2(task.question) is not None:
         found[RuntimeToolFamily.EXACT_ARITHMETIC] = "UNIQUE_CLOSED_ARITHMETIC_EXPRESSION"
     if _restricted_python(task.question):
         found[RuntimeToolFamily.RESTRICTED_PYTHON] = "SINGLE_RESTRICTED_PYTHON_PRINT"
     if _SYMBOLIC.search(task.question):
         found[RuntimeToolFamily.SYMBOLIC_COMPUTATION] = "EXPLICIT_SYMBOLIC_OPERATION"
-    if _RETRIEVAL.search(task.question):
+    formula_task = discover_formula_task(task.question)
+    if formula_task is not None:
+        found[RuntimeToolFamily.PASSAGE_RETRIEVAL] = "NAMED_FORMULA_LOOKUP"
+    elif _RETRIEVAL.search(task.question):
         found[RuntimeToolFamily.PASSAGE_RETRIEVAL] = "FACT_OR_SOURCE_LOOKUP"
 
     candidates = tuple(
