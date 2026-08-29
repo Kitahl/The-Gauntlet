@@ -29,7 +29,7 @@ Validated scope:
 - final fresh-root qualification aggregate: 31/31 PASS
 - isolated Method Atlas execution: 57/57 PASS
 - postbench hardening controls: 9/9 PASS
-- representation tribunal: 19/19 PASS
+- representation verification suite: 19/19 PASS
 - formal-plane controls: 19/19 PASS
 - behavioral mutations: 20/20 PASS
 - candidate validator: 8/8 PASS
