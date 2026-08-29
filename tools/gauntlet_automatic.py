@@ -1,15 +1,9 @@
 """Automatic-first Process Assurance controller.
 
 The low-level :mod:`gauntlet_runtime` registry and typed monitors remain the factual
-mechanism. This controller restores the intended automatic behavior around them:
-release assurance evaluates every currently applicable canonical operation by default,
-does not silently drop checks because a structural budget is small, and does not stop
-automatically after the first issue. Selective/budgeted execution remains available
-only as an explicitly experimental policy.
-
-The controller also checks the integrity-valid runtime event chain needed by the
-monitors. That check is deliberately scoped to RuntimeStore records; it does not claim
-that every real-world hazard was represented as an event.
+mechanism. This controller preserves automatic full applicable coverage and adds an
+opt-in evidence-context gate without reinterpreting historical ``egrt.runtime.v1``
+receipts. Selective or early-stop execution remains explicitly experimental.
 """
 from __future__ import annotations
 
@@ -22,6 +16,11 @@ from typing import Any, Mapping, Sequence
 import gauntlet_runtime as low_level
 from egrt_store import RuntimeStore, new_id, utcnow
 from egrt_types import EvidenceClass, EvidenceRef, Receipt, Verdict, digest
+from gauntlet_evidence_context import (
+    EVIDENCE_CONTEXT_SCHEMA,
+    TaskEvidenceContextAssessment,
+    assess_task_evidence_context,
+)
 
 AUTOMATIC_ASSURANCE_SCHEMA = "egrt.gauntlet.automatic.v1"
 _POLICY_MODES = {
@@ -233,7 +232,9 @@ def _runtime_event_coverage(
             gaps.append(f"receipt-event-missing-or-unbound:{key[0] or 'unknown'}")
     for key, required in required_state_events.items():
         if actual_state_events[key] < required:
-            gaps.append(f"obligation-state-event-missing-or-unbound:{key[0] or 'unknown'}")
+            gaps.append(
+                f"obligation-state-event-missing-or-unbound:{key[0] or 'unknown'}"
+            )
     for key, required in required_evidence_events.items():
         if actual_evidence_events[key] < required:
             gaps.append(f"evidence-event-missing-or-unbound:{key[0] or 'unknown'}")
@@ -329,7 +330,14 @@ def _worse(
     left: tuple[Verdict, str],
     right: tuple[Verdict, str],
 ) -> tuple[Verdict, str]:
-    return right if _SEVERITY[right[0]] > _SEVERITY[left[0]] else left
+    left_severity = _SEVERITY[left[0]]
+    right_severity = _SEVERITY[right[0]]
+    if right_severity > left_severity:
+        return right
+    # At equal non-green severity prefer the later, more task-specific discriminator.
+    if right_severity == left_severity and right[0] != Verdict.CLEARED:
+        return right
+    return left
 
 
 def _monitor_operation(
@@ -340,6 +348,7 @@ def _monitor_operation(
     task: Mapping[str, Any] | None,
     task_id: str | None,
     assurance_obligation_id: str,
+    evidence_context: TaskEvidenceContextAssessment | None = None,
 ) -> tuple[Verdict, str]:
     low_level_result = low_level.monitor_structured(
         operation,
@@ -349,6 +358,17 @@ def _monitor_operation(
         task_id=task_id,
         assurance_obligation_id=assurance_obligation_id,
     )
+    if operation == "audit":
+        context_result = evidence_context or assess_task_evidence_context(
+            task,
+            receipts,
+            task_id=task_id,
+            assurance_obligation_id=assurance_obligation_id,
+        )
+        return _worse(
+            low_level_result,
+            (context_result.verdict, context_result.summary),
+        )
     if operation != "self":
         return low_level_result
     current_result = _current_receipt_self_check(
@@ -562,6 +582,12 @@ def run_automatic_assurance(
         events=events,
         receipts=receipts,
     )
+    evidence_context = assess_task_evidence_context(
+        task,
+        receipts,
+        task_id=resolved,
+        assurance_obligation_id=obligation_id,
+    )
     results: list[tuple[str, Verdict, str]] = []
     for operation in plan.selected_operations:
         verdict, reason = _monitor_operation(
@@ -571,6 +597,7 @@ def run_automatic_assurance(
             task=task,
             task_id=resolved,
             assurance_obligation_id=obligation_id,
+            evidence_context=evidence_context,
         )
         results.append((operation, verdict, reason))
         if (
@@ -596,6 +623,14 @@ def run_automatic_assurance(
     unresolved.extend(
         f"event-chain:{gap}" for gap in plan.runtime_event_coverage_gaps
     )
+    for row in evidence_context.rows:
+        assessment = row.get("assessment", {})
+        if assessment.get("verdict") == Verdict.CLEARED.value:
+            continue
+        for reason in assessment.get("reasons", []):
+            unresolved.append(
+                f"evidence-context:{row.get('obligation_id')}:{reason}"
+            )
     metrics = {
         "registry_operation_count": len(low_level.OPERATIONS),
         "applicable_operation_count": len(plan.applicable_operations),
@@ -605,6 +640,7 @@ def run_automatic_assurance(
         "planned_cost_units": plan.planned_cost_units,
         "registry_cost_units": plan.registry_cost_units,
         "advisory_budget_exceeded": plan.advisory_budget_exceeded,
+        "evidence_context_obligation_count": len(evidence_context.rows),
         "semantic_tool_calls": 0,
         "cost_unit_status": "UNCALIBRATED_ORDERING_PROXY",
         "efficacy_status": "NOT_ESTABLISHED",
@@ -615,6 +651,7 @@ def run_automatic_assurance(
         "deferred_operations": list(plan.deferred_operations),
         "runtime_event_coverage_status": plan.runtime_event_coverage_status,
         "runtime_event_coverage_gaps": list(plan.runtime_event_coverage_gaps),
+        "evidence_context": evidence_context.to_dict(),
         "metrics": metrics,
     }
     receipt = Receipt(
@@ -644,7 +681,15 @@ def run_automatic_assurance(
                     "deferred_operations": list(plan.deferred_operations),
                     "metrics": metrics,
                     "automatic": True,
-                    "coverage_reduction_experimental": policy.mode.endswith("EXPERIMENTAL"),
+                    "coverage_reduction_experimental": policy.mode.endswith(
+                        "EXPERIMENTAL"
+                    ),
+                    "evidence_context_schema": EVIDENCE_CONTEXT_SCHEMA,
+                    "evidence_context_status": evidence_context.status,
+                    "evidence_context_verdict": evidence_context.verdict.value,
+                    "evidence_context_rows": [
+                        dict(row) for row in evidence_context.rows
+                    ],
                     "authority": "ASSURANCE_ONLY",
                     "target_domain_clearance_authorized": False,
                 },
@@ -659,9 +704,11 @@ def run_automatic_assurance(
             {
                 "boundary": (
                     "Automatic full mode preserves every currently applicable canonical "
-                    "monitor. Coverage remains scoped to hazards represented through the "
-                    "RuntimeStore event/task/receipt model."
+                    "monitor. Evidence-context admission is opt-in and never replaces "
+                    "claim-native verification. Coverage remains scoped to hazards "
+                    "represented through the RuntimeStore event/task/receipt model."
                 ),
+                "evidence_context_status": evidence_context.status,
                 "results": result_rows,
             },
             sort_keys=True,

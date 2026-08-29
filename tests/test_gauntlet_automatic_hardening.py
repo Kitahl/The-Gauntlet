@@ -175,7 +175,9 @@ class AutomaticGauntletHardeningTests(unittest.TestCase):
                 for row in store.iter_events(task_id)
                 if row.get("event_type") == "obligation.state"
             )
-            event_path = store.events / f"{state_event['event_id']}.json"
+            event_paths = list(store.events.glob(f"*-{state_event['event_id']}.json"))
+            self.assertEqual(len(event_paths), 1)
+            event_path = event_paths[0]
             planted = store._read(event_path, require_integrity=False)
             self.assertIsNotNone(planted)
             planted.pop("content_hash", None)
@@ -194,7 +196,10 @@ class AutomaticGauntletHardeningTests(unittest.TestCase):
                 "UNKNOWN_RUNTIME_EVENT_CHAIN",
             )
             self.assertTrue(
-                any("obligation-state-event-missing-or-unbound" in gap for gap in receipt.unresolved)
+                any(
+                    "obligation-state-event-missing-or-unbound" in gap
+                    for gap in receipt.unresolved
+                )
             )
 
     def test_one_evidence_event_cannot_cover_two_receipts(self) -> None:
@@ -226,7 +231,10 @@ class AutomaticGauntletHardeningTests(unittest.TestCase):
                 "UNKNOWN_RUNTIME_EVENT_CHAIN",
             )
             self.assertTrue(
-                any("evidence-event-missing-or-unbound" in gap for gap in receipt.unresolved)
+                any(
+                    "evidence-event-missing-or-unbound" in gap
+                    for gap in receipt.unresolved
+                )
             )
 
     def test_monotonic_sequence_outranks_future_wall_clock_text(self) -> None:

@@ -16,10 +16,11 @@ Runtime automation is external to this skill:
 - `tools/gauntlet_hook.py`
 - `tools/gauntlet_runtime.py`
 - `tools/gauntlet_automatic.py`
+- `tools/gauntlet_evidence_context/__init__.py`
 - `tools/verify_ledger.py`
 - optional `tools/scout.py`, `tools/blackgem_runtime.py`, `tools/snap.py`
 
-See `docs/RUNTIME_SETUP.md`, `docs/specs/GAUNTLET_ENGINEERING_SPEC.md`, and `docs/specs/GAUNTLET_AUTOMATIC_SPEC.md`.
+See `docs/RUNTIME_SETUP.md`, `docs/specs/GAUNTLET_ENGINEERING_SPEC.md`, `docs/specs/GAUNTLET_AUTOMATIC_SPEC.md`, and `docs/specs/GAUNTLET_EVIDENCE_CONTEXT_SPEC.md`.
 
 ## Ten operations
 
@@ -48,11 +49,44 @@ At release, `AUTOMATIC_FULL`:
 4. ignores structural budgets as advisory rather than silently omitting release checks;
 5. runs the complete applicable sweep even after the first issue so one repair cycle can expose all represented blockers;
 6. verifies the internal RuntimeStore receipt→event chain used by the monitors;
-7. emits one compact `ASSURANCE_ONLY` receipt.
+7. composes `audit` with any explicitly required evidence-context gate;
+8. emits one compact `ASSURANCE_ONLY` receipt.
 
 Selective, budget-constrained, or early-stop execution remains available only through explicitly named `*_EXPERIMENTAL` policies. Those modes cannot be confused with the production automatic path.
 
 The existing Stop-hook recursion guard remains active through `stop_hook_active`; this upgrade does not weaken or replace the hook boundary.
+
+## Evidence-context hardening
+
+The base receipt schema remains `egrt.runtime.v1`. A task or obligation may opt into a stronger additive envelope using:
+
+```text
+metadata["gauntlet_evidence_requirement"]
+EvidenceRef.metadata["gauntlet_evidence_context"]
+```
+
+The envelope independently records:
+
+- execution: `CLAIMED | EXECUTED | TESTED`;
+- validity: `UNCHECKED | FORMAL_PASS | STATISTICAL_PASS | DETERMINISTIC_PASS | FAIL`;
+- fidelity: `NOT_APPLICABLE | UNCHECKED | PASSED | FAILED`;
+- independence: `SELF | CROSS_CHECKED | INDEPENDENT`;
+- provenance: `MISSING | PARTIAL | BOUND`;
+- admission: `PENDING | ADMITTED | REJECTED`.
+
+No qualifier implies another. A formal pass is not fidelity, signed provenance is not truth, independent verification is not scientific admission, and free-text claims such as “tested” or “ready” are not lifecycle causes.
+
+An admitted lifecycle transition must bind either the exact receipt or a host-registered deterministic rule, plus source state, source artifact where required, and rerun generation. Stale, superseded, source-changed, or old-generation evidence cannot clear the current gate.
+
+Historical receipts without the envelope remain readable and retain their original meaning. They are labelled legacy-unqualified and receive no inferred stronger admission status. Opt-in requirements are therefore additive rather than a silent rewrite of old receipts.
+
+Evaluation evidence may bind model, harness, prompt digest, evaluator, oracle semantics, equivalence relation, tools, environment, budget, retry/context policies, source artifact, and session state. Missing load-bearing identity remains `UNKNOWN`.
+
+A neutral provenance adapter may normalize W3C PROV-compatible lineage, Flowcept runtime records, in-toto attestations, or another backend. Its semantics are limited to integrity and lineage; Gauntlet still decides the evidence class and admission rule.
+
+Session/evaluation lanes distinguish `COLD_START`, `WARMED_STATE`, `EXTENDED_SESSION`, `RESUMED_STATE`, `STALE_STATE`, and `SUPERSEDED_STATE`. These are regression axes, not automatic safety or capability rankings.
+
+External failure taxonomies are diagnostic only and never release authority.
 
 ## Automaticity without silent capability loss
 
@@ -78,10 +112,10 @@ Reported `cost_units` are an `UNCALIBRATED_ORDERING_PROXY`, not measured model t
 
 ## Result semantics
 
-- `ISSUE`: a represented process hazard is established.
+- `ISSUE`: a represented process hazard or contradictory evidence-context admission is established.
 - `UNAVAILABLE`: a required method or capability cannot run.
-- `UNKNOWN`: evidence is absent, incomplete, unbound, provenance-ambiguous, or the RuntimeStore event chain is incomplete.
-- `CLEARED`: every applicable operation cleared and the represented runtime event chain is internally complete.
+- `UNKNOWN`: evidence is absent, incomplete, unbound, stale, provenance-ambiguous, context-identity incomplete, or the RuntimeStore event chain is incomplete.
+- `CLEARED`: every applicable operation cleared, the represented runtime event chain is internally complete, and every opted-in evidence-context requirement was admitted.
 
 `CLEARED` applies only to an `ASSURANCE` obligation. It cannot clear proof, discovery, synthesis, engineering, evaluation, review, adaptation, or adversary obligations.
 
@@ -96,6 +130,7 @@ Reported `cost_units` are an `UNCALIBRATED_ORDERING_PROXY`, not measured model t
 - Evidence inspected: `<task-scoped artifact/receipt/event hashes>`
 - Counterevidence: `<strongest live challenger>`
 - Runtime event coverage: `ESTABLISHED_RUNTIME_EVENT_CHAIN | UNKNOWN_RUNTIME_EVENT_CHAIN`
+- Evidence context: `<legacy-compatible | admitted | unresolved | rejected>`
 - Result: `CLEARED | ISSUE | UNKNOWN | UNAVAILABLE`
 - Consequence: `<what may or may not proceed>`
 - Next discriminator: `<only when unresolved>`
