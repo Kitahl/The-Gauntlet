@@ -1,0 +1,169 @@
+name: Finalize Soul session upgrade v2
+
+on:
+  push:
+    branches:
+      - upgrade/challenge-vnext-soul
+    paths:
+      - .github/workflows/finalize-soul-session-upgrade-v2.yml
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: upgrade/challenge-vnext-soul
+          fetch-depth: 0
+
+      - name: Normalize implementation and public wiring
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import textwrap
+          from pathlib import Path
+
+          root = Path('.')
+          facade = root / 'tools' / 'soul_session.py'
+          compact_test = root / 'tests' / 'test_soul_session.py'
+          rich_test = root / 'tests' / 'test_soul_session_control.py'
+          rich_module = root / 'tools' / 'soul_vnext' / 'session_control.py'
+          validator = root / 'validation' / 'validate_soul_sessions.py'
+          spec = root / 'docs' / 'specs' / 'SOUL_SESSION_CHECKPOINT_SPEC.md'
+
+          if not facade.exists() or not spec.exists():
+              raise SystemExit('missing required Soul session implementation/spec')
+
+          facade_text = facade.read_text(encoding='utf-8')
+          rich = 'soul_vnext.session_control import' in facade_text
+          if rich:
+              if not rich_module.exists() or not rich_test.exists():
+                  raise SystemExit('rich facade missing implementation or test')
+              compact_test.unlink(missing_ok=True)
+              selected_pattern = 'test_soul_session_control.py'
+              selected_path = rich_test.as_posix()
+          else:
+              if not compact_test.exists():
+                  raise SystemExit('compact implementation missing test')
+              selected_pattern = 'test_soul_session.py'
+              selected_path = compact_test.as_posix()
+
+          config_path = root / '.gauntlet.json'
+          config = json.loads(config_path.read_text(encoding='utf-8'))
+          tracked = None
+          for value in config.values():
+              if isinstance(value, list) and 'docs/ARCHITECTURE.md' in value:
+                  tracked = value
+                  break
+          if tracked is not None:
+              additions = [
+                  'docs/specs/SOUL_SESSION_CHECKPOINT_SPEC.md',
+                  'tools/soul_session.py',
+              ]
+              if rich:
+                  additions.extend([
+                      'tools/soul_vnext/session_control.py',
+                      'validation/validate_soul_sessions.py',
+                  ])
+              for item in additions:
+                  if item not in tracked:
+                      tracked.append(item)
+          runtime = config.get('runtime')
+          if isinstance(runtime, dict):
+              runtime.setdefault('automatic_sessions', True)
+              runtime.setdefault('session_checkpoint_limit', 128)
+              runtime.setdefault('session_metadata_max_bytes', 8192)
+          config_path.write_text(json.dumps(config, indent=2) + '\n', encoding='utf-8')
+
+          engineering = root / 'docs' / 'specs' / 'SOUL_ENGINEERING_SPEC.md'
+          engineering_section = textwrap.dedent('''
+
+          ## Durable host-loop sessions
+
+          Interruption and resume are governed by the additive, authority-neutral
+          contract in [`SOUL_SESSION_CHECKPOINT_SPEC.md`](SOUL_SESSION_CHECKPOINT_SPEC.md).
+          Session progress is `HOST_HINT_ONLY`; it never substitutes for a claim-native
+          receipt or the Soul release gate.
+          ''')
+          current = engineering.read_text(encoding='utf-8')
+          if 'SOUL_SESSION_CHECKPOINT_SPEC.md' not in current:
+              engineering.write_text(current.rstrip() + engineering_section + '\n', encoding='utf-8')
+
+          skill = root / 'skills' / 'soul' / 'SKILL.md'
+          skill_section = textwrap.dedent('''
+
+          ## Durable session checkpoints
+
+          For an interrupted host loop, use `tools/soul_session.py` to open,
+          checkpoint, and validate a content-bound session. A resume manifest is
+          control-only and carries no execution, domain-evidence, candidate-adoption,
+          or release authority. Task, route, evidence, or authority drift invalidates
+          the session and requires a fresh Soul plan.
+          ''')
+          current = skill.read_text(encoding='utf-8')
+          if '## Durable session checkpoints' not in current:
+              skill.write_text(current.rstrip() + skill_section + '\n', encoding='utf-8')
+
+          workflow = root / '.github' / 'workflows' / 'validate.yml'
+          current = workflow.read_text(encoding='utf-8')
+          marker = 'python -m unittest tests/test_soul_planner.py tests/test_soul_automatic_control.py'
+          if selected_path not in current:
+              lines = current.splitlines()
+              for index, line in enumerate(lines):
+                  if marker in line:
+                      suffix = ' -v' if line.rstrip().endswith(' -v') else ''
+                      base = line[:-3] if suffix else line
+                      lines[index] = f'{base} {selected_path}{suffix}'
+                      break
+              current = '\n'.join(lines) + ('\n' if workflow.read_text(encoding='utf-8').endswith('\n') else '')
+              workflow.write_text(current, encoding='utf-8')
+
+          Path('/tmp/soul_selected_pattern').write_text(selected_pattern, encoding='utf-8')
+          Path('/tmp/soul_mode').write_text('RICH' if rich else 'COMPACT', encoding='utf-8')
+          PY
+
+      - name: Validate durable session contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          pattern="$(cat /tmp/soul_selected_pattern)"
+          python -m compileall -q tools/soul_session.py tools/soul_vnext validation tests
+          python -m unittest discover -s tests -p "$pattern" -v
+          python -m unittest tests/test_soul_planner.py tests/test_soul_automatic_control.py -v
+          if [ -f validation/validate_soul_sessions.py ]; then
+            python validation/validate_soul_sessions.py
+          fi
+
+      - name: Commit tested core integration
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add .gauntlet.json .github/workflows/validate.yml docs/specs/SOUL_ENGINEERING_SPEC.md docs/specs/SOUL_SESSION_CHECKPOINT_SPEC.md skills/soul/SKILL.md tools/soul_session.py tests
+          if [ -f tools/soul_vnext/session_control.py ]; then git add tools/soul_vnext/session_control.py; fi
+          if [ -f validation/validate_soul_sessions.py ]; then git add validation/validate_soul_sessions.py; fi
+          if ! git diff --cached --quiet; then
+            git commit -m 'feat(soul): integrate durable authority-neutral sessions'
+            git push origin HEAD:upgrade/challenge-vnext-soul
+          fi
+
+      - name: Remove temporary synchronization workflows
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f \
+            .github/workflows/session-source-export.yml \
+            .github/workflows/finalize-soul-session-upgrade.yml \
+            .github/workflows/finalize-soul-session-upgrade-v2.yml
+          git add -A .github/workflows
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m 'chore(soul): remove temporary synchronization workflows'
+          git push origin HEAD:upgrade/challenge-vnext-soul
