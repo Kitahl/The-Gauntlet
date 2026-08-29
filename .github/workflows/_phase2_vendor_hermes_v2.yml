@@ -1,0 +1,64 @@
+name: Phase 2 Hermes Snapshot Bootstrap v2
+
+on:
+  push:
+    branches:
+      - work/native-hermes-fastpath
+    paths:
+      - .github/workflows/_phase2_vendor_hermes_v2.yml
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Check out fast-build branch
+        uses: actions/checkout@v4
+        with:
+          ref: work/native-hermes-fastpath
+          fetch-depth: 0
+
+      - name: Verify phase boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor 60bb6f22d7c13a25fee204fbc17798c6c55cb19f HEAD
+          test ! -e vendor/hermes-agent
+          test ! -e gauntlet_host
+
+      - name: Configure commit identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Dry-run pinned materialization
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/vendor_hermes.py --dry-run
+
+      - name: Materialize exact pinned source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/vendor_hermes.py
+
+      - name: Independently verify snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/vendor_hermes.py --verify-only
+
+      - name: Commit and push materialized snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add vendor/hermes-agent vendor/HERMES_SNAPSHOT.json
+          git diff --cached --check
+          git commit -m "vendor: materialize pinned Hermes v0.20.6 source"
+          git push origin HEAD:work/native-hermes-fastpath
