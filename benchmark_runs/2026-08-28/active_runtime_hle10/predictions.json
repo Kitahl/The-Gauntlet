@@ -2646,7 +2646,7 @@
         "total_tokens": 17898
       },
       "question_sha256": "e50425f9e579e96156bc0db036298ef58f8cb36a87fb414743774552a9fa462b",
-      "receipt_sha256": "67c3744a7723d3b288d58de1c2b5d17aac102b29d9fde25b75a710947830492e",
+      "receipt_sha256": "098262aa9fdeaae120d72fa2f8a186de61eac118ae1b225420731976b8db5a9d",
       "retrieval_fetches": [],
       "row_outcome": "VERIFY_RESOLVED",
       "row_valid": true,
@@ -2714,7 +2714,7 @@
         "archive_receipt": {
           "archive_id": "evidence-9aba5763059607db-d0ddd0916f4e8162",
           "contract_sha256": "9aba5763059607db59a1911d842aa85c25b98e8741cc7e141df8e217ae42dcc3",
-          "path": "C:\\Users\\tombl\\Documents\\Codex\\2026-08-23\\thi\\foil-persona-validation\\benchmark_runs\\2026-08-28\\active_runtime_hle10\\private\\hle-live-670dc75dcfd3fc87a109a929\\raw_evidence\\evidence-9aba5763059607db-d0ddd0916f4e8162.json",
+          "path": "benchmark_runs\\2026-08-28\\active_runtime_hle10\\private\\hle-live-670dc75dcfd3fc87a109a929\\raw_evidence\\evidence-9aba5763059607db-d0ddd0916f4e8162.json",
           "payload_sha256": "f1945993b3341d9cfe72f511add415b6b5c4846fd7b18d85f70963f1fdd03cf7",
           "raw_evidence_stored": true,
           "raw_passages": 0,

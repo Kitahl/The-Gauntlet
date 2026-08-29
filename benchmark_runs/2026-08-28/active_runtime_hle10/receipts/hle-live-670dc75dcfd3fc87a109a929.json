@@ -356,7 +356,7 @@
     "archive_receipt": {
       "archive_id": "evidence-9aba5763059607db-d0ddd0916f4e8162",
       "contract_sha256": "9aba5763059607db59a1911d842aa85c25b98e8741cc7e141df8e217ae42dcc3",
-      "path": "C:\\Users\\tombl\\Documents\\Codex\\2026-08-23\\thi\\foil-persona-validation\\benchmark_runs\\2026-08-28\\active_runtime_hle10\\private\\hle-live-670dc75dcfd3fc87a109a929\\raw_evidence\\evidence-9aba5763059607db-d0ddd0916f4e8162.json",
+      "path": "benchmark_runs\\2026-08-28\\active_runtime_hle10\\private\\hle-live-670dc75dcfd3fc87a109a929\\raw_evidence\\evidence-9aba5763059607db-d0ddd0916f4e8162.json",
       "payload_sha256": "f1945993b3341d9cfe72f511add415b6b5c4846fd7b18d85f70963f1fdd03cf7",
       "raw_evidence_stored": true,
       "raw_passages": 0,
