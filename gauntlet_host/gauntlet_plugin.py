@@ -280,12 +280,6 @@ def _post(*positional: Any, **values: Any) -> None:
             "started_at": started_at,
             "finished_at": finished_at,
             "duration_ms": max(0.0, duration_ms),
-            "provenance": {
-                "producer": "gauntlet-fastpath-plugin",
-                "event_source": "hermes.post_tool_call",
-                "raw_input_persisted": False,
-                "raw_output_persisted": False,
-            },
         }
     )
 
