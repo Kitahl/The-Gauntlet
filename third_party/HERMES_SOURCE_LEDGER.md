@@ -2,7 +2,7 @@
 
 **Ledger ID:** `GAUNTLET-HERMES-SOURCE-001`  
 **Fast-build branch:** `work/native-hermes-fastpath`  
-**Authority:** `vendor/HERMES_SNAPSHOT.json` is the machine-readable snapshot record.
+**Authority:** `vendor/HERMES_SNAPSHOT.json` is the machine-readable source record.
 
 ## 1. Frozen upstream source
 
@@ -14,49 +14,57 @@
 | License | MIT |
 | Upstream license SHA-256 | `821556e6336796450ab852d375117b48a4887e71d255794fd6318d99982a5ab6` |
 | Local destination | `vendor/hermes-agent/` |
-| Adoption method | Full source snapshot with only nested `.git` metadata excluded |
+| Adoption method | Git submodule-style gitlink pinned to the exact upstream commit |
 | Runtime role | Internal isolated worker implementation; never Gauntlet evidential authority |
 
-## 2. Current phase state
+## 2. Current source state
 
-`PREPARED_NOT_MATERIALIZED`
+`GITLINK_VERIFIED`
 
-This phase commits the exact pin, the unmodified MIT notice, and a deterministic
-materialization/verification command. The full upstream tree is intentionally populated
-in the next phase from a networked checkout so that the exact commit can be verified
-before any bytes enter `vendor/hermes-agent/`.
+Gauntlet records the upstream Hermes tree as a Git gitlink rather than copying the full
+third-party source tree into Gauntlet history. This preserves exact source identity while
+preventing upstream documentation, test fixtures, public OAuth client identifiers, and
+secret-shaped examples from being misclassified as first-party Gauntlet credentials by the
+repository-wide full-history secret scan.
 
-## 3. Materialization commands
+The remediation does **not** add a Gitleaks allowlist and does **not** weaken the first-party
+secret scanner. The pinned upstream source must be initialized through Git submodules before
+the native Hermes worker is executed.
+
+| Verification field | Value |
+|---|---|
+| Gitlink commit | `5fc308a70719a83cccdbba4c0e39c23f5a8239d5` |
+| Upstream tag | `v2026.8.27` |
+| License SHA-256 | `821556e6336796450ab852d375117b48a4887e71d255794fd6318d99982a5ab6` |
+| Local modifications | `0` |
+
+## 3. Checkout and verification
 
 From the repository root:
 
 ```bash
-python scripts/vendor_hermes.py --dry-run
-python scripts/vendor_hermes.py
+git submodule update --init --depth 1 -- vendor/hermes-agent
 python scripts/vendor_hermes.py --verify-only
 ```
 
-To use an already available clean checkout:
+Or initialize and verify in one bounded command:
 
 ```bash
-python scripts/vendor_hermes.py --source /path/to/hermes-agent
+python scripts/vendor_hermes.py --init
 ```
 
-Replacement of an existing vendored tree requires an explicit reviewed action:
+`vendor/hermes-agent` must remain a mode-`160000` gitlink to the exact pinned commit. A
+copied source tree at that path is rejected by the verifier.
 
-```bash
-python scripts/vendor_hermes.py --force
-```
+## 4. Local modifications inside the upstream tree
 
-## 4. Local modifications inside the vendored tree
+None.
 
-None permitted by default.
-
-The source snapshot must remain byte-for-byte faithful to the pinned checkout except for
-excluding `.git` metadata. Any future edit under `vendor/hermes-agent/` must be listed here
-with the local path, reason, reviewer, and replacement or removal plan.
+Do not edit the submodule worktree as part of Gauntlet. A future Hermes upgrade must update
+the gitlink, the machine-readable source record, and this ledger together after license,
+security, and behavior qualification.
 
 ## 5. Authority boundary
 
-Vendored runtime output is an observation. It cannot directly create a canonical Gauntlet
+Hermes runtime output is an observation. It cannot directly create a canonical Gauntlet
 `Receipt`, change a `Verdict`, clear an `Obligation`, or bypass Soul's `release_gate()`.
