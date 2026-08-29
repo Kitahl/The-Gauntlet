@@ -1,0 +1,234 @@
+{
+  "diagnostic_only": true,
+  "rows": [
+    {
+      "a0_observed": false,
+      "candidates": [],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "ca8438f97f1b3b2719fcff2fc57920167ef1ef4abbb08f056bcb77eb636e7540",
+      "profile_observed": false,
+      "promotion_authorized": false,
+      "question_digest": "1e736b4189a1d0ae642e8266979b0b48556e85003bc0b396ca0fa3bd63512b9b",
+      "question_only": true,
+      "schema": "foil.route-opportunity.v2",
+      "status": "COVERAGE_GAP",
+      "task_id": "hle-live-6707791ed9cad1c3863ce734"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "complexity": "MEDIUM",
+          "cost_rank": 2,
+          "execution_authorized": false,
+          "family": "SYMBOLIC_COMPUTATION",
+          "question_structure_only": true,
+          "reason_code": "EXPLICIT_SYMBOLIC_OPERATION",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "7dacbff9367ca4b4c91592833af3f35204a0ea0c79ce3ffb8b480dce691f7387",
+      "profile_observed": false,
+      "promotion_authorized": false,
+      "question_digest": "4bf04eb2f6ea4e28797090eba5fc04e0aa07534025fece4d8dd5324eb510f40d",
+      "question_only": true,
+      "schema": "foil.route-opportunity.v2",
+      "status": "FOUND",
+      "task_id": "hle-live-66e8b0a9e5eaa390aa9fdde5"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "7b6f6b33282995b4a90a839a918a36cdbdf4c9c987b38462c8cafa4120ecb20a",
+      "profile_observed": false,
+      "promotion_authorized": false,
+      "question_digest": "37b96a8f5cc76c866fee86311cc40b9a963f7fb9ce0cffe06a1df52137832d29",
+      "question_only": true,
+      "schema": "foil.route-opportunity.v2",
+      "status": "COVERAGE_GAP",
+      "task_id": "hle-live-66ff31e8c604a3a87b0cdf62"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "ac8f3e7e958909ceacad975d9854170abd774e01dd84b68463cfc9f5c6290c58",
+      "profile_observed": false,
+      "promotion_authorized": false,
+      "question_digest": "2bcc5ddd8e30bab5c130a5b36e1fc73d108c11569cca9fb4173c7e88a70c0731",
+      "question_only": true,
+      "schema": "foil.route-opportunity.v2",
+      "status": "COVERAGE_GAP",
+      "task_id": "hle-live-671da0bbbb27b8f41a423e7c"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "complexity": "HIGH",
+          "cost_rank": 2,
+          "execution_authorized": false,
+          "family": "SYMBOLIC_COMPUTATION",
+          "question_structure_only": true,
+          "reason_code": "EXPLICIT_SYMBOLIC_OPERATION",
+          "requires_runtime_probe": true
+        },
+        {
+          "complexity": "HIGH",
+          "cost_rank": 3,
+          "execution_authorized": false,
+          "family": "PASSAGE_RETRIEVAL",
+          "question_structure_only": true,
+          "reason_code": "FACT_OR_SOURCE_LOOKUP",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "46910e773025b6cfc6a9d026771bf2536c96fa3715f1efa48da9d08b738a28cb",
+      "profile_observed": false,
+      "promotion_authorized": false,
+      "question_digest": "db65063408756601ae5c334ef5b94ff74fd198c5450d9fcd27e36f1fe1262dc7",
+      "question_only": true,
+      "schema": "foil.route-opportunity.v2",
+      "status": "FOUND",
+      "task_id": "hle-live-670eb27fd2f45b1198c87766"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "complexity": "LOW",
+          "cost_rank": 2,
+          "execution_authorized": false,
+          "family": "SYMBOLIC_COMPUTATION",
+          "question_structure_only": true,
+          "reason_code": "EXPLICIT_SYMBOLIC_OPERATION",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "39c57403bb6887e29a18d7c874e5c17ee870289b6c7be41b104abd1966a5348d",
+      "profile_observed": false,
+      "promotion_authorized": false,
+      "question_digest": "7731e75ec250a669df0e0973a147ca1faf7a7bd68bf5d4b3c600efc291e58100",
+      "question_only": true,
+      "schema": "foil.route-opportunity.v2",
+      "status": "FOUND",
+      "task_id": "hle-live-673b7ee0b22ebd24e26d4ece"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "complexity": "HIGH",
+          "cost_rank": 2,
+          "execution_authorized": false,
+          "family": "SYMBOLIC_COMPUTATION",
+          "question_structure_only": true,
+          "reason_code": "EXPLICIT_SYMBOLIC_OPERATION",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "b9fe4880cb0bcdc88d0695c78dbd308b84b537466c197f9bd0eeee0cb206cb39",
+      "profile_observed": false,
+      "promotion_authorized": false,
+      "question_digest": "e44f2eff2e77190aad4404a52760b0f83c6ecb7aeebc843ef055eb5e80b17cd6",
+      "question_only": true,
+      "schema": "foil.route-opportunity.v2",
+      "status": "FOUND",
+      "task_id": "hle-live-66e9032060abc895aedcf460"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "complexity": "HIGH",
+          "cost_rank": 3,
+          "execution_authorized": false,
+          "family": "PASSAGE_RETRIEVAL",
+          "question_structure_only": true,
+          "reason_code": "FACT_OR_SOURCE_LOOKUP",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "046e630f21c2ebb2673ccab5b00032566fad3723ef40542e0484653159af8760",
+      "profile_observed": false,
+      "promotion_authorized": false,
+      "question_digest": "c28cce84e20b92e3d11efe88ca153d0b2a64676eb44ac225cba3caefbfab7123",
+      "question_only": true,
+      "schema": "foil.route-opportunity.v2",
+      "status": "FOUND",
+      "task_id": "hle-live-66fcc286eab6d512704d96af"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "complexity": "HIGH",
+          "cost_rank": 3,
+          "execution_authorized": false,
+          "family": "PASSAGE_RETRIEVAL",
+          "question_structure_only": true,
+          "reason_code": "FACT_OR_SOURCE_LOOKUP",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "326da5654cfb096e2058452f0462d18f1dd74f8addf2c674071dd81381fcafbf",
+      "profile_observed": false,
+      "promotion_authorized": false,
+      "question_digest": "3f5394cb57bfda20389155f0179b804a8e65d7e3137d03d43985d1848d241fdf",
+      "question_only": true,
+      "schema": "foil.route-opportunity.v2",
+      "status": "FOUND",
+      "task_id": "hle-live-6771217e251029ed2eca577a"
+    },
+    {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "complexity": "HIGH",
+          "cost_rank": 0,
+          "execution_authorized": false,
+          "family": "EXACT_ARITHMETIC",
+          "question_structure_only": true,
+          "reason_code": "UNIQUE_CLOSED_ARITHMETIC_EXPRESSION",
+          "requires_runtime_probe": true
+        },
+        {
+          "complexity": "HIGH",
+          "cost_rank": 2,
+          "execution_authorized": false,
+          "family": "SYMBOLIC_COMPUTATION",
+          "question_structure_only": true,
+          "reason_code": "EXPLICIT_SYMBOLIC_OPERATION",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "850ba156e9bff286fd46c8f49fa1873663b5bb177c15b435da7c7d4617442c4b",
+      "profile_observed": false,
+      "promotion_authorized": false,
+      "question_digest": "e50425f9e579e96156bc0db036298ef58f8cb36a87fb414743774552a9fa462b",
+      "question_only": true,
+      "schema": "foil.route-opportunity.v2",
+      "status": "FOUND",
+      "task_id": "hle-live-670dc75dcfd3fc87a109a929"
+    }
+  ],
+  "schema": "foil.active-runtime-hle10-opportunities.v1"
+}

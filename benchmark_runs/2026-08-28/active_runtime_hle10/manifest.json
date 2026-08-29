@@ -1,0 +1,53 @@
+{
+  "aggregate_token_ceiling": null,
+  "classification": "DIAGNOSTIC_UNADMITTED_N10",
+  "codex": {
+    "effective_context_tokens": 258400,
+    "model": "gpt-5.6-terra",
+    "path_basename": "codex.exe",
+    "reasoning_effort": "high",
+    "sha256": "935a1911ed2556e4ffcec995f4886ac2ac425863ba26fed264df62e30272ad9d",
+    "version": "codex-cli 0.147.0"
+  },
+  "core_commit": "a48b313f72b9c3e31c035cfa7dd380c9306101cd",
+  "coverage_cancellation": false,
+  "dataset_revision": "0bc83643672d4f68a5f89998617a639d85e7318b",
+  "files": {
+    "benchmark_runs/2026-08-28/active_runtime_hle10/exposure_manifest.json": "e9c8e0f575213c8b7c3ea8bfc02c3b17b5b33801809078c21b5ef75600e5c80e",
+    "benchmark_runs/2026-08-28/active_runtime_hle10/items.json": "ae15ab13105b22d99053c8f0e8310ca7d7b0dc803f65195e17a09f2cb96090dc",
+    "benchmark_runs/2026-08-28/active_runtime_hle10/opportunities.json": "dce37a22bef1ddc656c1182c4c04ce473c3d4f088656b50383093fb51e137f8c",
+    "benchmarks/FOIL_ACTIVE_RUNTIME_HLE10_PROTOCOL.md": "3b1e677257fc843386d15fd1f9973f6640fde020cf1f2d63a8c88443c48c93e1",
+    "benchmarks/harness/foil_active_runtime_hle10.py": "29c96cf29324961f5ec5abefa12c624e66da30597fc7bb3c2879cb587276db79",
+    "benchmarks/harness/foil_active_runtime_hle10_audit.py": "fc218a7d179b4f09c91a1613631a5fad500b3b5689be62b287a5c7ec31c3f60f",
+    "benchmarks/harness/foil_active_runtime_hle10_common.py": "5bf05d6a6f17efa17bcda780e0b00b7b99a560f32be36fb487ad1b69a8ec2a4e",
+    "benchmarks/harness/foil_active_runtime_hle10_score.py": "a57707707dc63d156294dbf123616024db332d3ed32ea966302de3a1c5f89b3e",
+    "benchmarks/harness/foil_runtime_benchmark_integration.py": "68e17bc5b034935c35fd6c98f7a29deaf48960d3435e4dbb8bd1a72da018cf6d",
+    "benchmarks/protocols/foil_active_runtime_hle10_a0.schema.json": "47f1028ab8e4cbaed3fed403f30c89ecd986a34e771c9b2930fd9c9ecc0b8971",
+    "benchmarks/protocols/foil_active_runtime_hle10_constructor.schema.json": "5da533c3d0413b55e4dfb43e73c615e3f4bb8d22181c7e8e8ac637f0eb389004",
+    "benchmarks/protocols/foil_active_runtime_hle10_retrieval.schema.json": "4d6de0b8824ecc69176335cd430c7f2a1e3fc7bc50add618a37a97816ce47761",
+    "tools/foil_runtime_active.py": "7c44e09881cd5baf1206c2291c9a8b99ea6cb327f823affc660889dbed7c8c30"
+  },
+  "gold_opened": false,
+  "integration_commit": "2cd98dedf9378cd54fae115d1b7590b39d3fb744",
+  "item_count": 10,
+  "model": "gpt-5.6-terra",
+  "prior_receipt_costs": {
+    "terra_high_a0_p50": 19513,
+    "terra_high_a0_p90": 21974,
+    "terra_high_route_p50": 34246,
+    "terra_high_route_p90": 273355
+  },
+  "production_authorized": false,
+  "promotion_authorized": false,
+  "reasoning_effort": "high",
+  "retries": 0,
+  "schema": "foil.active-runtime-hle10-manifest.v1",
+  "selection_seed": 20260828,
+  "shards": {
+    "Gold_subset.part01.parquet": "0f9347730c0b9a7b690931bfe38f748d2b142be8b4b3318e16d23844b18af98b",
+    "Gold_subset.part02.parquet": "9661a90148056d7d39e0fef058159e72532119aa8ee30a26f06dfa27b61d015f",
+    "Gold_subset.part03.parquet": "ace18833057f09e9071be632239b255a1cd23a3a602dddd524b88e573bf427aa",
+    "Gold_subset.part04.parquet": "f09e14efe051a8a5af54e5f14f0bb2231ddb4b68cbba8886afb2f0a2995e3737",
+    "Gold_subset.part05.parquet": "23211a403e2c013b01dd8634ffa982b9f6dfcb6a4c126a3223c2a18913030ee2"
+  }
+}
