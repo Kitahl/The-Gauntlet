@@ -1,0 +1,31 @@
+{
+  "admission_state": "AUDITED",
+  "applied_paths": [
+    "docs/specs/COUNCIL_ENGINEERING_SPEC.md",
+    "skills/council-of-elders/SKILL.md",
+    "tests/test_council_challenge_seats.py",
+    "tools/council_runtime.py"
+  ],
+  "conflict_records": [],
+  "delta_patch_sha256": null,
+  "functional_base": "af8dc2621099dd4993272cbc9e623190ef23ca9c",
+  "functional_base_tree": "62d72e4f5babf44145d9a9fbabcfcee9c8663ac7",
+  "import_strategy": "FAST_FORWARD_EXACT_CHAIN",
+  "notes": [
+    "source commit retained unchanged in exact ancestry chain",
+    "H2 exact-head qualification pending",
+    "patch digest pending and not invented"
+  ],
+  "operator": "ChatGPT/GitHub connector",
+  "recorded_at": "2026-08-29T17:40:00Z",
+  "rejected_paths": [],
+  "resulting_integration_commit": "132172944c07de77c11266c953996fc1e840b647",
+  "resulting_integration_source_checkpoint": "7fcfd259a6b103a464061c1d30f2a48fa1ff7f52",
+  "resulting_integration_tree": "8ee1708de7b5179f03cd1cb012a0caa3e778df4a",
+  "schema": "egr.integration.import-receipt.v1",
+  "source_head": "132172944c07de77c11266c953996fc1e840b647",
+  "source_id": "COUNCIL-VNEXT",
+  "source_tree": "8ee1708de7b5179f03cd1cb012a0caa3e778df4a",
+  "tests_run": [],
+  "validation_class": "EXACT_HEAD"
+}

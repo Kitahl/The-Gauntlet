@@ -1,0 +1,84 @@
+name: Integration qualification
+
+on:
+  push:
+    branches:
+      - integration/vnext-core
+      - integration/vnext-native-stack
+  pull_request:
+    branches:
+      - integration/vnext-core
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: integration-qualification-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  direct-mode:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-lock.txt
+      - name: Assert direct-mode dependency isolation
+        run: |
+          set -euo pipefail
+          test ! -e vendor/hermes-agent
+          test -z "${HERMES_HOME:-}"
+      - name: Install hash-locked core dependencies
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install --require-hashes -r requirements-lock.txt
+          python -m playwright install --with-deps chromium
+      - name: Verify source manifest and open blockers
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          path = Path('integration/VNEXT_NATIVE_SOURCE_MANIFEST.json')
+          value = json.loads(path.read_text(encoding='utf-8'))
+          expected = value['content_hash']
+          candidate = dict(value)
+          candidate['content_hash'] = None
+          actual = hashlib.sha256(
+              json.dumps(
+                  candidate,
+                  ensure_ascii=False,
+                  separators=(',', ':'),
+                  sort_keys=True,
+              ).encode('utf-8')
+          ).hexdigest()
+          assert actual == expected
+          blockers = {item['blocker_id']: item['state'] for item in value['blockers']}
+          assert blockers['BLOCKER-TIME-IDENTITY'] == 'OPEN'
+          assert blockers['BLOCKER-TIME-ARTIFACT-DIVERGENCE'] == 'OPEN'
+          assert value['native_overlay_head'] is None
+          assert value['last_admitted_hermes_sha'] is None
+          PY
+      - name: Lint direct-mode Python
+        run: ruff check validation tools tests benchmarks/harness
+      - name: Run complete core test suite
+        run: python -m unittest discover -s tests -v
+      - name: Validate public Soul and Gauntlet
+        run: python validation/validate_soul_gauntlet_public.py
+      - name: Validate typed runtime
+        run: python validation/validate_vnext_runtime.py
+      - name: Validate showcase
+        run: python validation/validate_showcase.py
+      - name: Check Python syntax
+        run: python -m compileall -q validation tools tests benchmarks/harness
