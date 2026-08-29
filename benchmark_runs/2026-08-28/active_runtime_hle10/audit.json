@@ -1,0 +1,21 @@
+{
+  "audit": "PASS",
+  "predictions_sha256": "c6854b223095f39c9fa2a14e9e332fce2a61b36cd46dbe07952d2faf289bf5fd",
+  "recomputed": {
+    "a0_normalized_correct": 4,
+    "a0_raw_correct": 4,
+    "abstentions": 0,
+    "accounting_invalid_rows": 3,
+    "answer_changes": 1,
+    "coverage_gaps": 3,
+    "final_normalized_correct": 3,
+    "final_raw_correct": 3,
+    "invalid_rows": 0,
+    "normalized_damages": 1,
+    "normalized_rescues": 0,
+    "raw_damages": 1,
+    "raw_rescues": 0,
+    "stage1_verify_resolved": 1
+  },
+  "rows": 10
+}
