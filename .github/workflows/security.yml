@@ -58,6 +58,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install pip-tools==7.6.1
+          unset PIP_NO_INDEX
           python -m piptools compile \
             --generate-hashes \
             --resolver=backtracking \
