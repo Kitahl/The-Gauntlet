@@ -1,0 +1,178 @@
+name: Phase 2 Hermes Snapshot Bootstrap
+
+on:
+  push:
+    branches:
+      - work/native-hermes-fastpath
+    paths:
+      - .github/workflows/_phase2_vendor_hermes.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gauntlet-phase2-hermes-vendor
+  cancel-in-progress: false
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Check out fast-build branch
+        uses: actions/checkout@v4
+        with:
+          ref: work/native-hermes-fastpath
+          fetch-depth: 0
+
+      - name: Verify phase boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "60bb6f22d7c13a25fee204fbc17798c6c55cb19f"
+          test ! -e vendor/hermes-agent
+          test ! -e gauntlet_host
+
+      - name: Configure commit identity
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Dry-run pinned materialization
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/vendor_hermes.py --dry-run | tee /tmp/hermes-dry-run.json
+
+      - name: Materialize exact pinned source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/vendor_hermes.py | tee /tmp/hermes-materialized.json
+
+      - name: Independently verify snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/vendor_hermes.py --verify-only | tee /tmp/hermes-verified.json
+
+      - name: Record source-ledger verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(Path("vendor/HERMES_SNAPSHOT.json").read_text(encoding="utf-8"))
+          path = Path("third_party/HERMES_SOURCE_LEDGER.md")
+          text = path.read_text(encoding="utf-8")
+          text = text.replace("`PREPARED_NOT_MATERIALIZED`", "`MATERIALIZED_VERIFIED`", 1)
+          old = (
+              "This phase commits the exact pin, the unmodified MIT notice, and a deterministic\n"
+              "materialization/verification command. The full upstream tree is intentionally populated\n"
+              "in the next phase from a networked checkout so that the exact commit can be verified\n"
+              "before any bytes enter `vendor/hermes-agent/`.\n"
+          )
+          new = (
+              "The full upstream working tree was copied from the exact clean tagged checkout with only\n"
+              "nested `.git` metadata excluded, then independently re-hashed from the vendored destination.\n\n"
+              "| Verification field | Value |\n"
+              "|---|---|\n"
+              f"| File count | `{manifest['file_count']}` |\n"
+              f"| Deterministic tree SHA-256 | `{manifest['tree_sha256']}` |\n"
+              f"| Materialized at | `{manifest['materialized_at']}` |\n"
+              "| Local modifications | `0` |\n"
+          )
+          if old not in text:
+              raise SystemExit("source-ledger phase paragraph not found")
+          path.write_text(text.replace(old, new, 1), encoding="utf-8")
+          PY
+
+      - name: Commit materialized source snapshot
+        id: snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add vendor/hermes-agent vendor/HERMES_SNAPSHOT.json third_party/HERMES_SOURCE_LEDGER.md
+          git diff --cached --check
+          git commit -m "vendor: materialize pinned Hermes v0.20.6 source"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Record Phase 2 handoff receipt
+        env:
+          SNAPSHOT_COMMIT: ${{ steps.snapshot.outputs.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          snapshot_commit = os.environ["SNAPSHOT_COMMIT"]
+          manifest = json.loads(Path("vendor/HERMES_SNAPSHOT.json").read_text(encoding="utf-8"))
+          path = Path("docs/engineering/GAUNTLET_FAST_BUILD_HANDOFF.md")
+          text = path.read_text(encoding="utf-8")
+          text = text.replace(
+              "| 1 | Pin, provenance, license, deterministic vendoring command, governing plan | `COMPLETE` | this commit |",
+              "| 1 | Pin, provenance, license, deterministic vendoring command, governing plan | `COMPLETE` | `60bb6f22d7c13a25fee204fbc17798c6c55cb19f` |",
+              1,
+          )
+          text = text.replace(
+              "| 2 | Materialize and verify `vendor/hermes-agent/` at the exact commit | `NEXT` | — |",
+              f"| 2 | Materialize and verify `vendor/hermes-agent/` at the exact commit | `COMPLETE` | `{snapshot_commit}` |",
+              1,
+          )
+          text = text.replace(
+              "| 3 | Add `gauntlet_host` constants, typed JSONL IPC, isolated worker bootstrap | `PENDING` | — |",
+              "| 3 | Add `gauntlet_host` constants, typed JSONL IPC, isolated worker bootstrap | `NEXT` | — |",
+              1,
+          )
+          marker = "## 4. Continue instruction\n"
+          if marker not in text:
+              raise SystemExit("handoff continue marker not found")
+          prefix = text.split(marker, 1)[0]
+          suffix = f'''## 4. Phase 2 verification receipt
+
+| Field | Result |
+|---|---|
+| Upstream commit | `{manifest["upstream_commit"]}` |
+| Upstream tag | `{manifest["upstream_tag"]}` |
+| Vendored files | `{manifest["file_count"]}` |
+| Tree SHA-256 | `{manifest["tree_sha256"]}` |
+| License SHA-256 | `{manifest["license_sha256"]}` |
+| Snapshot commit | `{snapshot_commit}` |
+| Local modifications | `0` |
+| `gauntlet_host/` created | `NO` |
+
+Executed successfully:
+
+```bash
+python scripts/vendor_hermes.py --dry-run
+python scripts/vendor_hermes.py
+python scripts/vendor_hermes.py --verify-only
+```
+
+## 5. Continue instruction
+
+Continue with **Phase 3 only**:
+
+1. create `gauntlet_host/__init__.py` and `gauntlet_host/constants.py`;
+2. add typed JSONL request/result contracts in `gauntlet_host/ipc.py`;
+3. add the isolated worker bootstrap in `gauntlet_host/worker_main.py`;
+4. prove the worker resolves the vendored `tools` package rather than Gauntlet's package;
+5. stop before implementing the launcher or runtime profile.
+'''
+          path.write_text(prefix + suffix, encoding="utf-8")
+          PY
+          git add docs/engineering/GAUNTLET_FAST_BUILD_HANDOFF.md
+          git diff --cached --check
+          git commit -m "docs: record Phase 2 Hermes snapshot receipt"
+
+      - name: Push Phase 2 commits
+        shell: bash
+        run: |
+          set -euo pipefail
+          git push origin HEAD:work/native-hermes-fastpath
