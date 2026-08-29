@@ -50,7 +50,10 @@ Retrieval date for every entry below: **2026-08-29**.
 - Reported v2 dataset size: about 1.14 GB.
 - Pinned classification file exposes 22 domains.
 - Official generation prompt exposes the assigned keyword, not the domain.
-- Build disposition: ready for local deterministic materialization from the pinned small CSVs; full v2 model-response corpus is not required to construct the keyword-only inference inputs.
+- Materialization: 1,180 full blind keyword items; 44-item pilot, exactly 2 selected deterministically per each of 22 domains.
+- Full blind SHA-256: `4c96e5fe7355a9075a3ab0c885925f80a68914440de315aaa380e07616652b34`.
+- Pilot blind SHA-256: `a07d8718b6e3b65be654a517fa5ebf0449f2b99b96a172c12e70e9a536184254`.
+- Build disposition: materialized and committed as keyword-only blind inputs; domain mapping remains local/sealed.
 
 ## Axiomatic novelty benchmark
 
