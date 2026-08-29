@@ -1,0 +1,13 @@
+{
+  "checks": {
+    "01_exact_two_plan_universe": true,
+    "02_exhaustive_minimum_selects_smallest_success": true,
+    "03_missing_outcome_blocks_global_claim": true,
+    "04_unknown_outcome_blocks_global_claim": true,
+    "05_self_verification_rejected": true
+  },
+  "passed": 5,
+  "schema": "mastermind/postbench-hardening-selftest/1",
+  "status": "PASS",
+  "total": 5
+}
