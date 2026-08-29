@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  fast-p7:
+  fast-p8:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -23,12 +23,13 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/vendor_hermes.py --verify-only
-      - name: Install pinned Hermes runtime dependencies
+      - name: Install pinned runtime and Gauntlet CLI
         run: |
           set -euo pipefail
           python -m pip install --upgrade pip
           python -m pip install -e vendor/hermes-agent
-      - name: Verify FAST-P7 advisory FOIL routing
+          python -m pip install -e . --no-deps
+      - name: Verify FAST-P8 user-facing alpha boot
         run: |
           set -euo pipefail
-          PYTHONPATH=. python .github/phase7_verify.py
+          PYTHONPATH=. python .github/phase8_verify.py
