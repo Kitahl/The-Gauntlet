@@ -899,7 +899,6 @@ def create_attack_bundle(
         if context is not None
         else digest({"unbound_obligation": candidate.obligation_id})
     )
-    task_id = context.task_id if context is not None else None
     challenges: list[str] = []
     selected: list[str] = []
     unresolved: list[str] = [*prior.unresolved, *prior.issues, *prior.unavailable]
