@@ -1,0 +1,44 @@
+{
+  "schema": "foil.active-runtime-hle10-token-audit.v1",
+  "predictions_sha256": "c6854b223095f39c9fa2a14e9e332fce2a61b36cd46dbe07952d2faf289bf5fd",
+  "provider_calls_total": 13,
+  "provider_calls_with_usage": 10,
+  "provider_calls_missing_usage": 3,
+  "known_observed_usage": {
+    "input_tokens": 181388.0,
+    "cached_input_tokens": 72448.0,
+    "output_tokens": 3722.0,
+    "total_tokens": 185110.0
+  },
+  "scorer_valid_row_subtotal": 128136,
+  "accounting_complete": false,
+  "exact_total_known": false,
+  "lower_bound_only": true,
+  "missing_calls": [
+    {
+      "task_id": "hle-live-670eb27fd2f45b1198c87766",
+      "call_index": 1,
+      "returncode": 1,
+      "search_enabled": true,
+      "wall_ms": 2937,
+      "usage": null
+    },
+    {
+      "task_id": "hle-live-66fcc286eab6d512704d96af",
+      "call_index": 1,
+      "returncode": 1,
+      "search_enabled": true,
+      "wall_ms": 3171,
+      "usage": null
+    },
+    {
+      "task_id": "hle-live-6771217e251029ed2eca577a",
+      "call_index": 1,
+      "returncode": 1,
+      "search_enabled": true,
+      "wall_ms": 3467,
+      "usage": null
+    }
+  ],
+  "note": "Known observed usage includes all ten A0 calls. Three failed retrieval calls returned no usage receipt and are not treated as zero."
+}
