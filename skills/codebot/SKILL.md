@@ -1,43 +1,71 @@
 ---
 name: codebot
-description: Engineering Verification module. Trigger: /power, /codebot, implement, debug, integrate, test, benchmark software behavior, review architecture, or verify an executable claim. Converts software claims into runnable checks and preservation obligations.
+description: Engineering Verification module. Trigger: /power, /codebot, implement, debug, integrate, test, benchmark software behavior, review architecture, or verify an executable claim. Converts software claims into bound failure hypotheses, runnable checks, adversarial discriminators, and scoped receipts.
 ---
 
 # Engineering Verification
 
-Executable claims should be executed.
+Executable claims should be executed against named failure hypotheses.
 
 ## Workflow
 
-1. Inspect the actual repository/artifacts before proposing edits.
-2. State requirements, interfaces, invariants, failure model, and compatibility constraints.
-3. Map each edit to an obligation.
-4. Implement the smallest complete change.
-5. Run targeted tests plus relevant regressions.
-6. Exercise the real entrypoint, not only internal functions.
-7. Check environment/integration failure classes outside unit-test scope.
-8. Report what was and was not executed.
+1. Inspect the actual repository, interfaces, entrypoints, and prior receipts.
+2. Freeze the task, obligation, plan, candidate, scope, invariants, and residual boundary.
+3. Derive concrete `FailureHypothesis` records; each needs a trigger, expected symptom,
+   failure class, and executable refuter.
+4. Reject duplicate semantic hypotheses instead of spending duplicate rounds.
+5. Implement the smallest complete change consistent with known invariants.
+6. For a substantial change, run direct targeted and regression checks, the real
+   entrypoint when applicable, and one selected adversarial discriminator.
+7. Record one relevant residual failure class outside the current gate.
+8. Emit a claim-scoped receipt containing hashes and verdicts, never trusted prose.
 
-## Correctness obligations
+## Adversarial discriminators
 
-Depending on the system, inspect:
+Use a discriminator only when it targets a named failure class:
 
-- state ownership/lifetime;
-- notification/reactivity semantics;
-- atomicity/idempotency/retry behavior;
-- concurrency and ordering;
-- persistence/recovery;
-- authorization and least privilege;
-- input validation and output encoding;
-- resource ceilings and timeouts;
-- backward compatibility and migration.
+- negative control or mutation;
+- property-generated case;
+- metamorphic relation;
+- differential implementation; or
+- environment/integration probe.
 
-## Verification boundary
+A surviving mutation or negative control blocks “fixed.” A passing metamorphic check
+establishes only its named relation and scope. Generic fuzzing does not count merely
+because it ran.
 
-A green unit suite certifies only those tests. Before "fixed" or "verified", name at least one plausible relevant failure class outside the gate set or justify why the scope is exhaustive.
+## Real entrypoint
 
-Use linters/type checkers/static analysis/fuzzing/security scans/formal tools where they are diagnostic of the claim, not for badge collection.
+Exercise the actual CLI, API, hook, service, build invocation, or repository workflow
+when relevant. Bind it into the plan. When no real surface exists, record
+`NOT_APPLICABLE` with a reason; do not invent one.
+
+## Failure location
+
+Distinguish `TASK_ARTIFACT`, `AGENT_HARNESS`, `TOOL_ENVIRONMENT`, `TEST_ORACLE`, and
+`UNKNOWN` through an explicit discriminator. Do not rewrite source merely because a
+harness failed, and do not relax an oracle merely because source failed. A changed
+harness or oracle creates a new evidence identity.
+
+## Repair boundary
+
+Prefer a local typed repair only when localization is credible, invariants are known,
+and the intervention can be independently verified. Otherwise defer for broader
+review. Use the neutral candidate gate for exact base/candidate/scope/obligation
+binding and independent structural plus semantic verification. Power cannot promote
+its own patch; host write/commit authority remains separate.
+
+## Security boundary
+
+Retain constrained known verifier families, trusted executable resolution, active
+Python binding, per-check timeouts, `shell=False`, disabled custom commands unless the
+outer environment explicitly opts in, and hashed stdout/stderr. An unavailable
+mandatory verifier is `UNAVAILABLE`, never omitted or converted to a pass.
 
 ## Typed runtime contract
 
-`tools/power_runtime.py` executes explicit verification plans with `shell=False`, timeouts, mandatory/optional checks, output hashes and named defect-class coverage. A green plan is scoped to the checks/coverage represented in its receipt. Missing mandatory tooling is `UNAVAILABLE`. See `docs/specs/POWER_ENGINEERING_SPEC.md`.
+`tools/power_runtime.py` implements `egrt.power.v2` while preserving historical Power
+constructors and `verification-plan` receipts. Soul continues to route `ENGINEERING`
+automatically to `power`. A green plan covers only its named checks, relations, and
+failure classes; it does not establish exhaustive software correctness or benchmark
+efficacy. See `docs/specs/POWER_ENGINEERING_SPEC.md`.
