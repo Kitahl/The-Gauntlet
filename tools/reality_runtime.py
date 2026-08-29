@@ -8,7 +8,7 @@ has no live task binding and cannot satisfy the strict Soul-routed vNext admissi
 The front-end also owns compatibility hardening that must be applied without widening
 Reality authority: current Space assessment state outranks stale caller-selected state,
 Space refutation cannot be interpreted as a novelty-costume pass, and documented
-candidate fields remain mechanically required.
+candidate fields remain mechanically required for live vNext admission.
 """
 from __future__ import annotations
 
@@ -65,6 +65,18 @@ def _claim_outcome(receipt: Mapping[str, Any]) -> str | None:
     return value.strip().upper()
 
 
+def _competing_discriminator_reasons(candidate: MethodCandidate) -> list[str]:
+    competing = candidate.metadata.get("competing_mechanism")
+    if not isinstance(competing, str) or not competing.strip():
+        return []
+    discriminator = candidate.metadata.get("competing_discriminator")
+    if not isinstance(discriminator, str) or not discriminator.strip():
+        return [
+            "named competing mechanism requires an explicit A-vs-B discriminator specification"
+        ]
+    return []
+
+
 def _hardened_basic_candidate_errors(candidate: MethodCandidate) -> list[str]:
     errors = list(_original_basic_candidate_errors(candidate))
     if isinstance(candidate, _core.MethodCandidate):
@@ -72,6 +84,7 @@ def _hardened_basic_candidate_errors(candidate: MethodCandidate) -> list[str]:
             errors.append("invariants are required")
         if not candidate.dependencies:
             errors.append("dependencies are required")
+        errors.extend(_competing_discriminator_reasons(candidate))
     return list(dict.fromkeys(errors))
 
 
@@ -202,18 +215,6 @@ def _hardened_space_prior_art_state(
             dict.fromkeys((*state.unresolved, *directional_unresolved))
         ),
     )
-
-
-def _competing_discriminator_reasons(candidate: MethodCandidate) -> list[str]:
-    competing = candidate.metadata.get("competing_mechanism")
-    if not isinstance(competing, str) or not competing.strip():
-        return []
-    discriminator = candidate.metadata.get("competing_discriminator")
-    if not isinstance(discriminator, str) or not discriminator.strip():
-        return [
-            "named competing mechanism requires an explicit A-vs-B discriminator specification"
-        ]
-    return []
 
 
 # Core functions resolve these helpers from their module globals at call time.
@@ -359,7 +360,10 @@ def _legacy_receipt(
     candidate_state["content_hash"] = _core.digest(candidate_state)
     store.write_named_state("reality", candidate.candidate_id, candidate_state)
 
-    basic = _core._basic_candidate_errors(candidate)
+    # Historical unbound calls retain the pre-vNext completeness contract. The stricter
+    # invariants/dependencies/competing-discriminator checks apply only to live vNext
+    # admission and therefore do not rewrite old direct-call behavior.
+    basic = _original_basic_candidate_errors(candidate)
     if basic:
         verdict = _core.Verdict.UNKNOWN
         reasons = basic
