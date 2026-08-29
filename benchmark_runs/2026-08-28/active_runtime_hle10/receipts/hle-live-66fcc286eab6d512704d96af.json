@@ -1,0 +1,349 @@
+{
+  "a0_assessment": null,
+  "abstention": false,
+  "accounting_invalid_reasons": [
+    "provider_usage_incomplete",
+    "provider_usage_missing"
+  ],
+  "accounting_status": "ACCOUNTING_INVALID",
+  "answer_changed": false,
+  "b_assessment": null,
+  "constructor": null,
+  "cost_accounting_complete": true,
+  "evidence_packet": null,
+  "final_answer": "H",
+  "final_answer_sha256": "7499c53b80350db62e05439f0f86a5c1b9eae4c23d649cc6e0822c990d866384",
+  "invalid_reason": null,
+  "ledger_after_spent_usage": {
+    "cached_input_tokens": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0
+  },
+  "opportunity": {
+    "a0_observed": false,
+    "candidates": [
+      {
+        "complexity": "HIGH",
+        "cost_rank": 3,
+        "execution_authorized": false,
+        "family": "PASSAGE_RETRIEVAL",
+        "question_structure_only": true,
+        "reason_code": "FACT_OR_SOURCE_LOOKUP",
+        "requires_runtime_probe": true
+      }
+    ],
+    "execution_authorized": false,
+    "gold_observed": false,
+    "opportunity_sha256": "046e630f21c2ebb2673ccab5b00032566fad3723ef40542e0484653159af8760",
+    "profile_observed": false,
+    "promotion_authorized": false,
+    "question_digest": "c28cce84e20b92e3d11efe88ca153d0b2a64676eb44ac225cba3caefbfab7123",
+    "question_only": true,
+    "schema": "foil.route-opportunity.v2",
+    "status": "FOUND",
+    "task_id": "hle-live-66fcc286eab6d512704d96af"
+  },
+  "original_answer": "H",
+  "original_answer_sha256": "7499c53b80350db62e05439f0f86a5c1b9eae4c23d649cc6e0822c990d866384",
+  "persisted_at": "2026-08-29T00:50:12.508945+00:00",
+  "probes": [
+    {
+      "complexity": "HIGH",
+      "envelope": {
+        "maximum_cached_input_tokens": 258400,
+        "maximum_evidence_characters": 200000,
+        "maximum_input_tokens": 258400,
+        "maximum_latency_ms": 1200000,
+        "maximum_model_passes": 2,
+        "maximum_monetary_microunits": 0,
+        "maximum_output_tokens": 258400,
+        "maximum_tool_calls": 4,
+        "maximum_total_tokens": 775200
+      },
+      "family": "PASSAGE_RETRIEVAL",
+      "formalization_admission_sha256": null,
+      "operation_input_sha256": "c28cce84e20b92e3d11efe88ca153d0b2a64676eb44ac225cba3caefbfab7123",
+      "provider_cap_enforced": true,
+      "raw_operation_stored": false,
+      "reason": "passage_retrieval_provider_available",
+      "spec_origin": "HOST_RETRIEVAL",
+      "status": "APPLICABLE",
+      "timeout_ms": 1200000,
+      "value": {
+        "benefit_microunits": 1000000,
+        "damage_microunits": 2000000,
+        "executes": true,
+        "expected_gain_microunits": 30000,
+        "fixed_cost_microunits": 0,
+        "probability_base_error_ppm": 800000,
+        "probability_damage_ppm": 0,
+        "probability_resolution_ppm": 100000,
+        "token_cost_microunits": 50000
+      }
+    }
+  ],
+  "provider_calls": [
+    {
+      "output_sha256": "7f6047f72614597a35251e2138c7dc83239c4318ed6edb87141aeec7e0f836d9",
+      "parse_errors": 0,
+      "prompt_sha256": "ede081110ab88844fc11c6214d74a08c9f83e403d387c7456412c85769df584f",
+      "raw_persisted": true,
+      "returncode": 0,
+      "search_enabled": false,
+      "tools": [],
+      "usage": {
+        "cached_input_tokens": 0,
+        "input_tokens": 18280,
+        "output_tokens": 265,
+        "total_tokens": 18545
+      },
+      "wall_ms": 10500
+    },
+    {
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parse_errors": 0,
+      "prompt_sha256": "cb0650b5ebca3c439fde302c5d4055868b309b8b6267e44593d10ba6cb7eff1e",
+      "raw_persisted": true,
+      "returncode": 1,
+      "search_enabled": true,
+      "tools": [],
+      "usage": null,
+      "wall_ms": 3171
+    }
+  ],
+  "provider_usage": null,
+  "question_sha256": "c28cce84e20b92e3d11efe88ca153d0b2a64676eb44ac225cba3caefbfab7123",
+  "retrieval_fetches": [],
+  "row_outcome": "TOOL_ERROR",
+  "row_valid": true,
+  "runtime_receipt": {
+    "a0_assessment": null,
+    "a0_sha256": "7499c53b80350db62e05439f0f86a5c1b9eae4c23d649cc6e0822c990d866384",
+    "answer_changed": false,
+    "archive_receipt": null,
+    "b_assessment": null,
+    "constructor": null,
+    "contract": {
+      "a0_digest": "7499c53b80350db62e05439f0f86a5c1b9eae4c23d649cc6e0822c990d866384",
+      "contract_sha256": "8f439f12fa884ba8da36380d08fc545262cafca28141cc3a7ddac500c886bf20",
+      "envelope": {
+        "maximum_cached_input_tokens": 258400,
+        "maximum_evidence_characters": 200000,
+        "maximum_input_tokens": 258400,
+        "maximum_latency_ms": 1200000,
+        "maximum_model_passes": 2,
+        "maximum_monetary_microunits": 0,
+        "maximum_output_tokens": 258400,
+        "maximum_tool_calls": 4,
+        "maximum_total_tokens": 775200
+      },
+      "family": "PASSAGE_RETRIEVAL",
+      "formalization_admission_sha256": null,
+      "operation_input_digest": "c28cce84e20b92e3d11efe88ca153d0b2a64676eb44ac225cba3caefbfab7123",
+      "production_authorized": false,
+      "question_digest": "c28cce84e20b92e3d11efe88ca153d0b2a64676eb44ac225cba3caefbfab7123",
+      "raw_a0_stored": false,
+      "raw_question_stored": false,
+      "read_only": true,
+      "schema": "foil.tool-contract.v2",
+      "spec_origin": "HOST_RETRIEVAL",
+      "task_id": "hle-live-66fcc286eab6d512704d96af",
+      "timeout_ms": 1200000,
+      "tool_id": "foil.hle10-passage-retrieval",
+      "tool_version": "1",
+      "value": {
+        "benefit_microunits": 1000000,
+        "damage_microunits": 2000000,
+        "executes": true,
+        "expected_gain_microunits": 30000,
+        "fixed_cost_microunits": 0,
+        "probability_base_error_ppm": 800000,
+        "probability_damage_ppm": 0,
+        "probability_resolution_ppm": 100000,
+        "token_cost_microunits": 50000
+      }
+    },
+    "cost_accounting_complete": true,
+    "evidence_packet": null,
+    "final_sha256": "7499c53b80350db62e05439f0f86a5c1b9eae4c23d649cc6e0822c990d866384",
+    "ledger_after": {
+      "active_call_ids": [],
+      "aggregate_cancellation_enabled": false,
+      "aggregate_token_ceiling": null,
+      "conserved": true,
+      "ledger_sha256": "203657a048711b1fa0a36c00154ca11cfdde0c6d6f685416b0bcb09c143abe09",
+      "observed_call_ids": [],
+      "observed_spend_conserved_on_failure": true,
+      "per_call_envelopes_required": true,
+      "positive_prelaunch_value_required": true,
+      "schema": "foil.runtime-token-ledger.v2",
+      "settlements": [
+        {
+          "call_id": "call-8f439f12fa884ba8",
+          "cancelled": false,
+          "contract_sha256": "8f439f12fa884ba8da36380d08fc545262cafca28141cc3a7ddac500c886bf20",
+          "latency_ms": 3171,
+          "monetary_microunits": 0,
+          "reason": null,
+          "tool_calls": 0,
+          "usage": {
+            "cached_input_tokens": 0,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0
+          }
+        }
+      ],
+      "spent_usage": {
+        "cached_input_tokens": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      }
+    },
+    "ledger_before": {
+      "active_call_ids": [],
+      "aggregate_cancellation_enabled": false,
+      "aggregate_token_ceiling": null,
+      "conserved": true,
+      "ledger_sha256": "b8750c2f493279ca4b439361002674e6af19eede9eb3c288d883d0b1b17ad850",
+      "observed_call_ids": [],
+      "observed_spend_conserved_on_failure": true,
+      "per_call_envelopes_required": true,
+      "positive_prelaunch_value_required": true,
+      "schema": "foil.runtime-token-ledger.v2",
+      "settlements": [],
+      "spent_usage": {
+        "cached_input_tokens": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      }
+    },
+    "opportunity": {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "complexity": "HIGH",
+          "cost_rank": 3,
+          "execution_authorized": false,
+          "family": "PASSAGE_RETRIEVAL",
+          "question_structure_only": true,
+          "reason_code": "FACT_OR_SOURCE_LOOKUP",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "046e630f21c2ebb2673ccab5b00032566fad3723ef40542e0484653159af8760",
+      "profile_observed": false,
+      "promotion_authorized": false,
+      "question_digest": "c28cce84e20b92e3d11efe88ca153d0b2a64676eb44ac225cba3caefbfab7123",
+      "question_only": true,
+      "schema": "foil.route-opportunity.v2",
+      "status": "FOUND",
+      "task_id": "hle-live-66fcc286eab6d512704d96af"
+    },
+    "outcome": "TOOL_ERROR",
+    "probes": [
+      {
+        "complexity": "HIGH",
+        "envelope": {
+          "maximum_cached_input_tokens": 258400,
+          "maximum_evidence_characters": 200000,
+          "maximum_input_tokens": 258400,
+          "maximum_latency_ms": 1200000,
+          "maximum_model_passes": 2,
+          "maximum_monetary_microunits": 0,
+          "maximum_output_tokens": 258400,
+          "maximum_tool_calls": 4,
+          "maximum_total_tokens": 775200
+        },
+        "family": "PASSAGE_RETRIEVAL",
+        "formalization_admission_sha256": null,
+        "operation_input_sha256": "c28cce84e20b92e3d11efe88ca153d0b2a64676eb44ac225cba3caefbfab7123",
+        "provider_cap_enforced": true,
+        "raw_operation_stored": false,
+        "reason": "passage_retrieval_provider_available",
+        "spec_origin": "HOST_RETRIEVAL",
+        "status": "APPLICABLE",
+        "timeout_ms": 1200000,
+        "value": {
+          "benefit_microunits": 1000000,
+          "damage_microunits": 2000000,
+          "executes": true,
+          "expected_gain_microunits": 30000,
+          "fixed_cost_microunits": 0,
+          "probability_base_error_ppm": 800000,
+          "probability_damage_ppm": 0,
+          "probability_resolution_ppm": 100000,
+          "token_cost_microunits": 50000
+        }
+      }
+    ],
+    "production_authorized": false,
+    "profile_read": false,
+    "profile_written": false,
+    "promotion_authorized": false,
+    "question_digest": "c28cce84e20b92e3d11efe88ca153d0b2a64676eb44ac225cba3caefbfab7123",
+    "question_only_frontier": true,
+    "raw_a0_stored": false,
+    "raw_candidate_stored": false,
+    "raw_question_stored": false,
+    "reason": "PROVIDER_ERROR:provider_returncode_1",
+    "run_sha256": "a78fe42b318921f74e4d705c1ba59cf3f6f10265a15a53658146e16b00af0b40",
+    "schema": "foil.active-runtime.v2",
+    "selected_family": "PASSAGE_RETRIEVAL",
+    "selection": null,
+    "shadow_only": false,
+    "task_id": "hle-live-66fcc286eab6d512704d96af",
+    "tool_receipt": null
+  },
+  "schema": "foil.active-runtime-hle10-row.v1",
+  "selected_family": "PASSAGE_RETRIEVAL",
+  "selection": null,
+  "source_id": "66fcc286eab6d512704d96af",
+  "task_id": "hle-live-66fcc286eab6d512704d96af",
+  "tool_contract": {
+    "a0_digest": "7499c53b80350db62e05439f0f86a5c1b9eae4c23d649cc6e0822c990d866384",
+    "contract_sha256": "8f439f12fa884ba8da36380d08fc545262cafca28141cc3a7ddac500c886bf20",
+    "envelope": {
+      "maximum_cached_input_tokens": 258400,
+      "maximum_evidence_characters": 200000,
+      "maximum_input_tokens": 258400,
+      "maximum_latency_ms": 1200000,
+      "maximum_model_passes": 2,
+      "maximum_monetary_microunits": 0,
+      "maximum_output_tokens": 258400,
+      "maximum_tool_calls": 4,
+      "maximum_total_tokens": 775200
+    },
+    "family": "PASSAGE_RETRIEVAL",
+    "formalization_admission_sha256": null,
+    "operation_input_digest": "c28cce84e20b92e3d11efe88ca153d0b2a64676eb44ac225cba3caefbfab7123",
+    "production_authorized": false,
+    "question_digest": "c28cce84e20b92e3d11efe88ca153d0b2a64676eb44ac225cba3caefbfab7123",
+    "raw_a0_stored": false,
+    "raw_question_stored": false,
+    "read_only": true,
+    "schema": "foil.tool-contract.v2",
+    "spec_origin": "HOST_RETRIEVAL",
+    "task_id": "hle-live-66fcc286eab6d512704d96af",
+    "timeout_ms": 1200000,
+    "tool_id": "foil.hle10-passage-retrieval",
+    "tool_version": "1",
+    "value": {
+      "benefit_microunits": 1000000,
+      "damage_microunits": 2000000,
+      "executes": true,
+      "expected_gain_microunits": 30000,
+      "fixed_cost_microunits": 0,
+      "probability_base_error_ppm": 800000,
+      "probability_damage_ppm": 0,
+      "probability_resolution_ppm": 100000,
+      "token_cost_microunits": 50000
+    }
+  },
+  "tool_receipt": null
+}

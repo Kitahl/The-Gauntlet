@@ -1,0 +1,435 @@
+{
+  "a0_assessment": null,
+  "abstention": false,
+  "accounting_invalid_reasons": [
+    "provider_usage_incomplete",
+    "provider_usage_missing"
+  ],
+  "accounting_status": "ACCOUNTING_INVALID",
+  "answer_changed": false,
+  "b_assessment": null,
+  "constructor": null,
+  "cost_accounting_complete": true,
+  "evidence_packet": null,
+  "final_answer": "\\(C=(V_fC_fA+V_mC_m)(V_fA+V_mI)^{-1}\\)",
+  "final_answer_sha256": "107f25256019868e98cb6cd3104add380d5e1fb48ce1d6e2836e846269301998",
+  "invalid_reason": null,
+  "ledger_after_spent_usage": {
+    "cached_input_tokens": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0
+  },
+  "opportunity": {
+    "a0_observed": false,
+    "candidates": [
+      {
+        "complexity": "HIGH",
+        "cost_rank": 2,
+        "execution_authorized": false,
+        "family": "SYMBOLIC_COMPUTATION",
+        "question_structure_only": true,
+        "reason_code": "EXPLICIT_SYMBOLIC_OPERATION",
+        "requires_runtime_probe": true
+      },
+      {
+        "complexity": "HIGH",
+        "cost_rank": 3,
+        "execution_authorized": false,
+        "family": "PASSAGE_RETRIEVAL",
+        "question_structure_only": true,
+        "reason_code": "FACT_OR_SOURCE_LOOKUP",
+        "requires_runtime_probe": true
+      }
+    ],
+    "execution_authorized": false,
+    "gold_observed": false,
+    "opportunity_sha256": "46910e773025b6cfc6a9d026771bf2536c96fa3715f1efa48da9d08b738a28cb",
+    "profile_observed": false,
+    "promotion_authorized": false,
+    "question_digest": "db65063408756601ae5c334ef5b94ff74fd198c5450d9fcd27e36f1fe1262dc7",
+    "question_only": true,
+    "schema": "foil.route-opportunity.v2",
+    "status": "FOUND",
+    "task_id": "hle-live-670eb27fd2f45b1198c87766"
+  },
+  "original_answer": "\\(C=(V_fC_fA+V_mC_m)(V_fA+V_mI)^{-1}\\)",
+  "original_answer_sha256": "107f25256019868e98cb6cd3104add380d5e1fb48ce1d6e2836e846269301998",
+  "persisted_at": "2026-08-29T00:49:35.641408+00:00",
+  "probes": [
+    {
+      "complexity": "MEDIUM",
+      "envelope": {
+        "maximum_cached_input_tokens": 0,
+        "maximum_evidence_characters": 0,
+        "maximum_input_tokens": 0,
+        "maximum_latency_ms": 1000,
+        "maximum_model_passes": 0,
+        "maximum_monetary_microunits": 0,
+        "maximum_output_tokens": 0,
+        "maximum_tool_calls": 1,
+        "maximum_total_tokens": 0
+      },
+      "family": "SYMBOLIC_COMPUTATION",
+      "formalization_admission_sha256": null,
+      "operation_input_sha256": "fdc66dca2f4037dc7d8d988318b3678bfcc15cb2d4aa038359eed2dad644b28b",
+      "provider_cap_enforced": true,
+      "raw_operation_stored": false,
+      "reason": "outside_bounded_symbolic_language",
+      "spec_origin": "HOST_DERIVED",
+      "status": "DECLINE",
+      "timeout_ms": 1000,
+      "value": {
+        "benefit_microunits": 1000000,
+        "damage_microunits": 2000000,
+        "executes": true,
+        "expected_gain_microunits": 285000,
+        "fixed_cost_microunits": 0,
+        "probability_base_error_ppm": 300000,
+        "probability_damage_ppm": 0,
+        "probability_resolution_ppm": 950000,
+        "token_cost_microunits": 0
+      }
+    },
+    {
+      "complexity": "HIGH",
+      "envelope": {
+        "maximum_cached_input_tokens": 258400,
+        "maximum_evidence_characters": 200000,
+        "maximum_input_tokens": 258400,
+        "maximum_latency_ms": 1200000,
+        "maximum_model_passes": 2,
+        "maximum_monetary_microunits": 0,
+        "maximum_output_tokens": 258400,
+        "maximum_tool_calls": 4,
+        "maximum_total_tokens": 775200
+      },
+      "family": "PASSAGE_RETRIEVAL",
+      "formalization_admission_sha256": null,
+      "operation_input_sha256": "db65063408756601ae5c334ef5b94ff74fd198c5450d9fcd27e36f1fe1262dc7",
+      "provider_cap_enforced": true,
+      "raw_operation_stored": false,
+      "reason": "passage_retrieval_provider_available",
+      "spec_origin": "HOST_RETRIEVAL",
+      "status": "APPLICABLE",
+      "timeout_ms": 1200000,
+      "value": {
+        "benefit_microunits": 1000000,
+        "damage_microunits": 2000000,
+        "executes": true,
+        "expected_gain_microunits": 30000,
+        "fixed_cost_microunits": 0,
+        "probability_base_error_ppm": 800000,
+        "probability_damage_ppm": 0,
+        "probability_resolution_ppm": 100000,
+        "token_cost_microunits": 50000
+      }
+    }
+  ],
+  "provider_calls": [
+    {
+      "output_sha256": "0d05ff33c8bc3a922e2c9c74bad25ea73ecb958c3ffb4a7a383ea20a9fdbfa23",
+      "parse_errors": 0,
+      "prompt_sha256": "4f9fc80ee5e001bd87b860b20bf7ff990081e3a81f275e41e84ddb8db29b9715",
+      "raw_persisted": true,
+      "returncode": 0,
+      "search_enabled": false,
+      "tools": [],
+      "usage": {
+        "cached_input_tokens": 11008,
+        "input_tokens": 17557,
+        "output_tokens": 132,
+        "total_tokens": 17689
+      },
+      "wall_ms": 6750
+    },
+    {
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parse_errors": 0,
+      "prompt_sha256": "e1243b17c6f55e57d3e73df13f3919296c005d1a79fa562b00f984bb08f250a5",
+      "raw_persisted": true,
+      "returncode": 1,
+      "search_enabled": true,
+      "tools": [],
+      "usage": null,
+      "wall_ms": 2937
+    }
+  ],
+  "provider_usage": null,
+  "question_sha256": "db65063408756601ae5c334ef5b94ff74fd198c5450d9fcd27e36f1fe1262dc7",
+  "retrieval_fetches": [],
+  "row_outcome": "TOOL_ERROR",
+  "row_valid": true,
+  "runtime_receipt": {
+    "a0_assessment": null,
+    "a0_sha256": "107f25256019868e98cb6cd3104add380d5e1fb48ce1d6e2836e846269301998",
+    "answer_changed": false,
+    "archive_receipt": null,
+    "b_assessment": null,
+    "constructor": null,
+    "contract": {
+      "a0_digest": "107f25256019868e98cb6cd3104add380d5e1fb48ce1d6e2836e846269301998",
+      "contract_sha256": "7705883eab1a50ce3eac378adb5263370cb867aa84dda5930baca42f73d9ddb3",
+      "envelope": {
+        "maximum_cached_input_tokens": 258400,
+        "maximum_evidence_characters": 200000,
+        "maximum_input_tokens": 258400,
+        "maximum_latency_ms": 1200000,
+        "maximum_model_passes": 2,
+        "maximum_monetary_microunits": 0,
+        "maximum_output_tokens": 258400,
+        "maximum_tool_calls": 4,
+        "maximum_total_tokens": 775200
+      },
+      "family": "PASSAGE_RETRIEVAL",
+      "formalization_admission_sha256": null,
+      "operation_input_digest": "db65063408756601ae5c334ef5b94ff74fd198c5450d9fcd27e36f1fe1262dc7",
+      "production_authorized": false,
+      "question_digest": "db65063408756601ae5c334ef5b94ff74fd198c5450d9fcd27e36f1fe1262dc7",
+      "raw_a0_stored": false,
+      "raw_question_stored": false,
+      "read_only": true,
+      "schema": "foil.tool-contract.v2",
+      "spec_origin": "HOST_RETRIEVAL",
+      "task_id": "hle-live-670eb27fd2f45b1198c87766",
+      "timeout_ms": 1200000,
+      "tool_id": "foil.hle10-passage-retrieval",
+      "tool_version": "1",
+      "value": {
+        "benefit_microunits": 1000000,
+        "damage_microunits": 2000000,
+        "executes": true,
+        "expected_gain_microunits": 30000,
+        "fixed_cost_microunits": 0,
+        "probability_base_error_ppm": 800000,
+        "probability_damage_ppm": 0,
+        "probability_resolution_ppm": 100000,
+        "token_cost_microunits": 50000
+      }
+    },
+    "cost_accounting_complete": true,
+    "evidence_packet": null,
+    "final_sha256": "107f25256019868e98cb6cd3104add380d5e1fb48ce1d6e2836e846269301998",
+    "ledger_after": {
+      "active_call_ids": [],
+      "aggregate_cancellation_enabled": false,
+      "aggregate_token_ceiling": null,
+      "conserved": true,
+      "ledger_sha256": "4abc2a64fab53b4b8fb18c23b40c62b5a43123da5420b74c2ea4202846787337",
+      "observed_call_ids": [],
+      "observed_spend_conserved_on_failure": true,
+      "per_call_envelopes_required": true,
+      "positive_prelaunch_value_required": true,
+      "schema": "foil.runtime-token-ledger.v2",
+      "settlements": [
+        {
+          "call_id": "call-7705883eab1a50ce",
+          "cancelled": false,
+          "contract_sha256": "7705883eab1a50ce3eac378adb5263370cb867aa84dda5930baca42f73d9ddb3",
+          "latency_ms": 2937,
+          "monetary_microunits": 0,
+          "reason": null,
+          "tool_calls": 0,
+          "usage": {
+            "cached_input_tokens": 0,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0
+          }
+        }
+      ],
+      "spent_usage": {
+        "cached_input_tokens": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      }
+    },
+    "ledger_before": {
+      "active_call_ids": [],
+      "aggregate_cancellation_enabled": false,
+      "aggregate_token_ceiling": null,
+      "conserved": true,
+      "ledger_sha256": "b8750c2f493279ca4b439361002674e6af19eede9eb3c288d883d0b1b17ad850",
+      "observed_call_ids": [],
+      "observed_spend_conserved_on_failure": true,
+      "per_call_envelopes_required": true,
+      "positive_prelaunch_value_required": true,
+      "schema": "foil.runtime-token-ledger.v2",
+      "settlements": [],
+      "spent_usage": {
+        "cached_input_tokens": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      }
+    },
+    "opportunity": {
+      "a0_observed": false,
+      "candidates": [
+        {
+          "complexity": "HIGH",
+          "cost_rank": 2,
+          "execution_authorized": false,
+          "family": "SYMBOLIC_COMPUTATION",
+          "question_structure_only": true,
+          "reason_code": "EXPLICIT_SYMBOLIC_OPERATION",
+          "requires_runtime_probe": true
+        },
+        {
+          "complexity": "HIGH",
+          "cost_rank": 3,
+          "execution_authorized": false,
+          "family": "PASSAGE_RETRIEVAL",
+          "question_structure_only": true,
+          "reason_code": "FACT_OR_SOURCE_LOOKUP",
+          "requires_runtime_probe": true
+        }
+      ],
+      "execution_authorized": false,
+      "gold_observed": false,
+      "opportunity_sha256": "46910e773025b6cfc6a9d026771bf2536c96fa3715f1efa48da9d08b738a28cb",
+      "profile_observed": false,
+      "promotion_authorized": false,
+      "question_digest": "db65063408756601ae5c334ef5b94ff74fd198c5450d9fcd27e36f1fe1262dc7",
+      "question_only": true,
+      "schema": "foil.route-opportunity.v2",
+      "status": "FOUND",
+      "task_id": "hle-live-670eb27fd2f45b1198c87766"
+    },
+    "outcome": "TOOL_ERROR",
+    "probes": [
+      {
+        "complexity": "MEDIUM",
+        "envelope": {
+          "maximum_cached_input_tokens": 0,
+          "maximum_evidence_characters": 0,
+          "maximum_input_tokens": 0,
+          "maximum_latency_ms": 1000,
+          "maximum_model_passes": 0,
+          "maximum_monetary_microunits": 0,
+          "maximum_output_tokens": 0,
+          "maximum_tool_calls": 1,
+          "maximum_total_tokens": 0
+        },
+        "family": "SYMBOLIC_COMPUTATION",
+        "formalization_admission_sha256": null,
+        "operation_input_sha256": "fdc66dca2f4037dc7d8d988318b3678bfcc15cb2d4aa038359eed2dad644b28b",
+        "provider_cap_enforced": true,
+        "raw_operation_stored": false,
+        "reason": "outside_bounded_symbolic_language",
+        "spec_origin": "HOST_DERIVED",
+        "status": "DECLINE",
+        "timeout_ms": 1000,
+        "value": {
+          "benefit_microunits": 1000000,
+          "damage_microunits": 2000000,
+          "executes": true,
+          "expected_gain_microunits": 285000,
+          "fixed_cost_microunits": 0,
+          "probability_base_error_ppm": 300000,
+          "probability_damage_ppm": 0,
+          "probability_resolution_ppm": 950000,
+          "token_cost_microunits": 0
+        }
+      },
+      {
+        "complexity": "HIGH",
+        "envelope": {
+          "maximum_cached_input_tokens": 258400,
+          "maximum_evidence_characters": 200000,
+          "maximum_input_tokens": 258400,
+          "maximum_latency_ms": 1200000,
+          "maximum_model_passes": 2,
+          "maximum_monetary_microunits": 0,
+          "maximum_output_tokens": 258400,
+          "maximum_tool_calls": 4,
+          "maximum_total_tokens": 775200
+        },
+        "family": "PASSAGE_RETRIEVAL",
+        "formalization_admission_sha256": null,
+        "operation_input_sha256": "db65063408756601ae5c334ef5b94ff74fd198c5450d9fcd27e36f1fe1262dc7",
+        "provider_cap_enforced": true,
+        "raw_operation_stored": false,
+        "reason": "passage_retrieval_provider_available",
+        "spec_origin": "HOST_RETRIEVAL",
+        "status": "APPLICABLE",
+        "timeout_ms": 1200000,
+        "value": {
+          "benefit_microunits": 1000000,
+          "damage_microunits": 2000000,
+          "executes": true,
+          "expected_gain_microunits": 30000,
+          "fixed_cost_microunits": 0,
+          "probability_base_error_ppm": 800000,
+          "probability_damage_ppm": 0,
+          "probability_resolution_ppm": 100000,
+          "token_cost_microunits": 50000
+        }
+      }
+    ],
+    "production_authorized": false,
+    "profile_read": false,
+    "profile_written": false,
+    "promotion_authorized": false,
+    "question_digest": "db65063408756601ae5c334ef5b94ff74fd198c5450d9fcd27e36f1fe1262dc7",
+    "question_only_frontier": true,
+    "raw_a0_stored": false,
+    "raw_candidate_stored": false,
+    "raw_question_stored": false,
+    "reason": "PROVIDER_ERROR:provider_returncode_1",
+    "run_sha256": "acf36f1464428a7401a13cbcde66de30f1dc1d23553fc85ac17a5b642648374c",
+    "schema": "foil.active-runtime.v2",
+    "selected_family": "PASSAGE_RETRIEVAL",
+    "selection": null,
+    "shadow_only": false,
+    "task_id": "hle-live-670eb27fd2f45b1198c87766",
+    "tool_receipt": null
+  },
+  "schema": "foil.active-runtime-hle10-row.v1",
+  "selected_family": "PASSAGE_RETRIEVAL",
+  "selection": null,
+  "source_id": "670eb27fd2f45b1198c87766",
+  "task_id": "hle-live-670eb27fd2f45b1198c87766",
+  "tool_contract": {
+    "a0_digest": "107f25256019868e98cb6cd3104add380d5e1fb48ce1d6e2836e846269301998",
+    "contract_sha256": "7705883eab1a50ce3eac378adb5263370cb867aa84dda5930baca42f73d9ddb3",
+    "envelope": {
+      "maximum_cached_input_tokens": 258400,
+      "maximum_evidence_characters": 200000,
+      "maximum_input_tokens": 258400,
+      "maximum_latency_ms": 1200000,
+      "maximum_model_passes": 2,
+      "maximum_monetary_microunits": 0,
+      "maximum_output_tokens": 258400,
+      "maximum_tool_calls": 4,
+      "maximum_total_tokens": 775200
+    },
+    "family": "PASSAGE_RETRIEVAL",
+    "formalization_admission_sha256": null,
+    "operation_input_digest": "db65063408756601ae5c334ef5b94ff74fd198c5450d9fcd27e36f1fe1262dc7",
+    "production_authorized": false,
+    "question_digest": "db65063408756601ae5c334ef5b94ff74fd198c5450d9fcd27e36f1fe1262dc7",
+    "raw_a0_stored": false,
+    "raw_question_stored": false,
+    "read_only": true,
+    "schema": "foil.tool-contract.v2",
+    "spec_origin": "HOST_RETRIEVAL",
+    "task_id": "hle-live-670eb27fd2f45b1198c87766",
+    "timeout_ms": 1200000,
+    "tool_id": "foil.hle10-passage-retrieval",
+    "tool_version": "1",
+    "value": {
+      "benefit_microunits": 1000000,
+      "damage_microunits": 2000000,
+      "executes": true,
+      "expected_gain_microunits": 30000,
+      "fixed_cost_microunits": 0,
+      "probability_base_error_ppm": 800000,
+      "probability_damage_ppm": 0,
+      "probability_resolution_ppm": 100000,
+      "token_cost_microunits": 50000
+    }
+  },
+  "tool_receipt": null
+}
