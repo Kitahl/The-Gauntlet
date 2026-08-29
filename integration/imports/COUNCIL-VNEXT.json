@@ -1,5 +1,5 @@
 {
-  "admission_state": "AUDITED",
+  "admission_state": "H1_PASS",
   "applied_paths": [
     "docs/specs/COUNCIL_ENGINEERING_SPEC.md",
     "skills/council-of-elders/SKILL.md",
@@ -7,7 +7,54 @@
     "tools/council_runtime.py"
   ],
   "conflict_records": [],
-  "delta_patch_sha256": null,
+  "delta_patch_path": "integration/patches/COUNCIL-VNEXT.patch",
+  "delta_patch_sha256": "c2fd195351ddc0600eb229b9b493ba46f3894aa46ceeb17a8dc06e3a1be0f694",
+  "file_records": [
+    {
+      "blob_after": "7276ba864d93d3dddd418ba91f11a1952566d6d5",
+      "blob_before": "431d116400f4af9239d37ef9918e04c9d22d7d3f",
+      "change_type": "MODIFY",
+      "mode_after": "100644",
+      "mode_before": "100644",
+      "owner": "COUNCIL-VNEXT",
+      "path_after": "docs/specs/COUNCIL_ENGINEERING_SPEC.md",
+      "path_before": "docs/specs/COUNCIL_ENGINEERING_SPEC.md",
+      "shared_conflict": true
+    },
+    {
+      "blob_after": "30df96b7666248d36876cdb84998bccecd3bb054",
+      "blob_before": "74ac2144271e718da3c5102fa5c4728ab7cd3785",
+      "change_type": "MODIFY",
+      "mode_after": "100644",
+      "mode_before": "100644",
+      "owner": "COUNCIL-VNEXT",
+      "path_after": "skills/council-of-elders/SKILL.md",
+      "path_before": "skills/council-of-elders/SKILL.md",
+      "shared_conflict": true
+    },
+    {
+      "blob_after": "3829fe6bdf008b9ab2269375ebfbb9a0e52597af",
+      "blob_before": null,
+      "change_type": "ADD",
+      "mode_after": "100644",
+      "mode_before": null,
+      "owner": "COUNCIL-VNEXT",
+      "path_after": "tests/test_council_challenge_seats.py",
+      "path_before": null,
+      "shared_conflict": false
+    },
+    {
+      "blob_after": "13304eddf0cebb872b4e954b1b5d63c9736ad69f",
+      "blob_before": "bb2e60c97440c30b92816ffd25b5ab4a96c2a58d",
+      "change_type": "MODIFY",
+      "mode_after": "100644",
+      "mode_before": "100644",
+      "owner": "COUNCIL-VNEXT",
+      "path_after": "tools/council_runtime.py",
+      "path_before": "tools/council_runtime.py",
+      "shared_conflict": false
+    }
+  ],
   "functional_base": "af8dc2621099dd4993272cbc9e623190ef23ca9c",
   "functional_base_tree": "62d72e4f5babf44145d9a9fbabcfcee9c8663ac7",
   "import_strategy": "FAST_FORWARD_EXACT_CHAIN",

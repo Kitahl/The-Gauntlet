@@ -1,5 +1,5 @@
 {
-  "admission_state": "AUDITED",
+  "admission_state": "H1_PASS",
   "applied_paths": [
     "docs/specs/COUNCIL_ENGINEERING_SPEC.md",
     "skills/council-of-elders/SKILL.md",
@@ -7,7 +7,54 @@
     "tools/council_v3_evidence/__init__.py"
   ],
   "conflict_records": [],
-  "delta_patch_sha256": null,
+  "delta_patch_path": "integration/patches/COUNCIL-V3.patch",
+  "delta_patch_sha256": "1f5356f131db725e68ad1cf6a6cdda28f4667f384b10ce869e290c1e9556e67b",
+  "file_records": [
+    {
+      "blob_after": "cf193b33d37165a58298b97c2dec624909ce11d9",
+      "blob_before": "7276ba864d93d3dddd418ba91f11a1952566d6d5",
+      "change_type": "MODIFY",
+      "mode_after": "100644",
+      "mode_before": "100644",
+      "owner": "COUNCIL-V3",
+      "path_after": "docs/specs/COUNCIL_ENGINEERING_SPEC.md",
+      "path_before": "docs/specs/COUNCIL_ENGINEERING_SPEC.md",
+      "shared_conflict": true
+    },
+    {
+      "blob_after": "1a114d01c9a1b4f537488491e5bbc56a28d1e16c",
+      "blob_before": "30df96b7666248d36876cdb84998bccecd3bb054",
+      "change_type": "MODIFY",
+      "mode_after": "100644",
+      "mode_before": "100644",
+      "owner": "COUNCIL-V3",
+      "path_after": "skills/council-of-elders/SKILL.md",
+      "path_before": "skills/council-of-elders/SKILL.md",
+      "shared_conflict": true
+    },
+    {
+      "blob_after": "65e464fbd4be277d96836e0b8c09ac98a6b3693c",
+      "blob_before": null,
+      "change_type": "ADD",
+      "mode_after": "100644",
+      "mode_before": null,
+      "owner": "COUNCIL-V3",
+      "path_after": "tests/test_council_v3_evidence.py",
+      "path_before": null,
+      "shared_conflict": false
+    },
+    {
+      "blob_after": "bb033b5082b2929c4a1f0866f9403e7ccb010610",
+      "blob_before": null,
+      "change_type": "ADD",
+      "mode_after": "100644",
+      "mode_before": null,
+      "owner": "COUNCIL-V3",
+      "path_after": "tools/council_v3_evidence/__init__.py",
+      "path_before": null,
+      "shared_conflict": false
+    }
+  ],
   "functional_base": "132172944c07de77c11266c953996fc1e840b647",
   "functional_base_tree": "8ee1708de7b5179f03cd1cb012a0caa3e778df4a",
   "import_strategy": "FAST_FORWARD_EXACT_CHAIN",

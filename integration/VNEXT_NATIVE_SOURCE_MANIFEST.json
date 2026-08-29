@@ -14,8 +14,16 @@
     },
     {
       "blocker_id": "BLOCKER-INT100-PATCH-DIGESTS",
+      "closed_at": "2026-08-29T17:52:00Z",
       "reason": "Binary/full-index patch artifacts and SHA-256 digests have not yet been published for the three exact-chain imports.",
-      "state": "OPEN"
+      "resolution": {
+        "patches": {
+          "COUNCIL-V3": "1f5356f131db725e68ad1cf6a6cdda28f4667f384b10ce869e290c1e9556e67b",
+          "COUNCIL-VNEXT": "c2fd195351ddc0600eb229b9b493ba46f3894aa46ceeb17a8dc06e3a1be0f694",
+          "MIND-VNEXT": "69fbff921c27fb51e204d67ad979477273c43f0d98351c4399fd9b1c2dc930ea"
+        }
+      },
+      "state": "CLOSED"
     },
     {
       "blocker_id": "BLOCKER-INT100-H2",
@@ -23,7 +31,7 @@
       "state": "OPEN"
     }
   ],
-  "content_hash": "2140c7ecfdab49b61e08cd3db82c472df3438d0594b23b11acef3bcab357d78a",
+  "content_hash": "a0ed318ce8ed49db539158223d7138526e870f4f8f016c1b762fbd5a3c1bc677",
   "core_integration_head": "7fcfd259a6b103a464061c1d30f2a48fa1ff7f52",
   "created_at": "2026-08-29T17:40:00Z",
   "hermes_cutoff_sha": null,
@@ -33,10 +41,253 @@
   "schema": "egr.integration.source-manifest.v1",
   "sources": [
     {
-      "admission_state": "AUDITED",
+      "admission_state": "H1_PASS",
       "authority_ceiling": "PROOF",
-      "delta_patch_sha256": null,
-      "file_records": [],
+      "delta_patch_sha256": "69fbff921c27fb51e204d67ad979477273c43f0d98351c4399fd9b1c2dc930ea",
+      "file_records": [
+        {
+          "blob_after": "b420b4f306144b9269d8e142ff5b261c974fab93",
+          "blob_before": "76f1f13d95d40d78095392e4585f9013f2664ca5",
+          "change_type": "MODIFY",
+          "mode_after": "100644",
+          "mode_before": "100644",
+          "owner": "MIND-VNEXT",
+          "path_after": ".gauntlet.json",
+          "path_before": ".gauntlet.json",
+          "shared_conflict": true
+        },
+        {
+          "blob_after": "ca067e682fc2e453954d5cb3c97b078a82211af1",
+          "blob_before": "17cc6037d39cea5396268fdc0d4f5711539277f3",
+          "change_type": "MODIFY",
+          "mode_after": "100644",
+          "mode_before": "100644",
+          "owner": "MIND-VNEXT",
+          "path_after": ".github/workflows/security.yml",
+          "path_before": ".github/workflows/security.yml",
+          "shared_conflict": true
+        },
+        {
+          "blob_after": "a4817dbc62efe55e7f7b22cce0dce173aa8b037b",
+          "blob_before": null,
+          "change_type": "ADD",
+          "mode_after": "100644",
+          "mode_before": null,
+          "owner": "MIND-VNEXT",
+          "path_after": "docs/adr/0001-neutral-challenge-protocol.md",
+          "path_before": null,
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "4b818aeae1acd1311a317dc94f7a166c4502ad75",
+          "blob_before": null,
+          "change_type": "ADD",
+          "mode_after": "100644",
+          "mode_before": null,
+          "owner": "MIND-VNEXT",
+          "path_after": "docs/specs/CHALLENGE_ENGINEERING_SPEC.md",
+          "path_before": null,
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "7bc04352de9caf5a8cbae823f11939dd81b701a3",
+          "blob_before": "865090d6545575ecd06bc4866285ef8b01d09ff4",
+          "change_type": "MODIFY",
+          "mode_after": "100644",
+          "mode_before": "100644",
+          "owner": "MIND-VNEXT",
+          "path_after": "docs/specs/MIND_ENGINEERING_SPEC.md",
+          "path_before": "docs/specs/MIND_ENGINEERING_SPEC.md",
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "e5c3c6d286acbab98d1cc1043bb628a79178b174",
+          "blob_before": "8c27111809e390910a74b1380b9fbce12b016999",
+          "change_type": "MODIFY",
+          "mode_after": "100644",
+          "mode_before": "100644",
+          "owner": "MIND-VNEXT",
+          "path_after": "skills/mathbot/SKILL.md",
+          "path_before": "skills/mathbot/SKILL.md",
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "b4912f129d8ce5a76ab406f9b0c2b0f3aae5bd97",
+          "blob_before": null,
+          "change_type": "ADD",
+          "mode_after": "100644",
+          "mode_before": null,
+          "owner": "MIND-VNEXT",
+          "path_after": "tests/_challenge_helpers.py",
+          "path_before": null,
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "318d4acd8b836ca3737636af1dd1eb8ee09fb607",
+          "blob_before": null,
+          "change_type": "ADD",
+          "mode_after": "100644",
+          "mode_before": null,
+          "owner": "MIND-VNEXT",
+          "path_after": "tests/test_candidate_gate.py",
+          "path_before": null,
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "31fbfb7d8f2fe61c2e9bc5ba12fd37c732f6de32",
+          "blob_before": null,
+          "change_type": "ADD",
+          "mode_after": "100644",
+          "mode_before": null,
+          "owner": "MIND-VNEXT",
+          "path_after": "tests/test_egrt_challenge_gate.py",
+          "path_before": null,
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "fe2a8561bf6215fe5a853ddc720de1cc0ed2ae52",
+          "blob_before": null,
+          "change_type": "ADD",
+          "mode_after": "100644",
+          "mode_before": null,
+          "owner": "MIND-VNEXT",
+          "path_after": "tests/test_egrt_challenge_store.py",
+          "path_before": null,
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "41fca6b57286ccb0c9842abf3c99f9470a1f4290",
+          "blob_before": null,
+          "change_type": "ADD",
+          "mode_after": "100644",
+          "mode_before": null,
+          "owner": "MIND-VNEXT",
+          "path_after": "tests/test_egrt_challenge_types.py",
+          "path_before": null,
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "4581fedad84c9a83b7f1b3ff72483ead6bef8a34",
+          "blob_before": null,
+          "change_type": "ADD",
+          "mode_after": "100644",
+          "mode_before": null,
+          "owner": "MIND-VNEXT",
+          "path_after": "tests/test_mind_challenge_runtime.py",
+          "path_before": null,
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "e636657de8e3fdbed4003415173a0976a41981a4",
+          "blob_before": null,
+          "change_type": "ADD",
+          "mode_after": "100644",
+          "mode_before": null,
+          "owner": "MIND-VNEXT",
+          "path_after": "tests/test_no_nonfoil_imports_foil_modules.py",
+          "path_before": null,
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "080c677c34dc02821fd5e3abf6194584ee0dd6af",
+          "blob_before": null,
+          "change_type": "ADD",
+          "mode_after": "100644",
+          "mode_before": null,
+          "owner": "MIND-VNEXT",
+          "path_after": "tools/egrt_candidate_gate.py",
+          "path_before": null,
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "3bce1048084f42c18069af1837d1a1861d73c40e",
+          "blob_before": null,
+          "change_type": "ADD",
+          "mode_after": "100644",
+          "mode_before": null,
+          "owner": "MIND-VNEXT",
+          "path_after": "tools/egrt_challenge.py",
+          "path_before": null,
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "3000f93e0db45fb8b9a0ea461dc63241df0ab4d7",
+          "blob_before": null,
+          "change_type": "ADD",
+          "mode_after": "100644",
+          "mode_before": null,
+          "owner": "MIND-VNEXT",
+          "path_after": "tools/egrt_challenge_types.py",
+          "path_before": null,
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "6722ce5053df8b5c879970fea5156ded7f4bc3e1",
+          "blob_before": "f297f5922841ac6590a236ec5f621c8d7557f646",
+          "change_type": "MODIFY",
+          "mode_after": "100644",
+          "mode_before": "100644",
+          "owner": "MIND-VNEXT",
+          "path_after": "tools/egrt_store.py",
+          "path_before": "tools/egrt_store.py",
+          "shared_conflict": true
+        },
+        {
+          "blob_after": "d8da6b65520abb5422002ebf3288044506776aa2",
+          "blob_before": "fed4b7b916a3e655f9305e7ac6c334df3292b7d2",
+          "change_type": "MODIFY",
+          "mode_after": "100644",
+          "mode_before": "100644",
+          "owner": "MIND-VNEXT",
+          "path_after": "tools/foil_authority.py",
+          "path_before": "tools/foil_authority.py",
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "2e18a7aa2f1cb1342fe3db37d862313f029a5d36",
+          "blob_before": "260118c28cb5a7ec45093bb129ae38f038889155",
+          "change_type": "MODIFY",
+          "mode_after": "100644",
+          "mode_before": "100644",
+          "owner": "MIND-VNEXT",
+          "path_after": "tools/gauntlet_config.py",
+          "path_before": "tools/gauntlet_config.py",
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "eaba2fb06d1f47383608aa676d3c27a7ec7fe655",
+          "blob_before": "58aff0cc6b04b964ce42e37b0ca0304b1ec96dd3",
+          "change_type": "MODIFY",
+          "mode_after": "100644",
+          "mode_before": "100644",
+          "owner": "MIND-VNEXT",
+          "path_after": "tools/mind_runtime.py",
+          "path_before": "tools/mind_runtime.py",
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "029966de0bf1ef8b255ee17296e328027c3c9905",
+          "blob_before": "fdc9f590e35a8075192ca917d3b771f0e184ac7f",
+          "change_type": "MODIFY",
+          "mode_after": "100644",
+          "mode_before": "100644",
+          "owner": "MIND-VNEXT",
+          "path_after": "validation/validate_showcase.py",
+          "path_before": "validation/validate_showcase.py",
+          "shared_conflict": true
+        },
+        {
+          "blob_after": "af509641437d4f131e67cd0225fab30972a217ee",
+          "blob_before": "ee8643d6db0e3c264347d92dc11dd3247e62c102",
+          "change_type": "MODIFY",
+          "mode_after": "100644",
+          "mode_before": "100755",
+          "owner": "MIND-VNEXT",
+          "path_after": "validation/validate_vnext_runtime.py",
+          "path_before": "validation/validate_vnext_runtime.py",
+          "shared_conflict": true
+        }
+      ],
       "functional_base": "4f088d688fa9e25b4608f44000a5d9812efa45f9",
       "functional_base_tree": "465d460e9b7f8c61a57ceaf3400907832a6834cc",
       "import_commit_sha": "af8dc2621099dd4993272cbc9e623190ef23ca9c",
@@ -44,7 +295,8 @@
         "exact one-commit descendant of base main and retained verbatim in integration/vnext-core",
         "binary/full-index patch digest and integrated exact-head gates remain pending",
         "Mind authority ceiling remains PROOF",
-        "complete path inventory retained in import receipt and live compare; file records pending"
+        "complete path inventory retained in import receipt and live compare; file records pending",
+        "binary/full-index patch frozen at integration/patches/MIND-VNEXT.patch"
       ],
       "owned_paths": [
         "docs/adr/0001-neutral-challenge-protocol.md",
@@ -72,17 +324,63 @@
       "workflow_runs": []
     },
     {
-      "admission_state": "AUDITED",
+      "admission_state": "H1_PASS",
       "authority_ceiling": "REVIEW",
-      "delta_patch_sha256": null,
-      "file_records": [],
+      "delta_patch_sha256": "c2fd195351ddc0600eb229b9b493ba46f3894aa46ceeb17a8dc06e3a1be0f694",
+      "file_records": [
+        {
+          "blob_after": "7276ba864d93d3dddd418ba91f11a1952566d6d5",
+          "blob_before": "431d116400f4af9239d37ef9918e04c9d22d7d3f",
+          "change_type": "MODIFY",
+          "mode_after": "100644",
+          "mode_before": "100644",
+          "owner": "COUNCIL-VNEXT",
+          "path_after": "docs/specs/COUNCIL_ENGINEERING_SPEC.md",
+          "path_before": "docs/specs/COUNCIL_ENGINEERING_SPEC.md",
+          "shared_conflict": true
+        },
+        {
+          "blob_after": "30df96b7666248d36876cdb84998bccecd3bb054",
+          "blob_before": "74ac2144271e718da3c5102fa5c4728ab7cd3785",
+          "change_type": "MODIFY",
+          "mode_after": "100644",
+          "mode_before": "100644",
+          "owner": "COUNCIL-VNEXT",
+          "path_after": "skills/council-of-elders/SKILL.md",
+          "path_before": "skills/council-of-elders/SKILL.md",
+          "shared_conflict": true
+        },
+        {
+          "blob_after": "3829fe6bdf008b9ab2269375ebfbb9a0e52597af",
+          "blob_before": null,
+          "change_type": "ADD",
+          "mode_after": "100644",
+          "mode_before": null,
+          "owner": "COUNCIL-VNEXT",
+          "path_after": "tests/test_council_challenge_seats.py",
+          "path_before": null,
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "13304eddf0cebb872b4e954b1b5d63c9736ad69f",
+          "blob_before": "bb2e60c97440c30b92816ffd25b5ab4a96c2a58d",
+          "change_type": "MODIFY",
+          "mode_after": "100644",
+          "mode_before": "100644",
+          "owner": "COUNCIL-VNEXT",
+          "path_after": "tools/council_runtime.py",
+          "path_before": "tools/council_runtime.py",
+          "shared_conflict": false
+        }
+      ],
       "functional_base": "af8dc2621099dd4993272cbc9e623190ef23ca9c",
       "functional_base_tree": "62d72e4f5babf44145d9a9fbabcfcee9c8663ac7",
       "import_commit_sha": "132172944c07de77c11266c953996fc1e840b647",
       "notes": [
         "exact one-commit descendant of MIND-VNEXT and retained verbatim",
         "binary/full-index patch digest and integrated exact-head gates remain pending",
-        "Council authority ceiling remains REVIEW"
+        "Council authority ceiling remains REVIEW",
+        "binary/full-index patch frozen at integration/patches/COUNCIL-VNEXT.patch"
       ],
       "owned_paths": [
         "docs/specs/COUNCIL_ENGINEERING_SPEC.md",
@@ -103,16 +401,62 @@
       "workflow_runs": []
     },
     {
-      "admission_state": "AUDITED",
+      "admission_state": "H1_PASS",
       "authority_ceiling": "REVIEW",
-      "delta_patch_sha256": null,
-      "file_records": [],
+      "delta_patch_sha256": "1f5356f131db725e68ad1cf6a6cdda28f4667f384b10ce869e290c1e9556e67b",
+      "file_records": [
+        {
+          "blob_after": "cf193b33d37165a58298b97c2dec624909ce11d9",
+          "blob_before": "7276ba864d93d3dddd418ba91f11a1952566d6d5",
+          "change_type": "MODIFY",
+          "mode_after": "100644",
+          "mode_before": "100644",
+          "owner": "COUNCIL-V3",
+          "path_after": "docs/specs/COUNCIL_ENGINEERING_SPEC.md",
+          "path_before": "docs/specs/COUNCIL_ENGINEERING_SPEC.md",
+          "shared_conflict": true
+        },
+        {
+          "blob_after": "1a114d01c9a1b4f537488491e5bbc56a28d1e16c",
+          "blob_before": "30df96b7666248d36876cdb84998bccecd3bb054",
+          "change_type": "MODIFY",
+          "mode_after": "100644",
+          "mode_before": "100644",
+          "owner": "COUNCIL-V3",
+          "path_after": "skills/council-of-elders/SKILL.md",
+          "path_before": "skills/council-of-elders/SKILL.md",
+          "shared_conflict": true
+        },
+        {
+          "blob_after": "65e464fbd4be277d96836e0b8c09ac98a6b3693c",
+          "blob_before": null,
+          "change_type": "ADD",
+          "mode_after": "100644",
+          "mode_before": null,
+          "owner": "COUNCIL-V3",
+          "path_after": "tests/test_council_v3_evidence.py",
+          "path_before": null,
+          "shared_conflict": false
+        },
+        {
+          "blob_after": "bb033b5082b2929c4a1f0866f9403e7ccb010610",
+          "blob_before": null,
+          "change_type": "ADD",
+          "mode_after": "100644",
+          "mode_before": null,
+          "owner": "COUNCIL-V3",
+          "path_after": "tools/council_v3_evidence/__init__.py",
+          "path_before": null,
+          "shared_conflict": false
+        }
+      ],
       "functional_base": "132172944c07de77c11266c953996fc1e840b647",
       "functional_base_tree": "8ee1708de7b5179f03cd1cb012a0caa3e778df4a",
       "import_commit_sha": "7fcfd259a6b103a464061c1d30f2a48fa1ff7f52",
       "notes": [
         "exact one-commit descendant of COUNCIL-VNEXT and retained verbatim",
-        "component evidence was tree-identical; integrated exact-head gates remain pending"
+        "component evidence was tree-identical; integrated exact-head gates remain pending",
+        "binary/full-index patch frozen at integration/patches/COUNCIL-V3.patch"
       ],
       "owned_paths": [
         "docs/specs/COUNCIL_ENGINEERING_SPEC.md",
@@ -140,7 +484,9 @@
       "functional_base": null,
       "functional_base_tree": null,
       "import_commit_sha": null,
-      "notes": ["frozen at INT-000; not imported in INT-100"],
+      "notes": [
+        "frozen at INT-000; not imported in INT-100"
+      ],
       "owned_paths": [],
       "producer_ref": "pull/54/head",
       "shared_paths": [],
@@ -159,7 +505,9 @@
       "functional_base": null,
       "functional_base_tree": null,
       "import_commit_sha": null,
-      "notes": ["frozen at INT-000; not imported in INT-100"],
+      "notes": [
+        "frozen at INT-000; not imported in INT-100"
+      ],
       "owned_paths": [],
       "producer_ref": "pull/55/head",
       "shared_paths": [],
@@ -178,7 +526,9 @@
       "functional_base": null,
       "functional_base_tree": null,
       "import_commit_sha": null,
-      "notes": ["frozen at INT-000; not imported in INT-100"],
+      "notes": [
+        "frozen at INT-000; not imported in INT-100"
+      ],
       "owned_paths": [],
       "producer_ref": "pull/56/head",
       "shared_paths": [],
@@ -197,7 +547,9 @@
       "functional_base": null,
       "functional_base_tree": null,
       "import_commit_sha": null,
-      "notes": ["frozen at INT-000; not imported in INT-100"],
+      "notes": [
+        "frozen at INT-000; not imported in INT-100"
+      ],
       "owned_paths": [],
       "producer_ref": "pull/57/head",
       "shared_paths": [],
@@ -216,7 +568,9 @@
       "functional_base": null,
       "functional_base_tree": null,
       "import_commit_sha": null,
-      "notes": ["frozen at INT-000; not imported in INT-100"],
+      "notes": [
+        "frozen at INT-000; not imported in INT-100"
+      ],
       "owned_paths": [],
       "producer_ref": "pull/58/head",
       "shared_paths": [],
@@ -235,7 +589,9 @@
       "functional_base": null,
       "functional_base_tree": null,
       "import_commit_sha": null,
-      "notes": ["frozen at INT-000; not imported in INT-100"],
+      "notes": [
+        "frozen at INT-000; not imported in INT-100"
+      ],
       "owned_paths": [],
       "producer_ref": "pull/59/head",
       "shared_paths": [],
@@ -277,7 +633,9 @@
       "functional_base": "4f088d688fa9e25b4608f44000a5d9812efa45f9",
       "functional_base_tree": "465d460e9b7f8c61a57ceaf3400907832a6834cc",
       "import_commit_sha": null,
-      "notes": ["overlay-only checkpoint; not imported into stable core"],
+      "notes": [
+        "overlay-only checkpoint; not imported into stable core"
+      ],
       "owned_paths": [],
       "producer_ref": "work/native-hermes-fastpath",
       "shared_paths": [],
@@ -286,7 +644,9 @@
       "source_tree": "0ad6d8641561de46bd729a5115500d4fd7bb0483",
       "supersedes_source_entry": null,
       "validation_class": "EXACT_HEAD",
-      "workflow_runs": ["33230839031"]
+      "workflow_runs": [
+        "33230839031"
+      ]
     },
     {
       "admission_state": "DISCOVERED",
@@ -296,7 +656,9 @@
       "functional_base": "dda78eabc216749cb1a3010d8e533428b78721d0",
       "functional_base_tree": "0ad6d8641561de46bd729a5115500d4fd7bb0483",
       "import_commit_sha": null,
-      "notes": ["producer checkpoint under H1 repair-forward qualification; never part of core"],
+      "notes": [
+        "producer checkpoint under H1 repair-forward qualification; never part of core"
+      ],
       "owned_paths": [],
       "producer_ref": "work/native-hermes-fastpath",
       "shared_paths": [],
@@ -308,5 +670,5 @@
       "workflow_runs": []
     }
   ],
-  "updated_at": "2026-08-29T17:40:00Z"
+  "updated_at": "2026-08-29T17:52:00Z"
 }

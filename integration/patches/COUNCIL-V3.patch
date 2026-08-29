@@ -1,0 +1,1991 @@
+diff --git a/docs/specs/COUNCIL_ENGINEERING_SPEC.md b/docs/specs/COUNCIL_ENGINEERING_SPEC.md
+index 7276ba864d93d3dddd418ba91f11a1952566d6d5..cf193b33d37165a58298b97c2dec624909ce11d9 100644
+--- a/docs/specs/COUNCIL_ENGINEERING_SPEC.md
++++ b/docs/specs/COUNCIL_ENGINEERING_SPEC.md
+@@ -1,4 +1,4 @@
+-# Evidence Review Panel / Council — engineering specification
++# Evidence Review Panel / Council v3 — engineering specification
+ 
+ ## Obligation
+ 
+@@ -6,23 +6,28 @@ Provide selective, controlled review of a concrete artifact after a strong direc
+ 
+ Council owns only the `REVIEW` obligation. It may produce supported findings and proposal-only neutral challenges for target modules, but it cannot clear a `PROOF`, `DISCOVERY`, `SYNTHESIS`, `ENGINEERING`, `EVALUATION`, `ASSURANCE`, `PREFLIGHT`, `ADAPTATION`, or `ADVERSARY` obligation.
+ 
++Council v3 is additive over Council vNext. It adds a frozen, seat-local evidence-acquisition layer before commit-reveal. It does not merge FOIL into Council, does not import `foil_*`, and does not convert tool output into domain truth.
++
+ ## Runtime and schemas
+ 
+-- Runtime: `tools/council_runtime.py`
++- Council vNext runtime: `tools/council_runtime.py`
++- Council v3 evidence layer: `tools/council_v3_evidence/__init__.py`
+ - Domain receipt schema: existing `egrt.runtime.v1`
+ - Challenge schema: additive `egrt.challenge.v1`
++- Council v3 evidence schema identifier: `egrt.council.v3`
+ - Neutral challenge implementation: `tools/egrt_challenge_types.py` and `tools/egrt_challenge.py`
+-- State machine: `COMMIT -> REVEAL -> CROSS_CRITIQUE -> CLOSED`
++- Council state machine: `COMMIT -> REVEAL -> CROSS_CRITIQUE -> CLOSED`
++- Council v3 acquisition state: `INITIALIZED -> PLANS_FROZEN -> EVIDENCE_READY -> COMMITTED -> CLOSED`
+ 
+-Council never imports `foil_*`. FOIL remains an optional later controller and is not part of the native Council path.
++Council never imports `foil_*`. A future FOIL smart-tool controller may supply neutral bundle candidates, but native Council v3 selection, evidence admission, and authority checks remain independently testable.
+ 
+ ## Frozen Council state
+ 
+-A Council has:
++Council vNext preserves:
+ 
+ - an optional bound task ID;
+ - a frozen artifact hash and frozen total-budget hash;
+-- 3–6 seats;
++- 3–6 challenge-derived seats;
+ - first-pass commitment hashes;
+ - sealed and revealed submissions;
+ - structured cross-critiques;
+@@ -33,9 +38,19 @@ A Council has:
+ - an optional `VOTE` control receipt;
+ - one Council receipt that can clear only the bound `REVIEW` obligation.
+ 
++Council v3 additionally freezes before any acquisition or first-pass commit:
++
++- a caller-supplied total `EvidenceBudget`;
++- one non-transferable `EvidenceBudget` per seat;
++- one `EvidenceUtilityPolicy` per seat;
++- each seat's baseline evidence IDs and provenance groups;
++- all candidate bundle plans and exclusions;
++- the selected bundle or explicit stand-down state;
++- a plan-freeze digest.
++
+ ## Challenge-derived seat contract
+ 
+-A vNext `CouncilSeat` extends the legacy seat fields with:
++A vNext `CouncilSeat` contains:
+ 
+ - `challenge_kind`;
+ - `discriminator`;
+@@ -45,7 +60,7 @@ A vNext `CouncilSeat` extends the legacy seat fields with:
+ - `reviewer_provenance`;
+ - `challenge_contract="vnext"`.
+ 
+-Legacy four-field seats remain readable and executable for backward compatibility. A Council cannot mix legacy and vNext seats in one run.
++Council v3 requires vNext seats. Legacy Council remains available through `tools/council_runtime.py` and is not reinterpreted.
+ 
+ ### Residual-gap seat classes
+ 
+@@ -60,21 +75,178 @@ Derive seats from unresolved neutral challenge classes rather than generic perso
+ | Novelty or costume | prior-art/ablation | strongest known costume, assumption knockout, transfer or ablation |
+ | Operational feasibility | state/decision/operations | state drift, resource boundary, reversal condition |
+ 
+-`derive_challenge_seats()` deterministically converts open `ChallengeRequest` objects into vNext seats. Resolved and dismissed challenges are ignored. Load-bearing, higher-risk, higher-information, and lower-cost challenges are prioritized within the frozen maximum of six seats.
++Every seat must own a distinct question. Duplicate challenge kinds or discriminators are rejected unless both seats declare genuinely distinct evidence partitions. A skeptic/adversarial seat is mandatory and must name a concrete refuter.
++
++## Council v3 evidence budget
++
++`EvidenceBudget` contains:
++
++- `token_limit`;
++- `money_microunits_limit`;
++- `latency_ms_limit`;
++- `tool_call_limit`.
++
++The caller freezes the total budget. Seat budgets are frozen before Council work starts.
++
++For additive resources:
++
++\[
++\sum_i b^{token}_i \le B^{token},
++\qquad
++\sum_i b^{money}_i \le B^{money},
++\qquad
++\sum_i b^{calls}_i \le B^{calls}.
++\]
++
++Because first-pass seats may execute in parallel, the wall-time ceiling is enforced as:
++
++\[
++\max_i b^{latency}_i \le B^{latency}.
++\]
++
++Unused seat budget is not transferred after outcomes are observed. This prevents later seats from receiving an outcome-dependent evidence advantage.
++
++## Frozen utility policy
++
++`EvidenceUtilityPolicy` is frozen per seat and contains:
++
++- `rescue_value`;
++- `damage_loss`;
++- `token_price`;
++- `money_price`;
++- `latency_price`;
++- `privacy_price`;
++- `failure_loss`;
++- `minimum_margin`.
++
++These values are **not** candidate fields. A candidate bundle cannot choose its own prices, damage penalty, or rescue value.
++
++If these values are not defensible for a deployment, the smart-evidence route should remain off or shadow rather than inventing pseudo-precise utilities.
++
++## Neutral evidence bundle contract
++
++`EvidenceBundleCandidate` contains:
++
++- seat and bundle IDs;
++- provided capabilities;
++- tool IDs;
++- exact tool-contract digests;
++- frozen scored estimate-receipt IDs and digests;
++- dependency edges;
++- lower bound on rescue probability;
++- lower bound on valid-evidence probability;
++- upper bound on damage probability;
++- upper bound on failure probability;
++- complete expected token, money, latency, and privacy costs;
++- interaction basis;
++- task-only frontier flag;
++- hidden-gold-dependence flag;
++- side-effect class.
++
++Every bundle must be dependency-complete and acyclic. Tool-contract digests bind exactly one versioned contract to every tool.
++
++`interaction_basis` is restricted to:
++
++- `DIRECT_BUNDLE_RECEIPTS`; or
++- `PESSIMISTIC_PRIOR`.
++
++Council v3 never assumes multi-tool independence by multiplying individual tool success probabilities.
++
++## Conservative utility
++
++For candidate bundle \(B\) under frozen seat policy \(\pi\):
++
++\[
++U_{LCB}(B \mid \pi)
++=
++V_R \, LCB(P_{rescue}) \, LCB(P_{valid})
++-
++L_D \, UCB(P_{damage})
++-
++p_t C_t
++-
++p_m C_m
++-
++p_l C_l
++-
++p_p C_p
++-
++L_F \, UCB(P_{failure}).
++\]
++
++The runtime selects a bundle only if:
++
++1. it is task-only;
++2. it is not hidden-gold-dependent;
++3. it is `READ_ONLY`;
++4. it provides the seat's required capability;
++5. it is inside that seat's frozen budget;
++6. it is not dominated by another feasible bundle; and
++7. its conservative utility exceeds the frozen `minimum_margin`.
++
++Otherwise the seat stands down and uses only its frozen baseline evidence.
++
++A bundle \(A\) dominates \(B\) when \(A\) has at least as much conservative utility, no greater token, money, latency, or call cost, and is strictly better on at least one of those dimensions.
++
++## Evidence-acquisition isolation
+ 
+-Every seat must own a distinct question. Duplicate challenge kinds or duplicate discriminators are rejected unless both seats declare genuinely distinct evidence partitions. A skeptic/adversarial seat is mandatory and must name a concrete refuter; a generic instruction such as “be critical” does not satisfy the contract.
++All seat plans freeze before acquisition.
+ 
+-## Commit–reveal and cross-critique
++All selected acquisition completes before **any** seat first-pass commitment. This is stricter than merely hiding commitment contents and prevents later acquisition plans from becoming outcome-dependent.
+ 
+-1. Freeze the artifact, total budget, seats, questions, methods, evidence partitions, challenge bindings, and reviewer provenance.
+-2. Each seat commits a salted hash of its structured first-pass submission before any reveal.
+-3. Reveal only after all commitments are frozen. A wrong nonce or altered submission fails verification.
+-4. Compute evidence, provenance, method, reviewer-provenance, and finding overlap.
+-5. Cross-critique only after every reveal.
+-6. Require every seat to contribute a structured critique against another seat.
+-7. Synthesize by supported finding IDs and preserve unresolved disagreement.
++During acquisition:
+ 
+-Nominal seat count never establishes statistical independence. Every pair reports `independence_status="NOT_ESTABLISHED"`, and the Council-level diagnostic is `NOT_ESTABLISHED_BY_SEAT_COUNT`. Same-model or same-reviewer provenance remains explicit.
++- cross-seat result reuse is forbidden;
++- cross-seat budget transfer is forbidden;
++- only tools in the frozen selected bundle may execute;
++- only read-only evidence is admissible;
++- actual costs must remain within the seat's frozen budget;
++- call outcomes must conserve attempted calls exactly;
++- invalid or unresolved evidence has no admitted evidence IDs.
++
++`SeatEvidenceReceipt` records:
++
++- Council, seat, and bundle IDs;
++- evidence status;
++- executed tool IDs and tool-receipt IDs;
++- source artifact digests;
++- provenance groups;
++- admitted evidence IDs;
++- exact token, money, latency, and call accounting;
++- output digest;
++- side-effect class;
++- any attempted reuse provenance.
++
++A non-`VALID` receipt cannot carry admitted evidence IDs.
++
++## Submission binding
++
++`commit_v3()` is the normative Council v3 commit entrypoint.
++
++For each seat, the submitted evidence IDs must exactly equal:
++
++\[
++E_i^{baseline} \cup E_i^{admitted}
++\]
++
++and submitted provenance groups must exactly equal the frozen baseline plus the admitted seat-local acquisition provenance.
++
++This prevents a seat from silently importing another seat's newly acquired evidence before reveal.
++
++## Commit-reveal and cross-critique
++
++After every seat's acquisition phase is complete:
++
++1. each seat commits a salted hash of its structured first-pass submission;
++2. reveal only after all commitments are frozen;
++3. reject altered submissions or wrong nonces;
++4. compute evidence, provenance, method, reviewer-provenance, and finding overlap;
++5. compute Council v3 source-digest and tool overlap;
++6. cross-critique only after every reveal;
++7. require every seat to contribute a structured critique against another seat;
++8. synthesize by supported finding IDs and preserve unresolved disagreement.
++
++Nominal seat count never establishes statistical independence. Every Council v3 source/tool pair reports `independence_status="NOT_ESTABLISHED"`, and the Council-level diagnostic remains `NOT_ESTABLISHED_BY_SEAT_COUNT`.
+ 
+ ## Structured findings and neutral challenge output
+ 
+@@ -89,76 +261,139 @@ A supported vNext finding is recorded as `CouncilFinding` with:
+ - candidate, scope, and obligation-set SHA-256 bindings;
+ - provenance and typed metadata.
+ 
+-`record_finding()` is permitted only after all seats reveal. For vNext seats, the finding must match the seat’s challenge kind, target obligation, required capability, concrete refuter, and evidence partition, and its finding ID must have appeared in that seat’s frozen revealed submission.
++After Council finalization, `propose_supported_finding_challenge()` may convert one supported finding into a neutral `ChallengeRequest` with `origin=COUNCIL`.
++
++The emitted challenge is proposal-only and cannot:
++
++- resolve itself;
++- create a domain receipt;
++- clear the target module's obligation;
++- apply a repair;
++- authorize a write.
++
++The target module remains responsible for claim-native verification.
+ 
+-A vNext Council cannot clear its `REVIEW` obligation with a supported finding that lacks a structured `CouncilFinding` record.
++## Council v3 evidence audit
+ 
+-After Council finalization, `propose_supported_finding_challenge()` may convert one supported structured finding into a neutral `ChallengeRequest` with `origin=COUNCIL`. The emitted object is:
++Before ordinary Council finalization, `finalize_v3()` constructs an immutable evidence audit containing:
+ 
+-- bound to the same task, target obligation, candidate, scope, and obligation set;
+-- stored initially as `PROPOSED`;
+-- marked `authority=PROPOSAL_ONLY`;
+-- unable to resolve itself;
+-- unable to create a domain receipt;
+-- unable to clear the target module’s obligation;
+-- subject to the shared challenge budget, deduplication, selection, and release rules.
++- plan-freeze hash;
++- proof that plans froze before commits;
++- proof that evidence acquisition completed before commits;
++- exact total token, money, call, and critical-path latency accounting;
++- cross-seat reuse violations;
++- side-effect violations;
++- source/tool overlap diagnostics;
++- `EVIDENCE_ACQUISITION_ONLY` authority;
++- `domain_clearance_authorized=false`.
+ 
+-The target module or host must select a discriminator and the claim-native module must produce the resolving evidence.
++Any audit violation is forwarded as an unresolved Council review defect.
++
++The v3 evidence-audit hash is then cryptographically bound into the synthesis output hash passed to ordinary `council_runtime.finalize()`. Council v3 therefore reuses the existing REVIEW-only receipt rather than creating a second domain-like receipt.
+ 
+ ## Control and release semantics
+ 
+-A Council review requires a real `DIRECT` control receipt with the same:
++A Council review still requires a real `DIRECT` control receipt with the same:
+ 
+ - review obligation ID;
+ - frozen artifact hash;
+ - frozen total-budget hash.
+ 
+-The optional `VOTE` control is diagnostic only.
++Council v3 does not relax any vNext release condition.
+ 
+ Council finalization returns:
+ 
+ - `UNKNOWN` when commit/reveal is incomplete;
+ - `UNKNOWN` when cross-critique participation is incomplete;
+ - `UNKNOWN` when the matched `DIRECT` control is absent, invalid, or mismatched;
+-- `UNKNOWN` when a vNext supported finding lacks a structured record;
++- `UNKNOWN` when a supported vNext finding lacks a structured record;
++- `UNKNOWN` when Council v3 reports an evidence-process violation;
+ - `UNKNOWN` when synthesis supports no findings;
+-- `CLEARED` only when the frozen Council review protocol completed and at least one supported finding remains.
++- `CLEARED` only when the frozen Council REVIEW protocol completed and at least one supported finding remains.
++
++`CLEARED` means only that the controlled Council review protocol completed. It is not a verdict on the target domain claim and not evidence that Council v3 improves outcomes.
++
++## FOIL composition boundary
++
++The FOIL Smart-Tool Value Update is currently proposed and unvalidated. Council v3 therefore does not depend on a `foil_*` implementation.
+ 
+-`CLEARED` means only that the controlled Council protocol completed for the `REVIEW` obligation. It is not a verdict on the target domain claim and not evidence that Council outperforms `DIRECT` or `VOTE`.
++A future FOIL controller may provide neutral `EvidenceBundleCandidate` rows only if:
+ 
+-When a bound task exists, attempting to finalize Council against a non-`REVIEW` obligation raises `CouncilAuthorityError`. A Council receipt records `authority=REVIEW_ONLY` and `target_domain_clearance_authorized=false`.
++- bundle selection remains task-local;
++- estimates come from frozen scored receipts or a pessimistic prior;
++- Council's frozen utility policy remains external to the candidate;
++- Council's native baseline challenges are not removed;
++- no cross-seat evidence partition is merged before reveal;
++- authority remains evidence-acquisition-only.
++
++FOIL may help buy evidence. It cannot choose Council truth, clear a target obligation, or become another Council voter.
+ 
+ ## Backward compatibility
+ 
+-- Existing `CouncilSeat(seat_id, role, question, method, evidence_partition=None)` construction remains valid.
+-- Existing commit/reveal, overlap, cross-critique, control, and finalization behavior remains valid for legacy Council state.
+-- Historical Council state loads through inferred legacy challenge fields; historical receipts are not rewritten.
+-- Native Council challenge behavior is additive and uses the shared challenge configuration.
+-- No FOIL profile, FOIL receipt, or seat count changes evidence authority.
++- Council vNext remains in `tools/council_runtime.py`.
++- Legacy Council remains readable and executable.
++- Council v3 requires vNext seats and is opt-in through `tools/council_v3_evidence/__init__.py`.
++- Historical Council state and receipts are not rewritten.
++- No existing receipt semantics are reinterpreted.
++- No non-FOIL module imports `foil_*`.
+ 
+ ## Mechanical acceptance tests
+ 
+-`tests/test_council_challenge_seats.py` proves:
++`tests/test_council_v3_evidence.py` proves:
+ 
+-- distinct challenge questions and duplicate-kind/discriminator rejection;
+-- deterministic derivation from open challenge classes;
+-- concrete skeptic/refuter behavior;
+-- structured supported finding to neutral `COUNCIL` challenge conversion;
+-- target-domain authority denial;
+-- mandatory same-artifact/same-budget `DIRECT` control;
+-- same-model seats are never labeled independent solely by seat count.
++- deterministic positive-utility bundle selection;
++- stand-down on non-positive utility;
++- hidden-gold and non-read-only bundle exclusion;
++- frozen seat-budget conservation;
++- dependency-cycle rejection;
++- all acquisition completes before any first-pass commit;
++- cross-seat result reuse is rejected;
++- invalid evidence cannot become admitted evidence;
++- seat submissions are bound to the frozen evidence partition;
++- shared source evidence is measured as overlap without an independence claim;
++- final Council v3 review preserves `REVIEW_ONLY` authority and binds the evidence audit.
+ 
+-Existing Council tests continue to prove:
++Existing Council vNext tests continue to prove:
+ 
+ - 3–6 seat bounds;
+ - skeptic requirement;
+ - commitment hiding and binding;
+ - tampered reveal rejection;
++- distinct challenge/discriminator rules;
+ - overlap diagnostics;
+ - complete cross-critique participation;
+-- matching control semantics;
++- structured finding/challenge conversion;
++- matching direct-control semantics;
++- target-domain authority denial;
+ - non-recallable finalization.
+ 
+-## Non-goals and efficacy boundary
++## Efficacy boundary and required evaluation
++
++Council v3 is a mechanical and architectural upgrade, not evidence of behavioral benefit.
++
++Promotion requires a matched evaluation such as:
++
++| Arm | Council | Smart evidence |
++|---|---|---|
++| A | off / direct analysis | off |
++| B | off / direct analysis | on |
++| C | Council vNext | off |
++| D | Council v3 | on |
++
++The incremental Council-v3 smart-evidence estimand is:
++
++\[
++\tau_{smart|Council} = E[Y_D - Y_C].
++\]
++
++The interaction estimand is:
++
++\[
++\tau_{interaction}
++=
++(E[Y_D-Y_C])-(E[Y_B-Y_A]).
++\]
++
++Primary outcomes should include independently validated load-bearing defects found, false findings, target-module confirmation rate, challenge recall, source/evidence overlap, tool calls, tokens, latency, total cost, and cost per validated finding.
+ 
+-This work does not establish that Council improves task outcomes. It does not treat agreement as truth, seat count as independence, or a Council finding as claim-native evidence. Marginal-value claims still require prospective, matched-budget comparison against `DIRECT`; null and negative results must be retained.
++Null and negative results must be retained. Council v3 remains optional until prospective matched-budget evidence justifies broader promotion.
+diff --git a/skills/council-of-elders/SKILL.md b/skills/council-of-elders/SKILL.md
+index 30df96b7666248d36876cdb84998bccecd3bb054..1a114d01c9a1b4f537488491e5bbc56a28d1e16c 100644
+--- a/skills/council-of-elders/SKILL.md
++++ b/skills/council-of-elders/SKILL.md
+@@ -1,12 +1,14 @@
+ ---
+ name: council-of-elders
+-description: Evidence Review Panel. Trigger: /council, /forum, "independent review", or equivalent. Selectively convenes challenge-derived, evidence-grounded review seats around a concrete artifact after a strong direct pass exists. Uses commit-reveal, distinct discriminators or evidence partitions, a concrete skeptic refuter, cross-critique, overlap diagnostics, and a matched direct control. Agreement is not truth.
++description: Evidence Review Panel v3. Trigger: /council, /forum, "independent review", or equivalent. Selectively convenes challenge-derived review seats around a concrete artifact, freezes seat-local evidence plans and budgets, acquires only bounded read-only evidence before first-pass commits, then uses commit-reveal, cross-critique, overlap diagnostics, and a matched direct control. Agreement is not truth.
+ ---
+ 
+-# Evidence Review Panel
++# Evidence Review Panel v3
+ 
+ Use artifact-derived review seats, not named personalities or simulated authority.
+ 
++Council v3 is additive. It preserves Council vNext's challenge-derived seats and REVIEW-only authority, then adds a seat-local smart-evidence acquisition layer before commit-reveal.
++
+ ## When to convene
+ 
+ Default: **off**.
+@@ -16,8 +18,8 @@ Convene only when:
+ - there is a concrete artifact, claim, design, or candidate to review;
+ - a strong direct analysis already exists;
+ - at least three genuinely different challenge questions, discriminators, or evidence partitions are available;
+-- the total artifact and review budget can be frozen;
+-- marginal value can be compared against a same-artifact, same-budget direct control.
++- the total review and evidence-acquisition budget can be frozen before work begins;
++- marginal value can be compared against a same-artifact, same-total-budget direct control.
+ 
+ Do not convene merely because a problem is difficult or additional opinions sound reassuring.
+ 
+@@ -40,19 +42,55 @@ Every seat must own:
+ - one target obligation;
+ - one method or explicit evidence partition.
+ 
+-Duplicate challenge kinds or discriminators are allowed only when the evidence partitions are explicitly different. Include a skeptic/adversarial seat with a concrete refuter; “be critical” is not a discriminator.
++Duplicate challenge kinds or discriminators are allowed only when the evidence partitions are explicitly different. Include a skeptic/adversarial seat with a concrete refuter; "be critical" is not a discriminator.
++
++## Council v3 smart-evidence phase
++
++Council v3 does **not** import `foil_*` and does not let FOIL decide Council truth. A future FOIL smart-tool controller may propose neutral bundle candidates, but the native Council v3 contract remains independent and deterministic.
++
++Before any seat acquires new evidence or commits a first pass:
++
++1. freeze a caller-supplied total evidence budget;
++2. freeze one non-transferable budget for every seat;
++3. freeze one utility/risk policy for every seat;
++4. freeze each seat's baseline evidence and provenance;
++5. enumerate only task-local, dependency-complete bundle candidates;
++6. require bundle estimates to cite frozen scored receipts;
++7. reject hidden-gold-dependent, over-budget, capability-mismatched, cyclic, or non-read-only bundles;
++8. remove dominated bundles;
++9. select the greatest conservative-utility bundle only when it exceeds the frozen minimum margin;
++10. otherwise stand down and use only the frozen baseline evidence.
++
++The utility policy is frozen outside candidate bundles so a candidate cannot choose its own prices or risk weights.
++
++Council v3 initial acquisition is read-only. Consequential or reversible external actions remain outside Council authority.
++
++## Evidence-partition isolation
+ 
+-## Commit–reveal and cross-critique
++All seat evidence plans freeze before acquisition. All acquisition finishes before **any** first-pass commitment.
+ 
+-1. Freeze the artifact hash, total-budget hash, seats, methods, challenge bindings, evidence partitions, and reviewer provenance.
+-2. Each seat independently commits its first-pass structured submission before seeing another seat’s result.
+-3. Reveal only after all commitments are frozen.
+-4. Reject altered submissions or wrong nonces.
+-5. Compute method, evidence, provenance, reviewer-provenance, and finding overlap.
+-6. Require every seat to cross-critique another revealed seat.
+-7. Synthesize by claim and evidence, preserving disagreement.
++During this phase:
+ 
+-Do not call seats independent because there are several of them or because they produced separate messages. Same-model and shared-evidence common causes remain explicit.
++- a seat may use only its frozen baseline evidence plus evidence admitted from its selected bundle;
++- cross-seat result reuse is forbidden before reveal;
++- unused budget is not transferred between seats;
++- invalid or unresolved tool evidence contributes no admitted evidence ID;
++- source, tool, and provenance overlap remain measurable common causes, not evidence of independence.
++
++A seat submission must exactly match its frozen evidence partition and admitted provenance set.
++
++## Commit-reveal and cross-critique
++
++After every seat's evidence-acquisition phase is complete:
++
++1. each seat independently commits its structured first-pass submission;
++2. reveal only after all commitments are frozen;
++3. reject altered submissions or wrong nonces;
++4. compute method, evidence, provenance, reviewer-provenance, source, tool, and finding overlap;
++5. require every seat to cross-critique another revealed seat;
++6. synthesize by claim and evidence, preserving disagreement.
++
++Do not call seats independent because there are several of them or because they produced separate messages. Same-model, shared-source, shared-tool, and shared-evidence common causes remain explicit.
+ 
+ ## Supported findings
+ 
+@@ -62,23 +100,29 @@ The Council runtime may convert a supported structured finding into an additive
+ 
+ ## Control and authority
+ 
+-Run a strong direct analysis against the same frozen artifact and matching total budget. Without that `DIRECT` control, Council’s review verdict remains `UNKNOWN`.
++Run a strong direct analysis against the same frozen artifact and matching total budget. Without that `DIRECT` control, Council's review verdict remains `UNKNOWN`.
+ 
+ A Council receipt may clear only a `REVIEW` obligation. It never clears proof, discovery, synthesis, engineering, evaluation, assurance, preflight, adaptation, or adversary obligations. User or host authority remains required for adoption or writes.
+ 
+ ## Typed runtime contract
+ 
+-`tools/council_runtime.py` enforces:
+-
+-- 3–6 seats and a skeptic/adversarial seat;
+-- challenge kind, discriminator, capability, target obligation, refuter, and evidence partition for vNext seats;
+-- rejection of duplicate challenge/discriminator seats without distinct partitions;
+-- commitment hiding and reveal integrity;
+-- complete cross-critique participation;
+-- overlap diagnostics with `NOT_ESTABLISHED_BY_SEAT_COUNT`;
+-- structured `CouncilFinding` binding;
+-- proposal-only `COUNCIL` challenge emission;
+-- `REVIEW_ONLY` receipt authority;
+-- a same-artifact, same-total-budget `DIRECT` control.
+-
+-Confidence remains uncalibrated unless scored prospectively. See `docs/specs/COUNCIL_ENGINEERING_SPEC.md`.
++`tools/council_runtime.py` remains the Council vNext state machine.
++
++`tools/council_v3_evidence/__init__.py` adds:
++
++- `EvidenceBudget`;
++- `EvidenceUtilityPolicy`;
++- `EvidenceBundleCandidate`;
++- `SeatEvidenceReceipt`;
++- `create_council_v3()`;
++- frozen seat-local budget and utility partitions;
++- deterministic positive-utility bundle selection with dominance pruning;
++- dependency-DAG and task-only frontier checks;
++- read-only and hidden-gold exclusion;
++- evidence admission and exact cost conservation;
++- no cross-seat result reuse before reveal;
++- source/tool overlap diagnostics;
++- `commit_v3()` evidence-partition binding;
++- `finalize_v3()` evidence-audit binding into the ordinary REVIEW-only Council receipt.
++
++Council v3 makes no behavioral-efficacy claim. Its marginal value must be measured prospectively against Council vNext and matched-budget direct analysis. See `docs/specs/COUNCIL_ENGINEERING_SPEC.md`.
+diff --git a/tests/test_council_v3_evidence.py b/tests/test_council_v3_evidence.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..65e464fbd4be277d96836e0b8c09ac98a6b3693c
+--- /dev/null
++++ b/tests/test_council_v3_evidence.py
+@@ -0,0 +1,538 @@
++from __future__ import annotations
++
++import json
++import sys
++import tempfile
++import unittest
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parents[1]
++sys.path.insert(0, str(ROOT / "tools"))
++
++import council_runtime as council  # noqa: E402
++import council_v3_evidence as v3  # noqa: E402
++from egrt_challenge_types import ChallengeKind  # noqa: E402
++from egrt_store import RuntimeStore  # noqa: E402
++from egrt_types import (  # noqa: E402
++    Obligation,
++    ObligationKind,
++    TaskState,
++    Verdict,
++    digest,
++)
++
++
++def init_root(path: Path) -> None:
++    (path / ".gauntlet.json").write_text(
++        json.dumps({"state_dir": ".egrt/state", "runtime": {"enabled": True}}),
++        encoding="utf-8",
++    )
++
++
++class CouncilV3EvidenceTests(unittest.TestCase):
++    def _task(self, root: Path) -> tuple[str, str, str]:
++        task_id = "task-council-v3"
++        review_id = "obl-review-v3"
++        target_id = "obl-proof-v3"
++        RuntimeStore(root).write_task(
++            TaskState(
++                task_id=task_id,
++                goal_hash=digest("review a candidate with seat-local evidence acquisition"),
++                obligations=[
++                    Obligation(
++                        review_id,
++                        ObligationKind.REVIEW,
++                        "Run Council v3 controlled review",
++                        required_module="council",
++                    ),
++                    Obligation(
++                        target_id,
++                        ObligationKind.PROOF,
++                        "Target proof obligation",
++                        required_module="mind",
++                    ),
++                ],
++            )
++        )
++        return task_id, review_id, target_id
++
++    def _seats(self, target_id: str) -> list[council.CouncilSeat]:
++        return [
++            council.CouncilSeat(
++                "s1",
++                "formal correctness",
++                "Do alternate formalizations agree?",
++                "exact proof",
++                "partition-formal",
++                ChallengeKind.ALTERNATE_FORMALIZATION,
++                "compare both formalizations exactly",
++                "FORMAL_PROOF",
++                target_id,
++                "produce the formal scope where results differ",
++                "reviewer-a",
++            ),
++            council.CouncilSeat(
++                "s2",
++                "evidence / provenance",
++                "Does the source record support the premise?",
++                "source assessment",
++                "partition-source",
++                ChallengeKind.SOURCE_CONFLICT,
++                "resolve the primary-source conflict",
++                "SCHOLARLY_SEARCH",
++                target_id,
++                "identify the conflicting primary-source record",
++                "reviewer-b",
++            ),
++            council.CouncilSeat(
++                "s3",
++                "skeptic",
++                "Does a bounded counterexample refute the claim?",
++                "counterexample search",
++                "partition-counterexample",
++                ChallengeKind.COUNTEREXAMPLE,
++                "enumerate the smallest witness domain",
++                "FORMAL_PROOF",
++                target_id,
++                "produce the concrete witness and failed predicate",
++                "reviewer-c",
++            ),
++        ]
++
++    def _budgets(
++        self,
++    ) -> tuple[
++        v3.EvidenceBudget,
++        dict[str, v3.EvidenceBudget],
++        dict[str, v3.EvidenceUtilityPolicy],
++    ]:
++        total = v3.EvidenceBudget(
++            token_limit=3000,
++            money_microunits_limit=3000,
++            latency_ms_limit=3000,
++            tool_call_limit=9,
++        )
++        seats = {
++            seat_id: v3.EvidenceBudget(
++                token_limit=1000,
++                money_microunits_limit=1000,
++                latency_ms_limit=3000,
++                tool_call_limit=3,
++            )
++            for seat_id in ("s1", "s2", "s3")
++        }
++        policies = {
++            seat_id: v3.EvidenceUtilityPolicy(
++                rescue_value=10.0,
++                damage_loss=10.0,
++                token_price=0.001,
++                money_price=0.0,
++                latency_price=0.0,
++                privacy_price=0.0,
++                failure_loss=1.0,
++                minimum_margin=0.0,
++            )
++            for seat_id in ("s1", "s2", "s3")
++        }
++        return total, seats, policies
++
++    def _create(self, root: Path) -> tuple[council.CouncilState, str, str, str]:
++        task_id, review_id, target_id = self._task(root)
++        total, seats, policies = self._budgets()
++        state = v3.create_council_v3(
++            root,
++            "artifact-v3",
++            "budget-v3",
++            self._seats(target_id),
++            total_budget=total,
++            seat_budgets=seats,
++            utility_policies=policies,
++            task_id=task_id,
++        )
++        return state, task_id, review_id, target_id
++
++    def _candidate(
++        self,
++        seat_id: str,
++        bundle_id: str,
++        capability: str,
++        *,
++        rescue_lcb: float = 0.8,
++        damage_ucb: float = 0.1,
++        token_cost: int = 100,
++        tool_id: str | None = None,
++        side_effect_class: str = "READ_ONLY",
++        task_only_frontier: bool = True,
++        hidden_gold_dependent: bool = False,
++        dependency_edges: tuple[tuple[str, str], ...] = (),
++        tool_ids: tuple[str, ...] | None = None,
++    ) -> v3.EvidenceBundleCandidate:
++        if tool_ids is None:
++            tool_ids = (tool_id or f"tool-{bundle_id}",)
++        contracts = tuple((tool, digest({"tool": tool, "version": 1})) for tool in tool_ids)
++        return v3.EvidenceBundleCandidate(
++            bundle_id=bundle_id,
++            seat_id=seat_id,
++            provided_capabilities=(capability,),
++            tool_ids=tool_ids,
++            tool_contracts=contracts,
++            estimate_receipt_ids=(f"estimate-{bundle_id}",),
++            estimate_receipt_digests=(digest({"estimate": bundle_id}),),
++            rescue_probability_lcb=rescue_lcb,
++            valid_evidence_probability_lcb=0.9,
++            damage_probability_ucb=damage_ucb,
++            token_cost=token_cost,
++            money_microunits_cost=0,
++            latency_ms=10,
++            privacy_cost=0.0,
++            failure_probability_ucb=0.0,
++            dependency_edges=dependency_edges,
++            task_only_frontier=task_only_frontier,
++            hidden_gold_dependent=hidden_gold_dependent,
++            side_effect_class=side_effect_class,
++        )
++
++    def _candidates(self) -> dict[str, list[v3.EvidenceBundleCandidate]]:
++        return {
++            "s1": [self._candidate("s1", "b1", "FORMAL_PROOF")],
++            "s2": [self._candidate("s2", "b2", "SCHOLARLY_SEARCH")],
++            "s3": [self._candidate("s3", "b3", "FORMAL_PROOF")],
++        }
++
++    def _receipt(
++        self,
++        council_id: str,
++        seat_id: str,
++        bundle_id: str,
++        *,
++        source_digest: str | None = None,
++        evidence_status: str = "VALID",
++        admitted: tuple[str, ...] | None = None,
++        reused_from: tuple[str, ...] = (),
++    ) -> v3.SeatEvidenceReceipt:
++        if admitted is None:
++            admitted = (f"evidence-{seat_id}",) if evidence_status == "VALID" else ()
++        return v3.SeatEvidenceReceipt(
++            evidence_envelope_id=f"env-{seat_id}",
++            council_id=council_id,
++            seat_id=seat_id,
++            bundle_id=bundle_id,
++            evidence_status=evidence_status,
++            executed_tool_ids=(f"tool-{bundle_id}",),
++            tool_receipt_ids=(f"tool-receipt-{seat_id}",),
++            source_artifact_digests=(source_digest or digest({"source": seat_id}),),
++            provenance_groups=(f"prov-{seat_id}",),
++            admitted_evidence_ids=admitted,
++            token_used=100,
++            money_microunits_used=0,
++            latency_ms=10,
++            calls_attempted=1,
++            calls_completed=1,
++            calls_failed=0,
++            calls_cancelled=0,
++            output_digest=digest({"output": seat_id}),
++            reused_from_seat_ids=reused_from,
++        )
++
++    def test_positive_utility_selects_deterministically_before_commit(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            state, _, _, _ = self._create(root)
++            stronger = self._candidate("s1", "strong", "FORMAL_PROOF", rescue_lcb=0.9)
++            weaker = self._candidate("s1", "weak", "FORMAL_PROOF", rescue_lcb=0.6)
++            candidates = self._candidates()
++            candidates["s1"] = [weaker, stronger]
++            plans = v3.freeze_evidence_plans(root, state.council_id, candidates)
++            self.assertEqual(plans["s1"]["selected_bundle_id"], "strong")
++            self.assertTrue(plans["s1"]["frozen_before_any_commit"])
++            self.assertTrue(plans["s1"]["plan_hash"])
++
++    def test_nonpositive_bundle_stands_down(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            state, _, _, _ = self._create(root)
++            candidates = self._candidates()
++            candidates["s1"] = [
++                self._candidate(
++                    "s1",
++                    "bad",
++                    "FORMAL_PROOF",
++                    rescue_lcb=0.05,
++                    damage_ucb=0.95,
++                )
++            ]
++            plans = v3.freeze_evidence_plans(root, state.council_id, candidates)
++            self.assertIsNone(plans["s1"]["selected_bundle_id"])
++            self.assertEqual(
++                plans["s1"]["selection_reason"],
++                "STAND_DOWN_NONPOSITIVE_OR_INFEASIBLE",
++            )
++
++    def test_hidden_gold_and_non_read_only_bundles_are_infeasible(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            state, _, _, _ = self._create(root)
++            candidates = self._candidates()
++            candidates["s1"] = [
++                self._candidate(
++                    "s1",
++                    "gold",
++                    "FORMAL_PROOF",
++                    hidden_gold_dependent=True,
++                ),
++                self._candidate(
++                    "s1",
++                    "write",
++                    "FORMAL_PROOF",
++                    side_effect_class="CONSEQUENTIAL",
++                ),
++            ]
++            plans = v3.freeze_evidence_plans(root, state.council_id, candidates)
++            reasons = {
++                row["bundle_id"]: row["exclusion_reason"]
++                for row in plans["s1"]["candidate_rows"]
++            }
++            self.assertEqual(reasons["gold"], "HIDDEN_GOLD_DEPENDENT")
++            self.assertEqual(reasons["write"], "NON_READ_ONLY")
++            self.assertIsNone(plans["s1"]["selected_bundle_id"])
++
++    def test_frozen_seat_budgets_cannot_overallocate_total(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            task_id, _, target_id = self._task(root)
++            with self.assertRaises(ValueError):
++                v3.create_council_v3(
++                    root,
++                    "artifact-v3",
++                    "budget-v3",
++                    self._seats(target_id),
++                    total_budget=v3.EvidenceBudget(100, 100, 100, 3),
++                    seat_budgets={
++                        "s1": v3.EvidenceBudget(100, 30, 100, 1),
++                        "s2": v3.EvidenceBudget(100, 30, 100, 1),
++                        "s3": v3.EvidenceBudget(100, 30, 100, 1),
++                    },
++                    utility_policies={
++                        seat_id: v3.EvidenceUtilityPolicy(
++                            10.0, 10.0, 0.001, 0.0, 0.0, 0.0, 1.0
++                        )
++                        for seat_id in ("s1", "s2", "s3")
++                    },
++                    task_id=task_id,
++                )
++
++    def test_dependency_cycles_are_rejected(self) -> None:
++        with self.assertRaises(ValueError):
++            self._candidate(
++                "s1",
++                "cycle",
++                "FORMAL_PROOF",
++                tool_ids=("a", "b"),
++                dependency_edges=(("a", "b"), ("b", "a")),
++            )
++
++    def test_all_evidence_finishes_before_any_commit_and_no_cross_seat_reuse(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            state, _, _, _ = self._create(root)
++            v3.freeze_evidence_plans(root, state.council_id, self._candidates())
++            v3.record_seat_evidence(
++                root,
++                state.council_id,
++                self._receipt(state.council_id, "s1", "b1"),
++            )
++            with self.assertRaises(ValueError):
++                v3.commit_v3(
++                    root,
++                    state.council_id,
++                    "s1",
++                    council.SeatSubmission("h", (), ("evidence-s1",), ("prov-s1",)),
++                )
++            with self.assertRaises(ValueError):
++                v3.record_seat_evidence(
++                    root,
++                    state.council_id,
++                    self._receipt(
++                        state.council_id,
++                        "s2",
++                        "b2",
++                        reused_from=("s1",),
++                    ),
++                )
++
++    def test_invalid_evidence_cannot_be_admitted(self) -> None:
++        with self.assertRaises(ValueError):
++            self._receipt(
++                "council-x",
++                "s1",
++                "b1",
++                evidence_status="INVALID",
++                admitted=("fabricated-support",),
++            )
++
++    def test_submission_must_match_frozen_evidence_partition(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            state, _, _, _ = self._create(root)
++            v3.freeze_evidence_plans(root, state.council_id, self._candidates())
++            for seat_id, bundle_id in (("s1", "b1"), ("s2", "b2"), ("s3", "b3")):
++                v3.record_seat_evidence(
++                    root,
++                    state.council_id,
++                    self._receipt(state.council_id, seat_id, bundle_id),
++                )
++            with self.assertRaises(ValueError):
++                v3.commit_v3(
++                    root,
++                    state.council_id,
++                    "s1",
++                    council.SeatSubmission(
++                        "h",
++                        (),
++                        ("wrong-evidence",),
++                        ("prov-s1",),
++                    ),
++                )
++
++    def test_source_overlap_is_measured_without_independence_claim(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            state, _, _, _ = self._create(root)
++            v3.freeze_evidence_plans(root, state.council_id, self._candidates())
++            shared = digest("shared-primary-source")
++            v3.record_seat_evidence(
++                root,
++                state.council_id,
++                self._receipt(state.council_id, "s1", "b1", source_digest=shared),
++            )
++            v3.record_seat_evidence(
++                root,
++                state.council_id,
++                self._receipt(state.council_id, "s2", "b2", source_digest=shared),
++            )
++            v3.record_seat_evidence(
++                root,
++                state.council_id,
++                self._receipt(state.council_id, "s3", "b3"),
++            )
++            matrix = v3.evidence_overlap_matrix(root, state.council_id)
++            pair = next(
++                row for row in matrix["pairs"]
++                if {row["left"], row["right"]} == {"s1", "s2"}
++            )
++            self.assertEqual(pair["source_overlap"], 1.0)
++            self.assertEqual(pair["independence_status"], "NOT_ESTABLISHED")
++            self.assertEqual(
++                matrix["diagnostics"]["independence_status"],
++                "NOT_ESTABLISHED_BY_SEAT_COUNT",
++            )
++
++    def test_finalize_v3_preserves_review_only_authority_and_binds_audit(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            state, _, review_id, target_id = self._create(root)
++            v3.freeze_evidence_plans(root, state.council_id, self._candidates())
++            submissions: dict[str, council.SeatSubmission] = {}
++            nonces: dict[str, str] = {}
++            for seat_id, bundle_id in (("s1", "b1"), ("s2", "b2"), ("s3", "b3")):
++                v3.record_seat_evidence(
++                    root,
++                    state.council_id,
++                    self._receipt(state.council_id, seat_id, bundle_id),
++                )
++                submissions[seat_id] = council.SeatSubmission(
++                    f"hypothesis-{seat_id}",
++                    (f"claim-{seat_id}",),
++                    (f"evidence-{seat_id}",),
++                    (f"prov-{seat_id}",),
++                    findings=(f"finding-{seat_id}",),
++                )
++            for seat_id, submission in submissions.items():
++                _, nonces[seat_id] = v3.commit_v3(
++                    root,
++                    state.council_id,
++                    seat_id,
++                    submission,
++                )
++            for seat_id, submission in submissions.items():
++                self.assertTrue(
++                    council.reveal(
++                        root,
++                        state.council_id,
++                        seat_id,
++                        submission,
++                        nonces[seat_id],
++                    )
++                )
++
++            council.record_cross_critique(
++                root,
++                state.council_id,
++                council.CrossCritique("s1", "s2", surviving_findings=("finding-s2",)),
++            )
++            council.record_cross_critique(
++                root,
++                state.council_id,
++                council.CrossCritique("s2", "s3", surviving_findings=("finding-s3",)),
++            )
++            council.record_cross_critique(
++                root,
++                state.council_id,
++                council.CrossCritique("s3", "s1", surviving_findings=("finding-s1",)),
++            )
++
++            finding = council.CouncilFinding(
++                finding_id="finding-s1",
++                seat_id="s1",
++                target_module="mind",
++                target_obligation_id=target_id,
++                challenge_kind=ChallengeKind.ALTERNATE_FORMALIZATION,
++                hypothesis="formal scope may split",
++                refuter="produce the formal scope where results differ",
++                consequence_if_true="candidate scope must be regenerated",
++                candidate_hash=digest("candidate"),
++                scope_hash=digest("scope"),
++                obligation_set_hash=digest("obligation-set"),
++                required_capability="FORMAL_PROOF",
++                evidence_partition="partition-formal",
++            )
++            council.record_finding(root, state.council_id, finding)
++            control = council.record_control(
++                root,
++                review_id,
++                artifact_hash="artifact-v3",
++                budget_hash="budget-v3",
++                kind="DIRECT",
++                output_hash=digest("direct"),
++                verdict=Verdict.CLEARED,
++                verifier="direct-control",
++            )
++            receipt = v3.finalize_v3(
++                root,
++                state.council_id,
++                review_id,
++                synthesis_hash=digest("synthesis"),
++                supported_findings=["finding-s1"],
++                direct_control_receipt=control.receipt_id,
++            )
++            self.assertEqual(receipt.verdict, Verdict.CLEARED)
++            metadata = receipt.evidence[0].metadata
++            self.assertEqual(metadata["authority"], "REVIEW_ONLY")
++            self.assertFalse(metadata["target_domain_clearance_authorized"])
++            self.assertNotEqual(receipt.output_hash, digest("synthesis"))
++            stored = RuntimeStore(root).read_named_state("council_v3", state.council_id)
++            self.assertEqual(stored["phase"], "CLOSED")
++            self.assertEqual(stored["audit"]["review_receipt_id"], receipt.receipt_id)
++            self.assertEqual(stored["audit"]["violations"], [])
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tools/council_v3_evidence/__init__.py b/tools/council_v3_evidence/__init__.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..bb033b5082b2929c4a1f0866f9403e7ccb010610
+--- /dev/null
++++ b/tools/council_v3_evidence/__init__.py
+@@ -0,0 +1,860 @@
++"""Council v3 seat-local smart-evidence acquisition.
++
++This additive layer wraps the Council vNext state machine without importing FOIL.
++It freezes per-seat evidence budgets and bundle plans before acquisition, admits only
++task-local read-only evidence, prevents cross-seat result reuse before commit, and
++binds an evidence-audit digest into Council's REVIEW receipt.
++
++Council v3 does not establish behavioral efficacy and does not grant domain authority.
++A future FOIL smart-tool controller may propose neutral bundle candidates, but Council
++retains the same REVIEW_ONLY boundary and target modules retain claim-native authority.
++"""
++from __future__ import annotations
++
++import json
++import math
++import re
++from dataclasses import asdict, dataclass
++from pathlib import Path
++from typing import Any, Mapping, Sequence
++
++import council_runtime as council
++from egrt_store import RuntimeStore, new_id, utcnow
++from egrt_types import Receipt, digest
++
++SCHEMA_VERSION = "egrt.council.v3"
++_SHA256 = re.compile(r"^[0-9a-f]{64}$")
++_EVIDENCE_STATUSES = {"VALID", "UNRESOLVED", "INVALID"}
++_SIDE_EFFECT_CLASSES = {"READ_ONLY", "REVERSIBLE", "CONSEQUENTIAL"}
++
++
++def _require_text(name: str, value: object) -> None:
++    if not isinstance(value, str):
++        raise TypeError(f"{name} must be str")
++    if not value.strip():
++        raise ValueError(f"{name} must be non-empty")
++
++
++def _probability(name: str, value: float) -> None:
++    if not isinstance(value, (int, float)) or isinstance(value, bool):
++        raise TypeError(f"{name} must be numeric")
++    if not math.isfinite(float(value)) or not 0 <= float(value) <= 1:
++        raise ValueError(f"{name} must be finite and between 0 and 1")
++
++
++def _nonnegative_number(name: str, value: float) -> None:
++    if not isinstance(value, (int, float)) or isinstance(value, bool):
++        raise TypeError(f"{name} must be numeric")
++    if not math.isfinite(float(value)) or float(value) < 0:
++        raise ValueError(f"{name} must be finite and non-negative")
++
++
++def _nonnegative_int(name: str, value: int) -> None:
++    if not isinstance(value, int) or isinstance(value, bool):
++        raise TypeError(f"{name} must be int")
++    if value < 0:
++        raise ValueError(f"{name} must be non-negative")
++
++
++def _sha256(name: str, value: str) -> None:
++    if not isinstance(value, str) or not _SHA256.fullmatch(value):
++        raise ValueError(f"{name} must be a lowercase 64-character SHA-256 digest")
++
++
++def _unique_texts(name: str, values: Sequence[str]) -> None:
++    if any(not isinstance(value, str) or not value.strip() for value in values):
++        raise ValueError(f"{name} must contain non-empty strings")
++    if len(set(values)) != len(values):
++        raise ValueError(f"{name} must be unique")
++
++
++@dataclass(frozen=True)
++class EvidenceBudget:
++    """Caller-frozen upper bounds for one Council evidence partition."""
++
++    token_limit: int
++    money_microunits_limit: int
++    latency_ms_limit: int
++    tool_call_limit: int
++
++    def __post_init__(self) -> None:
++        for name in (
++            "token_limit",
++            "money_microunits_limit",
++            "latency_ms_limit",
++            "tool_call_limit",
++        ):
++            _nonnegative_int(name, getattr(self, name))
++
++
++@dataclass(frozen=True)
++class EvidenceUtilityPolicy:
++    """Frozen decision values/prices shared across all candidate bundles for one seat."""
++
++    rescue_value: float
++    damage_loss: float
++    token_price: float
++    money_price: float
++    latency_price: float
++    privacy_price: float
++    failure_loss: float
++    minimum_margin: float = 0.0
++
++    def __post_init__(self) -> None:
++        for name in (
++            "rescue_value",
++            "damage_loss",
++            "token_price",
++            "money_price",
++            "latency_price",
++            "privacy_price",
++            "failure_loss",
++            "minimum_margin",
++        ):
++            _nonnegative_number(name, getattr(self, name))
++
++
++@dataclass(frozen=True)
++class EvidenceBundleCandidate:
++    """Neutral, receipt-backed candidate tool bundle for one frozen Council seat."""
++
++    bundle_id: str
++    seat_id: str
++    provided_capabilities: tuple[str, ...]
++    tool_ids: tuple[str, ...]
++    tool_contracts: tuple[tuple[str, str], ...]
++    estimate_receipt_ids: tuple[str, ...]
++    estimate_receipt_digests: tuple[str, ...]
++    rescue_probability_lcb: float
++    valid_evidence_probability_lcb: float
++    damage_probability_ucb: float
++    token_cost: int
++    money_microunits_cost: int
++    latency_ms: int
++    privacy_cost: float
++    failure_probability_ucb: float
++    interaction_basis: str = "DIRECT_BUNDLE_RECEIPTS"
++    dependency_edges: tuple[tuple[str, str], ...] = ()
++    task_only_frontier: bool = True
++    hidden_gold_dependent: bool = False
++    side_effect_class: str = "READ_ONLY"
++    schema: str = SCHEMA_VERSION
++
++    def __post_init__(self) -> None:
++        _require_text("bundle_id", self.bundle_id)
++        _require_text("seat_id", self.seat_id)
++        _unique_texts("provided_capabilities", self.provided_capabilities)
++        _unique_texts("tool_ids", self.tool_ids)
++        _unique_texts("estimate_receipt_ids", self.estimate_receipt_ids)
++        if not self.estimate_receipt_ids:
++            raise ValueError("bundle estimates require at least one frozen scored receipt")
++        if len(self.estimate_receipt_digests) != len(self.estimate_receipt_ids):
++            raise ValueError("estimate receipt IDs and digests must have equal length")
++        for estimate_digest in self.estimate_receipt_digests:
++            _sha256("estimate_receipt_digest", estimate_digest)
++        if not self.tool_ids:
++            raise ValueError("bundle requires at least one tool")
++        if self.side_effect_class not in _SIDE_EFFECT_CLASSES:
++            raise ValueError("unknown side_effect_class")
++        if not isinstance(self.task_only_frontier, bool):
++            raise TypeError("task_only_frontier must be bool")
++        if not isinstance(self.hidden_gold_dependent, bool):
++            raise TypeError("hidden_gold_dependent must be bool")
++
++        contract_ids: list[str] = []
++        for tool_id, contract_digest in self.tool_contracts:
++            _require_text("tool_contract tool_id", tool_id)
++            _sha256("tool_contract digest", contract_digest)
++            contract_ids.append(tool_id)
++        if set(contract_ids) != set(self.tool_ids) or len(contract_ids) != len(self.tool_ids):
++            raise ValueError("tool_contracts must bind exactly one digest to every bundle tool")
++
++        tool_set = set(self.tool_ids)
++        for parent, child in self.dependency_edges:
++            if parent not in tool_set or child not in tool_set:
++                raise ValueError("dependency edge references tool outside the bundle")
++            if parent == child:
++                raise ValueError("dependency graph cannot contain self loops")
++        _require_acyclic(self.tool_ids, self.dependency_edges)
++
++        _probability("rescue_probability_lcb", self.rescue_probability_lcb)
++        _probability("valid_evidence_probability_lcb", self.valid_evidence_probability_lcb)
++        _probability("damage_probability_ucb", self.damage_probability_ucb)
++        _probability("failure_probability_ucb", self.failure_probability_ucb)
++        _nonnegative_number("privacy_cost", self.privacy_cost)
++        if self.interaction_basis not in {"DIRECT_BUNDLE_RECEIPTS", "PESSIMISTIC_PRIOR"}:
++            raise ValueError(
++                "interaction_basis must be DIRECT_BUNDLE_RECEIPTS or PESSIMISTIC_PRIOR"
++            )
++        for name in ("token_cost", "money_microunits_cost", "latency_ms"):
++            _nonnegative_int(name, getattr(self, name))
++
++    @property
++    def tool_call_cost(self) -> int:
++        return len(self.tool_ids)
++
++
++@dataclass(frozen=True)
++class SeatEvidenceReceipt:
++    """One normalized acquisition envelope for a selected Council seat bundle."""
++
++    evidence_envelope_id: str
++    council_id: str
++    seat_id: str
++    bundle_id: str
++    evidence_status: str
++    executed_tool_ids: tuple[str, ...]
++    tool_receipt_ids: tuple[str, ...]
++    source_artifact_digests: tuple[str, ...]
++    provenance_groups: tuple[str, ...]
++    admitted_evidence_ids: tuple[str, ...]
++    token_used: int
++    money_microunits_used: int
++    latency_ms: int
++    calls_attempted: int
++    calls_completed: int
++    calls_failed: int
++    calls_cancelled: int
++    output_digest: str
++    side_effect_class: str = "READ_ONLY"
++    reused_from_seat_ids: tuple[str, ...] = ()
++    schema: str = SCHEMA_VERSION
++
++    def __post_init__(self) -> None:
++        for name in ("evidence_envelope_id", "council_id", "seat_id", "bundle_id"):
++            _require_text(name, getattr(self, name))
++        if self.evidence_status not in _EVIDENCE_STATUSES:
++            raise ValueError("evidence_status must be VALID, UNRESOLVED, or INVALID")
++        if self.side_effect_class != "READ_ONLY":
++            raise ValueError("Council v3 admits only READ_ONLY seat evidence")
++        _unique_texts("executed_tool_ids", self.executed_tool_ids)
++        _unique_texts("tool_receipt_ids", self.tool_receipt_ids)
++        _unique_texts("provenance_groups", self.provenance_groups)
++        _unique_texts("admitted_evidence_ids", self.admitted_evidence_ids)
++        _unique_texts("reused_from_seat_ids", self.reused_from_seat_ids)
++        for source_digest in self.source_artifact_digests:
++            _sha256("source_artifact_digest", source_digest)
++        if len(set(self.source_artifact_digests)) != len(self.source_artifact_digests):
++            raise ValueError("source_artifact_digests must be unique")
++        _sha256("output_digest", self.output_digest)
++        for name in (
++            "token_used",
++            "money_microunits_used",
++            "latency_ms",
++            "calls_attempted",
++            "calls_completed",
++            "calls_failed",
++            "calls_cancelled",
++        ):
++            _nonnegative_int(name, getattr(self, name))
++        if self.calls_completed + self.calls_failed + self.calls_cancelled != self.calls_attempted:
++            raise ValueError("call outcome counts must conserve calls_attempted")
++        if self.evidence_status != "VALID" and self.admitted_evidence_ids:
++            raise ValueError("invalid or unresolved evidence cannot be admitted")
++
++
++def _require_acyclic(
++    tool_ids: Sequence[str],
++    edges: Sequence[tuple[str, str]],
++) -> None:
++    children: dict[str, list[str]] = {tool_id: [] for tool_id in tool_ids}
++    indegree: dict[str, int] = {tool_id: 0 for tool_id in tool_ids}
++    for parent, child in edges:
++        children[parent].append(child)
++        indegree[child] += 1
++    frontier = sorted(tool_id for tool_id, degree in indegree.items() if degree == 0)
++    seen = 0
++    while frontier:
++        node = frontier.pop(0)
++        seen += 1
++        for child in sorted(children[node]):
++            indegree[child] -= 1
++            if indegree[child] == 0:
++                frontier.append(child)
++                frontier.sort()
++    if seen != len(tool_ids):
++        raise ValueError("dependency graph must be acyclic")
++
++
++def _plain(value: object) -> Any:
++    if hasattr(value, "__dataclass_fields__"):
++        return json.loads(json.dumps(asdict(value), sort_keys=True))
++    return json.loads(json.dumps(value, sort_keys=True))
++
++
++def _council_row(root: Path, council_id: str) -> dict[str, Any]:
++    row = RuntimeStore(root).read_named_state("councils", council_id)
++    if row is None:
++        raise KeyError(council_id)
++    return row
++
++
++def _v3_row(root: Path, council_id: str) -> dict[str, Any]:
++    row = RuntimeStore(root).read_named_state("council_v3", council_id)
++    if row is None:
++        raise KeyError(f"Council v3 evidence state not initialized: {council_id}")
++    return row
++
++
++def _write_v3(root: Path, council_id: str, row: Mapping[str, Any]) -> None:
++    RuntimeStore(root).write_named_state("council_v3", council_id, dict(row))
++
++
++def _validate_frozen_partition(
++    seat_ids: set[str],
++    total_budget: EvidenceBudget,
++    seat_budgets: Mapping[str, EvidenceBudget],
++    utility_policies: Mapping[str, EvidenceUtilityPolicy],
++) -> None:
++    if set(seat_budgets) != seat_ids:
++        raise ValueError("seat_budgets must contain exactly one budget for every Council seat")
++    if set(utility_policies) != seat_ids:
++        raise ValueError("utility_policies must contain exactly one policy for every Council seat")
++    token_sum = sum(budget.token_limit for budget in seat_budgets.values())
++    money_sum = sum(budget.money_microunits_limit for budget in seat_budgets.values())
++    call_sum = sum(budget.tool_call_limit for budget in seat_budgets.values())
++    max_latency = max((budget.latency_ms_limit for budget in seat_budgets.values()), default=0)
++    if token_sum > total_budget.token_limit:
++        raise ValueError("seat token budgets exceed frozen Council total")
++    if money_sum > total_budget.money_microunits_limit:
++        raise ValueError("seat money budgets exceed frozen Council total")
++    if call_sum > total_budget.tool_call_limit:
++        raise ValueError("seat call budgets exceed frozen Council total")
++    if max_latency > total_budget.latency_ms_limit:
++        raise ValueError("a seat latency budget exceeds the frozen Council wall-time ceiling")
++
++
++def create_council_v3(
++    root: Path,
++    artifact_hash: str,
++    budget_hash: str,
++    seats: list[council.CouncilSeat],
++    *,
++    total_budget: EvidenceBudget,
++    seat_budgets: Mapping[str, EvidenceBudget],
++    utility_policies: Mapping[str, EvidenceUtilityPolicy],
++    task_id: str | None = None,
++    baseline_evidence_ids: Mapping[str, Sequence[str]] | None = None,
++    baseline_provenance_groups: Mapping[str, Sequence[str]] | None = None,
++) -> council.CouncilState:
++    """Create Council vNext and freeze Council-v3 evidence partitions/budgets."""
++    if not seats or any(seat.challenge_contract != "vnext" for seat in seats):
++        raise ValueError("Council v3 requires vNext challenge-derived seats")
++    seat_ids = {seat.seat_id for seat in seats}
++    if len(seat_ids) != len(seats):
++        raise ValueError("Council v3 seat IDs must be unique")
++    _validate_frozen_partition(seat_ids, total_budget, seat_budgets, utility_policies)
++    state = council.create_council(
++        root,
++        artifact_hash,
++        budget_hash,
++        seats,
++        task_id=task_id,
++    )
++    initialize_evidence_layer(
++        root,
++        state.council_id,
++        total_budget=total_budget,
++        seat_budgets=seat_budgets,
++        utility_policies=utility_policies,
++        baseline_evidence_ids=baseline_evidence_ids,
++        baseline_provenance_groups=baseline_provenance_groups,
++    )
++    return state
++
++
++def initialize_evidence_layer(
++    root: Path,
++    council_id: str,
++    *,
++    total_budget: EvidenceBudget,
++    seat_budgets: Mapping[str, EvidenceBudget],
++    utility_policies: Mapping[str, EvidenceUtilityPolicy],
++    baseline_evidence_ids: Mapping[str, Sequence[str]] | None = None,
++    baseline_provenance_groups: Mapping[str, Sequence[str]] | None = None,
++) -> None:
++    """Freeze seat-local budgets before any evidence acquisition or first-pass commit."""
++    council_row = _council_row(root, council_id)
++    if council_row.get("phase") != "COMMIT" or council_row.get("commitments"):
++        raise ValueError("Council v3 evidence budgets must freeze before any seat commit")
++    seats = council_row.get("seats", [])
++    if not seats or any(seat.get("challenge_contract") != "vnext" for seat in seats):
++        raise ValueError("Council v3 requires vNext challenge-derived seats")
++    seat_ids = {str(seat["seat_id"]) for seat in seats}
++    _validate_frozen_partition(seat_ids, total_budget, seat_budgets, utility_policies)
++
++    baseline_evidence_ids = baseline_evidence_ids or {}
++    baseline_provenance_groups = baseline_provenance_groups or {}
++    baseline_rows: dict[str, Any] = {}
++    for seat_id in sorted(seat_ids):
++        evidence = tuple(baseline_evidence_ids.get(seat_id, ()))
++        provenance = tuple(baseline_provenance_groups.get(seat_id, ()))
++        _unique_texts("baseline_evidence_ids", evidence)
++        _unique_texts("baseline_provenance_groups", provenance)
++        baseline_rows[seat_id] = {
++            "evidence_ids": list(evidence),
++            "provenance_groups": list(provenance),
++        }
++
++    row = {
++        "schema": SCHEMA_VERSION,
++        "council_id": council_id,
++        "phase": "INITIALIZED",
++        "initialized_at": utcnow(),
++        "total_budget": _plain(total_budget),
++        "seat_budgets": {
++            seat_id: _plain(seat_budgets[seat_id])
++            for seat_id in sorted(seat_ids)
++        },
++        "utility_policies": {
++            seat_id: _plain(utility_policies[seat_id])
++            for seat_id in sorted(seat_ids)
++        },
++        "baseline": baseline_rows,
++        "plans": {},
++        "receipts": {},
++        "committed_seats": [],
++        "plan_freeze_hash": None,
++        "audit": None,
++        "authority": "EVIDENCE_ACQUISITION_ONLY",
++        "domain_clearance_authorized": False,
++        "cross_seat_budget_transfer_authorized": False,
++        "cross_seat_result_reuse_before_reveal_authorized": False,
++    }
++    _write_v3(root, council_id, row)
++
++
++def _budget_from_row(row: Mapping[str, Any]) -> EvidenceBudget:
++    return EvidenceBudget(**dict(row))
++
++
++def _policy_from_row(row: Mapping[str, Any]) -> EvidenceUtilityPolicy:
++    return EvidenceUtilityPolicy(**dict(row))
++
++
++def _utility_lcb(
++    candidate: EvidenceBundleCandidate,
++    policy: EvidenceUtilityPolicy,
++) -> float:
++    return (
++        float(policy.rescue_value)
++        * float(candidate.rescue_probability_lcb)
++        * float(candidate.valid_evidence_probability_lcb)
++        - float(policy.damage_loss) * float(candidate.damage_probability_ucb)
++        - float(policy.token_price) * float(candidate.token_cost)
++        - float(policy.money_price) * float(candidate.money_microunits_cost)
++        - float(policy.latency_price) * float(candidate.latency_ms)
++        - float(policy.privacy_price) * float(candidate.privacy_cost)
++        - float(policy.failure_loss) * float(candidate.failure_probability_ucb)
++    )
++
++
++def _within_budget(candidate: EvidenceBundleCandidate, budget: EvidenceBudget) -> bool:
++    return (
++        candidate.token_cost <= budget.token_limit
++        and candidate.money_microunits_cost <= budget.money_microunits_limit
++        and candidate.latency_ms <= budget.latency_ms_limit
++        and candidate.tool_call_cost <= budget.tool_call_limit
++    )
++
++
++def _dominates(
++    left: EvidenceBundleCandidate,
++    right: EvidenceBundleCandidate,
++    *,
++    left_utility: float,
++    right_utility: float,
++) -> bool:
++    weak = (
++        left_utility >= right_utility
++        and left.token_cost <= right.token_cost
++        and left.money_microunits_cost <= right.money_microunits_cost
++        and left.latency_ms <= right.latency_ms
++        and left.tool_call_cost <= right.tool_call_cost
++    )
++    strict = (
++        left_utility > right_utility
++        or left.token_cost < right.token_cost
++        or left.money_microunits_cost < right.money_microunits_cost
++        or left.latency_ms < right.latency_ms
++        or left.tool_call_cost < right.tool_call_cost
++    )
++    return weak and strict
++
++
++def freeze_evidence_plans(
++    root: Path,
++    council_id: str,
++    candidates_by_seat: Mapping[str, Sequence[EvidenceBundleCandidate]],
++) -> dict[str, Any]:
++    """Freeze all seat plans atomically before any Council first-pass commit."""
++    council_row = _council_row(root, council_id)
++    v3 = _v3_row(root, council_id)
++    if v3.get("phase") != "INITIALIZED":
++        raise ValueError("Council v3 evidence plans are immutable once frozen")
++    if council_row.get("phase") != "COMMIT" or council_row.get("commitments"):
++        raise ValueError("all Council v3 plans must freeze before any seat commit")
++
++    seat_map = {str(seat["seat_id"]): seat for seat in council_row.get("seats", [])}
++    unknown = set(candidates_by_seat) - set(seat_map)
++    if unknown:
++        raise KeyError(f"candidate bundles supplied for unknown seats: {sorted(unknown)}")
++
++    plans: dict[str, Any] = {}
++    for seat_id in sorted(seat_map):
++        seat = seat_map[seat_id]
++        required_capability = seat.get("required_capability")
++        budget = _budget_from_row(v3["seat_budgets"][seat_id])
++        policy = _policy_from_row(v3["utility_policies"][seat_id])
++        candidates = list(candidates_by_seat.get(seat_id, ()))
++        if len({candidate.bundle_id for candidate in candidates}) != len(candidates):
++            raise ValueError(f"duplicate bundle_id in seat {seat_id}")
++
++        exclusions: dict[str, str] = {}
++        feasible: list[EvidenceBundleCandidate] = []
++        for candidate in candidates:
++            if candidate.seat_id != seat_id:
++                raise ValueError("bundle seat_id does not match its Council evidence partition")
++            reason: str | None = None
++            if not candidate.task_only_frontier:
++                reason = "NOT_TASK_ONLY_FRONTIER"
++            elif candidate.hidden_gold_dependent:
++                reason = "HIDDEN_GOLD_DEPENDENT"
++            elif candidate.side_effect_class != "READ_ONLY":
++                reason = "NON_READ_ONLY"
++            elif required_capability and required_capability not in candidate.provided_capabilities:
++                reason = "MISSING_REQUIRED_CAPABILITY"
++            elif not _within_budget(candidate, budget):
++                reason = "OVER_SEAT_BUDGET"
++            if reason:
++                exclusions[candidate.bundle_id] = reason
++            else:
++                feasible.append(candidate)
++
++        utility = {
++            candidate.bundle_id: _utility_lcb(candidate, policy)
++            for candidate in feasible
++        }
++        nondominated: list[EvidenceBundleCandidate] = []
++        for candidate in feasible:
++            dominator = next(
++                (
++                    other
++                    for other in feasible
++                    if (
++                        other.bundle_id != candidate.bundle_id
++                        and _dominates(
++                            other,
++                            candidate,
++                            left_utility=utility[other.bundle_id],
++                            right_utility=utility[candidate.bundle_id],
++                        )
++                    )
++                ),
++                None,
++            )
++            if dominator is not None:
++                exclusions[candidate.bundle_id] = f"DOMINATED_BY:{dominator.bundle_id}"
++            else:
++                nondominated.append(candidate)
++
++        ranked = sorted(
++            nondominated,
++            key=lambda candidate: (
++                -utility[candidate.bundle_id],
++                candidate.token_cost,
++                candidate.money_microunits_cost,
++                candidate.latency_ms,
++                candidate.tool_call_cost,
++                candidate.bundle_id,
++            ),
++        )
++        selected = (
++            ranked[0]
++            if ranked and utility[ranked[0].bundle_id] > policy.minimum_margin
++            else None
++        )
++        reason = "POSITIVE_CONSERVATIVE_VALUE" if selected else "STAND_DOWN_NONPOSITIVE_OR_INFEASIBLE"
++
++        plan_payload = {
++            "schema": SCHEMA_VERSION,
++            "plan_id": new_id("c3plan"),
++            "council_id": council_id,
++            "seat_id": seat_id,
++            "evidence_partition": seat.get("evidence_partition"),
++            "required_capability": required_capability,
++            "frozen_budget": _plain(budget),
++            "utility_policy": _plain(policy),
++            "baseline": dict(v3["baseline"][seat_id]),
++            "candidate_rows": [
++                {
++                    **_plain(candidate),
++                    "utility_lcb": _utility_lcb(candidate, policy),
++                    "exclusion_reason": exclusions.get(candidate.bundle_id),
++                }
++                for candidate in sorted(candidates, key=lambda item: item.bundle_id)
++            ],
++            "selected_bundle_id": selected.bundle_id if selected else None,
++            "selected_utility_lcb": (
++                _utility_lcb(selected, policy) if selected else None
++            ),
++            "selection_reason": reason,
++            "frozen_before_any_commit": True,
++            "frozen_at": utcnow(),
++        }
++        plan_payload["plan_hash"] = digest(plan_payload)
++        plans[seat_id] = plan_payload
++
++    v3["plans"] = plans
++    v3["plan_freeze_hash"] = digest(
++        {
++            "council_id": council_id,
++            "plans": {seat_id: plans[seat_id]["plan_hash"] for seat_id in sorted(plans)},
++        }
++    )
++    v3["phase"] = "PLANS_FROZEN"
++    _write_v3(root, council_id, v3)
++    return plans
++
++
++def selected_bundle(root: Path, council_id: str, seat_id: str) -> dict[str, Any] | None:
++    v3 = _v3_row(root, council_id)
++    plan = v3.get("plans", {}).get(seat_id)
++    if plan is None:
++        raise KeyError(seat_id)
++    selected_id = plan.get("selected_bundle_id")
++    if selected_id is None:
++        return None
++    for row in plan.get("candidate_rows", []):
++        if row.get("bundle_id") == selected_id:
++            return dict(row)
++    raise ValueError("selected Council v3 bundle is missing from its frozen plan")
++
++
++def record_seat_evidence(
++    root: Path,
++    council_id: str,
++    receipt: SeatEvidenceReceipt,
++) -> None:
++    """Record one seat-local evidence envelope before any seat first-pass commit."""
++    council_row = _council_row(root, council_id)
++    v3 = _v3_row(root, council_id)
++    if receipt.council_id != council_id:
++        raise ValueError("evidence receipt council_id mismatch")
++    if v3.get("phase") not in {"PLANS_FROZEN", "EVIDENCE_READY"}:
++        raise ValueError("Council v3 is not accepting evidence acquisition receipts")
++    if council_row.get("commitments"):
++        raise ValueError("seat evidence acquisition must finish before any first-pass commit")
++    if receipt.seat_id in v3.get("receipts", {}):
++        raise ValueError("Council v3 accepts one normalized evidence envelope per seat")
++    if receipt.reused_from_seat_ids:
++        raise ValueError("cross-seat result reuse is forbidden before Council reveal")
++
++    selected = selected_bundle(root, council_id, receipt.seat_id)
++    if selected is None:
++        raise ValueError("seat stood down; no tool evidence may be recorded")
++    if receipt.bundle_id != selected.get("bundle_id"):
++        raise ValueError("evidence receipt does not match the frozen selected bundle")
++    if not set(receipt.executed_tool_ids).issubset(set(selected.get("tool_ids", []))):
++        raise ValueError("evidence receipt executed a tool outside the frozen selected bundle")
++    budget = _budget_from_row(v3["seat_budgets"][receipt.seat_id])
++    if receipt.token_used > budget.token_limit:
++        raise ValueError("seat evidence exceeded frozen token budget")
++    if receipt.money_microunits_used > budget.money_microunits_limit:
++        raise ValueError("seat evidence exceeded frozen money budget")
++    if receipt.latency_ms > budget.latency_ms_limit:
++        raise ValueError("seat evidence exceeded frozen latency budget")
++    if receipt.calls_attempted > budget.tool_call_limit:
++        raise ValueError("seat evidence exceeded frozen tool-call budget")
++
++    v3.setdefault("receipts", {})[receipt.seat_id] = _plain(receipt)
++    all_ready = all(
++        plan.get("selected_bundle_id") is None or seat_id in v3["receipts"]
++        for seat_id, plan in v3.get("plans", {}).items()
++    )
++    if all_ready:
++        v3["phase"] = "EVIDENCE_READY"
++    _write_v3(root, council_id, v3)
++
++
++def commit_v3(
++    root: Path,
++    council_id: str,
++    seat_id: str,
++    submission: council.SeatSubmission,
++    *,
++    nonce: str | None = None,
++) -> tuple[str, str]:
++    """Commit only after every seat's acquisition phase is complete and isolated."""
++    v3 = _v3_row(root, council_id)
++    if v3.get("phase") not in {"EVIDENCE_READY", "COMMITTED"}:
++        raise ValueError("all Council v3 evidence acquisition must finish before first-pass commits")
++    plan = v3.get("plans", {}).get(seat_id)
++    if plan is None:
++        raise KeyError(seat_id)
++    baseline = v3["baseline"][seat_id]
++    expected_evidence = set(baseline.get("evidence_ids", []))
++    expected_provenance = set(baseline.get("provenance_groups", []))
++    receipt_row = v3.get("receipts", {}).get(seat_id)
++    if plan.get("selected_bundle_id") is not None:
++        if receipt_row is None:
++            raise ValueError("selected seat bundle lacks an evidence receipt")
++        expected_evidence.update(receipt_row.get("admitted_evidence_ids", []))
++        expected_provenance.update(receipt_row.get("provenance_groups", []))
++    elif receipt_row is not None:
++        raise ValueError("stand-down seat cannot carry acquired tool evidence")
++
++    if set(submission.evidence_ids) != expected_evidence:
++        raise ValueError("submission evidence_ids do not match the frozen v3 evidence partition")
++    if set(submission.provenance_groups) != expected_provenance:
++        raise ValueError("submission provenance_groups do not match the frozen v3 evidence partition")
++
++    commitment, actual_nonce = council.commit(
++        root,
++        council_id,
++        seat_id,
++        submission,
++        nonce=nonce,
++    )
++    v3 = _v3_row(root, council_id)
++    committed = set(v3.get("committed_seats", []))
++    committed.add(seat_id)
++    v3["committed_seats"] = sorted(committed)
++    if committed == set(v3.get("plans", {})):
++        v3["phase"] = "COMMITTED"
++    _write_v3(root, council_id, v3)
++    return commitment, actual_nonce
++
++
++def evidence_overlap_matrix(root: Path, council_id: str) -> dict[str, Any]:
++    """Measure shared sources/tools across seat partitions; never infer independence."""
++    v3 = _v3_row(root, council_id)
++    seat_ids = sorted(v3.get("plans", {}))
++    rows: list[dict[str, Any]] = []
++
++    def jaccard(left: set[str], right: set[str]) -> float | None:
++        if not left and not right:
++            return None
++        union = left | right
++        return len(left & right) / len(union) if union else None
++
++    for index, left in enumerate(seat_ids):
++        for right in seat_ids[index + 1 :]:
++            left_receipt = v3.get("receipts", {}).get(left, {})
++            right_receipt = v3.get("receipts", {}).get(right, {})
++            left_plan = selected_bundle(root, council_id, left) or {}
++            right_plan = selected_bundle(root, council_id, right) or {}
++            rows.append(
++                {
++                    "left": left,
++                    "right": right,
++                    "source_overlap": jaccard(
++                        set(left_receipt.get("source_artifact_digests", [])),
++                        set(right_receipt.get("source_artifact_digests", [])),
++                    ),
++                    "tool_overlap": jaccard(
++                        set(left_plan.get("tool_ids", [])),
++                        set(right_plan.get("tool_ids", [])),
++                    ),
++                    "independence_status": "NOT_ESTABLISHED",
++                }
++            )
++    return {
++        "pairs": rows,
++        "diagnostics": {
++            "seat_count": len(seat_ids),
++            "independence_status": "NOT_ESTABLISHED_BY_SEAT_COUNT",
++            "interpretation": (
++                "Shared source and tool usage are common-cause diagnostics. "
++                "Separate seat executions never establish statistical independence by count."
++            ),
++        },
++    }
++
++
++def _audit(root: Path, council_id: str) -> dict[str, Any]:
++    v3 = _v3_row(root, council_id)
++    total = _budget_from_row(v3["total_budget"])
++    receipts = list(v3.get("receipts", {}).values())
++    totals = {
++        "token_used": sum(int(row.get("token_used", 0)) for row in receipts),
++        "money_microunits_used": sum(int(row.get("money_microunits_used", 0)) for row in receipts),
++        "calls_attempted": sum(int(row.get("calls_attempted", 0)) for row in receipts),
++        "critical_path_latency_ms": max(
++            (int(row.get("latency_ms", 0)) for row in receipts),
++            default=0,
++        ),
++    }
++    violations: list[str] = []
++    if totals["token_used"] > total.token_limit:
++        violations.append("TOTAL_TOKEN_BUDGET_EXCEEDED")
++    if totals["money_microunits_used"] > total.money_microunits_limit:
++        violations.append("TOTAL_MONEY_BUDGET_EXCEEDED")
++    if totals["calls_attempted"] > total.tool_call_limit:
++        violations.append("TOTAL_TOOL_CALL_BUDGET_EXCEEDED")
++    if totals["critical_path_latency_ms"] > total.latency_ms_limit:
++        violations.append("TOTAL_LATENCY_BUDGET_EXCEEDED")
++    for row in receipts:
++        if row.get("reused_from_seat_ids"):
++            violations.append(f"CROSS_SEAT_REUSE:{row.get('seat_id')}")
++        if row.get("side_effect_class") != "READ_ONLY":
++            violations.append(f"NON_READ_ONLY:{row.get('seat_id')}")
++    audit = {
++        "schema": SCHEMA_VERSION,
++        "council_id": council_id,
++        "plan_freeze_hash": v3.get("plan_freeze_hash"),
++        "all_plans_frozen_before_commit": True,
++        "all_evidence_acquired_before_commit": True,
++        "cross_seat_budget_transfer_authorized": False,
++        "cross_seat_result_reuse_before_reveal_authorized": False,
++        "totals": totals,
++        "overlap": evidence_overlap_matrix(root, council_id),
++        "violations": sorted(set(violations)),
++        "authority": "EVIDENCE_ACQUISITION_ONLY",
++        "domain_clearance_authorized": False,
++        "created_at": utcnow(),
++    }
++    audit["audit_hash"] = digest(audit)
++    return audit
++
++
++def finalize_v3(
++    root: Path,
++    council_id: str,
++    obligation_id: str,
++    *,
++    synthesis_hash: str,
++    supported_findings: list[str],
++    unresolved: list[str] | None = None,
++    direct_control_receipt: str | None = None,
++    vote_control_receipt: str | None = None,
++) -> Receipt:
++    """Bind the v3 evidence audit into the ordinary REVIEW-only Council receipt."""
++    v3 = _v3_row(root, council_id)
++    if v3.get("phase") != "COMMITTED":
++        raise ValueError("Council v3 requires all seat commits before finalization")
++    audit = _audit(root, council_id)
++    missing = list(unresolved or [])
++    missing.extend(f"council-v3-evidence:{item}" for item in audit["violations"])
++    bound_synthesis_hash = digest(
++        {
++            "council_synthesis_hash": synthesis_hash,
++            "council_v3_evidence_audit_hash": audit["audit_hash"],
++        }
++    )
++    receipt = council.finalize(
++        root,
++        council_id,
++        obligation_id,
++        synthesis_hash=bound_synthesis_hash,
++        supported_findings=supported_findings,
++        unresolved=missing,
++        direct_control_receipt=direct_control_receipt,
++        vote_control_receipt=vote_control_receipt,
++    )
++    v3 = _v3_row(root, council_id)
++    audit["review_receipt_id"] = receipt.receipt_id
++    v3["audit"] = audit
++    v3["phase"] = "CLOSED"
++    _write_v3(root, council_id, v3)
++    return receipt

@@ -1,0 +1,4319 @@
+diff --git a/.gauntlet.json b/.gauntlet.json
+index 76f1f13d95d40d78095392e4585f9013f2664ca5..b420b4f306144b9269d8e142ff5b261c974fab93 100644
+--- a/.gauntlet.json
++++ b/.gauntlet.json
+@@ -8,6 +8,7 @@
+     "docs/ARCHITECTURE.md",
+     "docs/VNEXT_RUNTIME_PIPELINE.md",
+     "docs/specs/COMMON_RUNTIME_CONTRACT.md",
++    "docs/specs/CHALLENGE_ENGINEERING_SPEC.md",
+     "skills/soul/SKILL.md",
+     "skills/mathbot/SKILL.md",
+     "skills/scoutbot/SKILL.md",
+@@ -27,6 +28,16 @@
+     "release_gate": true,
+     "active_task_required_for_gate": true
+   },
++  "challenge": {
++    "mode": "shadow",
++    "max_total_per_obligation": 4,
++    "max_load_bearing_per_obligation": 2,
++    "max_selected_discriminators": 2,
++    "allow_foil_proposals": true,
++    "require_claim_native_receipt": true,
++    "block_on_unavailable_load_bearing": true,
++    "persist_raw_text": false
++  },
+   "boundary": {
+     "enabled": true,
+     "near_duplicate_threshold": 0.72,
+diff --git a/.github/workflows/security.yml b/.github/workflows/security.yml
+index 17cc6037d39cea5396268fdc0d4f5711539277f3..ca067e682fc2e453954d5cb3c97b078a82211af1 100644
+--- a/.github/workflows/security.yml
++++ b/.github/workflows/security.yml
+@@ -58,6 +58,7 @@ jobs:
+         run: |
+           python -m pip install --upgrade pip
+           python -m pip install pip-tools==7.6.1
++          export CUSTOM_COMPILE_COMMAND="pip-compile --generate-hashes --output-file=requirements-lock.txt requirements-lock.in"
+           python -m piptools compile \
+             --generate-hashes \
+             --resolver=backtracking \
+diff --git a/docs/adr/0001-neutral-challenge-protocol.md b/docs/adr/0001-neutral-challenge-protocol.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..a4817dbc62efe55e7f7b22cce0dce173aa8b037b
+--- /dev/null
++++ b/docs/adr/0001-neutral-challenge-protocol.md
+@@ -0,0 +1,31 @@
++# ADR-0001: Neutral challenge protocol; no FOIL imports in domain modules
++
++- Status: accepted for SHADOW implementation
++- Date: 2026-08-26
++- Baseline: `main@4f088d688fa9e25b4608f44000a5d9812efa45f9`
++- Source decision: EGR-FOIL-INT-001
++
++## Context
++
++FOIL contains useful task-local gap, minimum-discriminator, binding, fail-closed, and
++authority-separation mechanisms. Importing FOIL directly into each domain module
++would couple factual verification to personalization/adaptation state and make the
++incremental value of FOIL unidentifiable.
++
++## Decision
++
++Create additive `egrt.challenge.v1` contracts and storage. Domain modules own native
++challenge adapters against that neutral protocol. FOIL may later translate at most one
++non-redundant task-local proposal through the same interface, but it remains optional
++and shadow-only.
++
++No non-FOIL module may import `foil_*`. Challenge proposals and resolutions never
++replace domain receipts or grant write/commit authority.
++
++## Consequences
++
++- Existing runtime receipts remain valid.
++- Candidate/scope/obligation bindings become mechanically testable.
++- Native module benefit can be measured before FOIL is composed.
++- Soul and Gauntlet wiring is a later work order; Mind is implemented first.
++- Enforcement requires prospective evidence and an explicit rollback criterion.
+diff --git a/docs/specs/CHALLENGE_ENGINEERING_SPEC.md b/docs/specs/CHALLENGE_ENGINEERING_SPEC.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4b818aeae1acd1311a317dc94f7a166c4502ad75
+--- /dev/null
++++ b/docs/specs/CHALLENGE_ENGINEERING_SPEC.md
+@@ -0,0 +1,170 @@
++# Neutral challenge layer — engineering specification
++
++Status: **SHADOW / mechanical implementation only**  
++Schema: `egrt.challenge.v1`  
++Baseline: `main@4f088d688fa9e25b4608f44000a5d9812efa45f9`
++
++## Decision
++
++Every domain module may own a small, candidate-directed challenge adapter. The
++adapters and optional FOIL controller communicate only through the neutral challenge
++contract. A non-FOIL module must not import a `foil_*` module.
++
++A challenge is a proposal, not evidence. It cannot satisfy `PROOF`, `DISCOVERY`,
++`SYNTHESIS`, `ENGINEERING`, `EVALUATION`, `ASSURANCE`, `PREFLIGHT`, or `REVIEW`.
++Only a valid receipt from the declared claim-native module may resolve it. A
++resolution affects the challenge gate but never replaces the original domain receipt.
++External writes and candidate adoption remain host actions.
++
++## Additive compatibility
++
++`egrt.runtime.v1` remains unchanged. Existing `TaskState`, `Obligation`, `Receipt`,
++`RuntimeEvent`, `ArtifactRef`, `EvidenceRef`, and four-state verdict semantics remain
++valid. New state is stored separately under:
++
++- `runtime/challenges/<challenge_id>.json`
++- `runtime/challenge_resolutions/<resolution_id>.json`
++
++Old tasks and receipts require no migration. Setting challenge mode to `off` ignores
++the additive state.
++
++## Objects
++
++### `ChallengeRequest`
++
++Required fields:
++
++`challenge_id`, `task_id`, `obligation_id`, `target_module`, `origin`, `kind`,
++`hypothesis`, `alternative`, `refuter`, `consequence_if_true`, `load_bearing`,
++`required_capability`, `candidate_hash`, `scope_hash`, `obligation_set_hash`,
++`proposer`, `proposer_provenance`, `information_rank`, `risk_rank`, `cost_rank`,
++`metadata`, and `schema`.
++
++Origins are `USER`, `MODULE_NATIVE`, `FOIL`, `GAUNTLET`, and `COUNCIL`.
++
++Kinds are:
++
++- `ALTERNATE_FORMALIZATION`
++- `CLAIM_NEGATION`
++- `COUNTEREXAMPLE`
++- `ASSUMPTION_KNOCKOUT`
++- `REPRESENTATION_SWAP`
++- `SOURCE_CONFLICT`
++- `RETRIEVAL_REFRAME`
++- `NOVELTY_COSTUME`
++- `FAILURE_CLASS`
++- `METAMORPHIC_RELATION`
++- `BASELINE_OR_ESTIMAND`
++- `CONTAMINATION`
++- `STATE_DRIFT`
++- `DECISION_REVERSAL`
++- `REVIEW_DIVERSITY`
++- `OUTPUT_CONTRACT`
++
++### `DiscriminatorPlan`
++
++Required fields:
++
++`plan_id`, `challenge_id`, `mode`, `action`, `verifier_module`,
++`required_capability`, `expected_support_signal`, `expected_refute_signal`,
++`input_artifacts`, `timeout_seconds`, `max_cost_rank`, `metadata`, and `schema`.
++
++Selection uses ordinal/Pareto dominance. Available, more discriminating,
++higher-information and higher-risk-reduction plans dominate only when they are no
++more costly or irreversible. Incomparable plans remain unresolved for a module/host
++choice. Duplicate plans with the same action, capability, signals, and inputs do not
++consume another challenge round.
++
++### `ChallengeResolution`
++
++Required fields:
++
++`resolution_id`, `challenge_id`, `state`, `outcome`, `verifier_receipt_id`,
++`verifier_module`, `evidence_hash`, repeated candidate/scope/obligation-set hashes,
++`resolver`, `resolver_provenance`, `reason`, `metadata`, and `schema`.
++
++States are `PROPOSED`, `SELECTED`, `RUNNING`, `RESOLVED`, `UNRESOLVED`,
++`UNAVAILABLE`, and `DISMISSED_NOT_APPLICABLE`. Outcomes are `SUPPORTS_BASE`,
++`REFUTES_BASE`, `SCOPE_SPLIT`, and `INCONCLUSIVE`.
++
++A `RESOLVED` record must reference an integrity-valid receipt from the declared
++verifier module for the same task/obligation. `SUPPORTS_BASE` requires a `CLEARED`
++receipt. `REFUTES_BASE` requires an `ISSUE` receipt. All three binding hashes must
++match exactly.
++
++## Modes
++
++| Mode | Storage and execution | Release effect |
++|---|---|---|
++| `off` | Challenge state is ignored. | Existing behavior. |
++| `shadow` | Store proposals/resolutions and calculate the counterfactual gate. | Never blocks. Default. |
++| `enforced` | Apply load-bearing challenge severity. | `ISSUE`, `UNAVAILABLE`, or `UNKNOWN` as below. |
++
++`EGR_CHALLENGE_MODE=off|shadow|enforced` overrides repository configuration.
++
++Default configuration:
++
++```json
++{
++  "challenge": {
++    "mode": "shadow",
++    "max_total_per_obligation": 4,
++    "max_load_bearing_per_obligation": 2,
++    "max_selected_discriminators": 2,
++    "allow_foil_proposals": true,
++    "require_claim_native_receipt": true,
++    "block_on_unavailable_load_bearing": true,
++    "persist_raw_text": false
++  }
++}
++```
++
++## Gate truth table
++
++For the challenge gate alone:
++
++| Worst load-bearing state/outcome | Enforced result |
++|---|---|
++| none, dismissed, or all `SUPPORTS_BASE` | `CLEARED` |
++| proposed, selected, running, unresolved, inconclusive, or `SCOPE_SPLIT` | `UNKNOWN` |
++| mandatory verifier unavailable | `UNAVAILABLE` |
++| valid `REFUTES_BASE` | `ISSUE` |
++| corrupt or mismatched resolution binding | `ISSUE` |
++
++The Soul release gate must later combine this with the current correct-module domain
++receipt. A green challenge gate alone is not release evidence.
++
++## Events
++
++The store emits:
++
++- `challenge.proposed`
++- `challenge.selected`
++- `challenge.running`
++- `challenge.resolved`
++- `challenge.unresolved`
++- `challenge.unavailable`
++- `challenge.dismissed`
++
++Resolution events include the resolution ID, outcome, linked receipt ID, evidence
++hash, and all binding hashes. Generic state never persists raw prompts or unrestricted
++raw tool output.
++
++## Authority and dependency invariants
++
++1. No non-FOIL runtime imports `foil_*`.
++2. FOIL-origin challenges remain proposals and do not execute.
++3. A challenge or resolution never clears the original obligation.
++4. The candidate producer cannot act as structural or semantic verifier.
++5. Structural and semantic verifiers must be distinct.
++6. A `COMMITTABLE` candidate still has `host_commit_required=true` and
++   `execution_authorized=false`.
++7. `UNKNOWN` and `UNAVAILABLE` never collapse to `CLEARED`.
++8. Mechanical validity is not evidence of behavioral efficacy.
++
++## First implemented module
++
++Mind vNext is the first domain adapter. Soul, Gauntlet, Space, Reality, Power, Time,
++Meditate, Council, and the optional FOIL bridge remain separate follow-on work orders.
++The repository must remain in SHADOW until a prospective controlled evaluation
++supports narrower enforcement.
+diff --git a/docs/specs/MIND_ENGINEERING_SPEC.md b/docs/specs/MIND_ENGINEERING_SPEC.md
+index 865090d6545575ecd06bc4866285ef8b01d09ff4..7bc04352de9caf5a8cbae823f11939dd81b701a3 100644
+--- a/docs/specs/MIND_ENGINEERING_SPEC.md
++++ b/docs/specs/MIND_ENGINEERING_SPEC.md
+@@ -2,41 +2,96 @@
+ 
+ ## Obligation
+ 
+-Convert mathematical/logical claims into explicit formal obligations and verify them with a claim-native derivation, computation, solver or proof checker.
++Convert mathematical or logical claims into explicit formal candidates and verify the
++load-bearing proposition with claim-native derivation, exact computation, solver,
++enumeration, or proof-checker receipts.
+ 
+-## Current workflow
++## Candidate-directed workflow
+ 
+-Specification requires objects/domains/quantifiers/assumptions, exact claim and negation, domain classification, native verifier, counterexample search and scoped reporting.
++1. State the natural claim, objects, domains, assumptions, and quantifier scope.
++2. Construct one explicit base `FormalizationCandidate` and preserve any plausible
++   alternate formalizations supplied by the task.
++3. Bind the candidate to the task, obligation, scope, and obligation-set hashes.
++4. Generate native `ALTERNATE_FORMALIZATION` and `COUNTEREXAMPLE` challenges.
++5. Select the weakest load-bearing hinge and at most two minimum discriminators.
++6. Feature-detect and execute a claim-native verifier.
++7. Store the domain receipt, then a separate `ChallengeResolution` linked to that
++   receipt and the repeated binding hashes.
++8. Require an explicit natural-language-to-formal scope receipt.
++9. Finalize the proof bundle only when all load-bearing challenges support the base
++   and the scope receipt is valid.
+ 
+-## vNext state
++A challenge is never proof. A challenge resolution is never a replacement for the
++Mind domain receipt.
+ 
+-`ProofObligation(natural_claim, formal_claim, assumptions, domain, encoding_artifact, metadata)`.
++## Runtime objects
+ 
+-## vNext workflow
++### `FormalizationCandidate`
+ 
+-1. State natural claim and assumptions.
+-2. Construct explicit formal encoding.
+-3. Hash encoding and link it to obligation.
+-4. Select verifier by domain.
+-5. Feature-detect the verifier; missing tool -> UNAVAILABLE.
+-6. Execute.
+-7. Preserve proof/counterexample as an artifact when applicable; generic receipt stores artifact/output hash.
+-8. Report solver/proof result only for the supplied encoding.
+-9. If English->formal entailment is load-bearing, represent that as a separate obligation rather than assuming it.
++`candidate_id`, `obligation_id`, `natural_claim_hash`, `formal_claim`, `assumptions`,
++`quantifier_map`, `representation`, `producer`, `candidate_hash`, and typed metadata.
++The candidate hash covers the formal claim, assumptions, quantifiers,
++representation, producer, obligation, and natural-claim hash.
+ 
+-## Initial adapters
++### `ProofChallengeBundle`
+ 
+-- exact arithmetic via restricted Python AST + `Fraction`;
+-- Z3 SMT2 when `z3` exists;
+-- later Lean/Coq adapters with machine-checkable proof artifact receipts.
++`bundle_id`, `obligation_id`, base/alternate candidate IDs, challenge IDs, selected
++plan IDs, task ID, candidate/scope/obligation-set hashes, and the separate
++natural-scope receipt ID.
+ 
+-## Runtime
++## Initial verifier adapters
+ 
+-`tools/mind_runtime.py`
++- restricted exact arithmetic using Python AST and `Fraction`;
++- built-in exact polynomial normalization, including the bounded relation
++  `sin(x)^2 + cos(x)^2 = 1`;
++- optional feature-detected SymPy subprocess for expressions outside the built-in
++  fragment, with a hard timeout and restricted syntax;
++- complete bounded finite-domain enumeration with predicate-code, domain, result,
++  and witness hashes;
++- existing Z3 SMT2 execution with expected solver-status and negation binding;
++- explicit counterexample validation through a callable code hash;
++- future Lean/Coq proof-artifact adapters only after real implementation.
+ 
+-## Mechanical tests
++A complete finite-domain proof and an exact symbolic normalization may emit
++`PROVEN` for their declared formal scope. A numerical experiment or model-only review
++must not emit `PROVEN`. A model-proposed witness without a claim-native validator is
++`HEURISTIC/UNKNOWN`.
+ 
+-- unsupported AST rejected;
+-- arithmetic exactness for fractions;
+-- missing Z3 -> UNAVAILABLE;
+-- solver output scope explicitly limited to encoding.
++## Release rule
++
++| Condition | Mind result |
++|---|---|
++| No formal encoding or binding hashes | `UNKNOWN` |
++| Plausible formalizations differ and no discriminator resolves them | `UNKNOWN` |
++| Mandatory selected verifier is absent | `UNAVAILABLE` |
++| Exact check or verified counterexample refutes the base | `ISSUE` |
++| Formal checks support the base but natural/formal scope is unverified | `UNKNOWN` for the natural claim |
++| Every load-bearing challenge supports the base and the scope receipt is bound | `CLEARED` for the stated scope |
++
++The module remains additive and SHADOW by default. Existing `ProofObligation`, exact
++arithmetic, and Z3 entry points remain available.
++
++## Files
++
++- `tools/egrt_challenge_types.py`
++- `tools/egrt_challenge.py`
++- `tools/egrt_candidate_gate.py`
++- `tools/mind_runtime.py`
++- `tests/test_egrt_challenge_*.py`
++- `tests/test_candidate_gate.py`
++- `tests/test_mind_challenge_runtime.py`
++- `tests/test_no_nonfoil_imports_foil_modules.py`
++
++## Mechanical acceptance
++
++- content hashes detect tampering;
++- duplicate IDs, invalid transitions, and binding mismatches are rejected;
++- shadow mode records but does not block;
++- enforced unresolved, unavailable, and refuted states remain distinct;
++- exact polynomial/trigonometric equivalence is deterministic;
++- a finite-domain counterexample refutes a universal candidate;
++- model-only evidence cannot become `PROVEN`;
++- competing formalizations block finalization until resolved;
++- natural/formal scope remains a separate receipt;
++- legacy FOIL candidate-gate imports and existing exact arithmetic/Z3 behavior remain
++  compatible.
+diff --git a/skills/mathbot/SKILL.md b/skills/mathbot/SKILL.md
+index 8c27111809e390910a74b1380b9fbce12b016999..e5c3c6d286acbab98d1cc1043bb628a79178b174 100644
+--- a/skills/mathbot/SKILL.md
++++ b/skills/mathbot/SKILL.md
+@@ -5,52 +5,78 @@ description: Formal Reasoning module. Trigger: /mind, /mathbot, formal proof, lo
+ 
+ # Formal Reasoning
+ 
+-Use this module when the load-bearing obligation is mathematical or logical correctness.
++Use this module when the load-bearing obligation is mathematical or logical
++correctness.
+ 
+ ## Core method
+ 
+ 1. State objects, domains, variables, quantifiers, and assumptions.
+-2. State the exact claim and its negation.
+-3. Classify the reasoning domain: deductive, probabilistic, causal, optimization, complexity, numerical, or mixed.
+-4. Choose a claim-native verifier.
+-5. Search for counterexamples and edge cases before accepting the proof.
+-6. Report scope precisely.
++2. State the exact natural claim, formal encoding, and negation.
++3. Preserve plausible alternate formalizations when scope or quantifiers are
++   ambiguous.
++4. Bind the candidate to the task, obligation, scope, and obligation-set hashes.
++5. Create a load-bearing alternate-formalization or counterexample challenge when
++   applicable.
++6. Select the minimum claim-native discriminator, not a generic second review.
++7. Execute the verifier and store its domain receipt.
++8. Resolve the challenge only through that linked receipt.
++9. Verify natural-language-to-formal scope separately and report the exact boundary.
++
++At most two load-bearing discriminators are selected for one obligation by default.
++An unavailable mandatory solver/prover is `UNAVAILABLE`, not permission to silently
++replace it with model reasoning.
+ 
+ ## Verification hierarchy
+ 
+-- exact derivation / proof checker / solver → `PROVEN`
+-- executed enumeration or numerical computation → `MEASURED`
+-- fetched theorem/source that entails the proposition → `CITED`
+-- inference from already supported premises → `DERIVED`
+-- anything else remains unresolved.
++- exact derivation, proof checker, solver, complete finite enumeration, or supported
++  exact symbolic normalization → `PROVEN` within the declared formal scope;
++- bounded numerical computation → `MEASURED`;
++- fetched theorem/source that entails the proposition → `CITED`;
++- inference from already supported premises → `DERIVED`;
++- model-only witness or review → `HEURISTIC` and unresolved.
+ 
+-A solver result proves only the encoding it actually checked. A numerical experiment does not prove a universal theorem.
++A solver result proves only the encoding it checked. A numerical experiment does not
++prove a universal theorem. Agreement between repeated model passes is not independent
++evidence.
+ 
+ ## Logic validity
+ 
+ Restate as `premises ⊢ conclusion`.
+ 
+-- propositional/FOL: test satisfiability of `premises ∧ ¬conclusion` when a solver is available;
++- propositional/FOL: test satisfiability of `premises ∧ ¬conclusion` when a solver is
++  available;
++- finite universal claims: use complete declared-domain enumeration where feasible;
+ - probabilistic: expose conditioning, base rates, and independence assumptions;
+ - causal: define intervention/estimand and identify confounding/mediation assumptions;
+ - temporal/modal: preserve operator scope;
+-- informal arguments: quote the exact inference rather than relying on a fallacy label alone.
++- informal arguments: quote the exact inference rather than relying on a fallacy
++  label alone.
+ 
+ ## Negative results
+ 
+-An impossibility/kill requires one of:
++An impossibility or kill requires one of:
+ 
+ - a verified theorem with matching scope;
+-- an explicit counterexample;
+-- a demonstrated contradiction/degeneracy;
+-- a lower bound/hardness result under stated assumptions.
++- a verified explicit counterexample;
++- a demonstrated contradiction or degeneracy;
++- a lower bound or hardness result under stated assumptions.
+ 
+ When killing an approach, give the nearest viable alternative and its cost.
+ 
+ ## Tools
+ 
+-Use available Python/symbolic solvers/provers/SMT/ITP systems only after feature detection. Never reference machine-specific paths. For external theorem status or prior art, route to Research Discovery.
++Use available Python/symbolic solvers/provers/SMT/ITP systems only after feature
++detection. Never reference machine-specific paths. For external theorem status or
++prior art, route to Research Discovery.
+ 
+ ## Typed runtime contract
+ 
+-`tools/mind_runtime.py` records explicit proof obligations and verifier receipts. Initial adapters provide restricted exact arithmetic and optional Z3 SMT2 execution; missing solvers are `UNAVAILABLE`. Solver/proof receipts apply to the supplied formal encoding, not automatically to unstated natural-language scope. See `docs/specs/MIND_ENGINEERING_SPEC.md`.
++`tools/mind_runtime.py` implements `FormalizationCandidate`, native proof challenges,
++minimum-discriminator selection, exact symbolic equivalence, finite enumeration,
++counterexample receipts, explicit natural/formal scope receipts, and
++`finalize_proof_bundle()`.
++
++The neutral contracts live in `tools/egrt_challenge_types.py` and
++`tools/egrt_challenge.py`. Mind does not import FOIL. Challenge state is additive and
++SHADOW by default. See `docs/specs/CHALLENGE_ENGINEERING_SPEC.md` and
++`docs/specs/MIND_ENGINEERING_SPEC.md`.
+diff --git a/tests/_challenge_helpers.py b/tests/_challenge_helpers.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..b4912f129d8ce5a76ab406f9b0c2b0f3aae5bd97
+--- /dev/null
++++ b/tests/_challenge_helpers.py
+@@ -0,0 +1,58 @@
++from __future__ import annotations
++
++import json
++from pathlib import Path
++
++from egrt_challenge_types import ChallengeKind, ChallengeOrigin, ChallengeRequest
++from egrt_types import digest
++
++
++def init_root(root: Path, mode: str = "shadow") -> None:
++    (root / ".gauntlet.json").write_text(
++        json.dumps({
++            "state_dir": ".egrt/state",
++            "runtime": {"enabled": True, "schema": "egrt.runtime.v1"},
++            "challenge": {
++                "mode": mode,
++                "max_total_per_obligation": 4,
++                "max_load_bearing_per_obligation": 2,
++                "max_selected_discriminators": 2,
++                "allow_foil_proposals": True,
++                "require_claim_native_receipt": True,
++                "block_on_unavailable_load_bearing": True,
++                "persist_raw_text": False,
++            },
++        }),
++        encoding="utf-8",
++    )
++
++
++def request(
++    *,
++    challenge_id: str = "challenge-1",
++    task_id: str = "task-1",
++    obligation_id: str = "obl-1",
++    kind: ChallengeKind = ChallengeKind.COUNTEREXAMPLE,
++    load_bearing: bool = True,
++) -> ChallengeRequest:
++    return ChallengeRequest(
++        challenge_id=challenge_id,
++        task_id=task_id,
++        obligation_id=obligation_id,
++        target_module="mind",
++        origin=ChallengeOrigin.MODULE_NATIVE,
++        kind=kind,
++        hypothesis="candidate may fail",
++        alternative="negated candidate",
++        refuter="exact check",
++        consequence_if_true="candidate is invalid",
++        load_bearing=load_bearing,
++        required_capability="FINITE_ENUMERATION",
++        candidate_hash=digest({"candidate": 1}),
++        scope_hash=digest({"scope": 1}),
++        obligation_set_hash=digest({"obligations": 1}),
++        proposer="mind:native",
++        information_rank=3,
++        risk_rank=3,
++        cost_rank=1,
++    )
+diff --git a/tests/test_candidate_gate.py b/tests/test_candidate_gate.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..318d4acd8b836ca3737636af1dd1eb8ee09fb607
+--- /dev/null
++++ b/tests/test_candidate_gate.py
+@@ -0,0 +1,69 @@
++from __future__ import annotations
++
++import sys
++import unittest
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parents[1]
++sys.path.insert(0, str(ROOT / "tools"))
++
++from egrt_candidate_gate import (  # noqa: E402
++    AdmissionState,
++    CandidateBinding,
++    CandidateRepair,
++    CheckStatus,
++    PatchCertificate,
++    SemanticVerification,
++    StructuralCertificate,
++    decide_admission,
++)
++
++BASE = "a" * 64
++CANDIDATE = "b" * 64
++SCOPE = "c" * 64
++OBLIGATIONS = "d" * 64
++ENVIRONMENT = "e" * 64
++
++
++def binding() -> CandidateBinding:
++    return CandidateBinding("candidate", BASE, CANDIDATE, SCOPE, OBLIGATIONS, "producer", "1")
++
++
++def structural(verifier: str = "structural", environment: str = ENVIRONMENT) -> StructuralCertificate:
++    return StructuralCertificate(BASE, CANDIDATE, SCOPE, OBLIGATIONS, verifier, "1", environment, CheckStatus.PASS)
++
++
++def semantic(verifier: str = "semantic", environment: str = ENVIRONMENT) -> SemanticVerification:
++    return SemanticVerification(BASE, CANDIDATE, SCOPE, OBLIGATIONS, verifier, "1", environment, CheckStatus.PASS)
++
++
++class CandidateGateTests(unittest.TestCase):
++    def test_bound_distinct_passes_are_committable_but_not_executable(self) -> None:
++        decision = decide_admission(binding(), structural(), semantic())
++        self.assertEqual(decision.state, AdmissionState.COMMITTABLE)
++        self.assertTrue(decision.host_commit_required)
++        self.assertFalse(decision.execution_authorized)
++
++    def test_producer_and_verifiers_must_be_distinct(self) -> None:
++        self.assertEqual(decide_admission(binding(), structural("producer"), semantic()).state, AdmissionState.REJECTED)
++        self.assertEqual(decide_admission(binding(), structural("same"), semantic("same")).state, AdmissionState.REJECTED)
++
++    def test_environment_binding_mismatch_rejected(self) -> None:
++        self.assertEqual(decide_admission(binding(), structural(), semantic(environment="f" * 64)).state, AdmissionState.REJECTED)
++
++    def test_legacy_foil_shapes_are_compatible(self) -> None:
++        candidate = CandidateRepair(
++            candidate_id="candidate",
++            base_digest=BASE,
++            candidate_digest=CANDIDATE,
++            scope_digest=SCOPE,
++            obligation_set_digest=OBLIGATIONS,
++            repair_producer="producer",
++            repair_producer_version="1",
++        )
++        certificate = PatchCertificate(BASE, CANDIDATE, SCOPE, OBLIGATIONS, "structural", "1", ENVIRONMENT, CheckStatus.PASS)
++        self.assertEqual(decide_admission(candidate, certificate, semantic()).state, AdmissionState.COMMITTABLE)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tests/test_egrt_challenge_gate.py b/tests/test_egrt_challenge_gate.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..31fbfb7d8f2fe61c2e9bc5ba12fd37c732f6de32
+--- /dev/null
++++ b/tests/test_egrt_challenge_gate.py
+@@ -0,0 +1,131 @@
++from __future__ import annotations
++
++import sys
++import tempfile
++import unittest
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parents[1]
++sys.path.insert(0, str(ROOT / "tools"))
++sys.path.insert(0, str(ROOT / "tests"))
++
++from _challenge_helpers import init_root, request  # noqa: E402
++from egrt_challenge import (  # noqa: E402
++    ChallengePolicy,
++    ChallengeSelectionError,
++    challenge_gate,
++    propose_challenge,
++    record_resolution,
++    select_minimum_discriminator,
++)
++from egrt_challenge_types import (  # noqa: E402
++    ChallengeResolution,
++    ChallengeState,
++    DiscriminatorPlan,
++    ResolutionOutcome,
++)
++from egrt_store import RuntimeStore  # noqa: E402
++from egrt_types import Receipt, Verdict  # noqa: E402
++
++
++class ChallengeGateTests(unittest.TestCase):
++    def test_challenge_gate_modes(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            challenge = request()
++            propose_challenge(root, challenge)
++            self.assertEqual(challenge_gate(root, challenge.task_id, challenge.obligation_id, mode="off")[0], Verdict.CLEARED)
++            shadow, detail = challenge_gate(root, challenge.task_id, challenge.obligation_id, mode="shadow")
++            self.assertEqual(shadow, Verdict.CLEARED)
++            self.assertEqual(detail["counterfactual_verdict"], Verdict.UNKNOWN.value)
++            self.assertEqual(challenge_gate(root, challenge.task_id, challenge.obligation_id, mode="enforced")[0], Verdict.UNKNOWN)
++
++    def test_unavailable_and_refutation_have_distinct_severity(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            unavailable = request(challenge_id="unavailable")
++            propose_challenge(root, unavailable)
++            record_resolution(root, ChallengeResolution(
++                resolution_id="unavailable-resolution",
++                challenge_id=unavailable.challenge_id,
++                state=ChallengeState.UNAVAILABLE,
++                outcome=ResolutionOutcome.INCONCLUSIVE,
++                verifier_receipt_id=None,
++                verifier_module=None,
++                evidence_hash=None,
++                candidate_hash=unavailable.candidate_hash,
++                scope_hash=unavailable.scope_hash,
++                obligation_set_hash=unavailable.obligation_set_hash,
++                resolver="mind",
++                reason="solver absent",
++            ))
++            self.assertEqual(challenge_gate(root, unavailable.task_id, unavailable.obligation_id, mode="enforced")[0], Verdict.UNAVAILABLE)
++
++            root2 = Path(directory) / "second"
++            root2.mkdir()
++            init_root(root2)
++            refuted = request(challenge_id="refuted")
++            propose_challenge(root2, refuted)
++            store = RuntimeStore(root2)
++            store.write_receipt(Receipt(
++                "counterexample", "mind", refuted.obligation_id, Verdict.ISSUE,
++                "counterexample-check", "x", task_id=refuted.task_id,
++            ))
++            stored = store.read_receipt("counterexample")
++            record_resolution(root2, ChallengeResolution(
++                resolution_id="refuted-resolution",
++                challenge_id=refuted.challenge_id,
++                state=ChallengeState.RESOLVED,
++                outcome=ResolutionOutcome.REFUTES_BASE,
++                verifier_receipt_id="counterexample",
++                verifier_module="mind",
++                evidence_hash=stored["content_hash"],
++                candidate_hash=refuted.candidate_hash,
++                scope_hash=refuted.scope_hash,
++                obligation_set_hash=refuted.obligation_set_hash,
++                resolver="mind",
++            ))
++            self.assertEqual(challenge_gate(root2, refuted.task_id, refuted.obligation_id, mode="enforced")[0], Verdict.ISSUE)
++
++    def test_minimum_discriminator(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            challenge = request()
++            propose_challenge(root, challenge)
++            weak = DiscriminatorPlan(
++                "weak", challenge.challenge_id, "review", "generic review", "mind", None,
++                "maybe support", "maybe refute", max_cost_rank=3,
++                metadata={"capability_available": True, "discrimination_rank": 1},
++            )
++            decisive = DiscriminatorPlan(
++                "decisive", challenge.challenge_id, "enumeration", "exact enumeration", "mind", "FINITE_ENUMERATION",
++                "all cases pass", "witness", max_cost_rank=1,
++                metadata={"capability_available": True, "discrimination_rank": 3},
++            )
++            selected = select_minimum_discriminator(root, challenge.challenge_id, [weak, decisive], policy=ChallengePolicy.from_root(root))
++            self.assertEqual(selected.plan_id, "decisive")
++
++    def test_incomparable_discriminators_require_host_choice(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            challenge = request()
++            propose_challenge(root, challenge)
++            information = DiscriminatorPlan(
++                "information", challenge.challenge_id, "a", "a", "mind", None, "s", "r",
++                max_cost_rank=3, metadata={"capability_available": True, "information_rank": 3, "risk_reduction_rank": 1},
++            )
++            safety = DiscriminatorPlan(
++                "safety", challenge.challenge_id, "b", "b", "mind", None, "s", "r",
++                max_cost_rank=1, metadata={"capability_available": True, "information_rank": 1, "risk_reduction_rank": 3},
++            )
++            with self.assertRaises(ChallengeSelectionError):
++                select_minimum_discriminator(root, challenge.challenge_id, [information, safety], policy=ChallengePolicy.from_root(root))
++            self.assertEqual(RuntimeStore(root).read_challenge(challenge.challenge_id)["state"], "UNRESOLVED")
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tests/test_egrt_challenge_store.py b/tests/test_egrt_challenge_store.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..fe2a8561bf6215fe5a853ddc720de1cc0ed2ae52
+--- /dev/null
++++ b/tests/test_egrt_challenge_store.py
+@@ -0,0 +1,120 @@
++from __future__ import annotations
++
++import json
++import sys
++import tempfile
++import unittest
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parents[1]
++sys.path.insert(0, str(ROOT / "tools"))
++sys.path.insert(0, str(ROOT / "tests"))
++
++from _challenge_helpers import init_root, request  # noqa: E402
++from egrt_challenge import propose_challenge, record_resolution  # noqa: E402
++from egrt_challenge_types import (  # noqa: E402
++    ChallengeResolution,
++    ChallengeState,
++    ResolutionOutcome,
++)
++from egrt_store import RuntimeStore, verify_content_hash  # noqa: E402
++from egrt_types import Receipt, Verdict, digest  # noqa: E402
++
++
++class ChallengeStoreTests(unittest.TestCase):
++    def test_challenge_content_hash(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            path = propose_challenge(root, request())
++            body = json.loads(path.read_text(encoding="utf-8"))
++            self.assertTrue(verify_content_hash(body))
++            body["hypothesis"] = "tampered"
++            path.write_text(json.dumps(body), encoding="utf-8")
++            self.assertIsNone(RuntimeStore(root).read_challenge("challenge-1"))
++
++    def test_challenge_state_machine(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            propose_challenge(root, request())
++            with self.assertRaises(ValueError):
++                propose_challenge(root, request())
++            store = RuntimeStore(root)
++            store.update_challenge_state("challenge-1", "DISMISSED_NOT_APPLICABLE", reason="not applicable")
++            with self.assertRaises(ValueError):
++                store.update_challenge_state("challenge-1", "SELECTED")
++
++    def test_challenge_binding(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            challenge = request()
++            propose_challenge(root, challenge)
++            store = RuntimeStore(root)
++            receipt = Receipt(
++                receipt_id="receipt-1",
++                module="mind",
++                obligation_id=challenge.obligation_id,
++                verdict=Verdict.CLEARED,
++                action="exact-check",
++                input_hash=digest({"x": 1}),
++                task_id=challenge.task_id,
++            )
++            store.write_receipt(receipt)
++            stored_receipt = store.read_receipt(receipt.receipt_id)
++            resolution = ChallengeResolution(
++                resolution_id="resolution-1",
++                challenge_id=challenge.challenge_id,
++                state=ChallengeState.RESOLVED,
++                outcome=ResolutionOutcome.SUPPORTS_BASE,
++                verifier_receipt_id=receipt.receipt_id,
++                verifier_module="mind",
++                evidence_hash=stored_receipt["content_hash"],
++                candidate_hash=challenge.candidate_hash,
++                scope_hash=challenge.scope_hash,
++                obligation_set_hash=challenge.obligation_set_hash,
++                resolver="mind",
++            )
++            path = record_resolution(root, resolution)
++            self.assertTrue(verify_content_hash(json.loads(path.read_text(encoding="utf-8"))))
++            self.assertEqual(store.read_challenge(challenge.challenge_id)["state"], "RESOLVED")
++            events = [event for event in store.iter_events(challenge.task_id) if event["event_type"] == "challenge.resolved"]
++            self.assertEqual(len(events), 1)
++            self.assertEqual(events[0]["metadata"]["linked_receipt_id"], receipt.receipt_id)
++
++    def test_wrong_module_receipt_cannot_resolve(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            challenge = request()
++            propose_challenge(root, challenge)
++            store = RuntimeStore(root)
++            store.write_receipt(Receipt(
++                receipt_id="receipt-1",
++                module="space",
++                obligation_id=challenge.obligation_id,
++                verdict=Verdict.CLEARED,
++                action="source-check",
++                input_hash="x",
++                task_id=challenge.task_id,
++            ))
++            resolution = ChallengeResolution(
++                resolution_id="resolution-1",
++                challenge_id=challenge.challenge_id,
++                state=ChallengeState.RESOLVED,
++                outcome=ResolutionOutcome.SUPPORTS_BASE,
++                verifier_receipt_id="receipt-1",
++                verifier_module="mind",
++                evidence_hash=None,
++                candidate_hash=challenge.candidate_hash,
++                scope_hash=challenge.scope_hash,
++                obligation_set_hash=challenge.obligation_set_hash,
++                resolver="mind",
++            )
++            with self.assertRaises(ValueError):
++                record_resolution(root, resolution)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tests/test_egrt_challenge_types.py b/tests/test_egrt_challenge_types.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..41fca6b57286ccb0c9842abf3c99f9470a1f4290
+--- /dev/null
++++ b/tests/test_egrt_challenge_types.py
+@@ -0,0 +1,62 @@
++from __future__ import annotations
++
++import sys
++import unittest
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parents[1]
++sys.path.insert(0, str(ROOT / "tools"))
++sys.path.insert(0, str(ROOT / "tests"))
++
++from _challenge_helpers import request  # noqa: E402
++from egrt_challenge_types import (  # noqa: E402
++    ChallengeResolution,
++    ChallengeState,
++    ResolutionOutcome,
++)
++
++
++class ChallengeTypeTests(unittest.TestCase):
++    def test_request_requires_sha256_binding(self) -> None:
++        row = request()
++        with self.assertRaises(ValueError):
++            type(row)(**{**row.__dict__, "candidate_hash": "not-a-hash"})
++
++    def test_resolved_requires_conclusive_outcome(self) -> None:
++        row = request()
++        with self.assertRaises(ValueError):
++            ChallengeResolution(
++                resolution_id="resolution-1",
++                challenge_id=row.challenge_id,
++                state=ChallengeState.RESOLVED,
++                outcome=ResolutionOutcome.INCONCLUSIVE,
++                verifier_receipt_id="receipt-1",
++                verifier_module="mind",
++                evidence_hash=row.candidate_hash,
++                candidate_hash=row.candidate_hash,
++                scope_hash=row.scope_hash,
++                obligation_set_hash=row.obligation_set_hash,
++                resolver="mind",
++            )
++
++    def test_unavailable_remains_distinct_from_resolved(self) -> None:
++        row = request()
++        resolution = ChallengeResolution(
++            resolution_id="resolution-1",
++            challenge_id=row.challenge_id,
++            state=ChallengeState.UNAVAILABLE,
++            outcome=ResolutionOutcome.INCONCLUSIVE,
++            verifier_receipt_id=None,
++            verifier_module=None,
++            evidence_hash=None,
++            candidate_hash=row.candidate_hash,
++            scope_hash=row.scope_hash,
++            obligation_set_hash=row.obligation_set_hash,
++            resolver="mind",
++            reason="solver absent",
++        )
++        self.assertEqual(resolution.state, ChallengeState.UNAVAILABLE)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tests/test_mind_challenge_runtime.py b/tests/test_mind_challenge_runtime.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..4581fedad84c9a83b7f1b3ff72483ead6bef8a34
+--- /dev/null
++++ b/tests/test_mind_challenge_runtime.py
+@@ -0,0 +1,218 @@
++from __future__ import annotations
++
++import sys
++import tempfile
++import unittest
++from pathlib import Path
++from unittest.mock import patch
++
++ROOT = Path(__file__).resolve().parents[1]
++sys.path.insert(0, str(ROOT / "tools"))
++sys.path.insert(0, str(ROOT / "tests"))
++
++from _challenge_helpers import init_root  # noqa: E402
++from egrt_challenge import propose_challenge  # noqa: E402
++from egrt_store import RuntimeStore  # noqa: E402
++from egrt_types import EvidenceClass, Verdict, digest  # noqa: E402
++from mind_runtime import (  # noqa: E402
++    ProofChallengeBundle,
++    ProofObligation,
++    counterexample_receipt,
++    exact_enumeration_receipt,
++    finalize_proof_bundle,
++    generate_native_challenges,
++    natural_formal_scope_receipt,
++    propose_formalizations,
++    resolve_proof_challenge,
++    run_z3_smt2,
++    select_proof_discriminator,
++    symbolic_equivalence_receipt,
++)
++
++
++class MindChallengeRuntimeTests(unittest.TestCase):
++    def _obligation(self, task_id: str = "task-mind") -> ProofObligation:
++        return ProofObligation(
++            obligation_id="obl-mind",
++            natural_claim="For every integer x in the declared domain, x squared is nonnegative.",
++            formal_claim="x**2 >= 0",
++            assumptions=("x is an integer",),
++            domain="finite-integer",
++            metadata={
++                "task_id": task_id,
++                "quantifier_map": ("forall x",),
++                "alternate_formalizations": (
++                    {"formal_claim": "x*x >= 0", "quantifier_map": ("forall x",)},
++                ),
++            },
++        )
++
++    def test_proposes_explicit_alternate_formalizations_and_bound_challenges(self) -> None:
++        obligation = self._obligation()
++        candidates = propose_formalizations(obligation)
++        self.assertEqual(len(candidates), 2)
++        base, alternate = candidates
++        scope_hash = digest({"scope": "declared integers"})
++        obligation_set_hash = digest({"obligations": [obligation.obligation_id]})
++        challenges = generate_native_challenges(
++            base,
++            (alternate,),
++            task_id="task-mind",
++            scope_hash=scope_hash,
++            obligation_set_hash=obligation_set_hash,
++        )
++        self.assertEqual(len(challenges), 2)
++        self.assertTrue(all(item.candidate_hash == base.candidate_hash for item in challenges))
++        self.assertEqual({item.kind.value for item in challenges}, {"ALTERNATE_FORMALIZATION", "COUNTEREXAMPLE"})
++
++    def test_symbolic_equivalence(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            obligation = self._obligation()
++            polynomial = symbolic_equivalence_receipt(root, obligation, "(x + 1)**2", "x**2 + 2*x + 1")
++            trig = symbolic_equivalence_receipt(root, obligation, "sin(x)**2 + cos(x)**2", "1")
++            different = symbolic_equivalence_receipt(root, obligation, "x + 1", "x + 2")
++            self.assertEqual(polynomial.verdict, Verdict.CLEARED)
++            self.assertEqual(trig.verdict, Verdict.CLEARED)
++            self.assertEqual(different.verdict, Verdict.ISSUE)
++            self.assertTrue(all(receipt.evidence[0].evidence_class is EvidenceClass.PROVEN for receipt in (polynomial, trig, different)))
++
++    def test_exact_enumeration_receipt(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            obligation = self._obligation()
++            receipt = exact_enumeration_receipt(root, obligation, {"x": range(-2, 3)}, lambda x: x < 2)
++            self.assertEqual(receipt.verdict, Verdict.ISSUE)
++            self.assertIn("COUNTEREXAMPLE", receipt.notes or "")
++            self.assertIsNotNone(receipt.evidence[0].artifact)
++
++    def test_model_only_witness_never_becomes_proven(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            obligation = self._obligation()
++            candidate = propose_formalizations(obligation)[0]
++            receipt = counterexample_receipt(root, obligation, candidate, {"x": 2})
++            self.assertEqual(receipt.verdict, Verdict.UNKNOWN)
++            self.assertEqual(receipt.evidence[0].evidence_class, EvidenceClass.HEURISTIC)
++
++    def test_missing_solver_unavailable(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            obligation = self._obligation()
++            with patch("mind_runtime._sympy_available", return_value=False):
++                receipt = symbolic_equivalence_receipt(root, obligation, "sqrt(x**2)", "x")
++            self.assertEqual(receipt.verdict, Verdict.UNAVAILABLE)
++            self.assertEqual(run_z3_smt2(root / "missing.smt2")["verdict"], Verdict.UNAVAILABLE.value)
++
++    def test_natural_formal_scope_separate(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            obligation = self._obligation()
++            base = propose_formalizations(obligation)[0]
++            scope_hash = digest({"scope": "declared"})
++            obligation_set_hash = digest({"obligations": [obligation.obligation_id]})
++            bundle = ProofChallengeBundle(
++                "scope-only", obligation.obligation_id, base.candidate_id, (), (), (),
++                task_id="task-mind", base_candidate_hash=base.candidate_hash,
++                scope_hash=scope_hash, obligation_set_hash=obligation_set_hash,
++            )
++            self.assertEqual(finalize_proof_bundle(root, bundle).verdict, Verdict.UNKNOWN)
++            scope_receipt = natural_formal_scope_receipt(
++                root, obligation, base, scope_hash=scope_hash, verifier="mind:scope-review", supported=True
++            )
++            resolved = ProofChallengeBundle(
++                **{**bundle.__dict__, "natural_scope_receipt_id": scope_receipt.receipt_id}
++            )
++            self.assertEqual(finalize_proof_bundle(root, resolved).verdict, Verdict.CLEARED)
++
++    def test_alternate_formalization_gate(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            obligation = self._obligation()
++            base, alternate = propose_formalizations(obligation)
++            scope_hash = digest({"scope": "x in -2..2"})
++            obligation_set_hash = digest({"obligations": [obligation.obligation_id]})
++            challenges = generate_native_challenges(
++                base,
++                (alternate,),
++                task_id="task-mind",
++                scope_hash=scope_hash,
++                obligation_set_hash=obligation_set_hash,
++            )
++            for challenge in challenges:
++                propose_challenge(root, challenge)
++            plan = select_proof_discriminator(challenges, {"SYMBOLIC_EQUIVALENCE": True, "FINITE_ENUMERATION": True})
++            bundle = ProofChallengeBundle(
++                bundle_id="bundle-1",
++                obligation_id=obligation.obligation_id,
++                base_candidate_id=base.candidate_id,
++                alternate_candidate_ids=(alternate.candidate_id,),
++                challenge_ids=tuple(item.challenge_id for item in challenges),
++                selected_plan_ids=(plan.plan_id,),
++                task_id="task-mind",
++                base_candidate_hash=base.candidate_hash,
++                scope_hash=scope_hash,
++                obligation_set_hash=obligation_set_hash,
++            )
++            blocked = finalize_proof_bundle(root, bundle)
++            self.assertEqual(blocked.verdict, Verdict.UNKNOWN)
++
++            bound_obligation = ProofObligation(
++                **{**obligation.__dict__, "metadata": {**obligation.metadata, "candidate_hash": base.candidate_hash, "scope_hash": scope_hash}},
++            )
++            equivalent = symbolic_equivalence_receipt(root, bound_obligation, base.formal_claim, alternate.formal_claim)
++            exhaustive = exact_enumeration_receipt(root, bound_obligation, {"x": range(-2, 3)}, lambda x: x * x >= 0)
++            resolve_proof_challenge(root, challenges[0], equivalent)
++            resolve_proof_challenge(root, challenges[1], exhaustive)
++
++            still_scope_unknown = finalize_proof_bundle(root, bundle)
++            self.assertEqual(still_scope_unknown.verdict, Verdict.UNKNOWN)
++            self.assertTrue(any("scope" in item for item in still_scope_unknown.unresolved))
++
++            scope_receipt = natural_formal_scope_receipt(
++                root,
++                obligation,
++                base,
++                scope_hash=scope_hash,
++                verifier="mind:explicit-scope-review",
++                supported=True,
++                provenance_group="scope-review-1",
++            )
++            complete_bundle = ProofChallengeBundle(
++                **{**bundle.__dict__, "natural_scope_receipt_id": scope_receipt.receipt_id},
++            )
++            cleared = finalize_proof_bundle(root, complete_bundle)
++            self.assertEqual(cleared.verdict, Verdict.CLEARED)
++            self.assertEqual(RuntimeStore(root).read_receipt(cleared.receipt_id)["module"], "mind")
++
++    def test_counterexample_refutes(self) -> None:
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            init_root(root)
++            obligation = self._obligation()
++            base = propose_formalizations(obligation)[0]
++            scope_hash = digest({"scope": "x in -2..2"})
++            obligation_set_hash = digest({"obligations": [obligation.obligation_id]})
++            challenge = generate_native_challenges(
++                base, (), task_id="task-mind", scope_hash=scope_hash, obligation_set_hash=obligation_set_hash,
++            )[0]
++            propose_challenge(root, challenge)
++            bound = ProofObligation(**{**obligation.__dict__, "metadata": {**obligation.metadata, "candidate_hash": base.candidate_hash, "scope_hash": scope_hash}})
++            counterexample = exact_enumeration_receipt(root, bound, {"x": range(-2, 3)}, lambda x: x < 2)
++            resolve_proof_challenge(root, challenge, counterexample)
++            bundle = ProofChallengeBundle(
++                "bundle-refuted", obligation.obligation_id, base.candidate_id, (), (challenge.challenge_id,), (),
++                task_id="task-mind", base_candidate_hash=base.candidate_hash,
++                scope_hash=scope_hash, obligation_set_hash=obligation_set_hash,
++            )
++            self.assertEqual(finalize_proof_bundle(root, bundle).verdict, Verdict.ISSUE)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tests/test_no_nonfoil_imports_foil_modules.py b/tests/test_no_nonfoil_imports_foil_modules.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..e636657de8e3fdbed4003415173a0976a41981a4
+--- /dev/null
++++ b/tests/test_no_nonfoil_imports_foil_modules.py
+@@ -0,0 +1,30 @@
++from __future__ import annotations
++
++import ast
++import unittest
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parents[1]
++
++
++class DependencyBoundaryTests(unittest.TestCase):
++    def test_nonfoil_runtime_modules_do_not_import_foil_modules(self) -> None:
++        violations: list[str] = []
++        for path in (ROOT / "tools").glob("*.py"):
++            if path.name.startswith("foil_"):
++                continue
++            tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
++            for node in ast.walk(tree):
++                names: list[str] = []
++                if isinstance(node, ast.Import):
++                    names = [alias.name for alias in node.names]
++                elif isinstance(node, ast.ImportFrom) and node.module:
++                    names = [node.module]
++                for name in names:
++                    if name == "foil" or name.startswith("foil_") or name.startswith("foil."):
++                        violations.append(f"{path.name}:{node.lineno}:{name}")
++        self.assertEqual(violations, [])
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tools/egrt_candidate_gate.py b/tools/egrt_candidate_gate.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..080c677c34dc02821fd5e3abf6194584ee0dd6af
+--- /dev/null
++++ b/tools/egrt_candidate_gate.py
+@@ -0,0 +1,300 @@
++"""Neutral candidate-binding and dual-verifier admission gate.
++
++The gate can make a candidate ``COMMITTABLE`` but never applies it. Exact base,
++candidate, scope, obligation-set, and environment bindings are required, and the
++producer, structural verifier, and semantic verifier must be distinct identities.
++"""
++from __future__ import annotations
++
++import re
++from dataclasses import dataclass, field
++from enum import Enum
++from typing import Protocol, runtime_checkable
++
++_SHA256 = re.compile(r"^[0-9a-fA-F]{64}$")
++
++
++def _require_text(name: str, value: object) -> None:
++    if not isinstance(value, str):
++        raise TypeError(f"{name} must be str")
++    if not value.strip():
++        raise ValueError(f"{name} must be non-empty")
++
++
++def _require_sha256(name: str, value: object) -> None:
++    if not isinstance(value, str):
++        raise TypeError(f"{name} must be str")
++    if not _SHA256.fullmatch(value):
++        raise ValueError(f"{name} must be a 64-character SHA-256 hex digest")
++
++
++class CheckStatus(str, Enum):
++    PASS = "PASS"
++    FAIL = "FAIL"
++    UNKNOWN = "UNKNOWN"
++
++
++class AdmissionState(str, Enum):
++    CERTIFICATE_REQUIRED = "CERTIFICATE_REQUIRED"
++    SEMANTIC_VERIFICATION_REQUIRED = "SEMANTIC_VERIFICATION_REQUIRED"
++    COMMITTABLE = "COMMITTABLE"
++    REJECTED = "REJECTED"
++    UNKNOWN = "UNKNOWN"
++
++
++@runtime_checkable
++class _CandidateLike(Protocol):
++    candidate_id: str
++    base_digest: str
++    candidate_digest: str
++    scope_digest: str
++    obligation_set_digest: str
++
++
++@dataclass(frozen=True)
++class CandidateBinding:
++    candidate_id: str
++    base_digest: str
++    candidate_digest: str
++    scope_digest: str
++    obligation_set_digest: str
++    producer: str
++    producer_version: str
++
++    def __post_init__(self) -> None:
++        _validate_candidate(
++            self.candidate_id,
++            self.base_digest,
++            self.candidate_digest,
++            self.scope_digest,
++            self.obligation_set_digest,
++            self.producer,
++            self.producer_version,
++        )
++
++
++@dataclass(frozen=True)
++class CandidateRepair:
++    """Compatibility shape retained for the existing FOIL authority API."""
++
++    candidate_id: str
++    base_digest: str
++    candidate_digest: str
++    scope_digest: str
++    obligation_set_digest: str
++    repair_producer: str
++    repair_producer_version: str
++
++    def __post_init__(self) -> None:
++        _validate_candidate(
++            self.candidate_id,
++            self.base_digest,
++            self.candidate_digest,
++            self.scope_digest,
++            self.obligation_set_digest,
++            self.repair_producer,
++            self.repair_producer_version,
++        )
++
++    @property
++    def producer(self) -> str:
++        return self.repair_producer
++
++    @property
++    def producer_version(self) -> str:
++        return self.repair_producer_version
++
++
++def _validate_candidate(
++    candidate_id: str,
++    base_digest: str,
++    candidate_digest: str,
++    scope_digest: str,
++    obligation_set_digest: str,
++    producer: str,
++    producer_version: str,
++) -> None:
++    for name, value in (
++        ("candidate_id", candidate_id),
++        ("producer", producer),
++        ("producer_version", producer_version),
++    ):
++        _require_text(name, value)
++    for name, value in (
++        ("base_digest", base_digest),
++        ("candidate_digest", candidate_digest),
++        ("scope_digest", scope_digest),
++        ("obligation_set_digest", obligation_set_digest),
++    ):
++        _require_sha256(name, value)
++    if base_digest == candidate_digest:
++        raise ValueError("candidate must differ from the base")
++
++
++@dataclass(frozen=True)
++class StructuralCertificate:
++    base_digest: str
++    candidate_digest: str
++    scope_digest: str
++    obligation_set_digest: str
++    verifier_id: str
++    verifier_version: str
++    environment_digest: str
++    status: CheckStatus
++
++    def __post_init__(self) -> None:
++        _validate_verification(self)
++
++
++# Existing FOIL callers use this public name.
++PatchCertificate = StructuralCertificate
++
++
++@dataclass(frozen=True)
++class SemanticVerification:
++    base_digest: str
++    candidate_digest: str
++    scope_digest: str
++    obligation_set_digest: str
++    verifier_id: str
++    verifier_version: str
++    environment_digest: str
++    status: CheckStatus
++
++    def __post_init__(self) -> None:
++        _validate_verification(self)
++
++
++def _validate_verification(value: StructuralCertificate | SemanticVerification) -> None:
++    if not isinstance(value.status, CheckStatus):
++        raise TypeError("status must be CheckStatus")
++    _require_text("verifier_id", value.verifier_id)
++    _require_text("verifier_version", value.verifier_version)
++    for name in (
++        "base_digest",
++        "candidate_digest",
++        "scope_digest",
++        "obligation_set_digest",
++        "environment_digest",
++    ):
++        _require_sha256(name, getattr(value, name))
++
++
++@dataclass(frozen=True)
++class AdmissionDecision:
++    state: AdmissionState
++    reason: str
++    candidate_id: str
++    base_answer_preserved: bool = field(default=True, init=False)
++    host_commit_required: bool = field(default=True, init=False)
++    execution_authorized: bool = field(default=False, init=False)
++
++    def __post_init__(self) -> None:
++        if not isinstance(self.state, AdmissionState):
++            raise TypeError("state must be AdmissionState")
++        _require_text("reason", self.reason)
++        _require_text("candidate_id", self.candidate_id)
++
++    @property
++    def candidate_committable(self) -> bool:
++        return self.state is AdmissionState.COMMITTABLE
++
++    def trace(self) -> dict[str, object]:
++        return {
++            "state": self.state.value,
++            "reason": self.reason,
++            "candidate_id": self.candidate_id,
++            "candidate_committable": self.candidate_committable,
++            "base_answer_preserved": self.base_answer_preserved,
++            "host_commit_required": self.host_commit_required,
++            "execution_authorized": self.execution_authorized,
++        }
++
++
++def _producer(candidate: CandidateBinding | CandidateRepair) -> str:
++    return candidate.producer
++
++
++def _binding(candidate: _CandidateLike) -> tuple[str, str, str, str]:
++    return (
++        candidate.base_digest,
++        candidate.candidate_digest,
++        candidate.scope_digest,
++        candidate.obligation_set_digest,
++    )
++
++
++def _verification_binding(
++    verification: StructuralCertificate | SemanticVerification,
++) -> tuple[str, str, str, str]:
++    return (
++        verification.base_digest,
++        verification.candidate_digest,
++        verification.scope_digest,
++        verification.obligation_set_digest,
++    )
++
++
++def decide_admission(
++    candidate: CandidateBinding | CandidateRepair,
++    certificate: StructuralCertificate | None = None,
++    semantic: SemanticVerification | None = None,
++) -> AdmissionDecision:
++    """Gate a bound candidate without granting execution or commit authority."""
++    if not isinstance(candidate, (CandidateBinding, CandidateRepair)):
++        raise TypeError("candidate must be CandidateBinding or CandidateRepair")
++    if certificate is not None and not isinstance(certificate, StructuralCertificate):
++        raise TypeError("certificate must be StructuralCertificate")
++    if semantic is not None and not isinstance(semantic, SemanticVerification):
++        raise TypeError("semantic must be SemanticVerification")
++
++    def decision(state: AdmissionState, reason: str) -> AdmissionDecision:
++        return AdmissionDecision(state=state, reason=reason, candidate_id=candidate.candidate_id)
++
++    if certificate is None:
++        return decision(AdmissionState.CERTIFICATE_REQUIRED, "certificate_missing")
++    expected = _binding(candidate)
++    if _verification_binding(certificate) != expected:
++        return decision(AdmissionState.REJECTED, "certificate_binding_mismatch")
++    producer = _producer(candidate)
++    if certificate.verifier_id == producer:
++        return decision(AdmissionState.REJECTED, "repair_producer_self_certified")
++    if certificate.status is CheckStatus.FAIL:
++        return decision(AdmissionState.REJECTED, "certificate_failed")
++    if certificate.status is CheckStatus.UNKNOWN:
++        return decision(AdmissionState.UNKNOWN, "certificate_unknown")
++
++    if semantic is None:
++        return decision(
++            AdmissionState.SEMANTIC_VERIFICATION_REQUIRED,
++            "structural_certificate_passed_semantics_missing",
++        )
++    if _verification_binding(semantic) != expected:
++        return decision(AdmissionState.REJECTED, "semantic_binding_mismatch")
++    if semantic.environment_digest != certificate.environment_digest:
++        return decision(AdmissionState.REJECTED, "verification_environment_mismatch")
++    if semantic.verifier_id == certificate.verifier_id:
++        return decision(AdmissionState.REJECTED, "structural_verifier_reused_for_semantics")
++    if semantic.verifier_id == producer:
++        return decision(AdmissionState.REJECTED, "repair_producer_self_verified_semantics")
++    if semantic.status is CheckStatus.FAIL:
++        return decision(AdmissionState.REJECTED, "semantic_verification_failed")
++    if semantic.status is CheckStatus.UNKNOWN:
++        return decision(AdmissionState.UNKNOWN, "semantic_verification_unknown")
++    return decision(
++        AdmissionState.COMMITTABLE,
++        "certificate_and_independent_semantic_verification_passed",
++    )
++
++
++__all__ = [
++    "AdmissionDecision",
++    "AdmissionState",
++    "CandidateBinding",
++    "CandidateRepair",
++    "CheckStatus",
++    "PatchCertificate",
++    "SemanticVerification",
++    "StructuralCertificate",
++    "decide_admission",
++]
+diff --git a/tools/egrt_challenge.py b/tools/egrt_challenge.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..3bce1048084f42c18069af1837d1a1861d73c40e
+--- /dev/null
++++ b/tools/egrt_challenge.py
+@@ -0,0 +1,371 @@
++"""Neutral challenge lifecycle, selection, resolution, and gate logic.
++
++Challenge proposals carry no factual authority. Only a receipt from the declared
++claim-native verifier may resolve a challenge, and the resolution never substitutes
++for the original domain receipt.
++"""
++from __future__ import annotations
++
++from dataclasses import asdict, dataclass, fields
++from pathlib import Path
++from typing import Any, Sequence
++
++from egrt_challenge_types import (
++    ChallengeOrigin,
++    ChallengeRequest,
++    ChallengeResolution,
++    ChallengeState,
++    DiscriminatorPlan,
++    ResolutionOutcome,
++)
++from egrt_store import RuntimeStore, new_id
++from egrt_types import Verdict, digest
++from gauntlet_config import challenge_config
++
++
++class ChallengeError(ValueError):
++    """Base error for invalid challenge operations."""
++
++
++class ChallengeSelectionError(ChallengeError):
++    """Raised when no unique minimum discriminator is defensible."""
++
++
++@dataclass(frozen=True)
++class ChallengePolicy:
++    mode: str = "shadow"
++    max_total_per_obligation: int = 4
++    max_load_bearing_per_obligation: int = 2
++    max_selected_discriminators: int = 2
++    allow_foil_proposals: bool = True
++    require_claim_native_receipt: bool = True
++    block_on_unavailable_load_bearing: bool = True
++    persist_raw_text: bool = False
++
++    def __post_init__(self) -> None:
++        if self.mode not in {"off", "shadow", "enforced"}:
++            raise ValueError("mode must be off, shadow, or enforced")
++        for name in (
++            "max_total_per_obligation",
++            "max_load_bearing_per_obligation",
++            "max_selected_discriminators",
++        ):
++            value = getattr(self, name)
++            if isinstance(value, bool) or not isinstance(value, int):
++                raise TypeError(f"{name} must be int")
++            if value < 0:
++                raise ValueError(f"{name} must be non-negative")
++        for name in (
++            "allow_foil_proposals",
++            "require_claim_native_receipt",
++            "block_on_unavailable_load_bearing",
++            "persist_raw_text",
++        ):
++            if not isinstance(getattr(self, name), bool):
++                raise TypeError(f"{name} must be bool")
++
++    @classmethod
++    def from_root(cls, root: Path) -> "ChallengePolicy":
++        raw = challenge_config(root)
++        names = {item.name for item in fields(cls)}
++        return cls(**{name: raw[name] for name in names if name in raw})
++
++
++def _plain(value: Any) -> dict[str, Any]:
++    return asdict(value) if hasattr(value, "__dataclass_fields__") else dict(value)
++
++
++def _dedupe_key(request: ChallengeRequest | dict[str, Any]) -> str:
++    row = _plain(request)
++    return digest({
++        "task_id": row.get("task_id"),
++        "obligation_id": row.get("obligation_id"),
++        "candidate_hash": row.get("candidate_hash"),
++        "scope_hash": row.get("scope_hash"),
++        "kind": getattr(row.get("kind"), "value", row.get("kind")),
++        "refuter": row.get("refuter"),
++    })
++
++
++def propose_challenge(root: Path, request: ChallengeRequest) -> Path:
++    policy = ChallengePolicy.from_root(root)
++    if policy.mode == "off":
++        raise ChallengeError("challenge layer is OFF")
++    if request.origin is ChallengeOrigin.FOIL and not policy.allow_foil_proposals:
++        raise ChallengeError("FOIL proposals are disabled")
++    store = RuntimeStore(root)
++    existing = store.challenges_for(request.task_id, request.obligation_id)
++    if len(existing) >= policy.max_total_per_obligation:
++        raise ChallengeError("challenge budget exhausted for obligation")
++    load_bearing = [row for row in existing if row.get("load_bearing")]
++    if request.load_bearing and len(load_bearing) >= policy.max_load_bearing_per_obligation:
++        raise ChallengeError("load-bearing challenge budget exhausted")
++    key = _dedupe_key(request)
++    if any(_dedupe_key(row) == key for row in existing):
++        raise ChallengeError("duplicate challenge for candidate, scope, kind, and refuter")
++    return store.write_challenge(request)
++
++
++def _objective(plan: DiscriminatorPlan) -> tuple[int, int, int, int, int, int]:
++    metadata = plan.metadata
++    available = 1 if metadata.get("capability_available", True) else 0
++    discrimination = int(metadata.get("discrimination_rank", 0))
++    information = int(metadata.get("information_rank", 0))
++    risk_reduction = int(metadata.get("risk_reduction_rank", 0))
++    cost = plan.max_cost_rank if plan.max_cost_rank is not None else int(metadata.get("cost_rank", 0))
++    irreversibility = int(metadata.get("irreversibility_rank", 0))
++    return available, discrimination, information, risk_reduction, cost, irreversibility
++
++
++def _dominates(left: DiscriminatorPlan, right: DiscriminatorPlan) -> bool:
++    la, ld, li, lr, lc, lx = _objective(left)
++    ra, rd, ri, rr, rc, rx = _objective(right)
++    weak = la >= ra and ld >= rd and li >= ri and lr >= rr and lc <= rc and lx <= rx
++    strict = la > ra or ld > rd or li > ri or lr > rr or lc < rc or lx < rx
++    return weak and strict
++
++
++def _plan_dedupe_key(plan: DiscriminatorPlan) -> str:
++    return digest({
++        "challenge_id": plan.challenge_id,
++        "mode": plan.mode,
++        "action": plan.action,
++        "verifier_module": plan.verifier_module,
++        "required_capability": plan.required_capability,
++        "support": plan.expected_support_signal,
++        "refute": plan.expected_refute_signal,
++        "inputs": plan.input_artifacts,
++    })
++
++
++def select_minimum_discriminator(
++    root: Path,
++    challenge_id: str,
++    plans: Sequence[DiscriminatorPlan],
++    *,
++    policy: ChallengePolicy,
++) -> DiscriminatorPlan:
++    store = RuntimeStore(root)
++    challenge = store.read_challenge(challenge_id)
++    if challenge is None:
++        raise ChallengeSelectionError("challenge not found or corrupt")
++    if not plans:
++        raise ChallengeSelectionError("no discriminator plans supplied")
++    if challenge.get("state") in {"RESOLVED", "DISMISSED_NOT_APPLICABLE"}:
++        raise ChallengeSelectionError("terminal challenge cannot select a discriminator")
++
++    unique: dict[str, DiscriminatorPlan] = {}
++    for plan in plans:
++        if plan.challenge_id != challenge_id:
++            raise ChallengeSelectionError("plan is bound to a different challenge")
++        key = _plan_dedupe_key(plan)
++        current = unique.get(key)
++        if current is None or plan.plan_id < current.plan_id:
++            unique[key] = plan
++    candidates = list(unique.values())
++    available = [plan for plan in candidates if _objective(plan)[0] == 1]
++    if available:
++        candidates = available
++    survivors = [
++        plan for plan in candidates
++        if not any(other is not plan and _dominates(other, plan) for other in candidates)
++    ]
++    if len(survivors) > 1:
++        objectives = {_objective(plan) for plan in survivors}
++        if len(objectives) == 1:
++            survivors.sort(key=lambda item: item.plan_id)
++            selected = survivors[0]
++        else:
++            store.update_challenge_state(
++                challenge_id,
++                "UNRESOLVED",
++                reason="no_unique_dominating_discriminator",
++            )
++            raise ChallengeSelectionError("no unique dominating discriminator; host/module choice required")
++    elif survivors:
++        selected = survivors[0]
++    else:  # pragma: no cover - defensive; finite non-empty Pareto set always exists
++        raise ChallengeSelectionError("no admissible discriminator")
++
++    selected_count = sum(
++        1 for row in store.challenges_for(str(challenge["task_id"]), str(challenge["obligation_id"]))
++        if row.get("selected_plan_id")
++    )
++    if selected_count >= policy.max_selected_discriminators and not challenge.get("selected_plan_id"):
++        raise ChallengeSelectionError("selected discriminator budget exhausted")
++    store.update_challenge_state(challenge_id, "SELECTED", selected_plan=_plain(selected))
++    return selected
++
++
++def record_resolution(root: Path, resolution: ChallengeResolution) -> Path:
++    store = RuntimeStore(root)
++    challenge = store.read_challenge(resolution.challenge_id)
++    if challenge is None:
++        raise ChallengeError("challenge not found or corrupt")
++    valid, reason = validate_resolution_binding(store, challenge, _plain(resolution))
++    if not valid:
++        raise ChallengeError(reason)
++    return store.write_challenge_resolution(resolution)
++
++
++def open_challenges(
++    root: Path,
++    task_id: str,
++    obligation_id: str | None = None,
++) -> list[dict[str, Any]]:
++    rows = RuntimeStore(root).challenges_for(task_id, obligation_id)
++    return [
++        row for row in rows
++        if row.get("state") not in {"RESOLVED", "DISMISSED_NOT_APPLICABLE"}
++    ]
++
++
++def validate_resolution_binding(
++    store: RuntimeStore,
++    challenge: dict[str, Any],
++    resolution: dict[str, Any],
++) -> tuple[bool, str]:
++    if resolution.get("challenge_id") != challenge.get("challenge_id"):
++        return False, "resolution challenge_id mismatch"
++    for key in ("candidate_hash", "scope_hash", "obligation_set_hash"):
++        if resolution.get(key) != challenge.get(key):
++            return False, f"resolution {key} binding mismatch"
++    state = getattr(resolution.get("state"), "value", resolution.get("state"))
++    outcome = getattr(resolution.get("outcome"), "value", resolution.get("outcome"))
++    receipt_id = resolution.get("verifier_receipt_id")
++    verifier_module = resolution.get("verifier_module")
++    if state == ChallengeState.RESOLVED.value:
++        if not receipt_id or not verifier_module:
++            return False, "resolved challenge requires claim-native receipt"
++        receipt = store.read_receipt(str(receipt_id))
++        if receipt is None:
++            return False, "linked verifier receipt is missing or corrupt"
++        if receipt.get("module") != verifier_module:
++            return False, "linked verifier module mismatch"
++        if receipt.get("obligation_id") != challenge.get("obligation_id"):
++            return False, "linked verifier obligation mismatch"
++        if receipt.get("task_id") not in (None, challenge.get("task_id")):
++            return False, "linked verifier task mismatch"
++        if outcome == ResolutionOutcome.SUPPORTS_BASE.value and receipt.get("verdict") != Verdict.CLEARED.value:
++            return False, "SUPPORTS_BASE requires a CLEARED verifier receipt"
++        if outcome == ResolutionOutcome.REFUTES_BASE.value and receipt.get("verdict") != Verdict.ISSUE.value:
++            return False, "REFUTES_BASE requires an ISSUE verifier receipt"
++        expected_hash = receipt.get("content_hash")
++        evidence_hash = resolution.get("evidence_hash")
++        if evidence_hash is not None and evidence_hash != expected_hash:
++            return False, "resolution evidence_hash mismatch"
++    elif receipt_id is not None or verifier_module is not None:
++        receipt = store.read_receipt(str(receipt_id)) if receipt_id else None
++        if receipt is None or receipt.get("module") != verifier_module:
++            return False, "invalid optional linked verifier receipt"
++    return True, "ok"
++
++
++def _challenge_effect(store: RuntimeStore, challenge: dict[str, Any], policy: ChallengePolicy) -> tuple[Verdict, dict[str, Any]]:
++    state = str(challenge.get("state") or ChallengeState.PROPOSED.value)
++    detail: dict[str, Any] = {
++        "challenge_id": challenge.get("challenge_id"),
++        "kind": challenge.get("kind"),
++        "state": state,
++        "load_bearing": bool(challenge.get("load_bearing")),
++    }
++    if state == ChallengeState.DISMISSED_NOT_APPLICABLE.value:
++        detail["outcome"] = "DISMISSED_NOT_APPLICABLE"
++        return Verdict.CLEARED, detail
++    resolution = store.latest_resolution(str(challenge.get("challenge_id")))
++    if state == ChallengeState.RESOLVED.value:
++        if resolution is None:
++            detail["reason"] = "resolved_state_without_valid_resolution"
++            return Verdict.UNKNOWN, detail
++        valid, reason = validate_resolution_binding(store, challenge, resolution)
++        if not valid:
++            detail["reason"] = reason
++            return Verdict.ISSUE, detail
++        outcome = str(resolution.get("outcome"))
++        detail.update({"outcome": outcome, "resolution_id": resolution.get("resolution_id")})
++        if outcome == ResolutionOutcome.REFUTES_BASE.value:
++            return Verdict.ISSUE, detail
++        if outcome == ResolutionOutcome.SCOPE_SPLIT.value:
++            return Verdict.UNKNOWN, detail
++        if outcome == ResolutionOutcome.SUPPORTS_BASE.value:
++            return Verdict.CLEARED, detail
++        return Verdict.UNKNOWN, detail
++    if state == ChallengeState.UNAVAILABLE.value:
++        mandatory = bool(challenge.get("load_bearing")) and policy.block_on_unavailable_load_bearing
++        detail["mandatory"] = mandatory
++        return (Verdict.UNAVAILABLE if mandatory else Verdict.UNKNOWN), detail
++    return Verdict.UNKNOWN, detail
++
++
++def challenge_gate(
++    root: Path,
++    task_id: str,
++    obligation_id: str,
++    *,
++    mode: str,
++) -> tuple[Verdict, dict[str, Any]]:
++    mode = mode.lower()
++    if mode not in {"off", "shadow", "enforced"}:
++        raise ValueError("mode must be off, shadow, or enforced")
++    policy = ChallengePolicy.from_root(root)
++    policy = ChallengePolicy(**{**asdict(policy), "mode": mode})
++    if mode == "off":
++        return Verdict.CLEARED, {
++            "mode": "off", "applied": False, "status": "NOT_APPLICABLE",
++            "task_id": task_id, "obligation_id": obligation_id, "challenges": [],
++        }
++    store = RuntimeStore(root)
++    rows = [row for row in store.challenges_for(task_id, obligation_id) if row.get("load_bearing")]
++    effects: list[tuple[Verdict, dict[str, Any]]] = [_challenge_effect(store, row, policy) for row in rows]
++    verdict = Verdict.CLEARED
++    severity = {Verdict.CLEARED: 0, Verdict.UNKNOWN: 1, Verdict.UNAVAILABLE: 2, Verdict.ISSUE: 3}
++    for effect, _ in effects:
++        if severity[effect] > severity[verdict]:
++            verdict = effect
++    detail = {
++        "mode": mode,
++        "applied": mode == "enforced",
++        "task_id": task_id,
++        "obligation_id": obligation_id,
++        "load_bearing_count": len(rows),
++        "challenges": [item for _, item in effects],
++        "counterfactual_verdict": verdict.value,
++    }
++    if mode == "shadow":
++        return Verdict.CLEARED, detail
++    return verdict, detail
++
++
++def resolution_for_receipt(
++    root: Path,
++    challenge_id: str,
++    receipt_id: str,
++    *,
++    outcome: ResolutionOutcome,
++    resolver: str,
++    resolver_provenance: str | None = None,
++    reason: str | None = None,
++) -> ChallengeResolution:
++    """Build a hash-bound resolution from an existing claim-native receipt."""
++    store = RuntimeStore(root)
++    challenge = store.read_challenge(challenge_id)
++    if challenge is None:
++        raise ChallengeError("challenge not found or corrupt")
++    receipt = store.read_receipt(receipt_id)
++    if receipt is None:
++        raise ChallengeError("receipt not found or corrupt")
++    return ChallengeResolution(
++        resolution_id=new_id("cres"),
++        challenge_id=challenge_id,
++        state=ChallengeState.RESOLVED,
++        outcome=outcome,
++        verifier_receipt_id=receipt_id,
++        verifier_module=str(receipt.get("module")),
++        evidence_hash=str(receipt.get("content_hash")),
++        candidate_hash=str(challenge.get("candidate_hash")),
++        scope_hash=str(challenge.get("scope_hash")),
++        obligation_set_hash=str(challenge.get("obligation_set_hash")),
++        resolver=resolver,
++        resolver_provenance=resolver_provenance,
++        reason=reason,
++    )
+diff --git a/tools/egrt_challenge_types.py b/tools/egrt_challenge_types.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..3000f93e0db45fb8b9a0ea461dc63241df0ab4d7
+--- /dev/null
++++ b/tools/egrt_challenge_types.py
+@@ -0,0 +1,232 @@
++"""Neutral, additive challenge contracts for the EGR typed runtime.
++
++The challenge schema is deliberately separate from ``egrt.runtime.v1``. A challenge
++is a proposal about a bound candidate; it is not evidence and cannot satisfy the
++underlying domain obligation.
++"""
++from __future__ import annotations
++
++import re
++from dataclasses import dataclass, field
++from enum import Enum
++from typing import Any
++
++from egrt_types import ArtifactRef
++
++SCHEMA_VERSION = "egrt.challenge.v1"
++_SHA256 = re.compile(r"^[0-9a-f]{64}$")
++
++
++class ChallengeOrigin(str, Enum):
++    USER = "USER"
++    MODULE_NATIVE = "MODULE_NATIVE"
++    FOIL = "FOIL"
++    GAUNTLET = "GAUNTLET"
++    COUNCIL = "COUNCIL"
++
++
++class ChallengeKind(str, Enum):
++    ALTERNATE_FORMALIZATION = "ALTERNATE_FORMALIZATION"
++    CLAIM_NEGATION = "CLAIM_NEGATION"
++    COUNTEREXAMPLE = "COUNTEREXAMPLE"
++    ASSUMPTION_KNOCKOUT = "ASSUMPTION_KNOCKOUT"
++    REPRESENTATION_SWAP = "REPRESENTATION_SWAP"
++    SOURCE_CONFLICT = "SOURCE_CONFLICT"
++    RETRIEVAL_REFRAME = "RETRIEVAL_REFRAME"
++    NOVELTY_COSTUME = "NOVELTY_COSTUME"
++    FAILURE_CLASS = "FAILURE_CLASS"
++    METAMORPHIC_RELATION = "METAMORPHIC_RELATION"
++    BASELINE_OR_ESTIMAND = "BASELINE_OR_ESTIMAND"
++    CONTAMINATION = "CONTAMINATION"
++    STATE_DRIFT = "STATE_DRIFT"
++    DECISION_REVERSAL = "DECISION_REVERSAL"
++    REVIEW_DIVERSITY = "REVIEW_DIVERSITY"
++    OUTPUT_CONTRACT = "OUTPUT_CONTRACT"
++
++
++class ChallengeState(str, Enum):
++    PROPOSED = "PROPOSED"
++    SELECTED = "SELECTED"
++    RUNNING = "RUNNING"
++    RESOLVED = "RESOLVED"
++    UNRESOLVED = "UNRESOLVED"
++    UNAVAILABLE = "UNAVAILABLE"
++    DISMISSED_NOT_APPLICABLE = "DISMISSED_NOT_APPLICABLE"
++
++
++class ResolutionOutcome(str, Enum):
++    SUPPORTS_BASE = "SUPPORTS_BASE"
++    REFUTES_BASE = "REFUTES_BASE"
++    SCOPE_SPLIT = "SCOPE_SPLIT"
++    INCONCLUSIVE = "INCONCLUSIVE"
++
++
++def _require_text(name: str, value: object) -> None:
++    if not isinstance(value, str):
++        raise TypeError(f"{name} must be str")
++    if not value.strip():
++        raise ValueError(f"{name} must be non-empty")
++
++
++def _require_optional_text(name: str, value: object) -> None:
++    if value is not None:
++        _require_text(name, value)
++
++
++def _require_hash(name: str, value: object) -> None:
++    if not isinstance(value, str):
++        raise TypeError(f"{name} must be str")
++    if not _SHA256.fullmatch(value):
++        raise ValueError(f"{name} must be a lowercase 64-character SHA-256 digest")
++
++
++def _require_rank(name: str, value: object) -> None:
++    if value is None:
++        return
++    if isinstance(value, bool) or not isinstance(value, int):
++        raise TypeError(f"{name} must be int or None")
++    if value < 0:
++        raise ValueError(f"{name} must be non-negative")
++
++
++def _require_mapping(name: str, value: object) -> None:
++    if not isinstance(value, dict):
++        raise TypeError(f"{name} must be dict")
++    if any(not isinstance(key, str) for key in value):
++        raise TypeError(f"{name} keys must be str")
++
++
++@dataclass(frozen=True)
++class ChallengeRequest:
++    challenge_id: str
++    task_id: str
++    obligation_id: str
++    target_module: str
++    origin: ChallengeOrigin
++    kind: ChallengeKind
++    hypothesis: str
++    alternative: str | None
++    refuter: str
++    consequence_if_true: str
++    load_bearing: bool
++    required_capability: str | None
++    candidate_hash: str
++    scope_hash: str
++    obligation_set_hash: str
++    proposer: str
++    proposer_provenance: str | None = None
++    information_rank: int | None = None
++    risk_rank: int | None = None
++    cost_rank: int | None = None
++    metadata: dict[str, Any] = field(default_factory=dict)
++    schema: str = SCHEMA_VERSION
++
++    def __post_init__(self) -> None:
++        for name in (
++            "challenge_id", "task_id", "obligation_id", "target_module",
++            "hypothesis", "refuter", "consequence_if_true", "proposer",
++        ):
++            _require_text(name, getattr(self, name))
++        if not isinstance(self.origin, ChallengeOrigin):
++            raise TypeError("origin must be ChallengeOrigin")
++        if not isinstance(self.kind, ChallengeKind):
++            raise TypeError("kind must be ChallengeKind")
++        if not isinstance(self.load_bearing, bool):
++            raise TypeError("load_bearing must be bool")
++        for name in ("alternative", "required_capability", "proposer_provenance"):
++            _require_optional_text(name, getattr(self, name))
++        for name in ("candidate_hash", "scope_hash", "obligation_set_hash"):
++            _require_hash(name, getattr(self, name))
++        for name in ("information_rank", "risk_rank", "cost_rank"):
++            _require_rank(name, getattr(self, name))
++        _require_mapping("metadata", self.metadata)
++        if self.schema != SCHEMA_VERSION:
++            raise ValueError(f"schema must be {SCHEMA_VERSION}")
++
++
++@dataclass(frozen=True)
++class DiscriminatorPlan:
++    plan_id: str
++    challenge_id: str
++    mode: str
++    action: str
++    verifier_module: str
++    required_capability: str | None
++    expected_support_signal: str
++    expected_refute_signal: str
++    input_artifacts: tuple[ArtifactRef, ...] = ()
++    timeout_seconds: int | None = None
++    max_cost_rank: int | None = None
++    metadata: dict[str, Any] = field(default_factory=dict)
++    schema: str = SCHEMA_VERSION
++
++    def __post_init__(self) -> None:
++        for name in (
++            "plan_id", "challenge_id", "mode", "action", "verifier_module",
++            "expected_support_signal", "expected_refute_signal",
++        ):
++            _require_text(name, getattr(self, name))
++        _require_optional_text("required_capability", self.required_capability)
++        if not isinstance(self.input_artifacts, tuple):
++            raise TypeError("input_artifacts must be tuple")
++        if any(not isinstance(item, ArtifactRef) for item in self.input_artifacts):
++            raise TypeError("input_artifacts must contain ArtifactRef values")
++        _require_rank("max_cost_rank", self.max_cost_rank)
++        if self.timeout_seconds is not None:
++            if isinstance(self.timeout_seconds, bool) or not isinstance(self.timeout_seconds, int):
++                raise TypeError("timeout_seconds must be int or None")
++            if self.timeout_seconds <= 0:
++                raise ValueError("timeout_seconds must be positive")
++        _require_mapping("metadata", self.metadata)
++        if self.schema != SCHEMA_VERSION:
++            raise ValueError(f"schema must be {SCHEMA_VERSION}")
++
++
++@dataclass(frozen=True)
++class ChallengeResolution:
++    resolution_id: str
++    challenge_id: str
++    state: ChallengeState
++    outcome: ResolutionOutcome
++    verifier_receipt_id: str | None
++    verifier_module: str | None
++    evidence_hash: str | None
++    candidate_hash: str
++    scope_hash: str
++    obligation_set_hash: str
++    resolver: str
++    resolver_provenance: str | None = None
++    reason: str | None = None
++    metadata: dict[str, Any] = field(default_factory=dict)
++    schema: str = SCHEMA_VERSION
++
++    def __post_init__(self) -> None:
++        for name in ("resolution_id", "challenge_id", "resolver"):
++            _require_text(name, getattr(self, name))
++        if not isinstance(self.state, ChallengeState):
++            raise TypeError("state must be ChallengeState")
++        if not isinstance(self.outcome, ResolutionOutcome):
++            raise TypeError("outcome must be ResolutionOutcome")
++        for name in ("verifier_receipt_id", "verifier_module", "resolver_provenance", "reason"):
++            _require_optional_text(name, getattr(self, name))
++        if self.evidence_hash is not None:
++            _require_hash("evidence_hash", self.evidence_hash)
++        for name in ("candidate_hash", "scope_hash", "obligation_set_hash"):
++            _require_hash(name, getattr(self, name))
++        _require_mapping("metadata", self.metadata)
++        if (self.verifier_receipt_id is None) != (self.verifier_module is None):
++            raise ValueError("verifier_receipt_id and verifier_module must be provided together")
++        if self.state is ChallengeState.RESOLVED and self.outcome is ResolutionOutcome.INCONCLUSIVE:
++            raise ValueError("RESOLVED cannot have an INCONCLUSIVE outcome")
++        if self.state in {
++            ChallengeState.PROPOSED,
++            ChallengeState.SELECTED,
++            ChallengeState.RUNNING,
++            ChallengeState.UNRESOLVED,
++            ChallengeState.UNAVAILABLE,
++        } and self.outcome is not ResolutionOutcome.INCONCLUSIVE:
++            raise ValueError(f"{self.state.value} requires INCONCLUSIVE outcome")
++        if self.state is ChallengeState.DISMISSED_NOT_APPLICABLE and not self.reason:
++            raise ValueError("dismissed challenge requires a reason")
++        if self.schema != SCHEMA_VERSION:
++            raise ValueError(f"schema must be {SCHEMA_VERSION}")
+diff --git a/tools/egrt_store.py b/tools/egrt_store.py
+index f297f5922841ac6590a236ec5f621c8d7557f646..6722ce5053df8b5c879970fea5156ded7f4bc3e1 100644
+--- a/tools/egrt_store.py
++++ b/tools/egrt_store.py
+@@ -1,8 +1,9 @@
+-"""Private, config-aware state and content-addressed receipt storage.
++"""Private, config-aware state and content-addressed runtime storage.
+ 
+-Mutable task/component state is owner-private. Receipts and generic events are
+-integrity-protected with canonical SHA-256 content hashes. Integrity is not semantic
+-truth: claim-native verification remains the responsibility of the owning module.
++Mutable task/component state is owner-private. Receipts, challenges, resolutions, and
++generic events are integrity-protected with canonical SHA-256 content hashes. Integrity
++is not semantic truth: claim-native verification remains the responsibility of the
++owning module.
+ """
+ from __future__ import annotations
+ 
+@@ -49,6 +50,17 @@ def verify_content_hash(body: dict[str, Any]) -> bool:
+     return bool(expected) and digest(_integrity_body(body)) == expected
+ 
+ 
++_ALLOWED_CHALLENGE_TRANSITIONS: dict[str, frozenset[str]] = {
++    "PROPOSED": frozenset({"SELECTED", "UNRESOLVED", "UNAVAILABLE", "RESOLVED", "DISMISSED_NOT_APPLICABLE"}),
++    "SELECTED": frozenset({"RUNNING", "UNRESOLVED", "UNAVAILABLE", "RESOLVED", "DISMISSED_NOT_APPLICABLE"}),
++    "RUNNING": frozenset({"UNRESOLVED", "UNAVAILABLE", "RESOLVED"}),
++    "UNRESOLVED": frozenset({"SELECTED", "RUNNING", "UNAVAILABLE", "RESOLVED", "DISMISSED_NOT_APPLICABLE"}),
++    "UNAVAILABLE": frozenset({"SELECTED", "RUNNING", "UNRESOLVED", "RESOLVED", "DISMISSED_NOT_APPLICABLE"}),
++    "RESOLVED": frozenset(),
++    "DISMISSED_NOT_APPLICABLE": frozenset(),
++}
++
++
+ class RuntimeStore:
+     def __init__(self, root: Path, state_dir: str | None = None) -> None:
+         self.root = Path(root).resolve()
+@@ -62,6 +74,8 @@ class RuntimeStore:
+         self.tasks = ensure_private_dir(self.base / "tasks")
+         self.receipts = ensure_private_dir(self.base / "receipts")
+         self.events = ensure_private_dir(self.base / "events")
++        self.challenges = ensure_private_dir(self.base / "challenges")
++        self.challenge_resolutions = ensure_private_dir(self.base / "challenge_resolutions")
+         self.councils = ensure_private_dir(self.base / "councils")
+         self.meditate = ensure_private_dir(self.base / "meditate")
+         self.locks = ensure_private_dir(self.base / "locks")
+@@ -69,17 +83,26 @@ class RuntimeStore:
+     def _write(self, path: Path, value: Any) -> Path:
+         return write_private_text(path, json.dumps(_serialize(value), indent=2, sort_keys=True) + "\n")
+ 
++    @staticmethod
++    def _read(path: Path, *, require_integrity: bool = True) -> dict[str, Any] | None:
++        if not path.exists():
++            return None
++        try:
++            body = json.loads(path.read_text(encoding="utf-8"))
++        except (OSError, json.JSONDecodeError):
++            return None
++        if not isinstance(body, dict):
++            return None
++        if require_integrity and not verify_content_hash(body):
++            return None
++        return body
++
+     def lock(self, name: str):
+         """Advisory lock scoped to this store, for read-modify-write cycles."""
+         return file_lock(self.locks / f"{name}.lock")
+ 
+     def next_seq(self) -> int:
+-        """Monotonic per-store sequence number.
+-
+-        Wall-clock timestamps tie on Windows for consecutive writes, so ordering by
+-        timestamp alone is not a total order. The counter breaks the tie in true
+-        write order rather than by filename.
+-        """
++        """Monotonic per-store sequence number, used to break timestamp ties."""
+         with self.lock("seq"):
+             path = self.base / "seq_counter.json"
+             current = 0
+@@ -104,24 +127,12 @@ class RuntimeStore:
+         return self._write(self.tasks / f"{task_id}.json", body)
+ 
+     def read_task(self, task_id: str, *, require_integrity: bool = True) -> dict[str, Any] | None:
+-        path = self.tasks / f"{task_id}.json"
+-        if not path.exists():
+-            return None
+-        try:
+-            body = json.loads(path.read_text(encoding="utf-8"))
+-        except (OSError, json.JSONDecodeError):
+-            return None
+-        if not isinstance(body, dict):
+-            return None
+-        if require_integrity and not verify_content_hash(body):
+-            return None
+-        return body
++        return self._read(self.tasks / f"{task_id}.json", require_integrity=require_integrity)
+ 
+     def task_for_obligation(self, obligation_id: str) -> str | None:
+         for path in self.tasks.glob("*.json"):
+-            try:
+-                task = json.loads(path.read_text(encoding="utf-8"))
+-            except (OSError, json.JSONDecodeError):
++            task = self._read(path)
++            if task is None:
+                 continue
+             if any(row.get("obligation_id") == obligation_id for row in task.get("obligations", [])):
+                 return str(task.get("task_id") or path.stem)
+@@ -129,21 +140,17 @@ class RuntimeStore:
+ 
+     def write_receipt(self, receipt: Receipt) -> Path:
+         body = json.loads(canonical_json(receipt))
+-        # Every stored receipt must name the task it gates, so the release gate can
+-        # reject receipts belonging to a different task instead of trusting any
+-        # receipt that happens to share an obligation id.
+         task_id = receipt.task_id or self.task_for_obligation(receipt.obligation_id)
+         body["task_id"] = task_id
+         body["stored_at"] = utcnow()
+         body["seq"] = self.next_seq()
+         body["content_hash"] = digest(body)
+         path = self._write(self.receipts / f"{receipt.receipt_id}.json", body)
+-        # Structured events let Gauntlet monitor release/evidence state without
+-        # persisting raw prompts or raw tool outputs.
+         self.append_event(RuntimeEvent(
+             event_id=new_id("evt"), event_type="receipt.written", component=receipt.module,
+             task_id=task_id, payload_hash=body["content_hash"], timestamp=utcnow(),
+-            metadata={"receipt_id": receipt.receipt_id, "obligation_id": receipt.obligation_id, "verdict": receipt.verdict.value, "action": receipt.action},
++            metadata={"receipt_id": receipt.receipt_id, "obligation_id": receipt.obligation_id,
++                      "verdict": receipt.verdict.value, "action": receipt.action},
+         ))
+         self.append_event(RuntimeEvent(
+             event_id=new_id("evt"), event_type="obligation.state", component=receipt.module,
+@@ -169,37 +176,232 @@ class RuntimeStore:
+         return path
+ 
+     def read_receipt(self, receipt_id: str, *, require_integrity: bool = True) -> dict[str, Any] | None:
+-        path = self.receipts / f"{receipt_id}.json"
+-        if not path.exists():
+-            return None
+-        try:
+-            body = json.loads(path.read_text(encoding="utf-8"))
+-        except (OSError, json.JSONDecodeError):
+-            return None
+-        if require_integrity and not verify_content_hash(body):
+-            return None
+-        return body
++        return self._read(self.receipts / f"{receipt_id}.json", require_integrity=require_integrity)
+ 
+     def receipts_for(self, obligation_id: str, *, valid_only: bool = True) -> list[dict[str, Any]]:
+         out: list[dict[str, Any]] = []
+         for path in self.receipts.glob("*.json"):
+-            try:
+-                row = json.loads(path.read_text(encoding="utf-8"))
+-            except (OSError, json.JSONDecodeError):
+-                continue
+-            if row.get("obligation_id") != obligation_id:
+-                continue
+-            if valid_only and not verify_content_hash(row):
++            row = self._read(path, require_integrity=valid_only)
++            if row is None or row.get("obligation_id") != obligation_id:
+                 continue
+             out.append(row)
+-        # (stored_at, seq): the timestamp orders across stores, the per-store counter
+-        # breaks the ties the clock produces. Receipts written before `seq` existed
+-        # sort before any sequenced receipt rather than at an arbitrary position.
+         out.sort(key=_receipt_order)
+         return out
+ 
++    def write_challenge(self, challenge: Any) -> Path:
++        """Persist a new neutral challenge; duplicate identifiers are rejected."""
++        body = _serialize(challenge) if is_dataclass(challenge) else dict(challenge)
++        challenge_id = str(body.get("challenge_id") or "")
++        if not challenge_id:
++            raise ValueError("challenge_id is required")
++        path = self.challenges / f"{challenge_id}.json"
++        with self.lock(f"challenge-{challenge_id}"):
++            if path.exists():
++                raise ValueError(f"duplicate challenge_id: {challenge_id}")
++            body["state"] = "PROPOSED"
++            body["stored_at"] = utcnow()
++            body["seq"] = self.next_seq()
++            body["content_hash"] = digest(body)
++            written = self._write(path, body)
++        self._append_challenge_event("challenge.proposed", body, metadata={
++            "origin": body.get("origin"), "kind": body.get("kind"),
++            "load_bearing": body.get("load_bearing"), "candidate_hash": body.get("candidate_hash"),
++            "scope_hash": body.get("scope_hash"), "proposer_provenance": body.get("proposer_provenance"),
++        })
++        return written
++
++    def read_challenge(self, challenge_id: str, *, require_integrity: bool = True) -> dict[str, Any] | None:
++        return self._read(self.challenges / f"{challenge_id}.json", require_integrity=require_integrity)
++
++    def challenges_for(
++        self,
++        task_id: str,
++        obligation_id: str | None = None,
++        *,
++        valid_only: bool = True,
++    ) -> list[dict[str, Any]]:
++        rows: list[dict[str, Any]] = []
++        for path in self.challenges.glob("*.json"):
++            row = self._read(path, require_integrity=valid_only)
++            if row is None or row.get("task_id") != task_id:
++                continue
++            if obligation_id is not None and row.get("obligation_id") != obligation_id:
++                continue
++            rows.append(row)
++        rows.sort(key=_receipt_order)
++        return rows
++
++    def update_challenge_state(
++        self,
++        challenge_id: str,
++        state: str,
++        *,
++        selected_plan: dict[str, Any] | None = None,
++        reason: str | None = None,
++        component: str = "challenge",
++        emit_event: bool = True,
++    ) -> Path:
++        """Apply one validated lifecycle transition while retaining integrity metadata."""
++        state = str(state).upper()
++        if state not in _ALLOWED_CHALLENGE_TRANSITIONS:
++            raise ValueError(f"invalid challenge state: {state}")
++        path = self.challenges / f"{challenge_id}.json"
++        with self.lock(f"challenge-{challenge_id}"):
++            body = self._read(path)
++            if body is None:
++                raise ValueError(f"challenge not found or corrupt: {challenge_id}")
++            current = str(body.get("state") or "PROPOSED")
++            if state != current and state not in _ALLOWED_CHALLENGE_TRANSITIONS.get(current, frozenset()):
++                raise ValueError(f"invalid challenge transition: {current} -> {state}")
++            body.pop("content_hash", None)
++            body["state"] = state
++            if selected_plan is not None:
++                body["selected_plan"] = selected_plan
++                body["selected_plan_id"] = selected_plan.get("plan_id")
++            if reason is not None:
++                body["state_reason"] = reason
++            body["updated_at"] = utcnow()
++            body["seq"] = self.next_seq()
++            body["content_hash"] = digest(body)
++            written = self._write(path, body)
++        event_type = {
++            "SELECTED": "challenge.selected",
++            "RUNNING": "challenge.running",
++            "RESOLVED": "challenge.resolved",
++            "UNRESOLVED": "challenge.unresolved",
++            "UNAVAILABLE": "challenge.unavailable",
++            "DISMISSED_NOT_APPLICABLE": "challenge.dismissed",
++        }.get(state)
++        if event_type and emit_event:
++            metadata: dict[str, Any] = {"state": state, "reason": reason}
++            if selected_plan is not None:
++                metadata.update({
++                    "plan_id": selected_plan.get("plan_id"),
++                    "verifier_module": selected_plan.get("verifier_module"),
++                    "capability": selected_plan.get("required_capability"),
++                })
++            self._append_challenge_event(event_type, body, component=component, metadata=metadata)
++        return written
++
++    def write_challenge_resolution(self, resolution: Any) -> Path:
++        """Persist a resolution after validating binding and its claim-native receipt."""
++        body = _serialize(resolution) if is_dataclass(resolution) else dict(resolution)
++        resolution_id = str(body.get("resolution_id") or "")
++        challenge_id = str(body.get("challenge_id") or "")
++        if not resolution_id or not challenge_id:
++            raise ValueError("resolution_id and challenge_id are required")
++        if str(body.get("state")) not in {
++            "RESOLVED", "UNRESOLVED", "UNAVAILABLE", "DISMISSED_NOT_APPLICABLE",
++        }:
++            raise ValueError("resolution state must be terminal, unresolved, unavailable, or dismissed")
++        path = self.challenge_resolutions / f"{resolution_id}.json"
++        with self.lock(f"challenge-resolution-{challenge_id}"):
++            if path.exists():
++                raise ValueError(f"duplicate resolution_id: {resolution_id}")
++            challenge = self.read_challenge(challenge_id)
++            if challenge is None:
++                raise ValueError(f"challenge not found or corrupt: {challenge_id}")
++            for key in ("candidate_hash", "scope_hash", "obligation_set_hash"):
++                if body.get(key) != challenge.get(key):
++                    raise ValueError(f"resolution {key} binding mismatch")
++            receipt_id = body.get("verifier_receipt_id")
++            verifier_module = body.get("verifier_module")
++            if receipt_id is not None:
++                receipt = self.read_receipt(str(receipt_id))
++                if receipt is None:
++                    raise ValueError("linked verifier receipt is missing or corrupt")
++                if receipt.get("module") != verifier_module:
++                    raise ValueError("linked verifier module mismatch")
++                if receipt.get("obligation_id") != challenge.get("obligation_id"):
++                    raise ValueError("linked verifier receipt obligation mismatch")
++                if receipt.get("task_id") not in (None, challenge.get("task_id")):
++                    raise ValueError("linked verifier receipt task mismatch")
++                receipt_hash = receipt.get("content_hash")
++                if body.get("evidence_hash") is not None and body.get("evidence_hash") != receipt_hash:
++                    raise ValueError("resolution evidence_hash must bind the linked receipt")
++                body["evidence_hash"] = receipt_hash
++            elif body.get("state") == "RESOLVED":
++                raise ValueError("resolved challenge requires a claim-native verifier receipt")
++            body["stored_at"] = utcnow()
++            body["seq"] = self.next_seq()
++            body["content_hash"] = digest(body)
++            written = self._write(path, body)
++            self.update_challenge_state(
++                challenge_id,
++                str(body["state"]),
++                reason=body.get("reason"),
++                component=str(body.get("resolver") or "challenge"),
++                emit_event=False,
++            )
++        event_type = {
++            "RESOLVED": "challenge.resolved",
++            "UNRESOLVED": "challenge.unresolved",
++            "UNAVAILABLE": "challenge.unavailable",
++            "DISMISSED_NOT_APPLICABLE": "challenge.dismissed",
++        }[str(body["state"])]
++        self._append_challenge_event(
++            event_type,
++            {**challenge, "content_hash": body["content_hash"]},
++            component=str(body.get("resolver") or "challenge"),
++            metadata={
++                "resolution_id": resolution_id,
++                "outcome": body.get("outcome"),
++                "linked_receipt_id": body.get("verifier_receipt_id"),
++                "evidence_hash": body.get("evidence_hash"),
++                "candidate_hash": body.get("candidate_hash"),
++                "scope_hash": body.get("scope_hash"),
++                "obligation_set_hash": body.get("obligation_set_hash"),
++            },
++        )
++        return written
++
++    def read_challenge_resolution(
++        self,
++        resolution_id: str,
++        *,
++        require_integrity: bool = True,
++    ) -> dict[str, Any] | None:
++        return self._read(
++            self.challenge_resolutions / f"{resolution_id}.json",
++            require_integrity=require_integrity,
++        )
++
++    def latest_resolution(self, challenge_id: str, *, valid_only: bool = True) -> dict[str, Any] | None:
++        rows: list[dict[str, Any]] = []
++        for path in self.challenge_resolutions.glob("*.json"):
++            row = self._read(path, require_integrity=valid_only)
++            if row is not None and row.get("challenge_id") == challenge_id:
++                rows.append(row)
++        if not rows:
++            return None
++        rows.sort(key=_receipt_order)
++        return rows[-1]
++
++    def _append_challenge_event(
++        self,
++        event_type: str,
++        body: dict[str, Any],
++        *,
++        component: str = "challenge",
++        metadata: dict[str, Any] | None = None,
++    ) -> Path:
++        base_metadata = {
++            "challenge_id": body.get("challenge_id"),
++            "obligation_id": body.get("obligation_id"),
++        }
++        if metadata:
++            base_metadata.update({key: value for key, value in metadata.items() if value is not None})
++        return self.append_event(RuntimeEvent(
++            event_id=new_id("evt"),
++            event_type=event_type,
++            component=component,
++            task_id=body.get("task_id"),
++            payload_hash=str(body.get("content_hash") or digest(body)),
++            timestamp=utcnow(),
++            metadata=base_metadata,
++        ))
++
+     def append_event(self, event: RuntimeEvent) -> Path:
+-        # Generic event state contains only structured metadata and hashes.
+         body = json.loads(canonical_json(event))
+         body["content_hash"] = digest(body)
+         return self._write(self.events / f"{event.timestamp.replace(':', '-')}-{event.event_id}.json", body)
+@@ -207,11 +409,8 @@ class RuntimeStore:
+     def iter_events(self, task_id: str | None = None, *, valid_only: bool = True) -> list[dict[str, Any]]:
+         rows: list[dict[str, Any]] = []
+         for path in sorted(self.events.glob("*.json")):
+-            try:
+-                row = json.loads(path.read_text(encoding="utf-8"))
+-            except (OSError, json.JSONDecodeError):
+-                continue
+-            if valid_only and not verify_content_hash(row):
++            row = self._read(path, require_integrity=valid_only)
++            if row is None:
+                 continue
+             if task_id is None or row.get("task_id") == task_id:
+                 rows.append(row)
+diff --git a/tools/foil_authority.py b/tools/foil_authority.py
+index fed4b7b916a3e655f9305e7ac6c334df3292b7d2..d8da6b65520abb5422002ebf3288044506776aa2 100644
+--- a/tools/foil_authority.py
++++ b/tools/foil_authority.py
+@@ -1,10 +1,8 @@
+-"""Shadow-only action-authority and candidate-admission contracts for FOIL.
++"""Shadow-only action-authority contracts for FOIL.
+ 
+-This module is deliberately separate from :mod:`foil_policy`. The existing V2
+-policy decides task/complement routing; this module decides what a registered
+-evidence producer may *recommend* after it reports an outcome. It never calls a
+-tool, mutates an answer, commits a candidate, or changes a capability's write
+-permission.
++The generic candidate-admission gate now lives in :mod:`egrt_candidate_gate`.
++Compatibility imports below preserve the existing FOIL public API. This module never
++calls a tool, mutates an answer, commits a candidate, or changes write permission.
+ 
+ Status: VALID_IMPLEMENTATION / BEHAVIORAL_EFFICACY_NOT_MEASURED.
+ """
+@@ -14,6 +12,17 @@ import re
+ from dataclasses import dataclass, field
+ from enum import Enum
+ 
++from egrt_candidate_gate import (
++    AdmissionDecision,
++    AdmissionState,
++    CandidateBinding,
++    CandidateRepair,
++    CheckStatus,
++    PatchCertificate,
++    SemanticVerification,
++    StructuralCertificate,
++    decide_admission,
++)
+ from egrt_types import EvidenceClass
+ 
+ 
+@@ -53,21 +62,17 @@ class AuthorityAction(str, Enum):
+ 
+ 
+ _SURFACE_CEILINGS: dict[EvidenceSurface, frozenset[AuthorityCeiling]] = {
+-    EvidenceSurface.PROMPT: frozenset(
+-        {
+-            AuthorityCeiling.OBSERVE_ONLY,
+-            AuthorityCeiling.FLAG_ONLY,
+-            AuthorityCeiling.ASK_OR_ABSTAIN,
+-        }
+-    ),
++    EvidenceSurface.PROMPT: frozenset({
++        AuthorityCeiling.OBSERVE_ONLY,
++        AuthorityCeiling.FLAG_ONLY,
++        AuthorityCeiling.ASK_OR_ABSTAIN,
++    }),
+     EvidenceSurface.ANSWER: frozenset(AuthorityCeiling),
+-    EvidenceSurface.PERSON: frozenset(
+-        {
+-            AuthorityCeiling.OBSERVE_ONLY,
+-            AuthorityCeiling.FLAG_ONLY,
+-            AuthorityCeiling.ASK_OR_ABSTAIN,
+-        }
+-    ),
++    EvidenceSurface.PERSON: frozenset({
++        AuthorityCeiling.OBSERVE_ONLY,
++        AuthorityCeiling.FLAG_ONLY,
++        AuthorityCeiling.ASK_OR_ABSTAIN,
++    }),
+ }
+ 
+ 
+@@ -230,10 +235,7 @@ def decide_authority(
+     if ceiling is AuthorityCeiling.ASK_OR_ABSTAIN:
+         return decision(AuthorityAction.ASK_OR_ABSTAIN, "ask_or_abstain_ceiling")
+     if ceiling is AuthorityCeiling.ESCALATION_RECOMMENDED:
+-        return decision(
+-            AuthorityAction.RECOMMEND_ESCALATION,
+-            "escalation_recommendation_only",
+-        )
++        return decision(AuthorityAction.RECOMMEND_ESCALATION, "escalation_recommendation_only")
+ 
+     missing: list[str] = []
+     if not context.repair_proposals_enabled:
+@@ -250,193 +252,24 @@ def decide_authority(
+     )
+ 
+ 
+-class CheckStatus(str, Enum):
+-    PASS = "PASS"
+-    FAIL = "FAIL"
+-    UNKNOWN = "UNKNOWN"
+-
+-
+-class AdmissionState(str, Enum):
+-    CERTIFICATE_REQUIRED = "CERTIFICATE_REQUIRED"
+-    SEMANTIC_VERIFICATION_REQUIRED = "SEMANTIC_VERIFICATION_REQUIRED"
+-    COMMITTABLE = "COMMITTABLE"
+-    REJECTED = "REJECTED"
+-    UNKNOWN = "UNKNOWN"
+-
+-
+-@dataclass(frozen=True)
+-class CandidateRepair:
+-    candidate_id: str
+-    base_digest: str
+-    candidate_digest: str
+-    scope_digest: str
+-    obligation_set_digest: str
+-    repair_producer: str
+-    repair_producer_version: str
+-
+-    def __post_init__(self) -> None:
+-        _require_text("candidate_id", self.candidate_id)
+-        _require_text("repair_producer", self.repair_producer)
+-        _require_text("repair_producer_version", self.repair_producer_version)
+-        for name in (
+-            "base_digest",
+-            "candidate_digest",
+-            "scope_digest",
+-            "obligation_set_digest",
+-        ):
+-            _require_sha256(name, getattr(self, name))
+-        if self.base_digest == self.candidate_digest:
+-            raise ValueError("candidate repair must differ from the base answer")
+-
+-
+-@dataclass(frozen=True)
+-class PatchCertificate:
+-    base_digest: str
+-    candidate_digest: str
+-    scope_digest: str
+-    obligation_set_digest: str
+-    verifier_id: str
+-    verifier_version: str
+-    environment_digest: str
+-    status: CheckStatus
+-
+-    def __post_init__(self) -> None:
+-        _require_instance("status", self.status, CheckStatus)
+-        _require_text("verifier_id", self.verifier_id)
+-        _require_text("verifier_version", self.verifier_version)
+-        for name in (
+-            "base_digest",
+-            "candidate_digest",
+-            "scope_digest",
+-            "obligation_set_digest",
+-            "environment_digest",
+-        ):
+-            _require_sha256(name, getattr(self, name))
+-
+-
+-@dataclass(frozen=True)
+-class SemanticVerification:
+-    base_digest: str
+-    candidate_digest: str
+-    scope_digest: str
+-    obligation_set_digest: str
+-    verifier_id: str
+-    verifier_version: str
+-    environment_digest: str
+-    status: CheckStatus
+-
+-    def __post_init__(self) -> None:
+-        _require_instance("status", self.status, CheckStatus)
+-        _require_text("verifier_id", self.verifier_id)
+-        _require_text("verifier_version", self.verifier_version)
+-        for name in (
+-            "base_digest",
+-            "candidate_digest",
+-            "scope_digest",
+-            "obligation_set_digest",
+-            "environment_digest",
+-        ):
+-            _require_sha256(name, getattr(self, name))
+-
+-
+-@dataclass(frozen=True)
+-class AdmissionDecision:
+-    state: AdmissionState
+-    reason: str
+-    candidate_id: str
+-    base_answer_preserved: bool = field(default=True, init=False)
+-    host_commit_required: bool = field(default=True, init=False)
+-    execution_authorized: bool = field(default=False, init=False)
+-
+-    def __post_init__(self) -> None:
+-        _require_instance("state", self.state, AdmissionState)
+-        _require_text("reason", self.reason)
+-        _require_text("candidate_id", self.candidate_id)
+-
+-    @property
+-    def candidate_committable(self) -> bool:
+-        return self.state is AdmissionState.COMMITTABLE
+-
+-    def trace(self) -> dict[str, object]:
+-        return {
+-            "state": self.state.value,
+-            "reason": self.reason,
+-            "candidate_id": self.candidate_id,
+-            "candidate_committable": self.candidate_committable,
+-            "base_answer_preserved": self.base_answer_preserved,
+-            "host_commit_required": self.host_commit_required,
+-            "execution_authorized": self.execution_authorized,
+-        }
+-
+-
+-def decide_admission(
+-    candidate: CandidateRepair,
+-    certificate: PatchCertificate | None = None,
+-    semantic: SemanticVerification | None = None,
+-) -> AdmissionDecision:
+-    """Gate a candidate without applying it; COMMITTABLE still requires a host."""
+-
+-    _require_instance("candidate", candidate, CandidateRepair)
+-    if certificate is not None:
+-        _require_instance("certificate", certificate, PatchCertificate)
+-    if semantic is not None:
+-        _require_instance("semantic", semantic, SemanticVerification)
+-
+-    def decision(state: AdmissionState, reason: str) -> AdmissionDecision:
+-        return AdmissionDecision(
+-            state=state,
+-            reason=reason,
+-            candidate_id=candidate.candidate_id,
+-        )
+-
+-    if certificate is None:
+-        return decision(AdmissionState.CERTIFICATE_REQUIRED, "certificate_missing")
+-    expected = (
+-        candidate.base_digest,
+-        candidate.candidate_digest,
+-        candidate.scope_digest,
+-        candidate.obligation_set_digest,
+-    )
+-    certificate_binding = (
+-        certificate.base_digest,
+-        certificate.candidate_digest,
+-        certificate.scope_digest,
+-        certificate.obligation_set_digest,
+-    )
+-    if certificate_binding != expected:
+-        return decision(AdmissionState.REJECTED, "certificate_binding_mismatch")
+-    if certificate.verifier_id == candidate.repair_producer:
+-        return decision(AdmissionState.REJECTED, "repair_producer_self_certified")
+-    if certificate.status is CheckStatus.FAIL:
+-        return decision(AdmissionState.REJECTED, "certificate_failed")
+-    if certificate.status is CheckStatus.UNKNOWN:
+-        return decision(AdmissionState.UNKNOWN, "certificate_unknown")
+-
+-    if semantic is None:
+-        return decision(
+-            AdmissionState.SEMANTIC_VERIFICATION_REQUIRED,
+-            "structural_certificate_passed_semantics_missing",
+-        )
+-    semantic_binding = (
+-        semantic.base_digest,
+-        semantic.candidate_digest,
+-        semantic.scope_digest,
+-        semantic.obligation_set_digest,
+-    )
+-    if semantic_binding != expected:
+-        return decision(AdmissionState.REJECTED, "semantic_binding_mismatch")
+-    if semantic.verifier_id == certificate.verifier_id:
+-        return decision(
+-            AdmissionState.REJECTED,
+-            "structural_verifier_reused_for_semantics",
+-        )
+-    if semantic.verifier_id == candidate.repair_producer:
+-        return decision(AdmissionState.REJECTED, "repair_producer_self_verified_semantics")
+-    if semantic.status is CheckStatus.FAIL:
+-        return decision(AdmissionState.REJECTED, "semantic_verification_failed")
+-    if semantic.status is CheckStatus.UNKNOWN:
+-        return decision(AdmissionState.UNKNOWN, "semantic_verification_unknown")
+-    return decision(
+-        AdmissionState.COMMITTABLE,
+-        "certificate_and_independent_semantic_verification_passed",
+-    )
++__all__ = [
++    "AdmissionDecision",
++    "AdmissionState",
++    "Applicability",
++    "AuthorityAction",
++    "AuthorityCeiling",
++    "AuthorityContext",
++    "AuthorityDecision",
++    "CandidateBinding",
++    "CandidateRepair",
++    "CheckStatus",
++    "EvidenceSurface",
++    "PatchCertificate",
++    "SemanticVerification",
++    "SensorOutcome",
++    "SensorRegistration",
++    "SensorReport",
++    "StructuralCertificate",
++    "decide_admission",
++    "decide_authority",
++]
+diff --git a/tools/gauntlet_config.py b/tools/gauntlet_config.py
+index 260118c28cb5a7ec45093bb129ae38f038889155..2e18a7aa2f1cb1342fe3db37d862313f029a5d36 100644
+--- a/tools/gauntlet_config.py
++++ b/tools/gauntlet_config.py
+@@ -21,7 +21,6 @@ DEFAULT_CONFIG: dict[str, Any] = {
+         "skills/infinity-gauntlet/SKILL.md", "skills/meditate/SKILL.md",
+         "skills/council-of-elders/SKILL.md", "skills/foil/SKILL.md",
+     ],
+-
+     "runtime": {
+         "enabled": True,
+         "schema": "egrt.runtime.v1",
+@@ -30,6 +29,16 @@ DEFAULT_CONFIG: dict[str, Any] = {
+         "release_gate": True,
+         "active_task_required_for_gate": True,
+     },
++    "challenge": {
++        "mode": "shadow",
++        "max_total_per_obligation": 4,
++        "max_load_bearing_per_obligation": 2,
++        "max_selected_discriminators": 2,
++        "allow_foil_proposals": True,
++        "require_claim_native_receipt": True,
++        "block_on_unavailable_load_bearing": True,
++        "persist_raw_text": False,
++    },
+     "boundary": {
+         "enabled": True,
+         "near_duplicate_threshold": 0.72,
+@@ -75,6 +84,18 @@ def load_config(root: Path | None = None) -> dict[str, Any]:
+     return _merge(DEFAULT_CONFIG, raw)
+ 
+ 
++def challenge_config(root: Path | None = None) -> dict[str, Any]:
++    config = load_config(root)
++    challenge = dict(config.get("challenge") or {})
++    override = os.environ.get("EGR_CHALLENGE_MODE")
++    if override:
++        override = override.strip().lower()
++        if override not in {"off", "shadow", "enforced"}:
++            raise RuntimeError("EGR_CHALLENGE_MODE must be off, shadow, or enforced")
++        challenge["mode"] = override
++    return challenge
++
++
+ def state_dir(root: Path | None = None, config: dict[str, Any] | None = None) -> Path:
+     root = root or project_root()
+     config = config or load_config(root)
+diff --git a/tools/mind_runtime.py b/tools/mind_runtime.py
+index 58aff0cc6b04b964ce42e37b0ca0304b1ec96dd3..eaba2fb06d1f47383608aa676d3c27a7ec7fe655 100644
+--- a/tools/mind_runtime.py
++++ b/tools/mind_runtime.py
+@@ -1,22 +1,51 @@
+-"""Formal Reasoning runtime adapters and proof/derivation receipts.
++"""Formal Reasoning runtime adapters and candidate-directed proof challenges.
+ 
+-A receipt verifies only the supplied formal encoding. The module never upgrades an
+-English claim merely because a solver or arithmetic evaluator returned successfully.
++A receipt verifies only the supplied formal encoding. The module never upgrades a
++natural-language claim merely because a solver, enumerator, or symbolic normalizer
++returned successfully. Native challenges are bound to candidate, scope, and
++obligation-set hashes through the neutral challenge contract.
+ """
+ from __future__ import annotations
+ 
+ import ast
++import importlib.util
++import itertools
+ import json
+ import operator
+ import shutil
+ import subprocess
++import sys
++from collections.abc import Callable, Iterable, Mapping, Sequence
+ from dataclasses import dataclass, field
+ from fractions import Fraction
+ from pathlib import Path
+ from typing import Any
+ 
++from egrt_challenge import (
++    ChallengePolicy,
++    ChallengeSelectionError,
++    record_resolution,
++    select_minimum_discriminator,
++)
++from egrt_challenge_types import (
++    ChallengeKind,
++    ChallengeOrigin,
++    ChallengeRequest,
++    ChallengeResolution,
++    ChallengeState,
++    DiscriminatorPlan,
++    ResolutionOutcome,
++)
+ from egrt_store import RuntimeStore, new_id, utcnow
+-from egrt_types import EvidenceClass, EvidenceRef, Receipt, Verdict, digest, text_digest
++from egrt_types import (
++    ArtifactRef,
++    EvidenceClass,
++    EvidenceRef,
++    Receipt,
++    Verdict,
++    digest,
++    text_digest,
++)
+ 
+ 
+ @dataclass(frozen=True)
+@@ -30,6 +59,36 @@ class ProofObligation:
+     metadata: dict[str, Any] = field(default_factory=dict)
+ 
+ 
++@dataclass(frozen=True)
++class FormalizationCandidate:
++    candidate_id: str
++    obligation_id: str
++    natural_claim_hash: str
++    formal_claim: str
++    assumptions: tuple[str, ...]
++    quantifier_map: tuple[str, ...]
++    representation: str
++    producer: str
++    candidate_hash: str
++    metadata: dict[str, Any] = field(default_factory=dict)
++
++
++@dataclass(frozen=True)
++class ProofChallengeBundle:
++    bundle_id: str
++    obligation_id: str
++    base_candidate_id: str
++    alternate_candidate_ids: tuple[str, ...]
++    challenge_ids: tuple[str, ...]
++    selected_plan_ids: tuple[str, ...]
++    task_id: str | None = None
++    base_candidate_hash: str | None = None
++    scope_hash: str | None = None
++    obligation_set_hash: str | None = None
++    natural_scope_receipt_id: str | None = None
++    metadata: dict[str, Any] = field(default_factory=dict)
++
++
+ _BINOPS = {
+     ast.Add: operator.add,
+     ast.Sub: operator.sub,
+@@ -43,6 +102,9 @@ _UNARY = {ast.UAdd: operator.pos, ast.USub: operator.neg}
+ MAX_EXPRESSION_CHARS = 2048
+ MAX_AST_NODES = 128
+ MAX_ABS_EXPONENT = 1000
++MAX_SYMBOLIC_AST_NODES = 256
++MAX_SYMBOLIC_EXPONENT = 32
++MAX_ENUMERATION_CASES = 10_000
+ 
+ 
+ def _number(node: ast.AST) -> Fraction | int:
+@@ -103,16 +165,18 @@ def run_z3_smt2(path: Path, timeout: int = 20) -> dict[str, Any]:
+         stdout = exc.stdout.decode("utf-8", errors="replace") if isinstance(exc.stdout, bytes) else (exc.stdout or "")
+         stderr = exc.stderr.decode("utf-8", errors="replace") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
+         return {
+-            "verdict": Verdict.UNKNOWN.value, "reason": "z3 timeout", "solver_status": "timeout",
+-            "stdout_hash": text_digest(stdout), "stderr_hash": text_digest(stderr), "tool_version": _z3_version(),
++            "verdict": Verdict.UNKNOWN.value,
++            "reason": "z3 timeout",
++            "solver_status": "timeout",
++            "stdout_hash": text_digest(stdout),
++            "stderr_hash": text_digest(stderr),
++            "tool_version": _z3_version(),
+         }
+     first = (proc.stdout.strip().splitlines() or [""])[0].strip().lower()
+     if proc.returncode != 0:
+         verdict = Verdict.ISSUE
+     elif first in ("sat", "unsat"):
+         verdict = Verdict.CLEARED
+-    elif first == "unknown":
+-        verdict = Verdict.UNKNOWN
+     else:
+         verdict = Verdict.UNKNOWN
+     return {
+@@ -125,6 +189,11 @@ def run_z3_smt2(path: Path, timeout: int = 20) -> dict[str, Any]:
+     }
+ 
+ 
++def _task_id(obligation: ProofObligation) -> str | None:
++    value = obligation.metadata.get("task_id")
++    return str(value) if value else None
++
++
+ def arithmetic_receipt(root: Path, obligation: ProofObligation, expression: str) -> Receipt:
+     store = RuntimeStore(root)
+     try:
+@@ -136,17 +205,25 @@ def arithmetic_receipt(root: Path, obligation: ProofObligation, expression: str)
+         verdict = Verdict.ISSUE
+         unresolved = (str(exc),)
+     receipt = Receipt(
+-        receipt_id=new_id("rcpt"), module="mind", obligation_id=obligation.obligation_id,
+-        verdict=verdict, action="exact-arithmetic", input_hash=digest({"obligation": obligation, "expression": expression}),
++        receipt_id=new_id("rcpt"),
++        module="mind",
++        obligation_id=obligation.obligation_id,
++        verdict=verdict,
++        action="exact-arithmetic",
++        input_hash=digest({"obligation_id": obligation.obligation_id, "formal_claim": obligation.formal_claim, "expression": expression}),
+         output_hash=text_digest(result),
+         evidence=(EvidenceRef(
+             evidence_class=EvidenceClass.MEASURED,
+             verifier="mind:exact_arithmetic",
+             metadata={"scope": "exact evaluation of the supplied bounded arithmetic encoding"},
+         ),),
+-        verifier="mind:exact_arithmetic", tool_version="stdlib-ast+fractions",
+-        started_at=utcnow(), finished_at=utcnow(), unresolved=unresolved,
++        verifier="mind:exact_arithmetic",
++        tool_version="stdlib-ast+fractions",
++        started_at=utcnow(),
++        finished_at=utcnow(),
++        unresolved=unresolved,
+         notes=f"result={result}; this receipt supports the supplied encoding, not an unstated English generalization",
++        task_id=_task_id(obligation),
+     )
+     store.write_receipt(receipt)
+     return receipt
+@@ -155,23 +232,1112 @@ def arithmetic_receipt(root: Path, obligation: ProofObligation, expression: str)
+ def smt_receipt(root: Path, obligation: ProofObligation, smt2_path: Path) -> Receipt:
+     store = RuntimeStore(root)
+     if smt2_path.is_file():
+-        encoding_hash = text_digest(smt2_path.read_text(encoding="utf-8", errors="replace"))
++        encoding_text = smt2_path.read_text(encoding="utf-8", errors="replace")
++        encoding_hash = text_digest(encoding_text)
+     else:
+         encoding_hash = digest({"missing": str(smt2_path)})
+     result = run_z3_smt2(smt2_path)
+-    evidence_class = EvidenceClass.PROVEN if result.get("solver_status") in ("sat", "unsat") and result.get("verdict") == Verdict.CLEARED.value else EvidenceClass.OBSERVED
++    expected = str(obligation.metadata.get("expected_solver_status") or "unsat").lower()
++    status = str(result.get("solver_status") or "unknown")
++    if result.get("verdict") == Verdict.UNAVAILABLE.value:
++        verdict = Verdict.UNAVAILABLE
++    elif status in {"sat", "unsat"}:
++        verdict = Verdict.CLEARED if status == expected else Verdict.ISSUE
++    else:
++        verdict = Verdict.UNKNOWN if result.get("verdict") != Verdict.ISSUE.value else Verdict.ISSUE
++    evidence_class = EvidenceClass.PROVEN if verdict in {Verdict.CLEARED, Verdict.ISSUE} and status in {"sat", "unsat"} else EvidenceClass.OBSERVED
++    counterexample_hash = result.get("stdout_hash") if status == "sat" and expected == "unsat" else None
++    receipt = Receipt(
++        receipt_id=new_id("rcpt"),
++        module="mind",
++        obligation_id=obligation.obligation_id,
++        verdict=verdict,
++        action="z3-smt2",
++        input_hash=digest({
++            "obligation_id": obligation.obligation_id,
++            "candidate_hash": obligation.metadata.get("candidate_hash"),
++            "scope_hash": obligation.metadata.get("scope_hash"),
++            "encoding_sha256": encoding_hash,
++            "expected_solver_status": expected,
++            "negation_bound": bool(obligation.metadata.get("negation_bound", expected == "unsat")),
++        }),
++        output_hash=digest(result),
++        evidence=(EvidenceRef(
++            evidence_class=evidence_class,
++            verifier="z3",
++            artifact=ArtifactRef(f"hash:z3-output:{result.get('stdout_hash')}") if result.get("stdout_hash") else None,
++            metadata={
++                "solver_status": status,
++                "expected_solver_status": expected,
++                "scope": "formal SMT2 encoding only",
++                "encoding_sha256": encoding_hash,
++                "counterexample_hash": counterexample_hash,
++            },
++        ),),
++        verifier="z3",
++        tool_version=result.get("tool_version"),
++        started_at=utcnow(),
++        finished_at=utcnow(),
++        unresolved=() if verdict in {Verdict.CLEARED, Verdict.ISSUE} else (result.get("reason", "solver did not return the required conclusive status"),),
++        notes=json.dumps({**result, "boundary": "solver status establishes a property of the supplied encoding only"}, sort_keys=True),
++        task_id=_task_id(obligation),
++    )
++    store.write_receipt(receipt)
++    return receipt
++
++
++def _candidate_payload(
++    obligation: ProofObligation,
++    formal_claim: str,
++    *,
++    assumptions: tuple[str, ...],
++    quantifier_map: tuple[str, ...],
++    representation: str,
++    producer: str,
++) -> dict[str, Any]:
++    return {
++        "obligation_id": obligation.obligation_id,
++        "natural_claim_hash": text_digest(obligation.natural_claim),
++        "formal_claim": formal_claim,
++        "assumptions": assumptions,
++        "quantifier_map": quantifier_map,
++        "representation": representation,
++        "producer": producer,
++    }
++
++
++def _formalization_candidate(
++    obligation: ProofObligation,
++    formal_claim: str,
++    *,
++    assumptions: Sequence[str] | None = None,
++    quantifier_map: Sequence[str] | None = None,
++    representation: str | None = None,
++    producer: str | None = None,
++    metadata: Mapping[str, Any] | None = None,
++) -> FormalizationCandidate:
++    assumptions_tuple = tuple(str(item) for item in (assumptions if assumptions is not None else obligation.assumptions))
++    quantifiers = tuple(str(item) for item in (quantifier_map or ()))
++    representation_value = representation or obligation.domain or "deductive"
++    producer_value = producer or "mind:native-formalizer"
++    payload = _candidate_payload(
++        obligation,
++        formal_claim,
++        assumptions=assumptions_tuple,
++        quantifier_map=quantifiers,
++        representation=representation_value,
++        producer=producer_value,
++    )
++    candidate_hash = digest(payload)
++    return FormalizationCandidate(
++        candidate_id=f"fcand-{candidate_hash[:16]}",
++        obligation_id=obligation.obligation_id,
++        natural_claim_hash=payload["natural_claim_hash"],
++        formal_claim=formal_claim,
++        assumptions=assumptions_tuple,
++        quantifier_map=quantifiers,
++        representation=representation_value,
++        producer=producer_value,
++        candidate_hash=candidate_hash,
++        metadata=dict(metadata or {}),
++    )
++
++
++def propose_formalizations(obligation: ProofObligation) -> tuple[FormalizationCandidate, ...]:
++    """Construct explicit candidates from supplied encodings; never invent hidden scope."""
++    candidates: list[FormalizationCandidate] = []
++    if obligation.formal_claim.strip():
++        candidates.append(_formalization_candidate(
++            obligation,
++            obligation.formal_claim.strip(),
++            quantifier_map=tuple(obligation.metadata.get("quantifier_map") or ()),
++            representation=str(obligation.metadata.get("representation") or obligation.domain),
++            producer=str(obligation.metadata.get("producer") or "mind:native-formalizer"),
++        ))
++    alternates = obligation.metadata.get("alternate_formalizations") or ()
++    if not isinstance(alternates, Sequence) or isinstance(alternates, (str, bytes)):
++        raise TypeError("alternate_formalizations must be a sequence")
++    for alternate in alternates:
++        if isinstance(alternate, str):
++            row: Mapping[str, Any] = {"formal_claim": alternate}
++        elif isinstance(alternate, Mapping):
++            row = alternate
++        else:
++            raise TypeError("each alternate formalization must be str or mapping")
++        formal_claim = str(row.get("formal_claim") or "").strip()
++        if not formal_claim:
++            raise ValueError("alternate formalization requires formal_claim")
++        candidates.append(_formalization_candidate(
++            obligation,
++            formal_claim,
++            assumptions=tuple(row.get("assumptions") or obligation.assumptions),
++            quantifier_map=tuple(row.get("quantifier_map") or ()),
++            representation=str(row.get("representation") or obligation.domain),
++            producer=str(row.get("producer") or "mind:native-formalizer"),
++            metadata={key: value for key, value in row.items() if key not in {"formal_claim", "assumptions", "quantifier_map", "representation", "producer"}},
++        ))
++    unique: dict[str, FormalizationCandidate] = {}
++    for candidate in candidates:
++        unique.setdefault(candidate.candidate_hash, candidate)
++    return tuple(unique.values())
++
++
++def _challenge_id(kind: ChallengeKind, base: FormalizationCandidate, refuter: str, alternative_hash: str | None = None) -> str:
++    return f"chal-{digest({'kind': kind.value, 'candidate': base.candidate_hash, 'refuter': refuter, 'alternative': alternative_hash})[:16]}"
++
++
++def generate_native_challenges(
++    base: FormalizationCandidate,
++    alternates: Sequence[FormalizationCandidate],
++    *,
++    task_id: str | None = None,
++    scope_hash: str | None = None,
++    obligation_set_hash: str | None = None,
++    proposer: str = "mind:native-challenge",
++) -> tuple[ChallengeRequest, ...]:
++    """Generate candidate-bound alternate-formalization and counterexample challenges."""
++    task = task_id or f"task-{base.obligation_id}"
++    scope = scope_hash or digest({
++        "natural_claim_hash": base.natural_claim_hash,
++        "assumptions": base.assumptions,
++        "quantifier_map": base.quantifier_map,
++    })
++    obligation_set = obligation_set_hash or digest({"obligation_id": base.obligation_id})
++    requests: list[ChallengeRequest] = []
++    for alternate in alternates:
++        if alternate.obligation_id != base.obligation_id:
++            raise ValueError("alternate candidate obligation mismatch")
++        if alternate.candidate_hash == base.candidate_hash:
++            continue
++        refuter = "exact equivalence or a claim-native evaluation that distinguishes the encodings"
++        requests.append(ChallengeRequest(
++            challenge_id=_challenge_id(ChallengeKind.ALTERNATE_FORMALIZATION, base, refuter, alternate.candidate_hash),
++            task_id=task,
++            obligation_id=base.obligation_id,
++            target_module="mind",
++            origin=ChallengeOrigin.MODULE_NATIVE,
++            kind=ChallengeKind.ALTERNATE_FORMALIZATION,
++            hypothesis="A plausible alternate formalization changes the proposition or answer.",
++            alternative=alternate.formal_claim,
++            refuter=refuter,
++            consequence_if_true="The base encoding cannot warrant the natural-language claim.",
++            load_bearing=True,
++            required_capability="SYMBOLIC_EQUIVALENCE",
++            candidate_hash=base.candidate_hash,
++            scope_hash=scope,
++            obligation_set_hash=obligation_set,
++            proposer=proposer,
++            proposer_provenance=base.producer,
++            information_rank=3,
++            risk_rank=3,
++            cost_rank=1,
++            metadata={"alternate_candidate_id": alternate.candidate_id, "alternate_candidate_hash": alternate.candidate_hash},
++        ))
++    refuter = "a verified witness in the declared domain or an unsatisfied negated encoding"
++    requests.append(ChallengeRequest(
++        challenge_id=_challenge_id(ChallengeKind.COUNTEREXAMPLE, base, refuter),
++        task_id=task,
++        obligation_id=base.obligation_id,
++        target_module="mind",
++        origin=ChallengeOrigin.MODULE_NATIVE,
++        kind=ChallengeKind.COUNTEREXAMPLE,
++        hypothesis="The base formalization fails on a declared edge case or domain witness.",
++        alternative=f"not ({base.formal_claim})",
++        refuter=refuter,
++        consequence_if_true="The universal or load-bearing formal claim is false.",
++        load_bearing=True,
++        required_capability="FINITE_ENUMERATION_OR_SMT",
++        candidate_hash=base.candidate_hash,
++        scope_hash=scope,
++        obligation_set_hash=obligation_set,
++        proposer=proposer,
++        proposer_provenance=base.producer,
++        information_rank=3,
++        risk_rank=3,
++        cost_rank=2,
++        metadata={"base_candidate_id": base.candidate_id},
++    ))
++    return tuple(requests)
++
++
++def _capability_available(capabilities: Mapping[str, bool] | Iterable[str], name: str) -> bool:
++    if isinstance(capabilities, Mapping):
++        return bool(capabilities.get(name) or capabilities.get(name.lower()))
++    values = {str(value).upper() for value in capabilities}
++    return name.upper() in values
++
++
++def _plan_for_challenge(
++    challenge: ChallengeRequest,
++    capabilities: Mapping[str, bool] | Iterable[str],
++) -> list[DiscriminatorPlan]:
++    plans: list[DiscriminatorPlan] = []
++    if challenge.kind in {ChallengeKind.ALTERNATE_FORMALIZATION, ChallengeKind.REPRESENTATION_SWAP}:
++        plans.append(DiscriminatorPlan(
++            plan_id=f"plan-sym-{challenge.challenge_id[-12:]}",
++            challenge_id=challenge.challenge_id,
++            mode="symbolic-equivalence",
++            action="compare base and alternate formal encodings exactly",
++            verifier_module="mind",
++            required_capability="SYMBOLIC_EQUIVALENCE",
++            expected_support_signal="normalized residual is exactly zero",
++            expected_refute_signal="a non-zero exact residual or distinguishing witness",
++            timeout_seconds=20,
++            max_cost_rank=1,
++            metadata={
++                "capability_available": _capability_available(capabilities, "SYMBOLIC_EQUIVALENCE"),
++                "discrimination_rank": 3,
++                "information_rank": 3,
++                "risk_reduction_rank": 3,
++                "irreversibility_rank": 0,
++            },
++        ))
++    if challenge.kind in {ChallengeKind.COUNTEREXAMPLE, ChallengeKind.CLAIM_NEGATION}:
++        plans.append(DiscriminatorPlan(
++            plan_id=f"plan-enum-{challenge.challenge_id[-12:]}",
++            challenge_id=challenge.challenge_id,
++            mode="exact-enumeration",
++            action="enumerate the declared finite domain and search for a witness",
++            verifier_module="mind",
++            required_capability="FINITE_ENUMERATION",
++            expected_support_signal="all declared cases satisfy the predicate",
++            expected_refute_signal="a verified counterexample witness is produced",
++            timeout_seconds=20,
++            max_cost_rank=2,
++            metadata={
++                "capability_available": _capability_available(capabilities, "FINITE_ENUMERATION"),
++                "discrimination_rank": 3,
++                "information_rank": 3,
++                "risk_reduction_rank": 3,
++                "irreversibility_rank": 0,
++            },
++        ))
++        plans.append(DiscriminatorPlan(
++            plan_id=f"plan-smt-{challenge.challenge_id[-12:]}",
++            challenge_id=challenge.challenge_id,
++            mode="smt-negation",
++            action="check satisfiability of assumptions and claim negation",
++            verifier_module="mind",
++            required_capability="SMT",
++            expected_support_signal="negated claim is unsatisfiable",
++            expected_refute_signal="solver returns a satisfying witness",
++            timeout_seconds=20,
++            max_cost_rank=2,
++            metadata={
++                "capability_available": _capability_available(capabilities, "SMT"),
++                "discrimination_rank": 3,
++                "information_rank": 3,
++                "risk_reduction_rank": 3,
++                "irreversibility_rank": 0,
++            },
++        ))
++    return plans
++
++
++def select_proof_discriminator(
++    challenges: Sequence[ChallengeRequest],
++    capabilities: Mapping[str, bool] | Iterable[str],
++    *,
++    root: Path | None = None,
++    policy: ChallengePolicy | None = None,
++) -> DiscriminatorPlan:
++    """Select the weakest load-bearing proof hinge and its minimum available check."""
++    if not challenges:
++        raise ChallengeSelectionError("no proof challenges supplied")
++    ordered = sorted(
++        challenges,
++        key=lambda item: (
++            not item.load_bearing,
++            -(item.risk_rank or 0),
++            -(item.information_rank or 0),
++            item.cost_rank if item.cost_rank is not None else 10**9,
++            item.challenge_id,
++        ),
++    )
++    challenge = ordered[0]
++    plans = _plan_for_challenge(challenge, capabilities)
++    if not plans:
++        raise ChallengeSelectionError("no claim-native discriminator for challenge kind")
++    if root is not None:
++        return select_minimum_discriminator(
++            root,
++            challenge.challenge_id,
++            plans,
++            policy=policy or ChallengePolicy.from_root(root),
++        )
++    available = [plan for plan in plans if plan.metadata.get("capability_available")]
++    if available:
++        available.sort(key=lambda item: (item.max_cost_rank if item.max_cost_rank is not None else 10**9, item.plan_id))
++        return available[0]
++    plans.sort(key=lambda item: (item.max_cost_rank if item.max_cost_rank is not None else 10**9, item.plan_id))
++    return plans[0]
++
++
++# --- Exact symbolic equivalence for a bounded expression fragment -----------------
++Monomial = tuple[tuple[str, int], ...]
++Polynomial = dict[Monomial, Fraction]
++
++
++def _mono(items: Mapping[str, int]) -> Monomial:
++    return tuple(sorted((name, power) for name, power in items.items() if power))
++
++
++def _poly_clean(poly: Polynomial) -> Polynomial:
++    return {monomial: coefficient for monomial, coefficient in poly.items() if coefficient}
++
++
++def _poly_add(left: Polynomial, right: Polynomial, scale: Fraction = Fraction(1)) -> Polynomial:
++    out = dict(left)
++    for monomial, coefficient in right.items():
++        out[monomial] = out.get(monomial, Fraction(0)) + scale * coefficient
++    return _poly_clean(out)
++
++
++def _poly_mul(left: Polynomial, right: Polynomial) -> Polynomial:
++    out: Polynomial = {}
++    for lm, lc in left.items():
++        left_map = dict(lm)
++        for rm, rc in right.items():
++            powers = dict(left_map)
++            for name, power in rm:
++                powers[name] = powers.get(name, 0) + power
++            monomial = _mono(powers)
++            out[monomial] = out.get(monomial, Fraction(0)) + lc * rc
++    return _poly_clean(out)
++
++
++def _poly_pow(poly: Polynomial, exponent: int) -> Polynomial:
++    if exponent < 0 or exponent > MAX_SYMBOLIC_EXPONENT:
++        raise ValueError("symbolic exponent outside supported bound")
++    result: Polynomial = {(): Fraction(1)}
++    base = poly
++    value = exponent
++    while value:
++        if value & 1:
++            result = _poly_mul(result, base)
++        value >>= 1
++        if value:
++            base = _poly_mul(base, base)
++    return result
++
++
++def _symbolic_atom(name: str) -> Polynomial:
++    return {((name, 1),): Fraction(1)}
++
++
++def _canonical_arg(node: ast.AST) -> str:
++    return ast.dump(node, annotate_fields=True, include_attributes=False)
++
++
++def _symbolic_poly(node: ast.AST) -> Polynomial:
++    if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)) and not isinstance(node.value, bool):
++        return {(): Fraction(str(node.value))}
++    if isinstance(node, ast.Name):
++        if node.id.startswith("_"):
++            raise ValueError("private names are not allowed")
++        return _symbolic_atom(f"var:{node.id}")
++    if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.UAdd, ast.USub)):
++        value = _symbolic_poly(node.operand)
++        return value if isinstance(node.op, ast.UAdd) else {m: -c for m, c in value.items()}
++    if isinstance(node, ast.BinOp):
++        if isinstance(node.op, ast.Add):
++            return _poly_add(_symbolic_poly(node.left), _symbolic_poly(node.right))
++        if isinstance(node.op, ast.Sub):
++            return _poly_add(_symbolic_poly(node.left), _symbolic_poly(node.right), Fraction(-1))
++        if isinstance(node.op, ast.Mult):
++            return _poly_mul(_symbolic_poly(node.left), _symbolic_poly(node.right))
++        if isinstance(node.op, ast.Div):
++            denominator = _symbolic_poly(node.right)
++            if set(denominator) != {()} or denominator[()] == 0:
++                raise ValueError("only division by a non-zero exact constant is supported")
++            return {m: c / denominator[()] for m, c in _symbolic_poly(node.left).items()}
++        if isinstance(node.op, ast.Pow):
++            exponent = _number(node.right)
++            if isinstance(exponent, Fraction) and exponent.denominator != 1:
++                raise ValueError("fractional symbolic exponents are unsupported")
++            return _poly_pow(_symbolic_poly(node.left), int(exponent))
++        raise ValueError("unsupported symbolic operator")
++    if isinstance(node, ast.Call):
++        if not isinstance(node.func, ast.Name) or node.func.id not in {"sin", "cos"}:
++            raise ValueError("only sin() and cos() calls are supported by the built-in exact normalizer")
++        if len(node.args) != 1 or node.keywords:
++            raise ValueError("sin() and cos() require one positional argument")
++        arg = _canonical_arg(node.args[0])
++        return _symbolic_atom(f"{node.func.id}:{arg}")
++    raise ValueError("expression is outside the built-in symbolic fragment")
++
++
++def _reduce_trig(poly: Polynomial) -> Polynomial:
++    """Canonical reduction modulo sin(x)^2 + cos(x)^2 - 1 for each argument."""
++    pending = list(poly.items())
++    out: Polynomial = {}
++    while pending:
++        monomial, coefficient = pending.pop()
++        powers = dict(monomial)
++        reducible = next((name for name, power in powers.items() if name.startswith("sin:") and power >= 2), None)
++        if reducible is None:
++            out[monomial] = out.get(monomial, Fraction(0)) + coefficient
++            continue
++        arg = reducible[4:]
++        cos_name = f"cos:{arg}"
++        powers[reducible] -= 2
++        base = _mono(powers)
++        pending.append((base, coefficient))
++        powers[cos_name] = powers.get(cos_name, 0) + 2
++        pending.append((_mono(powers), -coefficient))
++    return _poly_clean(out)
++
++
++
++
++def _stable_value(value: Any) -> Any:
++    """Convert bounded verifier inputs to deterministic JSON-safe metadata."""
++    if value is None or isinstance(value, (str, int, float, bool)):
++        return value
++    if isinstance(value, Fraction):
++        return {"fraction": [value.numerator, value.denominator]}
++    if isinstance(value, range):
++        return {"range": [value.start, value.stop, value.step]}
++    if isinstance(value, Mapping):
++        return {str(key): _stable_value(item) for key, item in sorted(value.items(), key=lambda pair: str(pair[0]))}
++    if isinstance(value, (list, tuple)):
++        return [_stable_value(item) for item in value]
++    if isinstance(value, (set, frozenset)):
++        return sorted((_stable_value(item) for item in value), key=repr)
++    return {"type": f"{type(value).__module__}.{type(value).__qualname__}", "repr": repr(value)}
++
++
++def _polynomial_payload(poly: Polynomial) -> list[dict[str, Any]]:
++    return [
++        {
++            "monomial": [[name, power] for name, power in monomial],
++            "coefficient": [coefficient.numerator, coefficient.denominator],
++        }
++        for monomial, coefficient in sorted(poly.items())
++    ]
++
++def _relation_normal_form(node: ast.AST) -> tuple[str, Polynomial]:
++    if isinstance(node, ast.Compare):
++        if len(node.ops) != 1 or len(node.comparators) != 1:
++            raise ValueError("chained comparisons are outside the built-in symbolic fragment")
++        left = _symbolic_poly(node.left)
++        right = _symbolic_poly(node.comparators[0])
++        op = node.ops[0]
++        if isinstance(op, ast.GtE):
++            return "ge", _poly_add(left, right, Fraction(-1))
++        if isinstance(op, ast.LtE):
++            return "ge", _poly_add(right, left, Fraction(-1))
++        if isinstance(op, ast.Gt):
++            return "gt", _poly_add(left, right, Fraction(-1))
++        if isinstance(op, ast.Lt):
++            return "gt", _poly_add(right, left, Fraction(-1))
++        if isinstance(op, ast.Eq):
++            return "eq", _poly_add(left, right, Fraction(-1))
++        if isinstance(op, ast.NotEq):
++            return "ne", _poly_add(left, right, Fraction(-1))
++        raise ValueError("unsupported comparison operator")
++    return "expr", _symbolic_poly(node)
++
++
++def _built_in_equivalence(left: str, right: str) -> tuple[bool, str]:
++    if max(len(left), len(right)) > MAX_EXPRESSION_CHARS:
++        raise ValueError("symbolic expression exceeds size bound")
++    left_tree = ast.parse(left, mode="eval")
++    right_tree = ast.parse(right, mode="eval")
++    if sum(1 for _ in ast.walk(left_tree)) + sum(1 for _ in ast.walk(right_tree)) > MAX_SYMBOLIC_AST_NODES:
++        raise ValueError("symbolic expression exceeds AST bound")
++    left_kind, left_poly = _relation_normal_form(left_tree.body)
++    right_kind, right_poly = _relation_normal_form(right_tree.body)
++    residual = _reduce_trig(_poly_add(left_poly, right_poly, Fraction(-1)))
++    equivalent = left_kind == right_kind and not residual
++    return equivalent, digest({"left_kind": left_kind, "right_kind": right_kind, "residual": _polynomial_payload(residual)})
++
++
++def _sympy_available() -> bool:
++    return importlib.util.find_spec("sympy") is not None
++
++
++def _sympy_equivalence(left: str, right: str, assumptions: Sequence[str], timeout_seconds: int) -> tuple[str, str]:
++    script = r'''
++import ast, json, sys
++import sympy as s
++payload = json.loads(sys.stdin.read())
++allowed_calls = {"sin": s.sin, "cos": s.cos, "sqrt": s.sqrt, "exp": s.exp, "log": s.log}
++def parse(text):
++    tree = ast.parse(text, mode="eval")
++    allowed = (ast.Expression, ast.BinOp, ast.UnaryOp, ast.Add, ast.Sub, ast.Mult, ast.Div, ast.Pow,
++               ast.UAdd, ast.USub, ast.Constant, ast.Name, ast.Load, ast.Call)
++    for node in ast.walk(tree):
++        if not isinstance(node, allowed):
++            raise ValueError("unsupported syntax")
++        if isinstance(node, ast.Name) and node.id.startswith("_"):
++            raise ValueError("private name")
++        if isinstance(node, ast.Call) and (not isinstance(node.func, ast.Name) or node.func.id not in allowed_calls):
++            raise ValueError("unsupported call")
++    names = {node.id for node in ast.walk(tree) if isinstance(node, ast.Name)} - set(allowed_calls)
++    local = {name: s.Symbol(name) for name in names}
++    local.update(allowed_calls)
++    return s.sympify(text, locals=local, evaluate=True)
++residual = s.simplify(parse(payload["left"]) - parse(payload["right"]))
++print(json.dumps({"equivalent": bool(residual == 0), "residual_hash": __import__("hashlib").sha256(s.srepr(residual).encode()).hexdigest()}))
++'''
++    try:
++        process = subprocess.run(
++            [sys.executable, "-c", script],
++            input=json.dumps({"left": left, "right": right, "assumptions": list(assumptions)}),
++            text=True,
++            capture_output=True,
++            timeout=timeout_seconds,
++            shell=False,
++        )
++    except subprocess.TimeoutExpired:
++        return "timeout", digest({"timeout": timeout_seconds})
++    if process.returncode != 0:
++        return "error", text_digest(process.stderr)
++    try:
++        result = json.loads(process.stdout)
++    except json.JSONDecodeError:
++        return "error", text_digest(process.stdout)
++    return ("equivalent" if result.get("equivalent") else "different"), str(result.get("residual_hash"))
++
++
++def symbolic_equivalence_receipt(
++    root: Path,
++    obligation: ProofObligation,
++    left: str,
++    right: str,
++    assumptions: Sequence[str] = (),
++    *,
++    timeout_seconds: int = 20,
++) -> Receipt:
++    started = utcnow()
++    engine = "stdlib-exact-symbolic"
++    try:
++        equivalent, residual_hash = _built_in_equivalence(left, right)
++        status = "equivalent" if equivalent else "different"
++    except (SyntaxError, ValueError) as built_in_error:
++        if not _sympy_available():
++            status = "unavailable"
++            residual_hash = digest({"reason": str(built_in_error)})
++            engine = "sympy-unavailable"
++        else:
++            status, residual_hash = _sympy_equivalence(left, right, assumptions, timeout_seconds)
++            engine = "sympy-subprocess"
++    if status == "equivalent":
++        verdict = Verdict.CLEARED
++        evidence_class = EvidenceClass.PROVEN
++        unresolved: tuple[str, ...] = ()
++    elif status == "different":
++        verdict = Verdict.ISSUE
++        evidence_class = EvidenceClass.PROVEN
++        unresolved = ("formal expressions are not equivalent in the supported exact scope",)
++    elif status == "unavailable":
++        verdict = Verdict.UNAVAILABLE
++        evidence_class = EvidenceClass.OBSERVED
++        unresolved = ("required symbolic capability is unavailable for this expression fragment",)
++    else:
++        verdict = Verdict.UNKNOWN
++        evidence_class = EvidenceClass.OBSERVED
++        unresolved = (f"symbolic verifier returned {status}",)
++    result = {
++        "status": status,
++        "residual_hash": residual_hash,
++        "engine": engine,
++        "assumptions_hash": digest(tuple(assumptions)),
++    }
++    receipt = Receipt(
++        receipt_id=new_id("rcpt"),
++        module="mind",
++        obligation_id=obligation.obligation_id,
++        verdict=verdict,
++        action="symbolic-equivalence",
++        input_hash=digest({
++            "obligation_id": obligation.obligation_id,
++            "candidate_hash": obligation.metadata.get("candidate_hash"),
++            "scope_hash": obligation.metadata.get("scope_hash"),
++            "left": left,
++            "right": right,
++            "assumptions": tuple(assumptions),
++        }),
++        output_hash=digest(result),
++        evidence=(EvidenceRef(
++            evidence_class=evidence_class,
++            verifier=f"mind:{engine}",
++            metadata={
++                "scope": "exact equivalence of the supplied formal expressions only",
++                "status": status,
++                "residual_hash": residual_hash,
++                "assumptions": tuple(assumptions),
++            },
++        ),),
++        verifier=f"mind:{engine}",
++        tool_version="egrt.challenge.v1",
++        started_at=started,
++        finished_at=utcnow(),
++        unresolved=unresolved,
++        notes=json.dumps(result, sort_keys=True),
++        task_id=_task_id(obligation),
++    )
++    RuntimeStore(root).write_receipt(receipt)
++    return receipt
++
++
++def _predicate_hash(predicate: Callable[..., bool]) -> str:
++    code = getattr(predicate, "__code__", None)
++    if code is None:
++        return digest({"callable": type(predicate).__qualname__, "repr": repr(predicate)})
++    return digest({
++        "module": getattr(predicate, "__module__", None),
++        "qualname": getattr(predicate, "__qualname__", None),
++        "bytecode": code.co_code.hex(),
++        "constants": tuple(repr(item) for item in code.co_consts),
++        "names": code.co_names,
++    })
++
++
++def _enumeration_cases(domain_spec: Any) -> tuple[Iterable[Any], int | None, str]:
++    if isinstance(domain_spec, Mapping):
++        names = tuple(str(name) for name in domain_spec)
++        values = [tuple(domain_spec[name]) for name in domain_spec]
++        total = 1
++        for value in values:
++            total *= len(value)
++        return (
++            ({name: item for name, item in zip(names, combination, strict=True)} for combination in itertools.product(*values)),
++            total,
++            "cartesian-mapping",
++        )
++    if isinstance(domain_spec, Sequence) and not isinstance(domain_spec, (str, bytes)):
++        return iter(domain_spec), len(domain_spec), "declared-sequence"
++    if isinstance(domain_spec, Iterable) and not isinstance(domain_spec, (str, bytes)):
++        return iter(domain_spec), None, "declared-iterable"
++    raise TypeError("domain_spec must be a mapping or finite iterable")
++
++
++def _call_predicate(predicate: Callable[..., bool], case: Any) -> bool:
++    if isinstance(case, Mapping):
++        try:
++            result = predicate(**case)
++        except TypeError:
++            result = predicate(case)
++    elif isinstance(case, tuple):
++        try:
++            result = predicate(*case)
++        except TypeError:
++            result = predicate(case)
++    else:
++        result = predicate(case)
++    if not isinstance(result, bool):
++        raise TypeError("predicate must return bool")
++    return result
++
++
++def exact_enumeration_receipt(
++    root: Path,
++    obligation: ProofObligation,
++    domain_spec: Any,
++    predicate: Callable[..., bool],
++    *,
++    max_cases: int = MAX_ENUMERATION_CASES,
++) -> Receipt:
++    started = utcnow()
++    if not callable(predicate):
++        raise TypeError("predicate must be callable")
++    cases, declared_size, domain_kind = _enumeration_cases(domain_spec)
++    code_hash = _predicate_hash(predicate)
++    checked = 0
++    witness: Any | None = None
++    failure: str | None = None
++    exhausted = False
++    if declared_size is not None and declared_size > max_cases:
++        failure = f"declared domain size {declared_size} exceeds bound {max_cases}"
++    else:
++        try:
++            for case in cases:
++                if checked >= max_cases:
++                    failure = f"enumeration exceeded bound {max_cases} before exhaustion"
++                    break
++                checked += 1
++                if not _call_predicate(predicate, case):
++                    witness = case
++                    break
++            else:
++                exhausted = True
++        except Exception as exc:
++            failure = f"{type(exc).__name__}: {exc}"
++    if witness is not None:
++        verdict = Verdict.ISSUE
++        evidence_class = EvidenceClass.PROVEN
++        unresolved = ("verified finite-domain counterexample",)
++        status = "COUNTEREXAMPLE"
++    elif exhausted:
++        verdict = Verdict.CLEARED
++        evidence_class = EvidenceClass.PROVEN
++        unresolved = ()
++        status = "EXHAUSTED_DECLARED_DOMAIN"
++    elif failure and "exceeds bound" in failure:
++        verdict = Verdict.UNAVAILABLE
++        evidence_class = EvidenceClass.OBSERVED
++        unresolved = (failure,)
++        status = "RESOURCE_BOUND"
++    else:
++        verdict = Verdict.UNKNOWN
++        evidence_class = EvidenceClass.OBSERVED
++        unresolved = (failure or "enumeration incomplete",)
++        status = "INCOMPLETE"
++    witness_hash = digest(_stable_value(witness)) if witness is not None else None
++    result = {
++        "status": status,
++        "checked": checked,
++        "declared_size": declared_size,
++        "domain_kind": domain_kind,
++        "predicate_code_hash": code_hash,
++        "witness_hash": witness_hash,
++        "complete": exhausted,
++    }
++    receipt = Receipt(
++        receipt_id=new_id("rcpt"),
++        module="mind",
++        obligation_id=obligation.obligation_id,
++        verdict=verdict,
++        action="exact-enumeration",
++        input_hash=digest({
++            "obligation_id": obligation.obligation_id,
++            "candidate_hash": obligation.metadata.get("candidate_hash"),
++            "scope_hash": obligation.metadata.get("scope_hash"),
++            "domain_spec_hash": digest(_stable_value(domain_spec)),
++            "predicate_code_hash": code_hash,
++            "max_cases": max_cases,
++        }),
++        output_hash=digest(result),
++        evidence=(EvidenceRef(
++            evidence_class=evidence_class,
++            artifact=ArtifactRef(f"hash:counterexample:{witness_hash}") if witness_hash else None,
++            verifier="mind:exact_enumeration",
++            metadata={
++                "scope": "complete declared finite domain only" if exhausted else "bounded declared finite-domain search",
++                **result,
++            },
++        ),),
++        verifier="mind:exact_enumeration",
++        tool_version="stdlib-itertools+callable-code-hash",
++        started_at=started,
++        finished_at=utcnow(),
++        unresolved=unresolved,
++        notes=json.dumps(result, sort_keys=True),
++        task_id=_task_id(obligation),
++    )
++    RuntimeStore(root).write_receipt(receipt)
++    return receipt
++
++
++def counterexample_receipt(
++    root: Path,
++    obligation: ProofObligation,
++    candidate: FormalizationCandidate,
++    witness: Any,
++    *,
++    validator: Callable[[Any], bool] | None = None,
++) -> Receipt:
++    """Verify a supplied witness; an unverified model assertion remains UNKNOWN."""
++    verifier = validator or candidate.metadata.get("witness_validator")
++    started = utcnow()
++    witness_hash = digest(_stable_value(witness))
++    if not callable(verifier):
++        verdict = Verdict.UNKNOWN
++        status = "UNVERIFIED_WITNESS"
++        evidence_class = EvidenceClass.HEURISTIC
++        unresolved = ("no claim-native witness validator supplied",)
++        code_hash = None
++    else:
++        code_hash = _predicate_hash(verifier)
++        try:
++            is_counterexample = verifier(witness)
++            if not isinstance(is_counterexample, bool):
++                raise TypeError("witness validator must return bool")
++        except Exception as exc:
++            verdict = Verdict.UNKNOWN
++            status = "VALIDATOR_ERROR"
++            evidence_class = EvidenceClass.OBSERVED
++            unresolved = (f"{type(exc).__name__}: {exc}",)
++        else:
++            verdict = Verdict.ISSUE if is_counterexample else Verdict.CLEARED
++            status = "COUNTEREXAMPLE" if is_counterexample else "WITNESS_DOES_NOT_REFUTE"
++            evidence_class = EvidenceClass.PROVEN
++            unresolved = ("verified counterexample",) if is_counterexample else ()
++    result = {"status": status, "witness_hash": witness_hash, "validator_code_hash": code_hash}
++    receipt = Receipt(
++        receipt_id=new_id("rcpt"),
++        module="mind",
++        obligation_id=obligation.obligation_id,
++        verdict=verdict,
++        action="counterexample-check",
++        input_hash=digest({
++            "obligation_id": obligation.obligation_id,
++            "candidate_hash": candidate.candidate_hash,
++            "witness_hash": witness_hash,
++            "validator_code_hash": code_hash,
++        }),
++        output_hash=digest(result),
++        evidence=(EvidenceRef(
++            evidence_class=evidence_class,
++            artifact=ArtifactRef(f"hash:counterexample:{witness_hash}"),
++            verifier="mind:counterexample_validator" if callable(verifier) else "mind:model-only",
++            metadata={"scope": "supplied formal candidate and witness only", **result},
++        ),),
++        verifier="mind:counterexample_validator" if callable(verifier) else "mind:model-only",
++        tool_version="callable-code-hash",
++        started_at=started,
++        finished_at=utcnow(),
++        unresolved=unresolved,
++        notes=json.dumps(result, sort_keys=True),
++        task_id=_task_id(obligation),
++    )
++    RuntimeStore(root).write_receipt(receipt)
++    return receipt
++
++
++def resolve_proof_challenge(
++    root: Path,
++    challenge: ChallengeRequest,
++    receipt: Receipt,
++    *,
++    resolver: str = "mind:challenge-resolution",
++    resolver_provenance: str | None = None,
++) -> ChallengeResolution:
++    """Create and store a neutral resolution from a bound Mind verifier receipt."""
++    if receipt.module != "mind" or receipt.obligation_id != challenge.obligation_id:
++        raise ValueError("receipt is not a claim-native Mind receipt for this obligation")
++    if receipt.verdict is Verdict.CLEARED:
++        outcome = ResolutionOutcome.SUPPORTS_BASE
++    elif receipt.verdict is Verdict.ISSUE:
++        outcome = ResolutionOutcome.REFUTES_BASE
++    elif receipt.verdict is Verdict.UNAVAILABLE:
++        resolution = ChallengeResolution(
++            resolution_id=new_id("cres"),
++            challenge_id=challenge.challenge_id,
++            state=ChallengeState.UNAVAILABLE,
++            outcome=ResolutionOutcome.INCONCLUSIVE,
++            verifier_receipt_id=receipt.receipt_id,
++            verifier_module=receipt.module,
++            evidence_hash=RuntimeStore(root).read_receipt(receipt.receipt_id).get("content_hash"),
++            candidate_hash=challenge.candidate_hash,
++            scope_hash=challenge.scope_hash,
++            obligation_set_hash=challenge.obligation_set_hash,
++            resolver=resolver,
++            resolver_provenance=resolver_provenance,
++            reason="mandatory claim-native verifier unavailable",
++        )
++        record_resolution(root, resolution)
++        return resolution
++    else:
++        resolution = ChallengeResolution(
++            resolution_id=new_id("cres"),
++            challenge_id=challenge.challenge_id,
++            state=ChallengeState.UNRESOLVED,
++            outcome=ResolutionOutcome.INCONCLUSIVE,
++            verifier_receipt_id=receipt.receipt_id,
++            verifier_module=receipt.module,
++            evidence_hash=RuntimeStore(root).read_receipt(receipt.receipt_id).get("content_hash"),
++            candidate_hash=challenge.candidate_hash,
++            scope_hash=challenge.scope_hash,
++            obligation_set_hash=challenge.obligation_set_hash,
++            resolver=resolver,
++            resolver_provenance=resolver_provenance,
++            reason="claim-native verifier inconclusive",
++        )
++        record_resolution(root, resolution)
++        return resolution
++    stored = RuntimeStore(root).read_receipt(receipt.receipt_id)
++    if stored is None:
++        raise ValueError("receipt must be stored before challenge resolution")
++    resolution = ChallengeResolution(
++        resolution_id=new_id("cres"),
++        challenge_id=challenge.challenge_id,
++        state=ChallengeState.RESOLVED,
++        outcome=outcome,
++        verifier_receipt_id=receipt.receipt_id,
++        verifier_module=receipt.module,
++        evidence_hash=stored["content_hash"],
++        candidate_hash=challenge.candidate_hash,
++        scope_hash=challenge.scope_hash,
++        obligation_set_hash=challenge.obligation_set_hash,
++        resolver=resolver,
++        resolver_provenance=resolver_provenance,
++        reason="bound claim-native Mind verifier receipt",
++    )
++    record_resolution(root, resolution)
++    return resolution
++
++
++def _scope_receipt_valid(store: RuntimeStore, bundle: ProofChallengeBundle) -> tuple[bool, str]:
++    if not bundle.natural_scope_receipt_id:
++        return False, "natural-language-to-formal scope receipt missing"
++    receipt = store.read_receipt(bundle.natural_scope_receipt_id)
++    if receipt is None:
++        return False, "natural-language-to-formal scope receipt missing or corrupt"
++    if receipt.get("module") != "mind" or receipt.get("obligation_id") != bundle.obligation_id:
++        return False, "natural-language-to-formal scope receipt has wrong module or obligation"
++    if receipt.get("verdict") != Verdict.CLEARED.value or receipt.get("action") != "natural-formal-scope":
++        return False, "natural-language-to-formal scope remains unverified"
++    expected = digest({
++        "obligation_id": bundle.obligation_id,
++        "candidate_hash": bundle.base_candidate_hash,
++        "scope_hash": bundle.scope_hash,
++    })
++    if receipt.get("input_hash") != expected:
++        return False, "natural-language-to-formal scope receipt binding mismatch"
++    return True, "ok"
++
++
++def natural_formal_scope_receipt(
++    root: Path,
++    obligation: ProofObligation,
++    candidate: FormalizationCandidate,
++    *,
++    scope_hash: str,
++    verifier: str,
++    supported: bool,
++    provenance_group: str | None = None,
++) -> Receipt:
++    """Record an explicit scope-alignment check; it is never inferred from solver success."""
++    verdict = Verdict.CLEARED if supported else Verdict.UNKNOWN
++    receipt = Receipt(
++        receipt_id=new_id("rcpt"),
++        module="mind",
++        obligation_id=obligation.obligation_id,
++        verdict=verdict,
++        action="natural-formal-scope",
++        input_hash=digest({
++            "obligation_id": obligation.obligation_id,
++            "candidate_hash": candidate.candidate_hash,
++            "scope_hash": scope_hash,
++        }),
++        output_hash=digest({"supported": supported, "verifier": verifier}),
++        evidence=(EvidenceRef(
++            evidence_class=EvidenceClass.DERIVED,
++            verifier=verifier,
++            provenance_group=provenance_group,
++            metadata={
++                "scope": "alignment between the stated natural claim and this formal encoding",
++                "candidate_hash": candidate.candidate_hash,
++                "scope_hash": scope_hash,
++                "independent_verification_claimed": False,
++            },
++        ),),
++        verifier=verifier,
++        tool_version="scope-alignment-v1",
++        started_at=utcnow(),
++        finished_at=utcnow(),
++        unresolved=() if supported else ("natural/formal scope alignment not established",),
++        notes="Scope alignment is a separate obligation; DERIVED evidence is not an independent proof.",
++        task_id=_task_id(obligation),
++    )
++    RuntimeStore(root).write_receipt(receipt)
++    return receipt
++
++
++def finalize_proof_bundle(root: Path, bundle: ProofChallengeBundle) -> Receipt:
++    """Finalize only after all bound load-bearing challenges and scope checks resolve."""
++    store = RuntimeStore(root)
++    verdict = Verdict.CLEARED
++    unresolved: list[str] = []
++    linked_receipts: list[str] = []
++    if not bundle.base_candidate_hash or not bundle.scope_hash or not bundle.obligation_set_hash:
++        verdict = Verdict.UNKNOWN
++        unresolved.append("base formal encoding or binding hashes missing")
++    for challenge_id in bundle.challenge_ids:
++        challenge = store.read_challenge(challenge_id)
++        if challenge is None:
++            verdict = Verdict.UNKNOWN if verdict is not Verdict.ISSUE else verdict
++            unresolved.append(f"challenge missing or corrupt: {challenge_id}")
++            continue
++        if challenge.get("obligation_id") != bundle.obligation_id:
++            verdict = Verdict.ISSUE
++            unresolved.append(f"challenge obligation mismatch: {challenge_id}")
++            continue
++        for key, expected in (
++            ("candidate_hash", bundle.base_candidate_hash),
++            ("scope_hash", bundle.scope_hash),
++            ("obligation_set_hash", bundle.obligation_set_hash),
++        ):
++            if challenge.get(key) != expected:
++                verdict = Verdict.ISSUE
++                unresolved.append(f"challenge {key} mismatch: {challenge_id}")
++        state = str(challenge.get("state"))
++        resolution = store.latest_resolution(challenge_id)
++        if state == ChallengeState.UNAVAILABLE.value:
++            if verdict is not Verdict.ISSUE:
++                verdict = Verdict.UNAVAILABLE
++            unresolved.append(f"mandatory verifier unavailable: {challenge_id}")
++        elif state != ChallengeState.RESOLVED.value or resolution is None:
++            if verdict not in {Verdict.ISSUE, Verdict.UNAVAILABLE}:
++                verdict = Verdict.UNKNOWN
++            unresolved.append(f"load-bearing proof challenge unresolved: {challenge_id}")
++        else:
++            outcome = str(resolution.get("outcome"))
++            receipt_id = resolution.get("verifier_receipt_id")
++            if receipt_id:
++                linked_receipts.append(str(receipt_id))
++            if outcome == ResolutionOutcome.REFUTES_BASE.value:
++                verdict = Verdict.ISSUE
++                unresolved.append(f"candidate refuted: {challenge_id}")
++            elif outcome == ResolutionOutcome.SCOPE_SPLIT.value:
++                if verdict not in {Verdict.ISSUE, Verdict.UNAVAILABLE}:
++                    verdict = Verdict.UNKNOWN
++                unresolved.append(f"scope split requires regenerated candidate: {challenge_id}")
++            elif outcome != ResolutionOutcome.SUPPORTS_BASE.value:
++                if verdict not in {Verdict.ISSUE, Verdict.UNAVAILABLE}:
++                    verdict = Verdict.UNKNOWN
++                unresolved.append(f"challenge inconclusive: {challenge_id}")
++    scope_ok, scope_reason = _scope_receipt_valid(store, bundle)
++    if not scope_ok and verdict is Verdict.CLEARED:
++        verdict = Verdict.UNKNOWN
++    if not scope_ok:
++        unresolved.append(scope_reason)
++    else:
++        linked_receipts.append(str(bundle.natural_scope_receipt_id))
++    result = {
++        "bundle_id": bundle.bundle_id,
++        "base_candidate_hash": bundle.base_candidate_hash,
++        "scope_hash": bundle.scope_hash,
++        "obligation_set_hash": bundle.obligation_set_hash,
++        "challenge_ids": bundle.challenge_ids,
++        "selected_plan_ids": bundle.selected_plan_ids,
++        "linked_receipt_ids": tuple(linked_receipts),
++        "scope_verified": scope_ok,
++        "verdict": verdict.value,
++    }
+     receipt = Receipt(
+-        receipt_id=new_id("rcpt"), module="mind", obligation_id=obligation.obligation_id,
+-        verdict=Verdict(result["verdict"]), action="z3-smt2",
+-        input_hash=digest({"obligation": obligation, "encoding_sha256": encoding_hash}),
++        receipt_id=new_id("rcpt"),
++        module="mind",
++        obligation_id=bundle.obligation_id,
++        verdict=verdict,
++        action="finalize-proof-bundle",
++        input_hash=digest({
++            "bundle_id": bundle.bundle_id,
++            "base_candidate_hash": bundle.base_candidate_hash,
++            "scope_hash": bundle.scope_hash,
++            "obligation_set_hash": bundle.obligation_set_hash,
++            "challenge_ids": bundle.challenge_ids,
++            "selected_plan_ids": bundle.selected_plan_ids,
++        }),
+         output_hash=digest(result),
+         evidence=(EvidenceRef(
+-            evidence_class=evidence_class, verifier="z3",
+-            metadata={"solver_status": result.get("solver_status"), "scope": "formal SMT2 encoding only", "encoding_sha256": encoding_hash},
++            evidence_class=EvidenceClass.DERIVED,
++            verifier="mind:proof_bundle_gate",
++            metadata={
++                "scope": "mechanical integration of separately stored claim-native receipts",
++                **result,
++            },
+         ),),
+-        verifier="z3", tool_version=result.get("tool_version"), started_at=utcnow(), finished_at=utcnow(),
+-        unresolved=() if result["verdict"] == Verdict.CLEARED.value else (result.get("reason", "solver did not return a conclusive sat/unsat result"),),
+-        notes=json.dumps({**result, "boundary": "sat/unsat establishes a property of the supplied encoding only"}, sort_keys=True),
++        verifier="mind:proof_bundle_gate",
++        tool_version="egrt.challenge.v1",
++        started_at=utcnow(),
++        finished_at=utcnow(),
++        unresolved=tuple(dict.fromkeys(unresolved)),
++        notes=json.dumps(result, sort_keys=True),
++        task_id=bundle.task_id,
+     )
+     store.write_receipt(receipt)
+     return receipt
+diff --git a/validation/validate_showcase.py b/validation/validate_showcase.py
+index fdc9f590e35a8075192ca917d3b771f0e184ac7f..029966de0bf1ef8b255ee17296e328027c3c9905 100644
+--- a/validation/validate_showcase.py
++++ b/validation/validate_showcase.py
+@@ -111,7 +111,7 @@ checks["legacy_name_not_public"] = "mastermind" not in html.lower() and ">FOIL<"
+ checks["benchmark_results_not_front_page"] = all(token not in html for token in ("94 / 94", "18 / 18", "HLE public", "ARC-AGI", "GPQA-Diamond", "BrowseComp four-way"))
+ checks["activation_surface"] = all(command in html for command in ("/soul", "/foil", "/mind", "/space", "/reality", "/power", "/time", "/gauntlet", "/council"))
+ checks["control_tools_visible"] = all(token in html for token in ("Soul · Research Orchestrator", "Mirror · Adaptive Reasoning Complement", "Gauntlet · Process Assurance", "Meditate · Decision Preflight", "Council · Evidence Review Panel"))
+-checks["implementation_directory_exposed"] = len([p for p in (ROOT / "tools").glob("*.py") if p.name != "__init__.py"]) == 41 and "https://github.com/Kitahl/The-Gauntlet/tree/main/tools" in html
++checks["implementation_directory_exposed"] = len([p for p in (ROOT / "tools").glob("*.py") if p.name != "__init__.py"]) == 44 and "https://github.com/Kitahl/The-Gauntlet/tree/main/tools" in html
+ 
+ skill_dirs = ["soul", "mathbot", "scoutbot", "novelbot", "codebot", "benchbot", "infinity-gauntlet", "meditate", "council-of-elders", "foil"]
+ checks["skill_downloads"] = all(f"https://raw.githubusercontent.com/Kitahl/The-Gauntlet/main/skills/{directory}/SKILL.md" in html for directory in skill_dirs)
+diff --git a/validation/validate_vnext_runtime.py b/validation/validate_vnext_runtime.py
+old mode 100755
+new mode 100644
+index ee8643d6db0e3c264347d92dc11dd3247e62c102..af509641437d4f131e67cd0225fab30972a217ee
+--- a/validation/validate_vnext_runtime.py
++++ b/validation/validate_vnext_runtime.py
+@@ -6,6 +6,7 @@ establish behavioral efficacy or semantic correctness of future task receipts.
+ """
+ from __future__ import annotations
+ 
++import ast
+ import json
+ import re
+ from pathlib import Path
+@@ -15,18 +16,20 @@ checks: dict[str, bool] = {}
+ 
+ RUNTIME_FILES = [
+     "tools/egrt_types.py", "tools/egrt_store.py", "tools/egrt_hook.py", "tools/egrt_runtime.py",
++    "tools/egrt_challenge_types.py", "tools/egrt_challenge.py", "tools/egrt_candidate_gate.py",
+     "tools/soul_runtime.py", "tools/gauntlet_runtime.py", "tools/meditate_runtime.py",
+     "tools/council_runtime.py", "tools/mind_runtime.py", "tools/space_runtime.py",
+     "tools/reality_runtime.py", "tools/power_runtime.py", "tools/time_runtime.py",
+     "tools/foil_runtime_bridge.py", "tools/blackgem_runtime.py",
+ ]
+ SPEC_FILES = [
+-    "docs/specs/COMMON_RUNTIME_CONTRACT.md", "docs/specs/SOUL_ENGINEERING_SPEC.md",
+-    "docs/specs/GAUNTLET_ENGINEERING_SPEC.md", "docs/specs/MEDITATE_ENGINEERING_SPEC.md",
+-    "docs/specs/COUNCIL_ENGINEERING_SPEC.md", "docs/specs/MIND_ENGINEERING_SPEC.md",
+-    "docs/specs/SPACE_ENGINEERING_SPEC.md", "docs/specs/REALITY_ENGINEERING_SPEC.md",
+-    "docs/specs/POWER_ENGINEERING_SPEC.md", "docs/specs/TIME_ENGINEERING_SPEC.md",
+-    "docs/specs/FOIL_INTEGRATION_SPEC.md", "docs/specs/BLACKGEM_ENGINEERING_SPEC.md",
++    "docs/specs/COMMON_RUNTIME_CONTRACT.md", "docs/specs/CHALLENGE_ENGINEERING_SPEC.md",
++    "docs/specs/SOUL_ENGINEERING_SPEC.md", "docs/specs/GAUNTLET_ENGINEERING_SPEC.md",
++    "docs/specs/MEDITATE_ENGINEERING_SPEC.md", "docs/specs/COUNCIL_ENGINEERING_SPEC.md",
++    "docs/specs/MIND_ENGINEERING_SPEC.md", "docs/specs/SPACE_ENGINEERING_SPEC.md",
++    "docs/specs/REALITY_ENGINEERING_SPEC.md", "docs/specs/POWER_ENGINEERING_SPEC.md",
++    "docs/specs/TIME_ENGINEERING_SPEC.md", "docs/specs/FOIL_INTEGRATION_SPEC.md",
++    "docs/specs/BLACKGEM_ENGINEERING_SPEC.md",
+ ]
+ SKILLS = [
+     "soul", "mathbot", "scoutbot", "novelbot", "codebot", "benchbot",
+@@ -39,10 +42,18 @@ checks["pipeline_present"] = (ROOT / "docs/VNEXT_RUNTIME_PIPELINE.md").is_file()
+ 
+ config = json.loads((ROOT / ".gauntlet.json").read_text(encoding="utf-8"))
+ runtime = config.get("runtime", {})
++challenge = config.get("challenge", {})
+ checks["runtime_schema"] = runtime.get("schema") == "egrt.runtime.v1"
+ checks["raw_prompt_persistence_disabled"] = runtime.get("persist_raw_prompts") is False
+ checks["raw_tool_output_persistence_disabled"] = runtime.get("persist_raw_tool_output") is False
+ checks["release_gate_enabled"] = runtime.get("release_gate") is True
++checks["challenge_shadow_default"] = challenge.get("mode") == "shadow"
++checks["challenge_raw_text_disabled"] = challenge.get("persist_raw_text") is False
++checks["challenge_budgets_bounded"] = (
++    0 <= int(challenge.get("max_load_bearing_per_obligation", -1))
++    <= int(challenge.get("max_total_per_obligation", -1))
++    and int(challenge.get("max_selected_discriminators", -1)) >= 0
++)
+ checks["incident_refractory_configured"] = int(config.get("boundary", {}).get("incident_refractory_turns", 0)) >= 1
+ checks["legacy_lifetime_budgets_removed"] = not any(key in config.get("boundary", {}) for key in ("frame_budget", "costume_budget"))
+ 
+@@ -53,7 +64,6 @@ checks["foil_hook_preserved"] = "tools/foil_hook.py" in raw_settings
+ checks["gauntlet_hooks_preserved"] = "tools/gauntlet_hook.py" in raw_settings and "tools/gauntlet_boundary.py" in raw_settings
+ checks["project_relative_hooks"] = "${CLAUDE_PROJECT_DIR}" in raw_settings
+ 
+-# Skill directories remain specification-only and now trace to engineering specs.
+ checks["skill_spec_only"] = all(
+     (ROOT / "skills" / skill / "SKILL.md").is_file()
+     and {p.name for p in (ROOT / "skills" / skill).iterdir() if not p.name.startswith(".")} == {"SKILL.md"}
+@@ -64,22 +74,43 @@ checks["skill_runtime_trace"] = all(
+     for skill in SKILLS
+ )
+ 
+-# Runtime/control boundary: Mastermind may appear in historical prose elsewhere in the
+-# full repo, but never in this new runtime/control substrate.
+ forbidden = re.compile(r"(?:^|[\\/])mastermind(?:[\\/]|\.|$)|\b(?:from|import)\s+mastermind\b", re.I)
+ runtime_text = "\n".join((ROOT / path).read_text(encoding="utf-8") for path in RUNTIME_FILES)
+ checks["no_mastermind_runtime_control"] = forbidden.search(runtime_text) is None
+ 
++violations: list[str] = []
++for path in (ROOT / "tools").glob("*.py"):
++    if path.name.startswith("foil_"):
++        continue
++    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
++    for node in ast.walk(tree):
++        names: list[str] = []
++        if isinstance(node, ast.Import):
++            names = [alias.name for alias in node.names]
++        elif isinstance(node, ast.ImportFrom) and node.module:
++            names = [node.module]
++        for name in names:
++            if name == "foil" or name.startswith("foil_") or name.startswith("foil."):
++                violations.append(f"{path.name}:{node.lineno}:{name}")
++checks["no_nonfoil_imports_foil"] = not violations
++
+ common = (ROOT / "docs/specs/COMMON_RUNTIME_CONTRACT.md").read_text(encoding="utf-8")
+ checks["five_layer_contract"] = all(token in common for token in ("SPEC", "STATE", "ACTION", "RECEIPT", "VERDICT"))
+ checks["four_verdicts"] = all(token in common for token in ("CLEARED", "ISSUE", "UNKNOWN", "UNAVAILABLE"))
+ checks["integrity_not_entailment"] = "integrity" in common.lower() and "semantic entailment" in common.lower()
+ 
++challenge_types = (ROOT / "tools/egrt_challenge_types.py").read_text(encoding="utf-8")
++challenge_runtime = (ROOT / "tools/egrt_challenge.py").read_text(encoding="utf-8")
++checks["challenge_additive_schema"] = 'SCHEMA_VERSION = "egrt.challenge.v1"' in challenge_types
++checks["challenge_fail_closed_states"] = all(
++    token in challenge_types for token in ("UNRESOLVED", "UNAVAILABLE", "REFUTES_BASE", "SCOPE_SPLIT")
++)
++checks["challenge_never_domain_receipt"] = "never substitutes" in challenge_runtime.lower()
++
+ portability = (ROOT / ".github/workflows/portability.yml").read_text(encoding="utf-8")
+ checks["portability_always_runs"] = "    paths:\n" not in portability
+ checks["portability_stable_gate"] = "name: Runtime portability gate" in portability and "needs: [runtime]" in portability and "if: ${{ always() }}" in portability
+ 
+-# Specific research-hardening invariants.
+ checks["space_retrieval_not_warrant"] = "CANDIDATES_RETRIEVED_REVIEW_REQUIRED" in (ROOT / "tools/space_runtime.py").read_text(encoding="utf-8") and "source-assessment" in (ROOT / "tools/space_runtime.py").read_text(encoding="utf-8")
+ checks["council_control_matching"] = all(token in (ROOT / "tools/council_runtime.py").read_text(encoding="utf-8") for token in ("artifact_hash", "budget_hash", "CrossCritique", "DIRECT"))
+ checks["meditate_common_utility"] = "current_best_eu" in (ROOT / "tools/meditate_runtime.py").read_text(encoding="utf-8")
+@@ -87,9 +118,16 @@ checks["power_no_shell"] = "shell=False" in (ROOT / "tools/power_runtime.py").re
+ checks["time_fixed_n_boundary"] = "not provided by this fixed-n implementation" in (ROOT / "tools/time_runtime.py").read_text(encoding="utf-8")
+ checks["foil_factual_boundary"] = "cannot clear non-ADAPTATION obligations" in (ROOT / "tools/foil_runtime_bridge.py").read_text(encoding="utf-8")
+ 
++mind_src = (ROOT / "tools/mind_runtime.py").read_text(encoding="utf-8")
++checks["mind_native_challenge"] = all(
++    token in mind_src for token in (
++        "FormalizationCandidate", "ProofChallengeBundle", "symbolic_equivalence_receipt",
++        "exact_enumeration_receipt", "finalize_proof_bundle",
++    )
++)
++checks["mind_scope_separate"] = "natural-formal-scope" in mind_src
++
+ blackgem_src = (ROOT / "tools/blackgem_runtime.py").read_text(encoding="utf-8")
+-# Black Gem must be structurally incapable of clearing an obligation: the only
+-# occurrence of Verdict.CLEARED in the module is the guard assertion.
+ checks["blackgem_never_clears"] = (
+     'assert verdict != Verdict.CLEARED' in blackgem_src
+     and blackgem_src.count("Verdict.CLEARED") == 1
