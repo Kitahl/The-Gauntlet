@@ -1,0 +1,218 @@
+name: INT-100 freeze exact deltas
+
+on:
+  push:
+    branches:
+      - integration/vnext-core
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: int100-freeze-deltas-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  freeze:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Generate binary full-index patches and file records
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from __future__ import annotations
+
+          import hashlib
+          import json
+          from pathlib import Path
+          import subprocess
+          from typing import Any
+
+          ROOT = Path.cwd()
+          MANIFEST = ROOT / "integration" / "VNEXT_NATIVE_SOURCE_MANIFEST.json"
+          PAIRS = {
+              "MIND-VNEXT": (
+                  "4f088d688fa9e25b4608f44000a5d9812efa45f9",
+                  "af8dc2621099dd4993272cbc9e623190ef23ca9c",
+              ),
+              "COUNCIL-VNEXT": (
+                  "af8dc2621099dd4993272cbc9e623190ef23ca9c",
+                  "132172944c07de77c11266c953996fc1e840b647",
+              ),
+              "COUNCIL-V3": (
+                  "132172944c07de77c11266c953996fc1e840b647",
+                  "7fcfd259a6b103a464061c1d30f2a48fa1ff7f52",
+              ),
+          }
+
+          def run_bytes(*args: str) -> bytes:
+              return subprocess.check_output(args, cwd=ROOT)
+
+          def tree_entry(ref: str, path: str | None) -> tuple[str | None, str | None]:
+              if path is None:
+                  return None, None
+              output = run_bytes("git", "ls-tree", ref, "--", path).decode("utf-8")
+              if not output.strip():
+                  return None, None
+              prefix = output.split("\t", 1)[0]
+              mode, _kind, blob = prefix.split()
+              return mode, blob
+
+          def file_records(
+              source_id: str,
+              base: str,
+              head: str,
+              shared_paths: set[str],
+          ) -> list[dict[str, Any]]:
+              raw = run_bytes(
+                  "git",
+                  "diff",
+                  "--name-status",
+                  "--find-renames",
+                  "--find-copies",
+                  "-z",
+                  base,
+                  head,
+              )
+              tokens = raw.split(b"\0")
+              records: list[dict[str, Any]] = []
+              index = 0
+              while index < len(tokens) and tokens[index]:
+                  status = tokens[index].decode("utf-8")
+                  index += 1
+                  code = status[0]
+                  if code in {"R", "C"}:
+                      before = tokens[index].decode("utf-8")
+                      after = tokens[index + 1].decode("utf-8")
+                      index += 2
+                  else:
+                      path = tokens[index].decode("utf-8")
+                      index += 1
+                      before = None if code == "A" else path
+                      after = None if code == "D" else path
+                  mode_before, blob_before = tree_entry(base, before)
+                  mode_after, blob_after = tree_entry(head, after)
+                  change_type = {
+                      "A": "ADD",
+                      "M": "MODIFY",
+                      "D": "DELETE",
+                      "R": "RENAME",
+                      "C": "COPY",
+                      "T": "MODE",
+                  }.get(code, "MODIFY")
+                  records.append(
+                      {
+                          "path_before": before,
+                          "path_after": after,
+                          "change_type": change_type,
+                          "mode_before": mode_before,
+                          "mode_after": mode_after,
+                          "blob_before": blob_before,
+                          "blob_after": blob_after,
+                          "owner": source_id,
+                          "shared_conflict": bool(
+                              (before and before in shared_paths)
+                              or (after and after in shared_paths)
+                          ),
+                      }
+                  )
+              return records
+
+          manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+          sources = {row["source_id"]: row for row in manifest["sources"]}
+          patch_dir = ROOT / "integration" / "patches"
+          patch_dir.mkdir(parents=True, exist_ok=True)
+          digests: dict[str, str] = {}
+
+          for source_id, (base, head) in PAIRS.items():
+              subprocess.run(
+                  ["git", "merge-base", "--is-ancestor", base, head],
+                  cwd=ROOT,
+                  check=True,
+              )
+              patch_path = patch_dir / f"{source_id}.patch"
+              patch_path.write_bytes(
+                  run_bytes(
+                      "git",
+                      "diff",
+                      "--binary",
+                      "--full-index",
+                      "--find-renames",
+                      "--find-copies",
+                      base,
+                      head,
+                  )
+              )
+              digest = hashlib.sha256(patch_path.read_bytes()).hexdigest()
+              digests[source_id] = digest
+              source = sources[source_id]
+              records = file_records(
+                  source_id,
+                  base,
+                  head,
+                  set(source.get("shared_paths", [])),
+              )
+              source["delta_patch_sha256"] = digest
+              source["file_records"] = records
+              source["admission_state"] = "H1_PASS"
+              source.setdefault("notes", []).append(
+                  f"binary/full-index patch frozen at integration/patches/{source_id}.patch"
+              )
+
+              receipt_path = ROOT / "integration" / "imports" / f"{source_id}.json"
+              receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+              receipt["delta_patch_sha256"] = digest
+              receipt["delta_patch_path"] = f"integration/patches/{source_id}.patch"
+              receipt["file_records"] = records
+              receipt["admission_state"] = "H1_PASS"
+              receipt_path.write_text(
+                  json.dumps(receipt, indent=2, sort_keys=True) + "\n",
+                  encoding="utf-8",
+              )
+
+          sums = "".join(
+              f"{digests[source_id]}  {source_id}.patch\n"
+              for source_id in sorted(digests)
+          )
+          (patch_dir / "SHA256SUMS").write_text(sums, encoding="utf-8")
+
+          for blocker in manifest["blockers"]:
+              if blocker["blocker_id"] == "BLOCKER-INT100-PATCH-DIGESTS":
+                  blocker["state"] = "CLOSED"
+                  blocker["closed_at"] = "2026-08-29T17:52:00Z"
+                  blocker["resolution"] = {
+                      "patches": {
+                          source_id: digests[source_id]
+                          for source_id in sorted(digests)
+                      }
+                  }
+          manifest["updated_at"] = "2026-08-29T17:52:00Z"
+          manifest["content_hash"] = None
+          encoded = json.dumps(
+              manifest,
+              ensure_ascii=False,
+              separators=(",", ":"),
+              sort_keys=True,
+          ).encode("utf-8")
+          manifest["content_hash"] = hashlib.sha256(encoded).hexdigest()
+          MANIFEST.write_text(
+              json.dumps(manifest, indent=2, sort_keys=True) + "\n",
+              encoding="utf-8",
+          )
+          print(json.dumps(digests, indent=2, sort_keys=True))
+          PY
+      - name: Commit frozen delta artifacts and remove this one-shot workflow
+        run: |
+          set -euo pipefail
+          git rm .github/workflows/int100-freeze-deltas.yml
+          git add integration
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "integration: freeze exact INT-100 delta artifacts"
+          git push origin HEAD:integration/vnext-core
