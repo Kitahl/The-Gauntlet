@@ -1,10 +1,8 @@
-"""Shadow-only action-authority and candidate-admission contracts for FOIL.
+"""Shadow-only action-authority contracts for FOIL.
 
-This module is deliberately separate from :mod:`foil_policy`. The existing V2
-policy decides task/complement routing; this module decides what a registered
-evidence producer may *recommend* after it reports an outcome. It never calls a
-tool, mutates an answer, commits a candidate, or changes a capability's write
-permission.
+The generic candidate-admission gate now lives in :mod:`egrt_candidate_gate`.
+Compatibility imports below preserve the existing FOIL public API. This module never
+calls a tool, mutates an answer, commits a candidate, or changes write permission.
 
 Status: VALID_IMPLEMENTATION / BEHAVIORAL_EFFICACY_NOT_MEASURED.
 """
@@ -14,6 +12,17 @@ import re
 from dataclasses import dataclass, field
 from enum import Enum
 
+from egrt_candidate_gate import (
+    AdmissionDecision,
+    AdmissionState,
+    CandidateBinding,
+    CandidateRepair,
+    CheckStatus,
+    PatchCertificate,
+    SemanticVerification,
+    StructuralCertificate,
+    decide_admission,
+)
 from egrt_types import EvidenceClass
 
 
@@ -53,21 +62,17 @@ class AuthorityAction(str, Enum):
 
 
 _SURFACE_CEILINGS: dict[EvidenceSurface, frozenset[AuthorityCeiling]] = {
-    EvidenceSurface.PROMPT: frozenset(
-        {
-            AuthorityCeiling.OBSERVE_ONLY,
-            AuthorityCeiling.FLAG_ONLY,
-            AuthorityCeiling.ASK_OR_ABSTAIN,
-        }
-    ),
+    EvidenceSurface.PROMPT: frozenset({
+        AuthorityCeiling.OBSERVE_ONLY,
+        AuthorityCeiling.FLAG_ONLY,
+        AuthorityCeiling.ASK_OR_ABSTAIN,
+    }),
     EvidenceSurface.ANSWER: frozenset(AuthorityCeiling),
-    EvidenceSurface.PERSON: frozenset(
-        {
-            AuthorityCeiling.OBSERVE_ONLY,
-            AuthorityCeiling.FLAG_ONLY,
-            AuthorityCeiling.ASK_OR_ABSTAIN,
-        }
-    ),
+    EvidenceSurface.PERSON: frozenset({
+        AuthorityCeiling.OBSERVE_ONLY,
+        AuthorityCeiling.FLAG_ONLY,
+        AuthorityCeiling.ASK_OR_ABSTAIN,
+    }),
 }
 
 
@@ -230,10 +235,7 @@ def decide_authority(
     if ceiling is AuthorityCeiling.ASK_OR_ABSTAIN:
         return decision(AuthorityAction.ASK_OR_ABSTAIN, "ask_or_abstain_ceiling")
     if ceiling is AuthorityCeiling.ESCALATION_RECOMMENDED:
-        return decision(
-            AuthorityAction.RECOMMEND_ESCALATION,
-            "escalation_recommendation_only",
-        )
+        return decision(AuthorityAction.RECOMMEND_ESCALATION, "escalation_recommendation_only")
 
     missing: list[str] = []
     if not context.repair_proposals_enabled:
@@ -250,193 +252,24 @@ def decide_authority(
     )
 
 
-class CheckStatus(str, Enum):
-    PASS = "PASS"
-    FAIL = "FAIL"
-    UNKNOWN = "UNKNOWN"
-
-
-class AdmissionState(str, Enum):
-    CERTIFICATE_REQUIRED = "CERTIFICATE_REQUIRED"
-    SEMANTIC_VERIFICATION_REQUIRED = "SEMANTIC_VERIFICATION_REQUIRED"
-    COMMITTABLE = "COMMITTABLE"
-    REJECTED = "REJECTED"
-    UNKNOWN = "UNKNOWN"
-
-
-@dataclass(frozen=True)
-class CandidateRepair:
-    candidate_id: str
-    base_digest: str
-    candidate_digest: str
-    scope_digest: str
-    obligation_set_digest: str
-    repair_producer: str
-    repair_producer_version: str
-
-    def __post_init__(self) -> None:
-        _require_text("candidate_id", self.candidate_id)
-        _require_text("repair_producer", self.repair_producer)
-        _require_text("repair_producer_version", self.repair_producer_version)
-        for name in (
-            "base_digest",
-            "candidate_digest",
-            "scope_digest",
-            "obligation_set_digest",
-        ):
-            _require_sha256(name, getattr(self, name))
-        if self.base_digest == self.candidate_digest:
-            raise ValueError("candidate repair must differ from the base answer")
-
-
-@dataclass(frozen=True)
-class PatchCertificate:
-    base_digest: str
-    candidate_digest: str
-    scope_digest: str
-    obligation_set_digest: str
-    verifier_id: str
-    verifier_version: str
-    environment_digest: str
-    status: CheckStatus
-
-    def __post_init__(self) -> None:
-        _require_instance("status", self.status, CheckStatus)
-        _require_text("verifier_id", self.verifier_id)
-        _require_text("verifier_version", self.verifier_version)
-        for name in (
-            "base_digest",
-            "candidate_digest",
-            "scope_digest",
-            "obligation_set_digest",
-            "environment_digest",
-        ):
-            _require_sha256(name, getattr(self, name))
-
-
-@dataclass(frozen=True)
-class SemanticVerification:
-    base_digest: str
-    candidate_digest: str
-    scope_digest: str
-    obligation_set_digest: str
-    verifier_id: str
-    verifier_version: str
-    environment_digest: str
-    status: CheckStatus
-
-    def __post_init__(self) -> None:
-        _require_instance("status", self.status, CheckStatus)
-        _require_text("verifier_id", self.verifier_id)
-        _require_text("verifier_version", self.verifier_version)
-        for name in (
-            "base_digest",
-            "candidate_digest",
-            "scope_digest",
-            "obligation_set_digest",
-            "environment_digest",
-        ):
-            _require_sha256(name, getattr(self, name))
-
-
-@dataclass(frozen=True)
-class AdmissionDecision:
-    state: AdmissionState
-    reason: str
-    candidate_id: str
-    base_answer_preserved: bool = field(default=True, init=False)
-    host_commit_required: bool = field(default=True, init=False)
-    execution_authorized: bool = field(default=False, init=False)
-
-    def __post_init__(self) -> None:
-        _require_instance("state", self.state, AdmissionState)
-        _require_text("reason", self.reason)
-        _require_text("candidate_id", self.candidate_id)
-
-    @property
-    def candidate_committable(self) -> bool:
-        return self.state is AdmissionState.COMMITTABLE
-
-    def trace(self) -> dict[str, object]:
-        return {
-            "state": self.state.value,
-            "reason": self.reason,
-            "candidate_id": self.candidate_id,
-            "candidate_committable": self.candidate_committable,
-            "base_answer_preserved": self.base_answer_preserved,
-            "host_commit_required": self.host_commit_required,
-            "execution_authorized": self.execution_authorized,
-        }
-
-
-def decide_admission(
-    candidate: CandidateRepair,
-    certificate: PatchCertificate | None = None,
-    semantic: SemanticVerification | None = None,
-) -> AdmissionDecision:
-    """Gate a candidate without applying it; COMMITTABLE still requires a host."""
-
-    _require_instance("candidate", candidate, CandidateRepair)
-    if certificate is not None:
-        _require_instance("certificate", certificate, PatchCertificate)
-    if semantic is not None:
-        _require_instance("semantic", semantic, SemanticVerification)
-
-    def decision(state: AdmissionState, reason: str) -> AdmissionDecision:
-        return AdmissionDecision(
-            state=state,
-            reason=reason,
-            candidate_id=candidate.candidate_id,
-        )
-
-    if certificate is None:
-        return decision(AdmissionState.CERTIFICATE_REQUIRED, "certificate_missing")
-    expected = (
-        candidate.base_digest,
-        candidate.candidate_digest,
-        candidate.scope_digest,
-        candidate.obligation_set_digest,
-    )
-    certificate_binding = (
-        certificate.base_digest,
-        certificate.candidate_digest,
-        certificate.scope_digest,
-        certificate.obligation_set_digest,
-    )
-    if certificate_binding != expected:
-        return decision(AdmissionState.REJECTED, "certificate_binding_mismatch")
-    if certificate.verifier_id == candidate.repair_producer:
-        return decision(AdmissionState.REJECTED, "repair_producer_self_certified")
-    if certificate.status is CheckStatus.FAIL:
-        return decision(AdmissionState.REJECTED, "certificate_failed")
-    if certificate.status is CheckStatus.UNKNOWN:
-        return decision(AdmissionState.UNKNOWN, "certificate_unknown")
-
-    if semantic is None:
-        return decision(
-            AdmissionState.SEMANTIC_VERIFICATION_REQUIRED,
-            "structural_certificate_passed_semantics_missing",
-        )
-    semantic_binding = (
-        semantic.base_digest,
-        semantic.candidate_digest,
-        semantic.scope_digest,
-        semantic.obligation_set_digest,
-    )
-    if semantic_binding != expected:
-        return decision(AdmissionState.REJECTED, "semantic_binding_mismatch")
-    if semantic.verifier_id == certificate.verifier_id:
-        return decision(
-            AdmissionState.REJECTED,
-            "structural_verifier_reused_for_semantics",
-        )
-    if semantic.verifier_id == candidate.repair_producer:
-        return decision(AdmissionState.REJECTED, "repair_producer_self_verified_semantics")
-    if semantic.status is CheckStatus.FAIL:
-        return decision(AdmissionState.REJECTED, "semantic_verification_failed")
-    if semantic.status is CheckStatus.UNKNOWN:
-        return decision(AdmissionState.UNKNOWN, "semantic_verification_unknown")
-    return decision(
-        AdmissionState.COMMITTABLE,
-        "certificate_and_independent_semantic_verification_passed",
-    )
+__all__ = [
+    "AdmissionDecision",
+    "AdmissionState",
+    "Applicability",
+    "AuthorityAction",
+    "AuthorityCeiling",
+    "AuthorityContext",
+    "AuthorityDecision",
+    "CandidateBinding",
+    "CandidateRepair",
+    "CheckStatus",
+    "EvidenceSurface",
+    "PatchCertificate",
+    "SemanticVerification",
+    "SensorOutcome",
+    "SensorRegistration",
+    "SensorReport",
+    "StructuralCertificate",
+    "decide_admission",
+    "decide_authority",
+]

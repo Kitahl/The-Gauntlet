@@ -8,6 +8,8 @@
     "docs/ARCHITECTURE.md",
     "docs/VNEXT_RUNTIME_PIPELINE.md",
     "docs/specs/COMMON_RUNTIME_CONTRACT.md",
+    "docs/specs/CHALLENGE_ENGINEERING_SPEC.md",
+    "docs/specs/EXTERNAL_REVIEW_AUTHORITY.md",
     "skills/soul/SKILL.md",
     "skills/mathbot/SKILL.md",
     "skills/scoutbot/SKILL.md",
@@ -25,7 +27,32 @@
     "persist_raw_prompts": false,
     "persist_raw_tool_output": false,
     "release_gate": true,
-    "active_task_required_for_gate": true
+    "active_task_required_for_gate": true,
+    "strict_active_task": false,
+    "automatic_prompt_bootstrap": true,
+    "automatic_task_supersession": true,
+    "automatic_graph_revision": true,
+    "automatic_route_all_ready": true,
+    "automatic_assurance": true,
+    "automatic_assurance_mode": "AUTOMATIC_FULL"
+  },
+  "external_review": {
+    "authority": "ADVISORY_ONLY",
+    "control_plane_mutation_authorized": false,
+    "runtime_policy_mutation_authorized": false,
+    "task_state_mutation_authorized": false,
+    "release_authority": false,
+    "host_commit_required": true
+  },
+  "challenge": {
+    "mode": "shadow",
+    "max_total_per_obligation": 4,
+    "max_load_bearing_per_obligation": 2,
+    "max_selected_discriminators": 2,
+    "allow_foil_proposals": true,
+    "require_claim_native_receipt": true,
+    "block_on_unavailable_load_bearing": true,
+    "persist_raw_text": false
   },
   "boundary": {
     "enabled": true,

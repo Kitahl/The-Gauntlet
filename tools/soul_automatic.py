@@ -1,0 +1,46 @@
+"""Compatibility surface for the authoritative automatic Soul controller."""
+from __future__ import annotations
+
+from soul_vnext.controller import (
+    MODULE_FOR_KIND,
+    SOUL_AUTOMATIC_SCHEMA,
+    SOUL_CONTROL_SCHEMA,
+    SOUL_SCHEMA,
+    ActiveTaskError,
+    RouteBatch,
+    RouteCandidate,
+    RoutingPlan,
+    RoutingPolicy,
+    SoulError,
+    SoulGraphError,
+    add_obligation,
+    automatic_release,
+    freeze_task,
+    plan_routes,
+    release_gate,
+    release_task,
+    resolve_current_task_id,
+    start_task,
+)
+
+__all__ = [
+    "ActiveTaskError",
+    "MODULE_FOR_KIND",
+    "RouteBatch",
+    "RouteCandidate",
+    "RoutingPlan",
+    "RoutingPolicy",
+    "SOUL_AUTOMATIC_SCHEMA",
+    "SOUL_CONTROL_SCHEMA",
+    "SOUL_SCHEMA",
+    "SoulError",
+    "SoulGraphError",
+    "add_obligation",
+    "automatic_release",
+    "freeze_task",
+    "plan_routes",
+    "release_gate",
+    "release_task",
+    "resolve_current_task_id",
+    "start_task",
+]
