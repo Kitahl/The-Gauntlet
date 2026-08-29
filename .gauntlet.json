@@ -8,6 +8,7 @@
     "docs/ARCHITECTURE.md",
     "docs/VNEXT_RUNTIME_PIPELINE.md",
     "docs/specs/COMMON_RUNTIME_CONTRACT.md",
+    "docs/specs/CHALLENGE_ENGINEERING_SPEC.md",
     "skills/soul/SKILL.md",
     "skills/mathbot/SKILL.md",
     "skills/scoutbot/SKILL.md",
@@ -26,6 +27,16 @@
     "persist_raw_tool_output": false,
     "release_gate": true,
     "active_task_required_for_gate": true
+  },
+  "challenge": {
+    "mode": "shadow",
+    "max_total_per_obligation": 4,
+    "max_load_bearing_per_obligation": 2,
+    "max_selected_discriminators": 2,
+    "allow_foil_proposals": true,
+    "require_claim_native_receipt": true,
+    "block_on_unavailable_load_bearing": true,
+    "persist_raw_text": false
   },
   "boundary": {
     "enabled": true,

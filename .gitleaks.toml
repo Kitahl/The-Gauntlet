@@ -1,0 +1,12 @@
+title = "The-Gauntlet secret scanning"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Synthetic Bearer placeholder in historical RAG CLI smoke fixture"
+targetRules = ["generic-api-key"]
+condition = "AND"
+regexTarget = "line"
+paths = ['''^tools/rag_cli_smoke\.py$''']
+regexes = ['''^\s*auth_header\s*=\s*f"Bearer \{token\}"\s*$''']
