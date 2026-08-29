@@ -1,0 +1,148 @@
+name: Finalize Soul session upgrade
+
+on:
+  push:
+    branches:
+      - upgrade/challenge-vnext-soul
+    paths:
+      - .github/workflows/finalize-soul-session-upgrade.yml
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: upgrade/challenge-vnext-soul
+          fetch-depth: 0
+
+      - name: Normalize final Soul session tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('.')
+          facade = root / 'tools' / 'soul_session.py'
+          compact_test = root / 'tests' / 'test_soul_session.py'
+          rich_test = root / 'tests' / 'test_soul_session_control.py'
+          if not facade.exists():
+              raise SystemExit('missing tools/soul_session.py')
+
+          # The exact local validated implementation uses a facade over the richer
+          # soul_vnext module. The connector fallback is self-contained. Keep only
+          # the matching test so either synchronization path converges safely.
+          facade_text = facade.read_text(encoding='utf-8')
+          if 'soul_vnext.session_control import' in facade_text:
+              if compact_test.exists():
+                  compact_test.unlink()
+              selected_test = rich_test
+          else:
+              selected_test = compact_test
+          if not selected_test.exists():
+              raise SystemExit(f'missing selected session test: {selected_test}')
+
+          config_path = root / '.gauntlet.json'
+          config = json.loads(config_path.read_text(encoding='utf-8'))
+          tracked = None
+          for value in config.values():
+              if isinstance(value, list) and 'docs/ARCHITECTURE.md' in value:
+                  tracked = value
+                  break
+          if tracked is not None:
+              for item in (
+                  'docs/specs/SOUL_SESSION_CHECKPOINT_SPEC.md',
+                  'tools/soul_session.py',
+              ):
+                  if item not in tracked:
+                      tracked.append(item)
+              if rich_test.exists():
+                  for item in (
+                      'tools/soul_vnext/session_control.py',
+                      'validation/validate_soul_sessions.py',
+                  ):
+                      if item not in tracked:
+                          tracked.append(item)
+          runtime = config.get('runtime')
+          if isinstance(runtime, dict):
+              runtime.setdefault('automatic_sessions', True)
+              runtime.setdefault('session_checkpoint_limit', 128)
+              runtime.setdefault('session_metadata_max_bytes', 8192)
+          config_path.write_text(
+              json.dumps(config, indent=2) + '\n', encoding='utf-8'
+          )
+
+          engineering = root / 'docs' / 'specs' / 'SOUL_ENGINEERING_SPEC.md'
+          section = '''
+
+          ## Durable host-loop sessions
+
+          Interruption and resume are governed by the additive, authority-neutral
+          contract in [`SOUL_SESSION_CHECKPOINT_SPEC.md`](SOUL_SESSION_CHECKPOINT_SPEC.md).
+          Session progress is `HOST_HINT_ONLY`; it never substitutes for a claim-native
+          receipt or the Soul release gate.
+          '''
+          current = engineering.read_text(encoding='utf-8')
+          if 'SOUL_SESSION_CHECKPOINT_SPEC.md' not in current:
+              engineering.write_text(current.rstrip() + section + '\n', encoding='utf-8')
+
+          skill = root / 'skills' / 'soul' / 'SKILL.md'
+          section = '''
+
+          ## Durable session checkpoints
+
+          For an interrupted host loop, use `tools/soul_session.py` to open,
+          checkpoint, and validate a content-bound session. A resume manifest is
+          control-only and carries no execution, domain-evidence, candidate-adoption,
+          or release authority. Task, route, evidence, or authority drift invalidates
+          the session and requires a fresh Soul plan.
+          '''
+          current = skill.read_text(encoding='utf-8')
+          if '## Durable session checkpoints' not in current:
+              skill.write_text(current.rstrip() + section + '\n', encoding='utf-8')
+
+          workflow = root / '.github' / 'workflows' / 'validate.yml'
+          current = workflow.read_text(encoding='utf-8')
+          selected = selected_test.as_posix()
+          marker = 'python -m unittest tests/test_soul_planner.py tests/test_soul_automatic_control.py'
+          for line in current.splitlines():
+              if marker in line and selected not in line:
+                  current = current.replace(line, line.replace(' -v', f' {selected} -v'), 1)
+                  break
+          workflow.write_text(current, encoding='utf-8')
+
+          for path in (
+              root / '.github' / 'workflows' / 'session-source-export.yml',
+              root / '.github' / 'workflows' / 'finalize-soul-session-upgrade.yml',
+          ):
+              if path.exists():
+                  path.unlink()
+
+          Path('/tmp/selected_soul_test').write_text(selected, encoding='utf-8')
+          PY
+
+      - name: Validate selected session contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          selected="$(cat /tmp/selected_soul_test)"
+          python -m compileall -q tools/soul_session.py "$selected"
+          python -m unittest "${selected%.py}" -v
+
+      - name: Commit normalized tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m 'chore(soul): finalize durable session integration'
+          git push origin HEAD:upgrade/challenge-vnext-soul
