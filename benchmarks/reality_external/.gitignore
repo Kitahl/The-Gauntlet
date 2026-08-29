@@ -1,0 +1,9 @@
+# Local-only benchmark materialization and secrets
+local_materialized/
+restricted/
+gold/*.json
+gold/*.jsonl
+gold/plaintext*
+*.key
+REALITY_BENCHMARK_GOLD_KEY.txt
+REALITY_BENCHMARK_ID_KEY.txt

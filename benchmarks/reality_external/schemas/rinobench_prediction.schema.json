@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RINoBench Prediction",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sample_id", "arm", "predicted_novelty_score", "novelty_justification", "nearest_prior_mechanism", "meaningful_delta", "confidence_0_1", "runtime_executed", "production_reality_verdict"],
+  "properties": {
+    "sample_id": {"type": "string", "minLength": 1},
+    "arm": {"enum": ["BASELINE", "REALITY"]},
+    "predicted_novelty_score": {"type": "integer", "minimum": 1, "maximum": 5},
+    "novelty_justification": {"type": "string"},
+    "nearest_prior_mechanism": {"type": "string"},
+    "meaningful_delta": {"type": "string"},
+    "confidence_0_1": {"type": "number", "minimum": 0, "maximum": 1},
+    "runtime_executed": {"type": "boolean"},
+    "production_reality_verdict": {"type": ["string", "null"]}
+  }
+}

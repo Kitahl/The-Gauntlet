@@ -1,0 +1,49 @@
+{
+  "benchmark_branch": "benchmark/reality-external-v1",
+  "created_date": "2026-08-29",
+  "deterministic_seed": "REALITY-EXT-BENCH-V1-2026-08-29",
+  "inherited_reality_commit": "b4d4e0de4e18096ab6a2853e57318b2bc11de3bb",
+  "inherited_reality_tree": "a4b1cd67c38b7ea28708ac1ad903a26a91ba731c",
+  "no_real_predictions_generated": true,
+  "package_status": "PARTIAL_FAIL_CLOSED",
+  "benchmarks": {
+    "rinobench": {
+      "materialized_count": 0,
+      "pilot_target": 100,
+      "reported_total_dataset_count": 1381,
+      "status": "LOCAL_MATERIALIZATION_REQUIRED",
+      "redistribution_status": "NOT_ASSUMED_NO_DECLARED_REPO_LICENSE"
+    },
+    "researchbench_hypothesis_composition": {
+      "materialized_count": 0,
+      "pilot_target": 100,
+      "reported_generation_task_count": 1367,
+      "status": "RESTRICTED_LOCAL_ONLY",
+      "redistribution_status": "UPSTREAM_TERMS_PROHIBIT_RAW_DATA_REDISTRIBUTION_OUTSIDE_RESEARCH_GROUP"
+    },
+    "liveideabench_v2": {
+      "materialized_count": 0,
+      "pilot_target": 44,
+      "target_domains": 22,
+      "status": "READY_TO_MATERIALIZE",
+      "redistribution_status": "APACHE_2_0_DATASET"
+    },
+    "axiomatic": {
+      "materialized_count": 0,
+      "pilot_target_focal_papers": 30,
+      "status": "AXIOMATIC_ADAPTATION_V1_PENDING_AUTHORITATIVE_CODE"
+    },
+    "projectionbench": {
+      "materialized_count": 0,
+      "pilot_target_papers": 15,
+      "pilot_balance": {"bioactive_materials": 5, "mechanical_materials": 5, "nanomaterials": 5},
+      "status": "PROJECTIONBENCH_ADAPTATION_V1_PENDING"
+    }
+  },
+  "gold": {
+    "ciphertext_committed": false,
+    "key_generated": false,
+    "plaintext_committed": false,
+    "reason": "Complete canonical gold is not yet materialized; false or partial gold.enc is forbidden."
+  }
+}

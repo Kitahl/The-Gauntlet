@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ProjectionBench Prediction",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sample_id", "paper_id", "disclosure_level", "arm", "projected_result", "atomic_claims_if_generated", "confidence_0_1", "benchmark_mode", "runtime_executed"],
+  "properties": {
+    "sample_id": {"type": "string", "minLength": 1},
+    "paper_id": {"type": "string", "minLength": 1},
+    "disclosure_level": {"enum": ["L0", "L1", "L2"]},
+    "arm": {"enum": ["BASELINE", "REALITY"]},
+    "projected_result": {"type": "string"},
+    "atomic_claims_if_generated": {
+      "type": ["array", "null"],
+      "items": {"type": "string"}
+    },
+    "confidence_0_1": {"type": "number", "minimum": 0, "maximum": 1},
+    "benchmark_mode": {"type": "string", "minLength": 1},
+    "runtime_executed": {"type": "boolean"},
+    "production_reality_verdict": {"type": ["string", "null"]}
+  }
+}

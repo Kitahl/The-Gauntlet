@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Axiomatic Novelty Diagnostic Prediction",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sample_id", "focal_id", "pool_id", "arm", "novelty_score_0_100", "scoped_justification", "confidence_0_1", "diagnostic_only", "global_novelty_established"],
+  "properties": {
+    "sample_id": {"type": "string", "minLength": 1},
+    "focal_id": {"type": "string", "minLength": 1},
+    "pool_id": {"type": "string", "minLength": 1},
+    "arm": {"enum": ["BASELINE", "REALITY"]},
+    "novelty_score_0_100": {"type": "number", "minimum": 0, "maximum": 100},
+    "scoped_justification": {"type": "string"},
+    "confidence_0_1": {"type": "number", "minimum": 0, "maximum": 1},
+    "diagnostic_only": {"const": true},
+    "global_novelty_established": {"const": false}
+  }
+}

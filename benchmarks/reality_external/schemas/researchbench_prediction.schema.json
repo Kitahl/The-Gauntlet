@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ResearchBench Hypothesis Composition Prediction",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sample_id", "arm", "hypothesis", "mechanism", "predicted_observation", "confidence_0_1"],
+  "properties": {
+    "sample_id": {"type": "string", "minLength": 1},
+    "arm": {"enum": ["BASELINE", "REALITY"]},
+    "hypothesis": {"type": "string"},
+    "mechanism": {"type": "string"},
+    "predicted_observation": {"type": "string"},
+    "confidence_0_1": {"type": "number", "minimum": 0, "maximum": 1},
+    "changed_assumption": {"type": ["string", "null"]},
+    "negative_control": {"type": ["string", "null"]},
+    "competing_mechanism": {"type": ["string", "null"]},
+    "minimum_discriminator": {"type": ["string", "null"]},
+    "production_reality_verdict": {"type": ["string", "null"]},
+    "runtime_executed": {"type": ["boolean", "null"]}
+  }
+}

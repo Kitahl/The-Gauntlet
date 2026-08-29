@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LiveIdeaBench v2 Prediction",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sample_id", "arm", "generated_ideas", "benchmark_mode", "runtime_executed"],
+  "properties": {
+    "sample_id": {"type": "string", "minLength": 1},
+    "arm": {"enum": ["BASELINE", "REALITY"]},
+    "generated_ideas": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": ["string", "object"]}
+    },
+    "benchmark_mode": {"type": "string", "minLength": 1},
+    "runtime_executed": {"type": "boolean"},
+    "production_reality_verdict": {"type": ["string", "null"]}
+  }
+}
