@@ -1,0 +1,99 @@
+{
+  "allowed_internal_library_roots": [
+    "math_foundry_exec",
+    "math_foundry_exec.generalist"
+  ],
+  "authority": "ENGINEERING_ZERO_CREDIT",
+  "candidate": "math-foundry-formal-plane-postbench-hardening-candidate.2",
+  "candidate_additions": {
+    "math_foundry_exec.formalization_evidence": "typed multi-axis formalization evidence/admission candidate; no external worker authority",
+    "math_foundry_exec.theory_graph": "theory graph and trusted-base comparator lab substrate; no mathematical authority by itself",
+    "math_foundry_exec.trusted_base_minimality": "bounded exhaustive trusted-base minimality over an explicit finite graph universe; LAB_ONLY and no unbounded/global authority claim"
+  },
+  "declared_entrypoints": {
+    "math_foundry_session": {
+      "required_runtime_modules": [
+        "method_atlas",
+        "causal_regret_router",
+        "math_foundry_exec.assurance",
+        "math_foundry_exec.contract_core",
+        "math_foundry_exec.worker"
+      ]
+    },
+    "math_foundry_v19": {
+      "required_runtime_modules": [
+        "math_foundry_exec.strategy",
+        "math_foundry_exec.workflow",
+        "math_foundry_exec.runtime",
+        "math_foundry_exec.mechanism_search",
+        "math_foundry_exec.research_loop",
+        "math_foundry_exec.worldline_crs_bridge",
+        "proof_admission_v19",
+        "math_foundry_exec.worker"
+      ]
+    },
+    "math_foundry_v301": {
+      "required_runtime_modules": [
+        "math_foundry_exec.generalist.runner",
+        "math_foundry_exec.generalist.portfolio",
+        "math_foundry_exec.generalist.registry",
+        "math_foundry_exec.generalist.execution_supervisor",
+        "math_foundry_exec.legendre_pairs",
+        "math_foundry_exec.scientific_state",
+        "math_foundry_exec.worker"
+      ]
+    },
+    "math_foundry_v310": {
+      "required_runtime_modules": [
+        "math_foundry_v301",
+        "math_foundry_exec.generalist.runner",
+        "math_foundry_exec.generalist.registry"
+      ]
+    },
+    "math_foundry_v311": {
+      "required_runtime_modules": [
+        "math_foundry_v310",
+        "math_foundry_v301",
+        "math_foundry_exec.generalist.runner",
+        "math_foundry_exec.generalist.registry"
+      ]
+    }
+  },
+  "module_classifications": {
+    "math_foundry_exec.authority": "TEST_OR_LIBRARY_ONLY",
+    "math_foundry_exec.cache": "TEST_OR_LIBRARY_ONLY",
+    "math_foundry_exec.candidate_history": "TEST_OR_LIBRARY_ONLY",
+    "math_foundry_exec.common_mode": "TEST_OR_LIBRARY_ONLY",
+    "math_foundry_exec.evidence": "TEST_OR_LIBRARY_ONLY",
+    "math_foundry_exec.formalization_evidence": "CANDIDATE_LIBRARY_ONLY",
+    "math_foundry_exec.generalist.csp": "PRODUCT_EXECUTOR",
+    "math_foundry_exec.generalist.index_two": "DIAGNOSTIC_ONLY",
+    "math_foundry_exec.local_certificates": "TEST_OR_LIBRARY_ONLY",
+    "math_foundry_exec.lp_cegar": "LAB_ONLY",
+    "math_foundry_exec.method_backend_registry": "PRODUCT_EXECUTOR_REGISTRY",
+    "math_foundry_exec.method_native_ops": "PRODUCT_EXECUTOR",
+    "math_foundry_exec.method_scoped_ops": "PRODUCT_EXECUTOR",
+    "math_foundry_exec.replay": "TEST_OR_LIBRARY_ONLY",
+    "math_foundry_exec.router_family_model": "PRODUCT_ROUTING_MODEL",
+    "math_foundry_exec.theory_graph": "LAB_ONLY",
+    "math_foundry_exec.trusted_base_minimality": "LAB_ONLY"
+  },
+  "postbench_all57_isolated_runner": "benchmark_all_57_scoped_execution_postbench_v2.py",
+  "postbench_all57_worker": "benchmark_all_57_scoped_execution_postbench_worker.py",
+  "postbench_hardening_selftest": "math_foundry_postbench_hardening_selftest.py",
+  "postbench_qualification_manifest": "MATH_FOUNDRY_POSTBENCH_CANDIDATE_2_QUALIFICATION_MANIFEST.json",
+  "postbench_qualification_runner": "math_foundry_isolated_qualification_runner.py",
+  "postbench_representation_selftest": "math_foundry_v301_representation_tribunal_postbench_selftest.py",
+  "production_claims": {
+    "math_foundry_exec.generalist.execution_supervisor": "universal supervised boundary for deterministic/model/Latin operations",
+    "math_foundry_exec.generalist.registry": "canonical Generalist policy/route classification",
+    "math_foundry_exec.method_backend_registry": "truthful scoped/full backend registry for all Method Atlas cards",
+    "math_foundry_exec.method_native_ops": "qualified scoped exact executors for native Method Atlas cards",
+    "math_foundry_exec.method_scoped_ops": "qualified scoped exact executors covering the complete Method Atlas",
+    "math_foundry_exec.router_family_model": "SEARCH_ONLY transparent family/within-family paraphrase scoring; never mathematical authority",
+    "math_foundry_exec.scientific_state": "production proof-gated state used by Legendre/Generalist"
+  },
+  "qualification_manifest": "MATH_FOUNDRY_v3.1.1_RELEASE_QUALIFICATION_MANIFEST.json",
+  "qualification_runner": "math_foundry_qualification_runner.py",
+  "schema": "mathfoundry/architecture-contract/2"
+}

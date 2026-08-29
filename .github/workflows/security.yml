@@ -58,11 +58,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install pip-tools==7.6.1
+          tmp="$(mktemp)"
+          committed_norm="$(mktemp)"
+          generated_norm="$(mktemp)"
           python -m piptools compile \
             --generate-hashes \
             --resolver=backtracking \
-            --output-file=requirements-lock.txt \
+            --output-file="$tmp" \
             requirements-lock.in
+          sed '/^#    pip-compile /d' requirements-lock.txt > "$committed_norm"
+          sed '/^#    pip-compile /d' "$tmp" > "$generated_norm"
+          diff -u "$committed_norm" "$generated_norm"
           git diff --exit-code -- requirements-lock.txt
           echo "c691104c36101259f69f27d4e09ede3dc64b08c326b0ca8fa2021a1c2cacfd12  requirements-lock.txt" | sha256sum -c -
       - name: Install exact locked environment
