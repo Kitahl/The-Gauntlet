@@ -18,11 +18,19 @@ This directory contains benchmark construction, blinding, schema, sealing, scori
 |---|---|---|
 | RINoBench | LOCAL_MATERIALIZATION_REQUIRED | Official source is public, but no upstream redistribution license was declared in the pinned GitHub repository. Do not republish derived benchmark text until rights are verified. |
 | ResearchBench — Hypothesis Composition | RESTRICTED_LOCAL_ONLY | The full Hugging Face dataset is gated, CC BY-NC 4.0, and its access terms prohibit redistribution/re-hosting/publishing the raw data outside the research group. |
-| LiveIdeaBench v2 | READY_TO_MATERIALIZE | Official code is public and the v2 Hugging Face dataset declares Apache-2.0. The official generation prompt is keyword-only, so domain stays sealed. |
+| LiveIdeaBench v2 | MATERIALIZED | 1,180 keyword-only blind items plus a 44-item pilot (2 per each of 22 domains) were deterministically built from pinned official source CSVs. Domain remains sealed. |
 | AXIOMATIC_ADAPTATION_V1 | ADAPTATION_PENDING | The paper advertises supplementary benchmark code, but no authoritative executable repository was verified in this build. |
 | PROJECTIONBENCH_ADAPTATION_V1 | ADAPTATION_PENDING | No authoritative executable release was verified in this build. |
 
 The public repository must never contain readable gold, decryption secrets, restricted ResearchBench content, or unlicensed RINoBench text. The materializers default to caller-selected local output directories; restricted/local-only outputs should remain outside Git.
+
+## LiveIdeaBench v2 committed inputs
+
+- Full blind count: `1180`
+- Pilot count: `44`
+- Pilot stratification: `2 × 22 domains`
+- Full SHA-256: `4c96e5fe7355a9075a3ab0c885925f80a68914440de315aaa380e07616652b34`
+- Pilot SHA-256: `a07d8718b6e3b65be654a517fa5ebf0449f2b99b96a172c12e70e9a536184254`
 
 ## Deterministic seed
 
@@ -34,7 +42,7 @@ The public repository must never contain readable gold, decryption secrets, rest
 2. Generate a random 32-byte ID key locally and export it as `REALITY_BENCH_ID_KEY_HEX`.
 3. Run `tools/materialize.py` for a benchmark into a local-only directory.
 4. Inspect blind payloads and gold separately.
-5. Seal the canonical gold with `tools/seal_gold.py`.
+5. Seal the canonical gold with `tools/seal_gold.py` only after the complete gold package exists.
 6. Commit only inputs whose upstream license/terms permit redistribution, plus ciphertext commitments after a verified round trip.
 7. Run `python -m unittest discover -s benchmarks/reality_external/tests -v`.
 
