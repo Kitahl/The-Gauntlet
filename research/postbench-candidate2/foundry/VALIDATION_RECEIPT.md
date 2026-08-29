@@ -9,7 +9,7 @@
 - Source delta: **11 added / 1 modified / 0 deleted** (8 mechanism/harness + 3 packaging metadata)
 - Final isolated aggregate: **31/31 PASS**
 - New hardening controls: **9/9 PASS**
-- Representation tribunal: **19/19 PASS**
+- Representation verification suite: **19/19 PASS**
 - Isolated all-57 execution: **57/57 PASS**
 - Formal plane selftest: **19/19 PASS**
 - Behavioral mutations: **20/20 detected**
