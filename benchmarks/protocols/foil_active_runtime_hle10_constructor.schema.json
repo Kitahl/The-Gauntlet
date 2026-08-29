@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "status": {"type": "string", "enum": ["CANDIDATE", "NO_CANDIDATE"]},
+    "answer": {"type": "string"},
+    "claim": {"type": "string"},
+    "evidence_span_ids": {
+      "type": "array",
+      "maxItems": 2,
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
+    "reason": {"type": "string"}
+  },
+  "required": ["status", "answer", "claim", "evidence_span_ids", "reason"]
+}

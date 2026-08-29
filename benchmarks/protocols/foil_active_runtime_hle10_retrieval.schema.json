@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "status": {"type": "string", "enum": ["FOUND", "UNRESOLVED"]},
+    "sources": {
+      "type": "array",
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "url": {"type": "string", "format": "uri"},
+          "title": {"type": "string"},
+          "quote": {"type": "string"}
+        },
+        "required": ["url", "title", "quote"]
+      }
+    }
+  },
+  "required": ["status", "sources"]
+}
