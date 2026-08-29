@@ -678,7 +678,27 @@ def _module_args_allowed(
     return True, None
 
 
-def _command_shape_allowed(check: VerificationCheck) -> tuple[bool, str | None]:
+def _entrypoint_inside_root(root: Path, value: str) -> tuple[bool, str | None]:
+    """Require a real Python entrypoint to resolve inside the supplied repository root."""
+
+    root_path = root.resolve()
+    candidate = Path(value)
+    if not candidate.is_absolute():
+        candidate = root_path / candidate
+    try:
+        resolved = candidate.resolve(strict=True)
+    except OSError:
+        return False, "python-script entrypoint does not exist"
+    if not resolved.is_file():
+        return False, "python-script entrypoint is not a file"
+    try:
+        resolved.relative_to(root_path)
+    except ValueError:
+        return False, "python-script entrypoint resolves outside the repository root"
+    return True, None
+
+
+def _command_shape_allowed(root: Path, check: VerificationCheck) -> tuple[bool, str | None]:
     if check.kind not in KNOWN_KINDS:
         return False, f"unknown verifier kind: {check.kind}"
     if not check.command:
@@ -697,9 +717,10 @@ def _command_shape_allowed(check: VerificationCheck) -> tuple[bool, str | None]:
     if check.kind == "python-script":
         if not pythonish or len(command) < 2 or not command[1].endswith(".py"):
             return False, "python-script command must be python <entrypoint.py> ..."
-        if not Path(command[1]).exists():
-            return False, "python-script entrypoint does not exist"
-        return _module_args_allowed(command[1:], allow_custom=allow_custom)
+        inside, reason = _entrypoint_inside_root(root, command[1])
+        if not inside:
+            return False, reason
+        return _module_args_allowed(command[2:], allow_custom=allow_custom)
     if check.kind in {"python-unittest", "compileall"}:
         module = "unittest" if check.kind == "python-unittest" else "compileall"
         if not (pythonish and command[1:3] == ["-m", module]):
@@ -796,7 +817,7 @@ def run_check(root: Path, check: VerificationCheck) -> dict[str, Any]:
             "reason": check.applicability_reason,
             "entrypoint": check.entrypoint,
         }
-    allowed, reason = _command_shape_allowed(check)
+    allowed, reason = _command_shape_allowed(root, check)
     if not allowed:
         return {
             **common,
