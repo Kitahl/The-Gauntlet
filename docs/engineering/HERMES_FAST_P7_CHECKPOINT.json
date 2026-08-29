@@ -1,0 +1,92 @@
+{
+  "authority_ceiling": "ADAPTATION_ONLY",
+  "changed_paths": [
+    ".github/phase7_verify.py",
+    ".github/workflows/fastpath-checkpoint.yml",
+    "docs/engineering/PHASE7_FOIL_ADVISORY_ROUTE.md",
+    "gauntlet_host/constants.py",
+    "gauntlet_host/foil_bridge.py",
+    "gauntlet_host/module_cli.py",
+    "gauntlet_host/phase7_worker.py"
+  ],
+  "content_hash": "2af94023db476a0c059e91e196cdbafc5e2352fbaa4dd1a228492c3e1c7ebf32",
+  "fast_milestone": "FAST-P7",
+  "head_sha": "9747572e8ca13622b72d8cd3d995fece90e19173",
+  "implementation_commit_sha": "fc8ca813a71887f3be52e9da30794299030aab7a",
+  "known_limitations": [
+    "interim alpha still requires the pinned Hermes runtime",
+    "checkpoint is FAST-P7 only and is not GNR NATIVE-600, NATIVE-700, or native-final",
+    "FOIL route is SHADOW and ADAPTATION_ONLY",
+    "runtime-reported capability availability is not independently verified by Gauntlet",
+    "no profile complement or private profile data is used",
+    "no automatic toolset narrowing or execution authorization is applied",
+    "no behavioral efficacy or cost-reduction claim is established",
+    "FAST-P8 user-facing alpha CLI and boot qualification are not included",
+    "not yet admitted into integration/vnext-native-stack"
+  ],
+  "parent_checkpoint_sha": "249753738f193d1f82e7e12afe907c4841827f80",
+  "parent_checkpoint_tree": "10eeeeef9f85ca91e766e5be388a176943decf5d",
+  "producer_base_sha": "04e1994940115c8935246b54764e5f949096f179",
+  "producer_base_tree": "f64994423f1f03c213c4ddb7ea214b0a2671bc7d",
+  "producer_branch": "work/native-hermes-fastpath",
+  "recorded_at": "2026-08-29T19:46:18Z",
+  "repair_history": [
+    {
+      "conclusion": "failure",
+      "defect": "checkpoint verifier script did not expose the repository package root on sys.path",
+      "head_sha": "fc8ca813a71887f3be52e9da30794299030aab7a",
+      "run_id": 33271617165
+    },
+    {
+      "conclusion": "success",
+      "head_sha": "9747572e8ca13622b72d8cd3d995fece90e19173",
+      "resolution": "run the verifier with an explicit repository PYTHONPATH",
+      "run_id": 33271699059
+    }
+  ],
+  "runtime_required": true,
+  "schema": "egr.hermes.checkpoint.v1",
+  "tests": [
+    {
+      "checks": [
+        "pinned Hermes gitlink verification",
+        "pinned runtime dependency installation",
+        "strict direct FOIL route input validation",
+        "unknown semantic capability rejected fail-closed",
+        "one real vendored AIAgent turn against a deterministic local endpoint",
+        "live runtime tool definitions mapped to semantic capabilities",
+        "task-bound content-hashed route injected before the first model request",
+        "route mode SHADOW with ADAPTATION_ONLY authority ceiling",
+        "no private profile data transmitted",
+        "no automatic toolset narrowing or execution authorization",
+        "one real agent-visible gauntlet_task_status tool call",
+        "tool result persisted as OBSERVATION_ONLY",
+        "Soul release gate returned UNKNOWN for the unresolved fixture",
+        "unresolved task not accepted or released",
+        "zero canonical receipts created",
+        "canonical task state unchanged"
+      ],
+      "conclusion": "success",
+      "head_sha": "9747572e8ca13622b72d8cd3d995fece90e19173",
+      "job_id": 99151182885,
+      "run_id": 33271699059,
+      "workflow": "Fastpath checkpoint qualification"
+    }
+  ],
+  "tree_sha": "0b194a94abf0e9791afeb604c84141325381788f",
+  "upstream_hermes_commit": "5fc308a70719a83cccdbba4c0e39c23f5a8239d5",
+  "verification_summary": {
+    "canonical_receipts_created": 0,
+    "canonical_task_unchanged": true,
+    "capability_bundle_complete": false,
+    "missing_requirements": 2,
+    "model_round_trips": 3,
+    "profile_data_transmitted": false,
+    "release_gate_verdict": "UNKNOWN",
+    "route_authority_ceiling": "ADAPTATION_ONLY",
+    "route_injected_before_first_model_request": true,
+    "route_mode": "SHADOW",
+    "toolset_narrowing_applied": false,
+    "unresolved_not_accepted": true
+  }
+}
