@@ -35,7 +35,7 @@ from egrt_host_finalizer import (  # noqa: E402
     host_request_digest,
 )
 from egrt_types import ArtifactRef  # noqa: E402
-from egrt_verifiers import DEFAULT_REGISTRY  # noqa: E402
+from egrt_verifier_authority import VerifierRole, issue_verifier_evidence  # noqa: E402
 from foil_authority import (  # noqa: E402
     AuthorityAction,
     AuthorityCeiling,
@@ -121,8 +121,30 @@ def evidence_certificate(
         if verifier_id == "builtin.exact_arithmetic"
         else {"actual": "The exact result is 4.", "expected": "The exact result is 4."}
     )
-    verifier = DEFAULT_REGISTRY.run(verifier_id, payload)
-    verifier = dataclasses.replace(verifier, provenance_group=provenance_group)
+    verifier = issue_verifier_evidence(
+        verifier_id=verifier_id,
+        role=VerifierRole.STRUCTURAL_VERIFIER,
+        base_digest=base_digest,
+        candidate_digest=candidate_digest,
+        scope_digest=d("scope"),
+        obligation_set_digest=d("obligations"),
+        input_data=payload,
+    )
+    if kind is CertificateClass.INDEPENDENT_SEMANTIC:
+        verifier = dataclasses.replace(
+            verifier, role=VerifierRole.SEMANTIC_VERIFIER
+        )
+    if provenance_group != verifier.observed_result.provenance_group:
+        verifier = dataclasses.replace(
+            verifier,
+            observed_result=dataclasses.replace(
+                verifier.observed_result,
+                provenance_group=provenance_group,
+            ),
+        )
+    verifier = dataclasses.replace(
+        verifier, evidence_sha256=verifier.computed_evidence_sha256
+    )
     return EvidenceCertificate(
         certificate_id=f"cert-{kind.value.lower()}",
         certificate_class=kind,
@@ -138,9 +160,7 @@ def evidence_certificate(
             d("compiler"),
             d("config"),
         ),
-        verifier=verifier,
-        environment_digest=d("environment"),
-        evidence_digests=(verifier.evidence_digest,),
+        evidence=verifier,
         coverage=complete_coverage(),
     )
 
@@ -163,6 +183,7 @@ def full_pipeline_request(base: str, candidate: str) -> HostActionRequest:
         obligation_set_digest=d("obligations"),
         producer_id="host.fixture-producer",
         producer_version="1",
+        producer_implementation_digest=d("host.fixture-producer.impl"),
         artifact=ArtifactRef(locator="host://candidate-1", sha256=candidate_digest),
     )
     proposal = propose_shadow_repair(authority, external)
@@ -250,21 +271,11 @@ def full_pipeline_request(base: str, candidate: str) -> HostActionRequest:
 
 
 class HostFinalizerTests(unittest.TestCase):
-    def test_full_existing_chain_selects_candidate_only_after_explicit_approval(self) -> None:
+    def test_full_chain_rejects_unregistered_semantic_evidence_before_host_request(self) -> None:
         base = "The exact result is 5."
         candidate = "The exact result is 4."
-        request = full_pipeline_request(base, candidate)
-        result = finalize_host_answer(
-            request,
-            base_answer=base,
-            candidate_answer=candidate,
-            approval=approval(request),
-        )
-        self.assertEqual(result.state, FinalizationState.CANDIDATE_SELECTED)
-        self.assertEqual(result.answer, candidate)
-        self.assertTrue(result.host_action_applied)
-        self.assertFalse(result.base_answer_preserved)
-        self.assertFalse(result.execution_authorized)
+        with self.assertRaises(ValueError):
+            full_pipeline_request(base, candidate)
 
     def test_missing_approval_returns_the_identical_base_object(self) -> None:
         base = "The exact result is 5."

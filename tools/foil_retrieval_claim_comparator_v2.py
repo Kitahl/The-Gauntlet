@@ -129,7 +129,7 @@ def compare_candidate_v2(
                     ClaimVerdict(
                         claim.claim_id,
                         ClaimStatus.SUPPORTED if comparison.status is FormulaStatus.EQUIVALENT else ClaimStatus.CONTRADICTED,
-                        ComparisonAuthority.MECHANICAL,
+                        ComparisonAuthority.SOURCE_BOUND_MECHANICAL_UNADMITTED,
                         ComparisonMethod.TYPED_FORMULA_STRUCTURE,
                         PPM,
                         cited,
@@ -196,7 +196,11 @@ def _assessment(
     ) - omitted
     admissible = {ComparisonAuthority.MECHANICAL, ComparisonAuthority.SEMANTIC_CALIBRATED}
     if policy.allow_unadmitted_benchmark_selection:
-        admissible |= {ComparisonAuthority.SEMANTIC_UNCALIBRATED, ComparisonAuthority.HYBRID_UNADMITTED}
+        admissible |= {
+            ComparisonAuthority.SOURCE_BOUND_MECHANICAL_UNADMITTED,
+            ComparisonAuthority.SEMANTIC_UNCALIBRATED,
+            ComparisonAuthority.HYBRID_UNADMITTED,
+        }
     eligible = bool(replacements) and all(
         item.status is ClaimStatus.SUPPORTED and item.authority in admissible
         for item in replacements

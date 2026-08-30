@@ -375,9 +375,10 @@ class FoilRuntimeV2Tests(unittest.TestCase):
         self.assertEqual(final, "OLD")
         self.assertEqual(receipt.outcome, RuntimeOutcomeV2.PRESERVED_A0)
         self.assertEqual(raw["raw_receipt"]["passages"][0]["passage"], "ZX-9")
-        self.assertEqual(receipt.b_assessment["supported"], 1)
+        self.assertEqual(receipt.b_assessment["supported"], 0)
+        self.assertFalse(receipt.b_assessment["selection_eligible"])
 
-    def test_admitted_semantic_contradiction_can_unlock_retrieved_candidate(self) -> None:
+    def test_admitted_semantic_cannot_promote_untrusted_retrieved_candidate(self) -> None:
         question = "According to the official source, which code applies?"
 
         def comparator(claim: AtomicClaim, spans: tuple[object, ...]) -> SemanticComparison:
@@ -402,9 +403,9 @@ class FoilRuntimeV2Tests(unittest.TestCase):
                 archive=RawEvidenceArchive(Path(directory)),
                 constructor_runner=self.constructor, semantic_comparator=comparator,
             )
-        self.assertEqual(final, "ZX-9")
-        self.assertEqual(receipt.outcome, RuntimeOutcomeV2.FULL_RESOLVED)
-        self.assertTrue(receipt.answer_changed)
+        self.assertEqual(final, "OLD")
+        self.assertEqual(receipt.outcome, RuntimeOutcomeV2.PRESERVED_A0)
+        self.assertFalse(receipt.answer_changed)
 
     def test_uncalibrated_semantic_cannot_enter_active_selection(self) -> None:
         compare_policy = ComparatorPolicy(semantic_enabled=True, semantic_route_admitted=False)

@@ -27,8 +27,11 @@ from egrt_coverage import (  # noqa: E402
     CoverageRequirement,
     summarize_coverage,
 )  # noqa: E402
-from egrt_verifiers import DEFAULT_REGISTRY  # noqa: E402
-from foil_authority import CandidateRepair, CheckStatus, decide_admission  # noqa: E402
+from egrt_verifier_authority import (  # noqa: E402
+    VerifierRole,
+    issue_verifier_evidence,
+)
+from foil_authority import AdmissionState, CandidateRepair, CheckStatus, decide_admission  # noqa: E402
 
 BASE, CANDIDATE, SCOPE, OBLIGATIONS, ENV = (char * 64 for char in "abcde")
 
@@ -56,9 +59,21 @@ def certificate(
         if verifier_id == "builtin.json_exact"
         else {"actual": "x", "expected": "x"}
     )
-    result = DEFAULT_REGISTRY.run(verifier_id, payload)
+    result = issue_verifier_evidence(
+        verifier_id=verifier_id,
+        role=VerifierRole.STRUCTURAL_VERIFIER,
+        base_digest=BASE,
+        candidate_digest=CANDIDATE,
+        scope_digest=SCOPE,
+        obligation_set_digest=OBLIGATIONS,
+        input_data=payload,
+        input_artifact_digests=("8" * 64,),
+    )
     if kind is CertificateClass.INDEPENDENT_SEMANTIC:
-        result = dataclasses.replace(result, provenance_group="external.semantic")
+        result = dataclasses.replace(result, role=VerifierRole.SEMANTIC_VERIFIER)
+        result = dataclasses.replace(
+            result, evidence_sha256=result.computed_evidence_sha256
+        )
     return EvidenceCertificate(
         certificate_id="cert-1",
         certificate_class=kind,
@@ -68,9 +83,7 @@ def certificate(
         scope_digest=SCOPE,
         obligation_set_digest=OBLIGATIONS,
         bindings=bindings(),
-        verifier=result,
-        environment_digest=ENV,
-        evidence_digests=("8" * 64,),
+        evidence=result,
         coverage=coverage(),
     )
 
@@ -80,21 +93,36 @@ class EvidenceCertificateTests(unittest.TestCase):
         for kind in CertificateClass:
             with self.subTest(kind=kind):
                 valid, reason = validate_certificate(certificate(kind))
-                self.assertEqual(valid, kind is not CertificateClass.INCOMPLETE_SCOPE)
+                self.assertEqual(
+                    valid,
+                    kind
+                    not in {
+                        CertificateClass.INDEPENDENT_SEMANTIC,
+                        CertificateClass.INCOMPLETE_SCOPE,
+                    },
+                )
                 self.assertTrue(reason)
 
     def test_adapters_preserve_structural_semantic_separation(self) -> None:
         structural = certificate(CertificateClass.STRUCTURAL_ONLY)
         semantic = certificate(CertificateClass.INDEPENDENT_SEMANTIC, "builtin.json_exact")
         patch = to_patch_certificate(structural)
-        meaning = to_semantic_verification(semantic)
         self.assertEqual(patch.status, CheckStatus.PASS)
-        self.assertEqual(meaning.status, CheckStatus.PASS)
         candidate = CandidateRepair(
-            "candidate-1", BASE, CANDIDATE, SCOPE, OBLIGATIONS, "foil.repair", "1"
+            "candidate-1",
+            BASE,
+            CANDIDATE,
+            SCOPE,
+            OBLIGATIONS,
+            "foil.repair",
+            "1",
+            "7" * 64,
         )
-        decision = decide_admission(candidate, patch, meaning)
-        self.assertTrue(decision.candidate_committable)
+        decision = decide_admission(candidate, patch)
+        self.assertEqual(decision.state, AdmissionState.SEMANTIC_VERIFICATION_REQUIRED)
+        self.assertFalse(decision.candidate_committable)
+        with self.assertRaisesRegex(ValueError, "role_unauthorized"):
+            to_semantic_verification(semantic)
         with self.assertRaises(ValueError):
             to_patch_certificate(semantic)
         with self.assertRaises(ValueError):
@@ -104,9 +132,9 @@ class EvidenceCertificateTests(unittest.TestCase):
         valid = certificate(CertificateClass.STRUCTURAL_ONLY)
         for invalid in ("A" * 64, "g" * 64, "a" * 63):
             with self.subTest(field="environment", invalid=invalid), self.assertRaises(ValueError):
-                dataclasses.replace(valid, environment_digest=invalid)
+                dataclasses.replace(valid.evidence, environment_digest=invalid)
             with self.subTest(field="evidence", invalid=invalid), self.assertRaises(ValueError):
-                dataclasses.replace(valid, evidence_digests=(invalid,))
+                dataclasses.replace(valid.evidence, evidence_sha256=invalid)
 
     def test_incomplete_scope_never_adapts_to_a_passing_certificate(self) -> None:
         incomplete = certificate(CertificateClass.INCOMPLETE_SCOPE)

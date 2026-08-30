@@ -7,7 +7,7 @@ authority admission decision that remains subject to an explicit host action.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 
 from egrt_certificates import (
     CertificateClass,
@@ -22,7 +22,6 @@ from foil_authority import (
     AuthorityAction,
     AuthorityDecision,
     CandidateRepair,
-    CheckStatus,
     PatchCertificate,
     SemanticVerification,
     decide_admission,
@@ -56,6 +55,7 @@ class ExternalRepairCandidate:
     obligation_set_digest: str
     producer_id: str
     producer_version: str
+    producer_implementation_digest: str
     artifact: ArtifactRef
 
     def __post_init__(self) -> None:
@@ -63,6 +63,9 @@ class ExternalRepairCandidate:
             _require_text(name, getattr(self, name))
         for name in ("base_digest", "candidate_digest", "scope_digest", "obligation_set_digest"):
             _require_digest(name, getattr(self, name))
+        _require_digest(
+            "producer_implementation_digest", self.producer_implementation_digest
+        )
         if self.base_digest == self.candidate_digest:
             raise ValueError("candidate digest must differ from A0")
         if not isinstance(self.artifact, ArtifactRef):
@@ -114,6 +117,7 @@ def propose_shadow_repair(
         obligation_set_digest=external.obligation_set_digest,
         repair_producer=external.producer_id,
         repair_producer_version=external.producer_version,
+        producer_implementation_digest=external.producer_implementation_digest,
     )
     proposal_digest = digest(
         {
@@ -124,6 +128,7 @@ def propose_shadow_repair(
             "obligation_set_digest": candidate.obligation_set_digest,
             "artifact_locator": external.artifact.locator,
             "artifact_sha256": external.artifact.sha256,
+            "producer_implementation_digest": external.producer_implementation_digest,
         }
     )
     return ShadowRepairProposal(candidate, external.artifact, proposal_digest)
@@ -142,9 +147,8 @@ def _structural_certificate(
         CertificateClass.REGRESSION_SCOPED,
     }:
         raise ValueError("structural certificate must have a structural or predicate class")
-    adapted = to_patch_certificate(certificate)
     valid, _ = validate_certificate(certificate)
-    return adapted if valid else replace(adapted, status=CheckStatus.UNKNOWN)
+    return to_patch_certificate(certificate) if valid else None
 
 
 def _semantic_certificate(
@@ -156,9 +160,8 @@ def _semantic_certificate(
         raise TypeError("semantic certificate must be EvidenceCertificate")
     if certificate.certificate_class is not CertificateClass.INDEPENDENT_SEMANTIC:
         raise ValueError("semantic certificate must be INDEPENDENT_SEMANTIC")
-    adapted = to_semantic_verification(certificate)
     valid, _ = validate_certificate(certificate)
-    return adapted if valid else replace(adapted, status=CheckStatus.UNKNOWN)
+    return to_semantic_verification(certificate) if valid else None
 
 
 @dataclass(frozen=True)

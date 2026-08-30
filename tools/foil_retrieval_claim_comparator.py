@@ -40,6 +40,7 @@ class ClaimStatus(str, Enum):
 
 class ComparisonAuthority(str, Enum):
     MECHANICAL = "MECHANICAL"
+    SOURCE_BOUND_MECHANICAL_UNADMITTED = "SOURCE_BOUND_MECHANICAL_UNADMITTED"
     SEMANTIC_UNCALIBRATED = "SEMANTIC_UNCALIBRATED"
     SEMANTIC_CALIBRATED = "SEMANTIC_CALIBRATED"
     HYBRID_UNADMITTED = "HYBRID_UNADMITTED"
@@ -117,7 +118,12 @@ class ComparatorPolicy:
     allow_unadmitted_benchmark_selection: bool = False
     minimum_semantic_confidence_ppm: int = 950_000
     maximum_claims: int = 3
-    allowed_source_classes: tuple[SourceClass, ...] = tuple(SourceClass)
+    allowed_source_classes: tuple[SourceClass, ...] = (
+        SourceClass.PRIMARY,
+        SourceClass.SCHOLARLY,
+        SourceClass.INSTITUTIONAL,
+        SourceClass.SECONDARY,
+    )
 
     def __post_init__(self) -> None:
         for name in ("semantic_enabled", "semantic_route_admitted", "allow_unadmitted_benchmark_selection"):
@@ -296,7 +302,7 @@ def _exact_span_verdict(claim: AtomicClaim, packet: EvidencePacket, answer_kind:
     return ClaimVerdict(
         claim.claim_id,
         ClaimStatus.SUPPORTED,
-        ComparisonAuthority.MECHANICAL,
+        ComparisonAuthority.SOURCE_BOUND_MECHANICAL_UNADMITTED,
         ComparisonMethod.EXACT_BOUND_SPAN,
         PPM,
         tuple(span.span_id for span in exact),
@@ -473,7 +479,11 @@ def compare_candidate(
     unresolved -= omitted
     admissible = {ComparisonAuthority.MECHANICAL, ComparisonAuthority.SEMANTIC_CALIBRATED}
     if policy.allow_unadmitted_benchmark_selection:
-        admissible |= {ComparisonAuthority.SEMANTIC_UNCALIBRATED, ComparisonAuthority.HYBRID_UNADMITTED}
+        admissible |= {
+            ComparisonAuthority.SOURCE_BOUND_MECHANICAL_UNADMITTED,
+            ComparisonAuthority.SEMANTIC_UNCALIBRATED,
+            ComparisonAuthority.HYBRID_UNADMITTED,
+        }
     selection_eligible = bool(verdicts) and all(
         item.status is ClaimStatus.SUPPORTED and item.authority in admissible
         for item in verdicts

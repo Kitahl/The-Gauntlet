@@ -25,9 +25,10 @@ The runtime flow is:
    provide fetched content and exact passage offsets.
 6. Build an evidence packet. Arithmetic and non-arithmetic host proofs remain
    distinct receipt types. For a named-formula question, a unique parseable
-   source equation can construct a source-bound candidate without a model;
-   otherwise a candidate constructor, when enabled, receives the question and
-   admitted evidence but never A0 or tools.
+   source equation can construct a source-bound candidate without a model, but
+   that candidate remains `SOURCE_BOUND_MECHANICAL_UNADMITTED`; otherwise a
+   candidate constructor, when enabled, receives the question and evidence but
+   never A0 or tools.
 7. Compare A0 and B independently against the same packet. Mechanical evidence
    may adjudicate; uncalibrated semantic comparison is supporting only.
 8. Preserve A0 unless B is fully eligible and A0 has an admissible critical
@@ -44,6 +45,10 @@ The runtime flow is:
   not a generated specification.
 - A semantic comparator cannot participate in active answer change unless its
   route is explicitly admitted.
+- Provider-declared source classes are downgraded to `UNKNOWN` at the active
+  boundary. A trusted host source-policy adapter is not implemented. Source-
+  bound formula selection therefore requires an explicit unadmitted benchmark
+  opt-in and cannot silently inherit mechanical authority.
 - The runtime reads and writes no PERSON/profile state. Routing and acceptance
   evidence cannot train the profile from the same event.
 - The original answer digest and selected origin are retained on every path.
@@ -51,7 +56,7 @@ The runtime flow is:
 ## Verification
 
 Focused tests cover closed schemas, unknown-field rejection, all five adapter
-families, exact active repairs, correct-answer preservation, raw passage
+families, closed-host active repairs, correct-answer preservation, raw passage
 archiving, constructor blindness, selector authority, per-call accounting,
 aggregate-unbounded operation, timeout/malformed/overrun/persistence faults, and
 the real CLI path.
@@ -68,6 +73,6 @@ behavior; they do not prove generalized score improvement.
 - Passage retrieval requires a host-supplied provider adapter.
 - `FORMAL_DECIDABILITY` recognizes only the versioned total-language minimum-
   program theorem. It is not a general theorem prover or prose formalizer.
-- Typed formula comparison proves structural agreement with one retrieved
-  equation. It does not prove that the source is globally correct, and
-  conflicting or unsupported notation fails closed.
+- Typed formula comparison proves only structural agreement with one retrieved
+  equation. It does not prove source authority, relevance, or truth. Its normal
+  authority is unadmitted and provider source labels are not trusted.

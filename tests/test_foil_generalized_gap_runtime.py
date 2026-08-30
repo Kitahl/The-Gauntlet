@@ -13,7 +13,7 @@ if str(TOOLS) not in sys.path:
 from egrt_types import digest  # noqa: E402
 from foil_active_runtime_v2 import FoilRuntimePolicyV2, RuntimeOutcomeV2, run_foil_v2  # noqa: E402
 from foil_bounded_answer_constructor_v2 import ConstructorPolicyV2  # noqa: E402
-from foil_evidence_contract import AnswerKind, QuestionObligation  # noqa: E402
+from foil_evidence_contract import AnswerKind, QuestionObligation, SourceClass  # noqa: E402
 from foil_evidence_contract import PACKET_SCHEMA_V2  # noqa: E402
 from foil_retrieval_claim_comparator import ComparatorPolicy, ComparisonMethod  # noqa: E402
 from foil_route_opportunity_v2 import QUESTION_SCHEMA_V2, RuntimeToolFamily  # noqa: E402
@@ -44,11 +44,16 @@ MORI_WRONG = r"\(C=(V_fC_fA+V_mC_m)(V_fA+V_mI)^{-1}\)"
 MORI_RIGHT = r"C = (V_m C_m + V_f C_f A)(V_m I + V_f <A>)^{-1}"
 
 
-def policy() -> FoilRuntimePolicyV2:
+def policy(*, allow_unadmitted_source_selection: bool = False) -> FoilRuntimePolicyV2:
     return FoilRuntimePolicyV2(
         True,
         True,
-        ComparatorPolicy(),
+        ComparatorPolicy(
+            allow_unadmitted_benchmark_selection=allow_unadmitted_source_selection,
+            allowed_source_classes=(SourceClass.UNKNOWN,)
+            if allow_unadmitted_source_selection
+            else ComparatorPolicy().allowed_source_classes,
+        ),
         ConstructorPolicyV2(),
         require_raw_archive=False,
     )
@@ -114,7 +119,7 @@ class GeneralizedGapRuntimeTests(unittest.TestCase):
         self.assertEqual(receipt.a0_assessment["verdicts"][0]["method"], ComparisonMethod.EXACT_VERIFICATION.value)
         self.assertTrue(receipt.answer_changed)
 
-    def test_real_formula_failure_is_repaired_without_model_constructor(self) -> None:
+    def test_provider_asserted_formula_source_is_untrusted_and_preserves_a0(self) -> None:
         source = "The effective modulus is " + MORI_RIGHT + "."
         final, receipt = run_foil_v2(
             task("m", MORI_QUESTION),
@@ -125,11 +130,29 @@ class GeneralizedGapRuntimeTests(unittest.TestCase):
             policy=policy(),
             archive=None,
         )
+        self.assertEqual(final, MORI_WRONG)
+        self.assertEqual(receipt.outcome, RuntimeOutcomeV2.PRESERVED_A0)
+        assert receipt.constructor is not None
+        self.assertEqual(receipt.constructor["outcome"], "NO_CANDIDATE")
+        self.assertFalse(receipt.answer_changed)
+
+    def test_formula_selection_requires_explicit_unadmitted_benchmark_opt_in(self) -> None:
+        source = "The effective modulus is " + MORI_RIGHT + "."
+        final, receipt = run_foil_v2(
+            task("m", MORI_QUESTION),
+            MORI_WRONG,
+            obligation("m", MORI_QUESTION),
+            adapters={RuntimeToolFamily.PASSAGE_RETRIEVAL: retrieval_adapter((source,))},
+            ledger=RuntimeTokenLedger(),
+            policy=policy(allow_unadmitted_source_selection=True),
+            archive=None,
+        )
         self.assertEqual(final, MORI_RIGHT)
-        self.assertEqual(receipt.outcome, RuntimeOutcomeV2.FULL_RESOLVED)
-        self.assertIsNone(receipt.constructor)
         assert receipt.a0_assessment is not None and receipt.b_assessment is not None
-        self.assertEqual(receipt.a0_assessment["verdicts"][0]["method"], ComparisonMethod.TYPED_FORMULA_STRUCTURE.value)
+        self.assertEqual(
+            receipt.a0_assessment["verdicts"][0]["method"],
+            ComparisonMethod.TYPED_FORMULA_STRUCTURE.value,
+        )
         self.assertTrue(receipt.answer_changed)
 
     def test_correct_formula_is_preserved(self) -> None:

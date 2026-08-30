@@ -127,8 +127,11 @@ certificate classes. Certificate class is not action authority.
 applicability, sensor outcome, authority ceiling, and admission state. Unknown
 states preserve A0. A structural certificate does not establish semantic
 admission; an independently represented semantic verification is required for a
-COMMITTABLE candidate. Structural and semantic certificates must also carry
-different provenance groups; distinct verifier names alone are not independence.
+COMMITTABLE candidate. Verifier identity now resolves through the closed host
+authority registry and binds role, authority, implementation, environment, and
+registration digests. Admission replays canonical verifier input. Distinct
+names or caller-edited provenance strings alone are not independence. The
+default registry currently has no independently authorized semantic verifier.
 
 [foil_shadow_repair.py](../tools/foil_shadow_repair.py) is host-denied. It
 accepts an externally produced candidate, records certificate digests, preserves

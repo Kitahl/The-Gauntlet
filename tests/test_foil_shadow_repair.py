@@ -25,7 +25,7 @@ from egrt_coverage import (  # noqa: E402
     summarize_coverage,
 )
 from egrt_types import ArtifactRef  # noqa: E402
-from egrt_verifiers import DEFAULT_REGISTRY  # noqa: E402
+from egrt_verifier_authority import VerifierRole, issue_verifier_evidence  # noqa: E402
 from foil_authority import (  # noqa: E402
     AdmissionState,
     AuthorityAction,
@@ -61,6 +61,7 @@ def external(producer: str = "external.producer") -> ExternalRepairCandidate:
         obligation_set_digest=OBLIGATIONS,
         producer_id=producer,
         producer_version="1",
+        producer_implementation_digest="7" * 64,
         artifact=ArtifactRef(locator="host://artifact/candidate-1", sha256=CANDIDATE),
     )
 
@@ -86,11 +87,23 @@ def certificate(kind: CertificateClass, verifier_id: str) -> EvidenceCertificate
         if verifier_id == "builtin.json_exact"
         else {"actual": "x", "expected": "x"}
     )
-    verifier = DEFAULT_REGISTRY.run(verifier_id, payload)
+    verifier = issue_verifier_evidence(
+        verifier_id=verifier_id,
+        role=VerifierRole.STRUCTURAL_VERIFIER,
+        base_digest=BASE,
+        candidate_digest=CANDIDATE,
+        scope_digest=SCOPE,
+        obligation_set_digest=OBLIGATIONS,
+        input_data=payload,
+        input_artifact_digests=("8" * 64,),
+    )
     if kind is CertificateClass.INDEPENDENT_SEMANTIC:
         verifier = dataclasses.replace(
             verifier,
-            provenance_group="external.semantic",
+            role=VerifierRole.SEMANTIC_VERIFIER,
+        )
+        verifier = dataclasses.replace(
+            verifier, evidence_sha256=verifier.computed_evidence_sha256
         )
     return EvidenceCertificate(
         certificate_id=f"cert-{kind.value}",
@@ -101,9 +114,7 @@ def certificate(kind: CertificateClass, verifier_id: str) -> EvidenceCertificate
         scope_digest=SCOPE,
         obligation_set_digest=OBLIGATIONS,
         bindings=bindings(),
-        verifier=verifier,
-        environment_digest=ENV,
-        evidence_digests=("8" * 64,),
+        evidence=verifier,
         coverage=coverage(),
     )
 
@@ -128,6 +139,7 @@ class ShadowRepairTests(unittest.TestCase):
                 OBLIGATIONS,
                 "producer",
                 "1",
+                "7" * 64,
                 ArtifactRef(locator="host://artifact", sha256=BASE),
             )
         with self.assertRaisesRegex(ValueError, "artifact.sha256"):
@@ -139,6 +151,7 @@ class ShadowRepairTests(unittest.TestCase):
                 OBLIGATIONS,
                 "producer",
                 "1",
+                "7" * 64,
                 ArtifactRef(locator="host://artifact", sha256=None),
             )
 
@@ -149,7 +162,7 @@ class ShadowRepairTests(unittest.TestCase):
         admitted = admit_shadow_repair(
             proposal, structural_certificate=structural, semantic_certificate=semantic
         )
-        self.assertEqual(admitted.decision.state, AdmissionState.COMMITTABLE)
+        self.assertEqual(admitted.decision.state, AdmissionState.SEMANTIC_VERIFICATION_REQUIRED)
         self.assertTrue(admitted.base_answer_preserved)
         self.assertFalse(admitted.execution_authorized)
         self.assertEqual(
@@ -174,7 +187,7 @@ class ShadowRepairTests(unittest.TestCase):
             admit_shadow_repair(
                 proposal, structural_certificate=structural, semantic_certificate=same_semantic
             ).decision.state,
-            AdmissionState.REJECTED,
+            AdmissionState.SEMANTIC_VERIFICATION_REQUIRED,
         )
 
     def test_only_certificate_classes_in_their_separate_lanes_are_accepted(self) -> None:

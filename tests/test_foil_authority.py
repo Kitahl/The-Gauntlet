@@ -16,6 +16,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
 from egrt_types import EvidenceClass  # noqa: E402
+from egrt_verifier_authority import (  # noqa: E402
+    VerifierRole,
+    issue_verifier_evidence,
+)
 from foil_authority import (  # noqa: E402
     AdmissionDecision,
     AdmissionState,
@@ -76,61 +80,105 @@ def report(
     )
 
 
-def candidate() -> CandidateRepair:
+def candidate(
+    *,
+    producer: str = "foil.repair",
+    implementation_digest: str = "f" * 64,
+) -> CandidateRepair:
     return CandidateRepair(
         candidate_id="candidate-1",
         base_digest=BASE,
         candidate_digest=CANDIDATE,
         scope_digest=SCOPE,
         obligation_set_digest=OBLIGATIONS,
-        repair_producer="foil.repair",
+        repair_producer=producer,
         repair_producer_version="1.0.0",
+        producer_implementation_digest=implementation_digest,
     )
 
 
 def certificate(
     *,
     status: CheckStatus = CheckStatus.PASS,
-    verifier_id: str = "foil.structural-verifier",
-    provenance_group: str = "foil.structural",
+    verifier_id: str = "builtin.exact_match",
+    provenance_group: str = "egrt.builtin",
     base_digest: str = BASE,
     candidate_digest: str = CANDIDATE,
     scope_digest: str = SCOPE,
     obligation_set_digest: str = OBLIGATIONS,
 ) -> PatchCertificate:
+    if not isinstance(status, CheckStatus):
+        raise TypeError("status must be CheckStatus")
+    payload = (
+        {"actual": "x", "expected": "x"}
+        if status is CheckStatus.PASS
+        else {"actual": "x", "expected": "y"}
+        if status is CheckStatus.FAIL
+        else {}
+    )
+    evidence = issue_verifier_evidence(
+        verifier_id="builtin.exact_match",
+        role=VerifierRole.STRUCTURAL_VERIFIER,
+        base_digest=base_digest,
+        candidate_digest=candidate_digest,
+        scope_digest=scope_digest,
+        obligation_set_digest=obligation_set_digest,
+        input_data=payload,
+    )
+    if verifier_id != evidence.verifier_id:
+        evidence = dataclasses.replace(evidence, verifier_id=verifier_id)
+    if provenance_group != evidence.observed_result.provenance_group:
+        evidence = dataclasses.replace(
+            evidence,
+            observed_result=dataclasses.replace(
+                evidence.observed_result,
+                provenance_group=provenance_group,
+            ),
+        )
+    evidence = dataclasses.replace(
+        evidence, evidence_sha256=evidence.computed_evidence_sha256
+    )
     return PatchCertificate(
         base_digest=base_digest,
         candidate_digest=candidate_digest,
         scope_digest=scope_digest,
         obligation_set_digest=obligation_set_digest,
-        verifier_id=verifier_id,
-        verifier_version="1.0.0",
-        provenance_group=provenance_group,
-        environment_digest=ENVIRONMENT,
-        status=status,
+        evidence=evidence,
     )
 
 
 def semantic(
     *,
     status: CheckStatus = CheckStatus.PASS,
-    verifier_id: str = "foil.semantic-verifier",
-    provenance_group: str = "foil.semantic",
+    verifier_id: str = "builtin.exact_match",
+    provenance_group: str = "egrt.builtin",
     base_digest: str = BASE,
     candidate_digest: str = CANDIDATE,
     scope_digest: str = SCOPE,
     obligation_set_digest: str = OBLIGATIONS,
 ) -> SemanticVerification:
+    structural = certificate(
+        status=status,
+        verifier_id=verifier_id,
+        provenance_group=provenance_group,
+        base_digest=base_digest,
+        candidate_digest=candidate_digest,
+        scope_digest=scope_digest,
+        obligation_set_digest=obligation_set_digest,
+    )
+    evidence = dataclasses.replace(
+        structural.evidence,
+        role=VerifierRole.SEMANTIC_VERIFIER,
+    )
+    evidence = dataclasses.replace(
+        evidence, evidence_sha256=evidence.computed_evidence_sha256
+    )
     return SemanticVerification(
         base_digest=base_digest,
         candidate_digest=candidate_digest,
         scope_digest=scope_digest,
         obligation_set_digest=obligation_set_digest,
-        verifier_id=verifier_id,
-        verifier_version="1.0.0",
-        provenance_group=provenance_group,
-        environment_digest=ENVIRONMENT,
-        status=status,
+        evidence=evidence,
     )
 
 
@@ -165,6 +213,7 @@ class RegistrationBoundaryTests(unittest.TestCase):
                 obligation_set_digest=OBLIGATIONS,
                 repair_producer="foil.repair",
                 repair_producer_version="1.0.0",
+                producer_implementation_digest="f" * 64,
             )
 
     def test_strict_types_block_string_and_truthiness_bypasses(self):
@@ -319,10 +368,10 @@ class CandidateAdmissionTests(unittest.TestCase):
         self.assertEqual(decision.state, AdmissionState.SEMANTIC_VERIFICATION_REQUIRED)
         self.assertFalse(decision.candidate_committable)
 
-    def test_bound_independent_passes_make_candidate_committable_not_executable(self):
+    def test_unregistered_semantic_role_cannot_make_candidate_committable(self):
         decision = decide_admission(candidate(), certificate(), semantic())
-        self.assertEqual(decision.state, AdmissionState.COMMITTABLE)
-        self.assertTrue(decision.candidate_committable)
+        self.assertEqual(decision.state, AdmissionState.REJECTED)
+        self.assertFalse(decision.candidate_committable)
         self.assertTrue(decision.base_answer_preserved)
         self.assertTrue(decision.host_commit_required)
         self.assertFalse(decision.execution_authorized)
@@ -383,9 +432,9 @@ class CandidateAdmissionTests(unittest.TestCase):
             semantic(verifier_id="semantic.b", provenance_group="shared.family"),
         )
         self.assertEqual(decision.state, AdmissionState.REJECTED)
-        self.assertEqual(decision.reason, "structural_semantic_provenance_overlap")
+        self.assertIn("unregistered", decision.reason)
 
-    def test_only_pass_pass_is_committable_across_all_status_pairs(self):
+    def test_no_status_pair_bypasses_missing_semantic_role_authority(self):
         for structural_status, semantic_status in itertools.product(CheckStatus, repeat=2):
             with self.subTest(structural=structural_status, semantic=semantic_status):
                 decision = decide_admission(
@@ -393,11 +442,7 @@ class CandidateAdmissionTests(unittest.TestCase):
                     certificate(status=structural_status),
                     semantic(status=semantic_status),
                 )
-                expected = (
-                    structural_status is CheckStatus.PASS
-                    and semantic_status is CheckStatus.PASS
-                )
-                self.assertEqual(decision.candidate_committable, expected)
+                self.assertFalse(decision.candidate_committable)
 
     def test_unknown_checks_never_become_committable(self):
         decisions = (
@@ -408,8 +453,9 @@ class CandidateAdmissionTests(unittest.TestCase):
                 semantic(status=CheckStatus.UNKNOWN),
             ),
         )
+        self.assertEqual(decisions[0].state, AdmissionState.UNKNOWN)
+        self.assertEqual(decisions[1].state, AdmissionState.REJECTED)
         for decision in decisions:
-            self.assertEqual(decision.state, AdmissionState.UNKNOWN)
             self.assertFalse(decision.candidate_committable)
 
 

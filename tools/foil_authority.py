@@ -15,6 +15,12 @@ from dataclasses import dataclass, field
 from enum import Enum
 
 from egrt_types import EvidenceClass
+from egrt_verifier_authority import (
+    VerifierEvidenceManifest,
+    VerifierRole,
+    validate_verifier_evidence,
+)
+from egrt_verifiers import VerificationStatus
 
 
 class EvidenceSurface(str, Enum):
@@ -273,6 +279,7 @@ class CandidateRepair:
     obligation_set_digest: str
     repair_producer: str
     repair_producer_version: str
+    producer_implementation_digest: str
 
     def __post_init__(self) -> None:
         _require_text("candidate_id", self.candidate_id)
@@ -285,6 +292,9 @@ class CandidateRepair:
             "obligation_set_digest",
         ):
             _require_sha256(name, getattr(self, name))
+        _require_sha256(
+            "producer_implementation_digest", self.producer_implementation_digest
+        )
         if self.base_digest == self.candidate_digest:
             raise ValueError("candidate repair must differ from the base answer")
 
@@ -295,25 +305,56 @@ class PatchCertificate:
     candidate_digest: str
     scope_digest: str
     obligation_set_digest: str
-    verifier_id: str
-    verifier_version: str
-    provenance_group: str
-    environment_digest: str
-    status: CheckStatus
+    evidence: VerifierEvidenceManifest
 
     def __post_init__(self) -> None:
-        _require_instance("status", self.status, CheckStatus)
-        _require_text("verifier_id", self.verifier_id)
-        _require_text("verifier_version", self.verifier_version)
-        _require_text("provenance_group", self.provenance_group)
-        for name in (
-            "base_digest",
-            "candidate_digest",
-            "scope_digest",
-            "obligation_set_digest",
-            "environment_digest",
-        ):
+        _require_instance("evidence", self.evidence, VerifierEvidenceManifest)
+        for name in ("base_digest", "candidate_digest", "scope_digest", "obligation_set_digest"):
             _require_sha256(name, getattr(self, name))
+        if self.binding != (
+            self.evidence.base_digest,
+            self.evidence.candidate_digest,
+            self.evidence.scope_digest,
+            self.evidence.obligation_set_digest,
+        ):
+            raise ValueError("patch certificate must bind its evidence manifest")
+
+    @property
+    def binding(self) -> tuple[str, str, str, str]:
+        return (
+            self.base_digest,
+            self.candidate_digest,
+            self.scope_digest,
+            self.obligation_set_digest,
+        )
+
+    @property
+    def verifier_id(self) -> str:
+        return self.evidence.verifier_id
+
+    @property
+    def verifier_version(self) -> str:
+        return self.evidence.verifier_version
+
+    @property
+    def provenance_group(self) -> str:
+        return self.evidence.observed_result.provenance_group
+
+    @property
+    def implementation_digest(self) -> str:
+        return self.evidence.implementation_digest
+
+    @property
+    def authority_id(self) -> str:
+        return self.evidence.authority_id
+
+    @property
+    def environment_digest(self) -> str:
+        return self.evidence.environment_digest
+
+    @property
+    def status(self) -> CheckStatus:
+        return _check_status(self.evidence.observed_result.status)
 
 
 @dataclass(frozen=True)
@@ -322,25 +363,64 @@ class SemanticVerification:
     candidate_digest: str
     scope_digest: str
     obligation_set_digest: str
-    verifier_id: str
-    verifier_version: str
-    provenance_group: str
-    environment_digest: str
-    status: CheckStatus
+    evidence: VerifierEvidenceManifest
 
     def __post_init__(self) -> None:
-        _require_instance("status", self.status, CheckStatus)
-        _require_text("verifier_id", self.verifier_id)
-        _require_text("verifier_version", self.verifier_version)
-        _require_text("provenance_group", self.provenance_group)
-        for name in (
-            "base_digest",
-            "candidate_digest",
-            "scope_digest",
-            "obligation_set_digest",
-            "environment_digest",
-        ):
+        _require_instance("evidence", self.evidence, VerifierEvidenceManifest)
+        for name in ("base_digest", "candidate_digest", "scope_digest", "obligation_set_digest"):
             _require_sha256(name, getattr(self, name))
+        if self.binding != (
+            self.evidence.base_digest,
+            self.evidence.candidate_digest,
+            self.evidence.scope_digest,
+            self.evidence.obligation_set_digest,
+        ):
+            raise ValueError("semantic verification must bind its evidence manifest")
+
+    @property
+    def binding(self) -> tuple[str, str, str, str]:
+        return (
+            self.base_digest,
+            self.candidate_digest,
+            self.scope_digest,
+            self.obligation_set_digest,
+        )
+
+    @property
+    def verifier_id(self) -> str:
+        return self.evidence.verifier_id
+
+    @property
+    def verifier_version(self) -> str:
+        return self.evidence.verifier_version
+
+    @property
+    def provenance_group(self) -> str:
+        return self.evidence.observed_result.provenance_group
+
+    @property
+    def implementation_digest(self) -> str:
+        return self.evidence.implementation_digest
+
+    @property
+    def authority_id(self) -> str:
+        return self.evidence.authority_id
+
+    @property
+    def environment_digest(self) -> str:
+        return self.evidence.environment_digest
+
+    @property
+    def status(self) -> CheckStatus:
+        return _check_status(self.evidence.observed_result.status)
+
+
+def _check_status(status: VerificationStatus) -> CheckStatus:
+    if status is VerificationStatus.PASS:
+        return CheckStatus.PASS
+    if status is VerificationStatus.FAIL:
+        return CheckStatus.FAIL
+    return CheckStatus.UNKNOWN
 
 
 @dataclass(frozen=True)
@@ -409,8 +489,23 @@ def decide_admission(
     )
     if certificate_binding != expected:
         return decision(AdmissionState.REJECTED, "certificate_binding_mismatch")
+    certificate_evidence_valid, certificate_evidence_reason = validate_verifier_evidence(
+        certificate.evidence,
+        required_role=VerifierRole.STRUCTURAL_VERIFIER,
+        expected_bindings=expected,
+    )
+    if not certificate_evidence_valid:
+        return decision(
+            AdmissionState.REJECTED,
+            f"certificate_{certificate_evidence_reason}",
+        )
     if certificate.verifier_id == candidate.repair_producer:
         return decision(AdmissionState.REJECTED, "repair_producer_self_certified")
+    if certificate.implementation_digest == candidate.producer_implementation_digest:
+        return decision(
+            AdmissionState.REJECTED,
+            "repair_producer_implementation_self_certified",
+        )
     if certificate.status is CheckStatus.FAIL:
         return decision(AdmissionState.REJECTED, "certificate_failed")
     if certificate.status is CheckStatus.UNKNOWN:
@@ -429,6 +524,16 @@ def decide_admission(
     )
     if semantic_binding != expected:
         return decision(AdmissionState.REJECTED, "semantic_binding_mismatch")
+    semantic_evidence_valid, semantic_evidence_reason = validate_verifier_evidence(
+        semantic.evidence,
+        required_role=VerifierRole.SEMANTIC_VERIFIER,
+        expected_bindings=expected,
+    )
+    if not semantic_evidence_valid:
+        return decision(
+            AdmissionState.REJECTED,
+            f"semantic_{semantic_evidence_reason}",
+        )
     if semantic.verifier_id == certificate.verifier_id:
         return decision(
             AdmissionState.REJECTED,
@@ -439,8 +544,23 @@ def decide_admission(
             AdmissionState.REJECTED,
             "structural_semantic_provenance_overlap",
         )
+    if semantic.authority_id == certificate.authority_id:
+        return decision(
+            AdmissionState.REJECTED,
+            "structural_semantic_authority_overlap",
+        )
+    if semantic.implementation_digest == certificate.implementation_digest:
+        return decision(
+            AdmissionState.REJECTED,
+            "structural_semantic_implementation_collision",
+        )
     if semantic.verifier_id == candidate.repair_producer:
         return decision(AdmissionState.REJECTED, "repair_producer_self_verified_semantics")
+    if semantic.implementation_digest == candidate.producer_implementation_digest:
+        return decision(
+            AdmissionState.REJECTED,
+            "repair_producer_implementation_self_verified_semantics",
+        )
     if semantic.status is CheckStatus.FAIL:
         return decision(AdmissionState.REJECTED, "semantic_verification_failed")
     if semantic.status is CheckStatus.UNKNOWN:

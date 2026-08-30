@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 
 from egrt_certificates import CertificateClass  # noqa: E402
 from egrt_host_bridge import HostActionRequest, create_host_action_request  # noqa: E402
+from foil_authority import AdmissionDecision, AdmissionState  # noqa: E402
 from foil_authority_replay import AuthorityReplayGuard  # noqa: E402
 from foil_candidate_state import (  # noqa: E402
     AuthorityIssuer,
@@ -36,13 +37,21 @@ class HostBridgeTests(unittest.TestCase):
 
     def admitted(self):
         proposal = propose_shadow_repair(authority(), external())
-        return admit_shadow_repair(
+        incomplete = admit_shadow_repair(
             proposal,
             structural_certificate=certificate(
                 CertificateClass.STRUCTURAL_ONLY, "builtin.exact_match"
             ),
-            semantic_certificate=certificate(
-                CertificateClass.INDEPENDENT_SEMANTIC, "builtin.json_exact"
+        )
+        # This module tests only the downstream host bridge. Production admission
+        # is tested separately and currently has no registered semantic verifier.
+        return dataclasses.replace(
+            incomplete,
+            semantic_certificate_digest=d("synthetic bridge semantic certificate"),
+            decision=AdmissionDecision(
+                AdmissionState.COMMITTABLE,
+                "synthetic downstream bridge fixture",
+                incomplete.proposal.candidate.candidate_id,
             ),
         )
 

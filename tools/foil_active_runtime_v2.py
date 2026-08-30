@@ -232,10 +232,11 @@ def _receipt(
 
 
 def _source_class(value: str) -> SourceClass:
-    try:
-        return SourceClass(value)
-    except ValueError:
-        return SourceClass.UNKNOWN
+    """Provider assertions are data, not trusted source-policy decisions."""
+
+    if not isinstance(value, str):
+        raise TypeError("source class assertion must be text")
+    return SourceClass.UNKNOWN
 
 
 def _packet_from_receipt(

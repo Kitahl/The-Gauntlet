@@ -8,11 +8,13 @@ from __future__ import annotations
 import ast
 import hashlib
 import json
+import platform
 import re
 from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
 from enum import Enum
 from fractions import Fraction
+from pathlib import Path
 from typing import Any, Callable, Mapping
 
 from egrt_types import canonical_json, digest
@@ -455,6 +457,36 @@ class DeterministicVerifierRegistry:
 
     def names(self) -> tuple[str, ...]:
         return tuple(sorted(_BUILTINS))
+
+    @property
+    def module_digest(self) -> str:
+        """Digest the complete built-in implementation module."""
+
+        return hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+
+    @property
+    def environment_digest(self) -> str:
+        """Bind receipts to the interpreter and verifier module actually used."""
+
+        return digest(
+            {
+                "python_implementation": platform.python_implementation(),
+                "python_version": platform.python_version(),
+                "verifier_module_sha256": self.module_digest,
+            }
+        )
+
+    def implementation_digest(self, verifier_id: str) -> str:
+        """Content-bind one registered entry point and all module helpers it uses."""
+
+        self.resolve(verifier_id)
+        adapter = _BUILTINS[verifier_id][1]
+        return digest(
+            {
+                "module_sha256": self.module_digest,
+                "callable": adapter.__qualname__,
+            }
+        )
 
     def resolve(self, verifier_id: str) -> VerifierSpec:
         _require_text("verifier_id", verifier_id)

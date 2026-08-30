@@ -396,7 +396,7 @@ class SmallPilotTests(unittest.TestCase):
         audited = pilot_audit.verify(first)
         self.assertEqual(audited["verified_rows"], 12)
 
-    def test_frozen_report_reaudits_when_present(self) -> None:
+    def test_frozen_report_cannot_be_relabelled_current_after_implementation_change(self) -> None:
         report_path = (
             ROOT
             / "benchmark_runs"
@@ -407,10 +407,10 @@ class SmallPilotTests(unittest.TestCase):
             self.skipTest("frozen small-pilot report is absent")
         import json
 
-        audited = pilot_audit.verify(
-            json.loads(report_path.read_text(encoding="utf-8"))
-        )
-        self.assertEqual(audited["verified_rows"], 12)
+        with self.assertRaisesRegex(
+            AssertionError, "implementation/protocol file binding"
+        ):
+            pilot_audit.verify(json.loads(report_path.read_text(encoding="utf-8")))
 
 
 if __name__ == "__main__":

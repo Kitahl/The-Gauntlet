@@ -21,16 +21,19 @@ The retrieval path also has a typed formula-structure comparator. It parses a
 unique source-bound equation in a deliberately small algebra where addition is
 commutative but multiplication order, inverse scope, and `AVG` remain distinct.
 This closes one execution-class comparison gap; it does not infer an equation
-from prose or certify the truth of the retrieved source.
+from prose or certify the authority, relevance, or truth of the retrieved
+source. It is therefore source-bound mechanical evidence with unadmitted answer-
+selection authority unless a benchmark explicitly opts into that condition.
 
 Consequently, current decidable coverage measures only a supplied obligation
 universe. It does not measure FOIL's ability to find decidable structure in prose,
 does not prove that the universe faithfully represents the source, and cannot be
 read as global semantic correctness.
 
-Closed fields, versions, digests, enums, and a closed verifier registry establish
-structural validity and integrity. They do not establish semantic faithfulness or
-extraction recall.
+Closed fields, versions, digests, enums, replayed deterministic verifier input,
+and a closed verifier-authority registry establish structural validity,
+execution identity, and content integrity within the trusted host. They do not
+establish semantic faithfulness, source truth, or extraction recall.
 
 Any external component that generates obligations from natural language must pass
 this gate before its output can feed the existing compiler.

@@ -33,8 +33,16 @@ Certificate success never admits a repair by itself.
   execution. These fields cannot be overridden through normal construction.
 - Candidate, structural certificate, and semantic verification are bound to the
   same base, candidate, scope, and obligation-set digests.
-- The repair producer cannot certify or semantically verify its own candidate,
-  and the structural verifier cannot be reused as the semantic verifier.
+- Verifier authority resolves through a closed host registry. Registration binds
+  authority ID, role, version, implementation digest, authorized scope,
+  environment digest, and the complete registration digest.
+- Every certificate carries canonical verifier input plus the observed result.
+  Admission recomputes the evidence digest, reruns the closed deterministic
+  verifier, and compares the complete result. Caller-selected PASS values and
+  syntactically valid arbitrary hashes have no authority.
+- The repair producer cannot certify or semantically verify its own candidate.
+  Producer, structural verifier, and semantic verifier implementation digests
+  must be distinct; verifier names alone never establish independence.
 - Missing, failed, or unknown checks never make a candidate committable.
 - Even `COMMITTABLE` candidates preserve the base answer, deny execution, and
   require a host commit.
@@ -42,6 +50,12 @@ Certificate success never admits a repair by itself.
   as `"false"` cannot bypass enum or boolean checks.
 
 ## Deliberately absent
+
+The default registry currently authorizes only closed deterministic structural
+verifiers. It contains no independently authorized semantic verifier, so a
+caller cannot reach `COMMITTABLE` by relabeling a built-in result. Adding a real
+semantic authority requires a separately implemented and registered verifier,
+not a runtime string or provenance edit.
 
 This slice does not provide production sensors, a repair generator, an executor,
 a host integration, calibration data, efficacy measurements, or proof that FOIL
