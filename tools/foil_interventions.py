@@ -6,6 +6,10 @@ linked observational sequence does not establish a causal treatment effect.
 
 Changes from v1
 ---------------
+0. The optional ``effect`` field records whether assistance was useful,
+   necessary, redundant, harmful, a takeover, insufficient, or missed the gap.
+   It is additive: legacy v2 rows without the field remain readable, and the
+   outcome phase/ownership rules below remain the authority for transfer.
 1. Assistance levels come from `foil_assistance.Assistance`, so the ledger and
    `skills/foil/SKILL.md` share one vocabulary.  v1 accepted any free string for
    `assistance_level` and recognised independence only from `{"none",
@@ -25,12 +29,14 @@ Changes from v1
    Outcomes owned by TOOL or SHARED are inadmissible above the `immediate`
    phase, exactly as assisted outcomes are.
 """
+
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
 from datetime import datetime, timezone
+from enum import Enum
 from pathlib import Path
 from typing import Any
 
@@ -47,11 +53,13 @@ GAP_KINDS = {
     "MISSING_KNOWLEDGE",
     "INCORRECT_KNOWLEDGE",
     "MISSING_PROCEDURE",
+    "COMMUNICATION_GAP",
     "PREREQUISITE_GAP",
     "REPRESENTATION_MISMATCH",
     "RETRIEVAL_FAILURE",
     "EVIDENCE_GAP",
     "VERIFICATION_GAP",
+    "PRESENTATION_GAP",
     "TOOL_OR_ARTIFACT_GAP",
     "EXECUTION_SLIP",
     "AMBIGUOUS_TASK",
@@ -61,6 +69,23 @@ GAP_KINDS = {
 }
 OUTCOME_PHASES = ("immediate", "independent", "transfer", "defense")
 RESULTS = {"pass", "fail", "mixed", "unknown"}
+
+
+class OutcomeEffect(str, Enum):
+    """Append-only intervention-effect vocabulary for persisted rows."""
+
+    USEFUL_COMPLEMENT = "useful_complement"
+    NECESSARY_COMPLEMENT = "necessary_complement"
+    REDUNDANT_ASSISTANCE = "redundant_assistance"
+    HARMFUL_ASSISTANCE = "harmful_assistance"
+    TAKEOVER_EVENT = "takeover_event"
+    INSUFFICIENT_ASSISTANCE = "insufficient_assistance"
+    MISSED_GAP = "missed_gap"
+    INDEPENDENT_AFTER_ASSISTANCE = "independent_after_assistance"
+    LATER_TRANSFER = "later_transfer"
+
+
+OUTCOME_EFFECTS = tuple(effect.value for effect in OutcomeEffect)
 
 #: Phases ordered weakest to strongest claim about the person.
 _PHASE_STATUS = {
@@ -129,6 +154,29 @@ def _confidence(value: float) -> float:
     if not 0.0 <= value <= 1.0:
         raise ValueError("confidence must be between 0 and 1")
     return value
+
+
+def _changed_context_proof(
+    context_sha256: str | None,
+    prior_context_sha256: str | None,
+) -> dict[str, str] | None:
+    """Validate an optional digest-only proof of a representation change."""
+    if context_sha256 is None and prior_context_sha256 is None:
+        return None
+    values = {
+        "context_sha256": context_sha256,
+        "prior_context_sha256": prior_context_sha256,
+    }
+    for name, value in values.items():
+        if not isinstance(value, str) or len(value) != 64 or value.lower() != value:
+            raise ValueError(f"{name} must be a lowercase SHA-256 digest")
+        try:
+            int(value, 16)
+        except ValueError as exc:
+            raise ValueError(f"{name} must be a lowercase SHA-256 digest") from exc
+    if context_sha256 == prior_context_sha256:
+        raise ValueError("changed-context digests must be different")
+    return values  # type: ignore[return-value]
 
 
 def add_gap(
@@ -201,10 +249,13 @@ def add_outcome(
     verified: bool,
     assistance: str | Assistance,
     representation: str | None = None,
+    context_sha256: str | None = None,
+    prior_context_sha256: str | None = None,
     verifier: str | None = None,
     evidence_ref: str | None = None,
     observed_at: str | None = None,
     execution_owner: str | ExecutionOwner = ExecutionOwner.USER,
+    effect: str | OutcomeEffect | None = None,
 ) -> str:
     if phase not in OUTCOME_PHASES:
         raise ValueError(f"unknown outcome phase: {phase}")
@@ -214,8 +265,15 @@ def add_outcome(
         raise KeyError(f"unknown intervention_id: {intervention_id}")
     level = parse_assistance(assistance)
     owner = parse_execution_owner(execution_owner)
+    parsed_effect: OutcomeEffect | None = None
+    if effect is not None:
+        try:
+            parsed_effect = OutcomeEffect(effect)
+        except ValueError as exc:
+            raise ValueError(f"unknown outcome effect: {effect}") from exc
     if verified and not verifier:
         raise ValueError("a verified outcome must name its verifier")
+    changed_context = _changed_context_proof(context_sha256, prior_context_sha256)
     stamp = now()
     row = {
         "time": stamp,
@@ -227,8 +285,10 @@ def add_outcome(
         "assistance": level.value,
         "execution_owner": owner.value,
         "representation": representation,
+        "changed_context": changed_context,
         "verifier": verifier,
         "evidence_ref": evidence_ref,
+        "effect": parsed_effect.value if parsed_effect else None,
     }
     oid = _content_id("o", row)
     ledger.setdefault("outcomes", []).append({"id": oid, **row})
@@ -279,7 +339,9 @@ def intervention_status(ledger: dict[str, Any], intervention_id: str) -> dict[st
             continue
         latest = admissible[-1]
         latest_by_phase[phase] = latest
-        if latest.get("result") != "pass" and any(r.get("result") == "pass" for r in admissible[:-1]):
+        if latest.get("result") != "pass" and any(
+            r.get("result") == "pass" for r in admissible[:-1]
+        ):
             superseded.append(phase)
 
     for phase in ("defense", "transfer", "independent", "immediate"):
@@ -309,10 +371,55 @@ def intervention_status(ledger: dict[str, Any], intervention_id: str) -> dict[st
     }
 
 
+def intervention_effect_metrics(ledger: dict[str, Any]) -> dict[str, Any]:
+    """Compute auditable intervention-level rates from tagged outcomes.
+
+    An intervention may have more than one effect over time (for example an
+    immediately useful complement followed by later transfer), so every rate
+    is a separate proportion and the rates are not expected to sum to one.
+    """
+    known_interventions = {row.get("id") for row in ledger.get("interventions", [])}
+    by_intervention: dict[str, set[OutcomeEffect]] = {}
+    for row in ledger.get("outcomes", []):
+        intervention_id = row.get("intervention_id")
+        if intervention_id not in known_interventions or not row.get("effect"):
+            continue
+        try:
+            effect = OutcomeEffect(row["effect"])
+        except ValueError:
+            continue
+        by_intervention.setdefault(intervention_id, set()).add(effect)
+    assessed = len(by_intervention)
+
+    def count(*effects: OutcomeEffect) -> int:
+        wanted = set(effects)
+        return sum(bool(values & wanted) for values in by_intervention.values())
+
+    def rate(value: int) -> float | None:
+        return round(value / assessed, 6) if assessed else None
+
+    hits = count(OutcomeEffect.USEFUL_COMPLEMENT, OutcomeEffect.NECESSARY_COMPLEMENT)
+    redundant = count(OutcomeEffect.REDUNDANT_ASSISTANCE)
+    harmful = count(OutcomeEffect.HARMFUL_ASSISTANCE)
+    takeover = count(OutcomeEffect.TAKEOVER_EVENT)
+    harmful_or_takeover = count(OutcomeEffect.HARMFUL_ASSISTANCE, OutcomeEffect.TAKEOVER_EVENT)
+    missed = count(OutcomeEffect.MISSED_GAP)
+    insufficient = count(OutcomeEffect.INSUFFICIENT_ASSISTANCE)
+    return {
+        "assessed_interventions": assessed,
+        "complement_hit_rate": rate(hits),
+        "redundant_assistance_rate": rate(redundant),
+        "harmful_assistance_rate": rate(harmful),
+        "takeover_rate": rate(takeover),
+        "harmful_or_takeover_rate": rate(harmful_or_takeover),
+        "missed_gap_rate": rate(missed),
+        "insufficient_assistance_rate": rate(insufficient),
+    }
+
+
 def summary(ledger: dict[str, Any]) -> dict[str, Any]:
     statuses = {
-        row["id"]: intervention_status(ledger, row["id"])
-        for row in ledger.get("interventions", [])
+        row["id"]: intervention_status(ledger, row["id"]) for row in ledger.get("interventions", [])
     }
     ages: list[float] = []
     reference = datetime.now(timezone.utc)
@@ -329,6 +436,7 @@ def summary(ledger: dict[str, Any]) -> dict[str, Any]:
         "newest_evidence_age_days": round(min(ages), 2) if ages else None,
         "oldest_evidence_age_days": round(max(ages), 2) if ages else None,
         "superseded_count": sum(1 for row in statuses.values() if row["superseded_phases"]),
+        "effect_metrics": intervention_effect_metrics(ledger),
         "causal_boundary": (
             "These are descriptive linked observations. Do not infer that an intervention caused "
             "an outcome without a controlled comparison or randomized design."
@@ -368,8 +476,9 @@ def main(argv: list[str] | None = None) -> int:
     intervene.add_argument("path", type=Path)
     intervene.add_argument("--gap-id", required=True)
     intervene.add_argument("--complement", required=True)
-    intervene.add_argument("--assistance-level", required=True,
-                           choices=[a.value for a in Assistance])
+    intervene.add_argument(
+        "--assistance-level", required=True, choices=[a.value for a in Assistance]
+    )
     intervene.add_argument("--tool-capability")
     intervene.add_argument("--rationale")
     intervene.add_argument("--expected-signal")
@@ -382,10 +491,16 @@ def main(argv: list[str] | None = None) -> int:
     outcome.add_argument("--verified", action="store_true")
     outcome.add_argument("--assistance", required=True, choices=[a.value for a in Assistance])
     outcome.add_argument("--representation")
+    outcome.add_argument("--context-sha256")
+    outcome.add_argument("--prior-context-sha256")
     outcome.add_argument("--verifier")
     outcome.add_argument("--evidence-ref")
-    outcome.add_argument("--execution-owner", default=ExecutionOwner.USER.value,
-                         choices=[o.value for o in ExecutionOwner])
+    outcome.add_argument(
+        "--execution-owner",
+        default=ExecutionOwner.USER.value,
+        choices=[o.value for o in ExecutionOwner],
+    )
+    outcome.add_argument("--effect", choices=list(OUTCOME_EFFECTS))
 
     status = sub.add_parser("summary")
     status.add_argument("path", type=Path)
@@ -398,20 +513,41 @@ def main(argv: list[str] | None = None) -> int:
 
     ledger = load(args.path)
     if args.cmd == "gap":
-        ident = add_gap(ledger, task_id=args.task_id, capability=args.capability, kind=args.kind,
-                        confidence=args.confidence, alternatives=args.alternative,
-                        evidence_refs=args.evidence_ref)
+        ident = add_gap(
+            ledger,
+            task_id=args.task_id,
+            capability=args.capability,
+            kind=args.kind,
+            confidence=args.confidence,
+            alternatives=args.alternative,
+            evidence_refs=args.evidence_ref,
+        )
     elif args.cmd == "intervene":
-        ident = add_intervention(ledger, gap_id=args.gap_id, complement=args.complement,
-                                 assistance_level=args.assistance_level,
-                                 tool_capability=args.tool_capability, rationale=args.rationale,
-                                 expected_signal=args.expected_signal)
+        ident = add_intervention(
+            ledger,
+            gap_id=args.gap_id,
+            complement=args.complement,
+            assistance_level=args.assistance_level,
+            tool_capability=args.tool_capability,
+            rationale=args.rationale,
+            expected_signal=args.expected_signal,
+        )
     elif args.cmd == "outcome":
-        ident = add_outcome(ledger, intervention_id=args.intervention_id, phase=args.phase,
-                            result=args.result, verified=args.verified, assistance=args.assistance,
-                            representation=args.representation, verifier=args.verifier,
-                            evidence_ref=args.evidence_ref,
-                            execution_owner=args.execution_owner)
+        ident = add_outcome(
+            ledger,
+            intervention_id=args.intervention_id,
+            phase=args.phase,
+            result=args.result,
+            verified=args.verified,
+            assistance=args.assistance,
+            representation=args.representation,
+            verifier=args.verifier,
+            context_sha256=args.context_sha256,
+            prior_context_sha256=args.prior_context_sha256,
+            evidence_ref=args.evidence_ref,
+            execution_owner=args.execution_owner,
+            effect=args.effect,
+        )
     else:
         print(json.dumps(summary(ledger), indent=2, ensure_ascii=False))
         return 0

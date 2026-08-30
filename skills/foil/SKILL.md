@@ -85,6 +85,38 @@ Internal task fields may include:
 
 Do not infer a user weakness merely because a task requires a capability.
 
+For a route that may depend on personalization, make each load-bearing need an
+explicit `TaskCapabilityRequirement` with a stable id, capability, importance
+(`LOW`, `MEDIUM`, `HIGH`, or `CRITICAL`), required level (`MINIMAL`, `WORKING`,
+or `STRONG`), and optional evidence obligation, representation, and context.
+Duplicate requirement ids fail closed. Duplicate capabilities are normalized
+deterministically to the strongest importance and required level; compatible
+optional qualifiers are filled, while conflicting qualifiers fail closed.
+Resolve each canonical requirement through the shared evidence
+estimator before applying the runtime policy:
+
+`TASK REQUIREMENT -> MATCHED EVIDENCE -> REQUIREMENT COVERAGE -> RUNTIME POLICY -> MINIMUM COMPLEMENT`
+
+Coverage uses exactly these states:
+
+- `COVERED_STRONG`
+- `COVERED_WORKING`
+- `UNCERTAIN`
+- `PROBABLE_GAP`
+- `UNKNOWN`
+
+`UNKNOWN` is absence, staleness, or mismatch of evidence; it is never a gap.
+Fresh compatible evidence from the current task overrides stale or contradictory
+profile evidence. A current-task route must remain visibly distinct from a
+profile-derived route, and an unmapped capability must not be guessed into a
+complement.
+
+Router, monitor, and profile-selection signals are `CONTROL_ONLY`. They may
+select a route but cannot satisfy a factual obligation or promote the user's
+competence. Only an explicitly typed `EVIDENCE_CANDIDATE` may enter the existing
+evidence-admission path, and it still must pass all ordinary source, context,
+representation, and verification checks.
+
 ## 5. Gap hypotheses: local, competing, falsifiable
 
 When personalization would change the route, represent the missing complement as one or more **gap hypotheses**, not a trait label.
@@ -95,6 +127,7 @@ fails if this block and the runtime set disagree.
 
 <!-- generated from tools/foil_interventions.py: do not edit by hand -->
 - `AMBIGUOUS_TASK`
+- `COMMUNICATION_GAP`
 - `EVIDENCE_GAP`
 - `EXECUTION_SLIP`
 - `GENUINELY_NOVEL_TASK`
@@ -102,6 +135,7 @@ fails if this block and the runtime set disagree.
 - `MISSING_KNOWLEDGE`
 - `MISSING_PROCEDURE`
 - `PREREQUISITE_GAP`
+- `PRESENTATION_GAP`
 - `REPRESENTATION_MISMATCH`
 - `RETRIEVAL_FAILURE`
 - `TEMPORARY_STATE_OR_TIME_PRESSURE`
@@ -293,6 +327,17 @@ Store compact metadata, not raw private content by default. Status is computed f
 
 Normal observational history can support descriptive routing hypotheses. It does **not** establish the causal effect of an intervention. Causal efficacy claims require a controlled comparison or randomized design.
 
+Outcome rows may additionally use this append-only intervention-effect vocabulary:
+`useful_complement`, `necessary_complement`, `redundant_assistance`,
+`harmful_assistance`, `takeover_event`, `insufficient_assistance`, `missed_gap`,
+`independent_after_assistance`, and `later_transfer`. Legacy rows without an
+effect remain valid.
+
+Report complement-hit, redundant-assistance, harmful-assistance, takeover,
+harmful-or-takeover (compatibility), missed-gap, and insufficient-assistance
+rates over interventions that have an assessed effect. Rates are separate proportions and need not sum to one because one
+intervention can have outcomes at multiple phases.
+
 ## 13. Profile evidence rules and classification
 
 For capability/domain/facet evidence, retain:
@@ -452,6 +497,18 @@ When a frozen evaluation provides a task ID, condition, prompt, and budget:
 7. obey the requested exact-answer format;
 8. report invalid runs instead of repairing them after seeing gold.
 
+Before advancing a post-0.5.1 personalization controller to additional reasoning
+methods, run the same frozen items in three isolated, matched-budget conditions:
+`CORRECT_PROFILE`, `WRONG_PROFILE`, and `NO_PROFILE`. The profile is visible only
+to the router, never to the task solver. Record profile value, complement-hit,
+redundant-assistance, harmful/takeover, and missed-gap rates. A deterministic
+routing proxy establishes only that the control path behaves as designed; it is
+not evidence of task-success improvement or human learning. Behavioral efficacy
+requires separately executed, isolated runs with the frozen scoring plan.
+
+Stop after this P0 ablation and inspect the result before adding ReAct, extra
+verifiers, CRITIC, or bounded tree search. LATS and learned routing remain deferred.
+
 ### What the budget guard is, exactly
 
 `tools/foil_task_guard.py` is a **tamper-evident accounting ledger**, not a security
@@ -484,6 +541,15 @@ Do not expose this ceremony when the benchmark asks for one succinct answer.
 ## 16. Cost, latency, and stopping
 
 Every extra probe/tool/audit has an opportunity cost.
+
+For controlled runs, record one provider-neutral `RunCostReceipt` with actual
+profile lookups, routing decisions, model/tool/verification calls, retries,
+branches, revisions, input/output tokens, and wall time. Use `None` when a
+provider does not expose a field; never estimate or fabricate it. Reports may
+aggregate these fields, calculate cost per correct result, and report task
+success at matched total cost only when complete per-item cost vectors match
+exactly across conditions. Receipts retain prompt/profile hashes, never raw
+prompt or profile content.
 
 Stop escalating when:
 

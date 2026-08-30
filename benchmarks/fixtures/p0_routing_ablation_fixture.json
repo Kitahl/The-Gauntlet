@@ -1,0 +1,62 @@
+{
+  "schema": "egrt.foil-profile-ablation-fixture.v1",
+  "fixture_kind": "STRUCTURAL_SMOKE_ONLY",
+  "boundary": "Hand-authored routing controls only; no behavioral efficacy claim or historical result.",
+  "items": [
+    {
+      "item_id": "mechanism-review",
+      "task": {"closed_book": true, "technical_reasoning": true},
+      "requirements": [
+        {"requirement_id": "R1", "capability": "causal_reasoning", "importance": "HIGH", "required_level": "STRONG"},
+        {"requirement_id": "R2", "capability": "quantitative_checking", "importance": "MEDIUM", "required_level": "WORKING"}
+      ],
+      "expected_complement": "causal_reasoning",
+      "profiles": {
+        "CORRECT_PROFILE": {
+          "causal_reasoning": {
+            "transfer_confirmations": 1,
+            "observations": [
+              {"correct": false, "capability": "causal_reasoning", "representation": "narrative", "verifier": "rubric"},
+              {"correct": false, "capability": "causal_reasoning", "representation": "dag", "verifier": "rubric"},
+              {"correct": false, "capability": "causal_reasoning", "representation": "counterfactual", "verifier": "rubric"},
+              {"correct": false, "capability": "causal_reasoning", "representation": "experiment", "verifier": "rubric"}
+            ]
+          }
+        },
+        "WRONG_PROFILE": {
+          "quantitative_checking": {
+            "transfer_confirmations": 1,
+            "observations": [
+              {"correct": false, "capability": "quantitative_checking", "representation": "table", "verifier": "rubric"},
+              {"correct": false, "capability": "quantitative_checking", "representation": "equation", "verifier": "rubric"},
+              {"correct": false, "capability": "quantitative_checking", "representation": "chart", "verifier": "rubric"},
+              {"correct": false, "capability": "quantitative_checking", "representation": "simulation", "verifier": "rubric"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "item_id": "no-complement-needed",
+      "task": {"closed_book": true, "technical_reasoning": true},
+      "requirements": [
+        {"requirement_id": "R1", "capability": "formal_reasoning", "importance": "HIGH", "required_level": "WORKING"}
+      ],
+      "expected_complement": null,
+      "profiles": {
+        "CORRECT_PROFILE": {},
+        "WRONG_PROFILE": {
+          "formal_reasoning": {
+            "transfer_confirmations": 1,
+            "observations": [
+              {"correct": false, "capability": "formal_reasoning", "representation": "proof", "verifier": "checker"},
+              {"correct": false, "capability": "formal_reasoning", "representation": "counterexample", "verifier": "checker"},
+              {"correct": false, "capability": "formal_reasoning", "representation": "logic", "verifier": "checker"},
+              {"correct": false, "capability": "formal_reasoning", "representation": "formalization", "verifier": "checker"}
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

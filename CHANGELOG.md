@@ -14,6 +14,51 @@ The project follows semantic versioning for public releases.
 - Independent reproduction reports.
 - Archival DOI integration after the first evidence-bearing stable release.
 
+## [0.6.0-rc1] - 2026-08-24
+
+Testing release candidate for **Mirror** (public name; technical ID **FOIL**).
+The FOIL v5 runtime is default-off and shadow-only: it can classify and record
+post-solve diagnostic state, but it neither mutates an answer nor authorizes a
+host write, commit, tool call, or repair execution. FOIL, Gauntlet, and
+Mastermind remain separate systems; this release does not import, control, or
+promote either Gauntlet or Mastermind.
+
+### Added
+
+- Typed post-solve claims and load-bearing obligations with deterministic
+  decidable coverage, failed/unresolved/omitted mass, closed verifier adapters,
+  and digest-bound evidence certificates.
+- A sealed G0 protocol and append-only v5 run ledger for shadow diagnostics.
+- A pure residual scanner, typed no-answer states, and calibration-bound sensor
+  receipts. Expired or mismatched calibration fails closed.
+- A repair-proposal boundary only: a qualifying signal may produce a shadow
+  proposal for external review, never an autonomous repair or host action.
+- An opt-in, event-driven, zero-token pre-/post-solve monitor. It is inactive
+  by default and has no provider/model/network/process path.
+- A strict structured-spec obligation compiler, digest-bound one-claim shadow
+  runtime, closed READY Ditto resolver, and one-use host-bridge authorization
+  checks. Resolver and bridge results remain host-denied and non-executing.
+- A provider-neutral offline P0 routing reproducer. It validates isolation,
+  bindings, receipts, and the three-arm structure but cannot make an efficacy
+  or promotion claim.
+
+### Pending gates and evidence boundary
+
+- Gated Ditto resolution is implemented as a closed, host-denied resolver
+  surface. Gate 3 execution/effectiveness evidence is **UNRUN**, and no Ditto
+  result has execution authority here.
+- Structural and unit tests establish implementation contracts only. They are
+  **not Gate-1 efficacy evidence** and do not show that Mirror improves answers
+  or users' reasoning.
+- Historical profile P0 was **not promoted**. Profile efficacy, P1/P2
+  activation, and human complementarity remain unresolved.
+- External lock-partition, prospective-partition, and model-ladder gates remain
+  **UNRUN**. No behavioral efficacy, calibration, or release-completion claim
+  follows from this RC.
+
+This is not a completed release; it is a default-off testing candidate awaiting
+external gates.
+
 ## [0.5.1] - 2026-08-23
 
 Research-repair release. It closes measured defects in FOIL's evidence

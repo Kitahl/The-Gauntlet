@@ -1,0 +1,36 @@
+{
+  "schema": "egrt.foil-v5-protocol.v1",
+  "candidate_id": "foil-v5-shadow-example-001",
+  "candidate_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "bindings": {
+    "model_config_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "system_prompt_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "foil_skill_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "task_prompt_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "tool_regime_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "base_answers_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "scanner_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+    "diagnostic_bank_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+    "parser_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+    "applicability_sha256": "5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  "partitions": {
+    "development": {"artifact_sha256": "6666666666666666666666666666666666666666666666666666666666666666", "item_ids": ["dev-1"]},
+    "lock": {"artifact_sha256": "7777777777777777777777777777777777777777777777777777777777777777", "item_ids": ["lock-1"]},
+    "prospective": {"artifact_sha256": "8888888888888888888888888888888888888888888888888888888888888888", "item_ids": ["prospective-1"]}
+  },
+  "gates": {
+    "compiler_coverage": {"metric": "weighted_coverage", "direction": "min", "bound": 0.0},
+    "compiler_precision": {"metric": "weighted_precision", "direction": "min", "bound": 0.0},
+    "verifier_validity": {"metric": "validity_rate", "direction": "min", "bound": 0.0},
+    "residual_recall": {"metric": "residual_recall", "direction": "min", "bound": 0.0},
+    "false_activation_rate": {"metric": "false_activation_rate", "direction": "max", "bound": 1.0},
+    "incremental_value": {"metric": "conditional_added_recall", "direction": "min", "bound": 0.0},
+    "cost_completeness": {"metric": "complete_receipts", "direction": "required", "bound": true},
+    "negative_controls": {"metric": "control_pass", "direction": "required", "bound": true}
+  },
+  "allowed_effect_classes": ["local", "parser"],
+  "forbidden_effect_classes": ["model", "tool", "network", "subprocess", "retry", "async", "profile", "router"],
+  "no_answer_taxonomy": ["PARSER_FAILURE", "TIMEOUT", "UNAVAILABLE", "MALFORMED"],
+  "authority": {"issuer": "evaluation-host", "expires_at": "2026-12-31T00:00:00Z", "replay_protection": "unique-run-nonce", "candidate_id": "foil-v5-shadow-example-001"}
+}
