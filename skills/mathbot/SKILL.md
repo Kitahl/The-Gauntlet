@@ -1,9 +1,9 @@
 ---
 name: mathbot
-description: Formal Reasoning module. Trigger: /mind, /mathbot, formal proof, logical validity, probability/statistics derivation, optimization, counterexample, or formalization requests. Converts claims into explicit objects and proof obligations, then verifies with derivation, computation, solver, or source as appropriate.
+description: Prove — formal reasoning module for Strong Inference. Trigger: /mind, /mathbot, formal proof, logical validity, probability/statistics derivation, optimization, counterexample, or formalization requests. Converts claims into explicit objects and proof obligations, then verifies with derivation, computation, solver, or source as appropriate.
 ---
 
-# Formal Reasoning
+# Prove
 
 Use this module when the load-bearing obligation is mathematical or logical correctness.
 
@@ -49,8 +49,12 @@ When killing an approach, give the nearest viable alternative and its cost.
 
 ## Tools
 
-Use available Python/symbolic solvers/provers/SMT/ITP systems only after feature detection. Never reference machine-specific paths. For external theorem status or prior art, route to Research Discovery.
+Use available Python/symbolic solvers/provers/SMT/ITP systems only after feature detection. Never reference machine-specific paths. For external theorem status or prior art, route to **Discover**.
 
 ## Typed runtime contract
 
 `tools/mind_runtime.py` records explicit proof obligations and verifier receipts. Initial adapters provide restricted exact arithmetic and optional Z3 SMT2 execution; missing solvers are `UNAVAILABLE`. Solver/proof receipts apply to the supplied formal encoding, not automatically to unstated natural-language scope. See `docs/specs/MIND_ENGINEERING_SPEC.md`.
+
+## Compatibility
+
+Public product name: **Prove**. Stable technical identity: `mathbot`; stable commands include `/mind` and `/mathbot`. **Formal Reasoning** is the legacy public label retained in historical documentation and receipts.

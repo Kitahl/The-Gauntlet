@@ -1,11 +1,11 @@
 ---
 name: infinity-gauntlet
-description: Process Assurance Framework. Trigger: /gauntlet, repeated failed attempts, ungated kill/finding, last-surviving option, inherited number, stale authority, cross-context handoff, unclear architecture, or an all-green verification claim. Audits the frame and process behind a result, not only the result.
+description: Assure — process-assurance control module for Strong Inference. Trigger: /gauntlet, repeated failed attempts, ungated kill/finding, last-surviving option, inherited number, stale authority, cross-context handoff, unclear architecture, or an all-green verification claim. Audits the frame and process behind a result, not only the result.
 ---
 
-# Process Assurance Framework
+# Assure
 
-The framework is a self-audit layer worn by the Research Orchestrator.
+Assure is the self-audit layer used by **Route**.
 
 Runtime automation is external to this skill:
 
@@ -48,7 +48,7 @@ Use the smallest relevant set; do not ritualize all ten.
 
 ## Output
 
-**PROCESS ASSURANCE**
+**ASSURE**
 - Fired: `<operations>`
 - Claim/frame: `<target>`
 - Evidence inspected: `<actual artifacts/runs>`
@@ -59,4 +59,8 @@ Use the smallest relevant set; do not ritualize all ten.
 
 ## Typed runtime contract
 
-`tools/gauntlet_runtime.py` now declares the implementation/support mode and required typed state for all ten operations. Automatic monitors may return `UNKNOWN` when their required state is absent and `UNAVAILABLE` when a required semantic method/tool cannot run; silence is not equivalent to a negative finding. Existing boundary/monitor hooks remain compatibility detectors during migration. See `docs/specs/GAUNTLET_ENGINEERING_SPEC.md`.
+`tools/gauntlet_runtime.py` declares the implementation/support mode and required typed state for all ten operations. Automatic monitors may return `UNKNOWN` when their required state is absent and `UNAVAILABLE` when a required semantic method/tool cannot run; silence is not equivalent to a negative finding. Existing boundary/monitor hooks remain compatibility detectors during migration. See `docs/specs/GAUNTLET_ENGINEERING_SPEC.md`.
+
+## Compatibility
+
+Public product name: **Assure**. Stable technical identity: `infinity-gauntlet`; stable command: `/gauntlet`. **Process Assurance Framework** and **Process Assurance** are legacy public labels retained in historical documentation, validator receipts, and runtime naming. `Gauntlet` remains part of the technical compatibility namespace even though the overall Strong Inference product does not use The Gauntlet as its public brand.

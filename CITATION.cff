@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this research software, please cite the repository and the specific release used."
-title: "Evidence-Governed Research Toolkit"
+title: "Strong Inference"
 type: software
 authors:
   - family-names: "Kitahl"
@@ -18,11 +18,13 @@ keywords:
   - evaluation
   - evidence provenance
   - adaptive assistance
-  - personalized calibration
-  - transfer assessment
-  - evidence-centered assessment
+  - process assurance
+  - research infrastructure
 abstract: >-
-  A modular research-software toolkit for evidence-governed AI-assisted reasoning,
-  prior-art discovery, formal reasoning, engineering verification, evaluation,
-  process assurance, and adaptive complementary assistance with saved user profiles,
-  structured cross-cutting calibration, and real-work transfer assessment.
+  Strong Inference is an open research-software suite for evidence-governed
+  AI-assisted technical work, including orchestration, formal reasoning,
+  research discovery, method synthesis, engineering verification, evaluation,
+  process assurance, independent review, decision preflight, and adaptive
+  complementary assistance. Strong Inference Systems is a working pre-product
+  company identity and is not represented by this metadata as a legally cleared
+  corporate or trademark name.

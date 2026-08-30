@@ -1,9 +1,9 @@
 ---
 name: codebot
-description: Engineering Verification module. Trigger: /power, /codebot, implement, debug, integrate, test, benchmark software behavior, review architecture, or verify an executable claim. Converts software claims into runnable checks and preservation obligations.
+description: Verify — engineering verification module for Strong Inference. Trigger: /power, /codebot, implement, debug, integrate, test, benchmark software behavior, review architecture, or verify an executable claim. Converts software claims into runnable checks and preservation obligations.
 ---
 
-# Engineering Verification
+# Verify
 
 Executable claims should be executed.
 
@@ -41,3 +41,7 @@ Use linters/type checkers/static analysis/fuzzing/security scans/formal tools wh
 ## Typed runtime contract
 
 `tools/power_runtime.py` executes explicit verification plans with `shell=False`, timeouts, mandatory/optional checks, output hashes and named defect-class coverage. A green plan is scoped to the checks/coverage represented in its receipt. Missing mandatory tooling is `UNAVAILABLE`. See `docs/specs/POWER_ENGINEERING_SPEC.md`.
+
+## Compatibility
+
+Public product name: **Verify**. Stable technical identity: `codebot`; stable commands include `/power` and `/codebot`. **Engineering Verification** is the legacy public label retained in historical documentation and receipts.

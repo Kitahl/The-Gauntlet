@@ -88,9 +88,9 @@ checks["discovery_contract"] = (
 release_version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
 version_text = VISUAL_VERSION.read_text(encoding="utf-8")
 checks["showcase_revision"] = (
-    "Showcase R19" in html
-    and "showcase-revision=19" in version_text
-    and "previous-showcase-revision=18" in version_text
+    "Showcase R20" in html
+    and "showcase-revision=20" in version_text
+    and "previous-showcase-revision=19" in version_text
     and f"research-software-version={release_version}" in version_text
 )
 
@@ -103,14 +103,23 @@ checks["semantic_system_field"] = (
     and "cdnjs" not in js
     and "https://" not in js
 )
-checks["five_gem_scenes"] = html.count('class="gem-scene scene-section"') == 5
+checks["five_specialist_scenes"] = html.count('class="gem-scene scene-section"') == 5
 checks["professional_workflows"] = html.count("<article><div><span>") == 5
 checks["public_tool_catalog"] = parser.details == 10 and html.count("<h3>Professional use</h3>") == 10 and html.count("<h3>How it works</h3>") == 10
 checks["research_report_language_absent"] = all(token not in html.lower() for token in ("what remains unresolved", "current question", "next study", "success condition"))
 checks["legacy_name_not_public"] = "mastermind" not in html.lower() and ">FOIL<" not in html
+checks["rejected_brand_absent"] = all(token not in html for token in ("Rigilum", "Instrument 01"))
 checks["benchmark_results_not_front_page"] = all(token not in html for token in ("94 / 94", "18 / 18", "HLE public", "ARC-AGI", "GPQA-Diamond", "BrowseComp four-way"))
 checks["activation_surface"] = all(command in html for command in ("/soul", "/foil", "/mind", "/space", "/reality", "/power", "/time", "/gauntlet", "/council"))
-checks["control_tools_visible"] = all(token in html for token in ("Soul · Research Orchestrator", "Mirror · Adaptive Reasoning Complement", "Gauntlet · Process Assurance", "Meditate · Decision Preflight", "Council · Evidence Review Panel"))
+checks["strong_inference_public_names"] = all(
+    token in html
+    for token in (
+        "Strong Inference Systems", "Strong Inference", "Open Research Suite",
+        "Route · Orchestration", "Adapt · Adaptive Complement",
+        "Assure · Process Assurance", "Preflight · Decision Preflight", "Review · Evidence Review",
+        ">Prove<", ">Discover<", ">Synthesize<", ">Verify<", ">Measure<",
+    )
+)
 checks["implementation_directory_exposed"] = len([p for p in (ROOT / "tools").glob("*.py") if p.name != "__init__.py"]) == 41 and "https://github.com/Kitahl/The-Gauntlet/tree/main/tools" in html
 
 skill_dirs = ["soul", "mathbot", "scoutbot", "novelbot", "codebot", "benchbot", "infinity-gauntlet", "meditate", "council-of-elders", "foil"]
@@ -120,7 +129,7 @@ checks["source_surface"] = all(token in html for token in ("RESEARCH.md", "REPRO
 
 provenance = json.loads(PROVENANCE.read_text(encoding="utf-8"))
 checks["visual_provenance"] = (
-    provenance.get("showcase_revision") == 19
+    provenance.get("showcase_revision") == 20
     and provenance.get("research_software_version") == release_version
     and len(provenance.get("visuals", [])) == 1
     and provenance["visuals"][0].get("file") == "docs/system-field.js"

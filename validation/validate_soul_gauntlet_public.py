@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Mechanical public-package checks for Soul + typed runtime + Process Assurance.
+"""Mechanical public-package checks for Route + typed runtime + Assure.
 
 These checks establish source/package/wiring invariants only. They do not establish
 behavioral efficacy of an executing language model or semantic truth of receipts.
@@ -34,14 +34,15 @@ showcase = need("docs/index.html")
 settings = json.loads(need(".claude/settings.json"))
 config = json.loads(need(".gauntlet.json"))
 
+# Stable technical package vocabulary remains unchanged under the public product names.
 for token in ("name: soul", "Research Orchestrator", "/soul", "Portable runtime", "Process Assurance"):
     if token not in soul:
-        fail(f"Research Orchestrator missing invariant token: {token}")
+        fail(f"Route/soul compatibility source missing invariant token: {token}")
 
 ops = ["frame", "audit", "costume", "derive", "self", "redirect", "refresh", "boundary", "explain", "oob"]
 for op in ops:
     if f"`{op}`" not in gauntlet:
-        fail(f"Process Assurance missing operation: {op}")
+        fail(f"Assure/infinity-gauntlet missing operation: {op}")
 
 rows = re.findall(
     r"^\|\s*`(frame|audit|costume|derive|self|redirect|refresh|boundary|explain|oob)`\s*\|",
@@ -56,7 +57,7 @@ for token in (
     "UNAVAILABLE", "stop_hook_active",
 ):
     if token not in gauntlet:
-        fail(f"Process Assurance missing runtime invariant: {token}")
+        fail(f"Assure/infinity-gauntlet missing runtime invariant: {token}")
 
 runtime_files = (
     "tools/egrt_types.py", "tools/egrt_store.py", "tools/egrt_hook.py", "tools/egrt_runtime.py",
@@ -79,7 +80,6 @@ specs = (
 for name in specs:
     need(f"docs/specs/{name}")
 
-# Skill directories remain specification-only; runtime helpers never move into skills/.
 for directory in (ROOT / "skills").iterdir():
     if directory.is_dir():
         names = sorted(p.name for p in directory.iterdir() if not p.name.startswith("."))
@@ -105,7 +105,6 @@ if runtime_cfg.get("schema") != "egrt.runtime.v1":
 if runtime_cfg.get("persist_raw_prompts") is not False or runtime_cfg.get("persist_raw_tool_output") is not False:
     fail("generic typed runtime must not persist raw prompts/tool output")
 
-# Mastermind must not become a runtime dependency. Historical prose may name it.
 for path in runtime_files:
     text = need(path)
     if re.search(r"(^|\n)\s*(?:from|import)\s+mastermind\b", text, re.I):
@@ -113,36 +112,41 @@ for path in runtime_files:
 
 for forbidden in ("Initial assessment priors remain", "Relative strengths observed so far"):
     if forbidden in foil:
-        fail(f"person-specific Mirror/legacy-foil prior leaked into public skill: {forbidden}")
+        fail(f"person-specific Adapt/legacy-foil prior leaked into public skill: {forbidden}")
 
-# Public identity changed from FOIL to Mirror; the legacy technical namespace must
-# remain explicit so profiles, hooks, benchmarks, and old links do not silently break.
+# Public product names change while legacy namespaces remain explicit.
 for token in (
-    "Evidence-Governed Research Toolkit", "Research Orchestrator",
-    "Process Assurance Framework", "Mirror — Adaptive Reasoning Complement",
+    "# Strong Inference", "Strong Inference Systems", "Route", "Assure", "Adapt",
+    "Stable technical ID / command", "working pre-product identity",
 ):
     if token not in readme:
-        fail(f"README missing professional public terminology: {token}")
+        fail(f"README missing Strong Inference public terminology or compatibility boundary: {token}")
+for rejected in ("Rigilum", "Instrument 01"):
+    if rejected in readme or rejected in showcase:
+        fail(f"rejected public brand leaked into current surface: {rejected}")
 for token in (
-    "Mirror — Adaptive Reasoning Complement", "technical skill name: `foil`",
+    "Adapt — Adaptive Reasoning Complement", "technical skill name: `foil`",
     "slash command: `/foil`", "runtime modules: `tools/foil_*`",
     "historical benchmark condition names",
 ):
     if token not in mirror:
-        fail(f"Mirror compatibility contract missing token: {token}")
-if showcase.count('class="tool-entry"') != 10 or "Research Orchestrator" not in showcase or "Mirror" not in showcase:
-    fail("showcase architecture/module count or Mirror public name is not synchronized")
+        fail(f"Adapt/foil legacy compatibility contract missing token: {token}")
+if showcase.count('class="tool-entry"') != 10:
+    fail("showcase public module count is not synchronized")
+for token in ("Strong Inference", "Strong Inference Systems", ">Route<", ">Prove<", ">Discover<", ">Synthesize<", ">Verify<", ">Measure<", ">Assure<", ">Preflight<", ">Review<", ">Adapt<"):
+    if token not in showcase:
+        fail(f"showcase missing Strong Inference public name: {token}")
 
 pipeline = need("docs/VNEXT_RUNTIME_PIPELINE.md")
 for token in ("CLEARED", "ISSUE", "UNKNOWN", "UNAVAILABLE", "SPEC", "STATE", "RECEIPT", "FOIL", "Mastermind"):
     if token not in pipeline:
         fail(f"vNext pipeline missing contract token: {token}")
 
-print("PASS: Research Orchestrator + typed runtime public invariants")
-print("PASS: 10 canonical Process Assurance operations + explicit support registry")
+print("PASS: Route + typed runtime public invariants")
+print("PASS: 10 canonical Assure operations + explicit support registry")
 print("PASS: privacy-preserving typed hook/runtime wiring")
 print("PASS: per-component engineering specifications present")
 print("PASS: SKILL.md-only module directories preserved")
 print("PASS: Mastermind absent from runtime imports")
-print("PASS: Mirror public identity + legacy foil compatibility contract")
-print("PASS: public Mirror/legacy-foil skill contains no embedded user profile")
+print("PASS: Strong Inference public identity + legacy runtime compatibility contract")
+print("PASS: public Adapt/legacy-foil skill contains no embedded user profile")
