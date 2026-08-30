@@ -94,6 +94,7 @@ class NamespaceProof:
     runtime_profile_name: str
     context_engine_name: str
     background_review_enabled: bool
+    automatic_title_generation_enabled: bool
     memory_write_approval: bool
     memory_enabled: bool
     user_profile_enabled: bool
@@ -292,6 +293,7 @@ def bootstrap_vendor_runtime(profile: RuntimeProfile) -> NamespaceProof:
         runtime_profile_name=profile.profile_name,
         context_engine_name=profile.context_engine_name,
         background_review_enabled=profile.background_review_enabled,
+        automatic_title_generation_enabled=profile.automatic_title_generation_enabled,
         memory_write_approval=profile.memory_write_approval,
         memory_enabled=profile.memory_enabled,
         user_profile_enabled=profile.user_profile_enabled,

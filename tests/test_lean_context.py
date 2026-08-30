@@ -140,6 +140,7 @@ class LeanContextTests(unittest.TestCase):
             self.assertEqual(profile.profile_name, "gauntlet-lean.v1")
             self.assertEqual(profile.context_engine_name, "gauntlet-sparse")
             self.assertFalse(profile.memory_enabled)
+            self.assertFalse(profile.automatic_title_generation_enabled)
             self.assertFalse(profile.user_profile_enabled)
             self.assertFalse(profile.skills_project_discovery)
             self.assertFalse(profile.execution_guidance_enabled)
@@ -153,6 +154,7 @@ class LeanContextTests(unittest.TestCase):
             self.assertIn("parallel_tool_call_guidance: true", config)
             self.assertIn("coding_context: 'off'", config)
             self.assertIn("engine: gauntlet-sparse", config)
+            self.assertIn("title_generation:\n    enabled: false", config)
 
     def test_parent_prefetch_is_compact_content_addressed_and_non_mutating(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

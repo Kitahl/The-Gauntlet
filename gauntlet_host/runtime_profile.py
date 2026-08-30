@@ -51,6 +51,7 @@ class RuntimeProfile:
     context_engine_name: str
     config_sha256: str
     background_review_enabled: bool
+    automatic_title_generation_enabled: bool
     memory_write_approval: bool
     memory_enabled: bool
     user_profile_enabled: bool
@@ -183,6 +184,8 @@ def _apply_alpha_policy(config: dict[str, Any]) -> None:
     auxiliary = _mapping(config, "auxiliary")
     background_review = _mapping(auxiliary, "background_review")
     background_review["enabled"] = False
+    title_generation = _mapping(auxiliary, "title_generation")
+    title_generation["enabled"] = False
 
     agent = _mapping(config, "agent")
     agent["tool_use_enforcement"] = False
@@ -401,6 +404,7 @@ def prepare_runtime_profile(runtime_home: Path | None = None) -> RuntimeProfile:
         context_engine_name="gauntlet-sparse",
         config_sha256=config_digest,
         background_review_enabled=False,
+        automatic_title_generation_enabled=False,
         memory_write_approval=True,
         memory_enabled=False,
         user_profile_enabled=False,
