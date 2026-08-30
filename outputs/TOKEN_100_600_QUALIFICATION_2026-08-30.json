@@ -1,0 +1,52 @@
+{
+  "authority_ceiling": "TOKEN_EFFICIENCY_ONLY",
+  "counts": {
+    "batch_refresh_provider_requests": 2,
+    "first_turn_provider_requests": 1,
+    "model_visible_tools": 3,
+    "provider_requests": 3,
+    "task_obligations": 1,
+    "turns": 2
+  },
+  "gates": {
+    "active_manifest_frozen": true,
+    "canonical_receipts_created": 0,
+    "canonical_state_unchanged": true,
+    "compact_status_estimated_tokens": 186,
+    "deterministic_required_module_injected": true,
+    "exact_claim_absent_from_compact_context": true,
+    "exact_obligation_tool_available": true,
+    "first_turn_status_tool_calls": 0,
+    "foil_extra_model_calls": 0,
+    "full_route_content_addressed": true,
+    "independent_refresh_calls_batched": true,
+    "memory_profile_reads_disabled": true,
+    "parallel_batch_guidance_enabled": true,
+    "parent_prefetch_before_first_model_call": true,
+    "route_capsule_estimated_tokens": 86,
+    "route_capsule_fields_exact": true,
+    "skills_discovery_disabled": true,
+    "stable_system_prompt_bytes": true,
+    "status": "PASS",
+    "unused_guidance_disabled": true,
+    "volatile_context_not_persisted": true
+  },
+  "mode": "NON_DESTRUCTIVE_LOCAL_FIXTURE",
+  "obligation_id": "obl-2d85b8c7e1734c41",
+  "phases": [
+    "TOKEN-100",
+    "TOKEN-600"
+  ],
+  "provider_fixture": {
+    "model": "phase5-mock",
+    "network": "localhost-only",
+    "provider": "custom"
+  },
+  "schema": "gauntlet.token-100-600-qualification.v1",
+  "source": {
+    "pinned_hermes_commit": "5fc308a70719a83cccdbba4c0e39c23f5a8239d5",
+    "running_commit": "7731031845ba5ca583f352a04ca8b8f6c37e0db1",
+    "running_tree": "a3cecfb89d0b1129a6046719d735929e7f6a6ee7"
+  },
+  "task_id": "task-56fd620a64254b34"
+}
