@@ -1,0 +1,47 @@
+{
+  "authority_ceiling": "SESSION_CORRECTNESS_ONLY",
+  "counts": {
+    "conversation_provider_requests": 11,
+    "distinct_task_a_bindings": 1,
+    "distinct_task_a_runtime_sessions": 1,
+    "measurement_documents": 13,
+    "task_a_turns": 10,
+    "task_b_turns": 1
+  },
+  "mode": "NON_DESTRUCTIVE_LOCAL_FIXTURE",
+  "phase": "TOKEN-010",
+  "privacy": {
+    "derived_session_ids_expose_task_id": false,
+    "raw_canaries_in_measurement_documents": false
+  },
+  "provider_fixture": {
+    "model": "phase5-mock",
+    "network": "localhost-only",
+    "provider": "custom"
+  },
+  "schema": "gauntlet.token-010-qualification.v1",
+  "session_correctness": {
+    "cross_task_leak_absent": true,
+    "first_turn_resumed": false,
+    "fresh_parent_resume_tested_at_turn": 6,
+    "fresh_worker_each_turn": true,
+    "interleaved_cross_task_tested_at_turn": 6,
+    "kernel_turn_lock_unit_tested": true,
+    "same_runtime_session_id": true,
+    "same_task_binding_stable": true,
+    "status": "PASS",
+    "subsequent_turns_resumed": true,
+    "ten_turn_prior_context_present": true
+  },
+  "source": {
+    "pinned_hermes_commit": "5fc308a70719a83cccdbba4c0e39c23f5a8239d5",
+    "running_commit": "4e455e4dcddc329a6d2455676fdfc78a17338523",
+    "running_tree": "17225910e1962b18b652e922c01e897f707f5eb1"
+  },
+  "state_safety": {
+    "canonical_receipt_created": false,
+    "canonical_state_mutated": false,
+    "repository_egrt_digest_unchanged": true,
+    "temporary_fixture_egrt_digest_unchanged_during_turns": true
+  }
+}
