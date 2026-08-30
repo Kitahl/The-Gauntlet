@@ -216,7 +216,8 @@
       "turn_count": 10,
       "turn_generator": {
         "provider_action": "FINAL",
-        "prompt_template": "TOKEN700|{case_id}|T{turn_number_2d}| CONTINUITY_{case_id} turn {turn_number}; remember FIRST_{case_id} from turn 1.",
+        "first_prompt_template": "TOKEN700|{case_id}|T01| CONTINUITY_{case_id} turn 1; introduce the durable anchor FIRST_{case_id}.",
+        "prompt_template": "TOKEN700|{case_id}|T{turn_number_2d}| CONTINUITY_{case_id} turn {turn_number}; recall the unique durable anchor introduced at turn 1 without repeating it.",
         "turn_10_requires_provider_context_markers": [
           "FIRST_{case_id}",
           "CONTINUITY_{case_id}"
@@ -243,7 +244,8 @@
       "fresh_launcher_process_each_turn": true,
       "turn_generator": {
         "provider_action": "FINAL",
-        "prompt_template": "TOKEN700|{case_id}|T{turn_number_2d}| RESUME_{case_id} turn {turn_number}; durable anchor ANCHOR_{case_id} was introduced at turn 1.",
+        "first_prompt_template": "TOKEN700|{case_id}|T01| RESUME_{case_id} turn 1; introduce the durable anchor ANCHOR_{case_id}.",
+        "prompt_template": "TOKEN700|{case_id}|T{turn_number_2d}| RESUME_{case_id} turn {turn_number}; recall the unique durable anchor introduced at turn 1 without repeating it.",
         "turn_13_requires_provider_context_markers": [
           "ANCHOR_{case_id}",
           "RESUME_{case_id}"

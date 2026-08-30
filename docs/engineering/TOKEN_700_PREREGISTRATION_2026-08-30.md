@@ -44,11 +44,16 @@ The authoritative manifest is:
 
 ```text
 benchmarks/token700/workloads.v1.json
-SHA256 ce94b63a1488500895883fc0328aac637e1fcbca6bcec6959c4fbc44f01672de
+SHA256 70adbd24ab90d2ac9962da9e6f87b34cd9b2c089ea6db89d13b3d5174b77a4bf
 ```
 
 It contains the ten audit-named workload classes and three fixed variants (`S01`, `S02`, `S03`)
 per class, for exactly 30 matched case pairs. Case order is workload ID then variant ID.
+
+Pre-outcome amendment: the initial freeze at `82c855ce325fa53ad49cff10b71f2ccea311bd59`
+repeated the long-session anchor in every prompt, making its history oracle trivial. Before any
+matched run, the manifest was amended so only turn 1 contains the anchor; later recall checks must
+find it in provider-bound history. The hash above is the superseding authoritative freeze.
 
 Thirty pairs were selected prospectively to keep the ten workload classes balanced with three
 separate fixed task/session manifests and provider-bound measurements per class. The run does not
