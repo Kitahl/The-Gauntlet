@@ -1,0 +1,304 @@
+{
+  "schema": "gauntlet.token700-workloads.v2",
+  "suite_id": "TOKEN700_LOCAL_GAUNTLET_ONLY_V2",
+  "protocol_revision": 2,
+  "supersedes": {
+    "manifest": "benchmarks/token700/workloads.v1.json",
+    "reason": "v1 outcome discarded after auxiliary dispatches were misclassified and route metrics were read from the wrong payload level"
+  },
+  "variants": [
+    "S01",
+    "S02",
+    "S03"
+  ],
+  "case_id_format": "{workload_id}-{variant}",
+  "sample_size_pairs": 30,
+  "provider_action_protocol": {
+    "FINAL": "Return TOKEN700_OK:{case_id}:{turn_id} without a tool call.",
+    "STATUS_THEN_FINAL": "Call an exposed Gauntlet task-status tool once, then return TOKEN700_OK:{case_id}:{turn_id}.",
+    "UNAVAILABLE_FINAL": "Return TOKEN700_UNAVAILABLE:{case_id}:{turn_id} without claiming task completion."
+  },
+  "global_quality_checks": [
+    "worker_status_ok",
+    "expected_final_marker_exact",
+    "current_turn_marker_present_at_provider_boundary",
+    "measurement_complete_with_zero_drops",
+    "server_request_kinds_known",
+    "server_measurement_dispatch_counts_reconcile",
+    "arm_auxiliary_dispatch_policy_satisfied",
+    "release_verdict_unknown",
+    "release_eligible_false",
+    "task_release_not_performed",
+    "canonical_receipt_not_created",
+    "canonical_task_not_marked_released",
+    "no_cross_task_case_marker_leak"
+  ],
+  "workloads": [
+    {
+      "id": "W01",
+      "name": "no-tool one-shot",
+      "scope": "FULL_LOCAL",
+      "obligations": [
+        {
+          "kind": "EVALUATION",
+          "claim_template": "Measure a no-tool one-shot for {case_id}."
+        }
+      ],
+      "turn_count": 1,
+      "turns": [
+        {
+          "turn_id": "T01",
+          "provider_action": "FINAL",
+          "prompt_template": "TOKEN700|{case_id}|T01| Answer the local one-shot canary ONE_SHOT_{case_id}; use no tool."
+        }
+      ],
+      "specific_quality_checks": [
+        "provider_dispatches_equal_1",
+        "tool_calls_equal_0"
+      ]
+    },
+    {
+      "id": "W02",
+      "name": "one status call",
+      "scope": "FULL_LOCAL",
+      "obligations": [
+        {
+          "kind": "ASSURANCE",
+          "claim_template": "Read canonical status without mutation for {case_id}."
+        }
+      ],
+      "turn_count": 1,
+      "turns": [
+        {
+          "turn_id": "T01",
+          "provider_action": "STATUS_THEN_FINAL",
+          "prompt_template": "TOKEN700|{case_id}|T01| Read Gauntlet task status exactly once, then report STATUS_{case_id}."
+        }
+      ],
+      "specific_quality_checks": [
+        "provider_dispatches_equal_2",
+        "tool_calls_equal_1",
+        "status_task_id_matches",
+        "status_is_read_only",
+        "status_mutation_false",
+        "status_authority_all_false"
+      ]
+    },
+    {
+      "id": "W03",
+      "name": "web research",
+      "scope": "GAUNTLET_ONLY_CAPABILITY_ABSENT_CONTROL",
+      "obligations": [
+        {
+          "kind": "DISCOVERY",
+          "claim_template": "Research an external release fact for {case_id}."
+        }
+      ],
+      "turn_count": 1,
+      "turns": [
+        {
+          "turn_id": "T01",
+          "provider_action": "UNAVAILABLE_FINAL",
+          "prompt_template": "TOKEN700|{case_id}|T01| Research a current external release fact. Only repository Gauntlet tools are authorized in this qualification; do not invent retrieval evidence."
+        }
+      ],
+      "specific_quality_checks": [
+        "provider_dispatches_equal_1",
+        "tool_calls_equal_0",
+        "unavailable_outcome_does_not_clear_discovery"
+      ]
+    },
+    {
+      "id": "W04",
+      "name": "coding/edit/verification",
+      "scope": "GAUNTLET_ONLY_CAPABILITY_ABSENT_CONTROL",
+      "obligations": [
+        {
+          "kind": "ENGINEERING",
+          "claim_template": "Edit and verify a repository file for {case_id}."
+        }
+      ],
+      "turn_count": 1,
+      "turns": [
+        {
+          "turn_id": "T01",
+          "provider_action": "UNAVAILABLE_FINAL",
+          "prompt_template": "TOKEN700|{case_id}|T01| Apply and test a code edit identified by CODE_{case_id}. Only repository Gauntlet tools are authorized; do not claim an edit or test run without an execution tool."
+        }
+      ],
+      "specific_quality_checks": [
+        "provider_dispatches_equal_1",
+        "tool_calls_equal_0",
+        "unavailable_outcome_does_not_clear_engineering"
+      ]
+    },
+    {
+      "id": "W05",
+      "name": "browser interaction",
+      "scope": "GAUNTLET_ONLY_CAPABILITY_ABSENT_CONTROL",
+      "obligations": [
+        {
+          "kind": "DISCOVERY",
+          "claim_template": "Inspect an interactive browser page for {case_id}."
+        }
+      ],
+      "turn_count": 1,
+      "turns": [
+        {
+          "turn_id": "T01",
+          "provider_action": "UNAVAILABLE_FINAL",
+          "prompt_template": "TOKEN700|{case_id}|T01| Inspect and interact with browser page BROWSER_{case_id}. Only repository Gauntlet tools are authorized; do not claim visual or interactive evidence."
+        }
+      ],
+      "specific_quality_checks": [
+        "provider_dispatches_equal_1",
+        "tool_calls_equal_0",
+        "unavailable_outcome_does_not_clear_discovery"
+      ]
+    },
+    {
+      "id": "W06",
+      "name": "small MCP catalog",
+      "scope": "GAUNTLET_ONLY_ZERO_EXTERNAL_CATALOG_CONTROL",
+      "requested_catalog_cardinality": 8,
+      "authorized_external_catalog_cardinality": 0,
+      "obligations": [
+        {
+          "kind": "EVALUATION",
+          "claim_template": "Evaluate a request shaped for a small MCP catalog for {case_id}."
+        }
+      ],
+      "turn_count": 1,
+      "turns": [
+        {
+          "turn_id": "T01",
+          "provider_action": "UNAVAILABLE_FINAL",
+          "prompt_template": "TOKEN700|{case_id}|T01| Use one of eight requested external MCP capabilities for MCP_SMALL_{case_id}. The authorized external catalog is empty; do not claim a tool result."
+        }
+      ],
+      "specific_quality_checks": [
+        "provider_dispatches_equal_1",
+        "tool_calls_equal_0",
+        "active_tools_are_gauntlet_owned",
+        "unavailable_outcome_does_not_clear_evaluation"
+      ]
+    },
+    {
+      "id": "W07",
+      "name": "large MCP catalog",
+      "scope": "GAUNTLET_ONLY_ZERO_EXTERNAL_CATALOG_CONTROL",
+      "requested_catalog_cardinality": 64,
+      "authorized_external_catalog_cardinality": 0,
+      "obligations": [
+        {
+          "kind": "EVALUATION",
+          "claim_template": "Evaluate a request shaped for a large MCP catalog for {case_id}."
+        }
+      ],
+      "turn_count": 1,
+      "turns": [
+        {
+          "turn_id": "T01",
+          "provider_action": "UNAVAILABLE_FINAL",
+          "prompt_template": "TOKEN700|{case_id}|T01| Use one of sixty-four requested external MCP capabilities for MCP_LARGE_{case_id}. The authorized external catalog is empty; do not claim a tool result."
+        }
+      ],
+      "specific_quality_checks": [
+        "provider_dispatches_equal_1",
+        "tool_calls_equal_0",
+        "active_tools_are_gauntlet_owned",
+        "unavailable_outcome_does_not_clear_evaluation"
+      ]
+    },
+    {
+      "id": "W08",
+      "name": "ten-turn chat",
+      "scope": "FULL_LOCAL",
+      "obligations": [
+        {
+          "kind": "EVALUATION",
+          "claim_template": "Preserve relevant context across ten turns for {case_id}."
+        }
+      ],
+      "turn_count": 10,
+      "turn_generator": {
+        "provider_action": "FINAL",
+        "first_prompt_template": "TOKEN700|{case_id}|T01| CONTINUITY_{case_id} turn 1; introduce the durable anchor FIRST_{case_id}.",
+        "prompt_template": "TOKEN700|{case_id}|T{turn_number_2d}| CONTINUITY_{case_id} turn {turn_number}; recall the unique durable anchor introduced at turn 1 without repeating it.",
+        "turn_10_requires_provider_context_markers": [
+          "FIRST_{case_id}",
+          "CONTINUITY_{case_id}"
+        ]
+      },
+      "specific_quality_checks": [
+        "provider_dispatches_equal_10",
+        "tool_calls_equal_0",
+        "one_runtime_session_id",
+        "turn_10_contains_required_context_markers"
+      ]
+    },
+    {
+      "id": "W09",
+      "name": "resumed long session",
+      "scope": "FULL_LOCAL",
+      "obligations": [
+        {
+          "kind": "EVALUATION",
+          "claim_template": "Resume a long task-bound session for {case_id}."
+        }
+      ],
+      "turn_count": 13,
+      "fresh_launcher_process_each_turn": true,
+      "turn_generator": {
+        "provider_action": "FINAL",
+        "first_prompt_template": "TOKEN700|{case_id}|T01| RESUME_{case_id} turn 1; introduce the durable anchor ANCHOR_{case_id}.",
+        "prompt_template": "TOKEN700|{case_id}|T{turn_number_2d}| RESUME_{case_id} turn {turn_number}; recall the unique durable anchor introduced at turn 1 without repeating it.",
+        "turn_13_requires_provider_context_markers": [
+          "ANCHOR_{case_id}",
+          "RESUME_{case_id}"
+        ]
+      },
+      "specific_quality_checks": [
+        "provider_dispatches_equal_13",
+        "tool_calls_equal_0",
+        "one_runtime_session_id",
+        "turn_13_contains_required_context_markers"
+      ]
+    },
+    {
+      "id": "W10",
+      "name": "mixed multi-obligation task",
+      "scope": "FULL_LOCAL",
+      "obligations": [
+        {
+          "kind": "DISCOVERY",
+          "claim_template": "Locate source evidence for {case_id}."
+        },
+        {
+          "kind": "ENGINEERING",
+          "claim_template": "Implement the bounded change for {case_id}."
+        },
+        {
+          "kind": "EVALUATION",
+          "claim_template": "Measure the bounded change for {case_id}."
+        },
+        {
+          "kind": "REVIEW",
+          "claim_template": "Review the bounded change for {case_id}."
+        }
+      ],
+      "turn_count": 4,
+      "turn_generator": {
+        "provider_action": "FINAL",
+        "prompt_template": "TOKEN700|{case_id}|T{turn_number_2d}| MIXED_{case_id} obligation pass {turn_number}; preserve all four canonical obligations without clearing them."
+      },
+      "specific_quality_checks": [
+        "provider_dispatches_equal_4",
+        "tool_calls_equal_0",
+        "canonical_obligation_count_equal_4",
+        "all_obligations_remain_open",
+        "compact_status_obligation_count_equal_4"
+      ]
+    }
+  ]
+}
