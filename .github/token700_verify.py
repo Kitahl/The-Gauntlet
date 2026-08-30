@@ -29,9 +29,9 @@ from typing import Any, Iterator, Mapping, Sequence
 from urllib.parse import urlparse
 
 REPO = Path(__file__).resolve().parent.parent
-MANIFEST_PATH = REPO / "benchmarks" / "token700" / "workloads.v2.json"
-MANIFEST_SHA256 = "7a5cbff109f53348a43f84bcc3b819ddcdad0d6cb13d683236b42f7326089a3f"
-PREREGISTRATION_COMMIT = "916c22d3924b8c5e0f23f84376b0a69edc3159a4"
+MANIFEST_PATH = REPO / "benchmarks" / "token700" / "workloads.v3.json"
+MANIFEST_SHA256 = "4a95d8e3d54afc26a5d198df43257ac3e58731b3fcd1cf0049cb82b867297947"
+PREREGISTRATION_COMMIT = "8457ff8660051bdf24840ef9ed88658a722fd5f8"
 PINNED_HERMES = "5fc308a70719a83cccdbba4c0e39c23f5a8239d5"
 MODEL = "phase5-mock"
 PROVIDER = "custom"
@@ -148,7 +148,7 @@ def load_manifest(path: Path = MANIFEST_PATH) -> dict[str, Any]:
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
         raise ValueError("TOKEN-700 workload manifest must be an object")
-    if value.get("schema") != "gauntlet.token700-workloads.v2":
+    if value.get("schema") != "gauntlet.token700-workloads.v3":
         raise ValueError("TOKEN-700 workload manifest schema mismatch")
     workloads = value.get("workloads")
     variants = value.get("variants")
@@ -185,7 +185,7 @@ def expand_turns(case: Mapping[str, Any]) -> list[dict[str, str]]:
     case_id = str(case["case_id"])
     explicit = workload.get("turns")
     if isinstance(explicit, list):
-        return [
+        turns = [
             {
                 "turn_id": str(turn["turn_id"]),
                 "provider_action": str(turn["provider_action"]),
@@ -193,23 +193,31 @@ def expand_turns(case: Mapping[str, Any]) -> list[dict[str, str]]:
             }
             for turn in explicit
         ]
-    generator = workload["turn_generator"]
-    turns = []
-    for number in range(1, int(workload["turn_count"]) + 1):
-        template = (
-            generator.get("first_prompt_template") if number == 1 else generator["prompt_template"]
-        )
-        turns.append(
-            {
-                "turn_id": f"T{number:02d}",
-                "provider_action": str(generator["provider_action"]),
-                "prompt": str(template).format(
-                    case_id=case_id,
-                    turn_number=number,
-                    turn_number_2d=f"{number:02d}",
-                ),
-            }
-        )
+    else:
+        generator = workload["turn_generator"]
+        first_template = generator.get("first_prompt_template")
+        if first_template is None:
+            first_template = generator["prompt_template"]
+        turns = []
+        for number in range(1, int(workload["turn_count"]) + 1):
+            template = first_template if number == 1 else generator["prompt_template"]
+            turns.append(
+                {
+                    "turn_id": f"T{number:02d}",
+                    "provider_action": str(generator["provider_action"]),
+                    "prompt": str(template).format(
+                        case_id=case_id,
+                        turn_number=number,
+                        turn_number_2d=f"{number:02d}",
+                    ),
+                }
+            )
+    for turn in turns:
+        expected_marker = f"TOKEN700|{case_id}|{turn['turn_id']}|"
+        if expected_marker not in turn["prompt"]:
+            raise ValueError(
+                f"case {case_id} turn {turn['turn_id']} lacks its exact provider marker"
+            )
     return turns
 
 
@@ -301,7 +309,6 @@ def _capsule_metrics(payload: Mapping[str, Any]) -> dict[str, Any] | None:
 
 def _auxiliary_policy_satisfied(
     arm: str,
-    turn_id: str,
     server_dispatches: int,
     documents: Sequence[Mapping[str, Any]],
 ) -> bool:
@@ -312,7 +319,19 @@ def _auxiliary_policy_satisfied(
     if arm == "candidate":
         return server_dispatches == 0
     if arm == "baseline":
-        return server_dispatches <= 1 if turn_id == "T01" else server_dispatches == 0
+        return server_dispatches <= 1
+    return False
+
+
+def _case_auxiliary_policy_satisfied(
+    arm: str,
+    turns: Sequence[Mapping[str, Any]],
+) -> bool:
+    dispatches = sum(int(turn.get("auxiliary_provider_dispatches", 0)) for turn in turns)
+    if arm == "candidate":
+        return dispatches == 0
+    if arm == "baseline":
+        return dispatches <= 1
     return False
 
 
@@ -967,7 +986,6 @@ def _run_turn(
         ),
         "arm_auxiliary_dispatch_policy_satisfied": _auxiliary_policy_satisfied(
             arm,
-            turn["turn_id"],
             len(auxiliary_requests),
             auxiliary,
         ),
@@ -1114,6 +1132,10 @@ def _run_case(
             {session_id for turn in turns for session_id in turn["runtime_session_ids"]}
         )
         == 1,
+        "case_auxiliary_dispatch_policy_satisfied": _case_auxiliary_policy_satisfied(
+            arm,
+            turns,
+        ),
     }
     required = _required_history_markers(case)
     if required:
@@ -1345,10 +1367,12 @@ def run(output: Path, *, validate_only: bool = False) -> dict[str, Any]:
     source = _validate_source_state()
     manifest = load_manifest()
     cases = expand_cases(manifest)
+    expanded_turns = sum(len(expand_turns(case)) for case in cases)
     if validate_only:
         return {
             "status": "validated",
             "cases": len(cases),
+            "expanded_turns": expanded_turns,
             "manifest_sha256": MANIFEST_SHA256,
             **source,
         }
@@ -1404,12 +1428,12 @@ def run(output: Path, *, validate_only: bool = False) -> dict[str, Any]:
                 pairs = _pair_results(cases, results)
                 summary = _summarize(pairs)
                 document = {
-                    "schema": "gauntlet.token700-qualification.v2",
+                    "schema": "gauntlet.token700-qualification.v3",
                     "phase": "TOKEN-700",
                     "mode": "MATCHED_LOCAL_GAUNTLET_ONLY",
                     "preregistration": {
                         "commit": PREREGISTRATION_COMMIT,
-                        "manifest": "benchmarks/token700/workloads.v2.json",
+                        "manifest": "benchmarks/token700/workloads.v3.json",
                         "manifest_sha256": MANIFEST_SHA256,
                         "sample_size_pairs": len(pairs),
                         "noninferiority_margin_percentage_points": 0,

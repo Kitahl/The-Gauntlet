@@ -27,7 +27,7 @@ class FrozenManifestTests(unittest.TestCase):
     def test_manifest_hash_and_case_cardinality_are_frozen(self) -> None:
         manifest = t700.load_manifest()
         cases = t700.expand_cases(manifest)
-        self.assertEqual(manifest["protocol_revision"], 2)
+        self.assertEqual(manifest["protocol_revision"], 3)
         self.assertEqual(len(cases), 30)
         self.assertEqual(len({case["case_id"] for case in cases}), 30)
         self.assertEqual(
@@ -62,6 +62,36 @@ class FrozenManifestTests(unittest.TestCase):
             self.assertTrue(all(marker not in turn["prompt"] for turn in turns[1:]))
             required = t700._required_history_markers(case)
             self.assertTrue(any(marker in item for item in required))
+
+    def test_every_expanded_turn_has_exact_marker_and_w10_fallback(self) -> None:
+        cases = t700.expand_cases(t700.load_manifest())
+        turn_count = 0
+        for case in cases:
+            turns = t700.expand_turns(case)
+            turn_count += len(turns)
+            for turn in turns:
+                marker = f"TOKEN700|{case['case_id']}|{turn['turn_id']}|"
+                self.assertIn(marker, turn["prompt"])
+        self.assertEqual(turn_count, 102)
+        w10 = next(case for case in cases if case["case_id"] == "W10-S01")
+        self.assertIn("MIXED_W10-S01 obligation pass 1", t700.expand_turns(w10)[0]["prompt"])
+        self.assertNotEqual(t700.expand_turns(w10)[0]["prompt"], "None")
+
+    def test_expanded_turn_without_exact_marker_is_rejected(self) -> None:
+        bad = {
+            "case_id": "W99-S01",
+            "workload": {
+                "turns": [
+                    {
+                        "turn_id": "T01",
+                        "provider_action": "FINAL",
+                        "prompt_template": "missing marker",
+                    }
+                ]
+            },
+        }
+        with self.assertRaisesRegex(ValueError, "lacks its exact provider marker"):
+            t700.expand_turns(bad)
 
     def test_fixture_actions_are_single_and_frozen_per_case(self) -> None:
         cases = t700.expand_cases(t700.load_manifest())
@@ -140,18 +170,22 @@ class FrozenAnalysisTests(unittest.TestCase):
         self.assertEqual(t700._server_request_kind(title), "title_generation")
         self.assertEqual(t700._server_request_kind({"stream": False}), "unknown")
 
-    def test_auxiliary_policy_is_arm_and_turn_scoped(self) -> None:
+    def test_auxiliary_policy_is_arm_and_session_scoped(self) -> None:
         title = {"auxiliary_task": "title_generation"}
-        self.assertTrue(t700._auxiliary_policy_satisfied("baseline", "T01", 1, [title]))
-        self.assertTrue(t700._auxiliary_policy_satisfied("baseline", "T01", 0, []))
-        self.assertFalse(t700._auxiliary_policy_satisfied("baseline", "T02", 1, [title]))
-        self.assertFalse(t700._auxiliary_policy_satisfied("candidate", "T01", 1, [title]))
-        self.assertTrue(t700._auxiliary_policy_satisfied("candidate", "T01", 0, []))
+        self.assertTrue(t700._auxiliary_policy_satisfied("baseline", 1, [title]))
+        self.assertTrue(t700._auxiliary_policy_satisfied("baseline", 0, []))
+        self.assertTrue(t700._auxiliary_policy_satisfied("baseline", 1, [title]))
+        self.assertFalse(t700._auxiliary_policy_satisfied("candidate", 1, [title]))
+        self.assertTrue(t700._auxiliary_policy_satisfied("candidate", 0, []))
         self.assertFalse(
-            t700._auxiliary_policy_satisfied(
-                "baseline", "T01", 1, [{"auxiliary_task": "compression"}]
-            )
+            t700._auxiliary_policy_satisfied("baseline", 1, [{"auxiliary_task": "compression"}])
         )
+        no_aux = {"auxiliary_provider_dispatches": 0}
+        one_aux = {"auxiliary_provider_dispatches": 1}
+        self.assertTrue(t700._case_auxiliary_policy_satisfied("baseline", [no_aux, one_aux]))
+        self.assertFalse(t700._case_auxiliary_policy_satisfied("baseline", [one_aux, one_aux]))
+        self.assertTrue(t700._case_auxiliary_policy_satisfied("candidate", [no_aux, no_aux]))
+        self.assertFalse(t700._case_auxiliary_policy_satisfied("candidate", [no_aux, one_aux]))
 
     def test_nested_capsule_metrics_and_complete_cost_are_explicit(self) -> None:
         self.assertEqual(
