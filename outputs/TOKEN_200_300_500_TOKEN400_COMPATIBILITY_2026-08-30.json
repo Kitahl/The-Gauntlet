@@ -1,0 +1,51 @@
+{
+  "authority_ceiling": "TOKEN_EFFICIENCY_ONLY",
+  "counts": {
+    "input_chars": 18598,
+    "input_messages": 12,
+    "persisted_messages_after_turn": 12,
+    "provider_requests": 1,
+    "seeded_messages": 10,
+    "selected_chars": 16645,
+    "selected_messages": 11
+  },
+  "gates": {
+    "active_manifest_hash_bound": true,
+    "active_tool_closure_preserved": true,
+    "canonical_receipts_created": 0,
+    "canonical_state_unchanged": true,
+    "current_user_turn_preserved": true,
+    "explicit_capability_specs": true,
+    "fresh_availability_before_agent_construction": true,
+    "irrelevant_old_unit_dropped": true,
+    "jit_authority": "CONTEXT_ONLY",
+    "jit_selected_snippets": 1,
+    "jit_task_profile_isolated": true,
+    "jit_unselected_snippet_absent": true,
+    "model_visible_tools": 4,
+    "persisted_transcript_unchanged_by_selection": true,
+    "recent_turns_preserved": 3,
+    "silent_tool_widening": false,
+    "sparse_context_activated": true,
+    "stable_system_prefix_preserved": true,
+    "status": "PASS",
+    "top_k_retrieval_observed": true
+  },
+  "mode": "NON_DESTRUCTIVE_LOCAL_FIXTURE",
+  "phases": [
+    "TOKEN-200",
+    "TOKEN-300",
+    "TOKEN-500"
+  ],
+  "provider_fixture": {
+    "model": "phase5-mock",
+    "network": "localhost-only",
+    "provider": "custom"
+  },
+  "schema": "gauntlet.token-200-300-500-qualification.v1",
+  "source": {
+    "pinned_hermes_commit": "5fc308a70719a83cccdbba4c0e39c23f5a8239d5",
+    "running_commit": "dcb63f1acf3b7aeab09e065fa116cbc32c5a18cb",
+    "running_tree": "ec1fdf9385a16e878d4a8746aaec3cac6f8f85ed"
+  }
+}

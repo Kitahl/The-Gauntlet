@@ -1,0 +1,41 @@
+{
+  "authority_ceiling": "TOKEN_EFFICIENCY_ONLY",
+  "counts": {
+    "durable_reference_chars": 644,
+    "model_visible_tools": 4,
+    "operational_artifacts": 1,
+    "provider_requests": 3,
+    "raw_claim_chars": 11853,
+    "rehydrated_page_chars": 512,
+    "stored_artifact_chars": 13091
+  },
+  "gates": {
+    "artifact_path_not_model_visible": true,
+    "bounded_explicit_rehydration": true,
+    "canonical_receipts_created": 0,
+    "canonical_state_unchanged": true,
+    "content_addressed_hash_verified": true,
+    "deterministic_extraction": true,
+    "durable_transcript_contains_reference_only": true,
+    "private_task_session_bound_store": true,
+    "raw_result_visible_in_current_provider_call": true,
+    "secret_redaction_observed": true,
+    "status": "PASS",
+    "ttl_bound_verified": true
+  },
+  "mode": "NON_DESTRUCTIVE_LOCAL_FIXTURE",
+  "phases": [
+    "TOKEN-400"
+  ],
+  "provider_fixture": {
+    "model": "phase5-mock",
+    "network": "localhost-only",
+    "provider": "custom"
+  },
+  "schema": "gauntlet.token-400-qualification.v1",
+  "source": {
+    "pinned_hermes_commit": "5fc308a70719a83cccdbba4c0e39c23f5a8239d5",
+    "running_commit": "dcb63f1acf3b7aeab09e065fa116cbc32c5a18cb",
+    "running_tree": "ec1fdf9385a16e878d4a8746aaec3cac6f8f85ed"
+  }
+}
