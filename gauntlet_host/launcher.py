@@ -10,7 +10,7 @@ import time
 import uuid
 from dataclasses import replace
 from pathlib import Path
-from typing import Sequence
+from typing import Any, Sequence
 
 from gauntlet_host.constants import (
     DEFAULT_AGENT_RUN_BUDGET_SECONDS,
@@ -231,6 +231,7 @@ def run_worker_turn(
     model: str | None = None,
     provider: str | None = None,
     toolsets: Sequence[str] = (),
+    jit_context: Sequence[dict[str, Any]] = (),
     timeout_seconds: float = DEFAULT_LAUNCH_TIMEOUT_SECONDS,
 ) -> RuntimeResult:
     """Run one upstream AIAgent turn through the isolated JSONL worker."""
@@ -333,7 +334,20 @@ def run_worker_turn(
                     code=exc.code,
                     message=exc.message,
                 )
-            request.metadata["lean_context"] = lean_context.to_metadata()
+            try:
+                request.metadata["lean_context"] = lean_context.to_metadata(
+                    session_binding_id=request.session_id or "",
+                    profile_name=profile.profile_name,
+                    selected_snippets=jit_context,
+                )
+            except LeanContextError as exc:
+                return _failure(
+                    request,
+                    status=WorkerStatus.UNAVAILABLE,
+                    event="launcher.lean_context_failed",
+                    code=exc.code,
+                    message=exc.message,
+                )
             remaining = deadline - time.monotonic()
             if remaining <= 5.0:
                 raise SessionTurnLockTimeout(

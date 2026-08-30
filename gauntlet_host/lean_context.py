@@ -11,7 +11,7 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Sequence
 
 from gauntlet_host import foil_bridge
 from gauntlet_host.constants import (
@@ -22,13 +22,29 @@ from gauntlet_host.constants import (
     MAX_ROUTE_CAPSULE_CHARS,
     MAX_STATUS_CAPSULE_CHARS,
 )
+from gauntlet_host.tool_surface import (
+    ToolSurfaceError,
+    build_tool_surface_plan,
+    validate_tool_surface_plan,
+)
 
 ACTIVE_MANIFEST_REVISION = "gauntlet-status.v1"
 LEAN_CONTEXT_SCHEMA = "gauntlet.lean-context.v1"
+SPARSE_CONTEXT_SCHEMA = "gauntlet.sparse-context-plan.v1"
+SPARSE_CONTEXT_ENGINE = "gauntlet-sparse"
+LEAN_PROFILE_NAME = "gauntlet-lean.v1"
+SPARSE_ACTIVATION_HISTORY_CHARS = 8_192
+SPARSE_RECENT_TURNS = 3
+SPARSE_RETRIEVAL_TOP_K = 3
+SPARSE_MAX_SELECTED_MESSAGES = 18
+MAX_JIT_SNIPPETS = 8
+MAX_JIT_SNIPPET_CHARS = 4_000
+MAX_JIT_CONTEXT_CHARS = 12_000
 _CONTEXT_MARKER = "[GAUNTLET LEAN VOLATILE CONTEXT]"
 _CONTEXT_END_MARKER = "[/GAUNTLET LEAN VOLATILE CONTEXT]"
 _SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 _B64_SHA256_PATTERN = re.compile(r"^[A-Za-z0-9_-]{43}$")
+_IDENTIFIER_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,255}$")
 _OBLIGATION_FIELDS = [
     "obligation_id",
     "kind",
@@ -127,6 +143,162 @@ def status_tool_definitions() -> list[dict[str, Any]]:
 
 def active_manifest_hash() -> str:
     return foil_bridge.capability_snapshot(status_tool_definitions())["tool_manifest_hash"]
+
+
+def _validate_jit_snippet(value: Any) -> dict[str, str]:
+    if not isinstance(value, dict):
+        raise LeanContextError("JIT_CONTEXT_INVALID", "JIT context snippet must be an object")
+    if set(value) != {
+        "snippet_id",
+        "kind",
+        "provenance",
+        "source_hash",
+        "content",
+        "authority",
+    }:
+        raise LeanContextError(
+            "JIT_CONTEXT_INVALID",
+            "JIT context snippet fields did not match the frozen contract",
+        )
+    snippet_id = value.get("snippet_id")
+    kind = value.get("kind")
+    provenance = value.get("provenance")
+    source_hash = value.get("source_hash")
+    content = value.get("content")
+    if not isinstance(snippet_id, str) or not _IDENTIFIER_PATTERN.fullmatch(snippet_id):
+        raise LeanContextError("JIT_CONTEXT_INVALID", "JIT snippet ID is invalid")
+    if kind not in {"skill", "memory", "profile"}:
+        raise LeanContextError("JIT_CONTEXT_INVALID", "JIT snippet kind is unsupported")
+    if (
+        not isinstance(provenance, str)
+        or not provenance.strip()
+        or len(provenance) > 512
+        or any(char in provenance for char in "\r\n")
+    ):
+        raise LeanContextError("JIT_CONTEXT_INVALID", "JIT snippet provenance is invalid")
+    if not isinstance(content, str) or not content or len(content) > MAX_JIT_SNIPPET_CHARS:
+        raise LeanContextError("JIT_CONTEXT_INVALID", "JIT snippet content is invalid")
+    if _CONTEXT_MARKER in content or _CONTEXT_END_MARKER in content:
+        raise LeanContextError("JIT_CONTEXT_MARKER_COLLISION", "JIT snippet used a reserved marker")
+    expected_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()
+    if source_hash != expected_hash:
+        raise LeanContextError(
+            "JIT_CONTEXT_HASH_MISMATCH",
+            "JIT snippet source hash did not match its content",
+        )
+    if value.get("authority") != "CONTEXT_ONLY":
+        raise LeanContextError(
+            "JIT_CONTEXT_AUTHORITY_INVALID",
+            "JIT snippets cannot claim canonical or execution authority",
+        )
+    return {
+        "snippet_id": snippet_id,
+        "kind": kind,
+        "provenance": provenance.strip(),
+        "source_hash": source_hash,
+        "content": content,
+        "authority": "CONTEXT_ONLY",
+    }
+
+
+def build_sparse_context_plan(
+    *,
+    session_binding_id: str,
+    profile_name: str,
+    selected_snippets: Sequence[dict[str, Any]] = (),
+) -> dict[str, Any]:
+    if not isinstance(session_binding_id, str) or not session_binding_id:
+        raise LeanContextError(
+            "SPARSE_CONTEXT_BINDING_MISSING",
+            "sparse context requires the parent-derived session binding",
+        )
+    if profile_name != LEAN_PROFILE_NAME:
+        raise LeanContextError(
+            "SPARSE_CONTEXT_PROFILE_INVALID",
+            "sparse context requires the isolated lean runtime profile",
+        )
+    if len(selected_snippets) > MAX_JIT_SNIPPETS:
+        raise LeanContextError("JIT_CONTEXT_TOO_LARGE", "too many JIT context snippets")
+    snippets = [_validate_jit_snippet(value) for value in selected_snippets]
+    ids = [snippet["snippet_id"] for snippet in snippets]
+    if len(ids) != len(set(ids)):
+        raise LeanContextError("JIT_CONTEXT_DUPLICATE", "JIT snippet IDs must be unique")
+    if sum(len(snippet["content"]) for snippet in snippets) > MAX_JIT_CONTEXT_CHARS:
+        raise LeanContextError("JIT_CONTEXT_TOO_LARGE", "JIT context exceeded its total bound")
+    payload = {
+        "schema": SPARSE_CONTEXT_SCHEMA,
+        "engine": SPARSE_CONTEXT_ENGINE,
+        "task_binding_id": session_binding_id,
+        "profile_name": profile_name,
+        "activation_history_chars": SPARSE_ACTIVATION_HISTORY_CHARS,
+        "recent_turns": SPARSE_RECENT_TURNS,
+        "retrieval_top_k": SPARSE_RETRIEVAL_TOP_K,
+        "max_selected_messages": SPARSE_MAX_SELECTED_MESSAGES,
+        "selected_snippets": snippets,
+        "persisted_transcript_mutation_allowed": False,
+        "snippet_authority_allowed": False,
+    }
+    payload["content_hash"] = _canonical_hash(payload)
+    return payload
+
+
+def validate_sparse_context_plan(
+    value: Any,
+    *,
+    session_binding_id: str,
+    profile_name: str,
+) -> dict[str, Any]:
+    if not isinstance(value, dict) or value.get("schema") != SPARSE_CONTEXT_SCHEMA:
+        raise LeanContextError(
+            "SPARSE_CONTEXT_PLAN_MISSING",
+            "worker request omitted the sparse context plan",
+        )
+    supplied_hash = value.get("content_hash")
+    if not isinstance(supplied_hash, str) or not _SHA256_PATTERN.fullmatch(supplied_hash):
+        raise LeanContextError(
+            "SPARSE_CONTEXT_HASH_INVALID",
+            "sparse context plan omitted a valid content hash",
+        )
+    payload = dict(value)
+    payload.pop("content_hash", None)
+    if _canonical_hash(payload) != supplied_hash:
+        raise LeanContextError(
+            "SPARSE_CONTEXT_HASH_MISMATCH",
+            "sparse context plan content hash did not match its payload",
+        )
+    if (
+        value.get("engine") != SPARSE_CONTEXT_ENGINE
+        or value.get("task_binding_id") != session_binding_id
+        or value.get("profile_name") != profile_name
+    ):
+        raise LeanContextError(
+            "SPARSE_CONTEXT_ISOLATION_MISMATCH",
+            "sparse context plan did not match the task binding and runtime profile",
+        )
+    expected_scalars = {
+        "activation_history_chars": SPARSE_ACTIVATION_HISTORY_CHARS,
+        "recent_turns": SPARSE_RECENT_TURNS,
+        "retrieval_top_k": SPARSE_RETRIEVAL_TOP_K,
+        "max_selected_messages": SPARSE_MAX_SELECTED_MESSAGES,
+        "persisted_transcript_mutation_allowed": False,
+        "snippet_authority_allowed": False,
+    }
+    if any(value.get(key) != expected for key, expected in expected_scalars.items()):
+        raise LeanContextError(
+            "SPARSE_CONTEXT_POLICY_MISMATCH",
+            "sparse context plan changed a frozen selection policy field",
+        )
+    snippets = value.get("selected_snippets")
+    if not isinstance(snippets, list) or len(snippets) > MAX_JIT_SNIPPETS:
+        raise LeanContextError("JIT_CONTEXT_INVALID", "selected JIT context is invalid")
+    validated = [_validate_jit_snippet(item) for item in snippets]
+    ids = [snippet["snippet_id"] for snippet in validated]
+    if (
+        len(ids) != len(set(ids))
+        or sum(len(item["content"]) for item in validated) > MAX_JIT_CONTEXT_CHARS
+    ):
+        raise LeanContextError("JIT_CONTEXT_INVALID", "selected JIT context is invalid")
+    return value
 
 
 def _validate_content_hash(value: dict[str, Any], *, label: str) -> None:
@@ -355,8 +527,33 @@ class LeanContext:
     foil_route: dict[str, Any]
     compact_status: dict[str, Any]
     route_record_path: str
+    tool_surface_plan: dict[str, Any] | None = None
+    sparse_context_plan: dict[str, Any] | None = None
 
-    def to_metadata(self) -> dict[str, Any]:
+    def to_metadata(
+        self,
+        *,
+        session_binding_id: str,
+        profile_name: str = LEAN_PROFILE_NAME,
+        selected_snippets: Sequence[dict[str, Any]] = (),
+    ) -> dict[str, Any]:
+        try:
+            tool_plan = build_tool_surface_plan(
+                status_tool_definitions(),
+                self.foil_route,
+            )
+        except ToolSurfaceError as exc:
+            raise LeanContextError(exc.code, exc.message) from exc
+        if tool_plan["planned_manifest_hash"] != self.active_manifest_hash:
+            raise LeanContextError(
+                "ACTIVE_MANIFEST_HASH_MISMATCH",
+                "tool-surface plan did not match the frozen active manifest",
+            )
+        sparse_plan = build_sparse_context_plan(
+            session_binding_id=session_binding_id,
+            profile_name=profile_name,
+            selected_snippets=selected_snippets,
+        )
         return {
             "schema": LEAN_CONTEXT_SCHEMA,
             "task_id": self.task_id,
@@ -364,6 +561,8 @@ class LeanContext:
             "active_manifest_hash": self.active_manifest_hash,
             "foil_route": self.foil_route,
             "compact_status": self.compact_status,
+            "tool_surface_plan": tool_plan,
+            "sparse_context_plan": sparse_plan,
             "route_record": {
                 "path": self.route_record_path,
                 "content_hash": self.foil_route["content_hash"],
@@ -373,7 +572,14 @@ class LeanContext:
         }
 
     @classmethod
-    def from_metadata(cls, task_id: str, value: Any) -> "LeanContext":
+    def from_metadata(
+        cls,
+        task_id: str,
+        value: Any,
+        *,
+        session_binding_id: str,
+        profile_name: str,
+    ) -> "LeanContext":
         if not isinstance(value, dict) or value.get("schema") != LEAN_CONTEXT_SCHEMA:
             raise LeanContextError(
                 "LEAN_CONTEXT_MISSING",
@@ -406,6 +612,25 @@ class LeanContext:
                 "lean context FOIL route is invalid",
             ) from exc
         status = _validate_compact_status(task_id, value.get("compact_status"))
+        try:
+            tool_plan = validate_tool_surface_plan(value.get("tool_surface_plan"))
+        except ToolSurfaceError as exc:
+            raise LeanContextError(exc.code, exc.message) from exc
+        if (
+            tool_plan.get("foil_proposal_hash") != route["content_hash"]
+            or tool_plan.get("foil_selected_capability_ids")
+            != list(route.get("minimum_capability_bundle", []))
+            or tool_plan.get("planned_manifest_hash") != expected_manifest_hash
+        ):
+            raise LeanContextError(
+                "TOOL_SURFACE_ROUTE_MISMATCH",
+                "tool-surface plan did not bind the validated FOIL proposal and manifest",
+            )
+        sparse_plan = validate_sparse_context_plan(
+            value.get("sparse_context_plan"),
+            session_binding_id=session_binding_id,
+            profile_name=profile_name,
+        )
         record = value.get("route_record")
         if (
             not isinstance(record, dict)
@@ -425,6 +650,8 @@ class LeanContext:
             foil_route=route,
             compact_status=status,
             route_record_path=record["path"],
+            tool_surface_plan=tool_plan,
+            sparse_context_plan=sparse_plan,
         )
 
     def route_capsule(self) -> dict[str, Any]:

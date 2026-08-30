@@ -20,8 +20,8 @@ from gauntlet_host.constants import (
 GAUNTLET_PLUGIN_MANIFEST = """\
 manifest_version: 2
 name: gauntlet
-version: 0.2.0
-description: Lean read-only canonical task, obligation, and release status tools.
+version: 0.3.0
+description: Lean compiled tools plus sparse request-only context selection.
 author: The Gauntlet
 kind: standalone
 provides_tools:
@@ -47,6 +47,7 @@ class RuntimeProfile:
     runtime_home: str
     config_path: str
     profile_name: str
+    context_engine_name: str
     config_sha256: str
     background_review_enabled: bool
     memory_write_approval: bool
@@ -174,6 +175,9 @@ def _apply_alpha_policy(config: dict[str, Any]) -> None:
     """Apply the isolated, explicit gauntlet-lean.v1 runtime profile."""
 
     config["toolsets"] = [GAUNTLET_TOOLSET]
+
+    context = _mapping(config, "context")
+    context["engine"] = "gauntlet-sparse"
 
     auxiliary = _mapping(config, "auxiliary")
     background_review = _mapping(auxiliary, "background_review")
@@ -392,6 +396,7 @@ def prepare_runtime_profile(runtime_home: Path | None = None) -> RuntimeProfile:
         runtime_home=str(home),
         config_path=str(config_path),
         profile_name="gauntlet-lean.v1",
+        context_engine_name="gauntlet-sparse",
         config_sha256=config_digest,
         background_review_enabled=False,
         memory_write_approval=True,

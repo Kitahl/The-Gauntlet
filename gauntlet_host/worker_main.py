@@ -92,6 +92,7 @@ class NamespaceProof:
     runtime_config: str
     runtime_config_sha256: str
     runtime_profile_name: str
+    context_engine_name: str
     background_review_enabled: bool
     memory_write_approval: bool
     memory_enabled: bool
@@ -289,6 +290,7 @@ def bootstrap_vendor_runtime(profile: RuntimeProfile) -> NamespaceProof:
         runtime_config=profile.config_path,
         runtime_config_sha256=profile.config_sha256,
         runtime_profile_name=profile.profile_name,
+        context_engine_name=profile.context_engine_name,
         background_review_enabled=profile.background_review_enabled,
         memory_write_approval=profile.memory_write_approval,
         memory_enabled=profile.memory_enabled,
