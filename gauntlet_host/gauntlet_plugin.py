@@ -18,6 +18,17 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit
 
+from gauntlet_host.tool_results import (
+    ARTIFACT_TOOL_NAME,
+    DEFAULT_PAGE_CHARS,
+    MAX_PAGE_CHARS,
+    PAGE_SCHEMA,
+    OperationalArtifactStore,
+    ToolResultLifecycleError,
+    current_call_projection,
+    parse_reference,
+)
+
 ADAPTER_SCHEMA = "gauntlet.adapter.v1"
 OBSERVATION_SCHEMA = "gauntlet.observation-store-result.v1"
 TOOLSET = "gauntlet"
@@ -31,6 +42,7 @@ _pending_lock = threading.Lock()
 _api_context: dict[str, dict[str, Any]] = {}
 _llm_pending: dict[str, tuple[dict[str, Any], float]] = {}
 _llm_lock = threading.Lock()
+_active_sparse_engine: Any | None = None
 
 
 class BridgeError(RuntimeError):
@@ -182,6 +194,41 @@ def _obligation_get(arguments: dict[str, Any] | None = None, **_: Any) -> str:
 
 def _release_status(arguments: dict[str, Any] | None = None, **_: Any) -> str:
     return _status_call("release-status", arguments)
+
+
+def _artifact_get(arguments: dict[str, Any] | None = None, **_: Any) -> str:
+    try:
+        if not isinstance(arguments, dict) or not {"artifact_id"} <= set(arguments):
+            raise ToolResultLifecycleError(
+                "ARTIFACT_ARGUMENTS_INVALID",
+                "artifact_id is required",
+            )
+        if set(arguments).difference({"artifact_id", "offset", "limit"}):
+            raise ToolResultLifecycleError(
+                "ARTIFACT_ARGUMENTS_INVALID",
+                "artifact tool received unsupported arguments",
+            )
+        store = OperationalArtifactStore.from_environment()
+        return store.retrieve(
+            arguments["artifact_id"],
+            offset=arguments.get("offset", 0),
+            limit=arguments.get("limit", DEFAULT_PAGE_CHARS),
+        )
+    except ToolResultLifecycleError as exc:
+        return json.dumps(
+            {
+                "schema": PAGE_SCHEMA,
+                "status": "ERROR",
+                "error": {"code": exc.code, "message": _safe(exc.message)},
+                "read_only": True,
+                "mutation_performed": False,
+                "authority": "OPERATIONAL_ONLY",
+                "canonical_evidence": False,
+            },
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        )
 
 
 def _hash(value: Any) -> str:
@@ -428,6 +475,9 @@ class _GauntletSparseEngineBase:
     def __init__(self) -> None:
         self._delegate = None
         self._selection_plan: dict[str, Any] | None = None
+        self._pending_artifacts: dict[str, str] = {}
+        self._presented_artifacts: set[str] = set()
+        self._first_visibility_count = 0
         self.last_selection: dict[str, Any] = {
             "engine": _SPARSE_CONTEXT_ENGINE,
             "activated": False,
@@ -439,7 +489,15 @@ class _GauntletSparseEngineBase:
         delegate = self.__dict__.get("_delegate")
         if (
             delegate is not None
-            and name not in {"_delegate", "_selection_plan", "last_selection"}
+            and name
+            not in {
+                "_delegate",
+                "_selection_plan",
+                "_pending_artifacts",
+                "_presented_artifacts",
+                "_first_visibility_count",
+                "last_selection",
+            }
             and hasattr(delegate, name)
         ):
             setattr(delegate, name, value)
@@ -586,6 +644,8 @@ class _GauntletSparseEngineBase:
             self._delegate.on_session_reset()
             self._sync_delegate_state()
         self._selection_plan = None
+        self._pending_artifacts.clear()
+        self._presented_artifacts.clear()
 
     def on_turn_complete(
         self,
@@ -669,6 +729,8 @@ class _GauntletSparseEngineBase:
         if total_chars > 12_000:
             raise ValueError("selected JIT context too large")
         self._selection_plan = json.loads(json.dumps(plan))
+        global _active_sparse_engine
+        _active_sparse_engine = self
 
     def _jit_message(self) -> dict[str, Any] | None:
         if self._selection_plan is None:
@@ -707,6 +769,88 @@ class _GauntletSparseEngineBase:
             ),
         }
 
+    def register_externalized_result(self, artifact_id: str, content: str) -> None:
+        if (
+            not isinstance(artifact_id, str)
+            or not artifact_id.startswith("art_")
+            or len(artifact_id) != 68
+            or not isinstance(content, str)
+            or hashlib.sha256(content.encode("utf-8")).hexdigest() != artifact_id[4:]
+        ):
+            raise ValueError("externalized tool result identity mismatch")
+        self._pending_artifacts[artifact_id] = content
+
+    def acknowledge_provider_response(self) -> None:
+        for artifact_id in self._presented_artifacts:
+            self._pending_artifacts.pop(artifact_id, None)
+        self._presented_artifacts.clear()
+
+    def tool_result_lifecycle_metrics(self) -> dict[str, Any]:
+        return {
+            "first_visibility_presentations": self._first_visibility_count,
+            "pending_first_visibility": len(self._pending_artifacts),
+            "unacknowledged_presentations": len(self._presented_artifacts),
+            "request_only_projection": True,
+            "persisted_transcript_mutated": False,
+        }
+
+    def _project_first_visibility(
+        self,
+        messages: list[dict[str, Any]],
+    ) -> tuple[list[dict[str, Any]], list[str], int]:
+        projected: list[dict[str, Any]] | None = None
+        artifact_ids: list[str] = []
+        raw_chars = 0
+        for index, message in enumerate(messages):
+            if not isinstance(message, dict) or message.get("role") != "tool":
+                continue
+            reference = parse_reference(message.get("content"))
+            if reference is None:
+                continue
+            artifact_id = reference["artifact_id"]
+            content = self._pending_artifacts.get(artifact_id)
+            if content is None:
+                continue
+            if projected is None:
+                projected = list(messages)
+            replacement = dict(message)
+            replacement["content"] = current_call_projection(reference, content)
+            projected[index] = replacement
+            artifact_ids.append(artifact_id)
+            raw_chars += len(content)
+        if projected is None:
+            return messages, [], 0
+        self._presented_artifacts.update(artifact_ids)
+        self._first_visibility_count += len(artifact_ids)
+        return projected, artifact_ids, raw_chars
+
+    def _finish_selection(
+        self,
+        request_messages: list[dict[str, Any]],
+        selected: list[dict[str, Any]] | None,
+        metrics: dict[str, Any],
+    ) -> list[dict[str, Any]] | None:
+        base = request_messages if selected is None else selected
+        projected, artifact_ids, raw_chars = self._project_first_visibility(base)
+        if artifact_ids:
+            metrics = dict(metrics)
+            metrics.update(
+                {
+                    "tool_result_first_visibility": True,
+                    "first_visibility_artifact_ids": artifact_ids,
+                    "first_visibility_raw_chars": raw_chars,
+                    "selected_chars_after_first_visibility": sum(
+                        len(_message_text(message)) for message in projected
+                    ),
+                }
+            )
+            self.last_selection = metrics
+            return projected
+        metrics = dict(metrics)
+        metrics["tool_result_first_visibility"] = False
+        self.last_selection = metrics
+        return selected
+
     def select_context(
         self,
         request_messages: list[dict[str, Any]],
@@ -715,14 +859,18 @@ class _GauntletSparseEngineBase:
         incoming_message: dict[str, Any] | None = None,
         budget_tokens: int = 0,
     ) -> list[dict[str, Any]] | None:
+        del conversation_messages, incoming_message, budget_tokens
         if self._selection_plan is None or not request_messages:
-            self.last_selection = {
-                "engine": self.name,
-                "activated": False,
-                "reason": "not_configured",
-                "persisted_transcript_mutated": False,
-            }
-            return None
+            return self._finish_selection(
+                request_messages,
+                None,
+                {
+                    "engine": self.name,
+                    "activated": False,
+                    "reason": "not_configured",
+                    "persisted_transcript_mutated": False,
+                },
+            )
 
         current_user_index = -1
         for index in range(len(request_messages) - 1, -1, -1):
@@ -730,13 +878,16 @@ class _GauntletSparseEngineBase:
                 current_user_index = index
                 break
         if current_user_index < 0:
-            self.last_selection = {
-                "engine": self.name,
-                "activated": False,
-                "reason": "no_current_user_boundary",
-                "persisted_transcript_mutated": False,
-            }
-            return None
+            return self._finish_selection(
+                request_messages,
+                None,
+                {
+                    "engine": self.name,
+                    "activated": False,
+                    "reason": "no_current_user_boundary",
+                    "persisted_transcript_mutated": False,
+                },
+            )
 
         prefix_end = 0
         while prefix_end < len(request_messages) and request_messages[prefix_end].get("role") in {
@@ -750,18 +901,21 @@ class _GauntletSparseEngineBase:
         history_chars = sum(len(_message_text(message)) for message in historical)
         jit_message = self._jit_message()
         if history_chars < self._selection_plan["activation_history_chars"] and jit_message is None:
-            self.last_selection = {
-                "engine": self.name,
-                "activated": False,
-                "reason": "below_activation_threshold",
-                "input_messages": len(request_messages),
-                "selected_messages": len(request_messages),
-                "history_chars": history_chars,
-                "jit_snippets": 0,
-                "persisted_transcript_mutated": False,
-                "tool_closure_preserved": True,
-            }
-            return None
+            return self._finish_selection(
+                request_messages,
+                None,
+                {
+                    "engine": self.name,
+                    "activated": False,
+                    "reason": "below_activation_threshold",
+                    "input_messages": len(request_messages),
+                    "selected_messages": len(request_messages),
+                    "history_chars": history_chars,
+                    "jit_snippets": 0,
+                    "persisted_transcript_mutated": False,
+                    "tool_closure_preserved": True,
+                },
+            )
 
         units = _history_units(historical)
         closed = [(index, unit) for index, unit in enumerate(units) if _closed_history_unit(unit)]
@@ -808,38 +962,44 @@ class _GauntletSparseEngineBase:
         input_chars = sum(len(_message_text(message)) for message in request_messages)
         selected_chars = sum(len(_message_text(message)) for message in selected)
         if selected_chars >= input_chars and jit_message is None:
-            self.last_selection = {
+            return self._finish_selection(
+                request_messages,
+                None,
+                {
+                    "engine": self.name,
+                    "activated": False,
+                    "reason": "no_size_reduction",
+                    "input_messages": len(request_messages),
+                    "selected_messages": len(request_messages),
+                    "history_chars": history_chars,
+                    "jit_snippets": 0,
+                    "persisted_transcript_mutated": False,
+                    "tool_closure_preserved": True,
+                },
+            )
+
+        return self._finish_selection(
+            request_messages,
+            selected,
+            {
                 "engine": self.name,
-                "activated": False,
-                "reason": "no_size_reduction",
+                "activated": True,
+                "reason": "long_history_or_jit_selection",
                 "input_messages": len(request_messages),
-                "selected_messages": len(request_messages),
+                "selected_messages": len(selected),
+                "input_chars": input_chars,
+                "selected_chars": selected_chars,
                 "history_chars": history_chars,
-                "jit_snippets": 0,
+                "recent_units": len(recent),
+                "retrieved_units": len(retrieval_indexes),
+                "jit_snippets": len(self._selection_plan.get("selected_snippets", [])),
                 "persisted_transcript_mutated": False,
                 "tool_closure_preserved": True,
-            }
-            return None
-
-        self.last_selection = {
-            "engine": self.name,
-            "activated": True,
-            "reason": "long_history_or_jit_selection",
-            "input_messages": len(request_messages),
-            "selected_messages": len(selected),
-            "input_chars": input_chars,
-            "selected_chars": selected_chars,
-            "history_chars": history_chars,
-            "recent_units": len(recent),
-            "retrieved_units": len(retrieval_indexes),
-            "jit_snippets": len(self._selection_plan.get("selected_snippets", [])),
-            "persisted_transcript_mutated": False,
-            "tool_closure_preserved": True,
-            "stable_system_prefix_messages": len(prefix),
-            "active_suffix_messages": len(active_suffix),
-            "top_k_session_retrieval": True,
-        }
-        return selected
+                "stable_system_prefix_messages": len(prefix),
+                "active_suffix_messages": len(active_suffix),
+                "top_k_session_retrieval": True,
+            },
+        )
 
 
 def _build_sparse_context_engine() -> Any:
@@ -1359,6 +1519,12 @@ def _llm_execution(request: Any, next_call: Any, **values: Any) -> Any:
 
 
 def _post_api_request(*_: Any, **values: Any) -> None:
+    engine = _active_sparse_engine
+    if engine is not None:
+        try:
+            engine.acknowledge_provider_response()
+        except Exception:
+            logger.debug("tool-result first-visibility acknowledgement failed", exc_info=True)
     dispatch_id = str(values.get("api_request_id") or "")
     with _llm_lock:
         pending = _llm_pending.pop(dispatch_id, None)
@@ -1406,6 +1572,25 @@ _RELEASE_SCHEMA = {
     ),
     "parameters": {"type": "object", "properties": {}, "additionalProperties": False},
 }
+_ARTIFACT_SCHEMA = {
+    "description": (
+        "Read one bounded page from a private task/session-bound operational artifact. "
+        "Read-only; the artifact is non-canonical and identified by its content hash."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "artifact_id": {
+                "type": "string",
+                "pattern": "^art_[0-9a-f]{64}$",
+            },
+            "offset": {"type": "integer", "minimum": 0},
+            "limit": {"type": "integer", "minimum": 1, "maximum": MAX_PAGE_CHARS},
+        },
+        "required": ["artifact_id"],
+        "additionalProperties": False,
+    },
+}
 
 
 def register(ctx: Any) -> None:
@@ -1432,6 +1617,14 @@ def register(ctx: Any) -> None:
         schema=_RELEASE_SCHEMA,
         handler=_release_status,
         description=_RELEASE_SCHEMA["description"],
+        emoji="",
+    )
+    ctx.register_tool(
+        name=ARTIFACT_TOOL_NAME,
+        toolset=TOOLSET,
+        schema=_ARTIFACT_SCHEMA,
+        handler=_artifact_get,
+        description=_ARTIFACT_SCHEMA["description"],
         emoji="",
     )
     ctx.register_hook("pre_tool_call", _pre)

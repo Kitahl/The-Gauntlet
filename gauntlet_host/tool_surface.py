@@ -8,11 +8,11 @@ import re
 from dataclasses import asdict, dataclass
 from typing import Any, Sequence
 
-from gauntlet_host.constants import GAUNTLET_STATUS_TOOLS, GAUNTLET_TOOLSET
+from gauntlet_host.constants import GAUNTLET_ACTIVE_TOOLS, GAUNTLET_TOOLSET
 
 TOOL_SURFACE_SCHEMA = "gauntlet.tool-surface-plan.v1"
-TOOL_SURFACE_REVISION = "gauntlet-tools.v1"
-COMPILED_TOOLSET_NAME = "gauntlet-active-v1"
+TOOL_SURFACE_REVISION = "gauntlet-tools.v2"
+COMPILED_TOOLSET_NAME = "gauntlet-active-v2"
 _SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 
 _CAPABILITY_SPECS: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
@@ -27,6 +27,10 @@ _CAPABILITY_SPECS: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "gauntlet_release_status": (
         ("CANONICAL_RELEASE_REFRESH",),
         ("always", "release_refresh"),
+    ),
+    "gauntlet_artifact_get": (
+        ("BOUNDED_OPERATIONAL_REHYDRATION",),
+        ("always", "large_tool_result_rehydration"),
     ),
 }
 
@@ -101,12 +105,12 @@ def build_tool_surface_plan(
     """Freeze the authorized catalog and proposed active manifest."""
 
     records = _tool_records(definitions)
-    expected_names = set(GAUNTLET_STATUS_TOOLS)
+    expected_names = set(GAUNTLET_ACTIVE_TOOLS)
     actual_names = {record["name"] for record in records}
     if actual_names != expected_names:
         raise ToolSurfaceError(
             "AUTHORIZED_CATALOG_MISMATCH",
-            "authorized Gauntlet catalog did not match the frozen lean status tools",
+            "authorized Gauntlet catalog did not match the frozen lean runtime tools",
         )
     route_hash = route.get("content_hash") if isinstance(route, dict) else None
     if not isinstance(route_hash, str) or not _SHA256_PATTERN.fullmatch(route_hash):
@@ -188,12 +192,12 @@ def validate_tool_surface_plan(value: Any) -> dict[str, Any]:
             "tool-surface plan permitted silent widening",
         )
     specs = value.get("capability_specs")
-    if not isinstance(specs, list) or len(specs) != len(GAUNTLET_STATUS_TOOLS):
+    if not isinstance(specs, list) or len(specs) != len(GAUNTLET_ACTIVE_TOOLS):
         raise ToolSurfaceError(
             "CAPABILITY_SPECS_INVALID",
             "tool-surface plan capability specifications are incomplete",
         )
-    expected_names = set(GAUNTLET_STATUS_TOOLS)
+    expected_names = set(GAUNTLET_ACTIVE_TOOLS)
     seen: set[str] = set()
     for spec in specs:
         if not isinstance(spec, dict):

@@ -95,6 +95,7 @@ def _worker_environment(profile: RuntimeProfile, request: RuntimeRequest) -> dic
     environment["PYTHONUNBUFFERED"] = "1"
     task_root = Path(request.cwd or REPO_ROOT).expanduser().resolve(strict=False)
     environment["GAUNTLET_TASK_ID"] = request.task_id
+    environment["GAUNTLET_SESSION_ID"] = request.session_id or ""
     environment["GAUNTLET_REPO_ROOT"] = str(task_root)
     environment["GAUNTLET_MODULE_CLI"] = str(task_root / "gauntlet_host" / "module_cli.py")
     environment["GAUNTLET_OBSERVATION_BRIDGE"] = str(

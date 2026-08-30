@@ -11,23 +11,24 @@ from pathlib import Path
 from typing import Any
 
 from gauntlet_host.constants import (
+    GAUNTLET_ACTIVE_TOOLS,
     GAUNTLET_PLUGIN_ID,
     GAUNTLET_PLUGIN_SOURCE,
-    GAUNTLET_STATUS_TOOLS,
     GAUNTLET_TOOLSET,
 )
 
 GAUNTLET_PLUGIN_MANIFEST = """\
 manifest_version: 2
 name: gauntlet
-version: 0.3.0
-description: Lean compiled tools plus sparse request-only context selection.
+version: 0.4.0
+description: Lean compiled tools, sparse context, and bounded operational rehydration.
 author: The Gauntlet
 kind: standalone
 provides_tools:
   - gauntlet_task_status_compact
   - gauntlet_obligation_get
   - gauntlet_release_status
+  - gauntlet_artifact_get
 """
 
 
@@ -366,6 +367,7 @@ def prepare_runtime_profile(runtime_home: Path | None = None) -> RuntimeProfile:
         "measurements/token-efficiency",
         "operational",
         "operational/foil-routes",
+        "operational/tool-results",
         "session-bindings",
         "session-bindings/locks",
     )
@@ -412,7 +414,7 @@ def prepare_runtime_profile(runtime_home: Path | None = None) -> RuntimeProfile:
         plugin_path=str(plugin_path),
         plugin_manifest_path=str(manifest_path),
         plugin_sha256=plugin_digest,
-        plugin_tools=GAUNTLET_STATUS_TOOLS,
+        plugin_tools=GAUNTLET_ACTIVE_TOOLS,
         token_measurement_root=str(measurement_root),
         token_measurement_key_path=str(measurement_key_path),
         token_measurement_key_id=measurement_key_id,

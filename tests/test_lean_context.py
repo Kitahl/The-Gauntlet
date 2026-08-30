@@ -103,6 +103,7 @@ class LeanContextTests(unittest.TestCase):
             ),
             ("gauntlet_obligation_get", gauntlet_plugin._OBLIGATION_SCHEMA),
             ("gauntlet_release_status", gauntlet_plugin._RELEASE_SCHEMA),
+            ("gauntlet_artifact_get", gauntlet_plugin._ARTIFACT_SCHEMA),
         ]
         self.assertEqual(len(definitions), len(plugin))
         for definition, (name, schema) in zip(definitions, plugin, strict=True):

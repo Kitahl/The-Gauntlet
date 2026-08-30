@@ -206,10 +206,11 @@ def main(argv: list[str] | None = None) -> int:
                 "gauntlet_task_status_compact",
                 "gauntlet_obligation_get",
                 "gauntlet_release_status",
+                "gauntlet_artifact_get",
             }
 
             tool_surface = result.payload["tool_surface"]
-            assert tool_surface["toolset_name"] == "gauntlet-active-v1"
+            assert tool_surface["toolset_name"] == "gauntlet-active-v2"
             assert tool_surface["active_manifest_hash"] == tool_surface["planned_manifest_hash"]
             assert tool_surface["missing_required_names"] == []
             assert tool_surface["silent_widening_performed"] is False
@@ -275,7 +276,7 @@ def main(argv: list[str] | None = None) -> int:
                     "explicit_capability_specs": True,
                     "active_manifest_hash_bound": True,
                     "silent_tool_widening": False,
-                    "model_visible_tools": 3,
+                    "model_visible_tools": 4,
                     "sparse_context_activated": True,
                     "stable_system_prefix_preserved": True,
                     "current_user_turn_preserved": True,

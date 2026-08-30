@@ -17,6 +17,11 @@ from gauntlet_host import worker_main as core
 from gauntlet_host.constants import GAUNTLET_TOOLSET
 from gauntlet_host.ipc import RuntimeRequest, RuntimeResult
 from gauntlet_host.lean_context import LeanContext, LeanContextError
+from gauntlet_host.tool_results import (
+    ARTIFACT_TOOL_NAME,
+    OperationalArtifactStore,
+    ToolResultLifecycleError,
+)
 from gauntlet_host.tool_surface import (
     ToolSurfaceError,
     compile_live_tool_surface,
@@ -48,9 +53,25 @@ def _execute_with_foil_route(
         )
 
     route_state: dict[str, Any] = {}
+    try:
+        artifact_store = OperationalArtifactStore(
+            proof.runtime_home,
+            task_id=request.task_id,
+            session_id=request.session_id or "",
+        )
+    except ToolResultLifecycleError as exc:
+        return core._error_result(
+            request,
+            status=core.WorkerStatus.UNAVAILABLE,
+            event="worker.tool_result_lifecycle_unavailable",
+            code=exc.code,
+            message=exc.message,
+            payload=proof.to_payload(),
+        )
 
     try:
         with redirect_stdout(sys.stderr):
+            from agent import tool_executor
             from model_tools import get_tool_definitions
             from run_agent import AIAgent
 
@@ -86,6 +107,44 @@ def _execute_with_foil_route(
 
     request = replace(request, toolsets=(compiled_surface.toolset_name,))
     original_run_conversation = AIAgent.run_conversation
+    original_result_persistence = tool_executor.maybe_persist_tool_result
+
+    def managed_result_persistence(*args: Any, **kwargs: Any) -> Any:
+        content = kwargs.get("content", args[0] if args else None)
+        tool_name = str(kwargs.get("tool_name", args[1] if len(args) > 1 else ""))
+        tool_call_id = str(kwargs.get("tool_use_id", args[2] if len(args) > 2 else ""))
+        if tool_name == ARTIFACT_TOOL_NAME:
+            return content
+        try:
+            externalized = artifact_store.externalize(
+                content,
+                tool_name=tool_name,
+                tool_call_id=tool_call_id,
+            )
+        except ToolResultLifecycleError as exc:
+            route_state["lifecycle_error"] = exc
+            return artifact_store.rejection(content, exc)
+        if externalized is None:
+            return original_result_persistence(*args, **kwargs)
+        engine = route_state.get("context_engine")
+        register_result = getattr(engine, "register_externalized_result", None)
+        if not callable(register_result):
+            exc = ToolResultLifecycleError(
+                "TOOL_RESULT_CONTEXT_ENGINE_UNAVAILABLE",
+                "sparse context engine could not project first-call tool output",
+            )
+            route_state["lifecycle_error"] = exc
+            return artifact_store.rejection(content, exc)
+        try:
+            register_result(externalized.artifact_id, externalized.content)
+        except Exception as unexpected:
+            exc = ToolResultLifecycleError(
+                "TOOL_RESULT_FIRST_VISIBILITY_FAILED",
+                core._safe_exception_message(unexpected),
+            )
+            route_state["lifecycle_error"] = exc
+            return artifact_store.rejection(content, exc)
+        return externalized.reference
 
     def routed_run_conversation(
         agent: Any,
@@ -127,11 +186,25 @@ def _execute_with_foil_route(
         )
 
     AIAgent.run_conversation = routed_run_conversation
+    tool_executor.maybe_persist_tool_result = managed_result_persistence
     try:
         result = _ORIGINAL_EXECUTE(request, proof)
     finally:
         if AIAgent.run_conversation is routed_run_conversation:
             AIAgent.run_conversation = original_run_conversation
+        if tool_executor.maybe_persist_tool_result is managed_result_persistence:
+            tool_executor.maybe_persist_tool_result = original_result_persistence
+
+    lifecycle_error = route_state.get("lifecycle_error")
+    if isinstance(lifecycle_error, ToolResultLifecycleError) and result.status.value == "OK":
+        return core._error_result(
+            request,
+            status=core.WorkerStatus.UNAVAILABLE,
+            event="worker.tool_result_lifecycle_unavailable",
+            code=lifecycle_error.code,
+            message=lifecycle_error.message,
+            payload=proof.to_payload() | {"tool_result_lifecycle": artifact_store.metrics()},
+        )
 
     if route_state.get("applied") is not True and result.status.value == "OK":
         return core._error_result(
@@ -179,6 +252,14 @@ def _execute_with_foil_route(
             "task_binding_isolated": True,
             "authority": "CONTEXT_ONLY",
             "persisted": False,
+        }
+        payload["tool_result_lifecycle"] = artifact_store.metrics() | {
+            "rehydration_tool": ARTIFACT_TOOL_NAME,
+            "first_visibility": (
+                engine.tool_result_lifecycle_metrics()
+                if callable(getattr(engine, "tool_result_lifecycle_metrics", None))
+                else {"available": False}
+            ),
         }
         result = replace(result, payload=payload)
     return result

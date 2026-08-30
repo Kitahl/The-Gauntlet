@@ -9,7 +9,7 @@ import unittest
 from pathlib import Path
 
 from gauntlet_host import gauntlet_plugin
-from gauntlet_host.constants import GAUNTLET_STATUS_TOOLS
+from gauntlet_host.constants import GAUNTLET_ACTIVE_TOOLS
 from gauntlet_host.lean_context import (
     LeanContextError,
     build_sparse_context_plan,
@@ -67,7 +67,7 @@ class ToolSurfaceCompilerTests(unittest.TestCase):
             requested_toolsets=("gauntlet",),
         )
 
-        self.assertEqual(set(compiled.tool_names), set(GAUNTLET_STATUS_TOOLS))
+        self.assertEqual(set(compiled.tool_names), set(GAUNTLET_ACTIVE_TOOLS))
         self.assertEqual(compiled.ignored_available_names, ("unauthorized_extra",))
         self.assertFalse(compiled.silent_widening_performed)
         self.assertEqual(compiled.active_manifest_hash, plan["planned_manifest_hash"])

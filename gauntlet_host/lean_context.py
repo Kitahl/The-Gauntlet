@@ -28,7 +28,7 @@ from gauntlet_host.tool_surface import (
     validate_tool_surface_plan,
 )
 
-ACTIVE_MANIFEST_REVISION = "gauntlet-status.v1"
+ACTIVE_MANIFEST_REVISION = "gauntlet-runtime.v2"
 LEAN_CONTEXT_SCHEMA = "gauntlet.lean-context.v1"
 SPARSE_CONTEXT_SCHEMA = "gauntlet.sparse-context-plan.v1"
 SPARSE_CONTEXT_ENGINE = "gauntlet-sparse"
@@ -66,6 +66,10 @@ _OBLIGATION_DESCRIPTION = (
 _RELEASE_DESCRIPTION = (
     "Refresh Soul release-gate status for the exact host-bound task. This reports "
     "eligibility only and performs no mutation."
+)
+_ARTIFACT_DESCRIPTION = (
+    "Read one bounded page from a private task/session-bound operational artifact. "
+    "Read-only; the artifact is non-canonical and identified by its content hash."
 )
 
 
@@ -107,7 +111,7 @@ def _zero_argument_tool(name: str, description: str) -> dict[str, Any]:
 
 
 def status_tool_definitions() -> list[dict[str, Any]]:
-    """Return the frozen model-visible manifest for gauntlet-lean.v1."""
+    """Return the frozen model-visible manifest for the lean runtime."""
 
     obligation = {
         "type": "function",
@@ -128,6 +132,26 @@ def status_tool_definitions() -> list[dict[str, Any]]:
             },
         },
     }
+    artifact = {
+        "type": "function",
+        "function": {
+            "name": "gauntlet_artifact_get",
+            "description": _ARTIFACT_DESCRIPTION,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "artifact_id": {
+                        "type": "string",
+                        "pattern": "^art_[0-9a-f]{64}$",
+                    },
+                    "offset": {"type": "integer", "minimum": 0},
+                    "limit": {"type": "integer", "minimum": 1, "maximum": 4096},
+                },
+                "required": ["artifact_id"],
+                "additionalProperties": False,
+            },
+        },
+    }
     return [
         _zero_argument_tool(
             "gauntlet_task_status_compact",
@@ -138,6 +162,7 @@ def status_tool_definitions() -> list[dict[str, Any]]:
             "gauntlet_release_status",
             _RELEASE_DESCRIPTION,
         ),
+        artifact,
     ]
 
 

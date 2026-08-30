@@ -36,6 +36,8 @@ GAUNTLET_STATUS_TOOLS = (
     "gauntlet_obligation_get",
     "gauntlet_release_status",
 )
+GAUNTLET_OPERATIONAL_TOOLS = ("gauntlet_artifact_get",)
+GAUNTLET_ACTIVE_TOOLS = GAUNTLET_STATUS_TOOLS + GAUNTLET_OPERATIONAL_TOOLS
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 HOST_ROOT = REPO_ROOT / "gauntlet_host"

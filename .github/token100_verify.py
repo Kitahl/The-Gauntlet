@@ -424,6 +424,7 @@ def main(argv: list[str] | None = None) -> int:
                 "gauntlet_task_status_compact",
                 "gauntlet_obligation_get",
                 "gauntlet_release_status",
+                "gauntlet_artifact_get",
             }
             assert all(_tool_names(request) == active_names for request in requests)
 
