@@ -14,17 +14,19 @@ from gauntlet_host.constants import (
     GAUNTLET_PLUGIN_ID,
     GAUNTLET_PLUGIN_SOURCE,
     GAUNTLET_STATUS_TOOLS,
+    GAUNTLET_TOOLSET,
 )
 
 GAUNTLET_PLUGIN_MANIFEST = """\
 manifest_version: 2
 name: gauntlet
-version: 0.1.0
-description: Read-only canonical task and Soul release status tools for Gauntlet.
+version: 0.2.0
+description: Lean read-only canonical task, obligation, and release status tools.
 author: The Gauntlet
 kind: standalone
 provides_tools:
-  - gauntlet_task_status
+  - gauntlet_task_status_compact
+  - gauntlet_obligation_get
   - gauntlet_release_status
 """
 
@@ -44,10 +46,18 @@ class RuntimeProfile:
 
     runtime_home: str
     config_path: str
+    profile_name: str
     config_sha256: str
     background_review_enabled: bool
     memory_write_approval: bool
+    memory_enabled: bool
+    user_profile_enabled: bool
     skills_write_approval: bool
+    skills_project_discovery: bool
+    execution_guidance_enabled: bool
+    task_completion_guidance_enabled: bool
+    parallel_tool_call_guidance_enabled: bool
+    coding_context_enabled: bool
     gauntlet_plugin_enabled: bool
     plugin_path: str
     plugin_manifest_path: str
@@ -161,14 +171,35 @@ def _string_list(parent: dict[str, Any], key: str) -> list[str]:
 
 
 def _apply_alpha_policy(config: dict[str, Any]) -> None:
+    """Apply the isolated, explicit gauntlet-lean.v1 runtime profile."""
+
+    config["toolsets"] = [GAUNTLET_TOOLSET]
+
     auxiliary = _mapping(config, "auxiliary")
     background_review = _mapping(auxiliary, "background_review")
     background_review["enabled"] = False
 
+    agent = _mapping(config, "agent")
+    agent["tool_use_enforcement"] = False
+    agent["execution_guidance"] = False
+    agent["intent_ack_continuation"] = False
+    agent["stall_guards"] = False
+    agent["task_completion_guidance"] = False
+    agent["parallel_tool_call_guidance"] = True
+    agent["environment_probe"] = False
+    agent["coding_context"] = "off"
+    agent["verify_on_stop"] = False
+
     memory = _mapping(config, "memory")
+    memory["memory_enabled"] = False
+    memory["user_profile_enabled"] = False
+    memory["provider"] = ""
     memory["write_approval"] = True
 
     skills = _mapping(config, "skills")
+    skills["external_dirs"] = []
+    skills["project_discovery"] = False
+    skills["trusted_project_dirs"] = []
     skills["write_approval"] = True
 
     plugins = _mapping(config, "plugins")
@@ -329,6 +360,8 @@ def prepare_runtime_profile(runtime_home: Path | None = None) -> RuntimeProfile:
         f"plugins/{GAUNTLET_PLUGIN_ID}",
         "measurements",
         "measurements/token-efficiency",
+        "operational",
+        "operational/foil-routes",
         "session-bindings",
         "session-bindings/locks",
     )
@@ -358,10 +391,18 @@ def prepare_runtime_profile(runtime_home: Path | None = None) -> RuntimeProfile:
     return RuntimeProfile(
         runtime_home=str(home),
         config_path=str(config_path),
+        profile_name="gauntlet-lean.v1",
         config_sha256=config_digest,
         background_review_enabled=False,
         memory_write_approval=True,
+        memory_enabled=False,
+        user_profile_enabled=False,
         skills_write_approval=True,
+        skills_project_discovery=False,
+        execution_guidance_enabled=False,
+        task_completion_guidance_enabled=False,
+        parallel_tool_call_guidance_enabled=True,
+        coding_context_enabled=False,
         gauntlet_plugin_enabled=True,
         plugin_path=str(plugin_path),
         plugin_manifest_path=str(manifest_path),

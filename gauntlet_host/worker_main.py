@@ -44,6 +44,7 @@ from gauntlet_host.ipc import (
     decode_request,
     write_result,
 )
+from gauntlet_host.lean_context import drop_stale_lean_context_sidecars
 from gauntlet_host.runtime_profile import (
     RuntimeProfile,
     RuntimeProfileError,
@@ -90,9 +91,17 @@ class NamespaceProof:
     runtime_home: str
     runtime_config: str
     runtime_config_sha256: str
+    runtime_profile_name: str
     background_review_enabled: bool
     memory_write_approval: bool
+    memory_enabled: bool
+    user_profile_enabled: bool
     skills_write_approval: bool
+    skills_project_discovery: bool
+    execution_guidance_enabled: bool
+    task_completion_guidance_enabled: bool
+    parallel_tool_call_guidance_enabled: bool
+    coding_context_enabled: bool
 
     def to_payload(self) -> dict[str, Any]:
         return asdict(self)
@@ -279,9 +288,17 @@ def bootstrap_vendor_runtime(profile: RuntimeProfile) -> NamespaceProof:
         runtime_home=profile.runtime_home,
         runtime_config=profile.config_path,
         runtime_config_sha256=profile.config_sha256,
+        runtime_profile_name=profile.profile_name,
         background_review_enabled=profile.background_review_enabled,
         memory_write_approval=profile.memory_write_approval,
+        memory_enabled=profile.memory_enabled,
+        user_profile_enabled=profile.user_profile_enabled,
         skills_write_approval=profile.skills_write_approval,
+        skills_project_discovery=profile.skills_project_discovery,
+        execution_guidance_enabled=profile.execution_guidance_enabled,
+        task_completion_guidance_enabled=profile.task_completion_guidance_enabled,
+        parallel_tool_call_guidance_enabled=(profile.parallel_tool_call_guidance_enabled),
+        coding_context_enabled=profile.coding_context_enabled,
     )
 
 
@@ -483,6 +500,7 @@ def _execute_agent_turn(
             session_db = SessionDB()
             runtime_session_id = request.session_id
             conversation_history = None
+            stale_lean_context_rows_dropped = 0
             if session_db.get_session(runtime_session_id) is not None:
                 runtime_session_id = (
                     session_db.resolve_resume_session_id(runtime_session_id) or runtime_session_id
@@ -491,6 +509,9 @@ def _execute_agent_turn(
                     runtime_session_id,
                     repair_alternation=True,
                     include_row_ids=True,
+                )
+                stale_lean_context_rows_dropped = drop_stale_lean_context_sidecars(
+                    conversation_history
                 )
             agent = AIAgent(
                 api_key=runtime.get("api_key"),
@@ -508,6 +529,8 @@ def _execute_agent_turn(
                 session_db=session_db,
                 credential_pool=runtime.get("credential_pool"),
                 fallback_model=get_fallback_chain(config) or None,
+                skip_context_files=True,
+                skip_memory=True,
                 skip_background_review=True,
                 run_budget_seconds=run_budget,
             )
@@ -554,6 +577,7 @@ def _execute_agent_turn(
                 ),
                 "session_binding_id": request.session_id,
                 "session_resumed": conversation_history is not None,
+                "stale_lean_context_rows_dropped": (stale_lean_context_rows_dropped),
                 "completed": bool(result.get("completed", True)),
                 "failed": bool(result.get("failed", False)),
                 "partial": bool(result.get("partial", False)),

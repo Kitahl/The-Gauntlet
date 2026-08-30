@@ -3,18 +3,22 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import json
 import math
 import os
-from pathlib import Path
 import re
 import sys
+from pathlib import Path
 from typing import Any, Sequence
 
 ADAPTER_SCHEMA = "gauntlet.adapter.v1"
 FOIL_ROUTE_SCHEMA = "gauntlet.foil-route.v1"
+LEAN_PREFETCH_SCHEMA = "gauntlet.lean-prefetch.v1"
+COMPACT_STATUS_SCHEMA = "gauntlet.compact-status.v1"
 MAX_ROUTE_INPUT_BYTES = 131_072
+MAX_COMPACT_OBLIGATIONS = 128
 TASK_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,255}$")
 SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 
@@ -132,6 +136,19 @@ def _foil_base_document(task_id: str) -> dict[str, Any]:
     }
 
 
+def _lean_prefetch_base_document(task_id: str) -> dict[str, Any]:
+    return {
+        "schema": LEAN_PREFETCH_SCHEMA,
+        "action": "lean-prefetch",
+        "task_id": task_id,
+        "canonical_source": "egrt.runtime.v1",
+        "status": "OK",
+        "read_only": True,
+        "mutation_performed": False,
+        "authority": _authority_projection(),
+    }
+
+
 def _canonical_hash(value: Any) -> str:
     encoded = json.dumps(
         value,
@@ -196,6 +213,185 @@ def _task_projection(task: dict[str, Any], release: dict[str, Any]) -> dict[str,
     }
 
 
+def _sha256_base64url(value: Any) -> str | None:
+    if not isinstance(value, str) or not SHA256_PATTERN.fullmatch(value):
+        return None
+    return base64.urlsafe_b64encode(bytes.fromhex(value)).decode("ascii").rstrip("=")
+
+
+def _gate_states(release: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    detail = release.get("detail")
+    rows = detail.get("obligations", []) if isinstance(detail, dict) else []
+    return {
+        str(row.get("obligation_id")): row
+        for row in rows
+        if isinstance(row, dict) and row.get("obligation_id")
+    }
+
+
+def _reason_codes(gate: dict[str, Any] | None) -> list[str]:
+    if not isinstance(gate, dict):
+        return []
+    reason = gate.get("reason")
+    return [reason] if isinstance(reason, str) and reason else []
+
+
+def _receipt_content_hash_hex(
+    store: Any,
+    gate: dict[str, Any] | None,
+) -> str | None:
+    if not isinstance(gate, dict):
+        return None
+    receipt_id = gate.get("receipt_id")
+    if not isinstance(receipt_id, str) or not receipt_id:
+        return None
+    receipt = store.read_receipt(receipt_id, require_integrity=True)
+    if not isinstance(receipt, dict):
+        return None
+    value = receipt.get("content_hash")
+    return value if isinstance(value, str) and SHA256_PATTERN.fullmatch(value) else None
+
+
+def _receipt_content_hash(store: Any, gate: dict[str, Any] | None) -> str | None:
+    return _sha256_base64url(_receipt_content_hash_hex(store, gate))
+
+
+def _compact_status_projection(
+    root: Path,
+    task: dict[str, Any],
+    release: dict[str, Any],
+) -> dict[str, Any]:
+    """Return a claim-free, bounded canonical status projection."""
+
+    from egrt_store import RuntimeStore
+
+    task_rows = task.get("obligations", [])
+    if not isinstance(task_rows, list) or len(task_rows) > MAX_COMPACT_OBLIGATIONS:
+        raise AdapterError(
+            "COMPACT_STATUS_OBLIGATION_LIMIT",
+            f"compact status supports at most {MAX_COMPACT_OBLIGATIONS} obligations",
+        )
+
+    states = _gate_states(release)
+    store = RuntimeStore(root)
+    obligations: list[list[Any]] = []
+    for row in task_rows:
+        if not isinstance(row, dict):
+            continue
+        obligation_id = str(row.get("obligation_id") or "")
+        gate = states.get(obligation_id)
+        if isinstance(gate, dict):
+            verdict = str(gate.get("verdict") or "UNKNOWN")
+        elif row.get("load_bearing", True) is False:
+            verdict = "NOT_LOAD_BEARING"
+        else:
+            verdict = "UNKNOWN"
+        obligations.append(
+            [
+                obligation_id,
+                row.get("kind"),
+                row.get("required_module"),
+                verdict,
+                _reason_codes(gate),
+                _sha256_base64url(_canonical_hash(row.get("claim"))),
+                _receipt_content_hash(store, gate),
+            ]
+        )
+
+    verdict_codes = sorted({str(row[3]) for row in obligations})
+    reason_code_values = sorted(
+        {str(reason) for row in obligations for reason in row[4] if isinstance(reason, str)}
+    )
+    verdict_indexes = {value: index for index, value in enumerate(verdict_codes)}
+    reason_indexes = {value: index for index, value in enumerate(reason_code_values)}
+    for row in obligations:
+        row[3] = verdict_indexes[str(row[3])]
+        row[4] = [reason_indexes[str(reason)] for reason in row[4]]
+    release_detail = release.get("detail")
+    release_reasons: list[str] = []
+    if isinstance(release_detail, dict):
+        reason = release_detail.get("reason")
+        if isinstance(reason, str) and reason:
+            release_reasons.append(reason)
+    for gate in states.values():
+        for reason in _reason_codes(gate):
+            if reason not in release_reasons:
+                release_reasons.append(reason)
+
+    document = {
+        "schema": COMPACT_STATUS_SCHEMA,
+        "task_id": task.get("task_id"),
+        "active": bool(task.get("active", False)),
+        "released": bool(task.get("released", False)),
+        "hash_encoding": "sha256-base64url-no-pad",
+        "task_content_hash": _sha256_base64url(task.get("content_hash")),
+        "goal_hash": _sha256_base64url(task.get("goal_hash")),
+        "release_verdict": release.get("verdict"),
+        "release_reason_codes": release_reasons,
+        "verdict_codes": verdict_codes,
+        "reason_codes": reason_code_values,
+        "obligation_fields": [
+            "obligation_id",
+            "kind",
+            "required_module",
+            "verdict_index",
+            "reason_code_indexes",
+            "claim_hash",
+            "current_receipt_hash",
+        ],
+        "obligations": obligations,
+    }
+    return _bind_content_hash(document)
+
+
+def _obligation_projection(
+    root: Path,
+    task: dict[str, Any],
+    release: dict[str, Any],
+    obligation_id: str,
+) -> dict[str, Any]:
+    from egrt_store import RuntimeStore
+
+    match = next(
+        (
+            row
+            for row in task.get("obligations", [])
+            if isinstance(row, dict) and row.get("obligation_id") == obligation_id
+        ),
+        None,
+    )
+    if match is None:
+        raise AdapterError(
+            "OBLIGATION_NOT_FOUND",
+            f"task {task.get('task_id')} has no obligation {obligation_id}",
+        )
+    gate = _gate_states(release).get(obligation_id)
+    store = RuntimeStore(root)
+    current_receipt_hash = _receipt_content_hash_hex(store, gate)
+    projection = {
+        "obligation_id": obligation_id,
+        "kind": match.get("kind"),
+        "claim": match.get("claim"),
+        "claim_hash": _canonical_hash(match.get("claim")),
+        "load_bearing": bool(match.get("load_bearing", True)),
+        "required_module": match.get("required_module"),
+        "task_content_hash": task.get("content_hash"),
+        "release_gate": {
+            "verdict": gate.get("verdict") if isinstance(gate, dict) else "UNKNOWN",
+            "reason_codes": _reason_codes(gate),
+            "current_receipt_id": (gate.get("receipt_id") if isinstance(gate, dict) else None),
+            "current_receipt_hash": current_receipt_hash,
+            "historical_receipt_count": (
+                len(gate.get("historical_receipt_ids", []))
+                if isinstance(gate, dict)
+                and isinstance(gate.get("historical_receipt_ids", []), list)
+                else 0
+            ),
+        },
+    }
+    return _bind_content_hash(projection)
+
+
 def _read_task(root: Path, task_id: str) -> dict[str, Any]:
     from egrt_store import RuntimeStore
 
@@ -211,9 +407,7 @@ def _read_task(root: Path, task_id: str) -> dict[str, Any]:
             "canonical task identity did not match the requested task",
         )
     content_hash = task.get("content_hash")
-    if not isinstance(content_hash, str) or not SHA256_PATTERN.fullmatch(
-        content_hash
-    ):
+    if not isinstance(content_hash, str) or not SHA256_PATTERN.fullmatch(content_hash):
         raise AdapterError(
             "TASK_CONTENT_HASH_INVALID",
             "canonical task omitted a valid content hash",
@@ -328,9 +522,7 @@ def _route_input() -> dict[str, Any]:
         )
 
     manifest_hash = value["tool_manifest_hash"]
-    if not isinstance(manifest_hash, str) or not SHA256_PATTERN.fullmatch(
-        manifest_hash
-    ):
+    if not isinstance(manifest_hash, str) or not SHA256_PATTERN.fullmatch(manifest_hash):
         raise AdapterError(
             "FOIL_ROUTE_TOOL_HASH_INVALID",
             "tool_manifest_hash must be a lowercase SHA-256 digest",
@@ -417,12 +609,7 @@ def _strict_confidence(context: dict[str, Any]) -> float:
 
 def _strict_example_count(context: dict[str, Any]) -> int:
     value = context.get("supplied_example_count", 0)
-    if (
-        isinstance(value, bool)
-        or not isinstance(value, int)
-        or value < 0
-        or value > 1_000_000
-    ):
+    if isinstance(value, bool) or not isinstance(value, int) or value < 0 or value > 1_000_000:
         raise AdapterError(
             "FOIL_TASK_CONTEXT_INVALID",
             "foil_task_context.supplied_example_count must be from 0 to 1000000",
@@ -513,7 +700,6 @@ def _build_task_context(
         ComplementKind,
         LoadBearingUncertainty,
         TaskContext,
-        VerifierKind,
     )
 
     detail = release.get("detail")
@@ -737,6 +923,8 @@ def _foil_route(
     task: dict[str, Any],
     release: dict[str, Any],
     snapshot: dict[str, Any],
+    *,
+    snapshot_source: str = "RUNTIME_REPORTED_TOOL_DEFINITIONS",
 ) -> dict[str, Any]:
     from foil_policy import RuntimePolicyV2
 
@@ -759,35 +947,25 @@ def _foil_route(
             "task_context": context_projection,
             "trace": decision.trace(),
             "primary_effort_mode": decision.primary_effort_mode.value,
-            "task_complements": sorted(
-                item.value for item in decision.task_complements
-            ),
+            "task_complements": sorted(item.value for item in decision.task_complements),
             "targeted_complement": (
                 decision.targeted_complement.value
                 if decision.targeted_complement is not None
                 else None
             ),
-            "required_verifiers": [
-                item.value for item in decision.required_verifiers
-            ],
-            "pending_verifiers": [
-                item.value for item in decision.pending_verifiers
-            ],
+            "required_verifiers": [item.value for item in decision.required_verifiers],
+            "pending_verifiers": [item.value for item in decision.pending_verifiers],
             "actions": [item.value for item in decision.actions],
             "should_stop": decision.should_stop,
             "stop_reason": decision.stop_reason,
             "resource_allocation": {
                 "retrieval_allowed": decision.resource_allocation.retrieval_allowed,
-                "search_query_priority": (
-                    decision.resource_allocation.search_query_priority
-                ),
-                "source_followup_priority": (
-                    decision.resource_allocation.source_followup_priority
-                ),
+                "search_query_priority": (decision.resource_allocation.search_query_priority),
+                "source_followup_priority": (decision.resource_allocation.source_followup_priority),
                 "rationale": decision.resource_allocation.rationale,
             },
             "capability_snapshot": {
-                "source": "RUNTIME_REPORTED_TOOL_DEFINITIONS",
+                "source": snapshot_source,
                 "verified_by_gauntlet": False,
                 "available": list(available),
                 "tool_count": snapshot["tool_count"],
@@ -802,18 +980,61 @@ def _foil_route(
     return _bind_content_hash(document)
 
 
-def _execute(root: Path, action: str, task_id: str) -> dict[str, Any]:
+def _lean_prefetch(
+    root: Path,
+    task: dict[str, Any],
+    release: dict[str, Any],
+    snapshot: dict[str, Any],
+) -> dict[str, Any]:
+    route = _foil_route(
+        task,
+        release,
+        snapshot,
+        snapshot_source="PARENT_COMPILED_GAUNTLET_STATUS_MANIFEST",
+    )
+    document = _lean_prefetch_base_document(str(task["task_id"]))
+    document["compact_status"] = _compact_status_projection(root, task, release)
+    document["foil_route"] = route
+    return _bind_content_hash(document)
+
+
+def _execute(
+    root: Path,
+    action: str,
+    task_id: str,
+    obligation_id: str | None = None,
+) -> dict[str, Any]:
     task = _read_task(root, task_id)
     release = _release_projection(root, task_id)
 
     if action == "foil-route":
         return _foil_route(task, release, _route_input())
+    if action == "lean-prefetch":
+        return _lean_prefetch(root, task, release, _route_input())
 
     document = _base_document(action, task_id)
     document["status"] = "OK"
     if action == "task-status":
         document["task"] = _task_projection(task, release)
         document["release"] = release
+    elif action == "task-status-compact":
+        document["compact_status"] = _compact_status_projection(root, task, release)
+    elif action == "obligation-get":
+        if (
+            not isinstance(obligation_id, str)
+            or not TASK_ID_PATTERN.fullmatch(obligation_id)
+            or ".." in obligation_id
+        ):
+            raise AdapterError(
+                "OBLIGATION_ID_INVALID",
+                "--obligation-id must contain a valid obligation identifier",
+            )
+        document["obligation"] = _obligation_projection(
+            root,
+            task,
+            release,
+            obligation_id,
+        )
     elif action == "release-status":
         document["task_released"] = bool(task.get("released", False))
         document["release"] = release
@@ -843,6 +1064,19 @@ def _error_document(
         )
         return _bind_content_hash(document)
 
+    if action == "lean-prefetch":
+        document = _lean_prefetch_base_document(task_id)
+        document.update(
+            {
+                "status": "ERROR",
+                "error": {
+                    "code": exc.code,
+                    "message": exc.message,
+                },
+            }
+        )
+        return _bind_content_hash(document)
+
     document = _base_document(action, task_id)
     document.update(
         {
@@ -860,15 +1094,22 @@ def _argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python gauntlet_host/module_cli.py",
         description=(
-            "Read canonical status or compute one proposal-only FOIL route "
-            "without mutation."
+            "Read canonical status or compute one proposal-only FOIL route without mutation."
         ),
     )
     parser.add_argument("--root", default=".")
     parser.add_argument(
         "action",
-        choices=("task-status", "release-status", "foil-route"),
+        choices=(
+            "task-status",
+            "task-status-compact",
+            "obligation-get",
+            "release-status",
+            "foil-route",
+            "lean-prefetch",
+        ),
     )
+    parser.add_argument("--obligation-id")
     return parser
 
 
@@ -879,7 +1120,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         _configure_imports(root)
         task_id = _task_id()
-        document = _execute(root, args.action, task_id)
+        document = _execute(
+            root,
+            args.action,
+            task_id,
+            obligation_id=args.obligation_id,
+        )
         exit_code = 0
     except AdapterError as exc:
         document = _error_document(args.action, task_id, exc)
@@ -890,8 +1136,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             task_id,
             AdapterError(
                 "ADAPTER_INTERNAL_ERROR",
-                "unexpected read-only adapter failure: "
-                + type(exc).__name__,
+                "unexpected read-only adapter failure: " + type(exc).__name__,
             ),
         )
         exit_code = 2

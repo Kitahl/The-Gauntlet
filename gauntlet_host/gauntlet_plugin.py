@@ -23,7 +23,7 @@ OBSERVATION_SCHEMA = "gauntlet.observation-store-result.v1"
 TOOLSET = "gauntlet"
 ADAPTER_TIMEOUT = 20.0
 OBSERVATION_TIMEOUT = 10.0
-MAX_ADAPTER_OUTPUT = 262_144
+MAX_ADAPTER_OUTPUT = 65_536
 
 logger = logging.getLogger(__name__)
 _pending: dict[tuple[str, str, str], tuple[str, float]] = {}
@@ -74,11 +74,30 @@ def _error(action: str, exc: BridgeError) -> str:
 
 def _status_call(action: str, arguments: Any) -> str:
     try:
-        if arguments not in (None, {}):
+        command_arguments: list[str] = []
+        if action == "obligation-get":
+            if not isinstance(arguments, dict) or set(arguments) != {"obligation_id"}:
+                raise BridgeError(
+                    "TOOL_ARGUMENTS_REJECTED",
+                    "gauntlet_obligation_get requires only obligation_id",
+                )
+            obligation_id = arguments.get("obligation_id")
+            if (
+                not isinstance(obligation_id, str)
+                or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.:-]{0,255}", obligation_id)
+                or ".." in obligation_id
+            ):
+                raise BridgeError(
+                    "OBLIGATION_ID_INVALID",
+                    "obligation_id contains unsupported characters",
+                )
+            command_arguments = ["--obligation-id", obligation_id]
+        elif arguments not in (None, {}):
             raise BridgeError(
                 "TOOL_ARGUMENTS_REJECTED",
-                "Gauntlet status tools do not accept arguments",
+                "this Gauntlet status tool does not accept arguments",
             )
+
         task_id = _env("GAUNTLET_TASK_ID")
         root = Path(_env("GAUNTLET_REPO_ROOT")).resolve()
         adapter = Path(_env("GAUNTLET_MODULE_CLI")).resolve()
@@ -93,10 +112,21 @@ def _status_call(action: str, arguments: Any) -> str:
                 "PYTHONUNBUFFERED": "1",
             }
         )
-        for name in ("HERMES_YOLO_MODE", "HERMES_ACCEPT_HOOKS", "HERMES_INTERACTIVE"):
+        for name in (
+            "HERMES_YOLO_MODE",
+            "HERMES_ACCEPT_HOOKS",
+            "HERMES_INTERACTIVE",
+        ):
             environment.pop(name, None)
         completed = subprocess.run(
-            [sys.executable, str(adapter), "--root", str(root), action],
+            [
+                sys.executable,
+                str(adapter),
+                "--root",
+                str(root),
+                action,
+                *command_arguments,
+            ],
             cwd=root,
             env=environment,
             stdin=subprocess.DEVNULL,
@@ -108,7 +138,7 @@ def _status_call(action: str, arguments: Any) -> str:
             timeout=ADAPTER_TIMEOUT,
             check=False,
         )
-        if len(completed.stdout) > MAX_ADAPTER_OUTPUT:
+        if len(completed.stdout.encode("utf-8")) > MAX_ADAPTER_OUTPUT:
             raise BridgeError("MODULE_ADAPTER_OUTPUT_TOO_LARGE", "adapter output too large")
         records = [line for line in completed.stdout.splitlines() if line.strip()]
         if len(records) != 1:
@@ -137,7 +167,17 @@ def _status_call(action: str, arguments: Any) -> str:
 
 
 def _task_status(arguments: dict[str, Any] | None = None, **_: Any) -> str:
-    return _status_call("task-status", arguments)
+    """Legacy internal alias; returns compact status and is not model-visible."""
+
+    return _status_call("task-status-compact", arguments)
+
+
+def _task_status_compact(arguments: dict[str, Any] | None = None, **_: Any) -> str:
+    return _status_call("task-status-compact", arguments)
+
+
+def _obligation_get(arguments: dict[str, Any] | None = None, **_: Any) -> str:
+    return _status_call("obligation-get", arguments)
 
 
 def _release_status(arguments: dict[str, Any] | None = None, **_: Any) -> str:
@@ -813,16 +853,34 @@ def _post_api_request(*_: Any, **values: Any) -> None:
     )
 
 
-_TASK_SCHEMA = {
+_TASK_COMPACT_SCHEMA = {
     "description": (
-        "Read canonical status for the exact host-bound task. Read-only: cannot "
-        "create receipts, change verdicts, clear obligations, or release a task."
+        "Refresh compact canonical status for the exact host-bound task. Read-only; "
+        "returns IDs, kinds, required modules, verdicts, reason codes, and hashes."
     ),
     "parameters": {"type": "object", "properties": {}, "additionalProperties": False},
 }
+_OBLIGATION_SCHEMA = {
+    "description": (
+        "Read exact canonical detail for one obligation ID, including its claim and "
+        "current release row. Read-only and bounded to one obligation."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "obligation_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+            }
+        },
+        "required": ["obligation_id"],
+        "additionalProperties": False,
+    },
+}
 _RELEASE_SCHEMA = {
     "description": (
-        "Read Soul release-gate status for the exact host-bound task. This reports "
+        "Refresh Soul release-gate status for the exact host-bound task. This reports "
         "eligibility only and performs no mutation."
     ),
     "parameters": {"type": "object", "properties": {}, "additionalProperties": False},
@@ -831,11 +889,19 @@ _RELEASE_SCHEMA = {
 
 def register(ctx: Any) -> None:
     ctx.register_tool(
-        name="gauntlet_task_status",
+        name="gauntlet_task_status_compact",
         toolset=TOOLSET,
-        schema=_TASK_SCHEMA,
-        handler=_task_status,
-        description=_TASK_SCHEMA["description"],
+        schema=_TASK_COMPACT_SCHEMA,
+        handler=_task_status_compact,
+        description=_TASK_COMPACT_SCHEMA["description"],
+        emoji="",
+    )
+    ctx.register_tool(
+        name="gauntlet_obligation_get",
+        toolset=TOOLSET,
+        schema=_OBLIGATION_SCHEMA,
+        handler=_obligation_get,
+        description=_OBLIGATION_SCHEMA["description"],
         emoji="",
     )
     ctx.register_tool(

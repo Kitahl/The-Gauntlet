@@ -42,6 +42,10 @@ from gauntlet_host.ipc import (
     decode_result,
     encode_request,
 )
+from gauntlet_host.lean_context import (
+    LeanContextError,
+    prefetch_lean_context,
+)
 from gauntlet_host.runtime_profile import (
     RuntimeProfile,
     RuntimeProfileError,
@@ -313,6 +317,27 @@ def run_worker_turn(
             if remaining <= 5.0:
                 raise SessionTurnLockTimeout(
                     "no launch budget remained after waiting for the session"
+                )
+            try:
+                lean_context = prefetch_lean_context(
+                    task_id=request.task_id,
+                    repository_root=Path(request.cwd or REPO_ROOT),
+                    runtime_home=Path(profile.runtime_home),
+                    timeout_seconds=min(20.0, max(1.0, remaining - 5.0)),
+                )
+            except LeanContextError as exc:
+                return _failure(
+                    request,
+                    status=WorkerStatus.UNAVAILABLE,
+                    event="launcher.lean_prefetch_failed",
+                    code=exc.code,
+                    message=exc.message,
+                )
+            request.metadata["lean_context"] = lean_context.to_metadata()
+            remaining = deadline - time.monotonic()
+            if remaining <= 5.0:
+                raise SessionTurnLockTimeout(
+                    "no launch budget remained after parent context prefetch"
                 )
             request.metadata["run_budget_seconds"] = min(
                 MAX_AGENT_RUN_BUDGET_SECONDS,

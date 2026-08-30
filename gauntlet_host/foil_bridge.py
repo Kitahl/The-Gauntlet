@@ -363,6 +363,19 @@ def _parse_route(
     return route
 
 
+def validate_advisory_route(
+    task_id: str,
+    route: dict[str, Any],
+) -> dict[str, Any]:
+    """Validate an already-decoded successful route from a parent prefetch."""
+
+    return _parse_route(
+        task_id,
+        json.dumps(route, ensure_ascii=False, separators=(",", ":"), sort_keys=True),
+        0,
+    )
+
+
 def build_advisory_route(
     *,
     task_id: str,
