@@ -439,6 +439,16 @@ def _execute_agent_turn(
     request: RuntimeRequest,
     proof: NamespaceProof,
 ) -> RuntimeResult:
+    if not request.session_id:
+        return _error_result(
+            request,
+            status=WorkerStatus.ERROR,
+            event="worker.request_rejected",
+            code="SESSION_BINDING_MISSING",
+            message="run requests require a parent-derived Hermes session binding",
+            payload=proof.to_payload(),
+        )
+
     os.environ["GAUNTLET_TASK_ID"] = request.task_id
     for bypass in (
         "HERMES_YOLO_MODE",
@@ -471,6 +481,17 @@ def _execute_agent_turn(
             auxiliary_scope = auxiliary_measurement_scope()
             auxiliary_scope.__enter__()
             session_db = SessionDB()
+            runtime_session_id = request.session_id
+            conversation_history = None
+            if session_db.get_session(runtime_session_id) is not None:
+                runtime_session_id = (
+                    session_db.resolve_resume_session_id(runtime_session_id) or runtime_session_id
+                )
+                conversation_history = session_db.get_messages_as_conversation(
+                    runtime_session_id,
+                    repair_alternation=True,
+                    include_row_ids=True,
+                )
             agent = AIAgent(
                 api_key=runtime.get("api_key"),
                 base_url=runtime.get("base_url"),
@@ -483,6 +504,7 @@ def _execute_agent_turn(
                 quiet_mode=True,
                 tool_progress_mode="off",
                 platform="gauntlet",
+                session_id=runtime_session_id,
                 session_db=session_db,
                 credential_pool=runtime.get("credential_pool"),
                 fallback_model=get_fallback_chain(config) or None,
@@ -492,7 +514,11 @@ def _execute_agent_turn(
             agent.suppress_status_output = True
             agent.stream_delta_callback = None
             agent.tool_gen_callback = None
-            result = agent.run_conversation(request.prompt, task_id=request.task_id)
+            result = agent.run_conversation(
+                request.prompt,
+                conversation_history=conversation_history,
+                task_id=request.task_id,
+            )
 
         if not isinstance(result, dict):
             raise RuntimeExecutionError(
@@ -526,6 +552,8 @@ def _execute_agent_turn(
                 "session_id": str(
                     result.get("session_id") or getattr(agent, "session_id", "") or ""
                 ),
+                "session_binding_id": request.session_id,
+                "session_resumed": conversation_history is not None,
                 "completed": bool(result.get("completed", True)),
                 "failed": bool(result.get("failed", False)),
                 "partial": bool(result.get("partial", False)),

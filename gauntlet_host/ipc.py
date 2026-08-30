@@ -37,6 +37,7 @@ class RuntimeRequest:
     request_id: str
     task_id: str
     operation: WorkerOperation
+    session_id: str | None = None
     prompt: str = ""
     cwd: str | None = None
     model: str | None = None
@@ -183,6 +184,8 @@ def encode_request(request: RuntimeRequest) -> str:
         "toolsets": list(request.toolsets),
         "metadata": request.metadata,
     }
+    if request.session_id is not None:
+        value["session_id"] = request.session_id
     if request.cwd is not None:
         value["cwd"] = request.cwd
     if request.model is not None:
@@ -202,6 +205,7 @@ def decode_request(line: str) -> RuntimeRequest:
         "request_id",
         "task_id",
         "operation",
+        "session_id",
         "prompt",
         "cwd",
         "model",
@@ -256,6 +260,11 @@ def decode_request(line: str) -> RuntimeRequest:
         request_id=request_id,
         task_id=task_id,
         operation=operation,
+        session_id=_optional_string(
+            value.get("session_id"),
+            field_name="session_id",
+            maximum=128,
+        ),
         prompt=prompt,
         cwd=_optional_string(value.get("cwd"), field_name="cwd"),
         model=_optional_string(value.get("model"), field_name="model"),

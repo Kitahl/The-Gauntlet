@@ -56,6 +56,9 @@ class RuntimeProfile:
     token_measurement_root: str
     token_measurement_key_path: str
     token_measurement_key_id: str
+    session_binding_key_path: str
+    session_binding_key_id: str
+    session_lock_root: str
     created_directories: tuple[str, ...]
 
     def to_payload(self) -> dict[str, Any]:
@@ -250,6 +253,34 @@ def _measurement_key(path: Path) -> tuple[Path, str]:
     return path, hashlib.sha256(key).hexdigest()[:16]
 
 
+def _session_binding_key(path: Path) -> tuple[Path, str]:
+    """Create or reuse the private key that binds tasks to Hermes sessions."""
+
+    try:
+        try:
+            descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        except FileExistsError:
+            key = path.read_bytes()
+        else:
+            key = secrets.token_bytes(32)
+            with os.fdopen(descriptor, "wb") as handle:
+                handle.write(key)
+                handle.flush()
+                os.fsync(handle.fileno())
+        _secure_file(path)
+    except OSError as exc:
+        raise RuntimeProfileError(
+            "SESSION_BINDING_KEY_FAILED",
+            f"cannot prepare session-binding key: {exc}",
+        ) from exc
+    if len(key) < 32:
+        raise RuntimeProfileError(
+            "SESSION_BINDING_KEY_INVALID",
+            "session-binding key must contain at least 32 bytes",
+        )
+    return path, hashlib.sha256(key).hexdigest()[:16]
+
+
 def _materialize_gauntlet_plugin(home: Path) -> tuple[Path, Path, str]:
     if not GAUNTLET_PLUGIN_SOURCE.is_file():
         raise RuntimeProfileError(
@@ -298,6 +329,8 @@ def prepare_runtime_profile(runtime_home: Path | None = None) -> RuntimeProfile:
         f"plugins/{GAUNTLET_PLUGIN_ID}",
         "measurements",
         "measurements/token-efficiency",
+        "session-bindings",
+        "session-bindings/locks",
     )
     created: list[str] = []
     for relative in relative_directories:
@@ -308,6 +341,10 @@ def prepare_runtime_profile(runtime_home: Path | None = None) -> RuntimeProfile:
     plugin_path, manifest_path, plugin_digest = _materialize_gauntlet_plugin(home)
     measurement_root = home / "measurements" / "token-efficiency"
     measurement_key_path, measurement_key_id = _measurement_key(measurement_root / ".hmac-key")
+    session_binding_root = home / "session-bindings"
+    session_binding_key_path, session_binding_key_id = _session_binding_key(
+        session_binding_root / ".hmac-key"
+    )
 
     config_path = home / "config.yaml"
     config = _read_config(config_path)
@@ -333,5 +370,8 @@ def prepare_runtime_profile(runtime_home: Path | None = None) -> RuntimeProfile:
         token_measurement_root=str(measurement_root),
         token_measurement_key_path=str(measurement_key_path),
         token_measurement_key_id=measurement_key_id,
+        session_binding_key_path=str(session_binding_key_path),
+        session_binding_key_id=session_binding_key_id,
+        session_lock_root=str(session_binding_root / "locks"),
         created_directories=tuple(created),
     )

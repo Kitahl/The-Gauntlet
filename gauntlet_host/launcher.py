@@ -6,7 +6,9 @@ import argparse
 import os
 import subprocess
 import sys
+import time
 import uuid
+from dataclasses import replace
 from pathlib import Path
 from typing import Sequence
 
@@ -45,6 +47,13 @@ from gauntlet_host.runtime_profile import (
     RuntimeProfileError,
     prepare_runtime_profile,
 )
+from gauntlet_host.session_binding import (
+    SessionBindingError,
+    SessionTurnLockTimeout,
+    derive_session_id,
+    exclusive_session_turn_lock,
+    session_turn_lock_path,
+)
 
 
 def _failure(
@@ -80,11 +89,16 @@ def _worker_environment(profile: RuntimeProfile, request: RuntimeRequest) -> dic
     environment["HERMES_HOME"] = profile.runtime_home
     environment["PYTHONPATH"] = str(VENDOR_ROOT)
     environment["PYTHONUNBUFFERED"] = "1"
+    task_root = Path(request.cwd or REPO_ROOT).expanduser().resolve(strict=False)
     environment["GAUNTLET_TASK_ID"] = request.task_id
-    environment["GAUNTLET_REPO_ROOT"] = str(REPO_ROOT)
-    environment["GAUNTLET_MODULE_CLI"] = str(MODULE_CLI)
-    environment["GAUNTLET_OBSERVATION_BRIDGE"] = str(OBSERVATION_BRIDGE)
-    environment["GAUNTLET_TOKEN_MEASUREMENT_BRIDGE"] = str(TOKEN_MEASUREMENT_BRIDGE)
+    environment["GAUNTLET_REPO_ROOT"] = str(task_root)
+    environment["GAUNTLET_MODULE_CLI"] = str(task_root / "gauntlet_host" / "module_cli.py")
+    environment["GAUNTLET_OBSERVATION_BRIDGE"] = str(
+        task_root / "gauntlet_host" / "observation_bridge.py"
+    )
+    environment["GAUNTLET_TOKEN_MEASUREMENT_BRIDGE"] = str(
+        task_root / "gauntlet_host" / "token_measurement_bridge.py"
+    )
     environment["GAUNTLET_TOKEN_MEASUREMENT_KEY"] = profile.token_measurement_key_path
     environment["GAUNTLET_TOKEN_MEASUREMENT_KEY_ID"] = profile.token_measurement_key_id
     environment["GAUNTLET_HOST_REQUEST_ID"] = request.request_id
@@ -240,11 +254,7 @@ def run_worker_turn(
             message=str(exc),
         )
 
-    request.metadata["run_budget_seconds"] = min(
-        MAX_AGENT_RUN_BUDGET_SECONDS,
-        DEFAULT_AGENT_RUN_BUDGET_SECONDS,
-        max(1.0, timeout - 5.0),
-    )
+    deadline = time.monotonic() + timeout
 
     try:
         profile = prepare_runtime_profile()
@@ -253,6 +263,23 @@ def run_worker_turn(
             request,
             status=WorkerStatus.ERROR,
             event="launcher.profile_failed",
+            code=exc.code,
+            message=exc.message,
+        )
+
+    try:
+        request = replace(
+            request,
+            session_id=derive_session_id(
+                request.task_id,
+                profile.session_binding_key_path,
+            ),
+        )
+    except SessionBindingError as exc:
+        return _failure(
+            request,
+            status=WorkerStatus.ERROR,
+            event="launcher.session_binding_failed",
             code=exc.code,
             message=exc.message,
         )
@@ -274,20 +301,44 @@ def run_worker_turn(
 
     environment = _worker_environment(profile, request)
     command = [sys.executable, str(WORKER_MAIN)]
+    lock_path = session_turn_lock_path(
+        profile.session_lock_root,
+        request.session_id or "",
+    )
 
     try:
-        completed = subprocess.run(
-            command,
-            input=encode_request(request) + "\n",
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-            cwd=VENDOR_ROOT,
-            env=environment,
-            timeout=timeout,
-            check=False,
+        lock_wait = max(0.0, deadline - time.monotonic())
+        with exclusive_session_turn_lock(lock_path, timeout=lock_wait):
+            remaining = deadline - time.monotonic()
+            if remaining <= 5.0:
+                raise SessionTurnLockTimeout(
+                    "no launch budget remained after waiting for the session"
+                )
+            request.metadata["run_budget_seconds"] = min(
+                MAX_AGENT_RUN_BUDGET_SECONDS,
+                DEFAULT_AGENT_RUN_BUDGET_SECONDS,
+                max(1.0, remaining - 5.0),
+            )
+            completed = subprocess.run(
+                command,
+                input=encode_request(request) + "\n",
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                cwd=VENDOR_ROOT,
+                env=environment,
+                timeout=remaining,
+                check=False,
+            )
+    except SessionTurnLockTimeout as exc:
+        return _failure(
+            request,
+            status=WorkerStatus.UNAVAILABLE,
+            event="launcher.session_busy_timeout",
+            code="SESSION_TURN_BUSY",
+            message=str(exc),
         )
     except subprocess.TimeoutExpired:
         return _failure(

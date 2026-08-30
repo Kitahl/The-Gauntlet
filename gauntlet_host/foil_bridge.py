@@ -5,10 +5,10 @@ from __future__ import annotations
 import hashlib
 import json
 import os
-from pathlib import Path
 import re
 import subprocess
 import sys
+from pathlib import Path
 from typing import Any, Iterable
 
 from gauntlet_host.constants import (
@@ -16,7 +16,6 @@ from gauntlet_host.constants import (
     FOIL_ROUTE_PROTOCOL_VERSION,
     MAX_FOIL_ROUTE_OUTPUT_BYTES,
     MAX_FOIL_ROUTE_PROMPT_CHARS,
-    MODULE_CLI,
     REPO_ROOT,
 )
 
@@ -216,10 +215,10 @@ def capability_snapshot(tool_definitions: Any) -> dict[str, Any]:
     }
 
 
-def _adapter_environment(task_id: str) -> dict[str, str]:
+def _adapter_environment(task_id: str, repository_root: Path) -> dict[str, str]:
     environment = dict(os.environ)
     environment["GAUNTLET_TASK_ID"] = task_id
-    environment["PYTHONPATH"] = str(REPO_ROOT)
+    environment["PYTHONPATH"] = str(repository_root)
     environment["PYTHONUNBUFFERED"] = "1"
     for bypass in (
         "HERMES_YOLO_MODE",
@@ -342,8 +341,7 @@ def _parse_route(
     if forbidden:
         raise FoilRouteBridgeError(
             "FOIL_ROUTE_FORBIDDEN_FIELDS",
-            "FOIL route contains authority-bearing fields: "
-            + ", ".join(sorted(forbidden)),
+            "FOIL route contains authority-bearing fields: " + ", ".join(sorted(forbidden)),
         )
     _validate_content_hash(route)
 
@@ -372,10 +370,10 @@ def build_advisory_route(
 ) -> dict[str, Any]:
     """Request one task-bound, profile-free, proposal-only FOIL route."""
 
-    module_cli = Path(
-        os.environ.get("GAUNTLET_MODULE_CLI", str(MODULE_CLI))
-    ).resolve()
-    if module_cli != MODULE_CLI.resolve() or not module_cli.is_file():
+    repository_root = Path(os.environ.get("GAUNTLET_REPO_ROOT", str(REPO_ROOT))).resolve()
+    expected_module_cli = (repository_root / "gauntlet_host" / "module_cli.py").resolve()
+    module_cli = Path(os.environ.get("GAUNTLET_MODULE_CLI", str(expected_module_cli))).resolve()
+    if module_cli != expected_module_cli or not module_cli.is_file():
         raise FoilRouteBridgeError(
             "FOIL_ROUTE_ADAPTER_MISSING",
             "FOIL route adapter path does not match the active repository",
@@ -387,7 +385,7 @@ def build_advisory_route(
                 sys.executable,
                 str(module_cli),
                 "--root",
-                str(REPO_ROOT),
+                str(repository_root),
                 "foil-route",
             ],
             input=json.dumps(
@@ -396,8 +394,8 @@ def build_advisory_route(
                 separators=(",", ":"),
                 sort_keys=True,
             ),
-            cwd=REPO_ROOT,
-            env=_adapter_environment(task_id),
+            cwd=repository_root,
+            env=_adapter_environment(task_id, repository_root),
             stdin=None,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
