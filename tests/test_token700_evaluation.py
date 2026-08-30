@@ -27,6 +27,7 @@ class FrozenManifestTests(unittest.TestCase):
     def test_manifest_hash_and_case_cardinality_are_frozen(self) -> None:
         manifest = t700.load_manifest()
         cases = t700.expand_cases(manifest)
+        self.assertEqual(manifest["protocol_revision"], 2)
         self.assertEqual(len(cases), 30)
         self.assertEqual(len({case["case_id"] for case in cases}), 30)
         self.assertEqual(
@@ -95,6 +96,97 @@ class FrozenAnalysisTests(unittest.TestCase):
         self.assertEqual(t700.median([0.2, 0.4, 0.8]), 0.4)
         with self.assertRaises(ValueError):
             t700.paired_reduction(0, 0)
+
+    def test_invalid_pair_suppresses_reduction_fields(self) -> None:
+        cases = [
+            {
+                "case_id": "W01-S01",
+                "workload": {"id": "W01", "name": "one", "scope": "FULL_LOCAL"},
+            }
+        ]
+        results = {
+            "W01-S01": {
+                "arm_order": ["baseline", "candidate"],
+                "baseline": {
+                    "correct": False,
+                    "local_estimated_input_tokens": 100,
+                    "complete_token_units": 120,
+                },
+                "candidate": {
+                    "correct": True,
+                    "local_estimated_input_tokens": 50,
+                    "complete_token_units": 60,
+                },
+            }
+        }
+        pair = t700._pair_results(cases, results)[0]
+        self.assertIsNone(pair["input_reduction"])
+        self.assertIsNone(pair["complete_token_reduction"])
+
+    def test_request_classifier_separates_conversation_title_and_unknown(self) -> None:
+        conversation = {
+            "stream": True,
+            "messages": [{"role": "user", "content": "TOKEN700|W01-S01|T01| current"}],
+        }
+        title = {
+            "stream": False,
+            "response_format": {
+                "type": "json_schema",
+                "json_schema": {"name": "session_title"},
+            },
+            "messages": [{"role": "user", "content": "TOKEN700|W01-S01|T01| title"}],
+        }
+        self.assertEqual(t700._server_request_kind(conversation), "conversation")
+        self.assertEqual(t700._server_request_kind(title), "title_generation")
+        self.assertEqual(t700._server_request_kind({"stream": False}), "unknown")
+
+    def test_auxiliary_policy_is_arm_and_turn_scoped(self) -> None:
+        title = {"auxiliary_task": "title_generation"}
+        self.assertTrue(t700._auxiliary_policy_satisfied("baseline", "T01", 1, [title]))
+        self.assertTrue(t700._auxiliary_policy_satisfied("baseline", "T01", 0, []))
+        self.assertFalse(t700._auxiliary_policy_satisfied("baseline", "T02", 1, [title]))
+        self.assertFalse(t700._auxiliary_policy_satisfied("candidate", "T01", 1, [title]))
+        self.assertTrue(t700._auxiliary_policy_satisfied("candidate", "T01", 0, []))
+        self.assertFalse(
+            t700._auxiliary_policy_satisfied(
+                "baseline", "T01", 1, [{"auxiliary_task": "compression"}]
+            )
+        )
+
+    def test_nested_capsule_metrics_and_complete_cost_are_explicit(self) -> None:
+        self.assertEqual(
+            t700._capsule_metrics(
+                {"lean_context": {"capsule_metrics": {"route_estimated_tokens": 12}}}
+            ),
+            {"route_estimated_tokens": 12},
+        )
+        self.assertIsNone(t700._capsule_metrics({"capsule_metrics": {"wrong": True}}))
+        documents = [
+            {
+                "request_composition": {"local_estimated_tokens": 100},
+                "provider_usage": {
+                    "output_tokens": 10,
+                    "reasoning_tokens": 3,
+                    "cache_write_tokens": 5,
+                    "cache_read_tokens": 7,
+                },
+            },
+            {
+                "request_composition": {"local_estimated_tokens": 20},
+                "provider_usage": {"output_tokens": 2},
+            },
+        ]
+        self.assertEqual(
+            t700._measurement_totals(documents),
+            {
+                "local_input_tokens": 120,
+                "provider_output_tokens": 12,
+                "reasoning_tokens": 3,
+                "cache_write_tokens": 5,
+                "cache_read_tokens": 7,
+                "complete_token_units": 140,
+            },
+        )
 
     def test_case_marker_parser_uses_latest_user_protocol(self) -> None:
         body = {

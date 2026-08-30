@@ -29,9 +29,9 @@ from typing import Any, Iterator, Mapping, Sequence
 from urllib.parse import urlparse
 
 REPO = Path(__file__).resolve().parent.parent
-MANIFEST_PATH = REPO / "benchmarks" / "token700" / "workloads.v1.json"
-MANIFEST_SHA256 = "70adbd24ab90d2ac9962da9e6f87b34cd9b2c089ea6db89d13b3d5174b77a4bf"
-PREREGISTRATION_COMMIT = "503818e723f4b6625ef39459d8e2126afa9fe2cf"
+MANIFEST_PATH = REPO / "benchmarks" / "token700" / "workloads.v2.json"
+MANIFEST_SHA256 = "7a5cbff109f53348a43f84bcc3b819ddcdad0d6cb13d683236b42f7326089a3f"
+PREREGISTRATION_COMMIT = "916c22d3924b8c5e0f23f84376b0a69edc3159a4"
 PINNED_HERMES = "5fc308a70719a83cccdbba4c0e39c23f5a8239d5"
 MODEL = "phase5-mock"
 PROVIDER = "custom"
@@ -47,8 +47,8 @@ ARMS = {
         "evidence_commit": "d00e8e5a69cad022bc9a5cb701d3addcaeabfb81",
     },
     "candidate": {
-        "commit": "dcb63f1acf3b7aeab09e065fa116cbc32c5a18cb",
-        "tree": "ec1fdf9385a16e878d4a8746aaec3cac6f8f85ed",
+        "commit": "bd621d64876ff2434ebef46c2115603e072bd247",
+        "tree": "1b7a2d47540aef0a0fb68707bd2e1cf5a3ed9667",
         "evidence_commit": "31c4080482a15624e422d30ce3c0a980b719ced9",
     },
 }
@@ -148,7 +148,7 @@ def load_manifest(path: Path = MANIFEST_PATH) -> dict[str, Any]:
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
         raise ValueError("TOKEN-700 workload manifest must be an object")
-    if value.get("schema") != "gauntlet.token700-workloads.v1":
+    if value.get("schema") != "gauntlet.token700-workloads.v2":
         raise ValueError("TOKEN-700 workload manifest schema mismatch")
     workloads = value.get("workloads")
     variants = value.get("variants")
@@ -272,6 +272,80 @@ def _latest_user_text(body: Mapping[str, Any]) -> str:
     return ""
 
 
+def _response_schema_name(body: Mapping[str, Any]) -> str | None:
+    response_format = body.get("response_format")
+    if not isinstance(response_format, dict):
+        return None
+    json_schema = response_format.get("json_schema")
+    if not isinstance(json_schema, dict):
+        return None
+    name = json_schema.get("name")
+    return name if isinstance(name, str) else None
+
+
+def _server_request_kind(body: Mapping[str, Any]) -> str:
+    if _response_schema_name(body) == "session_title":
+        return "title_generation"
+    if body.get("stream") is True and CASE_PATTERN.search(_latest_user_text(body)):
+        return "conversation"
+    return "unknown"
+
+
+def _capsule_metrics(payload: Mapping[str, Any]) -> dict[str, Any] | None:
+    lean_context = payload.get("lean_context")
+    if not isinstance(lean_context, dict):
+        return None
+    metrics = lean_context.get("capsule_metrics")
+    return dict(metrics) if isinstance(metrics, dict) else None
+
+
+def _auxiliary_policy_satisfied(
+    arm: str,
+    turn_id: str,
+    server_dispatches: int,
+    documents: Sequence[Mapping[str, Any]],
+) -> bool:
+    if len(documents) != server_dispatches:
+        return False
+    if any(document.get("auxiliary_task") != "title_generation" for document in documents):
+        return False
+    if arm == "candidate":
+        return server_dispatches == 0
+    if arm == "baseline":
+        return server_dispatches <= 1 if turn_id == "T01" else server_dispatches == 0
+    return False
+
+
+def _measurement_totals(documents: Sequence[Mapping[str, Any]]) -> dict[str, int]:
+    local_input = sum(
+        _number(document.get("request_composition", {}).get("local_estimated_tokens"))
+        for document in documents
+    )
+    provider_output = sum(
+        _number(document.get("provider_usage", {}).get("output_tokens")) for document in documents
+    )
+    reasoning = sum(
+        _number(document.get("provider_usage", {}).get("reasoning_tokens"))
+        for document in documents
+    )
+    cache_write = sum(
+        _number(document.get("provider_usage", {}).get("cache_write_tokens"))
+        for document in documents
+    )
+    cache_read = sum(
+        _number(document.get("provider_usage", {}).get("cache_read_tokens"))
+        for document in documents
+    )
+    return {
+        "local_input_tokens": int(local_input),
+        "provider_output_tokens": int(provider_output),
+        "reasoning_tokens": int(reasoning),
+        "cache_write_tokens": int(cache_write),
+        "cache_read_tokens": int(cache_read),
+        "complete_token_units": int(local_input + provider_output + reasoning + cache_write),
+    }
+
+
 def _tool_names(body: Mapping[str, Any]) -> list[str]:
     names = []
     for tool in body.get("tools", []):
@@ -371,6 +445,16 @@ class Token700Handler(BaseHTTPRequestHandler):
             self._send_json({"ok": True})
             return
         self.fixture.append(body)
+        request_kind = _server_request_kind(body)
+        if request_kind == "title_generation":
+            self._send_final(
+                body,
+                json.dumps({"title": "TOKEN-700 Local Session"}, separators=(",", ":")),
+            )
+            return
+        if request_kind == "unknown":
+            self._send_final(body, "TOKEN700_PROTOCOL_ERROR:unknown-request-kind")
+            return
         match = CASE_PATTERN.search(_latest_user_text(body))
         if match is None:
             self._send_final(body, "TOKEN700_PROTOCOL_ERROR:no-case-marker")
@@ -721,6 +805,7 @@ def _public_measurement(document: Mapping[str, Any]) -> dict[str, Any]:
         "document_sha256": _sha256_bytes(_canonical(document)),
         "measurement_id": document.get("measurement_id"),
         "request_kind": document.get("request_kind"),
+        "auxiliary_task": document.get("auxiliary_task"),
         "dispatch_id": document.get("dispatch_id"),
         "runtime_session_id": document.get("runtime_session_id"),
         "request_composition": {
@@ -804,44 +889,94 @@ def _run_turn(
     worker = envelope["worker"]
     finalization = envelope["finalization"]
     requests = server.since(start_index)
+    request_kinds = [_server_request_kind(request) for request in requests]
+    conversation_requests = [
+        request
+        for request, kind in zip(requests, request_kinds, strict=True)
+        if kind == "conversation"
+    ]
+    auxiliary_requests = [
+        request
+        for request, kind in zip(requests, request_kinds, strict=True)
+        if kind == "title_generation"
+    ]
+    unknown_requests = [
+        request for request, kind in zip(requests, request_kinds, strict=True) if kind == "unknown"
+    ]
     expected_dispatches = 2 if turn["provider_action"] == "STATUS_THEN_FINAL" else 1
     expected_final = _expected_final(turn["provider_action"], str(case["case_id"]), turn["turn_id"])
 
     payload = worker.get("payload", {})
     summary = payload.get("token_measurement", {}) if isinstance(payload, dict) else {}
-    measurement_ids = summary.get("measurement_ids", []) if isinstance(summary, dict) else []
+    request_id = worker.get("request_id")
     index = _measurement_index(runtime)
-    documents = [index[item] for item in measurement_ids if item in index]
+    documents = [
+        document
+        for document in index.values()
+        if document.get("host_request_id") == request_id and document.get("task_id") == task_id
+    ]
+    documents.sort(key=lambda item: str(item.get("measurement_id") or ""))
     conversation = [item for item in documents if item.get("request_kind") == "conversation"]
     auxiliary = [item for item in documents if item.get("request_kind") == "auxiliary"]
+    unknown_documents = [
+        item for item in documents if item.get("request_kind") not in {"conversation", "auxiliary"}
+    ]
 
     current_marker = f"TOKEN700|{case['case_id']}|{turn['turn_id']}|"
+    conversation_text = "\n".join(_request_text(request) for request in conversation_requests)
     other_markers = sorted(
         marker
         for marker in all_case_ids
-        if marker != case["case_id"]
-        and any(marker in _request_text(request) for request in requests)
+        if marker != case["case_id"] and marker in conversation_text
     )
-    active_tools = sorted({name for request in requests for name in _tool_names(request)})
+    active_tools = sorted(
+        {name for request in conversation_requests for name in _tool_names(request)}
+    )
+    summary_ids = (
+        {str(item) for item in summary.get("measurement_ids", [])}
+        if isinstance(summary, dict)
+        else set()
+    )
+    actual_ids = {str(item.get("measurement_id")) for item in documents}
+    summary_conversation_ids = (
+        {str(item) for item in summary.get("conversation_measurement_ids", [])}
+        if isinstance(summary, dict)
+        else set()
+    )
+    actual_conversation_ids = {str(item.get("measurement_id")) for item in conversation}
     checks = {
         "worker_status_ok": worker.get("status") == "OK",
         "expected_final_marker_exact": payload.get("final_response") == expected_final,
         "current_turn_marker_present_at_provider_boundary": (
-            bool(requests) and all(current_marker in _request_text(request) for request in requests)
+            bool(conversation_requests)
+            and all(current_marker in _request_text(request) for request in conversation_requests)
         ),
         "measurement_complete_with_zero_drops": (
             summary.get("measurement_complete") is True
             and summary.get("measurement_drop_count") == 0
             and summary.get("invalid_record_count") == 0
-            and len(documents) == len(measurement_ids)
+            and summary.get("unknown_dispatches_recorded") == 0
+            and summary_ids.issubset(actual_ids)
+            and summary_conversation_ids == actual_conversation_ids
         ),
-        "no_auxiliary_model_dispatch": not auxiliary,
+        "server_request_kinds_known": not unknown_requests,
+        "server_measurement_dispatch_counts_reconcile": (
+            len(conversation_requests) == len(conversation)
+            and len(auxiliary_requests) == len(auxiliary)
+            and not unknown_documents
+        ),
+        "arm_auxiliary_dispatch_policy_satisfied": _auxiliary_policy_satisfied(
+            arm,
+            turn["turn_id"],
+            len(auxiliary_requests),
+            auxiliary,
+        ),
         "release_verdict_unknown": finalization.get("release_gate_verdict") == "UNKNOWN",
         "release_eligible_false": finalization.get("release_eligible") is False,
         "task_release_not_performed": finalization.get("task_release_performed") is False,
         "canonical_receipt_not_created": finalization.get("canonical_receipt_created") is False,
         "no_cross_task_case_marker_leak": not other_markers,
-        "provider_dispatch_count_expected": len(requests) == expected_dispatches,
+        "provider_dispatch_count_expected": len(conversation_requests) == expected_dispatches,
         "measurement_dispatch_count_expected": len(conversation) == expected_dispatches,
         "active_tools_are_gauntlet_owned": all(
             name.startswith("gauntlet_") for name in active_tools
@@ -860,14 +995,14 @@ def _run_turn(
     }
 
     status_result = None
-    if turn["provider_action"] == "STATUS_THEN_FINAL" and len(requests) == 2:
-        results = _tool_results(requests[-1])
+    if turn["provider_action"] == "STATUS_THEN_FINAL" and len(conversation_requests) == 2:
+        results = _tool_results(conversation_requests[-1])
         status_result = results[-1] if results else None
         authority = status_result.get("authority", {}) if isinstance(status_result, dict) else {}
         checks.update(
             {
                 "tool_calls_equal_1": sum(
-                    int(_number(item.get("tool_call_count"))) for item in documents
+                    int(_number(item.get("tool_call_count"))) for item in conversation
                 )
                 == 1,
                 "status_task_id_matches": (
@@ -889,46 +1024,52 @@ def _run_turn(
         )
     else:
         checks["tool_calls_equal_0"] = (
-            sum(int(_number(item.get("tool_call_count"))) for item in documents) == 0
+            sum(int(_number(item.get("tool_call_count"))) for item in conversation) == 0
         )
 
-    route_metrics = payload.get("capsule_metrics") if isinstance(payload, dict) else None
-    local_input = sum(
-        _number(item.get("request_composition", {}).get("local_estimated_tokens"))
-        for item in conversation
-    )
-    provider_output = sum(
-        _number(item.get("provider_usage", {}).get("output_tokens")) for item in conversation
-    )
-    reasoning = sum(
-        _number(item.get("provider_usage", {}).get("reasoning_tokens")) for item in conversation
-    )
-    cache_write = sum(
-        _number(item.get("provider_usage", {}).get("cache_write_tokens")) for item in conversation
-    )
-    cache_read = sum(
-        _number(item.get("provider_usage", {}).get("cache_read_tokens")) for item in conversation
-    )
+    route_metrics = _capsule_metrics(payload) if isinstance(payload, dict) else None
+    conversation_totals = _measurement_totals(conversation)
+    auxiliary_totals = _measurement_totals(auxiliary)
+    complete_totals = _measurement_totals(documents)
+    required_markers = _required_history_markers(case)
     return {
         "turn_id": turn["turn_id"],
         "provider_action": turn["provider_action"],
         "checks": checks,
         "correct": all(checks.values()),
         "provider_dispatches": len(requests),
+        "conversation_provider_dispatches": len(conversation_requests),
+        "auxiliary_provider_dispatches": len(auxiliary_requests),
+        "unknown_provider_dispatches": len(unknown_requests),
         "api_calls": len(conversation),
+        "auxiliary_api_calls": len(auxiliary),
         "tool_calls": sum(int(_number(item.get("tool_call_count"))) for item in conversation),
         "elapsed_ms": elapsed_ms,
-        "local_estimated_input_tokens": int(local_input),
-        "provider_output_tokens": int(provider_output),
-        "reasoning_tokens": int(reasoning),
-        "cache_write_tokens": int(cache_write),
-        "cache_read_tokens": int(cache_read),
-        "complete_token_units": int(local_input + provider_output + reasoning + cache_write),
-        "runtime_session_ids": summary.get("conversation_runtime_session_ids", []),
+        "local_estimated_input_tokens": conversation_totals["local_input_tokens"],
+        "auxiliary_local_estimated_input_tokens": auxiliary_totals["local_input_tokens"],
+        "provider_output_tokens": complete_totals["provider_output_tokens"],
+        "reasoning_tokens": complete_totals["reasoning_tokens"],
+        "cache_write_tokens": complete_totals["cache_write_tokens"],
+        "cache_read_tokens": complete_totals["cache_read_tokens"],
+        "complete_token_units": complete_totals["complete_token_units"],
+        "conversation_complete_token_units": conversation_totals["complete_token_units"],
+        "auxiliary_complete_token_units": auxiliary_totals["complete_token_units"],
+        "runtime_session_ids": sorted(
+            {str(item.get("runtime_session_id")) for item in conversation}
+        ),
+        "all_runtime_session_ids": sorted(
+            {str(item.get("runtime_session_id")) for item in documents}
+        ),
         "active_tool_names": active_tools,
         "route_metrics": route_metrics,
         "cross_task_leak_markers": other_markers,
+        "required_history_markers_present": (
+            all(marker in conversation_text for marker in required_markers)
+            if required_markers
+            else None
+        ),
         "measurements": [_public_measurement(item) for item in conversation],
+        "auxiliary_measurements": [_public_measurement(item) for item in auxiliary],
     }
 
 
@@ -976,12 +1117,9 @@ def _run_case(
     }
     required = _required_history_markers(case)
     if required:
-        final_measurements = turns[-1]["measurements"]
-        final_requests = server.chat_requests[-turns[-1]["provider_dispatches"] :]
-        text = "\n".join(_request_text(request) for request in final_requests)
-        case_checks["final_turn_contains_required_context_markers"] = all(
-            marker in text for marker in required
-        ) and bool(final_measurements)
+        case_checks["final_turn_contains_required_context_markers"] = turns[-1][
+            "required_history_markers_present"
+        ] is True and bool(turns[-1]["measurements"])
 
     route_metrics = [
         turn["route_metrics"] for turn in turns if isinstance(turn.get("route_metrics"), dict)
@@ -998,8 +1136,19 @@ def _run_case(
         "turns": turns,
         "correct": all(case_checks.values()) and all(turn["correct"] for turn in turns),
         "local_estimated_input_tokens": sum(turn["local_estimated_input_tokens"] for turn in turns),
+        "auxiliary_local_estimated_input_tokens": sum(
+            turn["auxiliary_local_estimated_input_tokens"] for turn in turns
+        ),
         "complete_token_units": sum(turn["complete_token_units"] for turn in turns),
+        "provider_dispatches": sum(turn["provider_dispatches"] for turn in turns),
+        "conversation_provider_dispatches": sum(
+            turn["conversation_provider_dispatches"] for turn in turns
+        ),
+        "auxiliary_provider_dispatches": sum(
+            turn["auxiliary_provider_dispatches"] for turn in turns
+        ),
         "api_calls": sum(turn["api_calls"] for turn in turns),
+        "auxiliary_api_calls": sum(turn["auxiliary_api_calls"] for turn in turns),
         "tool_calls": sum(turn["tool_calls"] for turn in turns),
         "elapsed_ms": round(sum(turn["elapsed_ms"] for turn in turns), 3),
         "route_estimated_tokens_max": max(
@@ -1010,11 +1159,7 @@ def _run_case(
             (int(item.get("status_estimated_tokens", 0)) for item in route_metrics),
             default=None,
         ),
-        "extra_llm_calls": sum(
-            turn["provider_dispatches"]
-            - (2 if turn["provider_action"] == "STATUS_THEN_FINAL" else 1)
-            for turn in turns
-        ),
+        "extra_llm_calls": sum(turn["auxiliary_provider_dispatches"] for turn in turns),
         "false_clear_events": sum(not turn["checks"]["release_eligible_false"] for turn in turns),
         "cross_task_leaks": sum(bool(turn["cross_task_leak_markers"]) for turn in turns),
     }
@@ -1060,6 +1205,7 @@ def _pair_results(
         case_id = str(case["case_id"])
         baseline = results[case_id]["baseline"]
         candidate = results[case_id]["candidate"]
+        valid_pair = bool(baseline["correct"] and candidate["correct"])
         pairs.append(
             {
                 "case_id": case_id,
@@ -1069,13 +1215,21 @@ def _pair_results(
                 "arm_order": results[case_id]["arm_order"],
                 "baseline_correct": baseline["correct"],
                 "candidate_correct": candidate["correct"],
-                "input_reduction": paired_reduction(
-                    baseline["local_estimated_input_tokens"],
-                    candidate["local_estimated_input_tokens"],
+                "input_reduction": (
+                    paired_reduction(
+                        baseline["local_estimated_input_tokens"],
+                        candidate["local_estimated_input_tokens"],
+                    )
+                    if valid_pair
+                    else None
                 ),
-                "complete_token_reduction": paired_reduction(
-                    baseline["complete_token_units"],
-                    candidate["complete_token_units"],
+                "complete_token_reduction": (
+                    paired_reduction(
+                        baseline["complete_token_units"],
+                        candidate["complete_token_units"],
+                    )
+                    if valid_pair
+                    else None
                 ),
                 "baseline": baseline,
                 "candidate": candidate,
@@ -1089,18 +1243,23 @@ def _summarize(pairs: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         [(bool(pair["baseline_correct"]), bool(pair["candidate_correct"])) for pair in pairs]
     )
     baseline_valid = all(pair["baseline_correct"] for pair in pairs)
-    input_reductions = [float(pair["input_reduction"]) for pair in pairs]
-    complete_reductions = [float(pair["complete_token_reduction"]) for pair in pairs]
+    candidate_valid = all(pair["candidate_correct"] for pair in pairs)
+    all_pairs_valid = baseline_valid and candidate_valid and len(pairs) == 30
+    input_reductions = [float(pair["input_reduction"]) for pair in pairs] if all_pairs_valid else []
+    complete_reductions = (
+        [float(pair["complete_token_reduction"]) for pair in pairs] if all_pairs_valid else []
+    )
     continuity = [
         float(pair["input_reduction"])
         for pair in pairs
-        if pair["workload_id"] in {"W08", "W09", "W10"}
+        if all_pairs_valid and pair["workload_id"] in {"W08", "W09", "W10"}
     ]
     absence = [
         float(pair["input_reduction"])
         for pair in pairs
-        if pair["workload_id"] in {"W03", "W04", "W05", "W06", "W07"}
+        if all_pairs_valid and pair["workload_id"] in {"W03", "W04", "W05", "W06", "W07"}
     ]
+    baseline_cases = [pair["baseline"] for pair in pairs]
     candidate_cases = [pair["candidate"] for pair in pairs]
     route_values = [
         value
@@ -1112,6 +1271,8 @@ def _summarize(pairs: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         for case in candidate_cases
         if (value := case["status_estimated_tokens_max"]) is not None
     ]
+    overall_input = median(input_reductions)
+    overall_complete = median(complete_reductions)
     gates = {
         "baseline_valid": baseline_valid,
         "finite_suite_quality_noninferiority": quality["passed"],
@@ -1129,10 +1290,10 @@ def _summarize(pairs: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         "candidate_cross_task_leaks_zero": sum(case["cross_task_leaks"] for case in candidate_cases)
         == 0,
         "overall_median_input_reduction_ge_40_percent": (
-            median(input_reductions) is not None and median(input_reductions) >= 0.40
+            overall_input is not None and overall_input >= 0.40
         ),
         "median_complete_token_reduction_ge_25_percent": (
-            median(complete_reductions) is not None and median(complete_reductions) >= 0.25
+            overall_complete is not None and overall_complete >= 0.25
         ),
     }
     if not baseline_valid:
@@ -1148,10 +1309,15 @@ def _summarize(pairs: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         "quality": quality,
         "gates": gates,
         "efficacy": {
-            "overall_median_input_reduction": median(input_reductions),
+            "reporting_status": (
+                "REPORTED_COMPLETE_VALID_SUITE"
+                if all_pairs_valid
+                else "SUPPRESSED_INVALID_OR_INFERIOR_QUALITY"
+            ),
+            "overall_median_input_reduction": overall_input,
             "continuity_median_input_reduction": median(continuity),
             "capability_absence_control_median_input_reduction": median(absence),
-            "overall_median_complete_token_reduction": median(complete_reductions),
+            "overall_median_complete_token_reduction": overall_complete,
             "external_mcp_tool_heavy_reduction": "NOT_ESTABLISHED_GAUNTLET_ONLY",
             "monetary_complete_cost_reduction": "NOT_ESTABLISHED_UNPRICED_FIXTURE",
         },
@@ -1161,6 +1327,7 @@ def _summarize(pairs: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         },
         "counts": {
             "pairs": len(pairs),
+            "baseline_extra_llm_calls": sum(case["extra_llm_calls"] for case in baseline_cases),
             "candidate_extra_llm_calls": sum(case["extra_llm_calls"] for case in candidate_cases),
             "candidate_false_clear_events": sum(
                 case["false_clear_events"] for case in candidate_cases
@@ -1237,12 +1404,12 @@ def run(output: Path, *, validate_only: bool = False) -> dict[str, Any]:
                 pairs = _pair_results(cases, results)
                 summary = _summarize(pairs)
                 document = {
-                    "schema": "gauntlet.token700-qualification.v1",
+                    "schema": "gauntlet.token700-qualification.v2",
                     "phase": "TOKEN-700",
                     "mode": "MATCHED_LOCAL_GAUNTLET_ONLY",
                     "preregistration": {
                         "commit": PREREGISTRATION_COMMIT,
-                        "manifest": "benchmarks/token700/workloads.v1.json",
+                        "manifest": "benchmarks/token700/workloads.v2.json",
                         "manifest_sha256": MANIFEST_SHA256,
                         "sample_size_pairs": len(pairs),
                         "noninferiority_margin_percentage_points": 0,
