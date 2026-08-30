@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import secrets
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
@@ -52,6 +53,9 @@ class RuntimeProfile:
     plugin_manifest_path: str
     plugin_sha256: str
     plugin_tools: tuple[str, ...]
+    token_measurement_root: str
+    token_measurement_key_path: str
+    token_measurement_key_id: str
     created_directories: tuple[str, ...]
 
     def to_payload(self) -> dict[str, Any]:
@@ -171,11 +175,7 @@ def _apply_alpha_policy(config: dict[str, Any]) -> None:
     plugins["enabled"] = enabled
 
     disabled = _string_list(plugins, "disabled")
-    plugins["disabled"] = [
-        plugin_id
-        for plugin_id in disabled
-        if plugin_id != GAUNTLET_PLUGIN_ID
-    ]
+    plugins["disabled"] = [plugin_id for plugin_id in disabled if plugin_id != GAUNTLET_PLUGIN_ID]
 
 
 def _render_config(config: dict[str, Any]) -> str:
@@ -220,6 +220,34 @@ def _write_if_changed(path: Path, content: str) -> None:
         _atomic_write(path, content)
     else:
         _secure_file(path)
+
+
+def _measurement_key(path: Path) -> tuple[Path, str]:
+    """Create or reuse the private local HMAC key for measurement digests."""
+
+    try:
+        try:
+            descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        except FileExistsError:
+            key = path.read_bytes()
+        else:
+            key = secrets.token_bytes(32)
+            with os.fdopen(descriptor, "wb") as handle:
+                handle.write(key)
+                handle.flush()
+                os.fsync(handle.fileno())
+        _secure_file(path)
+    except OSError as exc:
+        raise RuntimeProfileError(
+            "TOKEN_MEASUREMENT_KEY_FAILED",
+            f"cannot prepare token measurement key: {exc}",
+        ) from exc
+    if len(key) < 32:
+        raise RuntimeProfileError(
+            "TOKEN_MEASUREMENT_KEY_INVALID",
+            "token measurement key must contain at least 32 bytes",
+        )
+    return path, hashlib.sha256(key).hexdigest()[:16]
 
 
 def _materialize_gauntlet_plugin(home: Path) -> tuple[Path, Path, str]:
@@ -268,6 +296,8 @@ def prepare_runtime_profile(runtime_home: Path | None = None) -> RuntimeProfile:
         "pending/skills",
         "plugins",
         f"plugins/{GAUNTLET_PLUGIN_ID}",
+        "measurements",
+        "measurements/token-efficiency",
     )
     created: list[str] = []
     for relative in relative_directories:
@@ -276,6 +306,8 @@ def prepare_runtime_profile(runtime_home: Path | None = None) -> RuntimeProfile:
         created.append(str(directory))
 
     plugin_path, manifest_path, plugin_digest = _materialize_gauntlet_plugin(home)
+    measurement_root = home / "measurements" / "token-efficiency"
+    measurement_key_path, measurement_key_id = _measurement_key(measurement_root / ".hmac-key")
 
     config_path = home / "config.yaml"
     config = _read_config(config_path)
@@ -298,5 +330,8 @@ def prepare_runtime_profile(runtime_home: Path | None = None) -> RuntimeProfile:
         plugin_manifest_path=str(manifest_path),
         plugin_sha256=plugin_digest,
         plugin_tools=GAUNTLET_STATUS_TOOLS,
+        token_measurement_root=str(measurement_root),
+        token_measurement_key_path=str(measurement_key_path),
+        token_measurement_key_id=measurement_key_id,
         created_directories=tuple(created),
     )

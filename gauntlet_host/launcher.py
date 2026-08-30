@@ -3,12 +3,11 @@
 from __future__ import annotations
 
 import argparse
-import json
 import os
-from pathlib import Path
 import subprocess
 import sys
 import uuid
+from pathlib import Path
 from typing import Sequence
 
 from gauntlet_host.constants import (
@@ -20,6 +19,7 @@ from gauntlet_host.constants import (
     MODULE_CLI,
     OBSERVATION_BRIDGE,
     REPO_ROOT,
+    TOKEN_MEASUREMENT_BRIDGE,
     VENDOR_ROOT,
     WORKER_MAIN,
 )
@@ -84,6 +84,13 @@ def _worker_environment(profile: RuntimeProfile, request: RuntimeRequest) -> dic
     environment["GAUNTLET_REPO_ROOT"] = str(REPO_ROOT)
     environment["GAUNTLET_MODULE_CLI"] = str(MODULE_CLI)
     environment["GAUNTLET_OBSERVATION_BRIDGE"] = str(OBSERVATION_BRIDGE)
+    environment["GAUNTLET_TOKEN_MEASUREMENT_BRIDGE"] = str(TOKEN_MEASUREMENT_BRIDGE)
+    environment["GAUNTLET_TOKEN_MEASUREMENT_KEY"] = profile.token_measurement_key_path
+    environment["GAUNTLET_TOKEN_MEASUREMENT_KEY_ID"] = profile.token_measurement_key_id
+    environment["GAUNTLET_HOST_REQUEST_ID"] = request.request_id
+    source_commit, source_tree = _source_identity()
+    environment["GAUNTLET_SOURCE_COMMIT"] = source_commit
+    environment["GAUNTLET_SOURCE_TREE"] = source_tree
 
     for inherited_bypass in (
         "HERMES_YOLO_MODE",
@@ -92,6 +99,37 @@ def _worker_environment(profile: RuntimeProfile, request: RuntimeRequest) -> dic
     ):
         environment.pop(inherited_bypass, None)
     return environment
+
+
+def _source_identity() -> tuple[str, str]:
+    """Resolve the repository-bound running source without network access."""
+
+    values: list[str] = []
+    for revision in ("HEAD^{commit}", "HEAD^{tree}"):
+        try:
+            completed = subprocess.run(
+                ["git", "rev-parse", "--verify", revision],
+                cwd=REPO_ROOT,
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=5,
+                check=False,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            return "", ""
+        value = completed.stdout.strip().lower()
+        if completed.returncode != 0 or len(value) != 40:
+            return "", ""
+        try:
+            int(value, 16)
+        except ValueError:
+            return "", ""
+        values.append(value)
+    return values[0], values[1]
 
 
 def _parse_worker_output(
@@ -223,6 +261,7 @@ def run_worker_turn(
         WORKER_MAIN,
         MODULE_CLI,
         OBSERVATION_BRIDGE,
+        TOKEN_MEASUREMENT_BRIDGE,
     )
     if not VENDOR_ROOT.is_dir() or not all(path.is_file() for path in required_files):
         return _failure(
@@ -230,9 +269,7 @@ def run_worker_turn(
             status=WorkerStatus.ERROR,
             event="launcher.start_failed",
             code="WORKER_FILES_MISSING",
-            message=(
-                "vendored runtime, worker, module adapter, or observation bridge is missing"
-            ),
+            message=("vendored runtime, worker, module adapter, or observation bridge is missing"),
         )
 
     environment = _worker_environment(profile, request)

@@ -2,16 +2,16 @@
 
 from __future__ import annotations
 
-from contextlib import redirect_stdout
 import importlib
 import importlib.util
 import json
 import os
 import re
-from dataclasses import asdict, dataclass
-from pathlib import Path
 import sys
 import traceback
+from contextlib import redirect_stdout
+from dataclasses import asdict, dataclass
+from pathlib import Path
 from typing import Any, TextIO
 
 if __package__ in {None, ""}:
@@ -19,6 +19,7 @@ if __package__ in {None, ""}:
     if str(_repo_bootstrap) not in sys.path:
         sys.path.insert(0, str(_repo_bootstrap))
 
+from gauntlet_host.aux_measurement import auxiliary_measurement_scope
 from gauntlet_host.constants import (
     DEFAULT_AGENT_RUN_BUDGET_SECONDS,
     EXPECTED_HERMES_COMMIT,
@@ -48,6 +49,7 @@ from gauntlet_host.runtime_profile import (
     RuntimeProfileError,
     prepare_runtime_profile,
 )
+from gauntlet_host.token_measurement import summarize_measurements
 
 
 class WorkerBootstrapError(RuntimeError):
@@ -447,6 +449,7 @@ def _execute_agent_turn(
 
     agent = None
     session_db = None
+    auxiliary_scope = None
     try:
         run_budget = _run_budget(request)
         with redirect_stdout(sys.stderr):
@@ -462,6 +465,11 @@ def _execute_agent_turn(
                 requested=effective_provider,
                 target_model=effective_model,
             )
+            os.environ["GAUNTLET_REQUESTED_PROVIDER"] = str(
+                runtime.get("requested_provider") or effective_provider or ""
+            )
+            auxiliary_scope = auxiliary_measurement_scope()
+            auxiliary_scope.__enter__()
             session_db = SessionDB()
             agent = AIAgent(
                 api_key=runtime.get("api_key"),
@@ -484,7 +492,7 @@ def _execute_agent_turn(
             agent.suppress_status_output = True
             agent.stream_delta_callback = None
             agent.tool_gen_callback = None
-            result = agent.run_conversation(request.prompt)
+            result = agent.run_conversation(request.prompt, task_id=request.task_id)
 
         if not isinstance(result, dict):
             raise RuntimeExecutionError(
@@ -499,27 +507,31 @@ def _execute_agent_turn(
                 "upstream AIAgent did not produce a final response",
             )
 
+        usage_payload = _usage_payload(result)
+        token_measurement = summarize_measurements(
+            proof.runtime_home,
+            task_id=request.task_id,
+            request_id=request.request_id,
+            expected_api_calls=result.get("api_calls"),
+            provider_usage=usage_payload,
+        )
         safe_payload = proof.to_payload()
         safe_payload.update(
             {
                 "final_response": final_response,
                 "model": str(result.get("model") or effective_model),
                 "provider": str(
-                    result.get("provider")
-                    or runtime.get("provider")
-                    or effective_provider
-                    or ""
+                    result.get("provider") or runtime.get("provider") or effective_provider or ""
                 ),
                 "session_id": str(
-                    result.get("session_id")
-                    or getattr(agent, "session_id", "")
-                    or ""
+                    result.get("session_id") or getattr(agent, "session_id", "") or ""
                 ),
                 "completed": bool(result.get("completed", True)),
                 "failed": bool(result.get("failed", False)),
                 "partial": bool(result.get("partial", False)),
                 "requested_cwd": request.cwd,
-                "usage": _usage_payload(result),
+                "usage": usage_payload,
+                "token_measurement": token_measurement,
             }
         )
 
@@ -571,6 +583,8 @@ def _execute_agent_turn(
             payload=proof.to_payload(),
         )
     finally:
+        if auxiliary_scope is not None:
+            auxiliary_scope.__exit__(None, None, None)
         _cleanup_agent(agent, session_db)
 
 
