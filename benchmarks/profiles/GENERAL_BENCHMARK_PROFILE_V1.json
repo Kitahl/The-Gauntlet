@@ -1,0 +1,68 @@
+{
+  "schema": "foil-general-benchmark-profile/v1",
+  "created_before_new_suite_item_exposure": true,
+  "target": "GPT-5.6 Sol under FOIL across heterogeneous benchmark task families",
+  "source_evidence": [
+    {
+      "evaluation": "HLE public text-only pilot",
+      "observed": "BASE 1/6; FOIL_MM 2/6",
+      "interpretation": "expert exact-answer tasks remain difficult; use structure and verification but do not assume retrieval can replace missing expert reasoning"
+    },
+    {
+      "evaluation": "ARC-AGI-1 pilot",
+      "observed": "BASE 4/6; FOIL_MM 5/6",
+      "interpretation": "structured transformation and invariant checking appear comparatively promising"
+    },
+    {
+      "evaluation": "GPQA-Diamond pilot",
+      "observed": "BASE 9/12; FOIL_MM 9/12",
+      "interpretation": "technical multiple-choice reasoning is relatively strong, while additional audit overhead did not improve this sample"
+    },
+    {
+      "evaluation": "SimpleBench public pilot",
+      "observed": "BASE 3/5; FOIL 5/5",
+      "interpretation": "literal state tracking and resistance to distracting surface narratives may benefit from explicit state simulation"
+    },
+    {
+      "evaluation": "current-evidence retrieval holdout",
+      "observed": "BASE 0/5; FOIL 5/5",
+      "interpretation": "freshness-sensitive facts should be evidence-routed rather than answered from memory"
+    },
+    {
+      "evaluation": "BrowseComp four-condition exploratory pilot",
+      "observed": "BASE 1/2; FOIL 2/2; FOIL_PROFILE 1/2; FOIL_MM 0/2",
+      "interpretation": "sample is too small for component claims; one FOIL_PROFILE miss exhausted the search budget without a defensible candidate, motivating an explicit discovery-before-redundant-verification rule"
+    }
+  ],
+  "provisional_profile": {
+    "promising_strengths": [
+      "structured constraint reasoning",
+      "technical multiple-choice reasoning when required knowledge is internally available",
+      "explicit transformation and invariant checking"
+    ],
+    "possible_gaps": [
+      "exact identification of obscure entities or facts from memory",
+      "freshness-sensitive factual recall",
+      "premature commitment to a plausible narrative before checking all constraints",
+      "verification overhead consuming a fixed search budget before a viable candidate has been discovered"
+    ],
+    "routing_policy": [
+      "first classify the task as primarily external retrieval, closed-book technical reasoning, state or commonsense tracking, abstract transformation, or mixed-tool reasoning",
+      "preserve the exact output contract and every explicit constraint before solving",
+      "for external retrieval, spend early effort on high-information discovery queries and distinctive clue conjunctions; do not require redundant evidence paths before a viable candidate exists",
+      "once a viable retrieval candidate exists, verify only decisive constraints, search one plausible challenger when useful, and stop when evidence converges rather than spending budget mechanically",
+      "for freshness-sensitive questions, prefer current dated primary or near-primary evidence over model memory",
+      "for closed-book technical multiple-choice tasks, derive the answer from the stated constraints and compare alternatives explicitly; avoid unnecessary browsing when the benchmark regime is intended to measure internal reasoning",
+      "for state-tracking or trap-style tasks, simulate the literal physical, temporal, or logical state rather than following the surface arithmetic or narrative",
+      "for abstract transformation tasks, infer a candidate rule, test it against every provided example, preserve invariants, and verify exact output dimensions and values",
+      "for mixed-tool tasks, separate acquisition failures from reasoning failures and use tools only where they resolve a named uncertainty",
+      "never convert uncertainty into a fabricated citation or unsupported fact; when the benchmark forces a choice, commit the best-supported permitted answer and record confidence separately"
+    ]
+  },
+  "limits": [
+    "This is a provisional routing profile derived from prior exploratory pilots, not a validated psychometric profile.",
+    "It is frozen before any item from the new paired BrowseComp-40 or diverse-suite sample is generated or viewed.",
+    "The profile does not contain new-suite questions, answers, topic labels, or hidden benchmark information.",
+    "Past pilot effects are descriptive and small-sample; they are used only to define routing hypotheses for prospective testing."
+  ]
+}

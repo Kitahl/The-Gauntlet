@@ -30,6 +30,10 @@ jobs:
         run: python benchmarks/harness/browsecomp_prepare_score.py
       - name: Prepare blinded four-way BrowseComp questions; score committed predictions when present
         run: python benchmarks/harness/browsecomp_four_way_prepare_score.py
+      - name: Prepare fresh paired BrowseComp-40 questions; score only a complete isolated matrix
+        run: python benchmarks/harness/browsecomp_paired40_prepare_score.py
+      - name: Validate prospective ten-benchmark diversity suite
+        run: python benchmarks/harness/diverse_suite_validate.py
 
       # Offline. --check-only never downloads a dataset: it revalidates the
       # preregistration, the sealed condition map hash, and (once prepared) every
@@ -65,6 +69,17 @@ jobs:
           path: benchmark_runs/2026-08-22/browsecomp_four_way_questions.json
           if-no-files-found: error
 
+      # Intentionally do not upload browsecomp_paired40_questions.json. The
+      # selection seed and source are reproducible, while keeping the generated
+      # question text out of public CI artifacts avoids creating a new leakage
+      # surface for the prospective paired test.
+      - name: Upload prospective diversity plan (no benchmark question text)
+        uses: actions/upload-artifact@v4
+        with:
+          name: foil-diverse-suite-plan
+          path: benchmark_runs/2026-08-22/diverse_suite_plan.json
+          if-no-files-found: error
+
       - name: Upload HLE and ARC score receipt
         if: ${{ hashFiles('benchmark_runs/2026-08-22/benchmark_results.json') != '' }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -92,4 +107,11 @@ jobs:
         with:
           name: foil-browsecomp-four-way-results
           path: benchmark_runs/2026-08-22/browsecomp_four_way_results.json
+          if-no-files-found: error
+      - name: Upload paired BrowseComp-40 score receipt only after complete isolated execution
+        if: ${{ hashFiles('benchmark_runs/2026-08-22/browsecomp_paired40_results.json') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: foil-browsecomp-paired40-results
+          path: benchmark_runs/2026-08-22/browsecomp_paired40_results.json
           if-no-files-found: error

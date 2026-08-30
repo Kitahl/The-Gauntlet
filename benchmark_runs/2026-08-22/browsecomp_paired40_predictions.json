@@ -1,0 +1,26 @@
+{
+  "schema": "foil-browsecomp-paired40-predictions/v1",
+  "predictions": [
+    {
+      "id": "bcp40-00-c95be8bf",
+      "condition": "BASE",
+      "answer": "Madhumalti",
+      "trace": {
+        "isolation_session_id": "bcp40-00-BASE-3c4050d085e84447",
+        "sibling_outputs_visible": false,
+        "search_queries": 4,
+        "source_followups": 0,
+        "phase_allocation": {
+          "discovery": 1,
+          "candidate_testing": 1,
+          "verification": 1,
+          "disconfirmation": 0,
+          "final_audit": 1
+        },
+        "viable_candidate_before_verification": true,
+        "confidence": 0.99,
+        "failure_code": null
+      }
+    }
+  ]
+}
