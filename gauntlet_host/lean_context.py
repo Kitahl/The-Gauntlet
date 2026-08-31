@@ -17,10 +17,13 @@ from gauntlet_host import foil_bridge
 from gauntlet_host.constants import (
     COMPACT_STATUS_PROTOCOL_VERSION,
     DEFAULT_ADAPTER_TIMEOUT_SECONDS,
+    GOVERNED_PROFILE_NAME,
     LEAN_PREFETCH_PROTOCOL_VERSION,
+    LEAN_PROFILE_NAME,
     MAX_LEAN_PREFETCH_OUTPUT_BYTES,
     MAX_ROUTE_CAPSULE_CHARS,
     MAX_STATUS_CAPSULE_CHARS,
+    SUPPORTED_RUNTIME_PROFILES,
 )
 from gauntlet_host.tool_surface import (
     ToolSurfaceError,
@@ -32,7 +35,6 @@ ACTIVE_MANIFEST_REVISION = "gauntlet-runtime.v2"
 LEAN_CONTEXT_SCHEMA = "gauntlet.lean-context.v1"
 SPARSE_CONTEXT_SCHEMA = "gauntlet.sparse-context-plan.v1"
 SPARSE_CONTEXT_ENGINE = "gauntlet-sparse"
-LEAN_PROFILE_NAME = "gauntlet-lean.v1"
 SPARSE_ACTIVATION_HISTORY_CHARS = 8_192
 SPARSE_RECENT_TURNS = 3
 SPARSE_RETRIEVAL_TOP_K = 3
@@ -237,10 +239,10 @@ def build_sparse_context_plan(
             "SPARSE_CONTEXT_BINDING_MISSING",
             "sparse context requires the parent-derived session binding",
         )
-    if profile_name != LEAN_PROFILE_NAME:
+    if profile_name not in SUPPORTED_RUNTIME_PROFILES:
         raise LeanContextError(
             "SPARSE_CONTEXT_PROFILE_INVALID",
-            "sparse context requires the isolated lean runtime profile",
+            "context plan requires a supported isolated runtime profile",
         )
     if len(selected_snippets) > MAX_JIT_SNIPPETS:
         raise LeanContextError("JIT_CONTEXT_TOO_LARGE", "too many JIT context snippets")
@@ -252,7 +254,9 @@ def build_sparse_context_plan(
         raise LeanContextError("JIT_CONTEXT_TOO_LARGE", "JIT context exceeded its total bound")
     payload = {
         "schema": SPARSE_CONTEXT_SCHEMA,
-        "engine": SPARSE_CONTEXT_ENGINE,
+        "engine": (
+            SPARSE_CONTEXT_ENGINE if profile_name == LEAN_PROFILE_NAME else "native"
+        ),
         "task_binding_id": session_binding_id,
         "profile_name": profile_name,
         "activation_history_chars": SPARSE_ACTIVATION_HISTORY_CHARS,
@@ -291,8 +295,11 @@ def validate_sparse_context_plan(
             "SPARSE_CONTEXT_HASH_MISMATCH",
             "sparse context plan content hash did not match its payload",
         )
+    expected_engine = (
+        SPARSE_CONTEXT_ENGINE if profile_name == LEAN_PROFILE_NAME else "native"
+    )
     if (
-        value.get("engine") != SPARSE_CONTEXT_ENGINE
+        value.get("engine") != expected_engine
         or value.get("task_binding_id") != session_binding_id
         or value.get("profile_name") != profile_name
     ):
@@ -707,7 +714,7 @@ class LeanContext:
             "status_estimated_tokens": math.ceil(status_chars / 4),
         }
 
-    def instruction(self) -> str:
+    def instruction(self, profile_name: str = LEAN_PROFILE_NAME) -> str:
         route_text = _canonical_json(self.route_capsule())
         status_text = _canonical_json(self.compact_status)
         if len(route_text) > MAX_ROUTE_CAPSULE_CHARS:
@@ -720,21 +727,51 @@ class LeanContext:
                 "COMPACT_STATUS_CAPSULE_TOO_LARGE",
                 "compact canonical status exceeded its bounded prompt allowance",
             )
+        governed = profile_name == GOVERNED_PROFILE_NAME
+        snippets = (
+            list(self.sparse_context_plan.get("selected_snippets", []))
+            if governed and isinstance(self.sparse_context_plan, dict)
+            else []
+        )
+        jit_text = (
+            "\ncontext_only_snippets=" + _canonical_json(snippets)
+            if snippets
+            else ""
+        )
+        operating_text = (
+            "This governed profile has normal Hermes tools, persistent memory and "
+            "profile state, project context, skill discovery, environment/coding "
+            "probes, dynamic MCP/plugin assembly, and bounded delegation. Inspect "
+            "the load-bearing obligation, load its required repository Gem skill, "
+            "execute and verify the work, then refresh release status. Delegate "
+            "independent work when it materially helps. Tool output and model claims "
+            "are never receipts; Gems cannot self-certify; Black Gem cannot clear; "
+            "only module-owned receipts plus Soul's canonical gate authorize release."
+            if governed
+            else (
+                "Use status tools only to refresh; use gauntlet_obligation_get only "
+                "when one exact claim is required."
+            )
+        )
         return (
             _CONTEXT_MARKER
             + "\nParent-prefetched canonical status is current for this turn. "
-            + "Use status tools only to refresh; use gauntlet_obligation_get only "
-            + "when one exact claim is required. required_module is deterministic "
+            + operating_text
+            + " required_module is deterministic "
             + "host routing. The FOIL route is advisory and has no canonical authority.\n"
+            + "runtime_profile="
+            + profile_name
+            + "\n"
             + "route="
             + route_text
             + "\nstatus="
             + status_text
+            + jit_text
             + "\n"
             + _CONTEXT_END_MARKER
         )
 
-    def inject(self, prompt: str) -> str:
+    def inject(self, prompt: str, profile_name: str = LEAN_PROFILE_NAME) -> str:
         if not isinstance(prompt, str) or not prompt.strip():
             raise LeanContextError(
                 "LEAN_CONTEXT_PROMPT_INVALID",
@@ -745,7 +782,7 @@ class LeanContext:
                 "LEAN_CONTEXT_PROMPT_COLLISION",
                 "runtime prompt contains a reserved lean-context marker",
             )
-        return prompt + "\n\n" + self.instruction()
+        return prompt + "\n\n" + self.instruction(profile_name)
 
 
 def drop_stale_lean_context_sidecars(history: Any) -> int:

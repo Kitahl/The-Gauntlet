@@ -104,6 +104,13 @@ class NamespaceProof:
     task_completion_guidance_enabled: bool
     parallel_tool_call_guidance_enabled: bool
     coding_context_enabled: bool
+    context_files_enabled: bool
+    environment_probe_enabled: bool
+    verify_on_stop_enabled: bool
+    mcp_discovery_enabled: bool
+    delegation_enabled: bool
+    auto_release_enabled: bool
+    max_iterations: int
 
     def to_payload(self) -> dict[str, Any]:
         return asdict(self)
@@ -303,6 +310,13 @@ def bootstrap_vendor_runtime(profile: RuntimeProfile) -> NamespaceProof:
         task_completion_guidance_enabled=profile.task_completion_guidance_enabled,
         parallel_tool_call_guidance_enabled=(profile.parallel_tool_call_guidance_enabled),
         coding_context_enabled=profile.coding_context_enabled,
+        context_files_enabled=profile.context_files_enabled,
+        environment_probe_enabled=profile.environment_probe_enabled,
+        verify_on_stop_enabled=profile.verify_on_stop_enabled,
+        mcp_discovery_enabled=profile.mcp_discovery_enabled,
+        delegation_enabled=profile.delegation_enabled,
+        auto_release_enabled=profile.auto_release_enabled,
+        max_iterations=profile.max_iterations,
     )
 
 
@@ -471,6 +485,18 @@ def _execute_agent_turn(
         )
 
     os.environ["GAUNTLET_TASK_ID"] = request.task_id
+    if proof.context_files_enabled:
+        project_cwd = Path(request.cwd or "").expanduser().resolve(strict=False)
+        if not project_cwd.is_dir():
+            return _error_result(
+                request,
+                status=WorkerStatus.ERROR,
+                event="worker.request_rejected",
+                code="PROJECT_CWD_INVALID",
+                message="governed runtime requires an existing project working directory",
+                payload=proof.to_payload(),
+            )
+        os.chdir(project_cwd)
     for bypass in (
         "HERMES_YOLO_MODE",
         "HERMES_ACCEPT_HOOKS",
@@ -524,18 +550,18 @@ def _execute_agent_turn(
                 requested_provider=runtime.get("requested_provider"),
                 api_mode=runtime.get("api_mode"),
                 model=effective_model,
-                max_iterations=8,
+                max_iterations=proof.max_iterations,
                 enabled_toolsets=_toolsets(request),
                 quiet_mode=True,
                 tool_progress_mode="off",
-                platform="gauntlet",
+                platform="cli" if proof.coding_context_enabled else "gauntlet",
                 session_id=runtime_session_id,
                 session_db=session_db,
                 credential_pool=runtime.get("credential_pool"),
                 fallback_model=get_fallback_chain(config) or None,
-                skip_context_files=True,
-                skip_memory=True,
-                skip_background_review=True,
+                skip_context_files=not proof.context_files_enabled,
+                skip_memory=not (proof.memory_enabled or proof.user_profile_enabled),
+                skip_background_review=not proof.background_review_enabled,
                 run_budget_seconds=run_budget,
             )
             agent.suppress_status_output = True
@@ -586,6 +612,7 @@ def _execute_agent_turn(
                 "failed": bool(result.get("failed", False)),
                 "partial": bool(result.get("partial", False)),
                 "requested_cwd": request.cwd,
+                "runtime_cwd": os.getcwd(),
                 "usage": usage_payload,
                 "token_measurement": token_measurement,
             }
@@ -648,7 +675,7 @@ def handle_request(request: RuntimeRequest) -> RuntimeResult:
     """Handle one isolated import probe or one upstream AIAgent turn."""
 
     try:
-        profile = prepare_runtime_profile()
+        profile = prepare_runtime_profile(profile_name=request.runtime_profile)
         proof = bootstrap_vendor_runtime(profile)
     except RuntimeProfileError as exc:
         return _error_result(

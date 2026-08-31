@@ -15,6 +15,11 @@ from gauntlet_host.constants import (
     GAUNTLET_PLUGIN_ID,
     GAUNTLET_PLUGIN_SOURCE,
     GAUNTLET_TOOLSET,
+    GOVERNED_PROFILE_NAME,
+    HERMES_CLI_TOOLSET,
+    LEAN_PROFILE_NAME,
+    REPO_ROOT,
+    SUPPORTED_RUNTIME_PROFILES,
 )
 
 GAUNTLET_PLUGIN_MANIFEST = """\
@@ -61,6 +66,15 @@ class RuntimeProfile:
     task_completion_guidance_enabled: bool
     parallel_tool_call_guidance_enabled: bool
     coding_context_enabled: bool
+    context_files_enabled: bool
+    environment_probe_enabled: bool
+    verify_on_stop_enabled: bool
+    mcp_discovery_enabled: bool
+    delegation_enabled: bool
+    auto_release_enabled: bool
+    max_iterations: int
+    inherited_config_path: str | None
+    inherited_config_sha256: str | None
     gauntlet_plugin_enabled: bool
     plugin_path: str
     plugin_manifest_path: str
@@ -78,10 +92,33 @@ class RuntimeProfile:
         return asdict(self)
 
 
-def default_runtime_home() -> Path:
-    """Return the dedicated runtime home, never the user's normal Hermes home."""
+def normal_hermes_home() -> Path:
+    """Return the pinned Hermes platform-native default home."""
 
-    return Path.home().expanduser() / ".gauntlet" / "runtime"
+    if os.name == "nt":
+        roaming_root = os.environ.get("APPDATA", "").strip()
+        base = (
+            Path(roaming_root).parent / "Local"
+            if roaming_root
+            else Path.home() / ("App" + "Data") / "Local"
+        )
+        return base.expanduser() / "hermes"
+    return Path.home().expanduser() / ".hermes"
+
+
+def default_runtime_home(profile_name: str = LEAN_PROFILE_NAME) -> Path:
+    """Return a dedicated persistent home for one supported profile."""
+
+    if profile_name == LEAN_PROFILE_NAME:
+        return Path.home().expanduser() / ".gauntlet" / "runtime"
+    if profile_name == GOVERNED_PROFILE_NAME:
+        # A real Hermes named-profile layout preserves read-only fallback to the
+        # normal auth store while isolating sessions, memory, skills, and writes.
+        return normal_hermes_home() / "profiles" / "gauntlet-governed"
+    raise RuntimeProfileError(
+        "RUNTIME_PROFILE_UNSUPPORTED",
+        "runtime profile must be one of: " + ", ".join(SUPPORTED_RUNTIME_PROFILES),
+    )
 
 
 def _secure_directory(path: Path) -> None:
@@ -220,6 +257,73 @@ def _apply_alpha_policy(config: dict[str, Any]) -> None:
     plugins["disabled"] = [plugin_id for plugin_id in disabled if plugin_id != GAUNTLET_PLUGIN_ID]
 
 
+def _apply_governed_policy(config: dict[str, Any]) -> None:
+    """Apply full native Hermes capability with Gauntlet-owned release control."""
+
+    config["toolsets"] = [HERMES_CLI_TOOLSET, GAUNTLET_TOOLSET]
+
+    context = _mapping(config, "context")
+    context["engine"] = "compressor"
+
+    auxiliary = _mapping(config, "auxiliary")
+    auxiliary["free_only"] = True
+    background_review = _mapping(auxiliary, "background_review")
+    background_review["enabled"] = True
+    background_review["max_input_tokens"] = 60_000
+    # Preserve the proven no-title-call saving without reducing task capability.
+    title_generation = _mapping(auxiliary, "title_generation")
+    title_generation["enabled"] = False
+
+    agent = _mapping(config, "agent")
+    agent["tool_use_enforcement"] = "auto"
+    agent["execution_guidance"] = "auto"
+    agent["intent_ack_continuation"] = True
+    agent["stall_guards"] = True
+    agent["task_completion_guidance"] = True
+    agent["parallel_tool_call_guidance"] = True
+    agent["environment_probe"] = True
+    agent["coding_context"] = "auto"
+    agent["verify_on_stop"] = True
+
+    memory = _mapping(config, "memory")
+    memory["memory_enabled"] = True
+    memory["user_profile_enabled"] = True
+    memory["write_approval"] = True
+
+    skills = _mapping(config, "skills")
+    external = skills.get("external_dirs", [])
+    if not isinstance(external, list) or not all(isinstance(item, str) for item in external):
+        raise RuntimeProfileError(
+            "RUNTIME_CONFIG_INVALID",
+            "Gauntlet runtime config field skills.external_dirs must be a string array",
+        )
+    skill_root = str((REPO_ROOT / "skills").resolve(strict=False))
+    skills["external_dirs"] = list(
+        dict.fromkeys([*(item.strip() for item in external if item.strip()), skill_root])
+    )
+    skills["project_discovery"] = True
+    trusted = skills.get("trusted_project_dirs", [])
+    if not isinstance(trusted, list) or not all(isinstance(item, str) for item in trusted):
+        raise RuntimeProfileError(
+            "RUNTIME_CONFIG_INVALID",
+            "Gauntlet runtime config field skills.trusted_project_dirs must be a string array",
+        )
+    skills["trusted_project_dirs"] = list(
+        dict.fromkeys(
+            [*(item.strip() for item in trusted if item.strip()), str(REPO_ROOT.resolve())]
+        )
+    )
+    skills["write_approval"] = True
+
+    plugins = _mapping(config, "plugins")
+    enabled = _string_list(plugins, "enabled")
+    if GAUNTLET_PLUGIN_ID not in enabled:
+        enabled.append(GAUNTLET_PLUGIN_ID)
+    plugins["enabled"] = enabled
+    disabled = _string_list(plugins, "disabled")
+    plugins["disabled"] = [plugin_id for plugin_id in disabled if plugin_id != GAUNTLET_PLUGIN_ID]
+
+
 def _render_config(config: dict[str, Any]) -> str:
     yaml = _load_yaml_module()
     if yaml is None:
@@ -344,12 +448,22 @@ def _materialize_gauntlet_plugin(home: Path) -> tuple[Path, Path, str]:
     return plugin_path, manifest_path, digest
 
 
-def prepare_runtime_profile(runtime_home: Path | None = None) -> RuntimeProfile:
-    """Create isolated runtime state, plugin files, and alpha policy."""
+def prepare_runtime_profile(
+    runtime_home: Path | None = None,
+    *,
+    profile_name: str = LEAN_PROFILE_NAME,
+    base_config_path: Path | None = None,
+) -> RuntimeProfile:
+    """Create isolated runtime state, plugin files, and the selected policy."""
 
-    home = (runtime_home or default_runtime_home()).expanduser().resolve(strict=False)
-    normal_hermes_home = (Path.home().expanduser() / ".hermes").resolve(strict=False)
-    if home == normal_hermes_home:
+    if profile_name not in SUPPORTED_RUNTIME_PROFILES:
+        raise RuntimeProfileError(
+            "RUNTIME_PROFILE_UNSUPPORTED",
+            "runtime profile must be one of: " + ", ".join(SUPPORTED_RUNTIME_PROFILES),
+        )
+    home = (runtime_home or default_runtime_home(profile_name)).expanduser().resolve(strict=False)
+    normal_home = normal_hermes_home().resolve(strict=False)
+    if home == normal_home:
         raise RuntimeProfileError(
             "RUNTIME_HOME_COLLISION",
             "Gauntlet runtime home must not be the user's normal Hermes home",
@@ -389,8 +503,23 @@ def prepare_runtime_profile(runtime_home: Path | None = None) -> RuntimeProfile:
     )
 
     config_path = home / "config.yaml"
-    config = _read_config(config_path)
-    _apply_alpha_policy(config)
+    inherited_path: Path | None = None
+    inherited_digest: str | None = None
+    if profile_name == GOVERNED_PROFILE_NAME:
+        inherited_path = (base_config_path or (normal_home / "config.yaml")).expanduser()
+        config = _read_config(inherited_path)
+        if inherited_path.is_file():
+            try:
+                inherited_digest = hashlib.sha256(inherited_path.read_bytes()).hexdigest()
+            except OSError as exc:
+                raise RuntimeProfileError(
+                    "RUNTIME_CONFIG_UNREADABLE",
+                    f"cannot hash inherited Hermes runtime config: {exc}",
+                ) from exc
+        _apply_governed_policy(config)
+    else:
+        config = _read_config(config_path)
+        _apply_alpha_policy(config)
     rendered = _render_config(config)
     _write_if_changed(config_path, rendered)
 
@@ -400,20 +529,31 @@ def prepare_runtime_profile(runtime_home: Path | None = None) -> RuntimeProfile:
     return RuntimeProfile(
         runtime_home=str(home),
         config_path=str(config_path),
-        profile_name="gauntlet-lean.v1",
-        context_engine_name="gauntlet-sparse",
+        profile_name=profile_name,
+        context_engine_name=(
+            "gauntlet-sparse" if profile_name == LEAN_PROFILE_NAME else "compressor"
+        ),
         config_sha256=config_digest,
-        background_review_enabled=False,
+        background_review_enabled=profile_name == GOVERNED_PROFILE_NAME,
         automatic_title_generation_enabled=False,
         memory_write_approval=True,
-        memory_enabled=False,
-        user_profile_enabled=False,
+        memory_enabled=profile_name == GOVERNED_PROFILE_NAME,
+        user_profile_enabled=profile_name == GOVERNED_PROFILE_NAME,
         skills_write_approval=True,
-        skills_project_discovery=False,
-        execution_guidance_enabled=False,
-        task_completion_guidance_enabled=False,
+        skills_project_discovery=profile_name == GOVERNED_PROFILE_NAME,
+        execution_guidance_enabled=profile_name == GOVERNED_PROFILE_NAME,
+        task_completion_guidance_enabled=profile_name == GOVERNED_PROFILE_NAME,
         parallel_tool_call_guidance_enabled=True,
-        coding_context_enabled=False,
+        coding_context_enabled=profile_name == GOVERNED_PROFILE_NAME,
+        context_files_enabled=profile_name == GOVERNED_PROFILE_NAME,
+        environment_probe_enabled=profile_name == GOVERNED_PROFILE_NAME,
+        verify_on_stop_enabled=profile_name == GOVERNED_PROFILE_NAME,
+        mcp_discovery_enabled=profile_name == GOVERNED_PROFILE_NAME,
+        delegation_enabled=profile_name == GOVERNED_PROFILE_NAME,
+        auto_release_enabled=False,
+        max_iterations=64 if profile_name == GOVERNED_PROFILE_NAME else 8,
+        inherited_config_path=str(inherited_path) if inherited_path is not None else None,
+        inherited_config_sha256=inherited_digest,
         gauntlet_plugin_enabled=True,
         plugin_path=str(plugin_path),
         plugin_manifest_path=str(manifest_path),

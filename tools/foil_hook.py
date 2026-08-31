@@ -86,6 +86,8 @@ def session() -> int:
 def prompt() -> int:
     data = _input()
     text = str(data.get("prompt") or "")
+    task_id_value = data.get("task_id")
+    task_id = task_id_value if isinstance(task_id_value, str) and task_id_value else None
     try:
         profile = bootstrap_active()
     except Exception:  # noqa: BLE001 - see the module docstring: never break the prompt
@@ -111,7 +113,13 @@ def prompt() -> int:
         except Exception:  # noqa: BLE001 - alias detection is best-effort, default to non-explicit
             foil_alias = False
         typed_receipts = record_prompt_adaptation(
-            project_root(), profile, domains, facets, prompt_text=text, foil_alias=foil_alias,
+            project_root(),
+            profile,
+            domains,
+            facets,
+            prompt_text=text,
+            foil_alias=foil_alias,
+            task_id=task_id,
         )
         typed_status = f"receipts={len(typed_receipts)}"
     except Exception as exc:  # noqa: BLE001 - availability signal, never a factual judgment

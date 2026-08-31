@@ -9,7 +9,9 @@ from typing import Any, TextIO
 
 from gauntlet_host.constants import (
     HOST_PROTOCOL_VERSION,
+    LEAN_PROFILE_NAME,
     MAX_JSONL_BYTES,
+    SUPPORTED_RUNTIME_PROFILES,
     WORKER_REQUEST_TYPE,
     WORKER_RESULT_TYPE,
 )
@@ -37,6 +39,7 @@ class RuntimeRequest:
     request_id: str
     task_id: str
     operation: WorkerOperation
+    runtime_profile: str = LEAN_PROFILE_NAME
     session_id: str | None = None
     prompt: str = ""
     cwd: str | None = None
@@ -180,6 +183,7 @@ def encode_request(request: RuntimeRequest) -> str:
         "request_id": request.request_id,
         "task_id": request.task_id,
         "operation": request.operation.value,
+        "runtime_profile": request.runtime_profile,
         "prompt": request.prompt,
         "toolsets": list(request.toolsets),
         "metadata": request.metadata,
@@ -205,6 +209,7 @@ def decode_request(line: str) -> RuntimeRequest:
         "request_id",
         "task_id",
         "operation",
+        "runtime_profile",
         "session_id",
         "prompt",
         "cwd",
@@ -243,6 +248,16 @@ def decode_request(line: str) -> RuntimeRequest:
             f"operation must be one of: {allowed}",
         ) from exc
 
+    runtime_profile = _require_string(
+        value.get("runtime_profile", LEAN_PROFILE_NAME),
+        field_name="runtime_profile",
+    )
+    if runtime_profile not in SUPPORTED_RUNTIME_PROFILES:
+        raise IPCContractError(
+            "UNSUPPORTED_RUNTIME_PROFILE",
+            "runtime_profile must be one of: " + ", ".join(SUPPORTED_RUNTIME_PROFILES),
+        )
+
     prompt = _require_string(
         value.get("prompt", ""),
         field_name="prompt",
@@ -260,6 +275,7 @@ def decode_request(line: str) -> RuntimeRequest:
         request_id=request_id,
         task_id=task_id,
         operation=operation,
+        runtime_profile=runtime_profile,
         session_id=_optional_string(
             value.get("session_id"),
             field_name="session_id",

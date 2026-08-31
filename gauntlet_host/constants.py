@@ -31,6 +31,10 @@ DEFAULT_OBSERVATION_TIMEOUT_SECONDS = 10.0
 
 GAUNTLET_PLUGIN_ID = "gauntlet"
 GAUNTLET_TOOLSET = "gauntlet"
+HERMES_CLI_TOOLSET = "hermes-cli"
+LEAN_PROFILE_NAME = "gauntlet-lean.v1"
+GOVERNED_PROFILE_NAME = "gauntlet-governed.v1"
+SUPPORTED_RUNTIME_PROFILES = (LEAN_PROFILE_NAME, GOVERNED_PROFILE_NAME)
 GAUNTLET_STATUS_TOOLS = (
     "gauntlet_task_status_compact",
     "gauntlet_obligation_get",

@@ -3,16 +3,18 @@
 from __future__ import annotations
 
 import argparse
-from dataclasses import dataclass
 import json
 import os
-from pathlib import Path
 import subprocess
 import sys
+from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Sequence
 
 from gauntlet_host.constants import (
     DEFAULT_LAUNCH_TIMEOUT_SECONDS,
+    GOVERNED_PROFILE_NAME,
+    LEAN_PROFILE_NAME,
     MODULE_CLI,
     REPO_ROOT,
     VENDOR_ROOT,
@@ -274,6 +276,7 @@ def _run_bound_turn(
     model: str | None,
     provider: str | None,
     toolsets: Sequence[str],
+    runtime_profile: str,
     timeout: float,
 ) -> FinalizationResult:
     return run_gauntlet_turn(
@@ -283,6 +286,7 @@ def _run_bound_turn(
         model=model,
         provider=provider,
         toolsets=toolsets,
+        runtime_profile=runtime_profile,
         timeout_seconds=timeout,
     )
 
@@ -336,6 +340,12 @@ def _add_common_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--model")
     parser.add_argument("--provider")
     parser.add_argument("--toolset", action="append", default=[])
+    parser.add_argument(
+        "--profile",
+        choices=("governed", "lean"),
+        default="lean",
+        help="governed restores full Hermes capabilities; lean is the compatibility default",
+    )
     parser.add_argument(
         "--timeout",
         type=float,
@@ -405,6 +415,9 @@ def _run_command(argv: Sequence[str]) -> int:
             model=args.model,
             provider=args.provider,
             toolsets=args.toolset,
+            runtime_profile=(
+                GOVERNED_PROFILE_NAME if args.profile == "governed" else LEAN_PROFILE_NAME
+            ),
             timeout=args.timeout,
         )
     except CliError as exc:
@@ -459,6 +472,11 @@ def _chat_command(argv: Sequence[str]) -> int:
                 model=args.model,
                 provider=args.provider,
                 toolsets=args.toolset,
+                runtime_profile=(
+                    GOVERNED_PROFILE_NAME
+                    if args.profile == "governed"
+                    else LEAN_PROFILE_NAME
+                ),
                 timeout=args.timeout,
             )
         except CliError as exc:

@@ -1,5 +1,10 @@
 # Hermes Token-Efficiency Retrofit Handoff
 
+> Follow-on capability work is documented separately in
+> [`HERMES_GOVERNED_RUNTIME_HANDOFF_2026-08-30.md`](HERMES_GOVERNED_RUNTIME_HANDOFF_2026-08-30.md).
+> It adds an opt-in full-Hermes governed profile without changing this handoff's
+> frozen lean measurements or TOKEN-700 disposition.
+
 **Branch:** `work/hermes-token-lean`
 **Starting handoff:** `6a50046b23e4f4cef6667b80d2e700e7167d14ac`
 **Pinned Hermes:** `5fc308a70719a83cccdbba4c0e39c23f5a8239d5` (`v2026.8.27`)

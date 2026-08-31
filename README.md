@@ -122,6 +122,17 @@ Version 0.2.0 introduced the portable runtime. Version 0.3.0 added adaptive real
 
 Runtime state is written under gitignored `.egrt/state/`, not `.git/`. Model credentials are environment-only. No private workstation path or project-specific keystore is required.
 
+### Governed Hermes profile
+
+The vendored Hermes host now provides an explicit full-capability profile in addition to the frozen token-lean profile:
+
+~~~powershell
+python -m gauntlet_host.cli run --profile governed --root . "your task"
+python -m gauntlet_host.cli chat --profile governed --root .
+~~~
+
+Governed mode restores persistent memory/profile state, project context and skills, coding/environment probes, normal Hermes tools, bounded MCP discovery, and delegation while retaining task/session isolation, module-owned receipts, Black Gem's no-clear rule, and Soul's release gate. The safer compatibility default is `--profile lean`; canonical task release is always an explicit operator action. See [`docs/engineering/HERMES_GOVERNED_RUNTIME_HANDOFF_2026-08-30.md`](docs/engineering/HERMES_GOVERNED_RUNTIME_HANDOFF_2026-08-30.md).
+
 ## Mirror profiles and multi-stage calibration
 
 Mirror contains no built-in profile for any individual. A first hooked session creates a **blank local `default` profile** when needed; named profiles support multiple users on one installation. The implementation retains the `foil` technical ID and existing FOIL-named paths for compatibility.

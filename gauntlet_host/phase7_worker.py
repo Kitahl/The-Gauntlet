@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import sys
 from contextlib import redirect_stdout
 from dataclasses import replace
@@ -14,7 +15,11 @@ if __package__ in {None, ""}:
         sys.path.insert(0, str(_repo_bootstrap))
 
 from gauntlet_host import worker_main as core
-from gauntlet_host.constants import GAUNTLET_TOOLSET
+from gauntlet_host.constants import (
+    GAUNTLET_ACTIVE_TOOLS,
+    GAUNTLET_TOOLSET,
+    GOVERNED_PROFILE_NAME,
+)
 from gauntlet_host.ipc import RuntimeRequest, RuntimeResult
 from gauntlet_host.lean_context import LeanContext, LeanContextError
 from gauntlet_host.tool_results import (
@@ -31,10 +36,21 @@ from gauntlet_host.tool_surface import (
 _ORIGINAL_EXECUTE = core._execute_agent_turn
 
 
+def _tool_definition_names(definitions: Any) -> tuple[str, ...]:
+    names: list[str] = []
+    for definition in definitions if isinstance(definitions, list) else []:
+        function = definition.get("function") if isinstance(definition, dict) else None
+        name = function.get("name") if isinstance(function, dict) else None
+        if isinstance(name, str) and name and name not in names:
+            names.append(name)
+    return tuple(names)
+
+
 def _execute_with_foil_route(
     request: RuntimeRequest,
     proof: Any,
 ) -> RuntimeResult:
+    governed = proof.runtime_profile_name == GOVERNED_PROFILE_NAME
     try:
         lean_context = LeanContext.from_metadata(
             request.task_id,
@@ -72,20 +88,52 @@ def _execute_with_foil_route(
     try:
         with redirect_stdout(sys.stderr):
             from agent import tool_executor
+            if governed:
+                from hermes_cli.mcp_startup import ensure_mcp_discovery_before_agent_build
+
+                ensure_mcp_discovery_before_agent_build(
+                    logger=logging.getLogger("gauntlet.governed.mcp"),
+                    timeout=10.0,
+                    single_query=True,
+                    thread_name="gauntlet-governed-mcp-discovery",
+                )
             from model_tools import get_tool_definitions
             from run_agent import AIAgent
 
             live_definitions = get_tool_definitions(
-                enabled_toolsets=[GAUNTLET_TOOLSET],
+                enabled_toolsets=(
+                    list(request.toolsets) if governed else [GAUNTLET_TOOLSET]
+                ),
                 quiet_mode=True,
-                skip_tool_search_assembly=True,
+                skip_tool_search_assembly=not governed,
             )
-            compiled_surface = compile_live_tool_surface(
-                lean_context.tool_surface_plan,
-                live_definitions,
-                requested_toolsets=request.toolsets,
-            )
-            install_compiled_toolset(compiled_surface)
+            live_names = _tool_definition_names(live_definitions)
+            if governed:
+                missing = sorted(set(GAUNTLET_ACTIVE_TOOLS) - set(live_names))
+                if missing:
+                    raise ToolSurfaceError(
+                        "GOVERNED_GAUNTLET_TOOLS_MISSING",
+                        "governed Hermes surface omitted required Gauntlet tools: "
+                        + ", ".join(missing),
+                    )
+                compiled_surface = None
+                governed_surface = {
+                    "profile": GOVERNED_PROFILE_NAME,
+                    "mode": "native-dynamic",
+                    "tool_count": len(live_names),
+                    "required_gauntlet_tools": list(GAUNTLET_ACTIVE_TOOLS),
+                    "gauntlet_tools_verified": True,
+                    "dynamic_mcp_assembly_enabled": True,
+                    "requested_toolsets": list(request.toolsets),
+                }
+            else:
+                compiled_surface = compile_live_tool_surface(
+                    lean_context.tool_surface_plan,
+                    live_definitions,
+                    requested_toolsets=request.toolsets,
+                )
+                install_compiled_toolset(compiled_surface)
+                governed_surface = None
     except ToolSurfaceError as exc:
         return core._error_result(
             request,
@@ -105,7 +153,8 @@ def _execute_with_foil_route(
             payload=proof.to_payload(),
         )
 
-    request = replace(request, toolsets=(compiled_surface.toolset_name,))
+    if compiled_surface is not None:
+        request = replace(request, toolsets=(compiled_surface.toolset_name,))
     original_run_conversation = AIAgent.run_conversation
     original_result_persistence = tool_executor.maybe_persist_tool_result
 
@@ -156,16 +205,17 @@ def _execute_with_foil_route(
             return original_run_conversation(agent, prompt, *args, **kwargs)
 
         try:
-            routed_prompt = lean_context.inject(prompt)
+            routed_prompt = lean_context.inject(prompt, proof.runtime_profile_name)
             engine = getattr(agent, "context_compressor", None)
-            if getattr(engine, "name", None) != proof.context_engine_name or not callable(
-                getattr(engine, "configure_gauntlet_context", None)
-            ):
-                raise core.RuntimeExecutionError(
-                    "SPARSE_CONTEXT_ENGINE_UNAVAILABLE",
-                    "AIAgent did not activate the isolated Gauntlet sparse context engine",
-                )
-            engine.configure_gauntlet_context(lean_context.sparse_context_plan)
+            if not governed:
+                if getattr(engine, "name", None) != proof.context_engine_name or not callable(
+                    getattr(engine, "configure_gauntlet_context", None)
+                ):
+                    raise core.RuntimeExecutionError(
+                        "SPARSE_CONTEXT_ENGINE_UNAVAILABLE",
+                        "AIAgent did not activate the isolated Gauntlet sparse context engine",
+                    )
+                engine.configure_gauntlet_context(lean_context.sparse_context_plan)
         except LeanContextError as exc:
             raise core.RuntimeExecutionError(exc.code, exc.message) from exc
         except ValueError as exc:
@@ -186,7 +236,8 @@ def _execute_with_foil_route(
         )
 
     AIAgent.run_conversation = routed_run_conversation
-    tool_executor.maybe_persist_tool_result = managed_result_persistence
+    if not governed:
+        tool_executor.maybe_persist_tool_result = managed_result_persistence
     try:
         result = _ORIGINAL_EXECUTE(request, proof)
     finally:
@@ -231,18 +282,31 @@ def _execute_with_foil_route(
             "clean_user_message_persisted": True,
             "extra_model_calls": 0,
         }
-        payload["tool_surface"] = compiled_surface.to_payload()
+        payload["tool_surface"] = (
+            governed_surface
+            if governed_surface is not None
+            else compiled_surface.to_payload()
+        )
         engine = route_state.get("context_engine")
         selection = getattr(engine, "last_selection", None)
         payload["sparse_context"] = (
-            dict(selection)
-            if isinstance(selection, dict)
-            else {
+            {
                 "engine": proof.context_engine_name,
                 "activated": False,
-                "reason": "selection_metrics_unavailable",
+                "reason": "governed_profile_uses_native_context_engine",
                 "persisted_transcript_mutated": False,
             }
+            if governed
+            else (
+                dict(selection)
+                if isinstance(selection, dict)
+                else {
+                    "engine": proof.context_engine_name,
+                    "activated": False,
+                    "reason": "selection_metrics_unavailable",
+                    "persisted_transcript_mutated": False,
+                }
+            )
         )
         payload["jit_context"] = {
             "selected_snippet_count": len(
@@ -253,14 +317,19 @@ def _execute_with_foil_route(
             "authority": "CONTEXT_ONLY",
             "persisted": False,
         }
-        payload["tool_result_lifecycle"] = artifact_store.metrics() | {
-            "rehydration_tool": ARTIFACT_TOOL_NAME,
-            "first_visibility": (
-                engine.tool_result_lifecycle_metrics()
-                if callable(getattr(engine, "tool_result_lifecycle_metrics", None))
-                else {"available": False}
-            ),
-        }
+        payload["tool_result_lifecycle"] = (
+            {"mode": "native-hermes", "gauntlet_externalization_active": False}
+            if governed
+            else artifact_store.metrics()
+            | {
+                "rehydration_tool": ARTIFACT_TOOL_NAME,
+                "first_visibility": (
+                    engine.tool_result_lifecycle_metrics()
+                    if callable(getattr(engine, "tool_result_lifecycle_metrics", None))
+                    else {"available": False}
+                ),
+            }
+        )
         result = replace(result, payload=payload)
     return result
 

@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 import os
 import subprocess
 import sys
@@ -16,6 +18,9 @@ from gauntlet_host.constants import (
     DEFAULT_AGENT_RUN_BUDGET_SECONDS,
     DEFAULT_LAUNCH_TIMEOUT_SECONDS,
     GAUNTLET_TOOLSET,
+    GOVERNED_PROFILE_NAME,
+    HERMES_CLI_TOOLSET,
+    LEAN_PROFILE_NAME,
     MAX_AGENT_RUN_BUDGET_SECONDS,
     MAX_LAUNCH_TIMEOUT_SECONDS,
     MODULE_CLI,
@@ -220,8 +225,66 @@ def _parse_worker_output(
     return result
 
 
-def _effective_toolsets(toolsets: Sequence[str]) -> tuple[str, ...]:
-    return tuple(dict.fromkeys((*toolsets, GAUNTLET_TOOLSET)))
+def _profile_toolsets(
+    toolsets: Sequence[str],
+    runtime_profile: str,
+) -> tuple[str, ...]:
+    defaults = (
+        (HERMES_CLI_TOOLSET, GAUNTLET_TOOLSET)
+        if runtime_profile == GOVERNED_PROFILE_NAME
+        else (GAUNTLET_TOOLSET,)
+    )
+    return tuple(dict.fromkeys((*defaults, *toolsets)))
+
+
+def _foil_profile_snippet(
+    prompt: str,
+    *,
+    task_id: str,
+    root: Path,
+    timeout_seconds: float,
+) -> dict[str, str] | None:
+    """Apply persistent FOIL relevance and return bounded context-only output."""
+
+    hook = root / "tools" / "foil_hook.py"
+    if not hook.is_file():
+        return None
+    environment = dict(os.environ)
+    environment["EGR_PROJECT_DIR"] = str(root)
+    environment["GAUNTLET_TASK_ID"] = task_id
+    environment["PYTHONUNBUFFERED"] = "1"
+    try:
+        completed = subprocess.run(
+            [sys.executable, str(hook), "prompt"],
+            input=json.dumps(
+                {"prompt": prompt, "task_id": task_id},
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ),
+            cwd=root,
+            env=environment,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=min(10.0, max(1.0, timeout_seconds)),
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    content = completed.stdout.strip()
+    if completed.returncode != 0 or not content or len(content) > 4_000:
+        return None
+    digest = hashlib.sha256(content.encode("utf-8")).hexdigest()
+    return {
+        "snippet_id": f"foil-profile-{digest[:16]}",
+        "kind": "profile",
+        "provenance": "tools/foil_hook.py:prompt",
+        "source_hash": digest,
+        "content": content,
+        "authority": "CONTEXT_ONLY",
+    }
 
 
 def run_worker_turn(
@@ -233,6 +296,7 @@ def run_worker_turn(
     provider: str | None = None,
     toolsets: Sequence[str] = (),
     jit_context: Sequence[dict[str, Any]] = (),
+    runtime_profile: str = LEAN_PROFILE_NAME,
     timeout_seconds: float = DEFAULT_LAUNCH_TIMEOUT_SECONDS,
 ) -> RuntimeResult:
     """Run one upstream AIAgent turn through the isolated JSONL worker."""
@@ -245,7 +309,8 @@ def run_worker_turn(
         cwd=str(Path(cwd or Path.cwd()).expanduser().resolve(strict=False)),
         model=model,
         provider=provider,
-        toolsets=_effective_toolsets(toolsets),
+        toolsets=_profile_toolsets(toolsets, runtime_profile),
+        runtime_profile=runtime_profile,
         metadata={},
     )
 
@@ -263,7 +328,7 @@ def run_worker_turn(
     deadline = time.monotonic() + timeout
 
     try:
-        profile = prepare_runtime_profile()
+        profile = prepare_runtime_profile(profile_name=runtime_profile)
     except RuntimeProfileError as exc:
         return _failure(
             request,
@@ -336,10 +401,20 @@ def run_worker_turn(
                     message=exc.message,
                 )
             try:
+                selected_context = list(jit_context)
+                if profile.profile_name == GOVERNED_PROFILE_NAME:
+                    foil_profile = _foil_profile_snippet(
+                        prompt,
+                        task_id=request.task_id,
+                        root=Path(request.cwd or REPO_ROOT),
+                        timeout_seconds=max(1.0, remaining - 5.0),
+                    )
+                    if foil_profile is not None:
+                        selected_context.append(foil_profile)
                 request.metadata["lean_context"] = lean_context.to_metadata(
                     session_binding_id=request.session_id or "",
                     profile_name=profile.profile_name,
-                    selected_snippets=jit_context,
+                    selected_snippets=selected_context,
                 )
             except LeanContextError as exc:
                 return _failure(
@@ -420,6 +495,7 @@ def run_gauntlet_turn(
     model: str | None = None,
     provider: str | None = None,
     toolsets: Sequence[str] = (),
+    runtime_profile: str = LEAN_PROFILE_NAME,
     timeout_seconds: float = DEFAULT_LAUNCH_TIMEOUT_SECONDS,
 ) -> FinalizationResult:
     """Run one worker turn and apply the existing Soul release gate."""
@@ -432,6 +508,7 @@ def run_gauntlet_turn(
         model=model,
         provider=provider,
         toolsets=toolsets,
+        runtime_profile=runtime_profile,
         timeout_seconds=timeout_seconds,
     )
     return finalize_worker_result(resolved_root, task_id, worker_result)
@@ -448,6 +525,12 @@ def _argument_parser() -> argparse.ArgumentParser:
     parser.add_argument("--model")
     parser.add_argument("--provider")
     parser.add_argument("--toolset", action="append", default=[])
+    parser.add_argument(
+        "--profile",
+        choices=("governed", "lean"),
+        default="lean",
+        help="governed restores full Hermes capabilities; lean is the compatibility default",
+    )
     parser.add_argument(
         "--timeout",
         type=float,
@@ -472,6 +555,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         model=args.model,
         provider=args.provider,
         toolsets=args.toolset,
+        runtime_profile=(
+            GOVERNED_PROFILE_NAME if args.profile == "governed" else LEAN_PROFILE_NAME
+        ),
         timeout_seconds=args.timeout,
     )
 

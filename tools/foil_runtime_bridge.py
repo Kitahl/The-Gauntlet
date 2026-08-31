@@ -108,6 +108,7 @@ def record_prompt_adaptation(
     *,
     prompt_text: str = "",
     foil_alias: bool = False,
+    task_id: str | None = None,
 ) -> list[Receipt]:
     """Record that FOIL applied prompt-time relevance routing metadata.
 
@@ -116,9 +117,22 @@ def record_prompt_adaptation(
     alias. Otherwise the routing metadata is still recorded, but the obligation stays
     UNKNOWN so an ambient prompt cannot silently satisfy a load-bearing obligation.
     `prompt_text` is used transiently for that membership check and never persisted.
+    When a trusted host supplies `task_id`, it is validated directly instead of
+    consulting the process-global active-task pointer. This prevents concurrent
+    task sessions from attributing adaptation events or receipts to one another.
     """
     store = RuntimeStore(root)
-    task_id = _active_task(store)
+    if task_id is None:
+        task_id = _active_task(store)
+    else:
+        task = store.read_task(task_id)
+        if (
+            not isinstance(task, dict)
+            or task.get("task_id") != task_id
+            or task.get("active") is not True
+            or task.get("released") is True
+        ):
+            raise ValueError("explicit FOIL task binding is missing, inactive, or released")
     low = (prompt_text or "").lower()
     summary = _profile_summary(profile)
     routing = {
