@@ -131,7 +131,14 @@ python -m gauntlet_host.cli run --profile governed --root . "your task"
 python -m gauntlet_host.cli chat --profile governed --root .
 ~~~
 
-Governed mode restores persistent memory/profile state, project context and skills, coding/environment probes, normal Hermes tools, bounded MCP discovery, and delegation while retaining task/session isolation, module-owned receipts, Black Gem's no-clear rule, and Soul's release gate. The safer compatibility default is `--profile lean`; canonical task release is always an explicit operator action. See [`docs/engineering/HERMES_GOVERNED_RUNTIME_HANDOFF_2026-08-30.md`](docs/engineering/HERMES_GOVERNED_RUNTIME_HANDOFF_2026-08-30.md).
+Governed mode restores persistent memory/profile state, persistent privacy-bounded FOIL/Mirror adaptation, project context and skills, coding/environment probes, normal Hermes tools, bounded MCP discovery, and delegation while retaining task/session isolation, module-owned receipts, Black Gem's no-clear rule, and Soul's release gate. The safer compatibility default is `--profile lean`; canonical task release is always an explicit operator action. See [`docs/engineering/HERMES_GOVERNED_RUNTIME_HANDOFF_2026-08-30.md`](docs/engineering/HERMES_GOVERNED_RUNTIME_HANDOFF_2026-08-30.md).
+
+The repository also ships the Codex plugin at `plugins/hermes-gauntlet` (version `0.2.0`). Its `governed-hermes` skill starts and resumes ordinary governed tasks; its `hermes-foil` skill creates an explicit task-bound `ADAPTATION` obligation. After registering the plugin in a Codex marketplace, install it as `hermes-gauntlet@<marketplace>`. The bundled helper can also be run directly:
+
+~~~powershell
+python plugins\hermes-gauntlet\scripts\hermes_gauntlet.py doctor --json
+python plugins\hermes-gauntlet\scripts\hermes_gauntlet.py foil --prompt "what am I missing?"
+~~~
 
 ## Mirror profiles and multi-stage calibration
 

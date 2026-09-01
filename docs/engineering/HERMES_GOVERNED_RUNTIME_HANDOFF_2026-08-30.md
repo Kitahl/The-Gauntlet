@@ -20,6 +20,23 @@ python -m gauntlet_host.cli chat --profile governed --root .
 
 Use `--profile lean` (the compatibility default) for the TOKEN-700-qualified surface.
 
+## Codex plugin
+
+The repository includes `plugins/hermes-gauntlet` version `0.2.0`. The plugin exposes two Codex skills:
+
+- `governed-hermes` diagnoses, starts, resumes, or opens the full governed runtime. Persistent privacy-bounded FOIL/Mirror profile adaptation remains active on every governed prompt.
+- `hermes-foil` creates explicit adaptation work through the helper's `foil` command. That command forces `--kind ADAPTATION` and a `/foil` prompt so the receipt is bound to the correct task rather than a global active-task pointer.
+
+After the plugin has been registered in a local or shared Codex marketplace, invoke `$hermes-gauntlet:governed-hermes` for ordinary governed work or `$hermes-gauntlet:hermes-foil` for explicit adaptation work. The helper remains usable without skill invocation:
+
+~~~powershell
+python plugins\hermes-gauntlet\scripts\hermes_gauntlet.py doctor --json
+python plugins\hermes-gauntlet\scripts\hermes_gauntlet.py foil --prompt "adapt to what I am missing"
+python plugins\hermes-gauntlet\scripts\hermes_gauntlet.py continue --task-id "task-..." --prompt "/foil continue the adaptation"
+~~~
+
+The public resume handle is always the Gauntlet task ID. The internal Hermes session ID remains private, and neither plugin skill performs canonical release automatically.
+
 ## Governed capabilities
 
 The governed profile enables:

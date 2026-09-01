@@ -1,0 +1,35 @@
+{
+  "name": "hermes-gauntlet",
+  "version": "0.2.0+codex.20260901104009",
+  "description": "Run governed Hermes and task-bound FOIL adaptation from Codex.",
+  "author": {
+    "name": "The Gauntlet"
+  },
+  "license": "MIT",
+  "keywords": [
+    "hermes",
+    "gauntlet",
+    "governed-agent",
+    "foil",
+    "mirror",
+    "soul"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Hermes Gauntlet",
+    "shortDescription": "Use governed Hermes and FOIL from Codex.",
+    "longDescription": "Starts or resumes task-bound governed Hermes and explicit FOIL/Mirror adaptation, preserves Gauntlet and Soul authority boundaries, and diagnoses local setup without exposing credentials.",
+    "developerName": "The Gauntlet",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Start governed Hermes for this task.",
+      "Use Hermes FOIL to identify and adapt to what I am missing.",
+      "Resume a governed Hermes task.",
+      "Check whether governed Hermes is ready."
+    ]
+  }
+}
