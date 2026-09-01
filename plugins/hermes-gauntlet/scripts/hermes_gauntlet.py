@@ -93,8 +93,8 @@ def _implementation_present(root: Path) -> bool:
 def _normal_hermes_home() -> Path:
     if os.name == "nt":
         roaming = os.environ.get("APPDATA", "").strip()
-        base = Path(roaming).parent / "Local" if roaming else Path.home() / "AppData" / "Local"
-        return base / "hermes"
+        if roaming:
+            return Path(roaming).parent / "Local" / "hermes"
     return Path.home() / ".hermes"
 
 

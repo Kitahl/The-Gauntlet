@@ -107,6 +107,29 @@
       "sources": ["docs/RESEARCH_WEBSITE_BENCHMARK_2026-08-22.md"]
     },
     {
+      "id": "governed-hermes-capability",
+      "page_section": "Research Dossier",
+      "claim": "The governed Hermes profile restores persistent memory, project and coding context, normal tools, dynamic MCP discovery, bounded delegation, and FOIL adaptation while preserving task/session isolation and Soul's explicit release boundary.",
+      "sources": [
+        "docs/engineering/HERMES_GOVERNED_RUNTIME_HANDOFF_2026-08-30.md",
+        "gauntlet_host/runtime_profile.py",
+        "gauntlet_host/launcher.py",
+        "tests/test_governed_runtime.py"
+      ]
+    },
+    {
+      "id": "codex-hermes-foil-plugin",
+      "page_section": "Research Dossier",
+      "claim": "The repository ships an installable Codex plugin for ordinary governed Hermes work and explicit task-bound FOIL/Mirror adaptation without automatic canonical release.",
+      "sources": [
+        "plugins/hermes-gauntlet/.codex-plugin/plugin.json",
+        "plugins/hermes-gauntlet/skills/governed-hermes/SKILL.md",
+        "plugins/hermes-gauntlet/skills/hermes-foil/SKILL.md",
+        "plugins/hermes-gauntlet/scripts/hermes_gauntlet.py",
+        "tests/test_hermes_codex_plugin.py"
+      ]
+    },
+    {
       "id": "citation-license",
       "page_section": "Release",
       "claim": "The repository provides machine-readable citation metadata and an MIT open-source license.",

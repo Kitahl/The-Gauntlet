@@ -1,21 +1,102 @@
-# Evidence-Governed Research Toolkit
+# The Gauntlet
 
-**Modular research software for evidence-governed AI-assisted reasoning, verification, evaluation, process assurance, and adaptive complementary assistance.**
+### Evidence-Governed Research Toolkit
+
+**Open research infrastructure for AI-assisted reasoning, discovery, engineering, evaluation, and adaptive support.**
+
+*Evidence before confidence. Verification before release.*
 
 [![Research software validation](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml)
 [![CodeQL](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.5.1-informational.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/release-0.5.1-3157d5.svg)](CHANGELOG.md)
+[![Python](https://img.shields.io/badge/Python-3.12%2B-3776ab.svg)](pyproject.toml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-0f766e.svg)](LICENSE)
 
-> **Research status:** public research-software toolkit with executable runtime checks, evidence-bearing structural/source validation, and exploratory benchmark pilots. The repository does **not** claim that the complete system improves human reasoning, scientific discovery, or general AI capability in prospective deployment.
+> **Product Line 01 is released free and open.** The Gauntlet Research Suite is available under the MIT License for research, evaluation, adaptation, and commercial use. The source software is free; optional external model or API providers may charge for their services.
 
-**Demo:** https://kitahl.github.io/The-Gauntlet/  
-**5-minute evaluator path:** [`docs/EVALUATOR_QUICKSTART.md`](docs/EVALUATOR_QUICKSTART.md)  
-**Benchmark pilots:** [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) · **earlier blinded receipt:** [`benchmarks/results/2026-08-22-blinded-pilot.json`](benchmarks/results/2026-08-22-blinded-pilot.json) · **BrowseComp four-way receipt:** [`benchmark_runs/2026-08-22/browsecomp_four_way_results.json`](benchmark_runs/2026-08-22/browsecomp_four_way_results.json)  
-**Runtime setup:** [`docs/RUNTIME_SETUP.md`](docs/RUNTIME_SETUP.md) · **Mirror:** [`docs/MIRROR.md`](docs/MIRROR.md) · **Mirror onboarding (legacy FOIL paths):** [`docs/FOIL_ONBOARDING.md`](docs/FOIL_ONBOARDING.md) · **Deep calibration:** [`docs/FOIL_DEEP_CALIBRATION.md`](docs/FOIL_DEEP_CALIBRATION.md)  
-**Research statement:** [`RESEARCH.md`](RESEARCH.md) · **Reproducibility:** [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) · **Roadmap:** [`ROADMAP.md`](ROADMAP.md)
+The Gauntlet turns complex AI-assisted work into explicit obligations: what must be searched, proved, implemented, measured, independently checked, or left unresolved. It combines ten specialist research modules, a portable evidence runtime, persistent task-aware adaptation, a governed Hermes agent host, and reproducible evaluation assets in one inspectable suite.
+
+**[Explore the live research site](https://kitahl.github.io/The-Gauntlet/)** · **[Evaluate in 5 minutes](docs/EVALUATOR_QUICKSTART.md)** · **[Reproduce the checks](REPRODUCIBILITY.md)** · **[Inspect the evidence](#research-state-and-evidence-chain)** · **[Read the roadmap](ROADMAP.md)**
 
 ---
+
+## Research Dossier
+
+### The research question
+
+> **Can an evidence-governed modular reasoning workflow improve the traceability, verification discipline, and independent usefulness of AI-assisted research without confusing model agreement, stylistic confidence, or passing software checks with scientific validity?**
+
+This public release implements the research architecture, runtime, validation contracts, and exploratory evaluation program. The full behavioral answer remains open: the repository does **not** claim that the complete system improves human reasoning, scientific discovery, or general AI capability in prospective deployment.
+
+### Product Line 01 — The Gauntlet Research Suite
+
+| System area | Released capability | Evidence boundary |
+|---|---|---|
+| **Research orchestration** | Ten specialist modules route work by epistemic obligation: proof, discovery, synthesis, engineering, evaluation, assurance, review, and adaptation | Routing and receipts improve traceability; they do not make an unsupported result true |
+| **Evidence-governed runtime** | Task-bound obligations, module-owned receipts, stale-authority monitoring, evidence-ledger checks, and an explicit Soul release gate | A green runtime state certifies only the checks that actually ran |
+| **Mirror adaptive complement** | Persistent privacy-bounded profiles, cold-start assessment, structured calibration, real-work transfer plans, and prompt-time relevance adaptation | Experimental and non-diagnostic; independent human benefit is not yet established |
+| **Governed Hermes** | Persistent memory, project and coding context, normal Hermes tools, dynamic MCP discovery, bounded delegation, Gauntlet routes, and task/session isolation | Hermes, Gems, and Black Gem cannot authorize their own canonical release |
+| **Evaluation and open science** | Reproducible checks, provenance maps, benchmark harnesses and receipts, negative-result retention, citation metadata, CI, and security scanning | Existing benchmark pilots are exploratory, small-sample, and protocol-specific |
+| **Codex integration** | Installable `hermes-gauntlet` plugin with ordinary governed and explicit task-bound FOIL/Mirror workflows | The plugin preserves the same evidence and release-authority boundaries as the host |
+
+### Release profile
+
+| | |
+|---|---|
+| **Public release** | The Gauntlet `0.5.1` |
+| **Agent integration** | Hermes Gauntlet Codex plugin `0.2.0` |
+| **Access** | Free and open source under the [MIT License](LICENSE) |
+| **Runtime** | Python 3.12+ source package and `gauntlet` CLI; lean and governed Hermes profiles |
+| **Assurance** | Continuous validation, CodeQL, portability/security workflows, reproducibility protocol |
+| **Maturity** | Public research software; user-facing FAST-P8 runtime remains alpha |
+
+### Research output index
+
+These are inspectable research-software artifacts, not claimed papers or peer-reviewed publications.
+
+| Output | What it provides |
+|---|---|
+| [Software release](CHANGELOG.md) | Versioned implementation, release history, security and evidence-boundary repairs |
+| [Architecture](docs/ARCHITECTURE.md) | Module boundaries, evidence flow, authority separation, and release logic |
+| [Research statement](RESEARCH.md) | Research question, comparison conditions, endpoints, ablations, and integrity boundary |
+| [Reproducibility protocol](REPRODUCIBILITY.md) | Environment, commands, receipts, interpretation rules, and known limitations |
+| [Benchmark dossier](docs/BENCHMARKS.md) | Exploratory pilots, exclusions, scoring protocols, and validity constraints |
+| [Validation record](validation/) | Deterministic, structural, specification, privacy, and regression evidence |
+| [Mirror research basis](research/FOIL_PERSONALIZATION_BASIS.md) | Scientific basis and non-diagnostic boundary for adaptive complementary assistance |
+| [Governed Hermes handoff](docs/engineering/HERMES_GOVERNED_RUNTIME_HANDOFF_2026-08-30.md) | Full-capability host design, isolation model, verification record, and operator boundary |
+| [Research roadmap](ROADMAP.md) | Evidence-ordered program from release engineering through external reproduction |
+| [Citation metadata](CITATION.cff) | Software citation information for the exact release or commit evaluated |
+
+### Research state and evidence chain
+
+| State | Current evidence | Interpretation |
+|---|---|---|
+| **Implemented** | Runtime, modules, hooks, calibration systems, governed host, Codex plugin, tests, and CI | The mechanisms exist and can be inspected or executed |
+| **Validated** | Structural, source, privacy, behavioral-contract, and regression checks | Defined properties passed their named checks; this is not system-level efficacy |
+| **Recorded** | Content-addressed receipts, provenance maps, benchmark run artifacts, and audit records | Claims can be traced to bounded evidence and exclusions |
+| **Exploratory** | Small blinded and ablation benchmark pilots with positive, null, mixed, and negative outcomes | Useful for mechanism discovery; insufficient for broad generalization |
+| **Prospective** | Matched-budget behavioral studies, delayed independent transfer, mechanism ablations, and external reproduction | Planned research; no completion or positive outcome is implied |
+
+### Capability case for research partners and grant reviewers
+
+This release demonstrates the ability to:
+
+- translate an open research question into a modular, executable, and falsifiable software program;
+- build portable research infrastructure with explicit trust, privacy, evidence, and release boundaries;
+- connect source, tests, receipts, benchmarks, documentation, and public claims into an auditable evidence chain;
+- retain null, negative, and discarded results instead of optimizing the record for a favorable narrative;
+- expose exact next-step experiments, controls, endpoints, ablations, and exit criteria;
+- release reusable infrastructure openly while keeping behavioral efficacy claims scientifically unresolved.
+
+The next evidence program is ordered by information value rather than feature count:
+
+1. tag and archive an evidence-bearing release, then add a DOI;
+2. run matched-budget behavioral comparisons on at least three materially different task families;
+3. test adaptive Mirror support using preregistered delayed independent-transfer endpoints;
+4. ablate orchestration, Process Assurance, review, and verifier mechanisms against strong controls;
+5. support independent reproduction and publish discrepancies as research outputs.
+
+See the [full research roadmap](ROADMAP.md) for exit criteria and the [research website benchmark](docs/RESEARCH_WEBSITE_BENCHMARK_2026-08-22.md) for the design rationale behind this dossier.
 
 ## Why this project exists
 
@@ -23,11 +104,7 @@ The practical problem was simple: **there are many powerful research, reasoning,
 
 AI-assisted research can also fail even when the prose is persuasive, multiple agents agree, software tests are green, or a benchmark score is high. This project treats those signals as **evidence with scope**, not as automatic proof.
 
-The core research question is:
-
-> **Can a modular, evidence-governed reasoning workflow improve traceability, verification discipline, and independent usefulness in AI-assisted research without confusing confidence, consensus, or passing software checks with scientific validity?**
-
-The toolkit routes work according to the **epistemic obligation**: what must be proved, searched, executed, measured, independently checked, or left unresolved.
+The research question becomes an operational design rule: route work according to the **epistemic obligation**—what must be proved, searched, executed, measured, independently checked, or left unresolved.
 
 **Mirror** is the adaptive complement layer. It asks what the current task requires, what the user already covers, and which load-bearing capability is least covered; it then requests the smallest useful complement from the existing Gems/tools. Mirror is the public name. The technical ID, `/foil` command, `tools/foil_*` modules, historical benchmark condition names, and existing FOIL-named files remain stable for backwards compatibility.
 

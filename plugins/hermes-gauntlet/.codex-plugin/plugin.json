@@ -1,6 +1,6 @@
 {
   "name": "hermes-gauntlet",
-  "version": "0.2.0+codex.20260901104009",
+  "version": "0.2.0+codex.20260901105619",
   "description": "Run governed Hermes and task-bound FOIL adaptation from Codex.",
   "author": {
     "name": "The Gauntlet"
