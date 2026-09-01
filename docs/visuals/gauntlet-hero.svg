@@ -29,9 +29,9 @@
   <rect x="812" y="180" width="170" height="84" class="tool space"/>
   <rect x="812" y="368" width="170" height="84" class="tool power"/>
   <rect x="812" y="556" width="170" height="84" class="tool council"/>
-  <text x="897" y="211" text-anchor="middle" class="mono dim tiny">SELECTED TOOL</text><text x="897" y="244" text-anchor="middle" class="mono txt label">SPACE</text>
-  <text x="897" y="399" text-anchor="middle" class="mono dim tiny">SELECTED TOOL</text><text x="897" y="432" text-anchor="middle" class="mono txt label">POWER</text>
-  <text x="897" y="587" text-anchor="middle" class="mono dim tiny">SELECTED TOOL</text><text x="897" y="620" text-anchor="middle" class="mono txt label">COUNCIL</text>
+  <text x="897" y="211" text-anchor="middle" class="mono dim tiny">SELECTED TOOL</text><text x="897" y="244" text-anchor="middle" class="mono txt label">FARFIELD</text>
+  <text x="897" y="399" text-anchor="middle" class="mono dim tiny">SELECTED TOOL</text><text x="897" y="432" text-anchor="middle" class="mono txt label">PROOFRIG</text>
+  <text x="897" y="587" text-anchor="middle" class="mono dim tiny">SELECTED TOOL</text><text x="897" y="620" text-anchor="middle" class="mono txt label">CONCLAVE</text>
 
   <path d="M982 222H1060M982 410H1060M982 598H1060" class="route"/>
   <rect x="1060" y="180" width="190" height="84" class="receipt"/>

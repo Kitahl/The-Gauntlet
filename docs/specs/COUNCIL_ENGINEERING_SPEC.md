@@ -1,4 +1,4 @@
-# Evidence Review Panel / Council — engineering specification
+# Conclave / Council — Evidence Review System specification
 
 ## Obligation
 
@@ -8,7 +8,7 @@ Provide selective independent review of a concrete artifact after a strong direc
 
 Specification: 3–6 artifact-derived seats, skeptic, frozen independent first passes, disjoint evidence where feasible, reveal/cross-critique, evidence-ranked synthesis, matched direct control.
 
-Closest executable helper currently uses generic paired red-team prompts and synthesis; it does not enforce the full Council contract.
+Closest executable helper currently uses generic paired red-team prompts and synthesis; it does not enforce the full Conclave contract.
 
 ## vNext state machine
 

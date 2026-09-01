@@ -65,8 +65,8 @@ def _version() -> str:
     try:
         value = path.read_text(encoding="utf-8").strip()
     except OSError:
-        return "0.5.1-fast-p8"
-    return value or "0.5.1-fast-p8"
+        return "0.6.0-fast-p8"
+    return value or "0.6.0-fast-p8"
 
 
 def _resolve_root(value: str) -> Path:

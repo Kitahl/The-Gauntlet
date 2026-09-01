@@ -26,8 +26,8 @@ GAUNTLET_PLUGIN_MANIFEST = """\
 manifest_version: 2
 name: gauntlet
 version: 0.4.0
-description: Lean compiled tools, sparse context, and bounded operational rehydration.
-author: The Gauntlet
+description: BASTION-01 lean compiled tools, sparse context, and bounded operational rehydration.
+author: Rookframe Research
 kind: standalone
 provides_tools:
   - gauntlet_task_status_compact

@@ -35,11 +35,15 @@ class HermesCodexPluginTests(unittest.TestCase):
             (PLUGIN / ".codex-plugin" / "plugin.json").read_text(encoding="utf-8")
         )
         self.assertEqual(manifest["name"], "hermes-gauntlet")
-        self.assertRegex(manifest["version"], re.compile(r"^0\.2\.0(?:\+codex\.\d+)?$"))
+        self.assertRegex(manifest["version"], re.compile(r"^0\.3\.0(?:\+codex\.\d+)?$"))
         self.assertEqual(manifest["skills"], "./skills/")
         self.assertIn("foil", manifest["keywords"])
+        self.assertEqual(manifest["interface"]["displayName"], "Bastion Hermes")
         self.assertTrue(
-            any("FOIL" in prompt for prompt in manifest["interface"]["defaultPrompt"])
+            any(
+                "Counterform" in prompt
+                for prompt in manifest["interface"]["defaultPrompt"]
+            )
         )
         self.assertTrue(
             (PLUGIN / "skills" / "governed-hermes" / "SKILL.md").is_file()

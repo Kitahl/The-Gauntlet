@@ -1,11 +1,18 @@
 ---
 name: foil
-description: FOIL — Adaptive Reasoning Complement. Trigger: /foil, "use my foil", "what am I missing", "adapt to me", "teach me this", "check me against the evidence", or equivalent. Loads an optional local saved profile, identifies the task-relevant missing capability, method, evidence, context, or verifier, supplies the minimum useful complement, uses available tools by capability, and updates persistent personalization only from evidence-conditioned observations. No person-specific profile is embedded in this public skill.
+description: >-
+  Counterform — BASTION-01's Adaptive Reasoning Complement (technical ID FOIL).
+  Trigger: /foil, Counterform, Mirror, "use my foil", "what am I missing",
+  "adapt to me", "teach me this", "check me against the evidence", or equivalent.
+  Loads an optional local saved profile, identifies the task-relevant missing
+  capability, method, evidence, context, or verifier, supplies the minimum useful
+  complement, and updates persistent personalization only from
+  evidence-conditioned observations.
 ---
 
-# FOIL — Adaptive Reasoning Complement
+# Counterform — Adaptive Reasoning Complement
 
-FOIL adapts to the **current task and evidence about the user**, not to a fixed personality type. It is not a generic tutor, a personality profiler, or an agent swarm.
+Counterform, implemented under the stable technical ID **FOIL**, adapts to the **current task and evidence about the user**, not to a fixed personality type. It is not a generic tutor, a personality profiler, or an agent swarm.
 
 Its job is:
 

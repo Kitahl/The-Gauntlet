@@ -1,8 +1,8 @@
-# Process Assurance Framework / Gauntlet — engineering specification
+# Aegis / Gauntlet — Process Assurance Layer specification
 
 ## Obligation
 
-Monitor the research process/frame for known hazards that ordinary candidate verification may miss. Gauntlet does not replace claim-native verification.
+Monitor the research process/frame for known hazards that ordinary candidate verification may miss. Aegis does not replace claim-native verification.
 
 ## Current workflow
 

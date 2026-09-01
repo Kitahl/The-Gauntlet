@@ -1,6 +1,6 @@
-"""Evidence Review Panel state machine with commit/reveal and control matching.
+"""Conclave evidence-review state machine with commit/reveal and control matching.
 
-Council measures rather than assumes review diversity. A cleared Council receipt
+Conclave measures rather than assumes review diversity. A cleared Conclave receipt
 requires complete commit/reveal, cross-critique participation, and a same-artifact,
 same-budget DIRECT control receipt. Agreement alone never clears the obligation.
 """

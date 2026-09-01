@@ -4,7 +4,7 @@
     {
       "id": "architecture-modular-control",
       "page_section": "Architecture",
-      "claim": "The toolkit uses a portable Research Orchestrator control plane plus bounded specialist research modules rather than one undifferentiated prompt.",
+      "claim": "BASTION-01 uses the portable Crown orchestration core plus bounded specialist research modules rather than one undifferentiated prompt.",
       "sources": [
         "docs/ARCHITECTURE.md",
         "skills/soul/SKILL.md",
@@ -18,20 +18,20 @@
     {
       "id": "professional-naming-compatibility",
       "page_section": "Modules",
-      "claim": "Professional display names are used for the research portfolio while technical IDs and slash-command aliases are retained for backwards compatibility.",
-      "sources": ["docs/ARCHITECTURE.md", "GOVERNANCE.md"]
+      "claim": "Rookframe Research and BASTION-01 public display names are used for the research portfolio while technical IDs and slash-command aliases are retained for backwards compatibility.",
+      "sources": ["docs/BRAND_ARCHITECTURE.md", "docs/ARCHITECTURE.md", "GOVERNANCE.md"]
     },
     {
       "id": "foil-complement",
-      "page_section": "FOIL",
-      "claim": "FOIL models competing explanations for observed performance and supplies task-relevant complementary methods without treating a single error as a stable weakness.",
-      "sources": ["skills/foil/SKILL.md", "research/FOIL_RESEARCH_BASIS.md"]
+      "page_section": "Counterform",
+      "claim": "Counterform, implemented under the FOIL technical ID, models competing explanations for observed performance and supplies task-relevant complementary methods without treating a single error as a stable weakness.",
+      "sources": ["docs/COUNTERFORM.md", "skills/foil/SKILL.md", "research/FOIL_RESEARCH_BASIS.md"]
     },
     {
       "id": "independent-transfer-target",
-      "page_section": "FOIL",
-      "claim": "FOIL separates immediate assisted task success from later independent competence and transfer.",
-      "sources": ["skills/foil/SKILL.md", "research/FOIL_RESEARCH_BASIS.md", "RESEARCH.md"]
+      "page_section": "Counterform",
+      "claim": "Counterform/FOIL separates immediate assisted task success from later independent competence and transfer.",
+      "sources": ["docs/COUNTERFORM.md", "skills/foil/SKILL.md", "research/FOIL_RESEARCH_BASIS.md", "RESEARCH.md"]
     },
     {
       "id": "authority-evidence-split",
@@ -77,7 +77,7 @@
     {
       "id": "portable-process-assurance",
       "page_section": "Modules",
-      "claim": "The public Process Assurance Framework does not require private project hooks or hard-coded local runtime paths and treats missing optional machinery as unavailable.",
+      "claim": "The public Aegis process-assurance layer does not require private project hooks or hard-coded local runtime paths and treats missing optional machinery as unavailable.",
       "sources": ["skills/infinity-gauntlet/SKILL.md", "validation/SOUL_GAUNTLET_PUBLIC_AUDIT.md"]
     },
     {
@@ -89,7 +89,7 @@
     {
       "id": "research-dossier-output-index",
       "page_section": "Research Dossier",
-      "claim": "The homepage indexes the current research question, implemented architecture, FOIL basis, mechanical/specification receipts, exploratory benchmark pilots, prospective behavioral evaluation, and external reproduction as distinct research objects with explicit states.",
+      "claim": "The homepage indexes the current research question, implemented architecture, Counterform/FOIL basis, mechanical/specification receipts, exploratory benchmark pilots, prospective behavioral evaluation, and external reproduction as distinct research objects with explicit states.",
       "sources": [
         "RESEARCH.md",
         "ROADMAP.md",
@@ -109,7 +109,7 @@
     {
       "id": "governed-hermes-capability",
       "page_section": "Research Dossier",
-      "claim": "The governed Hermes profile restores persistent memory, project and coding context, normal tools, dynamic MCP discovery, bounded delegation, and FOIL adaptation while preserving task/session isolation and Soul's explicit release boundary.",
+      "claim": "Bastion Hermes restores persistent memory, project and coding context, normal tools, dynamic MCP discovery, bounded delegation, and Counterform/FOIL adaptation while preserving task/session isolation and Crown's explicit release boundary.",
       "sources": [
         "docs/engineering/HERMES_GOVERNED_RUNTIME_HANDOFF_2026-08-30.md",
         "gauntlet_host/runtime_profile.py",
@@ -120,7 +120,7 @@
     {
       "id": "codex-hermes-foil-plugin",
       "page_section": "Research Dossier",
-      "claim": "The repository ships an installable Codex plugin for ordinary governed Hermes work and explicit task-bound FOIL/Mirror adaptation without automatic canonical release.",
+      "claim": "The repository ships the Bastion Hermes Codex plugin for ordinary governed Hermes work and explicit task-bound Counterform/FOIL adaptation without automatic canonical release.",
       "sources": [
         "plugins/hermes-gauntlet/.codex-plugin/plugin.json",
         "plugins/hermes-gauntlet/skills/governed-hermes/SKILL.md",
@@ -134,6 +134,12 @@
       "page_section": "Release",
       "claim": "The repository provides machine-readable citation metadata and an MIT open-source license.",
       "sources": ["CITATION.cff", "LICENSE"]
+    },
+    {
+      "id": "rookframe-bastion-working-identity",
+      "page_section": "Identity",
+      "claim": "Rookframe Research is presented as a working identity for a planned company, BASTION-01 is its first free open-source product line, and no incorporation or legal-clearance claim is made.",
+      "sources": ["docs/BRAND_ARCHITECTURE.md", "README.md", "CITATION.cff"]
     },
     {
       "id": "homepage-trust-center",

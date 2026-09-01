@@ -1,4 +1,4 @@
-"""Typed runtime contracts for the Evidence-Governed Research Toolkit.
+"""Typed runtime contracts for BASTION-01's evidence-control runtime.
 
 This module is intentionally dependency-light so every public runtime component can
 share the same state/receipt/verdict vocabulary without importing an agent framework.

@@ -1,9 +1,13 @@
 ---
 name: novelbot
-description: Method Synthesis module. Trigger: /reality, /novelbot, invent a method, find a new mechanism, or when verified prior art fails a named constraint. Produces novel candidates only after the existing-method boundary is explicit.
+description: >-
+  Foundry — BASTION-01's Method Synthesis Engine. Trigger: /reality,
+  /novelbot, invent a method, find a new mechanism, or when verified prior art
+  fails a named constraint. Produces novel candidates only after the
+  existing-method boundary is explicit.
 ---
 
-# Method Synthesis
+# Foundry — Method Synthesis Engine
 
 Novelty is a **last-mile obligation**, not the default mode.
 
@@ -11,7 +15,7 @@ Novelty is a **last-mile obligation**, not the default mode.
 
 Do not synthesize a new mechanism until:
 
-- Research Discovery has identified the nearest known approaches;
+- Farfield has identified the nearest known approaches;
 - the relevant approaches fail a named constraint or leave a concrete gap;
 - the success criterion is explicit.
 

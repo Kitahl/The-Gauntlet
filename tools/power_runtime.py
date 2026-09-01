@@ -1,4 +1,4 @@
-"""Engineering Verification executor with explicit plans and hashed receipts.
+"""Proofrig engineering-verification executor with explicit plans and hashed receipts.
 
 The executor never uses a shell. Known verifier families have constrained command
 shapes. Arbitrary custom commands are disabled unless the caller's environment

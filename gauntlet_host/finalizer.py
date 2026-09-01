@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
 import json
 import os
-from pathlib import Path
 import subprocess
 import sys
+from dataclasses import asdict, dataclass
+from pathlib import Path
 from typing import Any
 
 from gauntlet_host.constants import (

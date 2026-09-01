@@ -1,11 +1,16 @@
 ---
 name: infinity-gauntlet
-description: Process Assurance Framework. Trigger: /gauntlet, repeated failed attempts, ungated kill/finding, last-surviving option, inherited number, stale authority, cross-context handoff, unclear architecture, or an all-green verification claim. Audits the frame and process behind a result, not only the result.
+description: >-
+  Aegis — BASTION-01's Process Assurance Layer. Trigger: /gauntlet, repeated
+  failed attempts, ungated kill/finding, last-surviving option, inherited
+  number, stale authority, cross-context handoff, unclear architecture, or an
+  all-green verification claim. Audits the frame and process behind a result,
+  not only the result.
 ---
 
-# Process Assurance Framework
+# Aegis — Process Assurance Layer
 
-The framework is a self-audit layer worn by the Research Orchestrator.
+Aegis is the self-audit layer applied by Crown. The stable technical ID and command remain `infinity-gauntlet` and `/gauntlet`.
 
 Runtime automation is external to this skill:
 

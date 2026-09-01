@@ -61,7 +61,7 @@ def ask(
     headers_base = {
         "Content-Type": "application/json",
         "HTTP-Referer": os.environ.get("OPENROUTER_HTTP_REFERER", "https://github.com/Kitahl/The-Gauntlet"),
-        "X-Title": os.environ.get("OPENROUTER_APP_TITLE", "Evidence-Governed Research Toolkit"),
+        "X-Title": os.environ.get("OPENROUTER_APP_TITLE", "Rookframe Research BASTION-01"),
     }
     last: Exception | None = None
     for index, key in enumerate(keys):

@@ -2,19 +2,19 @@
 
 ## Overview
 
-The Evidence-Governed Research Toolkit separates **control**, **specialist reasoning**, **assurance**, **preflight**, **review**, and **adaptation**. vNext adds a common typed runtime so each module can produce machine-readable state and receipts without collapsing distinct epistemic obligations into one generic agent interface.
+BASTION-01 separates **control**, **specialist reasoning**, **assurance**, **preflight**, **review**, and **adaptation**. A common typed runtime lets each module produce machine-readable state and receipts without collapsing distinct epistemic obligations into one generic agent interface. Public naming is governed by [`BRAND_ARCHITECTURE.md`](BRAND_ARCHITECTURE.md).
 
 ```mermaid
 flowchart TD
-    U[User / Researcher] --> O[Research Orchestrator / Soul]
-    O --> Q[Decision Preflight / Meditate]
-    O --> A[Mirror: Adaptive Reasoning Complement]
-    O --> F[Formal Reasoning / Mind]
-    O --> D[Research Discovery / Space]
-    O --> S[Method Synthesis / Reality]
-    O --> E[Engineering Verification / Power]
-    O --> B[Evaluation & Benchmarking / Time]
-    O --> R[Evidence Review Panel / Council]
+    U[User / Researcher] --> O[Crown / soul]
+    O --> Q[Stillpoint / meditate]
+    O --> A[Counterform / foil]
+    O --> F[Axiom / mind]
+    O --> D[Farfield / space]
+    O --> S[Foundry / reality]
+    O --> E[Proofrig / power]
+    O --> B[Caliper / time]
+    O --> R[Conclave / council]
 
     Q --> O
     A --> O
@@ -24,7 +24,7 @@ flowchart TD
     E --> X
     B --> X
     R --> X
-    X --> P[Process Assurance / Gauntlet]
+    X --> P[Aegis / gauntlet]
     P --> O
     X --> O
     O --> G[Release gate]
@@ -55,18 +55,18 @@ The full integration flow is frozen in [`VNEXT_RUNTIME_PIPELINE.md`](VNEXT_RUNTI
 
 | Professional display name | Technical ID / legacy alias | Primary responsibility | Runtime |
 |---|---|---|---|
-| Research Orchestrator | `soul`, `/soul` | frame, obligations, route, integrate, release | `tools/soul_runtime.py` |
-| Formal Reasoning | `mathbot`, `/mind` | proof, logic, exact derivation, formalization | `tools/mind_runtime.py` |
-| Research Discovery | `scoutbot`, `/space` | literature, prior art, current evidence | `tools/space_runtime.py` + `tools/scout.py` |
-| Method Synthesis | `novelbot`, `/reality` | constrained, falsifiable mechanism generation | `tools/reality_runtime.py` |
-| Engineering Verification | `codebot`, `/power` | executable software verification | `tools/power_runtime.py` |
-| Evaluation & Benchmarking | `benchbot`, `/time` | baselines, paired inference, cost, stop/go | `tools/time_runtime.py` |
-| Process Assurance Framework | `infinity-gauntlet`, `/gauntlet` | process hazards and false-green defense | `tools/gauntlet_runtime.py` + compatibility hooks |
-| Decision Preflight Protocol | `meditate` | resource-rational preflight/control | `tools/meditate_runtime.py` |
-| Evidence Review Panel | `council-of-elders`, `/council` | commit-reveal evidence review | `tools/council_runtime.py` |
-| Mirror — Adaptive Reasoning Complement | `foil`, `/foil` | adaptive complement selection, support, and transfer tracking | existing `foil` runtime + `tools/foil_runtime_bridge.py` |
+| Crown — Orchestration Core | `soul`, `/soul` | frame, obligations, route, integrate, release | `tools/soul_runtime.py` |
+| Axiom — Formal Reasoning Engine | `mathbot`, `/mind` | proof, logic, exact derivation, formalization | `tools/mind_runtime.py` |
+| Farfield — Research Discovery Array | `scoutbot`, `/space` | literature, prior art, current evidence | `tools/space_runtime.py` + `tools/scout.py` |
+| Foundry — Method Synthesis Engine | `novelbot`, `/reality` | constrained, falsifiable mechanism generation | `tools/reality_runtime.py` |
+| Proofrig — Engineering Verification System | `codebot`, `/power` | executable software verification | `tools/power_runtime.py` |
+| Caliper — Evaluation and Benchmarking System | `benchbot`, `/time` | baselines, paired inference, cost, stop/go | `tools/time_runtime.py` |
+| Aegis — Process Assurance Layer | `infinity-gauntlet`, `/gauntlet` | process hazards and false-green defense | `tools/gauntlet_runtime.py` + compatibility hooks |
+| Stillpoint — Decision Preflight Protocol | `meditate` | resource-rational preflight/control | `tools/meditate_runtime.py` |
+| Conclave — Evidence Review System | `council-of-elders`, `/council` | commit-reveal evidence review | `tools/council_runtime.py` |
+| Counterform — Adaptive Reasoning Complement | `foil`, `/foil` | adaptive complement selection, support, and transfer tracking | existing `foil` runtime + `tools/foil_runtime_bridge.py` |
 
-**Mirror** is the public display name. `foil`, `/foil`, `tools/foil_*`, `FOIL_TASK_RUN`, historical benchmark conditions, and FOIL-named artifact files remain stable compatibility identifiers. See [`MIRROR.md`](MIRROR.md).
+**Counterform** is the public display name. `foil`, `/foil`, `tools/foil_*`, `FOIL_TASK_RUN`, historical benchmark conditions, and FOIL- or Mirror-named artifact files remain stable compatibility identifiers. See [`COUNTERFORM.md`](COUNTERFORM.md).
 
 Technical identifiers remain stable for backwards compatibility. Names are user-facing mnemonics; evidence authority comes from receipts, not naming.
 
@@ -76,7 +76,7 @@ Modules are grouped by what they are *authoritative for*. Where two files could
 define the same vocabulary, exactly one is the source of truth and the other is
 generated from it or tested against it.
 
-### Process Assurance runtime
+### Aegis process-assurance runtime
 
 | Module | Authoritative for |
 |---|---|
@@ -86,13 +86,13 @@ generated from it or tested against it.
 | `tools/gauntlet_config.py` | `.gauntlet.json` policy loading |
 | `tools/verify_ledger.py` | optional evidence-ledger commit gate |
 
-### Adversarial review — Black Gem
+### Obsidian adversarial review (`blackgem`)
 
 | Module | Authoritative for |
 |---|---|
 | `tools/blackgem_runtime.py` | **the `ADVERSARY` obligation.** Independent multi-seat attack, off-diagonal cross-critique, and synthesis over a frozen candidate, with a planted-costume canary probe and whole-run participation accounting. |
 
-Black Gem produces the `ADVERSARY` obligation in the release gate's producer row.
+Obsidian (technical route: Black Gem) produces the `ADVERSARY` obligation in the release gate's producer row.
 It can raise an `ISSUE` (a surviving break, a `KILL`, or an `AMEND`), and it can
 report `UNKNOWN` or `UNAVAILABLE` — but it **never emits `CLEARED`**, enforced by an
 assertion in `finalize`. Surviving an attack panel is the absence of a found break,
@@ -102,7 +102,7 @@ from `trusted` (probe trust *and* complete participation *and* at least two dist
 provenance groups), and raw model text lives only in a declared evidence artifact
 referenced by `ArtifactRef`, never in generic state or the receipt.
 
-### Mirror (`foil`) — vocabularies and estimators
+### Counterform (`foil`) — vocabularies and estimators
 
 | Module | Authoritative for |
 |---|---|
@@ -117,7 +117,7 @@ Drift between a contract block and its runtime enum is a **test failure**, not a
 documentation task: `tests/test_foil_assistance.py::ContractDriftTests` and
 `tests/test_foil_ledger_b_items.py::GapVocabularyDriftTests` are live gates.
 
-### Mirror (`foil`) — profile, calibration, and policy
+### Counterform (`foil`) — profile, calibration, and policy
 
 | Module | Authoritative for |
 |---|---|
@@ -135,20 +135,20 @@ evidence into a small deterministic policy. Two properties matter architecturall
 - **The routing regime is derived from task properties** — freshness sensitivity, closed context, multi-hop structure, abstract transformation, closed-book technical reasoning, external-retrieval need. **Benchmark identity is receipt metadata and never a policy selector**, so the same task properties yield the same policy inside and outside an evaluation.
 - **A profile can trigger help only** when it describes a verified gap matching a capability the current task actually requires. A wrong, irrelevant, or stale profile is a negative control that cannot route.
 
-### Mirror (`foil`) — model layer
+### Counterform (`foil`) — model layer
 
 | Module | Authoritative for |
 |---|---|
 | `tools/foil_models.py` | provider adapters (`openai_chat`, `anthropic_messages`, `ollama_chat`, `cli`, `mock`), determinism classes, `probe()` |
 | `tools/foil_setup.py` | `.foil/models.json`, role assignment (`primary`/`reviewer`/`verifier`/`benchmark`) |
 
-The language model is a configured capability, not a build-time assumption. Mirror
+The language model is a configured capability, not a build-time assumption. Counterform
 requests a role; the host decides which model fills it. An unfilled role reports
 `NOT-MEASURED` rather than silently substituting the primary for the reviewer,
 because a model critiquing its own output is not independent evidence. Secrets are
 referenced by environment-variable *name* and are never stored.
 
-### Mirror (`foil`) — frozen-evaluation boundary
+### Counterform (`foil`) — frozen-evaluation boundary
 
 | Module | Authoritative for |
 |---|---|
@@ -209,13 +209,13 @@ layer.
 
 1. **Frame** — define goal, success condition, constraints, stakes and decision boundary.
 2. **Obligations** — create typed claims that must be proved, searched, synthesized, executed, measured, assured, preflighted, reviewed or adapted.
-3. **Preflight** — when explicit triggers are present, Meditate decides whether another computation is worth performing.
-4. **Adapt** — Mirror may alter routing priority or representation, never factual authority.
+3. **Preflight** — when explicit triggers are present, Stillpoint decides whether another computation is worth performing.
+4. **Adapt** — Counterform may alter routing priority or representation, never factual authority.
 5. **Route** — select the minimum claim-native module set.
 6. **Act** — run proof/search/synthesis/test/evaluation/review methods.
 7. **Receipt** — record hashes, verifier/tool identity, provenance, scope, uncertainty and unresolved state.
-8. **Assure** — Gauntlet checks typed process hazards and declares monitorability limits.
-9. **Release gate** — Soul checks all load-bearing obligations.
+8. **Assure** — Aegis checks typed process hazards and declares monitorability limits.
+9. **Release gate** — Crown checks all load-bearing obligations.
 10. **Release** — return a supported result or explicit `ISSUE`, `UNKNOWN`, or `UNAVAILABLE` state.
 
 ## Architectural constraints
@@ -261,13 +261,14 @@ State remains gitignored and owner-restricted where POSIX permissions are availa
 ```text
 .
 ├── skills/                  # executable research-method specifications (SKILL.md only)
-├── tools/                   # portable runtime: typed runtime + Process Assurance + Mirror/legacy foil modules
+├── tools/                   # portable runtime: typed runtime + Aegis + Counterform/legacy foil modules
 ├── tests/                   # runtime, privacy, layout, contract-drift regressions
 ├── benchmarks/              # blinded benchmark protocols, harnesses, receipts
 ├── research/                # evidence basis for research mechanisms
 ├── validation/              # deterministic/specification evidence
 ├── docs/specs/              # per-component engineering contracts
-├── docs/MIRROR.md           # public name and compatibility contract for the foil subsystem
+├── docs/COUNTERFORM.md      # public name and compatibility contract for the foil subsystem
+├── docs/MIRROR.md           # compatibility locator for the former public display name
 ├── docs/VNEXT_RUNTIME_PIPELINE.md
 ├── .claude/settings.json    # hook wiring
 ├── .gauntlet.json           # runtime/assurance configuration

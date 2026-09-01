@@ -1,6 +1,6 @@
-# The Gauntlet
+# Rookframe Research
 
-### Evidence-Governed Research Toolkit
+### BASTION-01 // Open Evidence-Control System
 
 **Open research infrastructure for AI-assisted reasoning, discovery, engineering, evaluation, and adaptive support.**
 
@@ -8,15 +8,15 @@
 
 [![Research software validation](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml)
 [![CodeQL](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml)
-[![Version](https://img.shields.io/badge/release-0.5.1-3157d5.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/release-0.6.0-3157d5.svg)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/Python-3.12%2B-3776ab.svg)](pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0f766e.svg)](LICENSE)
 
-> **Product Line 01 is released free and open.** The Gauntlet Research Suite is available under the MIT License for research, evaluation, adaptation, and commercial use. The source software is free; optional external model or API providers may charge for their services.
+> **Product Line 01 is released free and open.** BASTION-01 is available under the MIT License for research, evaluation, adaptation, and commercial use. The source software is free; optional external model or API providers may charge for their services.
 
-The Gauntlet turns complex AI-assisted work into explicit obligations: what must be searched, proved, implemented, measured, independently checked, or left unresolved. It combines ten specialist research modules, a portable evidence runtime, persistent task-aware adaptation, a governed Hermes agent host, and reproducible evaluation assets in one inspectable suite.
+**Rookframe Research** is the working identity for a planned independent research company. **BASTION-01** is its first public product line: a ten-module system that turns complex AI-assisted work into explicit obligations—what must be searched, proved, implemented, measured, independently checked, or left unresolved. It combines a portable evidence runtime, persistent task-aware adaptation, a governed Hermes agent host, and reproducible evaluation assets in one inspectable release.
 
-**[Explore the live research site](https://kitahl.github.io/The-Gauntlet/)** · **[Evaluate in 5 minutes](docs/EVALUATOR_QUICKSTART.md)** · **[Reproduce the checks](REPRODUCIBILITY.md)** · **[Inspect the evidence](#research-state-and-evidence-chain)** · **[Read the roadmap](ROADMAP.md)**
+**[Explore the live research site](https://kitahl.github.io/The-Gauntlet/)** · **[Evaluate in 5 minutes](docs/EVALUATOR_QUICKSTART.md)** · **[Reproduce the checks](REPRODUCIBILITY.md)** · **[Inspect the evidence](#research-state-and-evidence-chain)** · **[Read the brand architecture](docs/BRAND_ARCHITECTURE.md)**
 
 ---
 
@@ -28,23 +28,23 @@ The Gauntlet turns complex AI-assisted work into explicit obligations: what must
 
 This public release implements the research architecture, runtime, validation contracts, and exploratory evaluation program. The full behavioral answer remains open: the repository does **not** claim that the complete system improves human reasoning, scientific discovery, or general AI capability in prospective deployment.
 
-### Product Line 01 — The Gauntlet Research Suite
+### Product Line 01 — BASTION-01
 
 | System area | Released capability | Evidence boundary |
 |---|---|---|
-| **Research orchestration** | Ten specialist modules route work by epistemic obligation: proof, discovery, synthesis, engineering, evaluation, assurance, review, and adaptation | Routing and receipts improve traceability; they do not make an unsupported result true |
-| **Evidence-governed runtime** | Task-bound obligations, module-owned receipts, stale-authority monitoring, evidence-ledger checks, and an explicit Soul release gate | A green runtime state certifies only the checks that actually ran |
-| **Mirror adaptive complement** | Persistent privacy-bounded profiles, cold-start assessment, structured calibration, real-work transfer plans, and prompt-time relevance adaptation | Experimental and non-diagnostic; independent human benefit is not yet established |
-| **Governed Hermes** | Persistent memory, project and coding context, normal Hermes tools, dynamic MCP discovery, bounded delegation, Gauntlet routes, and task/session isolation | Hermes, Gems, and Black Gem cannot authorize their own canonical release |
+| **Crown orchestration core** | Ten specialist modules route work by epistemic obligation: proof, discovery, synthesis, engineering, evaluation, assurance, review, and adaptation | Routing and receipts improve traceability; they do not make an unsupported result true |
+| **Evidence-control runtime** | Task-bound obligations, module-owned receipts, stale-authority monitoring, evidence-ledger checks, and an explicit Crown release gate | A green runtime state certifies only the checks that actually ran |
+| **Counterform adaptive complement** | Persistent privacy-bounded profiles, cold-start assessment, structured calibration, real-work transfer plans, and prompt-time relevance adaptation | Experimental and non-diagnostic; independent human benefit is not yet established |
+| **Bastion Hermes** | Persistent memory, project and coding context, normal Hermes tools, dynamic MCP discovery, bounded delegation, Aegis routes, and task/session isolation | Hermes, specialist modules, and Obsidian cannot authorize their own canonical release |
 | **Evaluation and open science** | Reproducible checks, provenance maps, benchmark harnesses and receipts, negative-result retention, citation metadata, CI, and security scanning | Existing benchmark pilots are exploratory, small-sample, and protocol-specific |
-| **Codex integration** | Installable `hermes-gauntlet` plugin with ordinary governed and explicit task-bound FOIL/Mirror workflows | The plugin preserves the same evidence and release-authority boundaries as the host |
+| **Codex integration** | Installable `hermes-gauntlet` plugin, presented as Bastion Hermes, with ordinary governed and explicit task-bound Counterform/FOIL workflows | The plugin preserves the same evidence and release-authority boundaries as the host |
 
 ### Release profile
 
 | | |
 |---|---|
-| **Public release** | The Gauntlet `0.5.1` |
-| **Agent integration** | Hermes Gauntlet Codex plugin `0.2.0` |
+| **Public release** | BASTION-01 `0.6.0` |
+| **Agent integration** | Bastion Hermes Codex plugin `0.3.0` |
 | **Access** | Free and open source under the [MIT License](LICENSE) |
 | **Runtime** | Python 3.12+ source package and `gauntlet` CLI; lean and governed Hermes profiles |
 | **Assurance** | Continuous validation, CodeQL, portability/security workflows, reproducibility protocol |
@@ -62,10 +62,11 @@ These are inspectable research-software artifacts, not claimed papers or peer-re
 | [Reproducibility protocol](REPRODUCIBILITY.md) | Environment, commands, receipts, interpretation rules, and known limitations |
 | [Benchmark dossier](docs/BENCHMARKS.md) | Exploratory pilots, exclusions, scoring protocols, and validity constraints |
 | [Validation record](validation/) | Deterministic, structural, specification, privacy, and regression evidence |
-| [Mirror research basis](research/FOIL_PERSONALIZATION_BASIS.md) | Scientific basis and non-diagnostic boundary for adaptive complementary assistance |
+| [Counterform research basis](research/FOIL_PERSONALIZATION_BASIS.md) | Scientific basis and non-diagnostic boundary for adaptive complementary assistance |
 | [Governed Hermes handoff](docs/engineering/HERMES_GOVERNED_RUNTIME_HANDOFF_2026-08-30.md) | Full-capability host design, isolation model, verification record, and operator boundary |
 | [Research roadmap](ROADMAP.md) | Evidence-ordered program from release engineering through external reproduction |
 | [Citation metadata](CITATION.cff) | Software citation information for the exact release or commit evaluated |
+| [Brand architecture](docs/BRAND_ARCHITECTURE.md) | Company/product identity, module map, compatibility contract, and legal-status boundary |
 
 ### Research state and evidence chain
 
@@ -92,25 +93,25 @@ The next evidence program is ordered by information value rather than feature co
 
 1. tag and archive an evidence-bearing release, then add a DOI;
 2. run matched-budget behavioral comparisons on at least three materially different task families;
-3. test adaptive Mirror support using preregistered delayed independent-transfer endpoints;
-4. ablate orchestration, Process Assurance, review, and verifier mechanisms against strong controls;
+3. test adaptive Counterform support using preregistered delayed independent-transfer endpoints;
+4. ablate Crown orchestration, Aegis assurance, Conclave review, and verifier mechanisms against strong controls;
 5. support independent reproduction and publish discrepancies as research outputs.
 
 See the [full research roadmap](ROADMAP.md) for exit criteria and the [research website benchmark](docs/RESEARCH_WEBSITE_BENCHMARK_2026-08-22.md) for the design rationale behind this dossier.
 
 ## Why this project exists
 
-The practical problem was simple: **there are many powerful research, reasoning, search, coding, verification, benchmarking, and review tools, but using them well means repeatedly deciding which one to call, in what order, what evidence it actually produced, and what still has not been established.** The Gauntlet is an attempt to make that easier: one control surface that routes the work to the right specialist method instead of requiring the user to manually orchestrate every tool.
+The practical problem was simple: **there are many powerful research, reasoning, search, coding, verification, benchmarking, and review tools, but using them well means repeatedly deciding which one to call, in what order, what evidence it actually produced, and what still has not been established.** BASTION-01 makes that easier through one control surface that routes work to the specialist method responsible for the relevant evidence obligation.
 
 AI-assisted research can also fail even when the prose is persuasive, multiple agents agree, software tests are green, or a benchmark score is high. This project treats those signals as **evidence with scope**, not as automatic proof.
 
 The research question becomes an operational design rule: route work according to the **epistemic obligation**—what must be proved, searched, executed, measured, independently checked, or left unresolved.
 
-**Mirror** is the adaptive complement layer. It asks what the current task requires, what the user already covers, and which load-bearing capability is least covered; it then requests the smallest useful complement from the existing Gems/tools. Mirror is the public name. The technical ID, `/foil` command, `tools/foil_*` modules, historical benchmark condition names, and existing FOIL-named files remain stable for backwards compatibility.
+**Counterform** is the adaptive complement layer. It asks what the current task requires, what the user already covers, and which load-bearing capability is least covered; it then requests the smallest useful complement from existing modules and tools. Counterform is the public name. The technical ID, `/foil` command, `tools/foil_*` modules, historical benchmark condition names, previous Mirror links, and existing FOIL-named files remain stable for backwards compatibility.
 
 ## Exploratory benchmark pilots
 
-The repository reports positive, null, and mixed/negative results. Earlier blinded pilots compare GPT-5.6 Sol `BASE` with the same underlying model using a frozen **Frontier-Exam FOIL + Mastermind** pre-commit procedure (`FOIL_MM`). A newer BrowseComp ablation separates `BASE`, generic `FOIL`, `FOIL_PROFILE`, and `FOIL_MM`. These are historical technical condition names retained after the public rename to Mirror. Because the conditions were executed in one conversation, items are deterministic **disjoint subsets**; these are exploratory estimates, not official submissions or isolated same-item causal A/B tests.
+The repository reports positive, null, and mixed/negative results. Earlier blinded pilots compare GPT-5.6 Sol `BASE` with the same underlying model using a frozen **Frontier-Exam FOIL + Mastermind** pre-commit procedure (`FOIL_MM`). A newer BrowseComp ablation separates `BASE`, generic `FOIL`, `FOIL_PROFILE`, and `FOIL_MM`. These are historical technical condition names retained after the public rename to Counterform. Because the conditions were executed in one conversation, items are deterministic **disjoint subsets**; these are exploratory estimates, not official submissions or isolated same-item causal A/B tests.
 
 | Evaluation | BASE | Assisted condition | Delta | Status |
 |---|---:|---:|---:|---|
@@ -129,7 +130,7 @@ The repository reports positive, null, and mixed/negative results. Earlier blind
 | **FOIL_PROFILE** | 1/2 | **50%** |
 | **FOIL_MM** | 0/2 | **0%** |
 
-The BrowseComp result is **not** evidence that generic FOIL/Mirror is generally superior or that Mastermind is generally harmful: there are only two different scored items per condition, several complete pre-commit blocks were retired for contamination or execution-integrity reasons, and the exploratory scorer uses normalized exact string match rather than the official BrowseComp LLM judge.
+The BrowseComp result is **not** evidence that generic Counterform/FOIL is generally superior or that Mastermind is generally harmful: there are only two different scored items per condition, several complete pre-commit blocks were retired for contamination or execution-integrity reasons, and the exploratory scorer uses normalized exact string match rather than the official BrowseComp LLM judge.
 
 **Do not combine these rows into a single headline accuracy.** Samples are small and the evaluations measure different constructs. Null, negative, and mixed outcomes are retained because the research question is whether mechanisms help, not whether every benchmark can be made to show an improvement. Several math/error-localization pilots were also discarded when BASE saturated at or near 100%, rather than being used as non-discriminating evidence.
 
@@ -139,14 +140,14 @@ Methodology, exclusions, sources, reproduction commands, and validity boundaries
 
 ```mermaid
 flowchart LR
-    U[Researcher] --> O[Research Orchestrator]
-    O --> F[Formal Reasoning]
-    O --> D[Research Discovery]
-    O --> S[Method Synthesis]
-    O --> E[Engineering Verification]
-    O --> B[Evaluation & Benchmarking]
-    O --> P[Process Assurance]
-    O --> A[Mirror: Adaptive Reasoning Complement]
+    U[Researcher] --> O[Crown: Orchestration Core]
+    O --> F[Axiom: Formal Reasoning]
+    O --> D[Farfield: Research Discovery]
+    O --> S[Foundry: Method Synthesis]
+    O --> E[Proofrig: Engineering Verification]
+    O --> B[Caliper: Evaluation & Benchmarking]
+    O --> P[Aegis: Process Assurance]
+    O --> A[Counterform: Adaptive Reasoning Complement]
     P --> O
     A --> O
     F --> O
@@ -165,16 +166,16 @@ Professional display names are used for the research portfolio. Existing technic
 
 | Research module | Technical ID / alias | Responsibility |
 |---|---|---|
-| **Research Orchestrator** | `soul`, `/soul` | Frame, decompose, route, integrate, audit, release |
-| **Formal Reasoning** | `mathbot`, `/mind` | Proof, logic, probability/statistics, counterexamples, formalization |
-| **Research Discovery** | `scoutbot`, `/space` | Literature, prior art, existing software, cross-domain terminology |
-| **Method Synthesis** | `novelbot`, `/reality` | New mechanisms only after known methods fail a named constraint |
-| **Engineering Verification** | `codebot`, `/power` | Architecture, implementation, integration, execution, software verification |
-| **Evaluation & Benchmarking** | `benchbot`, `/time` | Baselines, capability measurement, ceilings, cost, stop/go |
-| **Process Assurance Framework** | `infinity-gauntlet`, `/gauntlet` | Frame/process audit, stale-state checks, inherited-number checks, false-green defense |
-| **Decision Preflight Protocol** | `meditate` | Grounding before consequential decisions and after failures |
-| **Evidence Review Panel** | `council-of-elders`, `/council` | Selective independent evidence/method review with matched control |
-| **Mirror — Adaptive Reasoning Complement** | `foil`, `/foil` | User/task-specific missing-capability support, multi-stage calibration, and independent-transfer tracking |
+| **Crown — Orchestration Core** | `soul`, `/soul` | Frame, decompose, route, integrate, audit, release |
+| **Axiom — Formal Reasoning Engine** | `mathbot`, `/mind` | Proof, logic, probability/statistics, counterexamples, formalization |
+| **Farfield — Research Discovery Array** | `scoutbot`, `/space` | Literature, prior art, existing software, cross-domain terminology |
+| **Foundry — Method Synthesis Engine** | `novelbot`, `/reality` | New mechanisms only after known methods fail a named constraint |
+| **Proofrig — Engineering Verification System** | `codebot`, `/power` | Architecture, implementation, integration, execution, software verification |
+| **Caliper — Evaluation and Benchmarking System** | `benchbot`, `/time` | Baselines, capability measurement, ceilings, cost, stop/go |
+| **Aegis — Process Assurance Layer** | `infinity-gauntlet`, `/gauntlet` | Frame/process audit, stale-state checks, inherited-number checks, false-green defense |
+| **Stillpoint — Decision Preflight Protocol** | `meditate` | Grounding before consequential decisions and after failures |
+| **Conclave — Evidence Review System** | `council-of-elders`, `/council` | Selective independent evidence/method review with matched control |
+| **Counterform — Adaptive Reasoning Complement** | `foil`, `/foil` | User/task-specific missing-capability support, multi-stage calibration, and independent-transfer tracking |
 
 Every `skills/<id>/` directory contains **`SKILL.md` only**. Hooks, executable helpers, state policy, profiles, and benchmark harnesses deliberately live elsewhere.
 
@@ -182,7 +183,7 @@ Every `skills/<id>/` directory contains **`SKILL.md` only**. Hooks, executable h
 
 Version 0.2.0 introduced the portable runtime. Version 0.3.0 added adaptive real-work deep calibration. Version 0.4.0 added a reproducible structured calibration layer for previously unknown users. Version 0.5.0 hardens release security, privacy, reproducibility, dependency identity, and cross-platform CI without changing the technical `foil` subsystem's Layer 1 / Layer 2A / Layer 2B architecture.
 
-**Version 0.5.1** is a research-repair release. It replaces the technical `foil` subsystem's non-monotone competence count rule with a Beta-posterior estimator carrying evidence tiers and a recency weight (`tools/foil_evidence.py`, characterized in [`docs/FOIL_EVIDENCE_ESTIMATOR.md`](docs/FOIL_EVIDENCE_ESTIMATOR.md)); makes the assistance ladder, execution-ownership axis, and gap vocabulary generated contracts that fail a test on drift; states honestly that the frozen-run tool budget is a tamper-evident ledger enforced only under the PreToolUse broker and advisory everywhere else; replaces a lock that was not a lock with real kernel byte-range locks; ports the V2 routing kernel into `tools/foil_policy.py`, where the routing regime comes from task properties and a benchmark name is receipt metadata only; and makes the language model itself a configured capability via provider-neutral adapters. It closes no efficacy question — retrieval and personalization quality remain `NOT_MEASURED`. Full defect disposition (D1–D11), the not-adopted list, and the corrected vNext evidence boundary are in [`CHANGELOG.md`](CHANGELOG.md).
+**Version 0.6.0** adds the Rookframe Research / BASTION-01 public identity and compatibility contract without changing runtime semantics. The underlying **0.5.1** research-repair work replaces the technical `foil` subsystem's non-monotone competence count rule with a Beta-posterior estimator carrying evidence tiers and a recency weight (`tools/foil_evidence.py`, characterized in [`docs/FOIL_EVIDENCE_ESTIMATOR.md`](docs/FOIL_EVIDENCE_ESTIMATOR.md)); makes the assistance ladder, execution-ownership axis, and gap vocabulary generated contracts that fail a test on drift; states honestly that the frozen-run tool budget is a tamper-evident ledger enforced only under the PreToolUse broker and advisory everywhere else; replaces a lock that was not a lock with real kernel byte-range locks; ports the V2 routing kernel into `tools/foil_policy.py`, where the routing regime comes from task properties and a benchmark name is receipt metadata only; and makes the language model itself a configured capability via provider-neutral adapters. It closes no efficacy question — retrieval and personalization quality remain `NOT_MEASURED`. Full defect disposition (D1–D11), the not-adopted list, and the corrected vNext evidence boundary are in [`CHANGELOG.md`](CHANGELOG.md).
 
 - `.claude/settings.json` — shareable Claude Code hooks using `${CLAUDE_PROJECT_DIR}`;
 - `.gauntlet.json` — configurable governing files, audit budgets, optional evidence-ledger policy;
@@ -191,7 +192,7 @@ Version 0.2.0 introduced the portable runtime. Version 0.3.0 added adaptive real
 - `tools/gauntlet_hook.py` — Pre/Post tool integration;
 - `tools/verify_ledger.py` — optional generic evidence-ledger commit gate;
 - `tools/openrouter_bot.py`, `tools/blackgem_runtime.py`, `tools/snap.py` — optional model-backed independent review;
-- `tools/foil_profile.py` / `tools/foil_hook.py` — Mirror's persistent profiles and prompt-time domain/facet relevance adaptation;
+- `tools/foil_profile.py` / `tools/foil_hook.py` — Counterform's persistent profiles and prompt-time domain/facet relevance adaptation;
 - `tools/foil_assessment.py` — Layer 1 blank cold-start domain questionnaire;
 - `tools/foil_layer2.py` — Layer 2A structured cross-cutting stranger calibration;
 - `tools/foil_calibration.py` — Layer 2B transfer/adversarial/real-work deep calibration;
@@ -199,7 +200,7 @@ Version 0.2.0 introduced the portable runtime. Version 0.3.0 added adaptive real
 
 Runtime state is written under gitignored `.egrt/state/`, not `.git/`. Model credentials are environment-only. No private workstation path or project-specific keystore is required.
 
-### Governed Hermes profile
+### Bastion Hermes governed profile
 
 The vendored Hermes host now provides an explicit full-capability profile in addition to the frozen token-lean profile:
 
@@ -208,7 +209,7 @@ python -m gauntlet_host.cli run --profile governed --root . "your task"
 python -m gauntlet_host.cli chat --profile governed --root .
 ~~~
 
-Governed mode restores persistent memory/profile state, persistent privacy-bounded FOIL/Mirror adaptation, project context and skills, coding/environment probes, normal Hermes tools, bounded MCP discovery, and delegation while retaining task/session isolation, module-owned receipts, Black Gem's no-clear rule, and Soul's release gate. The safer compatibility default is `--profile lean`; canonical task release is always an explicit operator action. See [`docs/engineering/HERMES_GOVERNED_RUNTIME_HANDOFF_2026-08-30.md`](docs/engineering/HERMES_GOVERNED_RUNTIME_HANDOFF_2026-08-30.md).
+Governed mode restores persistent memory/profile state, persistent privacy-bounded Counterform/FOIL adaptation, project context and skills, coding/environment probes, normal Hermes tools, bounded MCP discovery, and delegation while retaining task/session isolation, module-owned receipts, Obsidian's no-clear rule (technical route: Black Gem), and Crown's release gate. The safer compatibility default is `--profile lean`; canonical task release is always an explicit operator action. See [`docs/engineering/HERMES_GOVERNED_RUNTIME_HANDOFF_2026-08-30.md`](docs/engineering/HERMES_GOVERNED_RUNTIME_HANDOFF_2026-08-30.md).
 
 The repository also ships the Codex plugin at `plugins/hermes-gauntlet` (version `0.2.0`). Its `governed-hermes` skill starts and resumes ordinary governed tasks; its `hermes-foil` skill creates an explicit task-bound `ADAPTATION` obligation. After registering the plugin in a Codex marketplace, install it as `hermes-gauntlet@<marketplace>`. The bundled helper can also be run directly:
 
@@ -217,9 +218,9 @@ python plugins\hermes-gauntlet\scripts\hermes_gauntlet.py doctor --json
 python plugins\hermes-gauntlet\scripts\hermes_gauntlet.py foil --prompt "what am I missing?"
 ~~~
 
-## Mirror profiles and multi-stage calibration
+## Counterform profiles and multi-stage calibration
 
-Mirror contains no built-in profile for any individual. A first hooked session creates a **blank local `default` profile** when needed; named profiles support multiple users on one installation. The implementation retains the `foil` technical ID and existing FOIL-named paths for compatibility.
+Counterform contains no built-in profile for any individual. A first hooked session creates a **blank local `default` profile** when needed; named profiles support multiple users on one installation. The implementation retains the `foil` technical ID and existing FOIL-named paths for compatibility.
 
 Profiles are stored outside the repository by default and record evidence metadata rather than raw prompts. Topic or facet mentions can change routing relevance without changing competence classification.
 
@@ -268,15 +269,15 @@ The personalizer is an **experimental onboarding/calibration system**, not an IQ
 |---|---|---|
 | Process Assurance hooks/tools are portable, config-driven, and state-isolated | release-gated source/runtime checks | `validation/RUNTIME_FOIL_MASTERMIND_AUDIT.md`, `tests/` |
 | Public skill directories contain `SKILL.md` only and private-lineage regressions are tested | release-gated checks | `tests/test_skill_layout.py`, `tests/test_private_leaks.py` |
-| Mirror Layer 1 saved-profile/questionnaire mechanics enforce conservative initial classifications | release-gated tests | `tests/test_runtime_tools.py`, `tests/test_foil_assessment.py` |
-| Mirror Layer 2A has blank-session, answer-isolation, assistance, confidence, and no-false-deep regressions | release-gated tests | `tests/test_foil_layer2.py` |
-| Mirror Layer 2B mechanics enforce transfer breadth, independent verification, duplicate protection, and multi-domain maturity gates | release-gated tests | `tests/test_foil_calibration.py` |
-| Mirror structured-calibration falsification history is preserved | audit record | `validation/FOIL_LAYER2_MASTERMIND_AUDIT.md` |
-| Mirror/FOIL research-integration structure/source/regression checks passed the recorded validator | **94/94 PASS** | `validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json` |
-| Mirror's frozen behavioral-contract cases are represented in the specification | **18/18 PASS-SPEC** | `validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json` |
+| Counterform Layer 1 saved-profile/questionnaire mechanics enforce conservative initial classifications | release-gated tests | `tests/test_runtime_tools.py`, `tests/test_foil_assessment.py` |
+| Counterform Layer 2A has blank-session, answer-isolation, assistance, confidence, and no-false-deep regressions | release-gated tests | `tests/test_foil_layer2.py` |
+| Counterform Layer 2B mechanics enforce transfer breadth, independent verification, duplicate protection, and multi-domain maturity gates | release-gated tests | `tests/test_foil_calibration.py` |
+| Counterform structured-calibration falsification history is preserved | audit record | `validation/FOIL_LAYER2_MASTERMIND_AUDIT.md` |
+| Counterform/FOIL research-integration structure/source/regression checks passed the recorded validator | **94/94 PASS** | `validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json` |
+| Counterform's frozen behavioral-contract cases are represented in the specification | **18/18 PASS-SPEC** | `validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json` |
 | HLE/ARC/GPQA/BrowseComp pilot score receipts exist under blinded question-generation/scoring harnesses | exploratory benchmark evidence | `docs/BENCHMARKS.md`, `benchmarks/results/2026-08-22-blinded-pilot.json`, `benchmark_runs/2026-08-22/browsecomp_four_way_results.json` |
 | Public claims have a machine-readable provenance map | implemented | `docs/content-provenance.json` |
-| Mirror improves independent human reasoning in deployment | **not established** | planned in `ROADMAP.md` |
+| Counterform improves independent human reasoning in deployment | **not established** | planned in `ROADMAP.md` |
 
 `PASS-SPEC` means the specification contains the required decision behavior; it is not a behavioral execution result. Benchmark pilots measure model-output accuracy under particular benchmark protocols; they are not evidence of human learning efficacy.
 
@@ -310,7 +311,7 @@ python -m compileall -q validation tools tests benchmarks/harness
 
 For interpretation and evidence boundaries, read [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md).
 
-### 3. Optional Mirror stranger calibration
+### 3. Optional Counterform stranger calibration
 
 The commands retain their `foil_*` filenames for backwards compatibility:
 
@@ -347,7 +348,7 @@ The repository separates:
 5. **Evaluation** — strong baselines, matched budgets, ablations, uncertainty, and negative results.
 6. **Human learning** — assisted performance kept distinct from later independent ownership and transfer.
 
-Planned behavioral comparisons include strong direct AI, static rules, adaptive Mirror (technical/historical `FOIL` identifiers), Layer 1-only vs Layer 1 + Layer 2A vs full Layer 2B, module ablations, native verification vs same-model critique, and Evidence Review Panel vs matched-evidence direct control. See [`RESEARCH.md`](RESEARCH.md).
+Planned behavioral comparisons include strong direct AI, static rules, adaptive Counterform (technical/historical `FOIL` identifiers), Layer 1-only vs Layer 1 + Layer 2A vs full Layer 2B, module ablations, native verification vs same-model critique, and Conclave vs matched-evidence direct control. See [`RESEARCH.md`](RESEARCH.md).
 
 ## Repository structure
 

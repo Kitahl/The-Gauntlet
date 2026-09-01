@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the Evidence-Governed Research Toolkit are documented here.
+All notable changes to BASTION-01 (technical compatibility name: The Gauntlet) are documented here.
 
 The project follows semantic versioning for public releases.
 
@@ -13,6 +13,39 @@ The project follows semantic versioning for public releases.
 - Isolated same-item randomized benchmark A/B runs with confidence intervals and mechanism ablations.
 - Independent reproduction reports.
 - Archival DOI integration after the first evidence-bearing stable release.
+
+## [0.6.0] - 2026-09-01
+
+Public-identity release for **Rookframe Research / BASTION-01**. This release
+renames the public system and its ten modules while deliberately preserving the
+repository slug, Python package, protocol schemas, persisted state, file paths,
+skill IDs, and slash commands as compatibility interfaces.
+
+### Added
+
+- `docs/BRAND_ARCHITECTURE.md` as the canonical public-name, compatibility, and
+  pre-incorporation disclosure contract.
+- `docs/COUNTERFORM.md` as the canonical public overview for the adaptive
+  complement subsystem; `docs/MIRROR.md` remains as a compatibility locator.
+
+### Changed
+
+- The planned company identity is **Rookframe Research** and the first free,
+  open-source product line is **BASTION-01**.
+- Public module names are now Crown, Axiom, Farfield, Foundry, Proofrig,
+  Caliper, Aegis, Stillpoint, Conclave, and Counterform.
+- README, research statement, architecture, website, citation metadata,
+  validators, runtime descriptions, and Codex plugin presentation use the new
+  public identity.
+
+### Compatibility and evidence boundary
+
+- Technical identifiers such as `the-gauntlet`, `gauntlet`, `soul`, `mathbot`,
+  `/mind`, `/gauntlet`, `foil`, and `/foil` remain unchanged.
+- Rookframe Research is a proposed working identity. This release does not
+  claim incorporation, registered marks, or legal name clearance.
+- The rebrand changes no behavioral-efficacy claim and grants no module new
+  evidence or release authority.
 
 ## [0.5.1] - 2026-08-23
 

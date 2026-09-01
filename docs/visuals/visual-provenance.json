@@ -1,12 +1,12 @@
 {
   "schema": "egrt/visual-provenance-1",
-  "showcase_revision": 19,
-  "research_software_version": "0.5.1",
+  "showcase_revision": 20,
+  "research_software_version": "0.6.0",
   "visuals": [
     {
       "id": "system-field",
       "file": "docs/system-field.js",
-      "purpose": "Render one persistent semantic research-system field that reconfigures around the active professional workflow and the five specialist Gems.",
+      "purpose": "Render one persistent BASTION-01 system field that reconfigures around the active professional workflow and the five evidence engines.",
       "sources": [
         "docs/ARCHITECTURE.md",
         "skills/soul/SKILL.md",

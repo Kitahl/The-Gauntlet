@@ -1,4 +1,4 @@
-"""Typed Research Orchestrator runtime: obligations, routing and release gate."""
+"""Typed Crown/Soul runtime: obligations, routing and release gate."""
 from __future__ import annotations
 
 import argparse

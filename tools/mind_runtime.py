@@ -1,4 +1,4 @@
-"""Formal Reasoning runtime adapters and proof/derivation receipts.
+"""Axiom formal-reasoning runtime adapters and proof/derivation receipts.
 
 A receipt verifies only the supplied formal encoding. The module never upgrades an
 English claim merely because a solver or arithmetic evaluator returned successfully.

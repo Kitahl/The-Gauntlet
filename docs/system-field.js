@@ -19,11 +19,11 @@
     overview: ['SYSTEM MAP','FIVE SPECIALISTS · FIVE CONTROL / REVIEW TOOLS'],
     workflow: ['ROUTING TRACE','ONLY LOAD-BEARING METHODS ACTIVATE'],
     gems: ['SPECIALIST LAYER','THE FIELD RECONFIGURES AROUND THE CLAIM'],
-    mind: ['MIND / FORMAL REASONING','CLAIM → OBLIGATION → PROOF / COUNTEREXAMPLE'],
-    space: ['SPACE / RESEARCH DISCOVERY','QUERY → SOURCES → SCOPED FINDING'],
-    reality: ['REALITY / METHOD SYNTHESIS','KNOWN METHODS → GAP → CANDIDATE → RECHECK'],
-    power: ['POWER / ENGINEERING VERIFICATION','SOURCE → BUILD → TEST → RUNTIME → RECEIPT'],
-    time: ['TIME / EVALUATION','CANDIDATE ∥ BASELINE → MATCHED CELLS → STOP / GO'],
+    mind: ['AXIOM / FORMAL REASONING','CLAIM → OBLIGATION → PROOF / COUNTEREXAMPLE'],
+    space: ['FARFIELD / RESEARCH DISCOVERY','QUERY → SOURCES → SCOPED FINDING'],
+    reality: ['FOUNDRY / METHOD SYNTHESIS','KNOWN METHODS → GAP → CANDIDATE → RECHECK'],
+    power: ['PROOFRIG / ENGINEERING VERIFICATION','SOURCE → BUILD → TEST → RUNTIME → RECEIPT'],
+    time: ['CALIPER / EVALUATION','CANDIDATE ∥ BASELINE → MATCHED CELLS → STOP / GO'],
     system: ['CONTROL MODEL','TASK → OBLIGATIONS → METHODS → RECEIPTS → RESULT'],
     quiet: ['SOURCE / IMPLEMENTATION','DETAIL VIEW']
   };
@@ -143,7 +143,7 @@
     if(W>800){
       obligations.forEach((o,i)=>{line(task,o,COLORS.accent,.25*r,1);diamond(o[0],o[1],3,COLORS.base,.55*r);line(o,receipts[i],COLORS.accent,.22*r,1);diamond(receipts[i][0],receipts[i][1],3,COLORS.good,.65*r);});
       diamond(task[0],task[1],5,'#e8edf2',.85*r);label('TASK',task[0],task[1]-20,'#dfe5ec',.7*r);
-      label('SPACE',cx,cy-s*.45,COLORS.space,.75*r);label('POWER',cx,cy,COLORS.power,.75*r);label('COUNCIL',cx,cy+s*.45,COLORS.reality,.65*r);
+      label('FARFIELD',cx,cy-s*.45,COLORS.space,.75*r);label('PROOFRIG',cx,cy,COLORS.power,.75*r);label('CONCLAVE',cx,cy+s*.45,COLORS.reality,.65*r);
     }
     const front=lerp(W*.42,W*.97,r);ctx.fillStyle=rgba('#c7d7ea',.08*(1-r));ctx.fillRect(front,0,1,H);
   }
@@ -154,7 +154,7 @@
   }
 
   function drawWorkflow(t){
-    const y=H*.52, xs=W<800?[W*.17,W*.38,W*.59,W*.8]:[W*.47,W*.61,W*.75,W*.89];const names=['SPACE','REALITY','POWER','TIME'], cols=[COLORS.space,COLORS.reality,COLORS.power,COLORS.time];
+    const y=H*.52, xs=W<800?[W*.17,W*.38,W*.59,W*.8]:[W*.47,W*.61,W*.75,W*.89];const names=['FARFIELD','FOUNDRY','PROOFRIG','CALIPER'], cols=[COLORS.space,COLORS.reality,COLORS.power,COLORS.time];
     for(let i=0;i<xs.length;i++){if(i<xs.length-1)line([xs[i],y],[xs[i+1],y],COLORS.accent,.28,1);drawGem(xs[i],y,Math.min(W,H)*(W<800?.075:.095),cols[i],t,.58);if(W>800)label(names[i],xs[i],y,cols[i],.75);if(i<xs.length-1)travellingPulse([xs[i],y],[xs[i+1],y],t,i*.23,COLORS.accent,.8);}
   }
 

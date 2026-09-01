@@ -1,4 +1,4 @@
-"""Status/event CLI for the typed Evidence-Governed Research Toolkit runtime."""
+"""Status/event CLI for the typed BASTION-01 evidence-control runtime."""
 from __future__ import annotations
 
 import argparse

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 470" role="img" aria-labelledby="title desc">
-  <title id="title">Mirror adaptive complement process</title>
+  <title id="title">Counterform adaptive complement process</title>
   <desc id="desc">Task evidence produces competing gap hypotheses, one minimum discriminator, a smallest useful complement, claim-matched verification, changed-context transfer, and a bounded evidence update.</desc>
   <defs>
     <style>
@@ -8,7 +8,7 @@
   </defs>
   <rect width="1200" height="470" class="bg"/>
   <path d="M40 88H1160" class="rule"/>
-  <text x="40" y="52" class="mono accent tiny">MIRROR / TASK EVIDENCE → COMPLEMENT → TRANSFER</text>
+  <text x="40" y="52" class="mono accent tiny">COUNTERFORM / TASK EVIDENCE → COMPLEMENT → TRANSFER</text>
   <text x="1160" y="52" text-anchor="end" class="mono dim tiny">ASSISTANCE AND OWNERSHIP STAY SEPARATE</text>
 
   <rect x="48" y="248" width="150" height="96" class="box"/>

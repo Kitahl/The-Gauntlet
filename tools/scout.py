@@ -1,4 +1,4 @@
-"""Small, keyless OpenAlex prior-art lookup used by Research Discovery."""
+"""Small, keyless OpenAlex prior-art lookup used by Farfield."""
 from __future__ import annotations
 
 import argparse

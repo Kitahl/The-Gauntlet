@@ -1,4 +1,4 @@
-# Time / Evaluation & Benchmarking — engineering specification
+# Caliper / Time — Evaluation and Benchmarking System specification
 
 ## Obligation
 

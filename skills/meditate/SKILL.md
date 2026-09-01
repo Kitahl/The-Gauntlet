@@ -1,9 +1,9 @@
 ---
 name: meditate
-description: Decision Preflight Protocol. Orchestrator-invoked grounding step before consequential action, after repeated failure, or when the task frame is unstable. Produces a compact state/goal/evidence/next-action reset rather than an additional opinion.
+description: Stillpoint — BASTION-01's Decision Preflight Protocol. Orchestrator-invoked grounding step before consequential action, after repeated failure, or when the task frame is unstable. Produces a compact state/goal/evidence/next-action reset rather than an additional opinion.
 ---
 
-# Decision Preflight Protocol
+# Stillpoint — Decision Preflight Protocol
 
 Use when execution is about to outrun the evidence state.
 

@@ -1,4 +1,4 @@
-# Common runtime engineering contract
+# BASTION-01 common runtime engineering contract
 
 ## Purpose
 
@@ -24,7 +24,12 @@ Independence is represented by provenance, source lineage, verifier identity, mo
 
 ## Monitorability
 
-Every automated Gauntlet check declares which typed events/state it requires. If an operation is triggered but the typed state needed to discriminate it is absent, the monitor returns `UNKNOWN` or `UNAVAILABLE`; absence of the trigger itself is a scoped `UNKNOWN` result whose reason begins `not-applicable:` — nothing was checked, so nothing is cleared. It must not silently convert missing observability into a negative finding.
+Every automated Aegis check (technical route: Gauntlet) declares which typed
+events/state it requires. If an operation is triggered but the typed state
+needed to discriminate it is absent, the monitor returns `UNKNOWN` or
+`UNAVAILABLE`; absence of the trigger itself is a scoped `UNKNOWN` result whose
+reason begins `not-applicable:` — nothing was checked, so nothing is cleared. It
+must not silently convert missing observability into a negative finding.
 
 ## Versioning
 

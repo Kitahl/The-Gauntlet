@@ -1,4 +1,4 @@
-"""Reusable Evaluation & Benchmarking statistical primitives and receipts.
+"""Reusable Caliper evaluation and benchmarking primitives and receipts.
 
 This stdlib implementation is fixed-n. It does not make repeated peeking anytime-valid;
 sequential monitoring requires a separately preregistered confidence-sequence/e-process

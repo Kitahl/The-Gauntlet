@@ -1,4 +1,4 @@
-# Space / Research Discovery — engineering specification
+# Farfield / Space — Research Discovery Array specification
 
 ## Obligation
 

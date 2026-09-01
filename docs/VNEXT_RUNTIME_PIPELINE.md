@@ -1,21 +1,25 @@
-# vNext typed runtime pipeline
+# BASTION-01 typed runtime pipeline
 
-This document freezes the pipeline before component-specific implementation. It is the integration contract for Soul, Gauntlet, Meditate, Council, the five Gems, and FOIL.
+This document freezes the pipeline before component-specific implementation. It
+is the integration contract for Crown, Aegis, Stillpoint, Conclave, the five
+evidence engines, Counterform, and Obsidian. Stable technical IDs remain in
+parentheses where they matter for implementation.
 
-## 0. Current v0.5.0 pipeline
+## 0. Current v0.6.0 pipeline
 
 ```text
 User
-  -> Research Orchestrator specification
+  -> Crown orchestration specification (`soul`)
   -> model decides which skill(s) apply
-  -> optional FOIL prompt relevance/profile context
+  -> optional Counterform profile context (`foil`)
   -> selected research work/tools
-  -> Gauntlet hooks monitor stale state, repeated loops, and novelty/survivor framing
-  -> optional Council/SNAP/red-team helpers
+  -> Aegis hooks monitor stale state, repeated loops, and novelty/survivor framing
+  -> optional Conclave/SNAP/Obsidian review
   -> prose synthesis/release
 ```
 
-Strengths: modular epistemic obligations, privacy-conscious hooks, real Gauntlet/FOIL runtime, benchmark/reproducibility discipline.
+Strengths: modular epistemic obligations, privacy-conscious hooks, real
+Aegis/Counterform runtime, and benchmark/reproducibility discipline.
 
 Limitation: many obligations are represented in prose but do not share a single typed state/receipt/release contract.
 
@@ -28,7 +32,7 @@ USER / ARTIFACT
       |
       v
 +------------------------------+
-| 1. SOUL — FRAME TASK         |
+| 1. CROWN — FRAME TASK        |
 | task_id + goal_hash          |
 | success / stakes / boundary  |
 +------------------------------+
@@ -47,7 +51,7 @@ USER / ARTIFACT
       |                     |
       v                     v
 +-------------+      +----------------+
-| 3. MEDITATE |      | 4. FOIL        |
+| 3. STILLPOINT|     | 4. COUNTERFORM |
 | if triggered|      | routing/adapt. |
 | select next |      | no self-cert.  |
 | computation |      +----------------+
@@ -57,8 +61,8 @@ USER / ARTIFACT
                   v
 +---------------------------------------------------------+
 | 5. ROUTE CLAIM-NATIVE WORK                              |
-| MIND | SPACE | REALITY | POWER | TIME | COUNCIL |        |
-| BLACK GEM (ADVERSARY)                                   |
+| AXIOM | FARFIELD | FOUNDRY | PROOFRIG | CALIPER |        |
+| CONCLAVE | OBSIDIAN (ADVERSARY)                         |
 +---------------------------------------------------------+
                   |
                   v
@@ -70,14 +74,14 @@ USER / ARTIFACT
                   |
                   v
 +---------------------------------------------------------+
-| 7. GAUNTLET — RUNTIME ASSURANCE                          |
+| 7. AEGIS — RUNTIME ASSURANCE                             |
 | frame/audit/costume/derive/self/redirect/refresh/        |
 | boundary/explain/oob with explicit support mode          |
 +---------------------------------------------------------+
                   |
                   v
 +---------------------------------------------------------+
-| 8. SOUL RELEASE GATE                                     |
+| 8. CROWN RELEASE GATE                                    |
 | every load-bearing obligation has a scoped valid receipt |
 +---------------------------------------------------------+
         |             |              |              |
@@ -140,24 +144,28 @@ It does not store raw prompts or generic raw tool output. Component-specific art
 - Missing verifier/tool -> `UNAVAILABLE`, not false.
 - Same producer/verifier provenance -> independence `UNKNOWN`/`ISSUE` according to the claim, not automatic independent confirmation.
 - Search saturation with no result -> `NOT_FOUND_WITHIN_SCOPE`, not nonexistence.
-- Council synthesis without full commit/reveal + per-seat cross-critique + same-artifact/same-budget DIRECT control -> REVIEW remains `UNKNOWN`.
+- Conclave synthesis without full commit/reveal + per-seat cross-critique + same-artifact/same-budget DIRECT control -> REVIEW remains `UNKNOWN`.
 - Solver success -> formal encoding only; English entailment remains a separate obligation when nontrivial.
 - Green engineering checks -> only named check/defect-class coverage.
-- Black Gem surviving an attack panel -> `UNKNOWN`, never `CLEARED`; ADVERSARY receipts can raise an issue but never clear one.
+- Obsidian surviving an attack panel -> `UNKNOWN`, never `CLEARED`; ADVERSARY receipts can raise an issue but never clear one.
 
-## 6. FOIL integration
+## 6. Counterform integration
 
-FOIL remains the adaptive complementary-assistance layer. It may:
+Counterform (technical ID: FOIL) remains the adaptive
+complementary-assistance layer. It may:
 
 - alter routing priority;
 - recommend extra verification/representation changes;
 - contribute adaptation evidence about the user/task.
 
-FOIL may not mark another obligation `CLEARED` merely because it recommended or assisted the action. Factual warrant comes from the claim-native receipt.
+Counterform may not mark another obligation `CLEARED` merely because it
+recommended or assisted the action. Factual warrant comes from the claim-native
+receipt.
 
-## 6b. Black Gem — adversarial review
+## 6b. Obsidian — adversarial review
 
-Black Gem is the producer for the `ADVERSARY` obligation. It runs a frozen attack
+Obsidian (technical route: Black Gem) is the producer for the `ADVERSARY`
+obligation. It runs a frozen attack
 rubric across two or more independently provenanced breaker seats — a blind
 independent pass, off-diagonal cross-critique, then one synthesis — over a frozen
 candidate, and probes each seat with a planted-costume canary at the graded
@@ -174,13 +182,16 @@ substantive obligation.
 
 ## 7. Mastermind boundary
 
-Mastermind is not part of this pipeline or repository runtime. It may be used externally during development audits, but no import, hook, state, package, benchmark-control file, or runtime dependency is permitted in The-Gauntlet.
+Mastermind is not part of this pipeline or repository runtime. It may be used
+externally during development audits, but no import, hook, state, package,
+benchmark-control file, or runtime dependency is permitted in BASTION-01. The
+`The-Gauntlet` repository slug remains a compatibility locator.
 
 ## Important non-upgrades
 
-- Space retrieval candidates are not factual warrant; only a content-hashed claim-scoped source-assessment receipt can clear DISCOVERY.
+- Farfield retrieval candidates are not factual warrant; only a content-hashed claim-scoped source-assessment receipt can clear DISCOVERY.
 - A valid receipt hash proves integrity, not semantic entailment.
-- Council overlap diagnostics do not prove statistical independence.
-- Meditate numeric VOC is used only with one common supplied current decision utility and complete action outcome models; otherwise it stays heuristic/unknown.
-- Power never invokes a shell; arbitrary custom verifier commands require explicit outer `EGR_POWER_ALLOW_CUSTOM_COMMANDS=1`.
-- Time fixed-n statistics are not anytime-valid under repeated peeking.
+- Conclave overlap diagnostics do not prove statistical independence.
+- Stillpoint numeric VOC is used only with one common supplied current decision utility and complete action outcome models; otherwise it stays heuristic/unknown.
+- Proofrig never invokes a shell; arbitrary custom verifier commands require explicit outer `EGR_POWER_ALLOW_CUSTOM_COMMANDS=1`.
+- Caliper fixed-n statistics are not anytime-valid under repeated peeking.

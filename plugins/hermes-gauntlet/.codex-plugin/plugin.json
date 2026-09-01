@@ -1,35 +1,37 @@
 {
   "name": "hermes-gauntlet",
-  "version": "0.2.0+codex.20260901105619",
-  "description": "Run governed Hermes and task-bound FOIL adaptation from Codex.",
+  "version": "0.3.0",
+  "description": "Run Bastion Hermes and task-bound Counterform adaptation from Codex.",
   "author": {
-    "name": "The Gauntlet"
+    "name": "Rookframe Research"
   },
   "license": "MIT",
   "keywords": [
     "hermes",
+    "bastion",
     "gauntlet",
     "governed-agent",
+    "counterform",
     "foil",
     "mirror",
-    "soul"
+    "soul",
+    "rookframe"
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Hermes Gauntlet",
-    "shortDescription": "Use governed Hermes and FOIL from Codex.",
-    "longDescription": "Starts or resumes task-bound governed Hermes and explicit FOIL/Mirror adaptation, preserves Gauntlet and Soul authority boundaries, and diagnoses local setup without exposing credentials.",
-    "developerName": "The Gauntlet",
+    "displayName": "Bastion Hermes",
+    "shortDescription": "Use governed Hermes and Counterform from Codex.",
+    "longDescription": "Starts or resumes BASTION-01-governed Hermes and explicit Counterform/FOIL adaptation, preserves Aegis and Crown authority boundaries, and diagnoses local setup without exposing credentials.",
+    "developerName": "Rookframe Research",
     "category": "Developer Tools",
     "capabilities": [
       "Interactive",
       "Write"
     ],
     "defaultPrompt": [
-      "Start governed Hermes for this task.",
-      "Use Hermes FOIL to identify and adapt to what I am missing.",
-      "Resume a governed Hermes task.",
-      "Check whether governed Hermes is ready."
+      "Start Bastion Hermes for this task.",
+      "Use Counterform to identify what I am missing.",
+      "Check whether Bastion Hermes is ready."
     ]
   }
 }

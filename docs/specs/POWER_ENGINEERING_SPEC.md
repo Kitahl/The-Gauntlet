@@ -1,4 +1,4 @@
-# Power / Engineering Verification — engineering specification
+# Proofrig / Power — Engineering Verification System specification
 
 ## Obligation
 

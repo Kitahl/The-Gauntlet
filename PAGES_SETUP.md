@@ -1,6 +1,6 @@
-# GitHub Pages deployment
+# BASTION-01 GitHub Pages deployment
 
-The Evidence-Governed Research Toolkit showcase is a dependency-free static site in `docs/`.
+The Rookframe Research BASTION-01 showcase is a dependency-free static site in `docs/`.
 
 ## Repository setting
 
@@ -21,5 +21,6 @@ Expected project-site URL:
 - canonical GitHub links for repository artifacts;
 - deterministic browser validation in CI;
 - public content is research/portfolio material and follows the repository evidence boundary.
+- the company name is presented as a working identity pending incorporation and formal clearance.
 
 If the repository slug is renamed later, update the Pages URL, `CITATION.cff`, badges, canonical links, and deployment documentation in the same change.

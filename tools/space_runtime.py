@@ -1,4 +1,4 @@
-"""Stateful Research Discovery runtime with scoped retrieval and source assessment.
+"""Stateful Farfield research-discovery runtime with scoped retrieval and source assessment.
 
 Retrieval is not factual verification. Search receipts remain UNKNOWN until selected
 sources are actually inspected and recorded in a source-assessment receipt. A

@@ -1,9 +1,13 @@
 ---
 name: codebot
-description: Engineering Verification module. Trigger: /power, /codebot, implement, debug, integrate, test, benchmark software behavior, review architecture, or verify an executable claim. Converts software claims into runnable checks and preservation obligations.
+description: >-
+  Proofrig — BASTION-01's Engineering Verification System. Trigger: /power,
+  /codebot, implement, debug, integrate, test, benchmark software behavior,
+  review architecture, or verify an executable claim. Converts software claims
+  into runnable checks and preservation obligations.
 ---
 
-# Engineering Verification
+# Proofrig — Engineering Verification System
 
 Executable claims should be executed.
 

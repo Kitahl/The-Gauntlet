@@ -1,4 +1,4 @@
-# Reality / Method Synthesis — engineering specification
+# Foundry / Reality — Method Synthesis Engine specification
 
 ## Obligation
 

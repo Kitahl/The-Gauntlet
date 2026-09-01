@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Codex plugin helper for the task-bound governed Hermes runtime."""
+"""Codex plugin helper for the BASTION-01-governed Hermes runtime."""
 
 from __future__ import annotations
 
@@ -69,7 +69,7 @@ def discover_root(explicit: str | None) -> Path:
 
     requested = explicit or configured or "the current directory and plugin source ancestry"
     raise PluginError(
-        "No valid The-Gauntlet checkout was found. "
+        "No valid BASTION-01 (The-Gauntlet) checkout was found. "
         f"Set HERMES_GAUNTLET_ROOT or pass --root. Last requested location: {requested}"
     )
 
@@ -250,7 +250,7 @@ def command_start(args: argparse.Namespace) -> int:
 def command_foil(args: argparse.Namespace) -> int:
     prompt = args.prompt.strip()
     if not prompt:
-        raise PluginError("FOIL requires a non-empty prompt.")
+        raise PluginError("Counterform/FOIL requires a non-empty prompt.")
     if prompt.split(maxsplit=1)[0].casefold() != "/foil":
         prompt = f"/foil {prompt}"
     foil_args = argparse.Namespace(**vars(args))
@@ -315,7 +315,7 @@ def _add_overrides(parser: argparse.ArgumentParser) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Launch or resume The Gauntlet's governed Hermes runtime from Codex."
+        description="Launch or resume Bastion Hermes from Codex."
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -339,7 +339,7 @@ def build_parser() -> argparse.ArgumentParser:
     start.set_defaults(func=command_start)
 
     foil = subparsers.add_parser(
-        "foil", help="Create an explicit task-bound FOIL/Mirror adaptation task"
+        "foil", help="Create an explicit task-bound Counterform/FOIL adaptation task"
     )
     _add_root(foil)
     _add_overrides(foil)

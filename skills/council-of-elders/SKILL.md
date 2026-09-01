@@ -1,9 +1,14 @@
 ---
 name: council-of-elders
-description: Evidence Review Panel. Trigger: /council, /forum, "independent review", or equivalent. Selectively convenes independent, evidence-grounded review roles around a concrete artifact after a strong direct pass exists. Uses commit-reveal, disjoint evidence where possible, a skeptic, and a matched direct control. Agreement is not truth.
+description: >-
+  Conclave — BASTION-01's Evidence Review System. Trigger: /council, /forum,
+  "independent review", or equivalent. Selectively convenes independent,
+  evidence-grounded review roles around a concrete artifact after a strong
+  direct pass exists. Uses commit-reveal, disjoint evidence where possible, a
+  skeptic, and a matched direct control. Agreement is not truth.
 ---
 
-# Evidence Review Panel
+# Conclave — Evidence Review System
 
 The public panel uses **artifact-derived review roles**, not simulated authority from named personalities.
 

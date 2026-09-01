@@ -1,11 +1,15 @@
 ---
 name: soul
-description: Research Orchestrator — control plane for the Evidence-Governed Research Toolkit. Trigger: /soul, "orchestrate", "route this", or equivalent. Frames the task, identifies evidence obligations, invokes the minimum sufficient research modules, integrates results, applies process assurance, and releases only what the evidence supports.
+description: >-
+  Crown — BASTION-01's Orchestration Core. Trigger: /soul, "orchestrate",
+  "route this", or equivalent. Frames the task, identifies evidence obligations,
+  invokes the minimum sufficient research modules, integrates results, applies
+  process assurance, and releases only what the evidence supports.
 ---
 
-# Research Orchestrator
+# Crown — Orchestration Core
 
-The Research Orchestrator owns **routing and synthesis**, not domain authority.
+Crown owns **routing and synthesis**, not domain authority. The stable technical ID remains `soul`.
 
 ## Authority
 
@@ -31,7 +35,7 @@ The Research Orchestrator owns **routing and synthesis**, not domain authority.
 - benchmark / baseline / ceiling / cost / stop-go → Evaluation & Benchmarking (`/time`)
 - process/frame/stale-state/false-green audit → Process Assurance (`/gauntlet`)
 - user-specific missing capability → FOIL (`/foil`)
-- selective independent review → Evidence Review Panel (`/council`)
+- selective independent review → Conclave (`/council`)
 - grounding before consequential action or after drift → Decision Preflight
 
 Mandatory claim-native checks may not be optimized away for speed.

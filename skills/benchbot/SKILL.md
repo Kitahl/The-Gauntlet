@@ -1,9 +1,13 @@
 ---
 name: benchbot
-description: Evaluation & Benchmarking module. Trigger: /time, /benchbot, benchmark, baseline, capability, ceiling, cost, effort/reward, stop-go, comparison, or ablation. Designs evaluations that distinguish real mechanism gain from stronger models, more tools, or more compute.
+description: >-
+  Caliper — BASTION-01's Evaluation and Benchmarking System. Trigger: /time,
+  /benchbot, benchmark, baseline, capability, ceiling, cost, effort/reward,
+  stop-go, comparison, or ablation. Designs evaluations that distinguish real
+  mechanism gain from stronger models, more tools, or more compute.
 ---
 
-# Evaluation & Benchmarking
+# Caliper — Evaluation and Benchmarking System
 
 ## Evaluation design
 

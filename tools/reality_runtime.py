@@ -1,4 +1,4 @@
-"""Method Synthesis candidate schema and evidence-gated admission."""
+"""Foundry method-synthesis candidate schema and evidence-gated admission."""
 from __future__ import annotations
 
 import json

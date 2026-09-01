@@ -1,9 +1,13 @@
 ---
 name: scoutbot
-description: Research Discovery module. Trigger: /space, /scoutbot, prior art, literature search, current facts, existing tools, repositories, standards, or "has this been done?". Finds and verifies reusable work before new design.
+description: >-
+  Farfield — BASTION-01's Research Discovery Array. Trigger: /space,
+  /scoutbot, prior art, literature search, current facts, existing tools,
+  repositories, standards, or "has this been done?". Finds and verifies
+  reusable work before new design.
 ---
 
-# Research Discovery
+# Farfield — Research Discovery Array
 
 Search before novelty and before absence claims.
 

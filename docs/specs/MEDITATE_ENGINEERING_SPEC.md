@@ -1,8 +1,8 @@
-# Decision Preflight / Meditate — engineering specification
+# Stillpoint / Meditate — Decision Preflight Protocol specification
 
 ## Obligation
 
-Prevent execution from outrunning the represented decision/evidence state. Meditate is a metareasoning controller, not a ceremonial delay or extra opinion.
+Prevent execution from outrunning the represented decision/evidence state. Stillpoint is a metareasoning controller, not a ceremonial delay or extra opinion.
 
 ## Current workflow
 

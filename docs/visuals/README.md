@@ -2,8 +2,8 @@
 
 These assets explain public mechanisms and evidence already present in the repository. They are not decorative stock art and do not create new scientific claims.
 
-- `gauntlet-system-map.svg` — conceptual architecture from public module specifications.
-- `foil-diagnostic-loop.svg` — FOIL specification-derived diagnostic/transfer mechanism.
+- `gauntlet-system-map.svg` — BASTION-01 conceptual architecture from public module specifications; filename retained for compatibility.
+- `foil-diagnostic-loop.svg` — Counterform specification-derived diagnostic/transfer mechanism; filename retained for compatibility.
 - `benchmark-evidence.svg` — descriptive rendering of published exploratory benchmark receipts, including the GPQA null result.
 - `visual-provenance.json` — source and interpretation boundaries for each figure.
 

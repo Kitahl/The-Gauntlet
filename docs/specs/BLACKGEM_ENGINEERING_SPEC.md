@@ -1,4 +1,4 @@
-# Black Gem — engineering specification
+# Obsidian / Black Gem — Adversarial Review Cell specification
 
 ## Obligation
 
@@ -6,7 +6,7 @@ Attack a frozen candidate hard enough that a break, if one exists at this budget
 found and recorded as a structured triple — while measuring whether the breakers were
 actually capable and actually present, rather than assuming it from an HTTP 200.
 
-Black Gem produces the `ADVERSARY` obligation. It can raise an issue. It can never
+Obsidian (technical route: Black Gem) produces the `ADVERSARY` obligation. It can raise an issue. It can never
 clear one: the absence of a found break is not evidence that a claim is true.
 
 ## Current workflow

@@ -41,7 +41,7 @@ Dependabot remains responsible for proposing pinned-action and Python dependency
 
 A passing security scan means the configured scanners found no matching issue in the exact scanned state. It is not a proof that no undiscoverable vulnerability or secret exists.
 
-## 3. FOIL specification evidence
+## 3. Counterform specification evidence
 
 Inspect:
 
@@ -50,7 +50,9 @@ Inspect:
 - `validation/FOIL_RESEARCH_INTEGRATION_3_LOOP_REPORT.md`
 - `research/FOIL_RESEARCH_BASIS.md`
 
-`PASS-SPEC` means the specification contains the required decision behavior. It is not a behavioral execution result.
+The retained `FOIL` filenames are technical compatibility locators for
+Counterform. `PASS-SPEC` means the specification contains the required decision
+behavior. It is not a behavioral execution result.
 
 ## 4. Public-release assurance
 

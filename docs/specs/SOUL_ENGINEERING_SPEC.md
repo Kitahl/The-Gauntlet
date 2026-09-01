@@ -1,8 +1,8 @@
-# Research Orchestrator — engineering specification
+# Crown / Soul — Orchestration Core engineering specification
 
 ## Obligation
 
-Own task framing, obligation decomposition, routing, integration and release gating. Soul owns **control**, not domain truth.
+Own task framing, obligation decomposition, routing, integration and release gating. Crown (technical ID: Soul) owns **control**, not domain truth.
 
 ## Current workflow
 

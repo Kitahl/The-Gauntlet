@@ -1,4 +1,4 @@
-# Mind / Formal Reasoning — engineering specification
+# Axiom / Mind — Formal Reasoning Engine specification
 
 ## Obligation
 

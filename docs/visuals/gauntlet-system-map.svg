@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" role="img" aria-labelledby="title desc">
-  <title id="title">Gauntlet system map</title>
+  <title id="title">BASTION-01 system map</title>
   <desc id="desc">A five-stage system map. A framed goal becomes three explicit obligations. Each is routed to a selected specialist, produces a receipt, and converges on a scoped verdict.</desc>
   <defs>
     <style>
@@ -23,9 +23,9 @@
   <path d="M414 212H484M414 314H484M414 416H484" class="route"/>
   <text x="484" y="126" class="mono dim tiny">03 / SELECT TOOL</text>
   <rect x="484" y="180" width="156" height="64" class="space"/><rect x="484" y="282" width="156" height="64" class="power"/><rect x="484" y="384" width="156" height="64" class="time"/>
-  <text x="562" y="204" text-anchor="middle" class="mono dim tiny">PRIOR ART</text><text x="562" y="227" text-anchor="middle" class="mono txt label">SPACE</text>
-  <text x="562" y="306" text-anchor="middle" class="mono dim tiny">EXECUTABLE</text><text x="562" y="329" text-anchor="middle" class="mono txt label">POWER</text>
-  <text x="562" y="408" text-anchor="middle" class="mono dim tiny">EVALUATION</text><text x="562" y="431" text-anchor="middle" class="mono txt label">TIME</text>
+  <text x="562" y="204" text-anchor="middle" class="mono dim tiny">PRIOR ART</text><text x="562" y="227" text-anchor="middle" class="mono txt label">FARFIELD</text>
+  <text x="562" y="306" text-anchor="middle" class="mono dim tiny">EXECUTABLE</text><text x="562" y="329" text-anchor="middle" class="mono txt label">PROOFRIG</text>
+  <text x="562" y="408" text-anchor="middle" class="mono dim tiny">EVALUATION</text><text x="562" y="431" text-anchor="middle" class="mono txt label">CALIPER</text>
 
   <path d="M640 212H710M640 314H710M640 416H710" class="route"/>
   <text x="710" y="126" class="mono dim tiny">04 / RECEIPT</text>

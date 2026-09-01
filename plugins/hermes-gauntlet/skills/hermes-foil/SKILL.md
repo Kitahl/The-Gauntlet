@@ -1,9 +1,9 @@
 ---
 name: hermes-foil
-description: Run The Gauntlet's governed Hermes with explicit, persistent, task-bound FOIL/Mirror adaptation. Use when the user asks for FOIL, Mirror, adapt to me, teach me this, check me against the evidence, identify what I am missing, or create an adaptation obligation.
+description: Run Bastion Hermes with explicit, persistent, task-bound Counterform adaptation. Use when the user asks for Counterform, FOIL, Mirror, adapt to me, teach me this, check me against the evidence, identify what I am missing, or create an adaptation obligation.
 ---
 
-# Hermes FOIL
+# Bastion Hermes Counterform
 
 Use the bundled `scripts/hermes_gauntlet.py` helper. Resolve `<plugin-root>` as the parent of the `skills` directory containing this skill; do not assume the shell working directory is the plugin directory.
 
@@ -12,7 +12,7 @@ Use the bundled `scripts/hermes_gauntlet.py` helper. Resolve `<plugin-root>` as 
 - Create explicit FOIL work only with the `foil` command. It forces the Gauntlet obligation kind to `ADAPTATION` and prefixes the prompt with `/foil` when needed.
 - Preserve the printed Gauntlet task ID (`task-...`) as the public resume handle. Resume with `continue --task-id`; never expose or invent Hermes's derived internal session ID.
 - Continue to include `/foil` or the specific adaptation obligation ID when asking Hermes to satisfy an explicit FOIL obligation. Only an explicitly requested adaptation receipt may clear that obligation.
-- Treat background FOIL/Mirror profile adaptation on ordinary governed turns as useful context, not proof that an explicit adaptation obligation is complete.
+- Treat background Counterform/FOIL profile adaptation on ordinary governed turns as useful context, not proof that an explicit adaptation obligation is complete.
 - Never release a canonical task automatically. Run `release` only after an explicit user request and a `CLEARED` Soul finalization.
 
 ## Workflow
@@ -23,7 +23,7 @@ Use the bundled `scripts/hermes_gauntlet.py` helper. Resolve `<plugin-root>` as 
    python "<plugin-root>\scripts\hermes_gauntlet.py" doctor --json
    ```
 
-2. Start a new explicit FOIL adaptation task:
+2. Start a new explicit Counterform adaptation task:
 
    ```powershell
    python "<plugin-root>\scripts\hermes_gauntlet.py" foil --prompt "<adaptation request>"

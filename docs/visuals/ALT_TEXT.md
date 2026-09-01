@@ -2,11 +2,12 @@
 
 The public page carries concise `alt` text on each SVG image. Each SVG also contains its own `<title>` and `<desc>` for direct inspection.
 
-## Gauntlet system map
+## BASTION-01 system map
 
-The Research Orchestrator is shown at the center of bounded formal reasoning, research discovery, method synthesis, engineering verification, evaluation, assurance, evidence review, decision preflight, and FOIL responsibilities.
+Crown is shown at the center of bounded Axiom, Farfield, Foundry, Proofrig,
+Caliper, Aegis, Conclave, Stillpoint, and Counterform responsibilities.
 
-## FOIL diagnostic loop
+## Counterform diagnostic loop
 
 Observed behavior feeds competing explanations, then the smallest useful complement, claim-matched verification, changed-context or assistance-free transfer, and evidence update.
 

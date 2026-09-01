@@ -1,9 +1,14 @@
 ---
 name: mathbot
-description: Formal Reasoning module. Trigger: /mind, /mathbot, formal proof, logical validity, probability/statistics derivation, optimization, counterexample, or formalization requests. Converts claims into explicit objects and proof obligations, then verifies with derivation, computation, solver, or source as appropriate.
+description: >-
+  Axiom — BASTION-01's Formal Reasoning Engine. Trigger: /mind, /mathbot,
+  formal proof, logical validity, probability/statistics derivation,
+  optimization, counterexample, or formalization requests. Converts claims into
+  explicit objects and proof obligations, then verifies with derivation,
+  computation, solver, or source as appropriate.
 ---
 
-# Formal Reasoning
+# Axiom — Formal Reasoning Engine
 
 Use this module when the load-bearing obligation is mathematical or logical correctness.
 

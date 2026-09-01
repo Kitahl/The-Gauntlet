@@ -1,4 +1,4 @@
-# Research Roadmap
+# BASTION-01 research roadmap
 
 The roadmap is ordered by evidence value, not feature count.
 
@@ -29,11 +29,11 @@ The roadmap is ordered by evidence value, not feature count.
 
 **Exit criterion:** reproducible matched-budget evidence on at least three materially different task families.
 
-## R3 — FOIL adaptation study
+## R3 — Counterform adaptation study
 
 **Question:** does adaptive complementary assistance improve independent user capability beyond ordinary strong AI assistance?
 
-- direct AI vs static FOIL vs adaptive FOIL;
+- direct AI vs static complement vs adaptive Counterform;
 - delayed assistance-free transfer primary endpoint;
 - near/far transfer, retention, error detection, calibration;
 - assistance exposure recorded per item;
@@ -45,9 +45,9 @@ The roadmap is ordered by evidence value, not feature count.
 
 **Question:** which orchestration components add value after controlling for evidence and compute?
 
-- Research Orchestrator vs direct baseline;
-- Process Assurance on/off;
-- Evidence Review Panel vs matched-evidence direct control;
+- Crown vs direct baseline;
+- Aegis on/off;
+- Conclave vs matched-evidence direct control;
 - native verifier vs same-model self-critique;
 - optional route value and stopping analysis.
 
