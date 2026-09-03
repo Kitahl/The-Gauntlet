@@ -115,14 +115,14 @@ for forbidden in ("Initial assessment priors remain", "Relative strengths observ
     if forbidden in foil:
         fail(f"person-specific Mirror/legacy-foil prior leaked into public skill: {forbidden}")
 
-# Public identity changed from FOIL to Mirror; the legacy technical namespace must
-# remain explicit so profiles, hooks, benchmarks, and old links do not silently break.
+# Apparatus is the public product identity. Existing technical names must remain
+# explicit so commands, profiles, hooks, benchmarks, receipts, and old links do not break.
 for token in (
-    "Evidence-Governed Research Toolkit", "Research Orchestrator",
-    "Process Assurance Framework", "Mirror — Adaptive Reasoning Complement",
+    "Elenchion Systems", "Apparatus", "Mercury Runtime",
+    "Research Orchestrator", "Process Assurance Framework", "Mirror / FOIL",
 ):
     if token not in readme:
-        fail(f"README missing professional public terminology: {token}")
+        fail(f"README missing Apparatus public or compatibility terminology: {token}")
 for token in (
     "Mirror — Adaptive Reasoning Complement", "technical skill name: `foil`",
     "slash command: `/foil`", "runtime modules: `tools/foil_*`",
@@ -144,5 +144,6 @@ print("PASS: privacy-preserving typed hook/runtime wiring")
 print("PASS: per-component engineering specifications present")
 print("PASS: SKILL.md-only module directories preserved")
 print("PASS: Mastermind absent from runtime imports")
+print("PASS: Apparatus public identity + legacy technical compatibility contract")
 print("PASS: Mirror public identity + legacy foil compatibility contract")
 print("PASS: public Mirror/legacy-foil skill contains no embedded user profile")
