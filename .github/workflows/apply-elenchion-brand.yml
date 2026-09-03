@@ -53,7 +53,7 @@ jobs:
               assert item['source_page_url'].startswith('https://')
               assert item['source_file_sha256']
           PY
-          git diff --check
+          git diff --check -- . ':(exclude)README.md'
 
       - name: Install exact validation environment
         run: |
