@@ -1,0 +1,15 @@
+{
+  "authority": "ENGINEERING_ZERO_CREDIT",
+  "baseline_blind_arm_sha256": "de19a384fdc09123a53cce32cff903ffaf53ff3052392682c0d638146143e0a0",
+  "baseline_semantic_version": "3.1.1",
+  "blind_benchmark_arm_mutated": false,
+  "candidate": "math-foundry-formal-plane-postbench-hardening-candidate.2",
+  "promotion_authority": "NONE",
+  "qualification_harness_runtime": {
+    "gnu_timeout": "required by isolated all-57 qualification orchestrator",
+    "psutil": "required for process-tree cleanup fallback",
+    "python": "3.x",
+    "thread_pinning": "OMP/OPENBLAS/MKL/NUMEXPR=1 in qualification subprocesses"
+  },
+  "schema": "mathfoundry/postbench-candidate-identity/1"
+}
