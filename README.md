@@ -1,10 +1,10 @@
 <p align="center">
-  <img src="docs/visuals/apparatus-frontispiece.svg" alt="Apparatus frontispiece: a calibrated classical profile inside an armillary instrument, with botanical and measurement annotations" width="100%" />
+  <img src="docs/visuals/apparatus-frontispiece.svg" alt="Prism frontispiece: a calibrated classical profile inside an armillary instrument, with botanical and measurement annotations" width="100%" />
 </p>
 
-# Apparatus
+# Prism
 
-**An evidence-governed agent and research system by Elenchion Systems.**
+**An evidence-governed agent and research system by Lattice.**
 
 [![Research software validation](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml)
 [![Fastpath checkpoint](https://github.com/Kitahl/The-Gauntlet/actions/workflows/fastpath-checkpoint.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/fastpath-checkpoint.yml)
@@ -12,7 +12,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-0.5.1-informational.svg)](CHANGELOG.md)
 
-> **Research status:** Apparatus is public research software with executable checks, typed evidence receipts, bounded benchmark pilots, and an interim Hermes-derived runtime alpha. It does **not** establish that the complete system improves human reasoning, scientific discovery, or general AI capability in prospective deployment.
+> **Research status:** Prism is public research software with executable checks, typed evidence receipts, bounded benchmark pilots, and an interim Hermes-derived runtime alpha. It does **not** establish that the complete system improves human reasoning, scientific discovery, or general AI capability in prospective deployment.
 
 **Website:** [kitahl.github.io/The-Gauntlet](https://kitahl.github.io/The-Gauntlet/)  
 **5-minute evaluator path:** [`docs/EVALUATOR_QUICKSTART.md`](docs/EVALUATOR_QUICKSTART.md)  
@@ -25,16 +25,17 @@
 
 | Layer | Public name | Meaning | Compatibility boundary |
 |---|---|---|---|
-| Organization | **Elenchion Systems** | Working company identity for research and engineering instruments that test claims | Naming decision only; no claim of legal incorporation, trademark clearance, or historical lineage |
-| Product suite | **Apparatus** | One agent runtime, one evidence-control plane, and a portfolio of specialist instruments | Repository remains `Kitahl/The-Gauntlet`; the installed command remains `gauntlet` |
+| Organization | **Lattice** | One-word scientific identity: an ordered structure for research and engineering instruments | Naming decision only; no claim of legal incorporation, trademark clearance, or historical lineage |
+| Product suite | **Prism** | One runtime, one evidence-control plane, and a portfolio of specialist gemstone instruments | Repository remains `Kitahl/The-Gauntlet`; the installed command remains `gauntlet` |
+| Runtime | **Quartz** | Hermes-derived operational layer behind the evidence boundary | Technical runtime remains `gauntlet_host` |
 | Product principle | **Evidence before authority** | Models and tools may produce observations; claim-native methods and receipts govern factual warrant | Existing task, obligation, receipt, verdict, and release semantics are unchanged |
-| Visual language | **Scholarly Antiquarian Framing** | Classical, natural-history, and instrument imagery paired with modern evidence panels | Brand language is never evidence for a technical or scientific claim |
+| Visual language | **Scholarly Antiquarian Framing** | Classical, natural-history, mineralogical, and instrument imagery paired with modern evidence panels | Brand language is never evidence for a technical or scientific claim |
 
-The previous public names remain technical aliases so existing commands, state, receipts, tests, files, and citations continue to resolve. The migration is presentation-first rather than a breaking code rename. See [`docs/brand/NAMING_ARCHITECTURE.md`](docs/brand/NAMING_ARCHITECTURE.md).
+The gemstone names are public aliases. Existing commands, state, receipts, tests, files, and citations continue to resolve through the stable technical names. See [`docs/brand/NAMING_ARCHITECTURE.md`](docs/brand/NAMING_ARCHITECTURE.md).
 
-## 2. What Apparatus does
+## 2. What Prism does
 
-Apparatus treats a claim like a specimen under examination:
+Prism treats a claim like a specimen under examination:
 
 1. **Frame** the goal and create explicit load-bearing obligations.
 2. **Route** each obligation to the method that can actually establish it.
@@ -49,21 +50,21 @@ The system is intentionally asymmetric. A model may propose a route, call a tool
 
 ```mermaid
 flowchart TD
-    U[Researcher / artifact] --> M[Mercury Runtime\nprovider · tools · MCP · context · sessions]
-    M --> O[ToolObservation\noperational output only]
-    U --> X[Axis\ntask framing and obligations]
-    X --> P[Parallax\nadaptive complement and advisory routing]
-    P --> I{Claim-native instrument}
+    U[Researcher / artifact] --> Q[Quartz\nprovider · tools · MCP · context · sessions]
+    Q --> O[ToolObservation\noperational output only]
+    U --> D[Diamond\ntask framing and obligations]
+    D --> P[Opal\nadaptive complement and advisory routing]
+    P --> I{Claim-native gemstone instrument}
     O --> I
     I --> R[Canonical receipt\nverdict · scope · evidence references]
-    R --> A[Aegis\nprocess and integrity assurance]
-    A --> C[Conclave / Obsidian\nindependent review and adversarial attack]
-    C --> X
-    X --> G{Release gate}
+    R --> N[Onyx\nprocess and integrity assurance]
+    N --> A[Amethyst / Obsidian\nindependent review and adversarial attack]
+    A --> D
+    D --> G{Release gate}
     G -->|supported| S[CLEARED / scoped result]
     G -->|defect| E[ISSUE]
-    G -->|insufficient evidence| Q[UNKNOWN]
-    G -->|missing capability| N[UNAVAILABLE]
+    G -->|insufficient evidence| X[UNKNOWN]
+    G -->|missing capability| V[UNAVAILABLE]
 ```
 
 The governing path remains:
@@ -73,12 +74,12 @@ runtime tool execution
 → ToolObservation
 → claim-native instrument or verifier
 → canonical Receipt
-→ Axis release gate
+→ Diamond release gate
 ```
 
-## 4. Mercury Runtime — Hermes-derived operational layer
+## 4. Quartz — Hermes-derived operational layer
 
-**Mercury** is the public name for the interim runtime contained in `gauntlet_host/`. It vendors the exact pinned MIT-licensed Hermes Agent source and runs it as a Gauntlet-owned isolated subprocess rather than as a separately installed product.
+**Quartz** is the public name for the interim runtime contained in `gauntlet_host/`. It vendors the exact pinned MIT-licensed Hermes Agent source and runs it as a Gauntlet-owned isolated subprocess rather than as a separately installed product.
 
 ### Included mechanisms
 
@@ -99,7 +100,7 @@ The recorded FAST-P8 checkpoint reports **8/8 bounded boot checks passed**: the 
 
 ### Current boundary
 
-Mercury remains an interim pinned-runtime alpha. The checkpoint did not qualify paid external providers, automatic claim-native execution, autonomous replanning, task release, profile-based complements, dynamic tool narrowing, cross-platform operation, or behavioral/cost benefit. Runtime, model, tool, plugin, memory, and session state remain **observation-only** with respect to factual authority.
+Quartz remains an interim pinned-runtime alpha. The checkpoint did not qualify paid external providers, automatic claim-native execution, autonomous replanning, task release, profile-based complements, dynamic tool narrowing, cross-platform operation, or behavioral/cost benefit. Runtime, model, tool, plugin, memory, and session state remain **observation-only** with respect to factual authority.
 
 Inspect the frozen source, attribution, and checkpoint:
 
@@ -108,20 +109,20 @@ Inspect the frozen source, attribution, and checkpoint:
 - [`docs/engineering/GAUNTLET_FAST_BUILD_HERMES_INTERNAL_RUNTIME_2026-08-28.md`](docs/engineering/GAUNTLET_FAST_BUILD_HERMES_INTERNAL_RUNTIME_2026-08-28.md)
 - [`docs/engineering/HERMES_FAST_P8_CHECKPOINT.json`](docs/engineering/HERMES_FAST_P8_CHECKPOINT.json)
 
-## 5. The ten core instruments
+## 5. The ten gemstone instruments
 
 | Public instrument | Existing technical ID / command | Responsibility | Returns |
 |---|---|---|---|
-| **Axis** | `soul`, `/soul` | Frame goals, create obligations, route work, integrate receipts, govern release | Supported result or explicit unresolved state |
-| **Canon** | `mathbot`, `/mind` | Formalize and test mathematical, logical, probabilistic, and specification claims | Proof, counterexample, measured result, or unresolved obligation |
-| **Atlas** | `scoutbot`, `/space` | Search literature, standards, prior art, repositories, and current sources | Source set, nearest established class, differentiator, and search limits |
-| **Crucible** | `novelbot`, `/reality` | Construct a new mechanism only after a named constraint defeats established methods | Candidate mechanism, assumptions, failure modes, negative control, verifier plan |
-| **Forge** | `codebot`, `/power` | Implement and verify software through real entry points and defect classes | Executed checks, output hashes, coverage, and untested limits |
-| **Chronometer** | `benchbot`, `/time` | Design matched comparisons, baselines, ablations, uncertainty, and stop/go rules | Decision-relevant estimate with exclusions and uncertainty |
-| **Aegis** | `infinity-gauntlet`, `/gauntlet` | Detect stale state, false greens, inherited numbers, scope errors, and process defects | Assurance findings and integrity events; never cosmetic approval |
-| **Sextant** | `meditate` | Establish facts, assumptions, unknowns, options, blockers, and value of more computation | Decision preflight state and bounded next action |
-| **Conclave** | `council-of-elders`, `/council` | Run independent seats, commitment/reveal, cross-critique, and controlled synthesis | Review receipt with preserved disagreement and scope |
-| **Parallax** | `foil`, `/foil` | Identify the least-covered capability for this user and task, then request the smallest useful complement | Advisory route, complement, verifier requirements, and stop signal |
+| **Diamond** | `soul`, `/soul` | Frame goals, create obligations, route work, integrate receipts, govern release | Supported result or explicit unresolved state |
+| **Sapphire** | `mathbot`, `/mind` | Formalize and test mathematical, logical, probabilistic, and specification claims | Proof, counterexample, measured result, or unresolved obligation |
+| **Emerald** | `scoutbot`, `/space` | Search literature, standards, prior art, repositories, and current sources | Source set, nearest established class, differentiator, and search limits |
+| **Ruby** | `novelbot`, `/reality` | Construct a new mechanism only after a named constraint defeats established methods | Candidate mechanism, assumptions, failure modes, negative control, verifier plan |
+| **Garnet** | `codebot`, `/power` | Implement and verify software through real entry points and defect classes | Executed checks, output hashes, coverage, and untested limits |
+| **Topaz** | `benchbot`, `/time` | Design matched comparisons, baselines, ablations, uncertainty, and stop/go rules | Decision-relevant estimate with exclusions and uncertainty |
+| **Onyx** | `infinity-gauntlet`, `/gauntlet` | Detect stale state, false greens, inherited numbers, scope errors, and process defects | Assurance findings and integrity events; never cosmetic approval |
+| **Citrine** | `meditate` | Establish facts, assumptions, unknowns, options, blockers, and value of more computation | Decision preflight state and bounded next action |
+| **Amethyst** | `council-of-elders`, `/council` | Run independent seats, commitment/reveal, cross-critique, and controlled synthesis | Review receipt with preserved disagreement and scope |
+| **Opal** | `foil`, `/foil` | Identify the least-covered capability for this user and task, then request the smallest useful complement | Advisory route, complement, verifier requirements, and stop signal |
 
 Every `skills/<technical-id>/` directory retains `SKILL.md` as the public reasoning contract. Executable state, hooks, receipts, profiles, and verifiers remain outside those skill directories.
 
@@ -131,13 +132,13 @@ Every `skills/<technical-id>/` directory retains `SKILL.md` as the public reason
 
 **Obsidian** is the public name for Black Gem. It freezes a candidate and attack rubric, runs independently provenanced breaker seats, performs off-diagonal critique, records participation, and can raise an `ISSUE`. It structurally cannot produce `CLEARED`; failure to find a break is not proof of correctness. See [`docs/specs/BLACKGEM_ENGINEERING_SPEC.md`](docs/specs/BLACKGEM_ENGINEERING_SPEC.md).
 
-### Strategist Candidate — mechanism planning
+### Moonstone Candidate — mechanism planning
 
-The archived mechanism-planner candidate contains bounded minimum successful-repair selection over a declared finite repair universe. Its recorded hardening and inherited checks apply only to that archived candidate; it is **not** promoted into Apparatus authority or runtime by the archive. See [`research/postbench-candidate2/README.md`](research/postbench-candidate2/README.md).
+The archived mechanism-planner candidate contains bounded minimum successful-repair selection over a declared finite repair universe. Its recorded hardening and inherited checks apply only to that archived candidate; it is **not** promoted into Prism authority or runtime by the archive. See [`research/postbench-candidate2/README.md`](research/postbench-candidate2/README.md).
 
-### Formal Plane Candidate — mathematical execution hardening
+### Zircon Candidate — mathematical execution hardening
 
-The archived formal-plane candidate strengthens trusted-base minimality, isolated qualification, staged dependencies, process cleanup, and deterministic numeric thread limits. It remains an engineering candidate and does not replace Canon or change the release gate. See [`research/postbench-candidate2/README.md`](research/postbench-candidate2/README.md).
+The archived formal-plane candidate strengthens trusted-base minimality, isolated qualification, staged dependencies, process cleanup, and deterministic numeric thread limits. It remains an engineering candidate and does not replace Sapphire or change the release gate. See [`research/postbench-candidate2/README.md`](research/postbench-candidate2/README.md).
 
 ## 7. Evidence ledger
 
@@ -146,10 +147,10 @@ The archived formal-plane candidate strengthens trusted-base minimality, isolate
 | The ten core contracts and portable runtime checks exist | **Implemented / mechanically checked** | [`validation/`](validation/) · [`tests/`](tests/) |
 | The Hermes-derived alpha completes its bounded boot route without a false clear | **8/8 checkpoint checks passed** | [`docs/engineering/HERMES_FAST_P8_CHECKPOINT.json`](docs/engineering/HERMES_FAST_P8_CHECKPOINT.json) |
 | Runtime observations cannot directly create canonical receipts or release tasks | **Architecture invariant with executable checks** | [`docs/engineering/PHASE8_USER_CLI_BOOT.md`](docs/engineering/PHASE8_USER_CLI_BOOT.md) · [`.github/phase8_verify.py`](.github/phase8_verify.py) |
-| Parallax profile, onboarding, calibration, and routing mechanics exist | **Mechanically checked; efficacy open** | [`research/FOIL_RESEARCH_BASIS.md`](research/FOIL_RESEARCH_BASIS.md) · [`validation/`](validation/) |
+| Opal profile, onboarding, calibration, and routing mechanics exist | **Mechanically checked; efficacy open** | [`research/FOIL_RESEARCH_BASIS.md`](research/FOIL_RESEARCH_BASIS.md) · [`validation/`](validation/) |
 | Exploratory benchmark receipts include positive, null, and negative/mixed outcomes | **Exploratory, small-sample evidence** | [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) |
-| Apparatus improves independent human reasoning or scientific discovery in deployment | **Not established** | [`RESEARCH.md`](RESEARCH.md) · [`ROADMAP.md`](ROADMAP.md) |
-| Elenchion Systems and Apparatus are cleared corporate/product marks | **Unverified; no legal clearance performed** | [`docs/brand/CLAIMS_REGISTER.md`](docs/brand/CLAIMS_REGISTER.md) |
+| Prism improves independent human reasoning or scientific discovery in deployment | **Not established** | [`RESEARCH.md`](RESEARCH.md) · [`ROADMAP.md`](ROADMAP.md) |
+| Lattice and Prism are cleared corporate/product marks | **Unverified; no legal clearance performed** | [`docs/brand/CLAIMS_REGISTER.md`](docs/brand/CLAIMS_REGISTER.md) |
 
 The repository does not combine unlike benchmark rows into a single headline score. Passing source checks, green CI, model agreement, or persuasive design are evidence with bounded scope—not automatic scientific validity.
 
@@ -198,11 +199,11 @@ The FAST-P8 harness uses a deterministic local OpenAI-compatible endpoint. Passi
 
 ## 9. Brand and website system
 
-The visual system applies the supplied classical-scientific package as a restrained interface:
+The Prism visual system applies the supplied classical-scientific package as a restrained mineralogical research interface:
 
-- parchment, ink, slate, bronze, oxide, and verdigris tokens;
+- parchment, ink, slate, bronze, oxide, verdigris, and gemstone accents;
 - editorial serif, technical sans, and receipt-mono typography stacks;
-- original procedural armillary, botanical, geometric, engineering, and calibration motifs;
+- original procedural armillary, botanical, geometric, engineering, calibration, and crystalline motifs;
 - clean modern evidence panels separated from archival imagery;
 - explicit source, status, and boundary labels;
 - no fake seals, founding dates, patents, accession numbers, museum endorsement, or antique-looking evidence receipts.
@@ -233,7 +234,7 @@ commands:   /soul /mind /space /reality /power /time
 verdicts:   CLEARED | ISSUE | UNKNOWN | UNAVAILABLE
 ```
 
-Brand aliases may be removed or changed later only through an explicit migration with tests, redirects, and receipt compatibility review.
+Public gemstone aliases may be changed later only through an explicit migration with tests, redirects, and receipt compatibility review.
 
 ## 11. Governance, security, and citation
 
