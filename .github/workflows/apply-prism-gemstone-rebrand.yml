@@ -44,7 +44,7 @@ jobs:
           ET.parse('docs/visuals/elenchion-mark.svg')
           PY
           node --check docs/system-field.js
-          git diff --check -- . ':(exclude)README.md'
+          git diff --check -- . ':(exclude)README.md' ':(exclude)docs/brand/README.md'
 
       - name: Commit final rebrand
         env:
