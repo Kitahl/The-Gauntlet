@@ -1,307 +1,248 @@
-# Evidence-Governed Research Toolkit
+<p align="center">
+  <img src="docs/visuals/apparatus-frontispiece.svg" alt="Array frontispiece: a calibrated classical profile inside an armillary instrument, with botanical and measurement annotations" width="100%" />
+</p>
 
-**Modular research software for evidence-governed AI-assisted reasoning, verification, evaluation, process assurance, and adaptive complementary assistance.**
+# Array
+
+**An evidence-governed agent and research system by Bohr.**
 
 [![Research software validation](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml)
+[![Fastpath checkpoint](https://github.com/Kitahl/The-Gauntlet/actions/workflows/fastpath-checkpoint.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/fastpath-checkpoint.yml)
 [![CodeQL](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/codeql.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-0.5.1-informational.svg)](CHANGELOG.md)
 
-> **Research status:** public research-software toolkit with executable runtime checks, evidence-bearing structural/source validation, and exploratory benchmark pilots. The repository does **not** claim that the complete system improves human reasoning, scientific discovery, or general AI capability in prospective deployment.
+> **Research status:** Array is public research software with executable checks, typed evidence receipts, bounded benchmark pilots, and an interim Hermes-derived runtime alpha. It does **not** establish that the complete system improves human reasoning, scientific discovery, or general AI capability in prospective deployment.
 
-**Demo:** https://kitahl.github.io/The-Gauntlet/  
+**Website:** [kitahl.github.io/The-Gauntlet](https://kitahl.github.io/The-Gauntlet/)  
 **5-minute evaluator path:** [`docs/EVALUATOR_QUICKSTART.md`](docs/EVALUATOR_QUICKSTART.md)  
-**Benchmark pilots:** [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) · **earlier blinded receipt:** [`benchmarks/results/2026-08-22-blinded-pilot.json`](benchmarks/results/2026-08-22-blinded-pilot.json) · **BrowseComp four-way receipt:** [`benchmark_runs/2026-08-22/browsecomp_four_way_results.json`](benchmark_runs/2026-08-22/browsecomp_four_way_results.json)  
-**Runtime setup:** [`docs/RUNTIME_SETUP.md`](docs/RUNTIME_SETUP.md) · **Mirror:** [`docs/MIRROR.md`](docs/MIRROR.md) · **Mirror onboarding (legacy FOIL paths):** [`docs/FOIL_ONBOARDING.md`](docs/FOIL_ONBOARDING.md) · **Deep calibration:** [`docs/FOIL_DEEP_CALIBRATION.md`](docs/FOIL_DEEP_CALIBRATION.md)  
-**Research statement:** [`RESEARCH.md`](RESEARCH.md) · **Reproducibility:** [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) · **Roadmap:** [`ROADMAP.md`](ROADMAP.md)
+**Architecture:** [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · **Runtime alpha:** [`docs/engineering/PHASE8_USER_CLI_BOOT.md`](docs/engineering/PHASE8_USER_CLI_BOOT.md)  
+**Benchmarks:** [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) · **Reproducibility:** [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) · **Research boundary:** [`RESEARCH.md`](RESEARCH.md)
 
 ---
 
-## Why this project exists
+## 1. Identity
 
-The practical problem was simple: **there are many powerful research, reasoning, search, coding, verification, benchmarking, and review tools, but using them well means repeatedly deciding which one to call, in what order, what evidence it actually produced, and what still has not been established.** The Gauntlet is an attempt to make that easier: one control surface that routes the work to the right specialist method instead of requiring the user to manually orchestrate every tool.
+| Layer | Public name | Meaning | Compatibility boundary |
+|---|---|---|---|
+| Organization | **Bohr** | One-word scientific identity chosen for memorability and technical character | Naming decision only; no claim of legal incorporation, trademark clearance, or historical lineage |
+| Product suite | **Array** | An ordered collection: one runtime, one evidence-control plane, and specialist gemstone instruments | Repository remains `Kitahl/The-Gauntlet`; the installed command remains `gauntlet` |
+| Runtime | **Quartz** | Hermes-derived operational layer behind the evidence boundary | Technical runtime remains `gauntlet_host` |
+| Product principle | **Evidence before authority** | Models and tools may produce observations; claim-native methods and receipts govern factual warrant | Existing task, obligation, receipt, verdict, and release semantics are unchanged |
+| Visual language | **Scholarly Antiquarian Framing** | Classical, natural-history, mineralogical, and instrument imagery paired with modern evidence panels | Brand language is never evidence for a technical or scientific claim |
 
-AI-assisted research can also fail even when the prose is persuasive, multiple agents agree, software tests are green, or a benchmark score is high. This project treats those signals as **evidence with scope**, not as automatic proof.
+The gemstone names are public aliases. Existing commands, state, receipts, tests, files, and citations continue to resolve through the stable technical names. See [`docs/brand/NAMING_ARCHITECTURE.md`](docs/brand/NAMING_ARCHITECTURE.md).
 
-The core research question is:
+## 2. What Array does
 
-> **Can a modular, evidence-governed reasoning workflow improve traceability, verification discipline, and independent usefulness in AI-assisted research without confusing confidence, consensus, or passing software checks with scientific validity?**
+Array treats a claim like a specimen under examination:
 
-The toolkit routes work according to the **epistemic obligation**: what must be proved, searched, executed, measured, independently checked, or left unresolved.
+1. **Frame** the goal and create explicit load-bearing obligations.
+2. **Route** each obligation to the method that can actually establish it.
+3. **Execute** models, tools, search, code, and verifiers through a bounded runtime.
+4. **Record** observations and evidence as scoped, integrity-checked receipts.
+5. **Challenge** the result through process assurance and independent review.
+6. **Release** only the conclusion supported by the latest valid evidence state.
 
-**Mirror** is the adaptive complement layer. It asks what the current task requires, what the user already covers, and which load-bearing capability is least covered; it then requests the smallest useful complement from the existing Gems/tools. Mirror is the public name. The technical ID, `/foil` command, `tools/foil_*` modules, historical benchmark condition names, and existing FOIL-named files remain stable for backwards compatibility.
+The system is intentionally asymmetric. A model may propose a route, call a tool, or draft an answer. It may not convert its own activity into proof or release its own claim.
 
-## Exploratory benchmark pilots
-
-The repository reports positive, null, and mixed/negative results. Earlier blinded pilots compare GPT-5.6 Sol `BASE` with the same underlying model using a frozen **Frontier-Exam FOIL + Mastermind** pre-commit procedure (`FOIL_MM`). A newer BrowseComp ablation separates `BASE`, generic `FOIL`, `FOIL_PROFILE`, and `FOIL_MM`. These are historical technical condition names retained after the public rename to Mirror. Because the conditions were executed in one conversation, items are deterministic **disjoint subsets**; these are exploratory estimates, not official submissions or isolated same-item causal A/B tests.
-
-| Evaluation | BASE | Assisted condition | Delta | Status |
-|---|---:|---:|---:|---|
-| **HLE public text-only subset** | 1/6 · **16.7%** | FOIL_MM 2/6 · **33.3%** | **+16.7 pp** | blinded CI-scored pilot |
-| **ARC-AGI-1 evaluation** | 4/6 · **66.7%** | FOIL_MM 5/6 · **83.3%** | **+16.7 pp** | blinded CI-scored pilot |
-| **GPQA-Diamond** | 9/12 · **75.0%** | FOIL_MM 9/12 · **75.0%** | **0.0 pp** | blinded CI-scored pilot · **null result** |
-| SimpleBench public subset | 3/5 · 60% | FOIL 5/5 · 100% | +40 pp | legacy manual pilot |
-| Current-evidence retrieval holdout | 0/5 · 0% | FOIL 5/5 · 100% | +100 pp | custom mechanism holdout; not a standard benchmark |
-
-**BrowseComp four-way exploratory ablation:**
-
-| Condition | Correct / n | Exact-normalized accuracy |
-|---|---:|---:|
-| **BASE** | 1/2 | **50%** |
-| **FOIL** | 2/2 | **100%** |
-| **FOIL_PROFILE** | 1/2 | **50%** |
-| **FOIL_MM** | 0/2 | **0%** |
-
-The BrowseComp result is **not** evidence that generic FOIL/Mirror is generally superior or that Mastermind is generally harmful: there are only two different scored items per condition, several complete pre-commit blocks were retired for contamination or execution-integrity reasons, and the exploratory scorer uses normalized exact string match rather than the official BrowseComp LLM judge.
-
-**Do not combine these rows into a single headline accuracy.** Samples are small and the evaluations measure different constructs. Null, negative, and mixed outcomes are retained because the research question is whether mechanisms help, not whether every benchmark can be made to show an improvement. Several math/error-localization pilots were also discarded when BASE saturated at or near 100%, rather than being used as non-discriminating evidence.
-
-Methodology, exclusions, sources, reproduction commands, and validity boundaries: **[`docs/BENCHMARKS.md`](docs/BENCHMARKS.md)**.
-
-## Architecture
+## 3. System architecture
 
 ```mermaid
-flowchart LR
-    U[Researcher] --> O[Research Orchestrator]
-    O --> F[Formal Reasoning]
-    O --> D[Research Discovery]
-    O --> S[Method Synthesis]
-    O --> E[Engineering Verification]
-    O --> B[Evaluation & Benchmarking]
-    O --> P[Process Assurance]
-    O --> A[Mirror: Adaptive Reasoning Complement]
-    P --> O
-    A --> O
-    F --> O
-    D --> O
-    S --> O
-    E --> O
-    B --> O
-    O --> R[Supported result + explicit unresolved state]
+flowchart TD
+    U[Researcher / artifact] --> Q[Quartz\nprovider · tools · MCP · context · sessions]
+    Q --> O[ToolObservation\noperational output only]
+    U --> D[Diamond\ntask framing and obligations]
+    D --> P[Opal\nadaptive complement and advisory routing]
+    P --> I{Claim-native gemstone instrument}
+    O --> I
+    I --> R[Canonical receipt\nverdict · scope · evidence references]
+    R --> N[Onyx\nprocess and integrity assurance]
+    N --> A[Amethyst / Obsidian\nindependent review and adversarial attack]
+    A --> D
+    D --> G{Release gate}
+    G -->|supported| S[CLEARED / scoped result]
+    G -->|defect| E[ISSUE]
+    G -->|insufficient evidence| X[UNKNOWN]
+    G -->|missing capability| V[UNAVAILABLE]
 ```
 
-Full architecture and evidence flow: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+The governing path remains:
 
-## Research modules
+```text
+runtime tool execution
+→ ToolObservation
+→ claim-native instrument or verifier
+→ canonical Receipt
+→ Diamond release gate
+```
 
-Professional display names are used for the research portfolio. Existing technical IDs and slash-command aliases are retained for backwards compatibility.
+## 4. Quartz — Hermes-derived operational layer
 
-| Research module | Technical ID / alias | Responsibility |
+**Quartz** is the public name for the interim runtime contained in `gauntlet_host/`. It vendors the exact pinned MIT-licensed Hermes Agent source and runs it as a Gauntlet-owned isolated subprocess rather than as a separately installed product.
+
+### Included mechanisms
+
+- provider selection and OpenAI-compatible model access;
+- dynamic tool registration and tool execution;
+- MCP integration inherited from the pinned runtime;
+- context and session handling;
+- operational memory and skill mechanisms with write approval;
+- retries, interruption lifecycle, and delegation primitives;
+- typed JSONL parent/worker communication;
+- repository-bound task identity;
+- `gauntlet` one-shot and `gauntlet chat` entry points;
+- observation recording followed by the parent-owned release gate.
+
+### Verified checkpoint
+
+The recorded FAST-P8 checkpoint reports **8/8 bounded boot checks passed**: the command started, the isolated worker started, the model responded, a runtime tool executed, canonical task status was read, an observation-only record was written, the Soul release gate ran, and an unresolved task was not reported as cleared.
+
+### Current boundary
+
+Quartz remains an interim pinned-runtime alpha. The checkpoint did not qualify paid external providers, automatic claim-native execution, autonomous replanning, task release, profile-based complements, dynamic tool narrowing, cross-platform operation, or behavioral/cost benefit. Runtime, model, tool, plugin, memory, and session state remain **observation-only** with respect to factual authority.
+
+Inspect the frozen source, attribution, and checkpoint:
+
+- [`third_party/HERMES_SOURCE_LEDGER.md`](third_party/HERMES_SOURCE_LEDGER.md)
+- [`vendor/HERMES_SNAPSHOT.json`](vendor/HERMES_SNAPSHOT.json)
+- [`docs/engineering/GAUNTLET_FAST_BUILD_HERMES_INTERNAL_RUNTIME_2026-08-28.md`](docs/engineering/GAUNTLET_FAST_BUILD_HERMES_INTERNAL_RUNTIME_2026-08-28.md)
+- [`docs/engineering/HERMES_FAST_P8_CHECKPOINT.json`](docs/engineering/HERMES_FAST_P8_CHECKPOINT.json)
+
+## 5. The ten gemstone instruments
+
+| Public instrument | Existing technical ID / command | Responsibility | Returns |
+|---|---|---|---|
+| **Diamond** | `soul`, `/soul` | Frame goals, create obligations, route work, integrate receipts, govern release | Supported result or explicit unresolved state |
+| **Sapphire** | `mathbot`, `/mind` | Formalize and test mathematical, logical, probabilistic, and specification claims | Proof, counterexample, measured result, or unresolved obligation |
+| **Emerald** | `scoutbot`, `/space` | Search literature, standards, prior art, repositories, and current sources | Source set, nearest established class, differentiator, and search limits |
+| **Ruby** | `novelbot`, `/reality` | Construct a new mechanism only after a named constraint defeats established methods | Candidate mechanism, assumptions, failure modes, negative control, verifier plan |
+| **Garnet** | `codebot`, `/power` | Implement and verify software through real entry points and defect classes | Executed checks, output hashes, coverage, and untested limits |
+| **Topaz** | `benchbot`, `/time` | Design matched comparisons, baselines, ablations, uncertainty, and stop/go rules | Decision-relevant estimate with exclusions and uncertainty |
+| **Onyx** | `infinity-gauntlet`, `/gauntlet` | Detect stale state, false greens, inherited numbers, scope errors, and process defects | Assurance findings and integrity events; never cosmetic approval |
+| **Citrine** | `meditate` | Establish facts, assumptions, unknowns, options, blockers, and value of more computation | Decision preflight state and bounded next action |
+| **Amethyst** | `council-of-elders`, `/council` | Run independent seats, commitment/reveal, cross-critique, and controlled synthesis | Review receipt with preserved disagreement and scope |
+| **Opal** | `foil`, `/foil` | Identify the least-covered capability for this user and task, then request the smallest useful complement | Advisory route, complement, verifier requirements, and stop signal |
+
+Every `skills/<technical-id>/` directory retains `SKILL.md` as the public reasoning contract. Executable state, hooks, receipts, profiles, and verifiers remain outside those skill directories.
+
+## 6. Additional and candidate systems
+
+### Obsidian — adversarial examination
+
+**Obsidian** is the public name for Black Gem. It freezes a candidate and attack rubric, runs independently provenanced breaker seats, performs off-diagonal critique, records participation, and can raise an `ISSUE`. It structurally cannot produce `CLEARED`; failure to find a break is not proof of correctness. See [`docs/specs/BLACKGEM_ENGINEERING_SPEC.md`](docs/specs/BLACKGEM_ENGINEERING_SPEC.md).
+
+### Moonstone Candidate — mechanism planning
+
+The archived mechanism-planner candidate contains bounded minimum successful-repair selection over a declared finite repair universe. Its recorded hardening and inherited checks apply only to that archived candidate; it is **not** promoted into Array authority or runtime by the archive. See [`research/postbench-candidate2/README.md`](research/postbench-candidate2/README.md).
+
+### Zircon Candidate — mathematical execution hardening
+
+The archived formal-plane candidate strengthens trusted-base minimality, isolated qualification, staged dependencies, process cleanup, and deterministic numeric thread limits. It remains an engineering candidate and does not replace Sapphire or change the release gate. See [`research/postbench-candidate2/README.md`](research/postbench-candidate2/README.md).
+
+## 7. Evidence ledger
+
+| Statement | Current status | Evidence path |
 |---|---|---|
-| **Research Orchestrator** | `soul`, `/soul` | Frame, decompose, route, integrate, audit, release |
-| **Formal Reasoning** | `mathbot`, `/mind` | Proof, logic, probability/statistics, counterexamples, formalization |
-| **Research Discovery** | `scoutbot`, `/space` | Literature, prior art, existing software, cross-domain terminology |
-| **Method Synthesis** | `novelbot`, `/reality` | New mechanisms only after known methods fail a named constraint |
-| **Engineering Verification** | `codebot`, `/power` | Architecture, implementation, integration, execution, software verification |
-| **Evaluation & Benchmarking** | `benchbot`, `/time` | Baselines, capability measurement, ceilings, cost, stop/go |
-| **Process Assurance Framework** | `infinity-gauntlet`, `/gauntlet` | Frame/process audit, stale-state checks, inherited-number checks, false-green defense |
-| **Decision Preflight Protocol** | `meditate` | Grounding before consequential decisions and after failures |
-| **Evidence Review Panel** | `council-of-elders`, `/council` | Selective independent evidence/method review with matched control |
-| **Mirror — Adaptive Reasoning Complement** | `foil`, `/foil` | User/task-specific missing-capability support, multi-stage calibration, and independent-transfer tracking |
+| The ten core contracts and portable runtime checks exist | **Implemented / mechanically checked** | [`validation/`](validation/) · [`tests/`](tests/) |
+| The Hermes-derived alpha completes its bounded boot route without a false clear | **8/8 checkpoint checks passed** | [`docs/engineering/HERMES_FAST_P8_CHECKPOINT.json`](docs/engineering/HERMES_FAST_P8_CHECKPOINT.json) |
+| Runtime observations cannot directly create canonical receipts or release tasks | **Architecture invariant with executable checks** | [`docs/engineering/PHASE8_USER_CLI_BOOT.md`](docs/engineering/PHASE8_USER_CLI_BOOT.md) · [`.github/phase8_verify.py`](.github/phase8_verify.py) |
+| Opal profile, onboarding, calibration, and routing mechanics exist | **Mechanically checked; efficacy open** | [`research/FOIL_RESEARCH_BASIS.md`](research/FOIL_RESEARCH_BASIS.md) · [`validation/`](validation/) |
+| Exploratory benchmark receipts include positive, null, and negative/mixed outcomes | **Exploratory, small-sample evidence** | [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) |
+| Array improves independent human reasoning or scientific discovery in deployment | **Not established** | [`RESEARCH.md`](RESEARCH.md) · [`ROADMAP.md`](ROADMAP.md) |
+| Bohr and Array are cleared corporate/product marks | **Unverified; no legal clearance performed** | [`docs/brand/CLAIMS_REGISTER.md`](docs/brand/CLAIMS_REGISTER.md) |
 
-Every `skills/<id>/` directory contains **`SKILL.md` only**. Hooks, executable helpers, state policy, profiles, and benchmark harnesses deliberately live elsewhere.
+The repository does not combine unlike benchmark rows into a single headline score. Passing source checks, green CI, model agreement, or persuasive design are evidence with bounded scope—not automatic scientific validity.
 
-## Executable runtime
+## 8. Quick evaluation
 
-Version 0.2.0 introduced the portable runtime. Version 0.3.0 added adaptive real-work deep calibration. Version 0.4.0 added a reproducible structured calibration layer for previously unknown users. Version 0.5.0 hardens release security, privacy, reproducibility, dependency identity, and cross-platform CI without changing the technical `foil` subsystem's Layer 1 / Layer 2A / Layer 2B architecture.
-
-**Version 0.5.1** is a research-repair release. It replaces the technical `foil` subsystem's non-monotone competence count rule with a Beta-posterior estimator carrying evidence tiers and a recency weight (`tools/foil_evidence.py`, characterized in [`docs/FOIL_EVIDENCE_ESTIMATOR.md`](docs/FOIL_EVIDENCE_ESTIMATOR.md)); makes the assistance ladder, execution-ownership axis, and gap vocabulary generated contracts that fail a test on drift; states honestly that the frozen-run tool budget is a tamper-evident ledger enforced only under the PreToolUse broker and advisory everywhere else; replaces a lock that was not a lock with real kernel byte-range locks; ports the V2 routing kernel into `tools/foil_policy.py`, where the routing regime comes from task properties and a benchmark name is receipt metadata only; and makes the language model itself a configured capability via provider-neutral adapters. It closes no efficacy question — retrieval and personalization quality remain `NOT_MEASURED`. Full defect disposition (D1–D11), the not-adopted list, and the corrected vNext evidence boundary are in [`CHANGELOG.md`](CHANGELOG.md).
-
-- `.claude/settings.json` — shareable Claude Code hooks using `${CLAUDE_PROJECT_DIR}`;
-- `.gauntlet.json` — configurable governing files, audit budgets, optional evidence-ledger policy;
-- `tools/gauntlet_monitor.py` — stale governing-state detection;
-- `tools/gauntlet_boundary.py` — Stop-hook `frame` / `costume` boundary checks;
-- `tools/gauntlet_hook.py` — Pre/Post tool integration;
-- `tools/verify_ledger.py` — optional generic evidence-ledger commit gate;
-- `tools/openrouter_bot.py`, `tools/blackgem_runtime.py`, `tools/snap.py` — optional model-backed independent review;
-- `tools/foil_profile.py` / `tools/foil_hook.py` — Mirror's persistent profiles and prompt-time domain/facet relevance adaptation;
-- `tools/foil_assessment.py` — Layer 1 blank cold-start domain questionnaire;
-- `tools/foil_layer2.py` — Layer 2A structured cross-cutting stranger calibration;
-- `tools/foil_calibration.py` — Layer 2B transfer/adversarial/real-work deep calibration;
-- `tools/foil_domains.py` — expanded non-diagnostic domain-relevance recognition.
-
-Runtime state is written under gitignored `.egrt/state/`, not `.git/`. Model credentials are environment-only. No private workstation path or project-specific keystore is required.
-
-## Mirror profiles and multi-stage calibration
-
-Mirror contains no built-in profile for any individual. A first hooked session creates a **blank local `default` profile** when needed; named profiles support multiple users on one installation. The implementation retains the `foil` technical ID and existing FOIL-named paths for compatibility.
-
-Profiles are stored outside the repository by default and record evidence metadata rather than raw prompts. Topic or facet mentions can change routing relevance without changing competence classification.
-
-### Layer 1 — broad cold start
-
-The onboarding screen includes:
-
-- 20 generated objective probes across quantitative reasoning, formal reasoning, probability/statistics, causal inference, software engineering, systems/reliability, research/evidence literacy, scientific method, security/privacy, and planning/decision-making;
-- context/goals, work-style preferences, self-estimates, and confidence calibration;
-- open design/UX, creativity, and explanation tasks;
-- dynamic setup/usage domains, including arbitrary custom domains.
-
-### Layer 2A — structured cross-cutting calibration
-
-The stranger-facing second screen adds:
-
-- 24 objective micro-scenarios in standard mode;
-- two observations across 12 cross-cutting reasoning facets;
-- a 12-item short screening mode that cannot classify a facet from one response;
-- confidence calibration and self-estimates kept separate from observed performance;
-- open design, mechanism-diversity/creativity, and explanation tasks that remain rubric-reviewed.
-
-The objective facets include formalization precision, decomposition/systems reasoning, error detection, evidence discipline, causal/quantitative reasoning, implementation/execution, planning/prioritization, metacognitive calibration, transfer/adaptation, verifier/tool selection, and uncertainty management.
-
-### Layer 2B — adaptive real-work calibration
-
-The saved profile then drives a profile-specific plan containing:
-
-- changed-representation discriminators for uncertain/gap hypotheses;
-- harder transfer probes for apparent strengths;
-- adversarial/error-detection checks;
-- real-work/artifact samples;
-- design and creative production;
-- explanation/teach-back;
-- verifier/tool-selection probes;
-- confidence-before-feedback;
-- domain-specific follow-up.
-
-Open-ended outcomes only count as verified when an appropriate rubric, artifact, proof, execution, or independent reviewer supports the result. A perfect Layer 2A screen alone cannot satisfy the deep-profile real-work coverage gates.
-
-The personalizer is an **experimental onboarding/calibration system**, not an IQ, personality, clinical, diagnostic, aptitude, or employment test. See [`research/FOIL_PERSONALIZATION_BASIS.md`](research/FOIL_PERSONALIZATION_BASIS.md).
-
-## What is currently supported by evidence
-
-| Claim | Evidence status | Where to inspect |
-|---|---|---|
-| Process Assurance hooks/tools are portable, config-driven, and state-isolated | release-gated source/runtime checks | `validation/RUNTIME_FOIL_MASTERMIND_AUDIT.md`, `tests/` |
-| Public skill directories contain `SKILL.md` only and private-lineage regressions are tested | release-gated checks | `tests/test_skill_layout.py`, `tests/test_private_leaks.py` |
-| Mirror Layer 1 saved-profile/questionnaire mechanics enforce conservative initial classifications | release-gated tests | `tests/test_runtime_tools.py`, `tests/test_foil_assessment.py` |
-| Mirror Layer 2A has blank-session, answer-isolation, assistance, confidence, and no-false-deep regressions | release-gated tests | `tests/test_foil_layer2.py` |
-| Mirror Layer 2B mechanics enforce transfer breadth, independent verification, duplicate protection, and multi-domain maturity gates | release-gated tests | `tests/test_foil_calibration.py` |
-| Mirror structured-calibration falsification history is preserved | audit record | `validation/FOIL_LAYER2_MASTERMIND_AUDIT.md` |
-| Mirror/FOIL research-integration structure/source/regression checks passed the recorded validator | **94/94 PASS** | `validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json` |
-| Mirror's frozen behavioral-contract cases are represented in the specification | **18/18 PASS-SPEC** | `validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json` |
-| HLE/ARC/GPQA/BrowseComp pilot score receipts exist under blinded question-generation/scoring harnesses | exploratory benchmark evidence | `docs/BENCHMARKS.md`, `benchmarks/results/2026-08-22-blinded-pilot.json`, `benchmark_runs/2026-08-22/browsecomp_four_way_results.json` |
-| Public claims have a machine-readable provenance map | implemented | `docs/content-provenance.json` |
-| Mirror improves independent human reasoning in deployment | **not established** | planned in `ROADMAP.md` |
-
-`PASS-SPEC` means the specification contains the required decision behavior; it is not a behavioral execution result. Benchmark pilots measure model-output accuracy under particular benchmark protocols; they are not evidence of human learning efficacy.
-
-## Quick evaluation
-
-### 1. Clone and create an isolated environment
+### 8.1 Clone with the pinned runtime
 
 ```bash
-git clone https://github.com/Kitahl/The-Gauntlet.git
+git clone --recurse-submodules https://github.com/Kitahl/The-Gauntlet.git
 cd The-Gauntlet
-python -m venv .venv
 ```
 
-Activate the environment for your shell, then install the exact hash-locked development + runtime environment:
+For the combined runtime-and-brand working branch:
 
 ```bash
+git checkout work/elenchion-apparatus-brand
+git submodule update --init --recursive
+```
+
+### 8.2 Create an isolated environment
+
+```bash
+python -m venv .venv
 python -m pip install --upgrade pip
 python -m pip install --require-hashes -r requirements-lock.txt
 python -m playwright install chromium
 ```
 
-### 2. Run the reproducible public checks
+Activate the environment using the command appropriate for your shell, then inspect the entry point:
 
 ```bash
-ruff check validation tools tests benchmarks/harness
+python -m pip install -e .
+gauntlet --help
+gauntlet chat --help
+```
+
+### 8.3 Run bounded validation
+
+```bash
 python -m unittest discover -s tests -v
-python validation/validate_soul_gauntlet_public.py
 python validation/validate_showcase.py
-python -m compileall -q validation tools tests benchmarks/harness
+python .github/phase8_verify.py
 ```
 
-For interpretation and evidence boundaries, read [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md).
+The FAST-P8 harness uses a deterministic local OpenAI-compatible endpoint. Passing it reproduces the bounded alpha boot contract; it does not establish external-provider or behavioral efficacy.
 
-### 3. Optional Mirror stranger calibration
+## 9. Brand and website system
 
-The commands retain their `foil_*` filenames for backwards compatibility:
+The Array visual system applies the supplied classical-scientific package as a restrained mineralogical research interface:
 
-```bash
-python tools/foil_assessment.py start --out foil_assessment.json --responses foil_responses.json
-```
+- parchment, ink, slate, bronze, oxide, verdigris, and gemstone accents;
+- editorial serif, technical sans, and receipt-mono typography stacks;
+- original procedural armillary, botanical, geometric, engineering, calibration, and crystalline motifs;
+- clean modern evidence panels separated from archival imagery;
+- explicit source, status, and boundary labels;
+- no fake seals, founding dates, patents, accession numbers, museum endorsement, or antique-looking evidence receipts.
 
-Complete and apply Layer 1 to a saved profile, then run the structured Layer 2A screen:
+Implementation and provenance:
 
-```bash
-python tools/foil_layer2.py start --profile default --mode standard \
-  --out foil_layer2.json --responses foil_layer2_responses.json
-python tools/foil_layer2.py score foil_layer2.json foil_layer2_responses.json \
-  --profile default --out foil_layer2_report.json
-```
+- [`docs/brand/README.md`](docs/brand/README.md)
+- [`docs/brand/BRAND_SYSTEM.md`](docs/brand/BRAND_SYSTEM.md)
+- [`docs/brand/NAMING_ARCHITECTURE.md`](docs/brand/NAMING_ARCHITECTURE.md)
+- [`docs/brand/CLAIMS_REGISTER.md`](docs/brand/CLAIMS_REGISTER.md)
+- [`docs/brand/asset-manifest.json`](docs/brand/asset-manifest.json)
+- [`docs/content-provenance.json`](docs/content-provenance.json)
 
-Then generate the profile-specific Layer 2B real-work/transfer plan:
+## 10. Compatibility map
 
-```bash
-python tools/foil_calibration.py start --profile default --out foil_deep_calibration.json
-python tools/foil_calibration.py status --profile default
-```
-
-Full instructions: [`docs/FOIL_ONBOARDING.md`](docs/FOIL_ONBOARDING.md) and [`docs/FOIL_DEEP_CALIBRATION.md`](docs/FOIL_DEEP_CALIBRATION.md).
-
-## Research methodology
-
-The repository separates:
-
-1. **Generation** — candidate reasoning, methods, code, hypotheses.
-2. **Evidence acquisition** — primary sources, formal derivations, executable observations, benchmarks.
-3. **Verification** — a verifier matched to the exact claim and failure mode.
-4. **Assurance** — process/frame audits that attack what ordinary candidate review can miss.
-5. **Evaluation** — strong baselines, matched budgets, ablations, uncertainty, and negative results.
-6. **Human learning** — assisted performance kept distinct from later independent ownership and transfer.
-
-Planned behavioral comparisons include strong direct AI, static rules, adaptive Mirror (technical/historical `FOIL` identifiers), Layer 1-only vs Layer 1 + Layer 2A vs full Layer 2B, module ablations, native verification vs same-model critique, and Evidence Review Panel vs matched-evidence direct control. See [`RESEARCH.md`](RESEARCH.md).
-
-## Repository structure
+The public rename does not alter the following stable interfaces:
 
 ```text
-.
-├── skills/                  # specification-only modules: SKILL.md per directory
-├── tools/                   # portable runtime helpers
-├── benchmarks/              # blinded benchmark protocols, harnesses, permanent receipts
-├── .claude/settings.json    # project hook wiring
-├── .gauntlet.json           # Process Assurance runtime policy
-├── research/                # research basis and source records
-├── validation/              # deterministic/specification evidence
-├── tests/                   # runtime, privacy, layout, questionnaire/calibration regressions
-├── docs/                    # architecture, benchmark, runtime/onboarding docs, public showcase
-├── .github/                 # CI, CodeQL, benchmark workflow, Dependabot, issue/PR forms
-├── RESEARCH.md              # question, method, baselines, ablations
-├── REPRODUCIBILITY.md       # exact reproduction/evidence protocol
-├── ROADMAP.md               # evidence-first research roadmap
-├── CITATION.cff             # GitHub/software citation metadata
-├── CHANGELOG.md             # release history
-├── CONTRIBUTING.md          # contribution/research mechanism standards
-├── SECURITY.md              # vulnerability reporting
-└── LICENSE                  # MIT license
+repository: Kitahl/The-Gauntlet
+command:    gauntlet
+runtime:    gauntlet_host
+state:      .egrt/state and ~/.gauntlet/runtime
+skills:     soul, mathbot, scoutbot, novelbot, codebot,
+            benchbot, infinity-gauntlet, meditate,
+            council-of-elders, foil
+commands:   /soul /mind /space /reality /power /time
+            /gauntlet /council /foil
+verdicts:   CLEARED | ISSUE | UNKNOWN | UNAVAILABLE
 ```
 
-## Research integrity principles
+Public gemstone aliases may be changed later only through an explicit migration with tests, redirects, and receipt compatibility review.
 
-- User authority governs voluntary goals and actions; evidence governs factual warrant.
-- A citation must support the exact claim and scope being relied on.
-- A green test suite certifies only the properties it actually observes.
-- Multi-agent agreement is not independent verification by itself.
-- Novelty and absence claims are scoped to searched evidence.
-- Negative results and failed mechanisms are retained when they change the credible search space.
-- Behavioral efficacy is not inferred from specification correctness.
-- Benchmark improvements are not generalized beyond their exact protocol and sample.
-- User-profile relevance is not competence evidence; one miss never creates a permanent weakness.
-- A deep profile requires evidence breadth; repeated success in one narrow task family is insufficient.
-- A structured questionnaire may accelerate cold start but does not replace real-work and transfer evidence.
+## 11. Governance, security, and citation
 
-## Citation
+- [`SECURITY.md`](SECURITY.md)
+- [`GOVERNANCE.md`](GOVERNANCE.md)
+- [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- [`CITATION.cff`](CITATION.cff)
+- [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md)
+- [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)
 
-GitHub exposes citation information from [`CITATION.cff`](CITATION.cff). Cite the exact release or commit used. A DOI will be added after the first evidence-bearing stable release is archived.
-
-## Contributing and governance
-
-See [`CONTRIBUTING.md`](CONTRIBUTING.md), [`GOVERNANCE.md`](GOVERNANCE.md), [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md), and [`SECURITY.md`](SECURITY.md).
-
-Bug reports, research-mechanism proposals, and independent reproductions have separate structured issue forms so evidence is captured consistently.
-
-## License
-
-MIT License. See [`LICENSE`](LICENSE).
+Code is released under the [`MIT License`](LICENSE). The pinned Hermes Agent source retains its upstream MIT notice under [`third_party/HERMES_LICENSE.txt`](third_party/HERMES_LICENSE.txt). Brand names and original project artwork are presented as project identity; the MIT software license does not by itself grant trademark rights.

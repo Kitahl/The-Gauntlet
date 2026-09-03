@@ -1,0 +1,72 @@
+{
+  "authority_ceiling": "OBSERVATION_ONLY",
+  "changed_paths": [
+    ".github/phase6_verify.py",
+    ".github/workflows/fastpath-checkpoint.yml",
+    "gauntlet_host/constants.py",
+    "gauntlet_host/finalizer.py",
+    "gauntlet_host/gauntlet_plugin.py",
+    "gauntlet_host/launcher.py",
+    "gauntlet_host/observation_bridge.py"
+  ],
+  "content_hash": "6f70cc174307ad48868552ba543b57d32ce94b9f3c8e123403bb1f1cc1a4b266",
+  "fast_milestone": "FAST-P6",
+  "head_sha": "249753738f193d1f82e7e12afe907c4841827f80",
+  "known_limitations": [
+    "interim alpha still requires the pinned Hermes runtime",
+    "checkpoint is not GNR NATIVE-600 or native-final",
+    "observation store is operational and non-canonical",
+    "only one deterministic mock-provider end-to-end path was qualified",
+    "no automatic replanning loop",
+    "not yet admitted into integration/vnext-native-stack"
+  ],
+  "parent_checkpoint_sha": "dda78eabc216749cb1a3010d8e533428b78721d0",
+  "parent_checkpoint_tree": "0ad6d8641561de46bd729a5115500d4fd7bb0483",
+  "producer_branch": "work/native-hermes-fastpath",
+  "recorded_at": "2026-08-29T17:49:00Z",
+  "removed_paths": [
+    ".github/workflows/_phase5_status_plugin_v3.yml"
+  ],
+  "repair_history": [
+    {
+      "conclusion": "failure",
+      "defect": "no matching observation persisted",
+      "head_sha": "a1f6ac24cda62f4f94d10cbf4c015daad75ae7cc",
+      "run_id": 33265628442
+    },
+    {
+      "conclusion": "failure",
+      "defect": "caller-supplied provenance rejected by strict observation bridge",
+      "head_sha": "c3aa2d16b723690ad44fa9ff9dcff1e425a5dedc",
+      "run_id": 33266000140
+    },
+    {
+      "conclusion": "success",
+      "head_sha": "249753738f193d1f82e7e12afe907c4841827f80",
+      "resolution": "provenance kept bridge-owned",
+      "run_id": 33266521662
+    }
+  ],
+  "runtime_required": true,
+  "schema": "egr.hermes.checkpoint.v1",
+  "tests": [
+    {
+      "checks": [
+        "pinned Hermes gitlink verification",
+        "pinned runtime dependency installation",
+        "one real agent-visible gauntlet_task_status tool call",
+        "content-addressed tool observation persisted without raw input/output",
+        "Soul release gate invoked by parent finalizer",
+        "UNKNOWN unresolved task not accepted or released",
+        "zero canonical receipts created",
+        "canonical task state unchanged"
+      ],
+      "conclusion": "success",
+      "head_sha": "249753738f193d1f82e7e12afe907c4841827f80",
+      "run_id": 33266521662,
+      "workflow": "Fastpath checkpoint qualification"
+    }
+  ],
+  "tree_sha": "10eeeeef9f85ca91e766e5be388a176943decf5d",
+  "upstream_hermes_commit": "5fc308a70719a83cccdbba4c0e39c23f5a8239d5"
+}

@@ -1,0 +1,35 @@
+name: Fastpath checkpoint qualification
+
+on:
+  push:
+    branches:
+      - work/native-hermes-fastpath
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fast-p8:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          submodules: true
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - name: Verify pinned Hermes gitlink
+        run: |
+          set -euo pipefail
+          python scripts/vendor_hermes.py --verify-only
+      - name: Install pinned runtime and Gauntlet CLI
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install -e vendor/hermes-agent
+          python -m pip install -e . --no-deps
+      - name: Verify FAST-P8 user-facing alpha boot
+        run: |
+          set -euo pipefail
+          PYTHONPATH=. python .github/phase8_verify.py

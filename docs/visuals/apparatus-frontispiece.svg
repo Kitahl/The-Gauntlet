@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
+  <title id="title">Array by Bohr</title>
+  <desc id="desc">A parchment-toned scientific frontispiece. A measured classical profile sits inside an armillary instrument beside a botanical specimen, while restrained typography identifies Array as an evidence-governed agent and research system.</desc>
+  <metadata>
+    Original vector artwork for Kitahl/The-Gauntlet. Created for the Array brand edition. No external artwork is embedded or traced. Design image only; not evidence.
+  </metadata>
+  <defs>
+    <pattern id="grain" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M0 6H24M0 18H24" stroke="#77634C" stroke-opacity=".035" stroke-width=".7"/>
+      <circle cx="4" cy="13" r=".65" fill="#171714" fill-opacity=".045"/>
+      <circle cx="19" cy="3" r=".45" fill="#171714" fill-opacity=".035"/>
+    </pattern>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(18)">
+      <path d="M0 0V8" stroke="#171714" stroke-opacity=".12" stroke-width=".8"/>
+    </pattern>
+    <clipPath id="bustClip"><circle cx="343" cy="315" r="132"/></clipPath>
+    <filter id="paperNoise" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency=".75" numOctaves="2" seed="17" result="noise"/>
+      <feColorMatrix in="noise" type="saturate" values="0" result="mono"/>
+      <feComponentTransfer in="mono" result="fade"><feFuncA type="table" tableValues="0 .045"/></feComponentTransfer>
+      <feBlend in="SourceGraphic" in2="fade" mode="multiply"/>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="640" fill="#F2EBDD"/>
+  <rect width="1280" height="640" fill="url(#grain)"/>
+  <path d="M32 32H1248V608H32Z" fill="none" stroke="#77634C" stroke-width="1"/>
+  <path d="M48 48H1232V592H48Z" fill="none" stroke="#77634C" stroke-opacity=".38" stroke-width=".7"/>
+  <path d="M676 48V592" stroke="#77634C" stroke-opacity=".42"/>
+
+  <!-- registration and plate notation -->
+  <g fill="none" stroke="#8B3F2F" stroke-width="1.2">
+    <path d="M48 82V48H82M1198 48H1232V82M48 558V592H82M1198 592H1232V558"/>
+  </g>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" letter-spacing="1.5" fill="#3D4546">
+    <text x="68" y="75">FRONTISPIECE / BRAND EDITION 01</text>
+    <text x="68" y="576">ORIGINAL VECTOR · DESIGN PLATE · NOT EVIDENCE</text>
+    <text x="1208" y="576" text-anchor="end">1280 × 640</text>
+  </g>
+
+  <!-- botanical observation, secondary -->
+  <g transform="translate(86 112)" fill="none" stroke="#476B63" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M84 390C104 322 99 248 127 184C151 130 173 89 190 36" stroke-width="2"/>
+    <path d="M126 186C88 178 60 154 44 124C79 124 109 138 132 163"/>
+    <path d="M137 157C176 151 210 129 231 96C194 93 161 109 139 136"/>
+    <path d="M111 234C75 231 42 210 23 179C60 175 93 191 116 216"/>
+    <path d="M101 285C68 288 39 305 20 332C54 338 83 324 104 302"/>
+    <path d="M151 120C172 91 181 61 179 31C151 52 140 84 146 116"/>
+    <path d="M90 341C119 349 145 368 160 395C130 397 104 383 88 359"/>
+    <path d="M84 390l-16 32m16-32 8 35"/>
+    <g stroke-width=".7" opacity=".55">
+      <path d="M54 130l69 48M71 126l56 48M219 103l-73 48M204 104l-59 40M30 185l79 45M43 180l70 39M24 327l72-35M38 336l62-38M154 387l-57-37"/>
+    </g>
+  </g>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" letter-spacing="1.3" fill="#476B63">
+    <text x="79" y="104">SPECIMEN / ADAPTATION</text>
+    <text x="91" y="529">OBSERVE · CLASSIFY · COMPARE</text>
+  </g>
+
+  <!-- armillary instrument -->
+  <g transform="translate(0 0)" fill="none" stroke="#171714" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="343" cy="315" r="177" stroke-width="1.5"/>
+    <ellipse cx="343" cy="315" rx="177" ry="71" transform="rotate(-14 343 315)" stroke-width="1"/>
+    <ellipse cx="343" cy="315" rx="177" ry="71" transform="rotate(28 343 315)" stroke-width="1"/>
+    <ellipse cx="343" cy="315" rx="71" ry="177" transform="rotate(12 343 315)" stroke-width="1"/>
+    <ellipse cx="343" cy="315" rx="115" ry="177" transform="rotate(67 343 315)" stroke="#77634C" stroke-width=".9"/>
+    <circle cx="343" cy="315" r="133" stroke="#77634C" stroke-width=".9"/>
+    <circle cx="343" cy="315" r="8" fill="#F2EBDD" stroke="#8B3F2F" stroke-width="1.5"/>
+    <path d="M343 128V104M343 526V502M156 315H132M554 315H530" stroke="#8B3F2F" stroke-width="1.2"/>
+    <path d="M190 207l-20-13M496 423l20 13M451 166l13-20M235 464l-13 20" stroke="#8B3F2F" stroke-width="1.2"/>
+  </g>
+
+  <!-- measured classical profile: original construction -->
+  <g clip-path="url(#bustClip)">
+    <rect x="207" y="181" width="272" height="268" fill="url(#hatch)" opacity=".4"/>
+    <path d="M267 451c6-55 22-91 61-111c-16-21-24-44-21-70c4-35 25-65 56-77c24-9 52-4 71 11c-11 6-17 14-18 23c17 5 29 16 34 32c-6 9-13 15-24 18c7 9 7 18 1 28c-6 9-15 14-27 16c-3 24-14 43-34 57c26 10 49 35 60 73Z" fill="#F2EBDD" stroke="#171714" stroke-width="2"/>
+    <path d="M416 226c-29-14-65-9-86 16c-15 18-21 42-16 64M419 278c-12 2-22-1-30-10M414 293c-8 4-15 4-23 1M400 321c-16 5-33 2-45-8M356 379c-13 18-20 42-19 72" fill="none" stroke="#171714" stroke-width="1"/>
+    <path d="M318 249c-22 9-36 28-42 53M324 228c-20 4-39 14-54 31M339 211c-17 0-33 5-47 14" fill="none" stroke="#77634C" stroke-width=".8"/>
+    <g stroke="#8B3F2F" stroke-width=".8" opacity=".75">
+      <path d="M263 276H449M263 321H449M343 194V439"/>
+      <path d="M268 272v8m18-8v8m18-8v8m18-8v8m18-8v8m18-8v8m18-8v8m18-8v8m18-8v8m18-8v8"/>
+    </g>
+  </g>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="9" fill="#8B3F2F">
+    <text x="453" y="272">A</text><text x="453" y="317">B</text><text x="349" y="191">0</text>
+  </g>
+
+  <!-- instrument base -->
+  <g fill="none" stroke="#171714">
+    <path d="M318 493v42h50v-42M289 535h108M271 548h144" stroke-width="1.5"/>
+    <path d="M343 493v42" stroke="#77634C"/>
+  </g>
+
+  <!-- product copy -->
+  <g transform="translate(733 126)">
+    <text x="0" y="0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" letter-spacing="3.2" fill="#8B3F2F">BOHR</text>
+    <text x="0" y="96" font-family="Georgia, 'Times New Roman', serif" font-size="88" letter-spacing="-2" fill="#171714">Array</text>
+    <path d="M0 122H452" stroke="#77634C"/>
+    <text x="0" y="164" font-family="Georgia, 'Times New Roman', serif" font-size="29" fill="#171714">Evidence before authority.</text>
+    <text x="0" y="207" font-family="ui-sans-serif, system-ui, sans-serif" font-size="18" fill="#3D4546">An evidence-governed agent and research system.</text>
+    <g transform="translate(0 255)" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" letter-spacing="1.2">
+      <rect x="0" y="0" width="138" height="32" fill="#FCFAF4" stroke="#77634C"/>
+      <text x="69" y="21" text-anchor="middle" fill="#3D4546">RUNTIME / ALPHA</text>
+      <rect x="148" y="0" width="163" height="32" fill="#FCFAF4" stroke="#77634C"/>
+      <text x="229.5" y="21" text-anchor="middle" fill="#3D4546">RECEIPTS / TYPED</text>
+      <rect x="321" y="0" width="131" height="32" fill="#FCFAF4" stroke="#77634C"/>
+      <text x="386.5" y="21" text-anchor="middle" fill="#3D4546">LICENSE / MIT</text>
+    </g>
+    <g transform="translate(0 327)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#3D4546">
+      <text x="0" y="0">FRAME</text><text x="77" y="0" fill="#77634C">—</text>
+      <text x="96" y="0">ROUTE</text><text x="171" y="0" fill="#77634C">—</text>
+      <text x="190" y="0">VERIFY</text><text x="276" y="0" fill="#77634C">—</text>
+      <text x="295" y="0">REVIEW</text><text x="384" y="0" fill="#77634C">—</text>
+      <text x="403" y="0">RELEASE</text>
+    </g>
+  </g>
+
+  <!-- evidence boundary label -->
+  <g transform="translate(733 528)">
+    <path d="M0 0H452" stroke="#8B3F2F"/>
+    <text x="0" y="24" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" letter-spacing="1.2" fill="#8B3F2F">BOUNDARY</text>
+    <text x="82" y="24" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#3D4546">Classical-scientific imagery is identity, not proof.</text>
+  </g>
+</svg>

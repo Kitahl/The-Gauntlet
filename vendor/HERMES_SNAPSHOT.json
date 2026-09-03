@@ -1,0 +1,13 @@
+{
+  "destination": "vendor/hermes-agent",
+  "license": "MIT",
+  "license_sha256": "821556e6336796450ab852d375117b48a4887e71d255794fd6318d99982a5ab6",
+  "local_modifications": [],
+  "schema": "gauntlet.vendor_gitlink.v1",
+  "state": "materialized",
+  "storage": "gitlink",
+  "upstream_commit": "5fc308a70719a83cccdbba4c0e39c23f5a8239d5",
+  "upstream_repository": "NousResearch/hermes-agent",
+  "upstream_tag": "v2026.8.27",
+  "upstream_url": "https://github.com/NousResearch/hermes-agent.git"
+}

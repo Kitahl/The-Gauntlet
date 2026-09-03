@@ -1,0 +1,6 @@
+# Exact historical false-positive fingerprints.
+# The detected value is the documented non-secret local estimator identifier
+# `utf8-bytes-div-4-ceiling.v1`, not a credential. Keep exclusions commit-,
+# path-, rule-, and line-specific; do not disable the generic-api-key rule.
+b793e6fe393614ed1d6987744baabc4da03d58dc:.github/token000_verify.py:generic-api-key:371
+b793e6fe393614ed1d6987744baabc4da03d58dc:gauntlet_host/gauntlet_plugin.py:generic-api-key:296

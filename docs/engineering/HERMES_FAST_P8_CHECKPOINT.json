@@ -1,0 +1,116 @@
+{
+  "authority_ceiling": "TASK_SETUP_ONLY",
+  "changed_paths": [
+    ".github/phase8_verify.py",
+    ".github/workflows/fastpath-checkpoint.yml",
+    "docs/engineering/PHASE8_USER_CLI_BOOT.md",
+    "gauntlet_host/__main__.py",
+    "gauntlet_host/cli.py",
+    "pyproject.toml"
+  ],
+  "content_hash": "c34ef1bb041cdf48d007a282fe3839162a35c88c563bb5972bd77b739c42dcab",
+  "entry_points": {
+    "chat": "gauntlet chat",
+    "console": "gauntlet",
+    "one_shot": "gauntlet \"research this...\"",
+    "source_checkout_fallback": "python -m gauntlet_host"
+  },
+  "fast_milestone": "FAST-P8",
+  "foil_authority_ceiling": "ADAPTATION_ONLY",
+  "head_sha": "6990322a815e46b200d7572544a106607c74343a",
+  "implementation_commit_sha": "554ee851996cd363c2e52a6294c3bf478f10a41f",
+  "known_limitations": [
+    "interim alpha still requires the pinned Hermes runtime and its isolated dependencies",
+    "FAST-P8 is the fast-build alpha checkpoint, not NATIVE-800 or native-final",
+    "CLI qualification used one deterministic local OpenAI-compatible endpoint",
+    "no automatic claim-native module execution or autonomous replanning",
+    "no task release was qualified",
+    "FOIL remains SHADOW and ADAPTATION_ONLY with no automatic toolset narrowing",
+    "no profile complement or private profile data is used",
+    "no routing, verified-completion, latency, token, or complete-cost benefit is established",
+    "no direct-mode, integrated-overlay, Windows, or external-provider qualification",
+    "checkpoint is not admitted into integration/vnext-native-stack"
+  ],
+  "parent_checkpoint_sha": "9747572e8ca13622b72d8cd3d995fece90e19173",
+  "parent_checkpoint_tree": "0b194a94abf0e9791afeb604c84141325381788f",
+  "producer_base_sha": "2c3d5f19fa230bdf3a092c81f587397b4ce2734e",
+  "producer_base_tree": "51786c9162cd927a5b4fbb7cff1666bb43ddb4a3",
+  "producer_branch": "work/native-hermes-fastpath",
+  "recorded_at": "2026-08-29T20:19:10Z",
+  "removed_paths": [],
+  "repair_history": [
+    {
+      "conclusion": "failure",
+      "defect": "argparse wrapped the CLI help description and the harness compared raw whitespace",
+      "head_sha": "554ee851996cd363c2e52a6294c3bf478f10a41f",
+      "run_id": 33273066412
+    },
+    {
+      "conclusion": "success",
+      "head_sha": "6990322a815e46b200d7572544a106607c74343a",
+      "resolution": "normalize rendered help whitespace without changing runtime or authority behavior",
+      "run_id": 33273140981
+    }
+  ],
+  "runtime_authority_ceiling": "OBSERVATION_ONLY",
+  "runtime_required": true,
+  "schema": "egr.hermes.checkpoint.v1",
+  "task_binding": {
+    "conversation_inference": false,
+    "default_obligation_kind": "DISCOVERY",
+    "existing_task": "explicit --task-id; integrity-valid, active, unreleased, load-bearing",
+    "new_task": "existing Soul start plus one declared load-bearing obligation",
+    "repository_bound": true
+  },
+  "tests": [
+    {
+      "checks": [
+        "pinned Hermes gitlink verification",
+        "pinned runtime dependency installation",
+        "editable installation of the Gauntlet console entry point",
+        "gauntlet one-shot help and gauntlet chat help",
+        "gauntlet chat starts and exits through /quit",
+        "CLI creates a canonical task and one load-bearing DISCOVERY obligation",
+        "one real vendored AIAgent turn against a deterministic local endpoint",
+        "FAST-P7 route injected before the first model request",
+        "one real agent-visible gauntlet_task_status tool call",
+        "one OBSERVATION_ONLY runtime tool record",
+        "parent-owned Soul release gate invoked",
+        "UNKNOWN unresolved task not accepted or released",
+        "zero canonical receipts created",
+        "ordinary ~/.hermes not created",
+        "all eight manual boot checks passed"
+      ],
+      "conclusion": "success",
+      "head_sha": "6990322a815e46b200d7572544a106607c74343a",
+      "job_id": 99155128215,
+      "run_id": 33273140981,
+      "workflow": "Fastpath checkpoint qualification"
+    }
+  ],
+  "tree_sha": "3aba1c6263eaca953d92c6f71f2f5b4f9c7996d6",
+  "upstream_hermes_commit": "5fc308a70719a83cccdbba4c0e39c23f5a8239d5",
+  "verification_summary": {
+    "boot_checks": {
+      "1_gauntlet_starts": true,
+      "2_worker_starts": true,
+      "3_model_responds": true,
+      "4_runtime_tool_executes": true,
+      "5_gauntlet_task_status_works": true,
+      "6_runtime_observation_recorded": true,
+      "7_soul_gate_runs": true,
+      "8_unresolved_not_cleared": true
+    },
+    "boot_checks_passed": 8,
+    "canonical_receipts_created": 0,
+    "chat_entry_point_started": true,
+    "foil_route_preserved": true,
+    "load_bearing_obligation_created": true,
+    "model_round_trips": 3,
+    "ordinary_hermes_home_created": false,
+    "release_gate_verdict": "UNKNOWN",
+    "runtime_observations": 1,
+    "task_created_by_cli": true,
+    "unresolved_not_accepted": true
+  }
+}

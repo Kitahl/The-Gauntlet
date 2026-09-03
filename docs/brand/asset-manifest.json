@@ -1,0 +1,92 @@
+[
+  {
+    "asset_id": "ARRAY-ASSET-001",
+    "title": "Array Classical-Scientific Frontispiece",
+    "creator": "Project-authored with AI-assisted vector generation under project-owner direction",
+    "date": "2026-09-03",
+    "source_institution": "Kitahl/The-Gauntlet project",
+    "source_object_id": "docs/visuals/apparatus-frontispiece.svg",
+    "source_page_url": "https://github.com/Kitahl/The-Gauntlet/blob/work/elenchion-apparatus-brand/docs/visuals/apparatus-frontispiece.svg",
+    "download_url": "https://raw.githubusercontent.com/Kitahl/The-Gauntlet/work/elenchion-apparatus-brand/docs/visuals/apparatus-frontispiece.svg",
+    "rights_statement": "Original project vector created for this branch; no external artwork is embedded or traced. Commercial project use is approved by the project owner. No third-party endorsement is implied.",
+    "license_id": "PROJECT-ORIGINAL",
+    "commercial_use_allowed": true,
+    "rights_checked_on": "2026-09-03",
+    "source_file_sha256": "60cdc9198fc9e08d507187734cd34b86baf4446f8068c58eafe087537e37718d",
+    "transformations": [],
+    "production_files": [
+      "docs/visuals/apparatus-frontispiece.svg"
+    ],
+    "credit_line": "Array frontispiece — Kitahl/The-Gauntlet project, 2026",
+    "endorsement_disclaimer_required": true,
+    "review_status": "APPROVED_PROJECT_ORIGINAL",
+    "asset_type": "svg-frontispiece",
+    "use": [
+      "README hero",
+      "GitHub social-preview source",
+      "website brand reference"
+    ],
+    "alt_text": "Parchment scientific frontispiece with an original measured classical profile, armillary rings, a botanical specimen, and the Array identity.",
+    "evidence_boundary": "Brand image only. It is not an execution trace, receipt, benchmark result, historical artifact, or proof of product efficacy.",
+    "external_sources": []
+  },
+  {
+    "asset_id": "ARRAY-ASSET-002",
+    "title": "Bohr Calibration Mark",
+    "creator": "Project-authored with AI-assisted vector generation under project-owner direction",
+    "date": "2026-09-03",
+    "source_institution": "Kitahl/The-Gauntlet project",
+    "source_object_id": "docs/visuals/elenchion-mark.svg",
+    "source_page_url": "https://github.com/Kitahl/The-Gauntlet/blob/work/elenchion-apparatus-brand/docs/visuals/elenchion-mark.svg",
+    "download_url": "https://raw.githubusercontent.com/Kitahl/The-Gauntlet/work/elenchion-apparatus-brand/docs/visuals/elenchion-mark.svg",
+    "rights_statement": "Original project vector created for this branch; no external source artwork is embedded. Commercial project use is approved by the project owner. No trademark registration or third-party endorsement is claimed.",
+    "license_id": "PROJECT-ORIGINAL",
+    "commercial_use_allowed": true,
+    "rights_checked_on": "2026-09-03",
+    "source_file_sha256": "e9ea93513e7abccb3b0f8958ed8d5d091990613cdf4ae2c10560a6bdb586e055",
+    "transformations": [],
+    "production_files": [
+      "docs/visuals/elenchion-mark.svg"
+    ],
+    "credit_line": "Bohr calibration mark — Kitahl/The-Gauntlet project, 2026",
+    "endorsement_disclaimer_required": true,
+    "review_status": "APPROVED_PROJECT_ORIGINAL",
+    "asset_type": "svg-brand-mark",
+    "use": [
+      "website brand mark",
+      "documentation identity"
+    ],
+    "alt_text": "Circular calibration mark formed by instrument arcs, a central axis, and one oxide registration tick.",
+    "evidence_boundary": "Working brand mark only. It does not establish legal trademark clearance, institutional status, or product efficacy.",
+    "external_sources": []
+  },
+  {
+    "asset_id": "ARRAY-ASSET-003",
+    "title": "Array Semantic Instrument Field",
+    "creator": "Project-authored with AI-assisted Canvas2D generation under project-owner direction",
+    "date": "2026-09-03",
+    "source_institution": "Kitahl/The-Gauntlet project",
+    "source_object_id": "docs/system-field.js",
+    "source_page_url": "https://github.com/Kitahl/The-Gauntlet/blob/work/elenchion-apparatus-brand/docs/system-field.js",
+    "download_url": "https://raw.githubusercontent.com/Kitahl/The-Gauntlet/work/elenchion-apparatus-brand/docs/system-field.js",
+    "rights_statement": "Original project Canvas2D implementation derived from committed architecture and skill contracts. Commercial project use is approved by the project owner. No external image or JavaScript runtime is embedded.",
+    "license_id": "MIT-PROJECT-CODE",
+    "commercial_use_allowed": true,
+    "rights_checked_on": "2026-09-03",
+    "source_file_sha256": "36d0ba135999bb17cc809783e04c02705046e2ea3db2f6fa8809518d872cf9b8",
+    "transformations": [],
+    "production_files": [
+      "docs/system-field.js"
+    ],
+    "credit_line": "Array semantic instrument field — Kitahl/The-Gauntlet project, 2026",
+    "endorsement_disclaimer_required": true,
+    "review_status": "APPROVED_PROJECT_ORIGINAL",
+    "asset_type": "canvas2d-visualization",
+    "use": [
+      "GitHub Pages interactive background"
+    ],
+    "alt_text": "Decorative procedural scientific instrument field that changes among armillary, botanical, geometric, engineering, and calibration motifs.",
+    "evidence_boundary": "Conceptual architecture illustration only. It is not a live system monitor, receipt, benchmark result, or authority surface.",
+    "external_sources": []
+  }
+]

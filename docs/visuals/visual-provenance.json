@@ -2,22 +2,30 @@
   "schema": "egrt/visual-provenance-1",
   "showcase_revision": 19,
   "research_software_version": "0.5.1",
+  "brand_edition": "bohr-array-1",
   "visuals": [
     {
-      "id": "system-field",
+      "id": "array-semantic-instrument-field",
       "file": "docs/system-field.js",
-      "purpose": "Render one persistent semantic research-system field that reconfigures around the active professional workflow and the five specialist Gems.",
+      "purpose": "Render one local procedural field that translates Array architecture into armillary, botanical, geometric, engineering, metrology, optics, and review motifs as the reader moves through the public system explanation.",
       "sources": [
         "docs/ARCHITECTURE.md",
+        "docs/brand/NAMING_ARCHITECTURE.md",
+        "docs/brand/BRAND_SYSTEM.md",
         "skills/soul/SKILL.md",
         "skills/mathbot/SKILL.md",
         "skills/scoutbot/SKILL.md",
         "skills/novelbot/SKILL.md",
         "skills/codebot/SKILL.md",
-        "skills/benchbot/SKILL.md"
+        "skills/benchbot/SKILL.md",
+        "skills/infinity-gauntlet/SKILL.md",
+        "skills/meditate/SKILL.md",
+        "skills/council-of-elders/SKILL.md",
+        "skills/foil/SKILL.md"
       ],
-      "design_reference_boundary": "The constellation reveal, orbital/web formation language, sparse beam motion, and slow camera-like drift are adapted from an earlier cinematic prototype owned by the project author. The public implementation is rewritten as local Canvas2D and imports no external visual asset or runtime.",
-      "boundary": "Conceptual visualization of module contracts and routing semantics. It is not an execution trace, benchmark result, or behavioral-efficacy claim."
+      "source_file_sha256": "36d0ba135999bb17cc809783e04c02705046e2ea3db2f6fa8809518d872cf9b8",
+      "design_reference_boundary": "Original local Canvas2D implementation following the supplied classical-scientific brand package. It embeds no external image, font, library, or historical artwork. Separate original SVG assets are recorded in docs/brand/asset-manifest.json.",
+      "boundary": "Conceptual visualization of public module contracts and routing semantics. It is not a live execution trace, scientific figure, benchmark result, receipt, institutional endorsement, or behavioral-efficacy claim."
     }
   ]
 }
