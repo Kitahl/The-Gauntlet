@@ -2,9 +2,12 @@
 
 **Organization:** Bohr  
 **Product suite:** Array  
+**Runtime:** Quartz  
 **Product principle:** Evidence before authority  
 **Brand edition:** `array-brand-01`  
 **Status:** working public identity; technical compatibility preserved; legal name/trademark clearance not performed
+
+Public identity is **Bohr / Array / Quartz**. Gemstone names are presentation aliases; technical interfaces and evidence paths remain stable.
 
 ## File index
 
@@ -20,7 +23,7 @@
 
 ## Controlling rules
 
-1. Classical, archaeological, botanical, zoological, and technical-engraving cues are product identity only.
+1. Classical, archaeological, botanical, zoological, mineralogical, and technical-engraving cues are product identity only.
 2. Evidence tables use clean modern panels with explicit state and source paths.
 3. No fake founding year, academic seal, patent, accession number, museum endorsement, or antique evidence receipt.
 4. Public names may coexist with technical aliases; source identifiers change only through an explicit compatibility migration.
@@ -31,8 +34,8 @@
 
 - [x] README redesigned.
 - [x] GitHub Pages homepage redesigned.
-- [x] Company and product hierarchy established.
-- [x] Ten core modules renamed publicly with compatibility aliases.
+- [x] Company, product, and runtime hierarchy established.
+- [x] Ten core modules renamed publicly with gemstone compatibility aliases.
 - [x] Hermes-derived runtime, adversarial review, and research candidates included with bounded status.
 - [x] Original frontispiece and calibration mark created.
 - [x] Asset and content provenance recorded.
