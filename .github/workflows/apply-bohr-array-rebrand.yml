@@ -1,0 +1,59 @@
+name: Apply Bohr Array rebrand
+
+on:
+  push:
+    branches:
+      - work/elenchion-apparatus-brand
+    paths:
+      - scripts/.apply_bohr_array_rebrand.py
+      - .github/workflows/apply-bohr-array-rebrand.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apply-bohr-array-rebrand
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: work/elenchion-apparatus-brand
+          fetch-depth: 0
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Apply rebrand
+        run: python scripts/.apply_bohr_array_rebrand.py
+
+      - name: Validate changed public artifacts
+        run: |
+          python -m json.tool docs/brand/brand-system.json >/dev/null
+          python -m json.tool docs/brand/asset-manifest.json >/dev/null
+          python -m json.tool docs/content-provenance.json >/dev/null
+          python -m json.tool docs/visuals/visual-provenance.json >/dev/null
+          python - <<'PY'
+          from xml.etree import ElementTree as ET
+          ET.parse('docs/visuals/apparatus-frontispiece.svg')
+          ET.parse('docs/visuals/elenchion-mark.svg')
+          PY
+          node --check docs/system-field.js
+          git diff --check -- . ':(exclude)README.md' ':(exclude)docs/brand/README.md'
+
+      - name: Commit final rebrand
+        env:
+          BRANCH: work/elenchion-apparatus-brand
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          test ! -e scripts/.apply_bohr_array_rebrand.py
+          test ! -e .github/workflows/apply-bohr-array-rebrand.yml
+          git commit -m "brand: rename public system to Bohr Array"
+          git push origin "HEAD:${BRANCH}"
