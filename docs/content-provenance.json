@@ -1,12 +1,12 @@
 {
   "schema": "egrt/showcase-provenance-2",
-  "brand_edition": "lattice-prism-1",
+  "brand_edition": "bohr-array-1",
   "generated_on": "2026-09-03",
   "claims": [
     {
       "id": "public-identity-working-decision",
       "page_section": "Identity",
-      "claim": "Lattice and Prism are working public identities adopted by this branch; no corporate-name, trademark, domain, or legal clearance is claimed.",
+      "claim": "Bohr and Array are working public identities adopted by this branch; no corporate-name, trademark, domain, or legal clearance is claimed.",
       "status": "DESIGN_DECISION_WITH_UNVERIFIED_LEGAL_CLEARANCE",
       "sources": [
         "docs/brand/NAMING_ARCHITECTURE.md",
@@ -28,9 +28,9 @@
       ]
     },
     {
-      "id": "prism-modular-control",
+      "id": "array-modular-control",
       "page_section": "System",
-      "claim": "Prism publicly groups one orchestrator, five claim-native research instruments, four control/review instruments, and additional bounded systems while retaining the existing implementation boundaries.",
+      "claim": "Array publicly groups one orchestrator, five claim-native research instruments, four control/review instruments, and additional bounded systems while retaining the existing implementation boundaries.",
       "status": "DESIGN_DECISION_MAPPED_TO_REPOSITORY_FACTS",
       "sources": [
         "docs/brand/NAMING_ARCHITECTURE.md",
@@ -136,7 +136,7 @@
     {
       "id": "candidate-archive-no-promotion",
       "page_section": "Candidate Systems",
-      "claim": "The Strategist and Formal Plane public labels refer to archived Mastermind and Math Foundry engineering candidates; their archive does not promote them into Prism runtime or evidential authority.",
+      "claim": "The Strategist and Formal Plane public labels refer to archived Mastermind and Math Foundry engineering candidates; their archive does not promote them into Array runtime or evidential authority.",
       "status": "VERIFIED_REPOSITORY_FACT_PLUS_PUBLIC_ALIAS",
       "sources": [
         "docs/brand/NAMING_ARCHITECTURE.md",

@@ -1,9 +1,9 @@
-# Prism Brand System
+# Array Brand System
 
-**Organization:** Lattice  
-**Product suite:** Prism  
+**Organization:** Bohr  
+**Product suite:** Array  
 **Product principle:** Evidence before authority  
-**Brand edition:** `prism-brand-01`  
+**Brand edition:** `array-brand-01`  
 **Status:** working public identity; technical compatibility preserved; legal name/trademark clearance not performed
 
 ## File index

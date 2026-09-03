@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
-  <title id="title">Prism by Lattice</title>
-  <desc id="desc">A parchment-toned scientific frontispiece. A measured classical profile sits inside an armillary instrument beside a botanical specimen, while restrained typography identifies Prism as an evidence-governed agent and research system.</desc>
+  <title id="title">Array by Bohr</title>
+  <desc id="desc">A parchment-toned scientific frontispiece. A measured classical profile sits inside an armillary instrument beside a botanical specimen, while restrained typography identifies Array as an evidence-governed agent and research system.</desc>
   <metadata>
-    Original vector artwork for Kitahl/The-Gauntlet. Created for the Prism brand edition. No external artwork is embedded or traced. Design image only; not evidence.
+    Original vector artwork for Kitahl/The-Gauntlet. Created for the Array brand edition. No external artwork is embedded or traced. Design image only; not evidence.
   </metadata>
   <defs>
     <pattern id="grain" width="24" height="24" patternUnits="userSpaceOnUse">
@@ -93,8 +93,8 @@
 
   <!-- product copy -->
   <g transform="translate(733 126)">
-    <text x="0" y="0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" letter-spacing="3.2" fill="#8B3F2F">LATTICE</text>
-    <text x="0" y="96" font-family="Georgia, 'Times New Roman', serif" font-size="88" letter-spacing="-2" fill="#171714">Prism</text>
+    <text x="0" y="0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" letter-spacing="3.2" fill="#8B3F2F">BOHR</text>
+    <text x="0" y="96" font-family="Georgia, 'Times New Roman', serif" font-size="88" letter-spacing="-2" fill="#171714">Array</text>
     <path d="M0 122H452" stroke="#77634C"/>
     <text x="0" y="164" font-family="Georgia, 'Times New Roman', serif" font-size="29" fill="#171714">Evidence before authority.</text>
     <text x="0" y="207" font-family="ui-sans-serif, system-ui, sans-serif" font-size="18" fill="#3D4546">An evidence-governed agent and research system.</text>

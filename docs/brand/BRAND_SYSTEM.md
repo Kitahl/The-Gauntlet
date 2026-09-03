@@ -1,4 +1,4 @@
-# Prism Visual and Marketing System
+# Array Visual and Marketing System
 
 ## 1. North star
 

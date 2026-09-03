@@ -27,7 +27,7 @@ The package included research notes, a visual system, GitHub and website specifi
 
 ## Deliberate adaptations
 
-- The old product identity was replaced by Lattice / Prism.
+- The old product identity was replaced by Bohr / Array.
 - The five “Stones/Gems” became claim-native Instruments.
 - Soul, Gauntlet, Council, Meditate, and Mirror received new public instrument names while technical aliases remain.
 - The Hermes-derived host is described as Quartz and given an explicit alpha/observation-only boundary.

@@ -2,12 +2,12 @@
   "schema": "egrt/visual-provenance-1",
   "showcase_revision": 19,
   "research_software_version": "0.5.1",
-  "brand_edition": "lattice-prism-1",
+  "brand_edition": "bohr-array-1",
   "visuals": [
     {
-      "id": "prism-semantic-instrument-field",
+      "id": "array-semantic-instrument-field",
       "file": "docs/system-field.js",
-      "purpose": "Render one local procedural field that translates Prism architecture into armillary, botanical, geometric, engineering, metrology, optics, and review motifs as the reader moves through the public system explanation.",
+      "purpose": "Render one local procedural field that translates Array architecture into armillary, botanical, geometric, engineering, metrology, optics, and review motifs as the reader moves through the public system explanation.",
       "sources": [
         "docs/ARCHITECTURE.md",
         "docs/brand/NAMING_ARCHITECTURE.md",

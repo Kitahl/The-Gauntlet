@@ -1,10 +1,10 @@
 <p align="center">
-  <img src="docs/visuals/apparatus-frontispiece.svg" alt="Prism frontispiece: a calibrated classical profile inside an armillary instrument, with botanical and measurement annotations" width="100%" />
+  <img src="docs/visuals/apparatus-frontispiece.svg" alt="Array frontispiece: a calibrated classical profile inside an armillary instrument, with botanical and measurement annotations" width="100%" />
 </p>
 
-# Prism
+# Array
 
-**An evidence-governed agent and research system by Lattice.**
+**An evidence-governed agent and research system by Bohr.**
 
 [![Research software validation](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/validate.yml)
 [![Fastpath checkpoint](https://github.com/Kitahl/The-Gauntlet/actions/workflows/fastpath-checkpoint.yml/badge.svg)](https://github.com/Kitahl/The-Gauntlet/actions/workflows/fastpath-checkpoint.yml)
@@ -12,7 +12,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-0.5.1-informational.svg)](CHANGELOG.md)
 
-> **Research status:** Prism is public research software with executable checks, typed evidence receipts, bounded benchmark pilots, and an interim Hermes-derived runtime alpha. It does **not** establish that the complete system improves human reasoning, scientific discovery, or general AI capability in prospective deployment.
+> **Research status:** Array is public research software with executable checks, typed evidence receipts, bounded benchmark pilots, and an interim Hermes-derived runtime alpha. It does **not** establish that the complete system improves human reasoning, scientific discovery, or general AI capability in prospective deployment.
 
 **Website:** [kitahl.github.io/The-Gauntlet](https://kitahl.github.io/The-Gauntlet/)  
 **5-minute evaluator path:** [`docs/EVALUATOR_QUICKSTART.md`](docs/EVALUATOR_QUICKSTART.md)  
@@ -25,17 +25,17 @@
 
 | Layer | Public name | Meaning | Compatibility boundary |
 |---|---|---|---|
-| Organization | **Lattice** | One-word scientific identity: an ordered structure for research and engineering instruments | Naming decision only; no claim of legal incorporation, trademark clearance, or historical lineage |
-| Product suite | **Prism** | One runtime, one evidence-control plane, and a portfolio of specialist gemstone instruments | Repository remains `Kitahl/The-Gauntlet`; the installed command remains `gauntlet` |
+| Organization | **Bohr** | One-word scientific identity chosen for memorability and technical character | Naming decision only; no claim of legal incorporation, trademark clearance, or historical lineage |
+| Product suite | **Array** | An ordered collection: one runtime, one evidence-control plane, and specialist gemstone instruments | Repository remains `Kitahl/The-Gauntlet`; the installed command remains `gauntlet` |
 | Runtime | **Quartz** | Hermes-derived operational layer behind the evidence boundary | Technical runtime remains `gauntlet_host` |
 | Product principle | **Evidence before authority** | Models and tools may produce observations; claim-native methods and receipts govern factual warrant | Existing task, obligation, receipt, verdict, and release semantics are unchanged |
 | Visual language | **Scholarly Antiquarian Framing** | Classical, natural-history, mineralogical, and instrument imagery paired with modern evidence panels | Brand language is never evidence for a technical or scientific claim |
 
 The gemstone names are public aliases. Existing commands, state, receipts, tests, files, and citations continue to resolve through the stable technical names. See [`docs/brand/NAMING_ARCHITECTURE.md`](docs/brand/NAMING_ARCHITECTURE.md).
 
-## 2. What Prism does
+## 2. What Array does
 
-Prism treats a claim like a specimen under examination:
+Array treats a claim like a specimen under examination:
 
 1. **Frame** the goal and create explicit load-bearing obligations.
 2. **Route** each obligation to the method that can actually establish it.
@@ -134,7 +134,7 @@ Every `skills/<technical-id>/` directory retains `SKILL.md` as the public reason
 
 ### Moonstone Candidate — mechanism planning
 
-The archived mechanism-planner candidate contains bounded minimum successful-repair selection over a declared finite repair universe. Its recorded hardening and inherited checks apply only to that archived candidate; it is **not** promoted into Prism authority or runtime by the archive. See [`research/postbench-candidate2/README.md`](research/postbench-candidate2/README.md).
+The archived mechanism-planner candidate contains bounded minimum successful-repair selection over a declared finite repair universe. Its recorded hardening and inherited checks apply only to that archived candidate; it is **not** promoted into Array authority or runtime by the archive. See [`research/postbench-candidate2/README.md`](research/postbench-candidate2/README.md).
 
 ### Zircon Candidate — mathematical execution hardening
 
@@ -149,8 +149,8 @@ The archived formal-plane candidate strengthens trusted-base minimality, isolate
 | Runtime observations cannot directly create canonical receipts or release tasks | **Architecture invariant with executable checks** | [`docs/engineering/PHASE8_USER_CLI_BOOT.md`](docs/engineering/PHASE8_USER_CLI_BOOT.md) · [`.github/phase8_verify.py`](.github/phase8_verify.py) |
 | Opal profile, onboarding, calibration, and routing mechanics exist | **Mechanically checked; efficacy open** | [`research/FOIL_RESEARCH_BASIS.md`](research/FOIL_RESEARCH_BASIS.md) · [`validation/`](validation/) |
 | Exploratory benchmark receipts include positive, null, and negative/mixed outcomes | **Exploratory, small-sample evidence** | [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) |
-| Prism improves independent human reasoning or scientific discovery in deployment | **Not established** | [`RESEARCH.md`](RESEARCH.md) · [`ROADMAP.md`](ROADMAP.md) |
-| Lattice and Prism are cleared corporate/product marks | **Unverified; no legal clearance performed** | [`docs/brand/CLAIMS_REGISTER.md`](docs/brand/CLAIMS_REGISTER.md) |
+| Array improves independent human reasoning or scientific discovery in deployment | **Not established** | [`RESEARCH.md`](RESEARCH.md) · [`ROADMAP.md`](ROADMAP.md) |
+| Bohr and Array are cleared corporate/product marks | **Unverified; no legal clearance performed** | [`docs/brand/CLAIMS_REGISTER.md`](docs/brand/CLAIMS_REGISTER.md) |
 
 The repository does not combine unlike benchmark rows into a single headline score. Passing source checks, green CI, model agreement, or persuasive design are evidence with bounded scope—not automatic scientific validity.
 
@@ -199,7 +199,7 @@ The FAST-P8 harness uses a deterministic local OpenAI-compatible endpoint. Passi
 
 ## 9. Brand and website system
 
-The Prism visual system applies the supplied classical-scientific package as a restrained mineralogical research interface:
+The Array visual system applies the supplied classical-scientific package as a restrained mineralogical research interface:
 
 - parchment, ink, slate, bronze, oxide, verdigris, and gemstone accents;
 - editorial serif, technical sans, and receipt-mono typography stacks;

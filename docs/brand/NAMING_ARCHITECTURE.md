@@ -4,13 +4,13 @@
 
 | Level | New public identity | Status | Existing identity retained for compatibility |
 |---|---|---|---|
-| Organization | **Lattice** | `DESIGN_DECISION` | Independent project ownership remains unchanged |
-| Product suite | **Prism** | `DESIGN_DECISION` | Repository: `Kitahl/The-Gauntlet`; CLI: `gauntlet` |
+| Organization | **Bohr** | `DESIGN_DECISION` | Independent project ownership remains unchanged |
+| Product suite | **Array** | `DESIGN_DECISION` | Repository: `Kitahl/The-Gauntlet`; CLI: `gauntlet` |
 | Runtime | **Quartz** | `DESIGN_DECISION` | `gauntlet_host`; pinned Hermes Agent runtime source |
 | Principle | **Evidence before authority** | `DESIGN_DECISION` | Existing authority/evidence separation |
 | Visual method | **Scholarly Antiquarian Framing** | coined internal label | No claim that this is an established academic term |
 
-**Lattice** is selected because it is a short scientific term for an ordered structural arrangement. **Prism** is selected because it is a short scientific instrument/object term associated with separating a complex input into inspectable components. These are working public identities only; this document does not claim legal incorporation, trademark availability, domain availability, or institutional endorsement.
+**Bohr** is selected as a short, memorable scientific identity. **Array** is selected as a short scientific/computing term for an ordered collection, matching a suite composed of distinct specialist instruments. These are working public identities only; this document does not claim legal incorporation, trademark availability, domain availability, or institutional endorsement.
 
 ## 2. Public module map
 

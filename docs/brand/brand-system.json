@@ -1,13 +1,13 @@
 {
-  "schema": "prism.brand-system.v1",
-  "brand_edition": "prism-brand-01",
+  "schema": "array.brand-system.v1",
+  "brand_edition": "array-brand-01",
   "organization": {
-    "public_name": "Lattice",
+    "public_name": "Bohr",
     "status": "DESIGN_DECISION",
     "legal_clearance": "UNVERIFIED"
   },
   "product": {
-    "public_name": "Prism",
+    "public_name": "Array",
     "descriptor": "evidence-governed agent and research system",
     "principle": "Evidence before authority",
     "repository_compatibility_name": "The Gauntlet",
@@ -139,6 +139,6 @@
     "UNVERIFIED",
     "PROHIBITED"
   ],
-  "evidence_boundary": "Brand imagery, gemstone names, and historical cues never add evidential weight to technical or scientific claims.",
+  "evidence_boundary": "Brand imagery, gemstone names, and historical or scientific cues never add evidential weight to technical or scientific claims.",
   "source_package_sha256": "2232a3b18ee2c1ffeb2cf670f6018dc7129d4668db18ed8eef0ae767de2f22c5"
 }
