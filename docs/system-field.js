@@ -1,249 +1,540 @@
 (() => {
-  'use strict';
+  "use strict";
 
-  const canvas = document.getElementById('system-field-canvas');
-  const caption = document.getElementById('system-caption');
+  const canvas = document.getElementById("system-field-canvas");
   if (!canvas) return;
-  const ctx = canvas.getContext('2d', { alpha: true });
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const DPR_CAP = 1.5;
-  const COLORS = {
-    base: '#8290a0', accent: '#ff735f', mind: '#dec167', space: '#80aef7', reality: '#df86cf', power: '#58cedc', time: '#84cb96', bad: '#e46b5b', good: '#82d79a'
+
+  const ctx = canvas.getContext("2d", { alpha: true });
+  if (!ctx) return;
+
+  const caption = document.getElementById("system-caption");
+  const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let reducedMotion = motionQuery.matches;
+  let width = 0;
+  let height = 0;
+  let dpr = 1;
+  let frame = 0;
+  let time = 0;
+  let activeScene = document.body.dataset.scene || "hero";
+
+  const palette = {
+    paper: "#F2EBDD",
+    ink: "#171714",
+    slate: "#3D4546",
+    bronze: "#77634C",
+    oxide: "#8B3F2F",
+    verdigris: "#476B63",
+    white: "#FCFAF4"
   };
 
-  let W = 0, H = 0, dpr = 1, active = 'hero', previous = 'hero', switchedAt = performance.now();
-  let pointerX = 0, pointerY = 0;
-  let far = [], webNodes = [], webEdges = [];
-  const sceneLabels = {
-    hero: ['LIVE SYSTEM VIEW','TASK → OBLIGATION → METHOD → RECEIPT'],
-    overview: ['SYSTEM MAP','FIVE SPECIALISTS · FIVE CONTROL / REVIEW TOOLS'],
-    workflow: ['ROUTING TRACE','ONLY LOAD-BEARING METHODS ACTIVATE'],
-    gems: ['SPECIALIST LAYER','THE FIELD RECONFIGURES AROUND THE CLAIM'],
-    mind: ['MIND / FORMAL REASONING','CLAIM → OBLIGATION → PROOF / COUNTEREXAMPLE'],
-    space: ['SPACE / RESEARCH DISCOVERY','QUERY → SOURCES → SCOPED FINDING'],
-    reality: ['REALITY / METHOD SYNTHESIS','KNOWN METHODS → GAP → CANDIDATE → RECHECK'],
-    power: ['POWER / ENGINEERING VERIFICATION','SOURCE → BUILD → TEST → RUNTIME → RECEIPT'],
-    time: ['TIME / EVALUATION','CANDIDATE ∥ BASELINE → MATCHED CELLS → STOP / GO'],
-    system: ['CONTROL MODEL','TASK → OBLIGATIONS → METHODS → RECEIPTS → RESULT'],
-    quiet: ['SOURCE / IMPLEMENTATION','DETAIL VIEW']
+  const sceneCaption = {
+    hero: ["PLATE / ACTIVE SYSTEM", "FRAME → ROUTE → OBSERVE → VERIFY → RELEASE"],
+    overview: ["METHOD / CONTROL MODEL", "SIX STAGES · ONE EVIDENCE STATE"],
+    workflow: ["ROUTE / OBLIGATION", "THE METHOD CHANGES WITH THE CLAIM"],
+    gems: ["INDEX / INSTRUMENTS", "RUNTIME + TEN CORE CONTRACTS"],
+    mind: ["INSTRUMENT 01 / CANON", "FORMALIZE → NEGATE → VERIFY"],
+    space: ["INSTRUMENT 02 / ATLAS", "SEARCH → IDENTIFY → BOUND"],
+    reality: ["INSTRUMENT 03 / CRUCIBLE", "GAP → MECHANISM → FALSIFIER"],
+    power: ["INSTRUMENT 04 / FORGE", "SOURCE → ENTRYPOINT → EXECUTION"],
+    time: ["INSTRUMENT 05 / CHRONOMETER", "BASELINE → MEASURE → DECIDE"],
+    system: ["AUTHORITY / RELEASE PATH", "OBSERVATION ≠ RECEIPT ≠ RELEASE"],
+    quiet: ["ARCHIVE / SOURCE", "INSPECT THE MACHINERY, NOT THE MOOD"]
   };
 
-  function rand(a,b){ return a + Math.random() * (b-a); }
-  function hexToRgb(hex){ const n=parseInt(hex.slice(1),16); return [(n>>16)&255,(n>>8)&255,n&255]; }
-  function rgba(hex,a){ const [r,g,b]=hexToRgb(hex); return `rgba(${r},${g},${b},${a})`; }
-  function lerp(a,b,t){ return a + (b-a)*t; }
-  function ease(t){ return t*t*(3-2*t); }
-  function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+  const gemGeometry = {
+    mind: [[-0.7, 0.55], [0, -0.75], [0.75, 0.48]],
+    space: [[0, -0.86], [-0.38, -0.22], [0.4, -0.1], [-0.55, 0.48], [0.52, 0.58]],
+    reality: [[-0.72, -0.28], [-0.2, 0.08], [0.28, -0.06], [0.73, 0.34]],
+    power: [[-0.7, 0], [-0.24, 0], [0.24, 0], [0.7, 0]],
+    time: [[0, -0.78], [0.62, -0.2], [0.38, 0.64], [-0.38, 0.64], [-0.62, -0.2]]
+  };
 
-  // Derived from the uploaded Nexus Rift menu's cosmic-web/orbital formation idea,
-  // but implemented locally in Canvas2D so the public site has no remote runtime dependency.
-  function buildFarField(){
-    far = [];
-    const count = W < 700 ? 220 : 520;
-    for(let i=0;i<count;i++){
-      const mode = i % 3;
-      let x,y,z;
-      if(mode===0){ // orbital tangle
-        const a=rand(0,Math.PI*2), r=rand(.18,.55), squash=rand(.35,.8);
-        x=.72+Math.cos(a)*r; y=.46+Math.sin(a)*r*squash; z=rand(.2,1);
-      } else if(mode===1){ // cosmic web
-        x=rand(.18,1.25); y=rand(-.1,1.15); z=rand(.15,1);
-      } else { // scatter
-        x=rand(0,1.3); y=rand(0,1); z=rand(.1,1);
-      }
-      far.push({x,y,z,s:rand(.45,1.7),phase:rand(0,Math.PI*2),speed:rand(.2,.8)});
+  function resize() {
+    width = Math.max(1, window.innerWidth);
+    height = Math.max(1, window.innerHeight);
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw();
+  }
+
+  function rgba(hex, alpha) {
+    const value = hex.replace("#", "");
+    const n = Number.parseInt(value, 16);
+    return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
+  }
+
+  function setStroke(color = palette.bronze, alpha = 0.42, lineWidth = 1) {
+    ctx.strokeStyle = rgba(color, alpha);
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+  }
+
+  function line(x1, y1, x2, y2, color = palette.bronze, alpha = 0.42, lineWidth = 1) {
+    setStroke(color, alpha, lineWidth);
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  }
+
+  function circle(x, y, radius, color = palette.bronze, alpha = 0.42, lineWidth = 1, fill = null) {
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    if (fill) {
+      ctx.fillStyle = fill;
+      ctx.fill();
     }
+    setStroke(color, alpha, lineWidth);
+    ctx.stroke();
   }
 
-  function buildWeb(){
-    webNodes=[]; webEdges=[];
-    const anchors = W < 700 ? 14 : 22;
-    for(let i=0;i<anchors;i++) webNodes.push({x:rand(.48,1.05),y:rand(.08,.92),z:rand(.2,1),phase:rand(0,6.28)});
-    for(let i=0;i<webNodes.length;i++){
-      let ranked=[];
-      for(let j=i+1;j<webNodes.length;j++){
-        const a=webNodes[i],b=webNodes[j],d=(a.x-b.x)**2+(a.y-b.y)**2;
-        ranked.push([d,j]);
-      }
-      ranked.sort((a,b)=>a[0]-b[0]);
-      ranked.slice(0, i%3===0?2:1).forEach(([,j])=>webEdges.push([i,j]));
-    }
+  function ellipse(x, y, rx, ry, rotation = 0, color = palette.bronze, alpha = 0.42, lineWidth = 1) {
+    setStroke(color, alpha, lineWidth);
+    ctx.beginPath();
+    ctx.ellipse(x, y, rx, ry, rotation, 0, Math.PI * 2);
+    ctx.stroke();
   }
 
-  function resize(){
-    dpr=Math.min(devicePixelRatio||1,DPR_CAP); W=innerWidth; H=innerHeight;
-    canvas.width=Math.floor(W*dpr); canvas.height=Math.floor(H*dpr); canvas.style.width=W+'px'; canvas.style.height=H+'px';
-    ctx.setTransform(dpr,0,0,dpr,0,0); buildFarField(); buildWeb();
-  }
-
-  function diamond(x,y,r,color,alpha=1,fill=true){
-    ctx.save();ctx.translate(x,y);ctx.rotate(Math.PI/4);ctx.globalAlpha=alpha;
-    if(fill){ctx.fillStyle=color;ctx.fillRect(-r,-r,r*2,r*2);}else{ctx.strokeStyle=color;ctx.lineWidth=1;ctx.strokeRect(-r,-r,r*2,r*2);}ctx.restore();
-  }
-  function line(a,b,color,alpha=1,width=1){ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.strokeStyle=rgba(color,alpha);ctx.lineWidth=width;ctx.stroke();}
-  function label(text,x,y,color='#b6c0cb',alpha=.8,align='center',size=10){ctx.font=`700 ${size}px ${getComputedStyle(document.documentElement).getPropertyValue('--mono') || 'monospace'}`;ctx.textAlign=align;ctx.textBaseline='middle';ctx.fillStyle=rgba(color,alpha);ctx.fillText(text,x,y);}
-
-  function drawFar(t,intensity){
-    const driftX=Math.sin(t*.00006)*16 + pointerX*5, driftY=Math.cos(t*.00005)*8 + pointerY*4;
-    far.forEach((p,i)=>{
-      const tw=.55+.45*Math.sin(t*.0007*p.speed+p.phase);
-      const perspective=.55+.45*p.z;
-      const x=(p.x*W)+driftX*(1-p.z), y=(p.y*H)+driftY*(1-p.z);
-      const a=intensity*(.05+.12*tw)*(1-p.z*.32);
-      diamond(x,y,p.s*perspective,'#c7d0da',a,true);
-    });
-    ctx.save();ctx.globalCompositeOperation='lighter';
-    webEdges.forEach(([i,j],k)=>{
-      const a=webNodes[i],b=webNodes[j];
-      const ax=a.x*W+driftX*(1-a.z),ay=a.y*H+driftY*(1-a.z),bx=b.x*W+driftX*(1-b.z),by=b.y*H+driftY*(1-b.z);
-      const pulse=.5+.5*Math.sin(t*.00035+k*.7); line([ax,ay],[bx,by],COLORS.base,intensity*(.025+.035*pulse),.65);
-    });
+  function label(value, x, y, align = "left", color = palette.slate, alpha = 0.52, size = 10) {
+    ctx.save();
+    ctx.font = `600 ${size}px ui-monospace, SFMono-Regular, Menlo, monospace`;
+    ctx.textAlign = align;
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = rgba(color, alpha);
+    ctx.fillText(value, x, y);
     ctx.restore();
   }
 
-  function gemGeometry(cx,cy,s){
-    const p=[
-      [cx,cy-s],[cx-s*.64,cy-s*.55],[cx-s,cy],[cx-s*.58,cy+s*.68],[cx,cy+s],[cx+s*.58,cy+s*.68],[cx+s,cy],[cx+s*.64,cy-s*.55],
-      [cx,cy-s*.42],[cx-s*.38,cy],[cx,cy+s*.42],[cx+s*.38,cy],[cx,cy]
+  function dot(x, y, radius = 3, color = palette.oxide, alpha = 0.62) {
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fillStyle = rgba(color, alpha);
+    ctx.fill();
+  }
+
+  function ticks(x, y, radius, count = 36, length = 6, color = palette.bronze, alpha = 0.33) {
+    for (let i = 0; i < count; i += 1) {
+      const angle = (i / count) * Math.PI * 2;
+      const major = i % 6 === 0;
+      const inner = radius - (major ? length * 1.65 : length);
+      line(
+        x + Math.cos(angle) * inner,
+        y + Math.sin(angle) * inner,
+        x + Math.cos(angle) * radius,
+        y + Math.sin(angle) * radius,
+        major ? palette.oxide : color,
+        major ? alpha + 0.14 : alpha,
+        major ? 1.2 : 0.7
+      );
+    }
+  }
+
+  function crosshair(x, y, radius) {
+    line(x - radius, y, x + radius, y, palette.oxide, 0.4, 0.8);
+    line(x, y - radius, x, y + radius, palette.oxide, 0.4, 0.8);
+    circle(x, y, 4, palette.oxide, 0.62, 1.1);
+  }
+
+  function paperGrid(step = 42, alpha = 0.065) {
+    for (let x = step / 2; x < width; x += step) line(x, 0, x, height, palette.bronze, alpha, 0.6);
+    for (let y = step / 2; y < height; y += step) line(0, y, width, y, palette.bronze, alpha, 0.6);
+  }
+
+  function rightCenter(scale = 1) {
+    const compact = width < 850;
+    return {
+      x: compact ? width * 0.73 : width * 0.79,
+      y: height * 0.49,
+      r: Math.min(width, height) * (compact ? 0.24 : 0.28) * scale
+    };
+  }
+
+  function armillary(x, y, radius, phase = 0) {
+    circle(x, y, radius, palette.ink, 0.34, 1.15);
+    circle(x, y, radius * 0.72, palette.bronze, 0.32, 0.8);
+    ellipse(x, y, radius, radius * 0.38, -0.22 + phase, palette.ink, 0.31, 0.9);
+    ellipse(x, y, radius, radius * 0.38, 0.54 - phase * 0.7, palette.bronze, 0.34, 0.9);
+    ellipse(x, y, radius * 0.39, radius, 0.16 + phase * 0.4, palette.ink, 0.29, 0.9);
+    ellipse(x, y, radius * 0.62, radius, 1.06 - phase * 0.3, palette.bronze, 0.27, 0.8);
+    ticks(x, y, radius + 9, 48, 7);
+    crosshair(x, y, 11);
+    line(x, y + radius, x, y + radius + 36, palette.ink, 0.36, 1.2);
+    line(x - radius * 0.24, y + radius + 36, x + radius * 0.24, y + radius + 36, palette.ink, 0.36, 1.2);
+  }
+
+  function profile(x, y, scale) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(scale, scale);
+    setStroke(palette.ink, 0.31, 1.2 / scale);
+    ctx.beginPath();
+    ctx.moveTo(-30, 78);
+    ctx.bezierCurveTo(-27, 44, -18, 23, 6, 10);
+    ctx.bezierCurveTo(-7, -6, -12, -26, -8, -45);
+    ctx.bezierCurveTo(-3, -70, 17, -86, 42, -82);
+    ctx.bezierCurveTo(57, -80, 69, -72, 76, -61);
+    ctx.bezierCurveTo(67, -56, 63, -48, 66, -40);
+    ctx.bezierCurveTo(78, -37, 85, -29, 87, -19);
+    ctx.bezierCurveTo(84, -12, 79, -8, 71, -6);
+    ctx.bezierCurveTo(75, 1, 74, 8, 69, 13);
+    ctx.bezierCurveTo(64, 19, 56, 21, 47, 22);
+    ctx.bezierCurveTo(44, 38, 35, 51, 20, 60);
+    ctx.bezierCurveTo(37, 67, 51, 82, 57, 101);
+    ctx.stroke();
+    line(-18, -47, 57, -47, palette.oxide, 0.24, 0.7 / scale);
+    line(-18, -7, 73, -7, palette.oxide, 0.24, 0.7 / scale);
+    line(20, -78, 20, 90, palette.oxide, 0.22, 0.7 / scale);
+    ctx.restore();
+  }
+
+  function leaf(ctxX, ctxY, angle, length, side) {
+    const dx = Math.cos(angle);
+    const dy = Math.sin(angle);
+    const px = -dy;
+    const py = dx;
+    const widthLeaf = length * 0.33 * side;
+    ctx.beginPath();
+    ctx.moveTo(ctxX, ctxY);
+    ctx.bezierCurveTo(
+      ctxX + dx * length * 0.35 + px * widthLeaf,
+      ctxY + dy * length * 0.35 + py * widthLeaf,
+      ctxX + dx * length * 0.77 + px * widthLeaf * 0.5,
+      ctxY + dy * length * 0.77 + py * widthLeaf * 0.5,
+      ctxX + dx * length,
+      ctxY + dy * length
+    );
+    ctx.bezierCurveTo(
+      ctxX + dx * length * 0.75 - px * widthLeaf * 0.42,
+      ctxY + dy * length * 0.75 - py * widthLeaf * 0.42,
+      ctxX + dx * length * 0.3 - px * widthLeaf * 0.55,
+      ctxY + dy * length * 0.3 - py * widthLeaf * 0.55,
+      ctxX,
+      ctxY
+    );
+    setStroke(palette.verdigris, 0.33, 0.9);
+    ctx.stroke();
+    line(ctxX, ctxY, ctxX + dx * length, ctxY + dy * length, palette.verdigris, 0.25, 0.65);
+  }
+
+  function botanical(x, y, heightStem) {
+    const sway = reducedMotion ? 0 : Math.sin(time * 0.00035) * 0.035;
+    setStroke(palette.verdigris, 0.34, 1.2);
+    ctx.beginPath();
+    ctx.moveTo(x, y + heightStem * 0.48);
+    ctx.bezierCurveTo(x + 18, y + heightStem * 0.12, x - 12, y - heightStem * 0.16, x + 24, y - heightStem * 0.5);
+    ctx.stroke();
+    const points = [0.31, 0.15, -0.02, -0.19, -0.34];
+    points.forEach((offset, index) => {
+      const py = y + heightStem * offset;
+      const px = x + (0.28 - offset) * 22;
+      const direction = index % 2 === 0 ? Math.PI + 0.25 + sway : -0.25 + sway;
+      leaf(px, py, direction, heightStem * (0.19 - index * 0.008), index % 2 === 0 ? 1 : -1);
+    });
+    dot(x + 24, y - heightStem * 0.5, 2.4, palette.verdigris, 0.46);
+  }
+
+  function polygon(points, color = palette.ink, alpha = 0.34, lineWidth = 1, close = true) {
+    if (!points.length) return;
+    setStroke(color, alpha, lineWidth);
+    ctx.beginPath();
+    ctx.moveTo(points[0][0], points[0][1]);
+    for (let i = 1; i < points.length; i += 1) ctx.lineTo(points[i][0], points[i][1]);
+    if (close) ctx.closePath();
+    ctx.stroke();
+  }
+
+  function gear(x, y, radius, teeth, rotation = 0) {
+    const points = [];
+    const total = teeth * 4;
+    for (let i = 0; i < total; i += 1) {
+      const angle = rotation + (i / total) * Math.PI * 2;
+      const phase = i % 4;
+      const rr = phase === 1 || phase === 2 ? radius * 1.13 : radius;
+      points.push([x + Math.cos(angle) * rr, y + Math.sin(angle) * rr]);
+    }
+    polygon(points, palette.ink, 0.34, 0.9, true);
+    circle(x, y, radius * 0.42, palette.bronze, 0.34, 0.8);
+    circle(x, y, radius * 0.12, palette.oxide, 0.48, 0.9);
+  }
+
+  function drawHero() {
+    paperGrid(48, 0.05);
+    const { x, y, r } = rightCenter(0.98);
+    const drift = reducedMotion ? 0 : Math.sin(time * 0.00015) * 0.03;
+    armillary(x, y, r, drift);
+    profile(x - r * 0.05, y + r * 0.08, r / 145);
+    botanical(x - r * 1.22, y + r * 0.1, r * 1.32);
+    label("SPECIMEN / CLAIM", x - r * 1.48, y - r * 0.8, "left", palette.verdigris, 0.43, 9);
+    label("CALIBRATION / AUTHORITY", x + r * 0.25, y + r * 0.78, "left", palette.oxide, 0.44, 9);
+  }
+
+  function drawOverview() {
+    paperGrid(54, 0.045);
+    const { x, y, r } = rightCenter(0.94);
+    const cols = 3;
+    const rows = 2;
+    const gapX = r * 0.78;
+    const gapY = r * 0.66;
+    const startX = x - gapX;
+    const startY = y - gapY * 0.5;
+    let index = 0;
+    for (let row = 0; row < rows; row += 1) {
+      for (let col = 0; col < cols; col += 1) {
+        const px = startX + col * gapX;
+        const py = startY + row * gapY;
+        circle(px, py, r * 0.2, index === 4 ? palette.oxide : palette.bronze, 0.35, 1);
+        crosshair(px, py, r * 0.045);
+        label(String(index + 1).padStart(2, "0"), px, py + r * 0.29, "center", palette.slate, 0.46, 9);
+        if (index > 0) {
+          const prevCol = (index - 1) % cols;
+          const prevRow = Math.floor((index - 1) / cols);
+          line(startX + prevCol * gapX, startY + prevRow * gapY, px, py, palette.bronze, 0.19, 0.7);
+        }
+        index += 1;
+      }
+    }
+    label("FRAME / ROUTE / OBSERVE / VERIFY / CHALLENGE / RELEASE", x, y + r * 0.82, "center", palette.oxide, 0.4, 9);
+  }
+
+  function drawWorkflow() {
+    paperGrid(50, 0.04);
+    const { x, y, r } = rightCenter(1.03);
+    const paths = [
+      [-0.84, -0.58, 0.76, -0.58],
+      [-0.74, -0.29, 0.48, -0.29],
+      [-0.67, 0, 0.86, 0],
+      [-0.77, 0.29, 0.59, 0.29],
+      [-0.83, 0.58, 0.72, 0.58]
     ];
-    const e=[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,0],[0,8],[1,8],[7,8],[2,9],[3,10],[4,10],[5,10],[6,11],[8,12],[9,12],[10,12],[11,12],[8,9],[9,10],[10,11],[11,8]];
-    return {p,e};
+    paths.forEach((p, index) => {
+      const yLine = y + p[1] * r;
+      const x1 = x + p[0] * r;
+      const x2 = x + p[2] * r;
+      line(x1, yLine, x2, yLine, index === 2 ? palette.oxide : palette.bronze, 0.36, index === 2 ? 1.4 : 0.9);
+      for (let j = 0; j < 4; j += 1) {
+        const px = x1 + ((j + 0.5) / 4) * (x2 - x1);
+        dot(px, yLine, j === 3 ? 3.2 : 2.1, j === 3 ? palette.oxide : palette.bronze, 0.5);
+      }
+      label(`ROUTE ${String(index + 1).padStart(2, "0")}`, x1, yLine - 15, "left", palette.slate, 0.42, 8);
+    });
+    line(x - r * 0.06, y - r * 0.75, x - r * 0.06, y + r * 0.76, palette.oxide, 0.24, 0.8);
   }
 
-  function drawGem(cx,cy,s,color,t,alpha=1){
-    const {p,e}=gemGeometry(cx,cy,s); ctx.save();ctx.globalCompositeOperation='lighter';
-    e.forEach((edge,k)=>{const pulse=.45+.55*Math.sin(t*.0011-k*.29);line(p[edge[0]],p[edge[1]],color,alpha*(.24+.19*pulse),1);});
-    p.forEach((q,i)=>diamond(q[0],q[1],i===12?4:2.3,color,alpha*(i===12?.95:.55),true));ctx.restore(); return {p,e};
+  function drawGems() {
+    paperGrid(56, 0.045);
+    const { x, y, r } = rightCenter(0.96);
+    const names = ["CANON", "ATLAS", "CRUCIBLE", "FORGE", "CHRONOMETER"];
+    names.forEach((name, index) => {
+      const angle = -Math.PI / 2 + index * (Math.PI * 2 / 5);
+      const px = x + Math.cos(angle) * r * 0.7;
+      const py = y + Math.sin(angle) * r * 0.7;
+      circle(px, py, r * 0.19, index === 2 ? palette.oxide : palette.bronze, 0.36, 1);
+      line(x, y, px, py, palette.bronze, 0.19, 0.75);
+      dot(px, py, 3, index === 2 ? palette.oxide : palette.verdigris, 0.55);
+      label(name, px, py + r * 0.27, "center", palette.slate, 0.42, 8);
+    });
+    circle(x, y, r * 0.23, palette.ink, 0.28, 1);
+    crosshair(x, y, 12);
+    label("AXIS", x, y + 29, "center", palette.oxide, 0.45, 9);
   }
 
-  function travellingPulse(a,b,t,offset,color,alpha=1){
-    const u=(t*.00018+offset)%1, x=lerp(a[0],b[0],u),y=lerp(a[1],b[1],u);diamond(x,y,3,color,alpha,true);
+  function drawMind() {
+    paperGrid(44, 0.045);
+    const { x, y, r } = rightCenter(1.0);
+    const points = gemGeometry.mind.map(([gx, gy]) => [x + gx * r, y + gy * r]);
+    polygon(points, palette.ink, 0.39, 1.2, true);
+    const [a, b, c] = points;
+    circle(a[0], a[1], Math.hypot(b[0] - a[0], b[1] - a[1]), palette.bronze, 0.25, 0.8);
+    circle(c[0], c[1], Math.hypot(b[0] - c[0], b[1] - c[1]), palette.bronze, 0.25, 0.8);
+    line(b[0], b[1], x, y, palette.oxide, 0.34, 1);
+    line(x, y, a[0], a[1], palette.bronze, 0.27, 0.8);
+    line(x, y, c[0], c[1], palette.bronze, 0.27, 0.8);
+    [a, b, c, [x, y]].forEach((p, index) => {
+      dot(p[0], p[1], 3, index === 3 ? palette.oxide : palette.ink, 0.55);
+      label(["A", "B", "C", "Q.E.D."][index], p[0] + 10, p[1] - 12, "left", index === 3 ? palette.oxide : palette.slate, 0.5, 9);
+    });
+    ticks(x, y, r * 0.31, 24, 5, palette.bronze, 0.23);
   }
 
-  function stagePos(){
-    if(W<800) return {cx:W*.64,cy:H*.36,s:Math.min(W,H)*.23};
-    return {cx:W*.73,cy:H*.49,s:Math.min(W,H)*.27};
-  }
-
-  function drawTaskRoute(t,color=COLORS.accent,alpha=.8){
-    const {cx,cy,s}=stagePos();
-    const inP=[W<800?W*.12:W*.48,cy],out=[W<800?W*.92:W*.94,cy];
-    line(inP,[cx-s,cy],color,alpha*.5,1.2);line([cx+s,cy],out,color,alpha*.5,1.2);
-    diamond(inP[0],inP[1],4,color,alpha,true);diamond(out[0],out[1],4,COLORS.good,alpha,true);
-    if(W>760){label('TASK',inP[0],inP[1]-18,'#cbd3dc',alpha*.7);label('RECEIPT',out[0],out[1]-18,'#cbd3dc',alpha*.7);}
-    travellingPulse(inP,[cx-s,cy],t,.05,color,alpha);travellingPulse([cx+s,cy],out,t,.45,COLORS.good,alpha);
-    return {cx,cy,s,inP,out};
-  }
-
-  function drawHero(t,transition){
-    const {cx,cy,s}=stagePos(); const reveal=clamp((t%10500)/6500,0,1); const r=ease(reveal);
-    // reveal front borrowed from Nexus Rift's progressive constellation reveal, now tied to a task graph.
-    drawGem(cx,cy,s,COLORS.accent,t,.65*r);
-    const task=[W*.48,cy], obligations=[[cx-s*.98,cy-s*.48],[cx-s*1.08,cy],[cx-s*.98,cy+s*.48]], receipts=[[cx+s*.9,cy-s*.48],[cx+s*1.04,cy],[cx+s*.9,cy+s*.48]];
-    if(W>800){
-      obligations.forEach((o,i)=>{line(task,o,COLORS.accent,.25*r,1);diamond(o[0],o[1],3,COLORS.base,.55*r);line(o,receipts[i],COLORS.accent,.22*r,1);diamond(receipts[i][0],receipts[i][1],3,COLORS.good,.65*r);});
-      diamond(task[0],task[1],5,'#e8edf2',.85*r);label('TASK',task[0],task[1]-20,'#dfe5ec',.7*r);
-      label('SPACE',cx,cy-s*.45,COLORS.space,.75*r);label('POWER',cx,cy,COLORS.power,.75*r);label('COUNCIL',cx,cy+s*.45,COLORS.reality,.65*r);
+  function drawSpace() {
+    paperGrid(52, 0.04);
+    const { x, y, r } = rightCenter(0.98);
+    botanical(x, y + r * 0.02, r * 1.65);
+    const points = gemGeometry.space.map(([gx, gy]) => [x + gx * r, y + gy * r]);
+    points.forEach((point, index) => {
+      circle(point[0], point[1], r * 0.08, palette.verdigris, 0.3, 0.8);
+      dot(point[0], point[1], 2.3, palette.verdigris, 0.46);
+      label(`TAXON ${String(index + 1).padStart(2, "0")}`, point[0] + (point[0] < x ? -12 : 12), point[1] - 12, point[0] < x ? "right" : "left", palette.slate, 0.42, 8);
+    });
+    line(x - r * 0.95, y + r * 0.78, x + r * 0.98, y + r * 0.78, palette.bronze, 0.29, 0.8);
+    for (let i = 0; i <= 20; i += 1) {
+      const tx = x - r * 0.95 + (i / 20) * r * 1.93;
+      line(tx, y + r * 0.78, tx, y + r * (i % 5 === 0 ? 0.72 : 0.75), palette.oxide, 0.28, 0.7);
     }
-    const front=lerp(W*.42,W*.97,r);ctx.fillStyle=rgba('#c7d7ea',.08*(1-r));ctx.fillRect(front,0,1,H);
   }
 
-  function drawOverview(t){
-    const baseX=W<800?W*.2:W*.53, step=W<800?W*.145:W*.09, y=H*.5, s=Math.min(W,H)*(W<800?.08:.105);
-    [COLORS.mind,COLORS.space,COLORS.reality,COLORS.power,COLORS.time].forEach((c,i)=>{const yy=W<800?H*(.25+i*.12):y;const xx=W<800?W*.72:baseX+i*step;drawGem(xx,yy,s,c,t,.27);});
+  function drawReality() {
+    paperGrid(48, 0.04);
+    const { x, y, r } = rightCenter(0.98);
+    const points = gemGeometry.reality.map(([gx, gy]) => [x + gx * r, y + gy * r]);
+    points.forEach((point, index) => {
+      const radius = r * (0.17 + index * 0.025);
+      const sides = 3 + index;
+      const shape = [];
+      for (let j = 0; j < sides; j += 1) {
+        const angle = -Math.PI / 2 + (j / sides) * Math.PI * 2;
+        shape.push([point[0] + Math.cos(angle) * radius, point[1] + Math.sin(angle) * radius]);
+      }
+      polygon(shape, index === 2 ? palette.oxide : palette.ink, 0.34, index === 2 ? 1.3 : 0.9, true);
+      dot(point[0], point[1], 2.7, index === 2 ? palette.oxide : palette.bronze, 0.52);
+      if (index < points.length - 1) {
+        line(point[0] + radius, point[1], points[index + 1][0] - r * (0.17 + (index + 1) * 0.025), points[index + 1][1], palette.oxide, 0.29, 1);
+      }
+      label(["KNOWN", "GAP", "CANDIDATE", "FALSIFIER"][index], point[0], point[1] + radius + 18, "center", index === 1 ? palette.oxide : palette.slate, 0.46, 8);
+    });
   }
 
-  function drawWorkflow(t){
-    const y=H*.52, xs=W<800?[W*.17,W*.38,W*.59,W*.8]:[W*.47,W*.61,W*.75,W*.89];const names=['SPACE','REALITY','POWER','TIME'], cols=[COLORS.space,COLORS.reality,COLORS.power,COLORS.time];
-    for(let i=0;i<xs.length;i++){if(i<xs.length-1)line([xs[i],y],[xs[i+1],y],COLORS.accent,.28,1);drawGem(xs[i],y,Math.min(W,H)*(W<800?.075:.095),cols[i],t,.58);if(W>800)label(names[i],xs[i],y,cols[i],.75);if(i<xs.length-1)travellingPulse([xs[i],y],[xs[i+1],y],t,i*.23,COLORS.accent,.8);}
+  function drawPower() {
+    paperGrid(46, 0.045);
+    const { x, y, r } = rightCenter(0.98);
+    const points = gemGeometry.power.map(([gx, gy]) => [x + gx * r, y + gy * r]);
+    const rotation = reducedMotion ? 0 : time * 0.00005;
+    points.forEach((point, index) => {
+      gear(point[0], point[1], r * (0.16 + index * 0.012), 8 + index, rotation * (index % 2 ? -1 : 1));
+      label(["SOURCE", "BUILD", "ENTRY", "VERIFY"][index], point[0], y + r * 0.44, "center", palette.slate, 0.45, 8);
+      if (index < points.length - 1) line(point[0] + r * 0.18, point[1], points[index + 1][0] - r * 0.18, points[index + 1][1], palette.oxide, 0.26, 0.8);
+    });
+    line(x - r * 0.95, y - r * 0.48, x + r * 0.95, y - r * 0.48, palette.bronze, 0.25, 0.8);
+    label("EXPLODED VERIFICATION PLATE", x, y - r * 0.55, "center", palette.oxide, 0.42, 8);
   }
 
-  function drawMind(t){
-    const st=drawTaskRoute(t,COLORS.mind,.9);drawGem(st.cx,st.cy,st.s,COLORS.mind,t,.78);
-    const top=[st.cx+st.s*1.08,st.cy-st.s*.52], bot=[st.cx+st.s*1.08,st.cy+st.s*.52], core=[st.cx,st.cy];
-    line(core,top,COLORS.mind,.42,1.2);line(core,bot,COLORS.bad,.35,1.1);diamond(top[0],top[1],4,COLORS.good,.9);diamond(bot[0],bot[1],4,COLORS.bad,.8);
-    if(W>760){label('PROOF',top[0],top[1]-18,COLORS.good,.85);label('COUNTEREXAMPLE',bot[0],bot[1]+18,COLORS.bad,.8);label('PROOF OBLIGATION',core[0],core[1],COLORS.mind,.8);}
+  function drawTime() {
+    paperGrid(54, 0.04);
+    const { x, y, r } = rightCenter(0.98);
+    circle(x, y, r * 0.83, palette.ink, 0.37, 1.2);
+    circle(x, y, r * 0.68, palette.bronze, 0.31, 0.8);
+    ticks(x, y, r * 0.83, 60, 8, palette.bronze, 0.34);
+    ticks(x, y, r * 0.68, 24, 5, palette.bronze, 0.22);
+    const points = gemGeometry.time.map(([gx, gy]) => [x + gx * r * 0.55, y + gy * r * 0.55]);
+    polygon(points, palette.verdigris, 0.32, 0.9, true);
+    points.forEach((point, index) => {
+      dot(point[0], point[1], 3, index === 0 ? palette.oxide : palette.verdigris, 0.56);
+      label(String(index + 1), point[0], point[1] - 13, "center", palette.slate, 0.44, 8);
+    });
+    const handAngle = -Math.PI / 2 + (reducedMotion ? 0.68 : (time * 0.00008) % (Math.PI * 2));
+    line(x, y, x + Math.cos(handAngle) * r * 0.58, y + Math.sin(handAngle) * r * 0.58, palette.oxide, 0.47, 1.4);
+    circle(x, y, 7, palette.oxide, 0.52, 1.1, rgba(palette.paper, 0.7));
+    label("BASELINE", x - r * 0.62, y + r * 0.92, "left", palette.slate, 0.42, 8);
+    label("DECISION", x + r * 0.62, y + r * 0.92, "right", palette.oxide, 0.44, 8);
   }
 
-  function drawSpace(t){
-    const st=drawTaskRoute(t,COLORS.space,.9);drawGem(st.cx,st.cy,st.s,COLORS.space,t,.76);
-    const targets=[[st.cx+st.s*.45,st.cy-st.s*1.15],[st.cx+st.s*1.05,st.cy-st.s*.38],[st.cx+st.s*.45,st.cy+st.s*1.15]],names=['PAPERS','REPOS','STANDARDS'];
-    targets.forEach((p,i)=>{line([st.cx,st.cy],p,COLORS.space,.35,1);diamond(p[0],p[1],4,COLORS.space,.78);travellingPulse([st.cx,st.cy],p,t,i*.22,COLORS.space,.85);if(W>760)label(names[i],p[0],p[1]+(i===2?17:-17),'#c9d8ee',.72);});
-  }
-
-  function drawReality(t){
-    const st=drawTaskRoute(t,COLORS.reality,.9);drawGem(st.cx,st.cy,st.s,COLORS.reality,t,.76);
-    const gap=[st.cx-st.s*.1,st.cy],a=[st.cx+st.s*.6,st.cy-st.s*.48],b=[st.cx+st.s*.6,st.cy+st.s*.48];
-    line(gap,a,COLORS.reality,.42,1);line(gap,b,COLORS.reality,.32,1);diamond(a[0],a[1],4,COLORS.good,.82);diamond(b[0],b[1],4,COLORS.bad,.55);
-    if(W>760){label('NAMED GAP',gap[0],gap[1],COLORS.reality,.8);label('CANDIDATE',a[0],a[1]-18,COLORS.good,.8);label('KILLED',b[0],b[1]+18,COLORS.bad,.65);}
-  }
-
-  function drawPower(t){
-    const st=drawTaskRoute(t,COLORS.power,.9);drawGem(st.cx,st.cy,st.s,COLORS.power,t,.76);
-    const ys=st.cy, xs=[st.cx-st.s*.62,st.cx-st.s*.28,st.cx+.05*st.s,st.cx+.38*st.s,st.cx+.7*st.s];
-    const names=['SOURCE','BUILD','TEST','RUN','REGRESS'];
-    xs.forEach((x,i)=>{if(i<xs.length-1)line([x,ys],[xs[i+1],ys],COLORS.power,.4,1.1);diamond(x,ys,3.4,COLORS.power,.75);if(W>760)label(names[i],x,ys-18,'#cce8eb',.65, 'center', 9);if(i<xs.length-1)travellingPulse([x,ys],[xs[i+1],ys],t,i*.14,COLORS.power,.9);});
-    const fail=[xs[2],ys+st.s*.72];line([xs[2],ys],fail,COLORS.bad,.34,1);diamond(fail[0],fail[1],4,COLORS.bad,.7);if(W>760)label('FAILURE CLASS',fail[0],fail[1]+18,COLORS.bad,.65);
-  }
-
-  function drawTime(t){
-    const st=drawTaskRoute(t,COLORS.time,.9);drawGem(st.cx,st.cy,st.s,COLORS.time,t,.72);
-    const y1=st.cy-st.s*.34,y2=st.cy+st.s*.34,xs=[st.cx-st.s*.62,st.cx-st.s*.18,st.cx+st.s*.26,st.cx+st.s*.68];
-    xs.forEach((x,i)=>{if(i<xs.length-1){line([x,y1],[xs[i+1],y1],COLORS.time,.38,1);line([x,y2],[xs[i+1],y2],COLORS.base,.24,1);}diamond(x,y1,3.2,COLORS.time,.75);diamond(x,y2,3.2,COLORS.base,.58);if(i<xs.length-1){travellingPulse([x,y1],[xs[i+1],y1],t,i*.13,COLORS.time,.86);travellingPulse([x,y2],[xs[i+1],y2],t,.5+i*.13,'#aeb7c1',.65);}});
-    if(W>760){label('CANDIDATE',xs[0],y1-18,COLORS.time,.75);label('BASELINE',xs[0],y2+18,'#aeb7c1',.65);label('COMPARE',xs[3],st.cy,'#dce4de',.75);}
-  }
-
-  function drawSystem(t){
-    const y=W<800?H*.28:H*.24,xs=W<800?[W*.12,W*.31,W*.5,W*.69,W*.88]:[W*.53,W*.63,W*.73,W*.83,W*.93];
-    xs.forEach((x,i)=>{if(i<xs.length-1)line([x,y],[xs[i+1],y],COLORS.accent,.24,1);diamond(x,y,i===0||i===4?4.5:3.2,i===4?COLORS.good:COLORS.accent,.65);if(i<xs.length-1)travellingPulse([x,y],[xs[i+1],y],t,i*.17,COLORS.accent,.7);});
-  }
-
-  function drawScene(t){
-    const intensity=active==='quiet'?.18:(active==='hero'?.78:(active==='overview'?.28:.5));drawFar(t,intensity);
-    const reveal=reduced?1:ease(clamp((t-switchedAt)/720,0,1));
-    ctx.save();ctx.globalAlpha=reveal;
-    switch(active){
-      case 'hero': drawHero(t); break; case 'overview': drawOverview(t); break; case 'workflow': drawWorkflow(t); break; case 'gems': drawOverview(t); break;
-      case 'mind': drawMind(t); break; case 'space': drawSpace(t); break; case 'reality': drawReality(t); break; case 'power': drawPower(t); break; case 'time': drawTime(t); break;
-      case 'system': drawSystem(t); break; case 'quiet': break;
+  function drawSystem() {
+    paperGrid(48, 0.045);
+    const { x, y, r } = rightCenter(1.02);
+    const layers = [
+      { radius: r * 0.2, label: "AXIS", color: palette.oxide },
+      { radius: r * 0.43, label: "RECEIPTS", color: palette.verdigris },
+      { radius: r * 0.68, label: "INSTRUMENTS", color: palette.bronze },
+      { radius: r * 0.91, label: "RUNTIME", color: palette.ink }
+    ];
+    layers.forEach((layer, index) => {
+      circle(x, y, layer.radius, layer.color, 0.3 + index * 0.02, index === 0 ? 1.3 : 0.8);
+      label(layer.label, x, y - layer.radius - 12, "center", layer.color, 0.45, 8);
+    });
+    for (let i = 0; i < 10; i += 1) {
+      const angle = -Math.PI / 2 + i * Math.PI * 2 / 10;
+      const px = x + Math.cos(angle) * r * 0.68;
+      const py = y + Math.sin(angle) * r * 0.68;
+      line(x, y, px, py, palette.bronze, 0.18, 0.7);
+      dot(px, py, 2.7, i % 3 === 0 ? palette.oxide : palette.bronze, 0.5);
     }
+    crosshair(x, y, 13);
+    label("OBSERVATION ≠ RECEIPT ≠ RELEASE", x, y + r * 1.02, "center", palette.oxide, 0.45, 9);
+  }
+
+  function drawQuiet() {
+    paperGrid(58, 0.035);
+    const { x, y, r } = rightCenter(0.9);
+    circle(x, y, r * 0.7, palette.bronze, 0.16, 0.8);
+    ticks(x, y, r * 0.7, 32, 5, palette.bronze, 0.16);
+    line(x - r, y, x + r, y, palette.bronze, 0.13, 0.7);
+    line(x, y - r, x, y + r, palette.bronze, 0.13, 0.7);
+    label("ARCHIVE / SOURCE / PROVENANCE", x, y + r * 0.88, "center", palette.slate, 0.28, 8);
+  }
+
+  const drawers = {
+    hero: drawHero,
+    overview: drawOverview,
+    workflow: drawWorkflow,
+    gems: drawGems,
+    mind: drawMind,
+    space: drawSpace,
+    reality: drawReality,
+    power: drawPower,
+    time: drawTime,
+    system: drawSystem,
+    quiet: drawQuiet
+  };
+
+  function clear() {
+    ctx.clearRect(0, 0, width, height);
+  }
+
+  function draw() {
+    clear();
+    ctx.save();
+    const drawer = drawers[activeScene] || drawQuiet;
+    drawer();
     ctx.restore();
   }
 
-  function frame(t){
-    ctx.clearRect(0,0,W,H);ctx.fillStyle='#030405';ctx.fillRect(0,0,W,H);drawScene(reduced?3500:t);if(!reduced)requestAnimationFrame(frame);
+  function animate(timestamp) {
+    time = timestamp;
+    draw();
+    if (!reducedMotion) frame = window.requestAnimationFrame(animate);
   }
 
-  function setScene(scene){
-    if(scene===active) return; previous=active;active=scene;switchedAt=performance.now();document.body.dataset.scene=scene;
-    if(caption && sceneLabels[scene]){caption.innerHTML=`<strong>${sceneLabels[scene][0]}</strong><span>${sceneLabels[scene][1]}</span>`;}
-    const section=document.querySelector(`.scene-section[data-scene="${scene}"]`);const accent=section?.dataset.accent||'';if(accent)document.documentElement.style.setProperty('--live-accent',accent);else document.documentElement.style.removeProperty('--live-accent');
-    if(reduced){ctx.clearRect(0,0,W,H);ctx.fillStyle='#030405';ctx.fillRect(0,0,W,H);drawScene(3500);}
+  function setScene(scene) {
+    if (!drawers[scene] || scene === activeScene) return;
+    activeScene = scene;
+    document.body.dataset.scene = scene;
+    const copy = sceneCaption[scene] || sceneCaption.quiet;
+    if (caption) caption.innerHTML = `<strong>${copy[0]}</strong><span>${copy[1]}</span>`;
+    if (reducedMotion) draw();
   }
 
-  const sections=[...document.querySelectorAll('.scene-section[data-scene]')];
-  let sceneRAF=0;
-  function resolveScene(){
-    sceneRAF=0;
-    const targetY=H*.48;
-    let best=null,bestDist=Infinity;
-    for(const section of sections){
-      const r=section.getBoundingClientRect();
-      if(r.bottom<=0 || r.top>=H) continue;
-      const visibleTop=Math.max(0,r.top),visibleBottom=Math.min(H,r.bottom);
-      if(visibleBottom<=visibleTop) continue;
-      const center=(visibleTop+visibleBottom)*.5;
-      const dist=Math.abs(center-targetY);
-      if(dist<bestDist){best=section;bestDist=dist;}
-    }
-    if(best)setScene(best.dataset.scene||'hero');
+  const sections = Array.from(document.querySelectorAll(".scene-section[data-scene]"));
+  const observer = new IntersectionObserver((entries) => {
+    const candidates = entries
+      .filter((entry) => entry.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+    if (candidates.length) setScene(candidates[0].target.dataset.scene || "quiet");
+  }, {
+    root: null,
+    rootMargin: "-34% 0px -42% 0px",
+    threshold: [0, 0.08, 0.2, 0.45, 0.7]
+  });
+
+  sections.forEach((section) => observer.observe(section));
+
+  function handleMotion(event) {
+    reducedMotion = event.matches;
+    if (frame) window.cancelAnimationFrame(frame);
+    frame = 0;
+    if (reducedMotion) draw();
+    else frame = window.requestAnimationFrame(animate);
   }
-  function queueScene(){if(!sceneRAF)sceneRAF=requestAnimationFrame(resolveScene);}
-  const observer=new IntersectionObserver(queueScene,{threshold:[0,.1,.25,.5,.75]});
-  sections.forEach(s=>observer.observe(s));
-  addEventListener('scroll',queueScene,{passive:true});
-  addEventListener('resize',()=>{resize();queueScene();},{passive:true});
-  addEventListener('pointermove',e=>{pointerX=(e.clientX/W-.5);pointerY=(e.clientY/H-.5);},{passive:true});
+
+  if (typeof motionQuery.addEventListener === "function") motionQuery.addEventListener("change", handleMotion);
+  else if (typeof motionQuery.addListener === "function") motionQuery.addListener(handleMotion);
+
+  window.addEventListener("resize", resize, { passive: true });
   resize();
-  if(reduced){drawScene(3500);}else requestAnimationFrame(frame);
+  if (reducedMotion) draw();
+  else frame = window.requestAnimationFrame(animate);
 })();

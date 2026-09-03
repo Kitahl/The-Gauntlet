@@ -1,49 +1,40 @@
 {
-  "schema": "egrt/showcase-provenance-1",
+  "schema": "egrt/showcase-provenance-2",
+  "brand_edition": "elenchion-apparatus-1",
+  "generated_on": "2026-09-03",
   "claims": [
     {
-      "id": "architecture-modular-control",
-      "page_section": "Architecture",
-      "claim": "The toolkit uses a portable Research Orchestrator control plane plus bounded specialist research modules rather than one undifferentiated prompt.",
+      "id": "public-identity-working-decision",
+      "page_section": "Identity",
+      "claim": "Elenchion Systems and Apparatus are working public identities adopted by this branch; no corporate-name, trademark, domain, or legal clearance is claimed.",
+      "status": "DESIGN_DECISION_WITH_UNVERIFIED_LEGAL_CLEARANCE",
       "sources": [
-        "docs/ARCHITECTURE.md",
-        "skills/soul/SKILL.md",
-        "skills/mathbot/SKILL.md",
-        "skills/scoutbot/SKILL.md",
-        "skills/novelbot/SKILL.md",
-        "skills/codebot/SKILL.md",
-        "skills/benchbot/SKILL.md"
+        "docs/brand/NAMING_ARCHITECTURE.md",
+        "docs/brand/CLAIMS_REGISTER.md"
       ]
     },
     {
-      "id": "professional-naming-compatibility",
-      "page_section": "Modules",
-      "claim": "Professional display names are used for the research portfolio while technical IDs and slash-command aliases are retained for backwards compatibility.",
-      "sources": ["docs/ARCHITECTURE.md", "GOVERNANCE.md"]
-    },
-    {
-      "id": "foil-complement",
-      "page_section": "FOIL",
-      "claim": "FOIL models competing explanations for observed performance and supplies task-relevant complementary methods without treating a single error as a stable weakness.",
-      "sources": ["skills/foil/SKILL.md", "research/FOIL_RESEARCH_BASIS.md"]
-    },
-    {
-      "id": "independent-transfer-target",
-      "page_section": "FOIL",
-      "claim": "FOIL separates immediate assisted task success from later independent competence and transfer.",
-      "sources": ["skills/foil/SKILL.md", "research/FOIL_RESEARCH_BASIS.md", "RESEARCH.md"]
-    },
-    {
-      "id": "authority-evidence-split",
-      "page_section": "Evidence",
-      "claim": "Human authority governs voluntary goals and actions while evidence/proof determine factual warrant.",
-      "sources": ["skills/foil/SKILL.md", "skills/soul/SKILL.md", "RESEARCH.md"]
-    },
-    {
-      "id": "module-count",
-      "page_section": "Hero",
-      "claim": "This repository contains ten research-method modules.",
+      "id": "technical-compatibility-preserved",
+      "page_section": "Compatibility",
+      "claim": "The public rename preserves the repository, gauntlet command, technical skill IDs, slash-command aliases, state paths, verdict vocabulary, receipt semantics, and release authority.",
+      "status": "VERIFIED_REPOSITORY_FACT",
       "sources": [
+        "docs/brand/NAMING_ARCHITECTURE.md",
+        "pyproject.toml",
+        "gauntlet_host/cli.py",
+        "docs/ARCHITECTURE.md",
+        "tools/egrt_types.py",
+        "tools/soul_runtime.py"
+      ]
+    },
+    {
+      "id": "apparatus-modular-control",
+      "page_section": "System",
+      "claim": "Apparatus publicly groups one orchestrator, five claim-native research instruments, four control/review instruments, and additional bounded systems while retaining the existing implementation boundaries.",
+      "status": "DESIGN_DECISION_MAPPED_TO_REPOSITORY_FACTS",
+      "sources": [
+        "docs/brand/NAMING_ARCHITECTURE.md",
+        "docs/ARCHITECTURE.md",
         "skills/soul/SKILL.md",
         "skills/mathbot/SKILL.md",
         "skills/scoutbot/SKILL.md",
@@ -57,72 +48,177 @@
       ]
     },
     {
-      "id": "foil-structural-validation",
-      "page_section": "Evidence",
-      "claim": "The recorded FOIL structural/source/regression validator reports 94 of 94 checks passed.",
-      "sources": ["validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json"]
-    },
-    {
-      "id": "foil-contract-coverage",
-      "page_section": "Evidence",
-      "claim": "The recorded FOIL behavioral-contract specification artifact reports 18 of 18 cases represented as PASS-SPEC.",
-      "sources": ["validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json"]
-    },
-    {
-      "id": "validation-boundary",
-      "page_section": "Evidence",
-      "claim": "Mechanical and specification validation do not establish behavioral efficacy of the complete system.",
-      "sources": ["RESEARCH.md", "REPRODUCIBILITY.md", "validation/FOIL_RESEARCH_INTEGRATION_3_LOOP_REPORT.md"]
-    },
-    {
-      "id": "portable-process-assurance",
-      "page_section": "Modules",
-      "claim": "The public Process Assurance Framework does not require private project hooks or hard-coded local runtime paths and treats missing optional machinery as unavailable.",
-      "sources": ["skills/infinity-gauntlet/SKILL.md", "validation/SOUL_GAUNTLET_PUBLIC_AUDIT.md"]
-    },
-    {
-      "id": "research-question-open",
-      "page_section": "Research Dossier",
-      "claim": "Prospective behavioral efficacy of the complete workflow remains an open research question with planned matched-baseline and ablation studies.",
-      "sources": ["RESEARCH.md", "ROADMAP.md"]
-    },
-    {
-      "id": "research-dossier-output-index",
-      "page_section": "Research Dossier",
-      "claim": "The homepage indexes the current research question, implemented architecture, FOIL basis, mechanical/specification receipts, exploratory benchmark pilots, prospective behavioral evaluation, and external reproduction as distinct research objects with explicit states.",
+      "id": "mercury-pinned-runtime",
+      "page_section": "Mercury Runtime",
+      "claim": "The Mercury public layer corresponds to the Gauntlet-owned host around an exact pinned Hermes Agent source snapshot, isolated through parent/worker process and JSONL boundaries.",
+      "status": "VERIFIED_REPOSITORY_FACT",
       "sources": [
-        "RESEARCH.md",
-        "ROADMAP.md",
-        "docs/ARCHITECTURE.md",
-        "research/FOIL_RESEARCH_BASIS.md",
-        "validation/FOIL_RESEARCH_INTEGRATION_VALIDATION.json",
-        "validation/FOIL_RESEARCH_INTEGRATION_BEHAVIORAL_CONTRACT_VALIDATION.json",
-        "docs/BENCHMARKS.md"
+        "vendor/HERMES_SNAPSHOT.json",
+        "third_party/HERMES_SOURCE_LEDGER.md",
+        "third_party/HERMES_LICENSE.txt",
+        "docs/engineering/GAUNTLET_FAST_BUILD_HERMES_INTERNAL_RUNTIME_2026-08-28.md",
+        "gauntlet_host/launcher.py",
+        "gauntlet_host/worker_main.py",
+        "gauntlet_host/ipc.py"
       ]
     },
     {
-      "id": "research-site-benchmark",
-      "page_section": "Research Dossier",
-      "claim": "The research-site benchmark compares public research institutes, research indexes, open-science catalogs, and mature research-software repositories to identify transferable information-architecture mechanisms without treating the set as an objective global ranking.",
-      "sources": ["docs/RESEARCH_WEBSITE_BENCHMARK_2026-08-22.md"]
+      "id": "mercury-checkpoint-eight",
+      "page_section": "Mercury Runtime",
+      "claim": "The recorded FAST-P8 checkpoint reports eight of eight bounded alpha boot checks passed.",
+      "status": "VERIFIED_REPOSITORY_FACT",
+      "sources": [
+        "docs/engineering/HERMES_FAST_P8_CHECKPOINT.json",
+        ".github/phase8_verify.py",
+        "docs/engineering/PHASE8_USER_CLI_BOOT.md"
+      ]
     },
     {
-      "id": "citation-license",
-      "page_section": "Release",
-      "claim": "The repository provides machine-readable citation metadata and an MIT open-source license.",
-      "sources": ["CITATION.cff", "LICENSE"]
+      "id": "runtime-authority-ceiling",
+      "page_section": "Authority Boundary",
+      "claim": "Runtime, model, provider, tool, plugin, skill, memory, session, scheduler, and subagent outputs remain observations and cannot directly create canonical receipts, clear obligations, or release tasks.",
+      "status": "VERIFIED_REPOSITORY_FACT",
+      "sources": [
+        "docs/engineering/GAUNTLET_FAST_BUILD_HERMES_INTERNAL_RUNTIME_2026-08-28.md",
+        "docs/engineering/PHASE8_USER_CLI_BOOT.md",
+        "docs/engineering/HERMES_FAST_P8_CHECKPOINT.json",
+        "gauntlet_host/observation_bridge.py",
+        "gauntlet_host/finalizer.py",
+        "tools/soul_runtime.py"
+      ]
     },
     {
-      "id": "homepage-trust-center",
-      "page_section": "Research Software Trust Center",
-      "claim": "The public homepage exposes direct paths to security, governance, contribution, citation, changelog, and roadmap artifacts.",
-      "sources": ["SECURITY.md", "GOVERNANCE.md", "CONTRIBUTING.md", "CITATION.cff", "CHANGELOG.md", "ROADMAP.md"]
+      "id": "mercury-limitations-visible",
+      "page_section": "Mercury Runtime",
+      "claim": "FAST-P8 did not establish paid external-provider operation, autonomous claim-native execution, autonomous replanning, task release, dynamic tool narrowing, profile complement benefit, cross-platform qualification, or behavioral and cost efficacy.",
+      "status": "VERIFIED_NEGATIVE_BOUNDARY",
+      "sources": [
+        "docs/engineering/HERMES_FAST_P8_CHECKPOINT.json",
+        "docs/engineering/PHASE8_USER_CLI_BOOT.md"
+      ]
     },
     {
-      "id": "homepage-reproducibility-path",
-      "page_section": "Reproducibility",
-      "claim": "The public homepage exposes the documented mechanical validation commands and separates their interpretation from behavioral-efficacy claims.",
-      "sources": ["REPRODUCIBILITY.md", "validation/validate_soul_gauntlet_public.py", "validation/validate_showcase.py"]
+      "id": "parallax-adaptation-only",
+      "page_section": "Parallax",
+      "claim": "Parallax is the public name for the existing Mirror/FOIL adaptive complement layer; its route is advisory and cannot clear proof, discovery, engineering, evaluation, or release obligations.",
+      "status": "VERIFIED_REPOSITORY_FACT_PLUS_PUBLIC_ALIAS",
+      "sources": [
+        "docs/brand/NAMING_ARCHITECTURE.md",
+        "skills/foil/SKILL.md",
+        "docs/FOIL_AUTHORITY_KERNEL.md",
+        "docs/specs/FOIL_INTEGRATION_SPEC.md",
+        "docs/engineering/PHASE7_FOIL_ADVISORY_ROUTE.md"
+      ]
+    },
+    {
+      "id": "conclave-independent-review",
+      "page_section": "Conclave",
+      "claim": "Conclave maps to the Council protocol for independent seats, commitment/reveal, cross-critique, disagreement preservation, and controlled synthesis.",
+      "status": "VERIFIED_REPOSITORY_FACT_PLUS_PUBLIC_ALIAS",
+      "sources": [
+        "docs/brand/NAMING_ARCHITECTURE.md",
+        "skills/council-of-elders/SKILL.md",
+        "docs/specs/COUNCIL_ENGINEERING_SPEC.md",
+        "tools/council_runtime.py"
+      ]
+    },
+    {
+      "id": "obsidian-never-clears",
+      "page_section": "Additional Systems",
+      "claim": "Obsidian maps to Black Gem adversarial examination; it may raise ISSUE and structurally has no CLEARED verdict path.",
+      "status": "VERIFIED_REPOSITORY_FACT_PLUS_PUBLIC_ALIAS",
+      "sources": [
+        "docs/brand/NAMING_ARCHITECTURE.md",
+        "docs/specs/BLACKGEM_ENGINEERING_SPEC.md",
+        "tools/blackgem_runtime.py"
+      ]
+    },
+    {
+      "id": "candidate-archive-no-promotion",
+      "page_section": "Candidate Systems",
+      "claim": "The Strategist and Formal Plane public labels refer to archived Mastermind and Math Foundry engineering candidates; their archive does not promote them into Apparatus runtime or evidential authority.",
+      "status": "VERIFIED_REPOSITORY_FACT_PLUS_PUBLIC_ALIAS",
+      "sources": [
+        "docs/brand/NAMING_ARCHITECTURE.md",
+        "research/postbench-candidate2/README.md"
+      ]
+    },
+    {
+      "id": "benchmark-scope",
+      "page_section": "Evidence",
+      "claim": "The repository preserves positive, null, mixed, and excluded exploratory results and does not support a single general efficacy headline from the heterogeneous pilots.",
+      "status": "EXPLORATORY_EVIDENCE_BOUNDARY",
+      "sources": [
+        "docs/BENCHMARKS.md",
+        "benchmarks/results/2026-08-22-blinded-pilot.json",
+        "benchmark_runs/2026-08-22/browsecomp_four_way_results.json",
+        "RESEARCH.md"
+      ]
+    },
+    {
+      "id": "complete-system-efficacy-open",
+      "page_section": "Evidence",
+      "claim": "Independent human-reasoning, scientific-discovery, and general deployment benefit of the complete system remain unestablished.",
+      "status": "UNVERIFIED",
+      "sources": [
+        "RESEARCH.md",
+        "ROADMAP.md"
+      ]
+    },
+    {
+      "id": "brand-package-source",
+      "page_section": "Brand System",
+      "claim": "The branch applies the supplied classical-scientific design package recorded by filename, byte length, and SHA-256, with no museum image binary imported.",
+      "status": "VERIFIED_LOCAL_PACKAGE_RECORD",
+      "sources": [
+        "docs/brand/SOURCE_PACKAGE.md",
+        "docs/brand/BRAND_SYSTEM.md"
+      ]
+    },
+    {
+      "id": "project-original-assets",
+      "page_section": "Brand System",
+      "claim": "The committed frontispiece, calibration mark, and procedural system field are project-authored assets with file hashes and explicit non-evidence boundaries.",
+      "status": "VERIFIED_REPOSITORY_FACT",
+      "sources": [
+        "docs/brand/asset-manifest.json",
+        "docs/visuals/apparatus-frontispiece.svg",
+        "docs/visuals/elenchion-mark.svg",
+        "docs/system-field.js",
+        "docs/visuals/visual-provenance.json"
+      ]
+    },
+    {
+      "id": "historical-style-not-evidence",
+      "page_section": "Brand System",
+      "claim": "Classical and scientific visual language is treated as identity and navigation, never as proof of correctness, maturity, heritage, endorsement, or efficacy.",
+      "status": "DESIGN_AND_CLAIMS_GUARDRAIL",
+      "sources": [
+        "docs/brand/BRAND_SYSTEM.md",
+        "docs/brand/CLAIMS_REGISTER.md",
+        "docs/brand/asset-manifest.json"
+      ]
+    },
+    {
+      "id": "trust-center-visible",
+      "page_section": "Source and Governance",
+      "claim": "The public site exposes direct paths to architecture, runtime evidence, benchmark boundaries, research status, reproducibility, security, governance, contribution, citation, roadmap, source adoption, and brand provenance records.",
+      "status": "VERIFIED_REPOSITORY_FACT",
+      "sources": [
+        "docs/index.html",
+        "docs/ARCHITECTURE.md",
+        "docs/engineering/HERMES_FAST_P8_CHECKPOINT.json",
+        "docs/BENCHMARKS.md",
+        "RESEARCH.md",
+        "REPRODUCIBILITY.md",
+        "SECURITY.md",
+        "GOVERNANCE.md",
+        "CONTRIBUTING.md",
+        "CITATION.cff",
+        "ROADMAP.md",
+        "third_party/HERMES_SOURCE_LEDGER.md",
+        "docs/brand/README.md"
+      ]
     }
   ]
 }
