@@ -115,11 +115,14 @@ for forbidden in ("Initial assessment priors remain", "Relative strengths observ
     if forbidden in foil:
         fail(f"person-specific Mirror/legacy-foil prior leaked into public skill: {forbidden}")
 
-# Apparatus is the public product identity. Existing technical names must remain
-# explicit so commands, profiles, hooks, benchmarks, receipts, and old links do not break.
+# Apparatus is the public product identity. Require both the new instrument names
+# and the stable technical aliases rather than treating superseded public labels
+# as the only acceptable README wording.
 for token in (
     "Elenchion Systems", "Apparatus", "Mercury Runtime",
-    "Research Orchestrator", "Process Assurance Framework", "Mirror / FOIL",
+    "**Axis**", "`soul`, `/soul`",
+    "**Aegis**", "`infinity-gauntlet`, `/gauntlet`",
+    "**Parallax**", "`foil`, `/foil`",
 ):
     if token not in readme:
         fail(f"README missing Apparatus public or compatibility terminology: {token}")
