@@ -2,12 +2,12 @@
   "schema": "egrt/visual-provenance-1",
   "showcase_revision": 19,
   "research_software_version": "0.5.1",
-  "brand_edition": "elenchion-apparatus-1",
+  "brand_edition": "lattice-prism-1",
   "visuals": [
     {
-      "id": "apparatus-semantic-instrument-field",
+      "id": "prism-semantic-instrument-field",
       "file": "docs/system-field.js",
-      "purpose": "Render one local procedural field that translates Apparatus architecture into armillary, botanical, geometric, engineering, metrology, optics, and review motifs as the reader moves through the public system explanation.",
+      "purpose": "Render one local procedural field that translates Prism architecture into armillary, botanical, geometric, engineering, metrology, optics, and review motifs as the reader moves through the public system explanation.",
       "sources": [
         "docs/ARCHITECTURE.md",
         "docs/brand/NAMING_ARCHITECTURE.md",
@@ -23,7 +23,7 @@
         "skills/council-of-elders/SKILL.md",
         "skills/foil/SKILL.md"
       ],
-      "source_file_sha256": "0b415e0771cc24c4d95ec4d6c87a2be1e0a65d3fbe210402431238cb4a5ba68f",
+      "source_file_sha256": "36d0ba135999bb17cc809783e04c02705046e2ea3db2f6fa8809518d872cf9b8",
       "design_reference_boundary": "Original local Canvas2D implementation following the supplied classical-scientific brand package. It embeds no external image, font, library, or historical artwork. Separate original SVG assets are recorded in docs/brand/asset-manifest.json.",
       "boundary": "Conceptual visualization of public module contracts and routing semantics. It is not a live execution trace, scientific figure, benchmark result, receipt, institutional endorsement, or behavioral-efficacy claim."
     }

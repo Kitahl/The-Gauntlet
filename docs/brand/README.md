@@ -1,9 +1,9 @@
-# Apparatus Brand System
+# Prism Brand System
 
-**Organization:** Elenchion Systems  
-**Product suite:** Apparatus  
+**Organization:** Lattice  
+**Product suite:** Prism  
 **Product principle:** Evidence before authority  
-**Brand edition:** `apparatus-brand-01`  
+**Brand edition:** `prism-brand-01`  
 **Status:** working public identity; technical compatibility preserved; legal name/trademark clearance not performed
 
 ## File index

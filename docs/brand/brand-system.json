@@ -29,29 +29,116 @@
     "white": "#FCFAF4"
   },
   "typography": {
-    "editorial": ["Source Serif 4", "Georgia", "Times New Roman", "serif"],
-    "technical": ["IBM Plex Sans", "system-ui", "Segoe UI", "sans-serif"],
-    "receipt": ["IBM Plex Mono", "ui-monospace", "SFMono-Regular", "monospace"]
+    "editorial": [
+      "Source Serif 4",
+      "Georgia",
+      "Times New Roman",
+      "serif"
+    ],
+    "technical": [
+      "IBM Plex Sans",
+      "system-ui",
+      "Segoe UI",
+      "sans-serif"
+    ],
+    "receipt": [
+      "IBM Plex Mono",
+      "ui-monospace",
+      "SFMono-Regular",
+      "monospace"
+    ]
   },
   "core_instruments": [
-    {"public_name":"Diamond","technical_id":"soul","command":"/soul","role":"orchestration and release"},
-    {"public_name":"Sapphire","technical_id":"mathbot","command":"/mind","role":"formal reasoning"},
-    {"public_name":"Emerald","technical_id":"scoutbot","command":"/space","role":"research discovery"},
-    {"public_name":"Ruby","technical_id":"novelbot","command":"/reality","role":"method synthesis"},
-    {"public_name":"Garnet","technical_id":"codebot","command":"/power","role":"engineering verification"},
-    {"public_name":"Topaz","technical_id":"benchbot","command":"/time","role":"evaluation and benchmarking"},
-    {"public_name":"Onyx","technical_id":"infinity-gauntlet","command":"/gauntlet","role":"process assurance"},
-    {"public_name":"Citrine","technical_id":"meditate","command":"/meditate","role":"decision preflight"},
-    {"public_name":"Amethyst","technical_id":"council-of-elders","command":"/council","role":"independent evidence review"},
-    {"public_name":"Opal","technical_id":"foil","command":"/foil","role":"adaptive reasoning complement"}
+    {
+      "public_name": "Diamond",
+      "technical_id": "soul",
+      "command": "/soul",
+      "role": "orchestration and release"
+    },
+    {
+      "public_name": "Sapphire",
+      "technical_id": "mathbot",
+      "command": "/mind",
+      "role": "formal reasoning"
+    },
+    {
+      "public_name": "Emerald",
+      "technical_id": "scoutbot",
+      "command": "/space",
+      "role": "research discovery"
+    },
+    {
+      "public_name": "Ruby",
+      "technical_id": "novelbot",
+      "command": "/reality",
+      "role": "method synthesis"
+    },
+    {
+      "public_name": "Garnet",
+      "technical_id": "codebot",
+      "command": "/power",
+      "role": "engineering verification"
+    },
+    {
+      "public_name": "Topaz",
+      "technical_id": "benchbot",
+      "command": "/time",
+      "role": "evaluation and benchmarking"
+    },
+    {
+      "public_name": "Onyx",
+      "technical_id": "infinity-gauntlet",
+      "command": "/gauntlet",
+      "role": "process assurance"
+    },
+    {
+      "public_name": "Citrine",
+      "technical_id": "meditate",
+      "command": "/meditate",
+      "role": "decision preflight"
+    },
+    {
+      "public_name": "Amethyst",
+      "technical_id": "council-of-elders",
+      "command": "/council",
+      "role": "independent evidence review"
+    },
+    {
+      "public_name": "Opal",
+      "technical_id": "foil",
+      "command": "/foil",
+      "role": "adaptive reasoning complement"
+    }
   ],
   "additional_systems": [
-    {"public_name":"Quartz","technical_id":"gauntlet_host","status":"INTERIM_ALPHA_OBSERVATION_ONLY"},
-    {"public_name":"Obsidian","technical_id":"blackgem","status":"ADVERSARIAL_NEVER_CLEARS"},
-    {"public_name":"Moonstone Candidate","technical_id":"postbench mechanism-planner candidate","status":"ENGINEERING_CANDIDATE_NOT_PROMOTED"},
-    {"public_name":"Zircon Candidate","technical_id":"postbench Math Foundry candidate","status":"ENGINEERING_CANDIDATE_NOT_PROMOTED"}
+    {
+      "public_name": "Quartz",
+      "technical_id": "gauntlet_host",
+      "status": "INTERIM_ALPHA_OBSERVATION_ONLY"
+    },
+    {
+      "public_name": "Obsidian",
+      "technical_id": "blackgem",
+      "status": "ADVERSARIAL_NEVER_CLEARS"
+    },
+    {
+      "public_name": "Moonstone Candidate",
+      "technical_id": "postbench mechanism-planner candidate",
+      "status": "ENGINEERING_CANDIDATE_NOT_PROMOTED"
+    },
+    {
+      "public_name": "Zircon Candidate",
+      "technical_id": "postbench Math Foundry candidate",
+      "status": "ENGINEERING_CANDIDATE_NOT_PROMOTED"
+    }
   ],
-  "status_vocabulary": ["VERIFIED_REPOSITORY_FACT", "DESIGN_DECISION", "EXPLORATORY_EVIDENCE", "UNVERIFIED", "PROHIBITED"],
+  "status_vocabulary": [
+    "VERIFIED_REPOSITORY_FACT",
+    "DESIGN_DECISION",
+    "EXPLORATORY_EVIDENCE",
+    "UNVERIFIED",
+    "PROHIBITED"
+  ],
   "evidence_boundary": "Brand imagery, gemstone names, and historical cues never add evidential weight to technical or scientific claims.",
   "source_package_sha256": "2232a3b18ee2c1ffeb2cf670f6018dc7129d4668db18ed8eef0ae767de2f22c5"
 }

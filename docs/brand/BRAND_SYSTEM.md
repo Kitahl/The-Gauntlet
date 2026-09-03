@@ -1,4 +1,4 @@
-# Apparatus Visual and Marketing System
+# Prism Visual and Marketing System
 
 ## 1. North star
 
@@ -41,17 +41,17 @@ No font files are committed by this brand change. The static site uses system-sa
 
 | Instrument | Visual family | Motif |
 |---|---|---|
-| Axis | geometry / navigation | armillary rings, axes, obligation routes |
-| Canon | geometry | compass construction, Euclidean figures, proof points |
-| Atlas | botany / taxonomy | specimen stem, leaves, taxon labels, source scale |
-| Crucible | morphology / engineering | transformations, mechanism delta, falsifier sequence |
-| Forge | engineering | exploded gear train, source/build/entry/verify alignment |
-| Chronometer | metrology | calibrated dial, baseline points, decision hand |
-| Aegis | inspection | gauge, boundary marks, integrity ledger |
-| Sextant | navigation | triangulation and value-of-computation bearing |
-| Conclave | comparative specimen board | independent seats, reveal, off-diagonal critique |
-| Parallax | optics | paired lenses, ray trace, gap between perspectives |
-| Mercury Runtime | instrument cabinet | provider/tool/session mechanisms behind a hard authority boundary |
+| Diamond | geometry / navigation | armillary rings, axes, obligation routes |
+| Sapphire | geometry | compass construction, Euclidean figures, proof points |
+| Emerald | botany / taxonomy | specimen stem, leaves, taxon labels, source scale |
+| Ruby | morphology / engineering | transformations, mechanism delta, falsifier sequence |
+| Garnet | engineering | exploded gear train, source/build/entry/verify alignment |
+| Topaz | metrology | calibrated dial, baseline points, decision hand |
+| Onyx | inspection | gauge, boundary marks, integrity ledger |
+| Citrine | navigation | triangulation and value-of-computation bearing |
+| Amethyst | comparative specimen board | independent seats, reveal, off-diagonal critique |
+| Opal | optics | paired lenses, ray trace, gap between perspectives |
+| Quartz | instrument cabinet | provider/tool/session mechanisms behind a hard authority boundary |
 | Obsidian | fracture / stress plate | attack axes, break triples, participation marks |
 
 ## 5. Evidence boundary

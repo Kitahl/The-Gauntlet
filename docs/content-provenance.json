@@ -1,12 +1,12 @@
 {
   "schema": "egrt/showcase-provenance-2",
-  "brand_edition": "elenchion-apparatus-1",
+  "brand_edition": "lattice-prism-1",
   "generated_on": "2026-09-03",
   "claims": [
     {
       "id": "public-identity-working-decision",
       "page_section": "Identity",
-      "claim": "Elenchion Systems and Apparatus are working public identities adopted by this branch; no corporate-name, trademark, domain, or legal clearance is claimed.",
+      "claim": "Lattice and Prism are working public identities adopted by this branch; no corporate-name, trademark, domain, or legal clearance is claimed.",
       "status": "DESIGN_DECISION_WITH_UNVERIFIED_LEGAL_CLEARANCE",
       "sources": [
         "docs/brand/NAMING_ARCHITECTURE.md",
@@ -28,9 +28,9 @@
       ]
     },
     {
-      "id": "apparatus-modular-control",
+      "id": "prism-modular-control",
       "page_section": "System",
-      "claim": "Apparatus publicly groups one orchestrator, five claim-native research instruments, four control/review instruments, and additional bounded systems while retaining the existing implementation boundaries.",
+      "claim": "Prism publicly groups one orchestrator, five claim-native research instruments, four control/review instruments, and additional bounded systems while retaining the existing implementation boundaries.",
       "status": "DESIGN_DECISION_MAPPED_TO_REPOSITORY_FACTS",
       "sources": [
         "docs/brand/NAMING_ARCHITECTURE.md",
@@ -48,9 +48,9 @@
       ]
     },
     {
-      "id": "mercury-pinned-runtime",
-      "page_section": "Mercury Runtime",
-      "claim": "The Mercury public layer corresponds to the Gauntlet-owned host around an exact pinned Hermes Agent source snapshot, isolated through parent/worker process and JSONL boundaries.",
+      "id": "quartz-pinned-runtime",
+      "page_section": "Quartz",
+      "claim": "The Quartz public layer corresponds to the Gauntlet-owned host around an exact pinned Hermes Agent source snapshot, isolated through parent/worker process and JSONL boundaries.",
       "status": "VERIFIED_REPOSITORY_FACT",
       "sources": [
         "vendor/HERMES_SNAPSHOT.json",
@@ -63,8 +63,8 @@
       ]
     },
     {
-      "id": "mercury-checkpoint-eight",
-      "page_section": "Mercury Runtime",
+      "id": "quartz-checkpoint-eight",
+      "page_section": "Quartz",
       "claim": "The recorded FAST-P8 checkpoint reports eight of eight bounded alpha boot checks passed.",
       "status": "VERIFIED_REPOSITORY_FACT",
       "sources": [
@@ -88,8 +88,8 @@
       ]
     },
     {
-      "id": "mercury-limitations-visible",
-      "page_section": "Mercury Runtime",
+      "id": "quartz-limitations-visible",
+      "page_section": "Quartz",
       "claim": "FAST-P8 did not establish paid external-provider operation, autonomous claim-native execution, autonomous replanning, task release, dynamic tool narrowing, profile complement benefit, cross-platform qualification, or behavioral and cost efficacy.",
       "status": "VERIFIED_NEGATIVE_BOUNDARY",
       "sources": [
@@ -98,9 +98,9 @@
       ]
     },
     {
-      "id": "parallax-adaptation-only",
-      "page_section": "Parallax",
-      "claim": "Parallax is the public name for the existing Mirror/FOIL adaptive complement layer; its route is advisory and cannot clear proof, discovery, engineering, evaluation, or release obligations.",
+      "id": "opal-adaptation-only",
+      "page_section": "Opal",
+      "claim": "Opal is the public name for the existing Mirror/FOIL adaptive complement layer; its route is advisory and cannot clear proof, discovery, engineering, evaluation, or release obligations.",
       "status": "VERIFIED_REPOSITORY_FACT_PLUS_PUBLIC_ALIAS",
       "sources": [
         "docs/brand/NAMING_ARCHITECTURE.md",
@@ -111,9 +111,9 @@
       ]
     },
     {
-      "id": "conclave-independent-review",
-      "page_section": "Conclave",
-      "claim": "Conclave maps to the Council protocol for independent seats, commitment/reveal, cross-critique, disagreement preservation, and controlled synthesis.",
+      "id": "amethyst-independent-review",
+      "page_section": "Amethyst",
+      "claim": "Amethyst maps to the Council protocol for independent seats, commitment/reveal, cross-critique, disagreement preservation, and controlled synthesis.",
       "status": "VERIFIED_REPOSITORY_FACT_PLUS_PUBLIC_ALIAS",
       "sources": [
         "docs/brand/NAMING_ARCHITECTURE.md",
@@ -136,7 +136,7 @@
     {
       "id": "candidate-archive-no-promotion",
       "page_section": "Candidate Systems",
-      "claim": "The Strategist and Formal Plane public labels refer to archived Mastermind and Math Foundry engineering candidates; their archive does not promote them into Apparatus runtime or evidential authority.",
+      "claim": "The Strategist and Formal Plane public labels refer to archived Mastermind and Math Foundry engineering candidates; their archive does not promote them into Prism runtime or evidential authority.",
       "status": "VERIFIED_REPOSITORY_FACT_PLUS_PUBLIC_ALIAS",
       "sources": [
         "docs/brand/NAMING_ARCHITECTURE.md",

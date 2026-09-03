@@ -32,11 +32,11 @@
     overview: ["METHOD / CONTROL MODEL", "SIX STAGES · ONE EVIDENCE STATE"],
     workflow: ["ROUTE / OBLIGATION", "THE METHOD CHANGES WITH THE CLAIM"],
     gems: ["INDEX / INSTRUMENTS", "RUNTIME + TEN CORE CONTRACTS"],
-    mind: ["INSTRUMENT 01 / CANON", "FORMALIZE → NEGATE → VERIFY"],
-    space: ["INSTRUMENT 02 / ATLAS", "SEARCH → IDENTIFY → BOUND"],
-    reality: ["INSTRUMENT 03 / CRUCIBLE", "GAP → MECHANISM → FALSIFIER"],
-    power: ["INSTRUMENT 04 / FORGE", "SOURCE → ENTRYPOINT → EXECUTION"],
-    time: ["INSTRUMENT 05 / CHRONOMETER", "BASELINE → MEASURE → DECIDE"],
+    mind: ["INSTRUMENT 01 / SAPPHIRE", "FORMALIZE → NEGATE → VERIFY"],
+    space: ["INSTRUMENT 02 / EMERALD", "SEARCH → IDENTIFY → BOUND"],
+    reality: ["INSTRUMENT 03 / RUBY", "GAP → MECHANISM → FALSIFIER"],
+    power: ["INSTRUMENT 04 / GARNET", "SOURCE → ENTRYPOINT → EXECUTION"],
+    time: ["INSTRUMENT 05 / TOPAZ", "BASELINE → MEASURE → DECIDE"],
     system: ["AUTHORITY / RELEASE PATH", "OBSERVATION ≠ RECEIPT ≠ RELEASE"],
     quiet: ["ARCHIVE / SOURCE", "INSPECT THE MACHINERY, NOT THE MOOD"]
   };
@@ -328,7 +328,7 @@
   function drawGems() {
     paperGrid(56, 0.045);
     const { x, y, r } = rightCenter(0.96);
-    const names = ["CANON", "ATLAS", "CRUCIBLE", "FORGE", "CHRONOMETER"];
+    const names = ["SAPPHIRE", "EMERALD", "RUBY", "GARNET", "TOPAZ"];
     names.forEach((name, index) => {
       const angle = -Math.PI / 2 + index * (Math.PI * 2 / 5);
       const px = x + Math.cos(angle) * r * 0.7;
@@ -340,7 +340,7 @@
     });
     circle(x, y, r * 0.23, palette.ink, 0.28, 1);
     crosshair(x, y, 12);
-    label("AXIS", x, y + 29, "center", palette.oxide, 0.45, 9);
+    label("DIAMOND", x, y + 29, "center", palette.oxide, 0.45, 9);
   }
 
   function drawMind() {
@@ -437,7 +437,7 @@
     paperGrid(48, 0.045);
     const { x, y, r } = rightCenter(1.02);
     const layers = [
-      { radius: r * 0.2, label: "AXIS", color: palette.oxide },
+      { radius: r * 0.2, label: "DIAMOND", color: palette.oxide },
       { radius: r * 0.43, label: "RECEIPTS", color: palette.verdigris },
       { radius: r * 0.68, label: "INSTRUMENTS", color: palette.bronze },
       { radius: r * 0.91, label: "RUNTIME", color: palette.ink }

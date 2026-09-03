@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title desc">
-  <title id="title">Elenchion Systems calibration mark</title>
+  <title id="title">Lattice calibration mark</title>
   <desc id="desc">A restrained circular calibration mark formed from two instrument arcs, a vertical axis, and one oxide registration tick.</desc>
-  <metadata>Original vector mark for Elenchion Systems. No external source artwork.</metadata>
+  <metadata>Original vector mark for Lattice. No external source artwork.</metadata>
   <rect width="96" height="96" fill="#F2EBDD"/>
   <circle cx="48" cy="48" r="34" fill="none" stroke="#171714" stroke-width="2"/>
   <path d="M48 14a34 34 0 0 0 0 68M48 24a24 24 0 1 1 0 48" fill="none" stroke="#77634C" stroke-width="1.5"/>

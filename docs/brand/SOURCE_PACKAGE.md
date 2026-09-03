@@ -27,10 +27,10 @@ The package included research notes, a visual system, GitHub and website specifi
 
 ## Deliberate adaptations
 
-- The old product identity was replaced by Elenchion Systems / Apparatus.
+- The old product identity was replaced by Lattice / Prism.
 - The five “Stones/Gems” became claim-native Instruments.
 - Soul, Gauntlet, Council, Meditate, and Mirror received new public instrument names while technical aliases remain.
-- The Hermes-derived host is described as Mercury Runtime and given an explicit alpha/observation-only boundary.
+- The Hermes-derived host is described as Quartz and given an explicit alpha/observation-only boundary.
 - Black Gem is presented as Obsidian.
 - The archived mechanism-planner and formal-plane packages are presented as candidates, not shipped authority.
 - Original SVG and Canvas2D artwork replaced external historical imagery for the initial implementation, avoiding unresolved item-level rights and provenance.

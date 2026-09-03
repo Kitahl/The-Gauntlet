@@ -1,4 +1,4 @@
-# Apparatus Visual Assets
+# Prism Visual Assets
 
 ## 1. Inventory
 
@@ -14,7 +14,7 @@ Full rights, authorship, use, alt-text, and boundary records are in [`../brand/a
 
 ### Frontispiece
 
-Parchment scientific frontispiece with an original measured classical profile inside armillary rings, a botanical specimen at left, and the words “Elenchion Systems — Apparatus — Evidence before authority.”
+Parchment scientific frontispiece with an original measured classical profile inside armillary rings, a botanical specimen at left, and the words “Lattice — Prism — Evidence before authority.”
 
 ### Calibration mark
 
