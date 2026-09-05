@@ -1,0 +1,51 @@
+{
+  "schema": "bastion.github-program.v1",
+  "repository": "Kitahl/The-Gauntlet",
+  "program_directory": "orchestration/bastion",
+  "execution": "GITHUB_CONNECTOR_AND_CI",
+  "bootstrap_ref": "work/bastion-github-scheduled-program",
+  "source_ref": "work/hermes-token-lean",
+  "source_commit": "e338a2d564e65dd31b84876c89b421e0f8bf8233",
+  "local_uncommitted_repairs_included": false,
+  "live_model_dispatch": "NOT_AUTHORIZED",
+  "automatic_merge": false,
+  "tickets": [
+    {
+      "id": "BAS-C001",
+      "role": "coordinator",
+      "state": "READY",
+      "depends_on": [],
+      "base": "main",
+      "allowed_paths": [
+        "orchestration/bastion/protocols/",
+        "orchestration/bastion/reports/coordinator/"
+      ],
+      "objective": "Prepare a prospective public/synthetic BASE Hermes versus Bastion experiment contract from the pinned published source; no runtime implementation or live execution.",
+      "acceptance": "A reviewable protocol PR names actual interfaces, fixed scoring, isolation, budgets and missing prerequisites; no capability claims."
+    },
+    {
+      "id": "BAS-R001",
+      "role": "regression",
+      "state": "READY",
+      "depends_on": [],
+      "base": "main",
+      "allowed_paths": [
+        "orchestration/bastion/reports/regression/"
+      ],
+      "objective": "Inspect Actions coverage and exact-commit evidence for the pinned Hermes source; document any missing run or coverage and propose the smallest CI follow-up.",
+      "acceptance": "Report binds source SHA and any available run IDs/job outcomes, or explicitly records missing evidence. Do not change workflows under this ticket."
+    },
+    {
+      "id": "BAS-A001",
+      "role": "audit",
+      "state": "READY",
+      "depends_on": [],
+      "base": "main",
+      "allowed_paths": [
+        "orchestration/bastion/reports/audit/"
+      ],
+      "objective": "Audit setup protocol and new coordinator/regression evidence; report source mismatch, unsupported claims, scorer/holdout risks and permission violations.",
+      "acceptance": "Read-only evidence review, optionally a report-only PR; no self-approval or merge."
+    }
+  ]
+}
