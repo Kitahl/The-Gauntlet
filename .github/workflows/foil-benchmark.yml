@@ -41,25 +41,25 @@ jobs:
         run: python -m unittest tests.test_paired_stats -v
 
       - name: Upload blinded HLE and ARC questions
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: foil-benchmark-questions
           path: benchmark_runs/2026-08-22/benchmark_questions.json
           if-no-files-found: error
       - name: Upload blinded GPQA-Diamond questions
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: foil-gpqa-questions
           path: benchmark_runs/2026-08-22/gpqa_questions.json
           if-no-files-found: error
       - name: Upload blinded legacy BrowseComp questions
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: foil-browsecomp-questions
           path: benchmark_runs/2026-08-22/browsecomp_questions.json
           if-no-files-found: error
       - name: Upload blinded four-way BrowseComp questions
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: foil-browsecomp-four-way-questions
           path: benchmark_runs/2026-08-22/browsecomp_four_way_questions.json
@@ -67,28 +67,28 @@ jobs:
 
       - name: Upload HLE and ARC score receipt
         if: ${{ hashFiles('benchmark_runs/2026-08-22/benchmark_results.json') != '' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: foil-benchmark-results
           path: benchmark_runs/2026-08-22/benchmark_results.json
           if-no-files-found: error
       - name: Upload GPQA-Diamond score receipt
         if: ${{ hashFiles('benchmark_runs/2026-08-22/gpqa_results.json') != '' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: foil-gpqa-results
           path: benchmark_runs/2026-08-22/gpqa_results.json
           if-no-files-found: error
       - name: Upload legacy BrowseComp public score receipt
         if: ${{ hashFiles('benchmark_runs/2026-08-22/browsecomp_results.json') != '' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: foil-browsecomp-results
           path: benchmark_runs/2026-08-22/browsecomp_results.json
           if-no-files-found: error
       - name: Upload four-way BrowseComp public score receipt
         if: ${{ hashFiles('benchmark_runs/2026-08-22/browsecomp_four_way_results.json') != '' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: foil-browsecomp-four-way-results
           path: benchmark_runs/2026-08-22/browsecomp_four_way_results.json
